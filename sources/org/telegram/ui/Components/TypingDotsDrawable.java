@@ -28,44 +28,33 @@ public class TypingDotsDrawable extends StatusDrawable {
         }
     }
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public void setIsChat(boolean z) {
-        this.isChat = z;
+    public void setIsChat(boolean value) {
+        this.isChat = value;
     }
 
     private void update() {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = currentTimeMillis - this.lastUpdateTime;
-        this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 50;
-        if (j <= 50) {
-            currentTimeMillis = j;
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.lastUpdateTime;
+        this.lastUpdateTime = newTime;
+        if (dt > 50) {
+            dt = 50;
         }
-        for (int i = 0; i < 3; i++) {
+        for (int a = 0; a < 3; a++) {
             float[] fArr = this.elapsedTimes;
-            fArr[i] = fArr[i] + ((float) currentTimeMillis);
-            float f = this.elapsedTimes[i] - this.startTimes[i];
-            if (f <= 0.0f) {
-                this.scales[i] = 1.33f;
-            } else if (f <= 320.0f) {
-                this.scales[i] = 1.33f + this.decelerateInterpolator.getInterpolation(f / 320.0f);
-            } else if (f <= 640.0f) {
-                this.scales[i] = 1.33f + (1.0f - this.decelerateInterpolator.getInterpolation((f - 320.0f) / 320.0f));
-            } else if (f >= 800.0f) {
-                this.elapsedTimes[i] = 0.0f;
-                this.startTimes[i] = 0.0f;
-                this.scales[i] = 1.33f;
+            fArr[a] = fArr[a] + ((float) dt);
+            float timeSinceStart = this.elapsedTimes[a] - this.startTimes[a];
+            if (timeSinceStart <= 0.0f) {
+                this.scales[a] = 1.33f;
+            } else if (timeSinceStart <= 320.0f) {
+                this.scales[a] = 1.33f + this.decelerateInterpolator.getInterpolation(timeSinceStart / 320.0f);
+            } else if (timeSinceStart <= 640.0f) {
+                this.scales[a] = (1.0f - this.decelerateInterpolator.getInterpolation((timeSinceStart - 320.0f) / 320.0f)) + 1.33f;
+            } else if (timeSinceStart >= 800.0f) {
+                this.elapsedTimes[a] = 0.0f;
+                this.startTimes[a] = 0.0f;
+                this.scales[a] = 1.33f;
             } else {
-                this.scales[i] = 1.33f;
+                this.scales[a] = 1.33f;
             }
         }
         invalidateSelf();
@@ -78,9 +67,9 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public void stop() {
-        for (int i = 0; i < 3; i++) {
-            this.elapsedTimes[i] = 0.0f;
-            this.scales[i] = 1.33f;
+        for (int a = 0; a < 3; a++) {
+            this.elapsedTimes[a] = 0.0f;
+            this.scales[a] = 1.33f;
         }
         this.startTimes[0] = 0.0f;
         this.startTimes[1] = 150.0f;
@@ -89,17 +78,16 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        int dp;
+        int y;
         if (this.isChat) {
-            dp = AndroidUtilities.dp(8.5f) + getBounds().top;
+            y = AndroidUtilities.dp(8.5f) + getBounds().top;
         } else {
-            dp = AndroidUtilities.dp(9.3f) + getBounds().top;
+            y = AndroidUtilities.dp(9.3f) + getBounds().top;
         }
         Theme.chat_statusPaint.setAlpha(255);
-        float f = (float) dp;
-        canvas.drawCircle((float) AndroidUtilities.dp(3.0f), f, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.dp(9.0f), f, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.dp(15.0f), f, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.dp(3.0f), (float) y, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.dp(9.0f), (float) y, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.dp(15.0f), (float) y, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
         checkUpdate();
     }
 
@@ -112,6 +100,16 @@ public class TypingDotsDrawable extends StatusDrawable {
         } else {
             update();
         }
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

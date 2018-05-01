@@ -15,68 +15,62 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
         C06131() {
         }
 
-        public RepresentationKey createFromParcel(Parcel parcel) {
-            return new RepresentationKey(parcel.readInt(), parcel.readInt(), parcel.readInt());
+        public RepresentationKey createFromParcel(Parcel in) {
+            return new RepresentationKey(in.readInt(), in.readInt(), in.readInt());
         }
 
-        public RepresentationKey[] newArray(int i) {
-            return new RepresentationKey[i];
+        public RepresentationKey[] newArray(int size) {
+            return new RepresentationKey[size];
         }
+    }
+
+    public RepresentationKey(int periodIndex, int adaptationSetIndex, int representationIndex) {
+        this.periodIndex = periodIndex;
+        this.adaptationSetIndex = adaptationSetIndex;
+        this.representationIndex = representationIndex;
+    }
+
+    public String toString() {
+        return this.periodIndex + "." + this.adaptationSetIndex + "." + this.representationIndex;
     }
 
     public int describeContents() {
         return 0;
     }
 
-    public RepresentationKey(int i, int i2, int i3) {
-        this.periodIndex = i;
-        this.adaptationSetIndex = i2;
-        this.representationIndex = i3;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.periodIndex);
+        dest.writeInt(this.adaptationSetIndex);
+        dest.writeInt(this.representationIndex);
     }
 
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.periodIndex);
-        stringBuilder.append(".");
-        stringBuilder.append(this.adaptationSetIndex);
-        stringBuilder.append(".");
-        stringBuilder.append(this.representationIndex);
-        return stringBuilder.toString();
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(this.periodIndex);
-        parcel.writeInt(this.adaptationSetIndex);
-        parcel.writeInt(this.representationIndex);
-    }
-
-    public int compareTo(RepresentationKey representationKey) {
-        int i = this.periodIndex - representationKey.periodIndex;
-        if (i != 0) {
-            return i;
+    public int compareTo(RepresentationKey o) {
+        int result = this.periodIndex - o.periodIndex;
+        if (result != 0) {
+            return result;
         }
-        i = this.adaptationSetIndex - representationKey.adaptationSetIndex;
-        return i == 0 ? this.representationIndex - representationKey.representationIndex : i;
+        result = this.adaptationSetIndex - o.adaptationSetIndex;
+        if (result == 0) {
+            return this.representationIndex - o.representationIndex;
+        }
+        return result;
     }
 
-    public boolean equals(Object obj) {
-        boolean z = true;
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                RepresentationKey representationKey = (RepresentationKey) obj;
-                if (this.periodIndex != representationKey.periodIndex || this.adaptationSetIndex != representationKey.adaptationSetIndex || this.representationIndex != representationKey.representationIndex) {
-                    z = false;
-                }
-                return z;
-            }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RepresentationKey that = (RepresentationKey) o;
+        if (this.periodIndex == that.periodIndex && this.adaptationSetIndex == that.adaptationSetIndex && this.representationIndex == that.representationIndex) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((this.periodIndex * 31) + this.adaptationSetIndex)) + this.representationIndex;
+        return (((this.periodIndex * 31) + this.adaptationSetIndex) * 31) + this.representationIndex;
     }
 }

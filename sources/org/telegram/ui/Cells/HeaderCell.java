@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -13,16 +14,23 @@ public class HeaderCell extends FrameLayout {
     private TextView textView = new TextView(getContext());
 
     public HeaderCell(Context context) {
+        int i;
+        int i2 = 5;
         super(context);
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        int i = 3;
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        context = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
+        } else {
+            i = 3;
         }
-        addView(context, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 15.0f, 17.0f, 0.0f));
     }
 
     protected void onAttachedToWindow() {
@@ -30,11 +38,11 @@ public class HeaderCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(38.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(38.0f), NUM));
     }
 
-    public void setText(String str) {
-        this.textView.setText(str);
+    public void setText(String text) {
+        this.textView.setText(text);
     }
 }

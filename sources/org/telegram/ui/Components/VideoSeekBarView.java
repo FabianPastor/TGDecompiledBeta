@@ -31,55 +31,55 @@ public class VideoSeekBarView extends View {
         this.delegate = seekBarDelegate;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent == null) {
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event == null) {
             return false;
         }
-        float x = motionEvent.getX();
-        float y = motionEvent.getY();
-        float measuredWidth = (float) ((int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress));
-        float f = 0.0f;
-        if (motionEvent.getAction() == 0) {
-            motionEvent = (float) ((getMeasuredHeight() - this.thumbWidth) / 2);
-            if (measuredWidth - motionEvent <= x && x <= (((float) this.thumbWidth) + measuredWidth) + motionEvent && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
-                this.pressed = true;
-                this.thumbDX = (int) (x - measuredWidth);
-                getParent().requestDisallowInterceptTouchEvent(true);
-                invalidate();
-                return true;
+        float x = event.getX();
+        float y = event.getY();
+        float thumbX = (float) ((int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress));
+        if (event.getAction() == 0) {
+            int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
+            if (thumbX - ((float) additionWidth) > x || x > (((float) this.thumbWidth) + thumbX) + ((float) additionWidth) || y < 0.0f || y > ((float) getMeasuredHeight())) {
+                return false;
             }
-        }
-        if (motionEvent.getAction() != 1) {
-            if (motionEvent.getAction() != 3) {
-                if (motionEvent.getAction() == 2 && this.pressed != null) {
-                    motionEvent = (float) ((int) (x - ((float) this.thumbDX)));
-                    if (motionEvent >= null) {
-                        f = motionEvent > ((float) (getMeasuredWidth() - this.thumbWidth)) ? (float) (getMeasuredWidth() - this.thumbWidth) : motionEvent;
-                    }
-                    this.progress = f / ((float) (getMeasuredWidth() - this.thumbWidth));
-                    invalidate();
-                    return true;
-                }
+            this.pressed = true;
+            this.thumbDX = (int) (x - thumbX);
+            getParent().requestDisallowInterceptTouchEvent(true);
+            invalidate();
+            return true;
+        } else if (event.getAction() == 1 || event.getAction() == 3) {
+            if (!this.pressed) {
+                return false;
             }
-        }
-        if (this.pressed) {
-            if (motionEvent.getAction() == 1 && this.delegate != null) {
-                this.delegate.onSeekBarDrag(measuredWidth / ((float) (getMeasuredWidth() - this.thumbWidth)));
+            if (event.getAction() == 1 && this.delegate != null) {
+                this.delegate.onSeekBarDrag(thumbX / ((float) (getMeasuredWidth() - this.thumbWidth)));
             }
             this.pressed = false;
             invalidate();
             return true;
+        } else if (event.getAction() != 2 || !this.pressed) {
+            return false;
+        } else {
+            thumbX = (float) ((int) (x - ((float) this.thumbDX)));
+            if (thumbX < 0.0f) {
+                thumbX = 0.0f;
+            } else if (thumbX > ((float) (getMeasuredWidth() - this.thumbWidth))) {
+                thumbX = (float) (getMeasuredWidth() - this.thumbWidth);
+            }
+            this.progress = thumbX / ((float) (getMeasuredWidth() - this.thumbWidth));
+            invalidate();
+            return true;
         }
-        return false;
     }
 
-    public void setProgress(float f) {
-        if (f < 0.0f) {
-            f = 0.0f;
-        } else if (f > 1.0f) {
-            f = 1.0f;
+    public void setProgress(float progress) {
+        if (progress < 0.0f) {
+            progress = 0.0f;
+        } else if (progress > 1.0f) {
+            progress = 1.0f;
         }
-        this.progress = f;
+        this.progress = progress;
         invalidate();
     }
 
@@ -88,9 +88,9 @@ public class VideoSeekBarView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        int measuredHeight = (getMeasuredHeight() - this.thumbHeight) / 2;
-        int measuredWidth = (int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress);
+        int y = (getMeasuredHeight() - this.thumbHeight) / 2;
+        int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress);
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.paint);
-        canvas.drawCircle((float) (measuredWidth + (this.thumbWidth / 2)), (float) (measuredHeight + (this.thumbHeight / 2)), (float) (this.thumbWidth / 2), this.paint2);
+        canvas.drawCircle((float) ((this.thumbWidth / 2) + thumbX), (float) ((this.thumbHeight / 2) + y), (float) (this.thumbWidth / 2), this.paint2);
     }
 }

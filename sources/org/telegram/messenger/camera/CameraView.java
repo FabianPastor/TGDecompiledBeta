@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.tgnet.ConnectionsManager;
 
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
@@ -77,31 +78,27 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         void onCameraInit();
     }
 
-    private int clamp(int i, int i2, int i3) {
-        return i > i3 ? i3 : i < i2 ? i2 : i;
-    }
-
-    public CameraView(Context context, boolean z) {
+    public CameraView(Context context, boolean frontface) {
         super(context, null);
-        this.isFrontface = z;
-        this.initialFrontface = z;
+        this.isFrontface = frontface;
+        this.initialFrontface = frontface;
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
         this.focusAreaSize = AndroidUtilities.dp(96.0f);
-        this.outerPaint.setColor(true);
+        this.outerPaint.setColor(-1);
         this.outerPaint.setStyle(Style.STROKE);
-        this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(true));
-        this.innerPaint.setColor(true);
+        this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.innerPaint.setColor(ConnectionsManager.DEFAULT_DATACENTER_ID);
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         checkPreviewMatrix();
     }
 
-    public void setMirror(boolean z) {
-        this.mirror = z;
+    public void setMirror(boolean value) {
+        this.mirror = value;
     }
 
     public boolean isFrontface() {
@@ -109,9 +106,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public boolean hasFrontFaceCamera() {
-        ArrayList cameras = CameraController.getInstance().getCameras();
-        for (int i = 0; i < cameras.size(); i++) {
-            if (((CameraInfo) cameras.get(i)).frontCamera != 0) {
+        ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
+        for (int a = 0; a < cameraInfos.size(); a++) {
+            if (((CameraInfo) cameraInfos.get(a)).frontCamera != 0) {
                 return true;
             }
         }
@@ -119,80 +116,70 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void switchCamera() {
+        boolean z = false;
         if (this.cameraSession != null) {
             CameraController.getInstance().close(this.cameraSession, null, null);
             this.cameraSession = null;
         }
         this.initied = false;
-        this.isFrontface ^= 1;
+        if (!this.isFrontface) {
+            z = true;
+        }
+        this.isFrontface = z;
         initCamera(this.isFrontface);
     }
 
-    private void initCamera(boolean z) {
-        z = CameraController.getInstance().getCameras();
-        if (z) {
-            CameraInfo cameraInfo;
-            int i = 0;
-            while (i < z.size()) {
-                cameraInfo = (CameraInfo) z.get(i);
-                if (!this.isFrontface || cameraInfo.frontCamera == 0) {
-                    if (!this.isFrontface && cameraInfo.frontCamera == 0) {
-                        break;
-                    }
-                    i++;
-                } else {
+    private void initCamera(boolean front) {
+        CameraInfo info = null;
+        ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
+        if (cameraInfos != null) {
+            for (int a = 0; a < cameraInfos.size(); a++) {
+                CameraInfo cameraInfo = (CameraInfo) cameraInfos.get(a);
+                if ((this.isFrontface && cameraInfo.frontCamera != 0) || (!this.isFrontface && cameraInfo.frontCamera == 0)) {
+                    info = cameraInfo;
                     break;
                 }
             }
-            cameraInfo = null;
-            if (cameraInfo != null) {
-                Size size;
-                int i2;
-                int i3;
-                SurfaceTexture surfaceTexture;
-                float max = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
+            if (info != null) {
+                Size aspectRatio;
+                int wantedWidth;
+                int wantedHeight;
+                float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
                 if (this.initialFrontface) {
-                    size = new Size(16, 9);
-                    i2 = 480;
-                    i3 = 270;
+                    aspectRatio = new Size(16, 9);
+                    wantedWidth = 480;
+                    wantedHeight = 270;
+                } else if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                    aspectRatio = new Size(4, 3);
+                    wantedWidth = 1280;
+                    wantedHeight = 960;
                 } else {
-                    if (Math.abs(max - 1.3333334f) < 0.1f) {
-                        size = new Size(4, 3);
-                        i3 = 960;
-                    } else {
-                        size = new Size(16, 9);
-                        i3 = 720;
-                    }
-                    i2 = 1280;
+                    aspectRatio = new Size(16, 9);
+                    wantedWidth = 1280;
+                    wantedHeight = 720;
                 }
                 if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
-                    int min = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
-                    this.previewSize = CameraController.chooseOptimalSize(cameraInfo.getPreviewSizes(), min, (size.getHeight() * min) / size.getWidth(), size);
+                    int width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
+                    this.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
                 }
-                size = CameraController.chooseOptimalSize(cameraInfo.getPictureSizes(), i2, i3, size);
-                if (size.getWidth() >= 1280 && size.getHeight() >= 1280) {
-                    if (Math.abs(max - 1.3333334f) < true) {
-                        z = new Size(3, 4);
+                Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
+                if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
+                    if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                        aspectRatio = new Size(3, 4);
                     } else {
-                        z = new Size(9, 16);
+                        aspectRatio = new Size(9, 16);
                     }
-                    z = CameraController.chooseOptimalSize(cameraInfo.getPictureSizes(), i3, i2, z);
-                    if (z.getWidth() >= 1280) {
-                        if (z.getHeight() < 1280) {
-                        }
-                    }
-                    surfaceTexture = this.textureView.getSurfaceTexture();
-                    if (!(this.previewSize == null || surfaceTexture == null)) {
-                        surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                        this.cameraSession = new CameraSession(cameraInfo, this.previewSize, z, 256);
-                        CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05401(), new C05412());
+                    Size pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
+                    if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
+                        pictureSize = pictureSize2;
                     }
                 }
-                z = size;
-                surfaceTexture = this.textureView.getSurfaceTexture();
-                surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                this.cameraSession = new CameraSession(cameraInfo, this.previewSize, z, 256);
-                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05401(), new C05412());
+                SurfaceTexture surfaceTexture = this.textureView.getSurfaceTexture();
+                if (this.previewSize != null && surfaceTexture != null) {
+                    surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
+                    this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05401(), new C05412());
+                }
             }
         }
     }
@@ -201,11 +188,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         return this.previewSize;
     }
 
-    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         initCamera(this.isFrontface);
     }
 
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
         checkPreviewMatrix();
     }
 
@@ -213,11 +200,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         if (this.cameraSession != null) {
             CameraController.getInstance().close(this.cameraSession, null, null);
         }
-        return null;
+        return false;
     }
 
-    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        if (this.initied == null && this.cameraSession != null && this.cameraSession.isInitied() != null) {
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        if (!this.initied && this.cameraSession != null && this.cameraSession.isInitied()) {
             if (this.delegate != null) {
                 this.delegate.onCameraInit();
             }
@@ -225,12 +212,12 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         }
     }
 
-    public void setClipTop(int i) {
-        this.clipTop = i;
+    public void setClipTop(int value) {
+        this.clipTop = value;
     }
 
-    public void setClipLeft(int i) {
-        this.clipLeft = i;
+    public void setClipLeft(int value) {
+        this.clipLeft = value;
     }
 
     private void checkPreviewMatrix() {
@@ -239,110 +226,68 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         }
     }
 
-    private void adjustAspectRatio(int i, int i2, int i3) {
-        float max;
-        float f;
-        float f2;
+    private void adjustAspectRatio(int previewWidth, int previewHeight, int rotation) {
+        float scale;
         this.txform.reset();
-        int width = getWidth();
-        int height = getHeight();
-        float f3 = (float) (width / 2);
-        float f4 = (float) (height / 2);
-        if (i3 != 0) {
-            if (i3 != 2) {
-                max = Math.max(((float) (this.clipTop + height)) / ((float) i2), ((float) (this.clipLeft + width)) / ((float) i));
-                f = (float) width;
-                f2 = (float) height;
-                this.txform.postScale((((float) i2) * max) / f, (((float) i) * max) / f2, f3, f4);
-                if (1 != i3) {
-                    if (3 == i3) {
-                        if (2 == i3) {
-                            this.txform.postRotate(NUM, f3, f4);
-                        }
-                        if (this.mirror != 0) {
-                            this.txform.postScale(-NUM, NUM, f3, f4);
-                        }
-                        if (!(this.clipTop == 0 && this.clipLeft == 0)) {
-                            this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
-                        }
-                        this.textureView.setTransform(this.txform);
-                        i = new Matrix();
-                        i.postRotate((float) this.cameraSession.getDisplayOrientation());
-                        i.postScale(f / NUM, f2 / NUM);
-                        i.postTranslate(f / 2.0f, f2 / 2.0f);
-                        i.invert(this.matrix);
-                    }
-                }
-                this.txform.postRotate((float) (90 * (i3 - 2)), f3, f4);
-                if (this.mirror != 0) {
-                    this.txform.postScale(-NUM, NUM, f3, f4);
-                }
-                this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
-                this.textureView.setTransform(this.txform);
-                i = new Matrix();
-                i.postRotate((float) this.cameraSession.getDisplayOrientation());
-                i.postScale(f / NUM, f2 / NUM);
-                i.postTranslate(f / 2.0f, f2 / 2.0f);
-                i.invert(this.matrix);
-            }
+        int viewWidth = getWidth();
+        int viewHeight = getHeight();
+        float viewCenterX = (float) (viewWidth / 2);
+        float viewCenterY = (float) (viewHeight / 2);
+        if (rotation == 0 || rotation == 2) {
+            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewWidth), ((float) (this.clipLeft + viewWidth)) / ((float) previewHeight));
+        } else {
+            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewHeight), ((float) (this.clipLeft + viewWidth)) / ((float) previewWidth));
         }
-        max = Math.max(((float) (this.clipTop + height)) / ((float) i), ((float) (this.clipLeft + width)) / ((float) i2));
-        f = (float) width;
-        f2 = (float) height;
-        this.txform.postScale((((float) i2) * max) / f, (((float) i) * max) / f2, f3, f4);
-        if (1 != i3) {
-            if (3 == i3) {
-                if (2 == i3) {
-                    this.txform.postRotate(NUM, f3, f4);
-                }
-                if (this.mirror != 0) {
-                    this.txform.postScale(-NUM, NUM, f3, f4);
-                }
-                this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
-                this.textureView.setTransform(this.txform);
-                i = new Matrix();
-                i.postRotate((float) this.cameraSession.getDisplayOrientation());
-                i.postScale(f / NUM, f2 / NUM);
-                i.postTranslate(f / 2.0f, f2 / 2.0f);
-                i.invert(this.matrix);
-            }
+        this.txform.postScale((((float) previewHeight) * scale) / ((float) viewWidth), (((float) previewWidth) * scale) / ((float) viewHeight), viewCenterX, viewCenterY);
+        if (1 == rotation || 3 == rotation) {
+            this.txform.postRotate((float) ((rotation - 2) * 90), viewCenterX, viewCenterY);
+        } else if (2 == rotation) {
+            this.txform.postRotate(180.0f, viewCenterX, viewCenterY);
         }
-        this.txform.postRotate((float) (90 * (i3 - 2)), f3, f4);
-        if (this.mirror != 0) {
-            this.txform.postScale(-NUM, NUM, f3, f4);
+        if (this.mirror) {
+            this.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
         }
-        this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
+        if (!(this.clipTop == 0 && this.clipLeft == 0)) {
+            this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
+        }
         this.textureView.setTransform(this.txform);
-        i = new Matrix();
-        i.postRotate((float) this.cameraSession.getDisplayOrientation());
-        i.postScale(f / NUM, f2 / NUM);
-        i.postTranslate(f / 2.0f, f2 / 2.0f);
-        i.invert(this.matrix);
+        Matrix matrix = new Matrix();
+        matrix.postRotate((float) this.cameraSession.getDisplayOrientation());
+        matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
+        matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
+        matrix.invert(this.matrix);
     }
 
-    private Rect calculateTapArea(float f, float f2, float f3) {
-        f3 = Float.valueOf(((float) this.focusAreaSize) * f3).intValue();
-        int i = f3 / 2;
-        f = clamp(((int) f) - i, 0, getWidth() - f3);
-        f2 = clamp(((int) f2) - i, 0, getHeight() - f3);
-        RectF rectF = new RectF((float) f, (float) f2, (float) (f + f3), (float) (f2 + f3));
+    private Rect calculateTapArea(float x, float y, float coefficient) {
+        int areaSize = Float.valueOf(((float) this.focusAreaSize) * coefficient).intValue();
+        int left = clamp(((int) x) - (areaSize / 2), 0, getWidth() - areaSize);
+        int top = clamp(((int) y) - (areaSize / 2), 0, getHeight() - areaSize);
+        RectF rectF = new RectF((float) left, (float) top, (float) (left + areaSize), (float) (top + areaSize));
         this.matrix.mapRect(rectF);
         return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
     }
 
-    public void focusToPoint(int i, int i2) {
-        float f = (float) i;
-        float f2 = (float) i2;
-        Rect calculateTapArea = calculateTapArea(f, f2, 1.0f);
-        Rect calculateTapArea2 = calculateTapArea(f, f2, 1.5f);
+    private int clamp(int x, int min, int max) {
+        if (x > max) {
+            return max;
+        }
+        if (x < min) {
+            return min;
+        }
+        return x;
+    }
+
+    public void focusToPoint(int x, int y) {
+        Rect focusRect = calculateTapArea((float) x, (float) y, 1.0f);
+        Rect meteringRect = calculateTapArea((float) x, (float) y, 1.5f);
         if (this.cameraSession != null) {
-            this.cameraSession.focusToRect(calculateTapArea, calculateTapArea2);
+            this.cameraSession.focusToRect(focusRect, meteringRect);
         }
         this.focusProgress = 0.0f;
         this.innerAlpha = 1.0f;
         this.outerAlpha = 1.0f;
-        this.cx = i;
-        this.cy = i2;
+        this.cx = x;
+        this.cy = y;
         this.lastDrawTime = System.currentTimeMillis();
         invalidate();
     }
@@ -359,52 +304,48 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         return this.cameraSession;
     }
 
-    public void destroy(boolean z, Runnable runnable) {
+    public void destroy(boolean async, Runnable beforeDestroyRunnable) {
         if (this.cameraSession != null) {
             this.cameraSession.destroy();
-            CameraController.getInstance().close(this.cameraSession, !z ? new CountDownLatch(1) : false, runnable);
+            CameraController.getInstance().close(this.cameraSession, !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
         }
     }
 
-    protected boolean drawChild(Canvas canvas, View view, long j) {
-        view = super.drawChild(canvas, view, j);
-        if (!(this.focusProgress == NUM && this.innerAlpha == 0 && this.outerAlpha == 0)) {
-            j = AndroidUtilities.dp(NUM);
-            long currentTimeMillis = System.currentTimeMillis();
-            long j2 = currentTimeMillis - this.lastDrawTime;
-            long j3 = 17;
-            if (j2 >= 0) {
-                if (j2 <= 17) {
-                    j3 = j2;
-                }
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
+            int baseRad = AndroidUtilities.dp(30.0f);
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastDrawTime;
+            if (dt < 0 || dt > 17) {
+                dt = 17;
             }
-            this.lastDrawTime = currentTimeMillis;
+            this.lastDrawTime = newTime;
             this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
             this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
-            float interpolation = this.interpolator.getInterpolation(this.focusProgress);
-            j = (float) j;
-            canvas.drawCircle((float) this.cx, (float) this.cy, ((1.0f - interpolation) * j) + j, this.outerPaint);
-            canvas.drawCircle((float) this.cx, (float) this.cy, j * interpolation, this.innerPaint);
-            if (this.focusProgress < NUM) {
-                this.focusProgress += ((float) j3) / 200.0f;
-                if (this.focusProgress > NUM) {
+            float interpolated = this.interpolator.getInterpolation(this.focusProgress);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
+            if (this.focusProgress < 1.0f) {
+                this.focusProgress += ((float) dt) / 200.0f;
+                if (this.focusProgress > 1.0f) {
                     this.focusProgress = 1.0f;
                 }
                 invalidate();
-            } else if (this.innerAlpha != null) {
-                this.innerAlpha -= ((float) j3) / 150.0f;
-                if (this.innerAlpha < null) {
+            } else if (this.innerAlpha != 0.0f) {
+                this.innerAlpha -= ((float) dt) / 150.0f;
+                if (this.innerAlpha < 0.0f) {
                     this.innerAlpha = 0.0f;
                 }
                 invalidate();
-            } else if (this.outerAlpha != null) {
-                this.outerAlpha -= ((float) j3) / 150.0f;
-                if (this.outerAlpha < null) {
+            } else if (this.outerAlpha != 0.0f) {
+                this.outerAlpha -= ((float) dt) / 150.0f;
+                if (this.outerAlpha < 0.0f) {
                     this.outerAlpha = 0.0f;
                 }
                 invalidate();
             }
         }
-        return view;
+        return result;
     }
 }

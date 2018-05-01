@@ -11,40 +11,37 @@ public final class ChunkIndex implements SeekMap {
     public final int[] sizes;
     public final long[] timesUs;
 
-    public boolean isSeekable() {
-        return true;
-    }
-
-    public ChunkIndex(int[] iArr, long[] jArr, long[] jArr2, long[] jArr3) {
-        this.sizes = iArr;
-        this.offsets = jArr;
-        this.durationsUs = jArr2;
-        this.timesUs = jArr3;
-        this.length = iArr.length;
-        if (this.length > null) {
-            this.durationUs = jArr2[this.length - 1] + jArr3[this.length - 1];
+    public ChunkIndex(int[] sizes, long[] offsets, long[] durationsUs, long[] timesUs) {
+        this.sizes = sizes;
+        this.offsets = offsets;
+        this.durationsUs = durationsUs;
+        this.timesUs = timesUs;
+        this.length = sizes.length;
+        if (this.length > 0) {
+            this.durationUs = durationsUs[this.length - 1] + timesUs[this.length - 1];
         } else {
-            this.durationUs = null;
+            this.durationUs = 0;
         }
     }
 
-    public int getChunkIndex(long j) {
-        return Util.binarySearchFloor(this.timesUs, j, true, true);
+    public int getChunkIndex(long timeUs) {
+        return Util.binarySearchFloor(this.timesUs, timeUs, true, true);
+    }
+
+    public boolean isSeekable() {
+        return true;
     }
 
     public long getDurationUs() {
         return this.durationUs;
     }
 
-    public SeekPoints getSeekPoints(long j) {
-        int chunkIndex = getChunkIndex(j);
+    public SeekPoints getSeekPoints(long timeUs) {
+        int chunkIndex = getChunkIndex(timeUs);
         SeekPoint seekPoint = new SeekPoint(this.timesUs[chunkIndex], this.offsets[chunkIndex]);
-        if (seekPoint.timeUs < j) {
-            if (chunkIndex != this.length - 1) {
-                chunkIndex++;
-                return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex], this.offsets[chunkIndex]));
-            }
+        if (seekPoint.timeUs >= timeUs || chunkIndex == this.length - 1) {
+            return new SeekPoints(seekPoint);
         }
-        return new SeekPoints(seekPoint);
+        return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex + 1], this.offsets[chunkIndex + 1]));
     }
 }

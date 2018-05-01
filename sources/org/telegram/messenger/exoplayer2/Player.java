@@ -28,10 +28,6 @@ public interface Player {
     public static final int TIMELINE_CHANGE_REASON_PREPARED = 0;
     public static final int TIMELINE_CHANGE_REASON_RESET = 1;
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface DiscontinuityReason {
-    }
-
     public interface EventListener {
         void onLoadingChanged(boolean z);
 
@@ -52,6 +48,47 @@ public interface Player {
         void onTimelineChanged(Timeline timeline, Object obj, int i);
 
         void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray);
+    }
+
+    public static abstract class DefaultEventListener implements EventListener {
+        public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+            onTimelineChanged(timeline, manifest);
+        }
+
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        }
+
+        public void onLoadingChanged(boolean isLoading) {
+        }
+
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        }
+
+        public void onRepeatModeChanged(int repeatMode) {
+        }
+
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+        }
+
+        public void onPlayerError(ExoPlaybackException error) {
+        }
+
+        public void onPositionDiscontinuity(int reason) {
+        }
+
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+        }
+
+        public void onSeekProcessed() {
+        }
+
+        @Deprecated
+        public void onTimelineChanged(Timeline timeline, Object manifest) {
+        }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DiscontinuityReason {
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -94,43 +131,6 @@ public interface Player {
         void setVideoSurfaceView(SurfaceView surfaceView);
 
         void setVideoTextureView(TextureView textureView);
-    }
-
-    public static abstract class DefaultEventListener implements EventListener {
-        public void onLoadingChanged(boolean z) {
-        }
-
-        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-        }
-
-        public void onPlayerError(ExoPlaybackException exoPlaybackException) {
-        }
-
-        public void onPlayerStateChanged(boolean z, int i) {
-        }
-
-        public void onPositionDiscontinuity(int i) {
-        }
-
-        public void onRepeatModeChanged(int i) {
-        }
-
-        public void onSeekProcessed() {
-        }
-
-        public void onShuffleModeEnabledChanged(boolean z) {
-        }
-
-        @Deprecated
-        public void onTimelineChanged(Timeline timeline, Object obj) {
-        }
-
-        public void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray) {
-        }
-
-        public void onTimelineChanged(Timeline timeline, Object obj, int i) {
-            onTimelineChanged(timeline, obj);
-        }
     }
 
     void addListener(EventListener eventListener);

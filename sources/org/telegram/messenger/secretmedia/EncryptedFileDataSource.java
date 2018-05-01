@@ -22,8 +22,8 @@ public final class EncryptedFileDataSource implements DataSource {
     private Uri uri;
 
     public static class EncryptedFileDataSourceException extends IOException {
-        public EncryptedFileDataSourceException(IOException iOException) {
-            super(iOException);
+        public EncryptedFileDataSourceException(IOException cause) {
+            super(cause);
         }
     }
 
@@ -31,26 +31,21 @@ public final class EncryptedFileDataSource implements DataSource {
         this(null);
     }
 
-    public EncryptedFileDataSource(TransferListener<? super EncryptedFileDataSource> transferListener) {
+    public EncryptedFileDataSource(TransferListener<? super EncryptedFileDataSource> listener) {
         this.key = new byte[32];
         this.iv = new byte[16];
-        this.listener = transferListener;
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws EncryptedFileDataSourceException {
         try {
             this.uri = dataSpec.uri;
-            File file = new File(dataSpec.uri.getPath());
-            String name = file.getName();
-            File internalCacheDir = FileLoader.getInternalCacheDir();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(name);
-            stringBuilder.append(".key");
-            RandomAccessFile randomAccessFile = new RandomAccessFile(new File(internalCacheDir, stringBuilder.toString()), "r");
-            randomAccessFile.read(this.key);
-            randomAccessFile.read(this.iv);
-            randomAccessFile.close();
-            this.file = new RandomAccessFile(file, "r");
+            File path = new File(dataSpec.uri.getPath());
+            RandomAccessFile keyFile = new RandomAccessFile(new File(FileLoader.getInternalCacheDir(), path.getName() + ".key"), "r");
+            keyFile.read(this.key);
+            keyFile.read(this.iv);
+            keyFile.close();
+            this.file = new RandomAccessFile(path, "r");
             this.file.seek(dataSpec.position);
             this.fileOffset = (int) dataSpec.position;
             this.bytesRemaining = dataSpec.length == -1 ? this.file.length() - dataSpec.position : dataSpec.length;
@@ -62,31 +57,33 @@ public final class EncryptedFileDataSource implements DataSource {
                 this.listener.onTransferStart(this, dataSpec);
             }
             return this.bytesRemaining;
-        } catch (DataSpec dataSpec2) {
-            throw new EncryptedFileDataSourceException(dataSpec2);
+        } catch (IOException e) {
+            throw new EncryptedFileDataSourceException(e);
         }
     }
 
-    public int read(byte[] bArr, int i, int i2) throws EncryptedFileDataSourceException {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] buffer, int offset, int readLength) throws EncryptedFileDataSourceException {
+        if (readLength == 0) {
+            return 0;
         }
         if (this.bytesRemaining == 0) {
             return -1;
         }
         try {
-            i2 = this.file.read(bArr, i, (int) Math.min(this.bytesRemaining, (long) i2));
-            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, i2, this.fileOffset);
-            this.fileOffset += i2;
-            if (i2 > 0) {
-                this.bytesRemaining -= (long) i2;
-                if (this.listener != null) {
-                    this.listener.onBytesTransferred(this, i2);
-                }
+            int bytesRead = this.file.read(buffer, offset, (int) Math.min(this.bytesRemaining, (long) readLength));
+            Utilities.aesCtrDecryptionByteArray(buffer, this.key, this.iv, offset, bytesRead, this.fileOffset);
+            this.fileOffset += bytesRead;
+            if (bytesRead <= 0) {
+                return bytesRead;
             }
-            return i2;
-        } catch (byte[] bArr2) {
-            throw new EncryptedFileDataSourceException(bArr2);
+            this.bytesRemaining -= (long) bytesRead;
+            if (this.listener == null) {
+                return bytesRead;
+            }
+            this.listener.onBytesTransferred(this, bytesRead);
+            return bytesRead;
+        } catch (IOException e) {
+            throw new EncryptedFileDataSourceException(e);
         }
     }
 

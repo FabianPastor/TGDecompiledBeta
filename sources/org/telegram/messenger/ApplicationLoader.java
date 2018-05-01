@@ -20,8 +20,8 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
     @SuppressLint({"StaticFieldLeak"})
-    public static volatile Context applicationContext = null;
-    public static volatile Handler applicationHandler = null;
+    public static volatile Context applicationContext;
+    public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
@@ -48,12 +48,12 @@ public class ApplicationLoader extends Application {
 
             public void run() {
                 try {
-                    Object token = FirebaseInstanceId.getInstance().getToken();
+                    String token = FirebaseInstanceId.getInstance().getToken();
                     if (!TextUtils.isEmpty(token)) {
                         GcmInstanceIDListenerService.sendRegistrationToServer(token);
                     }
-                } catch (Throwable th) {
-                    FileLog.m3e(th);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
             }
         }
@@ -63,16 +63,13 @@ public class ApplicationLoader extends Application {
 
         public void run() {
             if (ApplicationLoader.this.checkPlayServices()) {
-                Object obj = SharedConfig.pushString;
-                if (TextUtils.isEmpty(obj)) {
+                String currentPushString = SharedConfig.pushString;
+                if (TextUtils.isEmpty(currentPushString)) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.m0d("GCM Registration not found.");
                     }
                 } else if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("GCM regId = ");
-                    stringBuilder.append(obj);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("GCM regId = " + currentPushString);
                 }
                 Utilities.globalQueue.postRunnable(new C00681());
             } else if (BuildVars.LOGS_ENABLED) {
@@ -82,16 +79,16 @@ public class ApplicationLoader extends Application {
     }
 
     public static File getFilesDirFixed() {
-        for (int i = 0; i < 10; i++) {
-            File filesDir = applicationContext.getFilesDir();
-            if (filesDir != null) {
-                return filesDir;
+        for (int a = 0; a < 10; a++) {
+            File path = applicationContext.getFilesDir();
+            if (path != null) {
+                return path;
             }
         }
         try {
-            filesDir = new File(applicationContext.getApplicationInfo().dataDir, "files");
-            filesDir.mkdirs();
-            return filesDir;
+            path = new File(applicationContext.getApplicationInfo().dataDir, "files");
+            path.mkdirs();
+            return path;
         } catch (Throwable e) {
             FileLog.m3e(e);
             return new File("/data/data/org.telegram.messenger/files");
@@ -100,6 +97,7 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
+            int a;
             applicationInited = true;
             try {
                 LocaleController.getInstance();
@@ -107,34 +105,30 @@ public class ApplicationLoader extends Application {
                 e.printStackTrace();
             }
             try {
-                IntentFilter intentFilter = new IntentFilter("android.intent.action.SCREEN_ON");
-                intentFilter.addAction("android.intent.action.SCREEN_OFF");
-                applicationContext.registerReceiver(new ScreenReceiver(), intentFilter);
+                IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
+                filter.addAction("android.intent.action.SCREEN_OFF");
+                applicationContext.registerReceiver(new ScreenReceiver(), filter);
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("screen state = ");
-                    stringBuilder.append(isScreenOn);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("screen state = " + isScreenOn);
                 }
             } catch (Throwable e3) {
                 FileLog.m3e(e3);
             }
             SharedConfig.loadConfig();
-            int i = 0;
-            for (int i2 = 0; i2 < 3; i2++) {
-                UserConfig.getInstance(i2).loadConfig();
-                MessagesController.getInstance(i2);
-                ConnectionsManager.getInstance(i2);
-                User currentUser = UserConfig.getInstance(i2).getCurrentUser();
-                if (currentUser != null) {
-                    MessagesController.getInstance(i2).putUser(currentUser, true);
-                    MessagesController.getInstance(i2).getBlockedUsers(true);
-                    SendMessagesHelper.getInstance(i2).checkUnsentMessages();
+            for (a = 0; a < 3; a++) {
+                UserConfig.getInstance(a).loadConfig();
+                MessagesController.getInstance(a);
+                ConnectionsManager.getInstance(a);
+                User user = UserConfig.getInstance(a).getCurrentUser();
+                if (user != null) {
+                    MessagesController.getInstance(a).putUser(user, true);
+                    MessagesController.getInstance(a).getBlockedUsers(true);
+                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
                 }
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
@@ -142,10 +136,9 @@ public class ApplicationLoader extends Application {
                 FileLog.m0d("app initied");
             }
             MediaController.getInstance();
-            while (i < 3) {
-                ContactsController.getInstance(i).checkAppAccount();
-                DownloadController.getInstance(i);
-                i++;
+            for (a = 0; a < 3; a++) {
+                ContactsController.getInstance(a).checkAppAccount();
+                DownloadController.getInstance(a);
             }
             WearDataLayerListenerService.updateWatchConnectionState();
         }
@@ -166,8 +159,8 @@ public class ApplicationLoader extends Application {
             try {
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
                 return;
-            } catch (Throwable th) {
-                FileLog.m3e(th);
+            } catch (Throwable e) {
+                FileLog.m3e(e);
                 return;
             }
         }
@@ -179,13 +172,13 @@ public class ApplicationLoader extends Application {
         ((AlarmManager) applicationContext.getSystemService("alarm")).cancel(PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0));
     }
 
-    public void onConfigurationChanged(Configuration configuration) {
-        super.onConfigurationChanged(configuration);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         try {
-            LocaleController.getInstance().onDeviceConfigurationChange(configuration);
-            AndroidUtilities.checkDisplaySize(applicationContext, configuration);
-        } catch (Configuration configuration2) {
-            configuration2.printStackTrace();
+            LocaleController.getInstance().onDeviceConfigurationChange(newConfig);
+            AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -194,12 +187,11 @@ public class ApplicationLoader extends Application {
     }
 
     private boolean checkPlayServices() {
-        boolean z = true;
         try {
-            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) != 0) {
-                z = false;
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == 0) {
+                return true;
             }
-            return z;
+            return false;
         } catch (Throwable e) {
             FileLog.m3e(e);
             return true;

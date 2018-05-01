@@ -8,12 +8,12 @@ import java.util.Set;
 public interface Cache {
 
     public static class CacheException extends IOException {
-        public CacheException(String str) {
-            super(str);
+        public CacheException(String message) {
+            super(message);
         }
 
-        public CacheException(Throwable th) {
-            super(th);
+        public CacheException(Throwable cause) {
+            super(cause);
         }
     }
 

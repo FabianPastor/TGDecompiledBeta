@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.util;
 import android.util.Log;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public final class NalUnitUtil {
     public static final float[] ASPECT_RATIO_IDC_VALUES = new float[]{1.0f, 1.0f, 1.0909091f, 0.90909094f, 1.4545455f, 1.2121212f, 2.1818182f, 1.8181819f, 2.909091f, 2.4242425f, 1.6363636f, 1.3636364f, 1.939394f, 1.6161616f, 1.3333334f, 1.5f, 2.0f};
@@ -21,10 +20,10 @@ public final class NalUnitUtil {
         public final int picParameterSetId;
         public final int seqParameterSetId;
 
-        public PpsData(int i, int i2, boolean z) {
-            this.picParameterSetId = i;
-            this.seqParameterSetId = i2;
-            this.bottomFieldPicOrderInFramePresentFlag = z;
+        public PpsData(int picParameterSetId, int seqParameterSetId, boolean bottomFieldPicOrderInFramePresentFlag) {
+            this.picParameterSetId = picParameterSetId;
+            this.seqParameterSetId = seqParameterSetId;
+            this.bottomFieldPicOrderInFramePresentFlag = bottomFieldPicOrderInFramePresentFlag;
         }
     }
 
@@ -40,472 +39,280 @@ public final class NalUnitUtil {
         public final int seqParameterSetId;
         public final int width;
 
-        public SpsData(int i, int i2, int i3, float f, boolean z, boolean z2, int i4, int i5, int i6, boolean z3) {
-            this.seqParameterSetId = i;
-            this.width = i2;
-            this.height = i3;
-            this.pixelWidthAspectRatio = f;
-            this.separateColorPlaneFlag = z;
-            this.frameMbsOnlyFlag = z2;
-            this.frameNumLength = i4;
-            this.picOrderCountType = i5;
-            this.picOrderCntLsbLength = i6;
-            this.deltaPicOrderAlwaysZeroFlag = z3;
+        public SpsData(int seqParameterSetId, int width, int height, float pixelWidthAspectRatio, boolean separateColorPlaneFlag, boolean frameMbsOnlyFlag, int frameNumLength, int picOrderCountType, int picOrderCntLsbLength, boolean deltaPicOrderAlwaysZeroFlag) {
+            this.seqParameterSetId = seqParameterSetId;
+            this.width = width;
+            this.height = height;
+            this.pixelWidthAspectRatio = pixelWidthAspectRatio;
+            this.separateColorPlaneFlag = separateColorPlaneFlag;
+            this.frameMbsOnlyFlag = frameMbsOnlyFlag;
+            this.frameNumLength = frameNumLength;
+            this.picOrderCountType = picOrderCountType;
+            this.picOrderCntLsbLength = picOrderCntLsbLength;
+            this.deltaPicOrderAlwaysZeroFlag = deltaPicOrderAlwaysZeroFlag;
         }
     }
 
-    public static int unescapeStream(byte[] bArr, int i) {
+    public static int unescapeStream(byte[] data, int limit) {
         synchronized (scratchEscapePositionsLock) {
-            int i2;
-            int i3 = 0;
-            int i4 = i3;
-            while (i3 < i) {
-                i3 = findNextUnescapeIndex(bArr, i3, i);
-                if (i3 < i) {
-                    if (scratchEscapePositions.length <= i4) {
-                        scratchEscapePositions = Arrays.copyOf(scratchEscapePositions, scratchEscapePositions.length * 2);
+            int position = 0;
+            int scratchEscapeCount = 0;
+            while (position < limit) {
+                try {
+                    position = findNextUnescapeIndex(data, position, limit);
+                    if (position < limit) {
+                        if (scratchEscapePositions.length <= scratchEscapeCount) {
+                            scratchEscapePositions = Arrays.copyOf(scratchEscapePositions, scratchEscapePositions.length * 2);
+                        }
+                        int scratchEscapeCount2 = scratchEscapeCount + 1;
+                        try {
+                            scratchEscapePositions[scratchEscapeCount] = position;
+                            position += 3;
+                            scratchEscapeCount = scratchEscapeCount2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            throw th2;
+                        }
                     }
-                    i2 = i4 + 1;
-                    scratchEscapePositions[i4] = i3;
-                    i3 += 3;
-                    i4 = i2;
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    scratchEscapeCount2 = scratchEscapeCount;
                 }
             }
-            i -= i4;
-            i3 = 0;
-            int i5 = i3;
-            i2 = i5;
-            while (i3 < i4) {
-                int i6 = scratchEscapePositions[i3] - i2;
-                System.arraycopy(bArr, i2, bArr, i5, i6);
-                i5 += i6;
-                int i7 = i5 + 1;
-                bArr[i5] = (byte) 0;
-                i5 = i7 + 1;
-                bArr[i7] = (byte) 0;
-                i2 += i6 + 3;
-                i3++;
+            int unescapedLength = limit - scratchEscapeCount;
+            int escapedPosition = 0;
+            int unescapedPosition = 0;
+            for (int i = 0; i < scratchEscapeCount; i++) {
+                int copyLength = scratchEscapePositions[i] - escapedPosition;
+                System.arraycopy(data, escapedPosition, data, unescapedPosition, copyLength);
+                unescapedPosition += copyLength;
+                int i2 = unescapedPosition + 1;
+                data[unescapedPosition] = (byte) 0;
+                unescapedPosition = i2 + 1;
+                data[i2] = (byte) 0;
+                escapedPosition += copyLength + 3;
             }
-            System.arraycopy(bArr, i2, bArr, i5, i - i5);
+            System.arraycopy(data, escapedPosition, data, unescapedPosition, unescapedLength - unescapedPosition);
+            return unescapedLength;
         }
-        return i;
     }
 
-    public static void discardToSps(ByteBuffer byteBuffer) {
-        int position = byteBuffer.position();
-        int i = 0;
-        int i2 = i;
-        while (true) {
-            int i3 = i + 1;
-            if (i3 < position) {
-                int i4 = byteBuffer.get(i) & 255;
-                if (i2 == 3) {
-                    if (i4 == 1 && (byteBuffer.get(i3) & 31) == 7) {
-                        ByteBuffer duplicate = byteBuffer.duplicate();
-                        duplicate.position(i - 3);
-                        duplicate.limit(position);
-                        byteBuffer.position(0);
-                        byteBuffer.put(duplicate);
-                        return;
-                    }
-                } else if (i4 == 0) {
-                    i2++;
+    public static void discardToSps(ByteBuffer data) {
+        int length = data.position();
+        int consecutiveZeros = 0;
+        int offset = 0;
+        while (offset + 1 < length) {
+            int value = data.get(offset) & 255;
+            if (consecutiveZeros == 3) {
+                if (value == 1 && (data.get(offset + 1) & 31) == 7) {
+                    ByteBuffer offsetData = data.duplicate();
+                    offsetData.position(offset - 3);
+                    offsetData.limit(length);
+                    data.position(0);
+                    data.put(offsetData);
+                    return;
                 }
-                if (i4 != 0) {
-                    i2 = 0;
-                }
-                i = i3;
-            } else {
-                byteBuffer.clear();
-                return;
+            } else if (value == 0) {
+                consecutiveZeros++;
             }
+            if (value != 0) {
+                consecutiveZeros = 0;
+            }
+            offset++;
         }
+        data.clear();
     }
 
-    public static boolean isNalUnitSei(String str, byte b) {
-        if ("video/avc".equals(str) && (b & 31) == 6) {
-            return true;
-        }
-        if (MimeTypes.VIDEO_H265.equals(str) == null || ((b & 126) >> 1) != (byte) 39) {
-            return false;
-        }
-        return true;
+    public static boolean isNalUnitSei(String mimeType, byte nalUnitHeaderFirstByte) {
+        return ("video/avc".equals(mimeType) && (nalUnitHeaderFirstByte & 31) == 6) || (MimeTypes.VIDEO_H265.equals(mimeType) && ((nalUnitHeaderFirstByte & 126) >> 1) == H265_NAL_UNIT_TYPE_PREFIX_SEI);
     }
 
-    public static int getNalUnitType(byte[] bArr, int i) {
-        return bArr[i + 3] & 31;
+    public static int getNalUnitType(byte[] data, int offset) {
+        return data[offset + 3] & 31;
     }
 
-    public static int getH265NalUnitType(byte[] bArr, int i) {
-        return (bArr[i + 3] & 126) >> 1;
+    public static int getH265NalUnitType(byte[] data, int offset) {
+        return (data[offset + 3] & 126) >> 1;
     }
 
-    public static SpsData parseSpsNalUnit(byte[] bArr, int i, int i2) {
-        boolean z;
-        int readUnsignedExpGolombCodedInt;
-        int readUnsignedExpGolombCodedInt2;
-        int i3;
-        boolean z2;
-        int readUnsignedExpGolombCodedInt3;
-        boolean readBit;
-        long readUnsignedExpGolombCodedInt4;
-        int i4;
-        int readUnsignedExpGolombCodedInt5;
-        boolean readBit2;
-        int i5;
-        int i6;
-        int i7;
-        float f;
-        int readBits;
-        int readBits2;
-        float f2;
-        ParsableNalUnitBitArray parsableNalUnitBitArray = new ParsableNalUnitBitArray(bArr, i, i2);
+    public static SpsData parseSpsNalUnit(byte[] nalData, int nalOffset, int nalLimit) {
+        int i;
+        ParsableNalUnitBitArray parsableNalUnitBitArray = new ParsableNalUnitBitArray(nalData, nalOffset, nalLimit);
         parsableNalUnitBitArray.skipBits(8);
-        int readBits3 = parsableNalUnitBitArray.readBits(8);
+        int profileIdc = parsableNalUnitBitArray.readBits(8);
         parsableNalUnitBitArray.skipBits(16);
-        int readUnsignedExpGolombCodedInt6 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        int i8 = 1;
-        if (!(readBits3 == 100 || readBits3 == 110 || readBits3 == 122 || readBits3 == 244 || readBits3 == 44 || readBits3 == 83 || readBits3 == 86 || readBits3 == 118 || readBits3 == 128)) {
-            if (readBits3 != TsExtractor.TS_STREAM_TYPE_DTS) {
-                z = false;
-                readBits3 = 1;
-                readUnsignedExpGolombCodedInt = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
-                readUnsignedExpGolombCodedInt2 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                if (readUnsignedExpGolombCodedInt2 == 0) {
-                    i3 = readUnsignedExpGolombCodedInt6;
-                    z2 = false;
-                    readUnsignedExpGolombCodedInt3 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
-                } else if (readUnsignedExpGolombCodedInt2 != 1) {
-                    readBit = parsableNalUnitBitArray.readBit();
-                    parsableNalUnitBitArray.readSignedExpGolombCodedInt();
-                    parsableNalUnitBitArray.readSignedExpGolombCodedInt();
-                    readUnsignedExpGolombCodedInt4 = (long) parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                    i3 = readUnsignedExpGolombCodedInt6;
-                    for (i4 = 0; ((long) i4) < readUnsignedExpGolombCodedInt4; i4++) {
-                        parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+        int seqParameterSetId = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+        int chromaFormatIdc = 1;
+        boolean separateColorPlaneFlag = false;
+        if (profileIdc == 100 || profileIdc == 110 || profileIdc == 122 || profileIdc == 244 || profileIdc == 44 || profileIdc == 83 || profileIdc == 86 || profileIdc == 118 || profileIdc == 128 || profileIdc == 138) {
+            chromaFormatIdc = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            if (chromaFormatIdc == 3) {
+                separateColorPlaneFlag = parsableNalUnitBitArray.readBit();
+            }
+            parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            parsableNalUnitBitArray.skipBit();
+            if (parsableNalUnitBitArray.readBit()) {
+                int limit = chromaFormatIdc != 3 ? 8 : 12;
+                i = 0;
+                while (i < limit) {
+                    if (parsableNalUnitBitArray.readBit()) {
+                        skipScalingList(parsableNalUnitBitArray, i < 6 ? 16 : 64);
                     }
-                    readUnsignedExpGolombCodedInt3 = 0;
-                    z2 = readBit;
-                } else {
-                    i3 = readUnsignedExpGolombCodedInt6;
-                    readUnsignedExpGolombCodedInt3 = 0;
-                    z2 = readUnsignedExpGolombCodedInt3;
+                    i++;
                 }
-                parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                parsableNalUnitBitArray.skipBit();
-                readUnsignedExpGolombCodedInt5 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
-                readUnsignedExpGolombCodedInt6 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
-                readBit2 = parsableNalUnitBitArray.readBit();
-                i5 = (2 - readBit2) * readUnsignedExpGolombCodedInt6;
-                if (!readBit2) {
-                    parsableNalUnitBitArray.skipBit();
-                }
-                parsableNalUnitBitArray.skipBit();
-                readUnsignedExpGolombCodedInt5 *= 16;
-                i5 *= 16;
-                if (parsableNalUnitBitArray.readBit()) {
-                    readUnsignedExpGolombCodedInt6 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                    int readUnsignedExpGolombCodedInt7 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                    int readUnsignedExpGolombCodedInt8 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                    int readUnsignedExpGolombCodedInt9 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-                    if (readBits3 != 0) {
-                        i6 = 2 - readBit2;
-                        i7 = 1;
-                    } else {
-                        i7 = readBits3 != 3 ? 1 : 2;
-                        if (readBits3 == 1) {
-                            i8 = 2;
-                        }
-                        i6 = (2 - readBit2) * i8;
-                    }
-                    readUnsignedExpGolombCodedInt5 -= (readUnsignedExpGolombCodedInt6 + readUnsignedExpGolombCodedInt7) * i7;
-                    i5 -= (readUnsignedExpGolombCodedInt8 + readUnsignedExpGolombCodedInt9) * i6;
-                }
-                i6 = readUnsignedExpGolombCodedInt5;
-                i8 = i5;
-                f = 1.0f;
-                if (parsableNalUnitBitArray.readBit() && parsableNalUnitBitArray.readBit()) {
-                    readBits = parsableNalUnitBitArray.readBits(8);
-                    if (readBits == 255) {
-                        readBits = parsableNalUnitBitArray.readBits(16);
-                        readBits2 = parsableNalUnitBitArray.readBits(16);
-                        if (!(readBits == 0 || readBits2 == 0)) {
-                            f = ((float) readBits) / ((float) readBits2);
-                        }
-                    } else if (readBits >= ASPECT_RATIO_IDC_VALUES.length) {
-                        f2 = ASPECT_RATIO_IDC_VALUES[readBits];
-                        return new SpsData(i3, i6, i8, f2, z, readBit2, readUnsignedExpGolombCodedInt, readUnsignedExpGolombCodedInt2, readUnsignedExpGolombCodedInt3, z2);
-                    } else {
-                        String str = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Unexpected aspect_ratio_idc value: ");
-                        stringBuilder.append(readBits);
-                        Log.w(str, stringBuilder.toString());
-                    }
-                }
-                f2 = f;
-                return new SpsData(i3, i6, i8, f2, z, readBit2, readUnsignedExpGolombCodedInt, readUnsignedExpGolombCodedInt2, readUnsignedExpGolombCodedInt3, z2);
             }
         }
-        readBits3 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        readBit = readBits3 == 3 ? parsableNalUnitBitArray.readBit() : false;
-        parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        parsableNalUnitBitArray.skipBit();
-        if (parsableNalUnitBitArray.readBit()) {
-            int i9 = readBits3 != 3 ? 8 : 12;
-            i4 = 0;
-            while (i4 < i9) {
-                if (parsableNalUnitBitArray.readBit()) {
-                    skipScalingList(parsableNalUnitBitArray, i4 < 6 ? 16 : 64);
-                }
-                i4++;
-            }
-        }
-        z = readBit;
-        readUnsignedExpGolombCodedInt = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
-        readUnsignedExpGolombCodedInt2 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        if (readUnsignedExpGolombCodedInt2 == 0) {
-            i3 = readUnsignedExpGolombCodedInt6;
-            z2 = false;
-            readUnsignedExpGolombCodedInt3 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
-        } else if (readUnsignedExpGolombCodedInt2 != 1) {
-            i3 = readUnsignedExpGolombCodedInt6;
-            readUnsignedExpGolombCodedInt3 = 0;
-            z2 = readUnsignedExpGolombCodedInt3;
-        } else {
-            readBit = parsableNalUnitBitArray.readBit();
+        int frameNumLength = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
+        int picOrderCntType = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+        int picOrderCntLsbLength = 0;
+        boolean deltaPicOrderAlwaysZeroFlag = false;
+        if (picOrderCntType == 0) {
+            picOrderCntLsbLength = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
+        } else if (picOrderCntType == 1) {
+            deltaPicOrderAlwaysZeroFlag = parsableNalUnitBitArray.readBit();
             parsableNalUnitBitArray.readSignedExpGolombCodedInt();
             parsableNalUnitBitArray.readSignedExpGolombCodedInt();
-            readUnsignedExpGolombCodedInt4 = (long) parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            i3 = readUnsignedExpGolombCodedInt6;
-            for (i4 = 0; ((long) i4) < readUnsignedExpGolombCodedInt4; i4++) {
+            long numRefFramesInPicOrderCntCycle = (long) parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            for (i = 0; ((long) i) < numRefFramesInPicOrderCntCycle; i++) {
                 parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
             }
-            readUnsignedExpGolombCodedInt3 = 0;
-            z2 = readBit;
         }
         parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
         parsableNalUnitBitArray.skipBit();
-        readUnsignedExpGolombCodedInt5 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
-        readUnsignedExpGolombCodedInt6 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
-        readBit2 = parsableNalUnitBitArray.readBit();
-        i5 = (2 - readBit2) * readUnsignedExpGolombCodedInt6;
-        if (readBit2) {
+        int picWidthInMbs = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
+        int picHeightInMapUnits = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
+        boolean frameMbsOnlyFlag = parsableNalUnitBitArray.readBit();
+        int frameHeightInMbs = (2 - (frameMbsOnlyFlag ? 1 : 0)) * picHeightInMapUnits;
+        if (!frameMbsOnlyFlag) {
             parsableNalUnitBitArray.skipBit();
         }
         parsableNalUnitBitArray.skipBit();
-        readUnsignedExpGolombCodedInt5 *= 16;
-        i5 *= 16;
+        int frameWidth = picWidthInMbs * 16;
+        int frameHeight = frameHeightInMbs * 16;
         if (parsableNalUnitBitArray.readBit()) {
-            readUnsignedExpGolombCodedInt6 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            int readUnsignedExpGolombCodedInt72 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            int readUnsignedExpGolombCodedInt82 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            int readUnsignedExpGolombCodedInt92 = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            if (readBits3 != 0) {
-                if (readBits3 != 3) {
-                }
-                if (readBits3 == 1) {
-                    i8 = 2;
-                }
-                i6 = (2 - readBit2) * i8;
+            int cropUnitX;
+            int cropUnitY;
+            int frameCropLeftOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropRightOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropTopOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropBottomOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            if (chromaFormatIdc == 0) {
+                cropUnitX = 1;
+                cropUnitY = 2 - (frameMbsOnlyFlag ? 1 : 0);
             } else {
-                i6 = 2 - readBit2;
-                i7 = 1;
+                cropUnitX = chromaFormatIdc == 3 ? 1 : 2;
+                cropUnitY = (chromaFormatIdc == 1 ? 2 : 1) * (2 - (frameMbsOnlyFlag ? 1 : 0));
             }
-            readUnsignedExpGolombCodedInt5 -= (readUnsignedExpGolombCodedInt6 + readUnsignedExpGolombCodedInt72) * i7;
-            i5 -= (readUnsignedExpGolombCodedInt82 + readUnsignedExpGolombCodedInt92) * i6;
+            frameWidth -= (frameCropLeftOffset + frameCropRightOffset) * cropUnitX;
+            frameHeight -= (frameCropTopOffset + frameCropBottomOffset) * cropUnitY;
         }
-        i6 = readUnsignedExpGolombCodedInt5;
-        i8 = i5;
-        f = 1.0f;
-        readBits = parsableNalUnitBitArray.readBits(8);
-        if (readBits == 255) {
-            readBits = parsableNalUnitBitArray.readBits(16);
-            readBits2 = parsableNalUnitBitArray.readBits(16);
-            f = ((float) readBits) / ((float) readBits2);
-        } else if (readBits >= ASPECT_RATIO_IDC_VALUES.length) {
-            String str2 = TAG;
-            StringBuilder stringBuilder2 = new StringBuilder();
-            stringBuilder2.append("Unexpected aspect_ratio_idc value: ");
-            stringBuilder2.append(readBits);
-            Log.w(str2, stringBuilder2.toString());
+        float pixelWidthHeightRatio = 1.0f;
+        if (parsableNalUnitBitArray.readBit() && parsableNalUnitBitArray.readBit()) {
+            int aspectRatioIdc = parsableNalUnitBitArray.readBits(8);
+            if (aspectRatioIdc == 255) {
+                int sarWidth = parsableNalUnitBitArray.readBits(16);
+                int sarHeight = parsableNalUnitBitArray.readBits(16);
+                if (!(sarWidth == 0 || sarHeight == 0)) {
+                    pixelWidthHeightRatio = ((float) sarWidth) / ((float) sarHeight);
+                }
+            } else if (aspectRatioIdc < ASPECT_RATIO_IDC_VALUES.length) {
+                pixelWidthHeightRatio = ASPECT_RATIO_IDC_VALUES[aspectRatioIdc];
+            } else {
+                Log.w(TAG, "Unexpected aspect_ratio_idc value: " + aspectRatioIdc);
+            }
+        }
+        return new SpsData(seqParameterSetId, frameWidth, frameHeight, pixelWidthHeightRatio, separateColorPlaneFlag, frameMbsOnlyFlag, frameNumLength, picOrderCntType, picOrderCntLsbLength, deltaPicOrderAlwaysZeroFlag);
+    }
+
+    public static PpsData parsePpsNalUnit(byte[] nalData, int nalOffset, int nalLimit) {
+        ParsableNalUnitBitArray data = new ParsableNalUnitBitArray(nalData, nalOffset, nalLimit);
+        data.skipBits(8);
+        int picParameterSetId = data.readUnsignedExpGolombCodedInt();
+        int seqParameterSetId = data.readUnsignedExpGolombCodedInt();
+        data.skipBit();
+        return new PpsData(picParameterSetId, seqParameterSetId, data.readBit());
+    }
+
+    public static int findNalUnit(byte[] data, int startOffset, int endOffset, boolean[] prefixFlags) {
+        boolean z;
+        boolean z2 = true;
+        int length = endOffset - startOffset;
+        if (length >= 0) {
+            z = true;
         } else {
-            f2 = ASPECT_RATIO_IDC_VALUES[readBits];
-            return new SpsData(i3, i6, i8, f2, z, readBit2, readUnsignedExpGolombCodedInt, readUnsignedExpGolombCodedInt2, readUnsignedExpGolombCodedInt3, z2);
+            z = false;
         }
-        f2 = f;
-        return new SpsData(i3, i6, i8, f2, z, readBit2, readUnsignedExpGolombCodedInt, readUnsignedExpGolombCodedInt2, readUnsignedExpGolombCodedInt3, z2);
-    }
-
-    public static PpsData parsePpsNalUnit(byte[] bArr, int i, int i2) {
-        ParsableNalUnitBitArray parsableNalUnitBitArray = new ParsableNalUnitBitArray(bArr, i, i2);
-        parsableNalUnitBitArray.skipBits(8);
-        bArr = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        i = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        parsableNalUnitBitArray.skipBit();
-        return new PpsData(bArr, i, parsableNalUnitBitArray.readBit());
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static int findNalUnit(byte[] bArr, int i, int i2, boolean[] zArr) {
-        int i3 = i2 - i;
-        boolean z = false;
-        Assertions.checkState(i3 >= 0);
-        if (i3 == 0) {
-            return i2;
+        Assertions.checkState(z);
+        if (length == 0) {
+            return endOffset;
         }
-        if (zArr != null) {
-            if (zArr[0]) {
-                clearPrefixFlags(zArr);
-                return i - 3;
-            } else if (i3 > 1 && zArr[1] && bArr[i] == (byte) 1) {
-                clearPrefixFlags(zArr);
-                return i - 2;
-            } else if (i3 > 2 && zArr[2] && bArr[i] == (byte) 0 && bArr[i + 1] == (byte) 1) {
-                clearPrefixFlags(zArr);
-                return i - 1;
+        if (prefixFlags != null) {
+            if (prefixFlags[0]) {
+                clearPrefixFlags(prefixFlags);
+                return startOffset - 3;
+            } else if (length > 1 && prefixFlags[1] && data[startOffset] == (byte) 1) {
+                clearPrefixFlags(prefixFlags);
+                return startOffset - 2;
+            } else if (length > 2 && prefixFlags[2] && data[startOffset] == (byte) 0 && data[startOffset + 1] == (byte) 1) {
+                clearPrefixFlags(prefixFlags);
+                return startOffset - 1;
             }
         }
-        int i4 = i2 - 1;
-        i += 2;
-        while (i < i4) {
-            if ((bArr[i] & 254) == 0) {
-                int i5 = i - 2;
-                if (bArr[i5] == (byte) 0 && bArr[i - 1] == (byte) 0 && bArr[i] == (byte) 1) {
-                    if (zArr != null) {
-                        clearPrefixFlags(zArr);
+        int limit = endOffset - 1;
+        int i = startOffset + 2;
+        while (i < limit) {
+            if ((data[i] & 254) == 0) {
+                if (data[i - 2] == (byte) 0 && data[i - 1] == (byte) 0 && data[i] == (byte) 1) {
+                    if (prefixFlags != null) {
+                        clearPrefixFlags(prefixFlags);
                     }
-                    return i5;
+                    return i - 2;
                 }
                 i -= 2;
             }
             i += 3;
         }
-        if (zArr != null) {
-            if (i3 > 2) {
-                if (bArr[i2 - 3] == 0) {
-                    if (bArr[i2 - 2] == 0) {
-                    }
-                }
-                i = 0;
-                zArr[0] = i;
-                if (i3 <= 1) {
-                    if (bArr[i2 - 2] == 0) {
-                    }
-                    i = 0;
-                    zArr[1] = i;
-                    if (bArr[i4] == null) {
-                        z = true;
-                    }
-                    zArr[2] = z;
-                } else {
-                    if (zArr[2] != 0 && bArr[i4] == 0) {
-                    }
-                    i = 0;
-                    zArr[1] = i;
-                    if (bArr[i4] == null) {
-                        z = true;
-                    }
-                    zArr[2] = z;
-                }
-                i = 1;
-                zArr[1] = i;
-                if (bArr[i4] == null) {
-                    z = true;
-                }
-                zArr[2] = z;
-            } else if (i3 == 2) {
-                if (zArr[2] != 0 && bArr[i2 - 2] == 0 && bArr[i4] == 1) {
-                }
-                i = 0;
-                zArr[0] = i;
-                if (i3 <= 1) {
-                    if (bArr[i2 - 2] == 0) {
-                    }
-                    i = 0;
-                    zArr[1] = i;
-                    if (bArr[i4] == null) {
-                        z = true;
-                    }
-                    zArr[2] = z;
-                }
-                i = 1;
-                zArr[1] = i;
-                if (bArr[i4] == null) {
-                    z = true;
-                }
-                zArr[2] = z;
-            } else {
-                if (zArr[1] != 0 && bArr[i4] == 1) {
-                }
-                i = 0;
-                zArr[0] = i;
-                if (i3 <= 1) {
-                    if (bArr[i2 - 2] == 0) {
-                    }
-                    i = 0;
-                    zArr[1] = i;
-                    if (bArr[i4] == null) {
-                        z = true;
-                    }
-                    zArr[2] = z;
-                }
-                i = 1;
-                zArr[1] = i;
-                if (bArr[i4] == null) {
-                    z = true;
-                }
-                zArr[2] = z;
-            }
-            i = 1;
-            zArr[0] = i;
-            if (i3 <= 1) {
-                if (bArr[i2 - 2] == 0) {
-                }
-                i = 0;
-                zArr[1] = i;
-                if (bArr[i4] == null) {
-                    z = true;
-                }
-                zArr[2] = z;
-            }
-            i = 1;
-            zArr[1] = i;
-            if (bArr[i4] == null) {
-                z = true;
-            }
-            zArr[2] = z;
+        if (prefixFlags == null) {
+            return endOffset;
         }
-        return i2;
+        z = length > 2 ? data[endOffset + -3] == (byte) 0 && data[endOffset - 2] == (byte) 0 && data[endOffset - 1] == (byte) 1 : length == 2 ? prefixFlags[2] && data[endOffset - 2] == (byte) 0 && data[endOffset - 1] == (byte) 1 : prefixFlags[1] && data[endOffset - 1] == (byte) 1;
+        prefixFlags[0] = z;
+        z = length > 1 ? data[endOffset + -2] == (byte) 0 && data[endOffset - 1] == (byte) 0 : prefixFlags[2] && data[endOffset - 1] == (byte) 0;
+        prefixFlags[1] = z;
+        if (data[endOffset - 1] != (byte) 0) {
+            z2 = false;
+        }
+        prefixFlags[2] = z2;
+        return endOffset;
     }
 
-    public static void clearPrefixFlags(boolean[] zArr) {
-        zArr[0] = false;
-        zArr[1] = false;
-        zArr[2] = false;
+    public static void clearPrefixFlags(boolean[] prefixFlags) {
+        prefixFlags[0] = false;
+        prefixFlags[1] = false;
+        prefixFlags[2] = false;
     }
 
-    private static int findNextUnescapeIndex(byte[] bArr, int i, int i2) {
-        while (i < i2 - 2) {
-            if (bArr[i] == (byte) 0 && bArr[i + 1] == (byte) 0 && bArr[i + 2] == (byte) 3) {
+    private static int findNextUnescapeIndex(byte[] bytes, int offset, int limit) {
+        int i = offset;
+        while (i < limit - 2) {
+            if (bytes[i] == (byte) 0 && bytes[i + 1] == (byte) 0 && bytes[i + 2] == (byte) 3) {
                 return i;
             }
             i++;
         }
-        return i2;
+        return limit;
     }
 
-    private static void skipScalingList(ParsableNalUnitBitArray parsableNalUnitBitArray, int i) {
-        int i2 = 8;
-        int i3 = 8;
-        for (int i4 = 0; i4 < i; i4++) {
-            if (i2 != 0) {
-                i2 = ((parsableNalUnitBitArray.readSignedExpGolombCodedInt() + i3) + 256) % 256;
+    private static void skipScalingList(ParsableNalUnitBitArray bitArray, int size) {
+        int lastScale = 8;
+        int nextScale = 8;
+        for (int i = 0; i < size; i++) {
+            if (nextScale != 0) {
+                nextScale = ((lastScale + bitArray.readSignedExpGolombCodedInt()) + 256) % 256;
             }
-            if (i2 != 0) {
-                i3 = i2;
+            if (nextScale != 0) {
+                lastScale = nextScale;
             }
         }
     }

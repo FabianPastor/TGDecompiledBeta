@@ -93,6 +93,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 if (AnimatedFileDrawable.this.backgroundBitmap != null) {
                     AnimatedFileDrawable.this.backgroundBitmap.recycle();
                     AnimatedFileDrawable.this.backgroundBitmap = null;
+                    return;
                 }
                 return;
             }
@@ -134,8 +135,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                             AnimatedFileDrawable.this.backgroundShader = new BitmapShader(AnimatedFileDrawable.this.backgroundBitmap, TileMode.CLAMP, TileMode.CLAMP);
                         }
                     }
-                } catch (Throwable th) {
-                    FileLog.m3e(th);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
                 if (AnimatedFileDrawable.this.backgroundBitmap != null) {
                     AnimatedFileDrawable.this.lastFrameDecodeTime = System.currentTimeMillis();
@@ -166,13 +167,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     private static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr);
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public AnimatedFileDrawable(File file, boolean z) {
+    public AnimatedFileDrawable(File file, boolean createDecoder) {
         this.path = file;
-        if (z) {
+        if (createDecoder) {
             this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData);
             this.decoderCreated = true;
         }
@@ -184,13 +181,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public void setSecondParentView(View view) {
         this.secondParentView = view;
-        if (view == null && this.recycleWithSecond != null) {
+        if (view == null && this.recycleWithSecond) {
             recycle();
         }
     }
 
-    public void setAllowDecodeSingleFrame(boolean z) {
-        this.decodeSingleFrame = z;
+    public void setAllowDecodeSingleFrame(boolean value) {
+        this.decodeSingleFrame = value;
         if (this.decodeSingleFrame) {
             scheduleNextGetFrame();
         }
@@ -215,17 +212,18 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             if (this.nextRenderingBitmap != null) {
                 this.nextRenderingBitmap.recycle();
                 this.nextRenderingBitmap = null;
+                return;
             }
-        } else {
-            this.destroyWhenDone = true;
+            return;
         }
+        this.destroyWhenDone = true;
     }
 
-    protected static void runOnUiThread(Runnable runnable) {
+    protected static void runOnUiThread(Runnable task) {
         if (Looper.myLooper() == uiHandler.getLooper()) {
-            runnable.run();
+            task.run();
         } else {
-            uiHandler.post(runnable);
+            uiHandler.post(task);
         }
     }
 
@@ -237,6 +235,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
+    public int getOpacity() {
+        return -2;
+    }
+
     public void start() {
         if (!this.isRunning) {
             this.isRunning = true;
@@ -246,23 +248,26 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     private void scheduleNextGetFrame() {
-        if (this.loadFrameTask == null) {
-            long j = 0;
-            if (!((this.nativePtr == 0 && this.decoderCreated) || this.destroyWhenDone)) {
-                if (!this.isRunning) {
-                    if (this.decodeSingleFrame) {
-                        if (this.decodeSingleFrame && this.singleFrameDecoded) {
-                        }
-                    }
+        if (this.loadFrameTask != null) {
+            return;
+        }
+        if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
+            if (!this.isRunning) {
+                if (!this.decodeSingleFrame) {
+                    return;
                 }
-                if (this.lastFrameDecodeTime != 0) {
-                    j = Math.min((long) this.invalidateAfter, Math.max(0, ((long) this.invalidateAfter) - (System.currentTimeMillis() - this.lastFrameDecodeTime)));
+                if (this.decodeSingleFrame && this.singleFrameDecoded) {
+                    return;
                 }
-                ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = executor;
-                Runnable runnable = this.loadFrameRunnable;
-                this.loadFrameTask = runnable;
-                scheduledThreadPoolExecutor.schedule(runnable, j, TimeUnit.MILLISECONDS);
             }
+            long ms = 0;
+            if (this.lastFrameDecodeTime != 0) {
+                ms = Math.min((long) this.invalidateAfter, Math.max(0, ((long) this.invalidateAfter) - (System.currentTimeMillis() - this.lastFrameDecodeTime)));
+            }
+            ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = executor;
+            Runnable runnable = this.loadFrameRunnable;
+            this.loadFrameTask = runnable;
+            scheduledThreadPoolExecutor.schedule(runnable, ms, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -275,71 +280,62 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public int getIntrinsicHeight() {
-        if (!this.decoderCreated) {
+        if (this.decoderCreated) {
+            return (this.metaData[2] == 90 || this.metaData[2] == 270) ? this.metaData[0] : this.metaData[1];
+        } else {
             return AndroidUtilities.dp(100.0f);
         }
-        if (this.metaData[2] != 90) {
-            if (this.metaData[2] != 270) {
-                return this.metaData[1];
-            }
-        }
-        return this.metaData[0];
     }
 
     public int getIntrinsicWidth() {
-        if (!this.decoderCreated) {
+        if (this.decoderCreated) {
+            return (this.metaData[2] == 90 || this.metaData[2] == 270) ? this.metaData[1] : this.metaData[0];
+        } else {
             return AndroidUtilities.dp(100.0f);
         }
-        if (this.metaData[2] != 90) {
-            if (this.metaData[2] != 270) {
-                return this.metaData[0];
-            }
-        }
-        return this.metaData[1];
     }
 
-    protected void onBoundsChange(Rect rect) {
-        super.onBoundsChange(rect);
+    protected void onBoundsChange(Rect bounds) {
+        super.onBoundsChange(bounds);
         this.applyTransformation = true;
     }
 
     public void draw(Canvas canvas) {
         if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
-            long currentTimeMillis = System.currentTimeMillis();
+            long now = System.currentTimeMillis();
             if (this.isRunning) {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
-                } else if (Math.abs(currentTimeMillis - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {
+                } else if (Math.abs(now - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {
                     this.renderingBitmap = this.nextRenderingBitmap;
                     this.renderingShader = this.nextRenderingShader;
                     this.nextRenderingBitmap = null;
                     this.nextRenderingShader = null;
-                    this.lastFrameTime = currentTimeMillis;
+                    this.lastFrameTime = now;
                 }
-            } else if (!this.isRunning && this.decodeSingleFrame && Math.abs(currentTimeMillis - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {
+            } else if (!this.isRunning && this.decodeSingleFrame && Math.abs(now - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {
                 this.renderingBitmap = this.nextRenderingBitmap;
                 this.renderingShader = this.nextRenderingShader;
                 this.nextRenderingBitmap = null;
                 this.nextRenderingShader = null;
-                this.lastFrameTime = currentTimeMillis;
+                this.lastFrameTime = now;
             }
             if (this.renderingBitmap != null) {
-                int width;
                 if (this.applyTransformation) {
-                    width = this.renderingBitmap.getWidth();
-                    int height = this.renderingBitmap.getHeight();
+                    int bitmapW = this.renderingBitmap.getWidth();
+                    int bitmapH = this.renderingBitmap.getHeight();
                     if (this.metaData[2] == 90 || this.metaData[2] == 270) {
-                        int i = height;
-                        height = width;
-                        width = i;
+                        int temp = bitmapW;
+                        bitmapW = bitmapH;
+                        bitmapH = temp;
                     }
                     this.dstRect.set(getBounds());
-                    this.scaleX = ((float) this.dstRect.width()) / ((float) width);
-                    this.scaleY = ((float) this.dstRect.height()) / ((float) height);
+                    this.scaleX = ((float) this.dstRect.width()) / ((float) bitmapW);
+                    this.scaleY = ((float) this.dstRect.height()) / ((float) bitmapH);
                     this.applyTransformation = false;
                 }
                 if (this.roundRadius != 0) {
-                    float max = Math.max(this.scaleX, this.scaleY);
+                    float scale = Math.max(this.scaleX, this.scaleY);
                     if (this.renderingShader == null) {
                         this.renderingShader = new BitmapShader(this.backgroundBitmap, TileMode.CLAMP, TileMode.CLAMP);
                     }
@@ -347,18 +343,16 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     this.roundRect.set(this.dstRect);
                     this.shaderMatrix.reset();
                     if (Math.abs(this.scaleX - this.scaleY) > 1.0E-5f) {
-                        int floor;
-                        if (this.metaData[2] != 90) {
-                            if (this.metaData[2] != 270) {
-                                floor = (int) Math.floor((double) (((float) this.dstRect.width()) / max));
-                                width = (int) Math.floor((double) (((float) this.dstRect.height()) / max));
-                                this.bitmapRect.set((float) ((this.renderingBitmap.getWidth() - floor) / 2), (float) ((this.renderingBitmap.getHeight() - width) / 2), (float) floor, (float) width);
-                                AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.metaData[2], ScaleToFit.START);
-                            }
+                        int w;
+                        int h;
+                        if (this.metaData[2] == 90 || this.metaData[2] == 270) {
+                            w = (int) Math.floor((double) (((float) this.dstRect.height()) / scale));
+                            h = (int) Math.floor((double) (((float) this.dstRect.width()) / scale));
+                        } else {
+                            w = (int) Math.floor((double) (((float) this.dstRect.width()) / scale));
+                            h = (int) Math.floor((double) (((float) this.dstRect.height()) / scale));
                         }
-                        floor = (int) Math.floor((double) (((float) this.dstRect.height()) / max));
-                        width = (int) Math.floor((double) (((float) this.dstRect.width()) / max));
-                        this.bitmapRect.set((float) ((this.renderingBitmap.getWidth() - floor) / 2), (float) ((this.renderingBitmap.getHeight() - width) / 2), (float) floor, (float) width);
+                        this.bitmapRect.set((float) ((this.renderingBitmap.getWidth() - w) / 2), (float) ((this.renderingBitmap.getHeight() - h) / 2), (float) w, (float) h);
                         AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.metaData[2], ScaleToFit.START);
                     } else {
                         this.bitmapRect.set(0.0f, 0.0f, (float) this.renderingBitmap.getWidth(), (float) this.renderingBitmap.getHeight());
@@ -381,52 +375,47 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     canvas.scale(this.scaleX, this.scaleY);
                     canvas.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
                 }
-                if (this.isRunning != null) {
-                    currentTimeMillis = Math.max(1, (((long) this.invalidateAfter) - (currentTimeMillis - this.lastFrameTime)) - 17);
+                if (this.isRunning) {
+                    long timeToNextFrame = Math.max(1, (((long) this.invalidateAfter) - (now - this.lastFrameTime)) - 17);
                     uiHandler.removeCallbacks(this.mInvalidateTask);
-                    uiHandler.postDelayed(this.mInvalidateTask, Math.min(currentTimeMillis, (long) this.invalidateAfter));
+                    uiHandler.postDelayed(this.mInvalidateTask, Math.min(timeToNextFrame, (long) this.invalidateAfter));
                 }
             }
         }
     }
 
     public int getMinimumHeight() {
-        if (!this.decoderCreated) {
+        if (this.decoderCreated) {
+            return (this.metaData[2] == 90 || this.metaData[2] == 270) ? this.metaData[0] : this.metaData[1];
+        } else {
             return AndroidUtilities.dp(100.0f);
         }
-        if (this.metaData[2] != 90) {
-            if (this.metaData[2] != 270) {
-                return this.metaData[1];
-            }
-        }
-        return this.metaData[0];
     }
 
     public int getMinimumWidth() {
-        if (!this.decoderCreated) {
+        if (this.decoderCreated) {
+            return (this.metaData[2] == 90 || this.metaData[2] == 270) ? this.metaData[1] : this.metaData[0];
+        } else {
             return AndroidUtilities.dp(100.0f);
         }
-        if (this.metaData[2] != 90) {
-            if (this.metaData[2] != 270) {
-                return this.metaData[0];
-            }
-        }
-        return this.metaData[1];
     }
 
     public Bitmap getAnimatedBitmap() {
         if (this.renderingBitmap != null) {
             return this.renderingBitmap;
         }
-        return this.nextRenderingBitmap != null ? this.nextRenderingBitmap : null;
+        if (this.nextRenderingBitmap != null) {
+            return this.nextRenderingBitmap;
+        }
+        return null;
     }
 
-    public void setActualDrawRect(int i, int i2, int i3, int i4) {
-        this.actualDrawRect.set((float) i, (float) i2, (float) (i + i3), (float) (i2 + i4));
+    public void setActualDrawRect(int x, int y, int width, int height) {
+        this.actualDrawRect.set((float) x, (float) y, (float) (x + width), (float) (y + height));
     }
 
-    public void setRoundRadius(int i) {
-        this.roundRadius = i;
+    public void setRoundRadius(int value) {
+        this.roundRadius = value;
         getPaint().setFlags(1);
     }
 
@@ -439,9 +428,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public AnimatedFileDrawable makeCopy() {
-        AnimatedFileDrawable animatedFileDrawable = new AnimatedFileDrawable(this.path, false);
-        animatedFileDrawable.metaData[0] = this.metaData[0];
-        animatedFileDrawable.metaData[1] = this.metaData[1];
-        return animatedFileDrawable;
+        AnimatedFileDrawable drawable = new AnimatedFileDrawable(this.path, false);
+        drawable.metaData[0] = this.metaData[0];
+        drawable.metaData[1] = this.metaData[1];
+        return drawable;
     }
 }

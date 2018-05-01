@@ -10,51 +10,46 @@ public final class PriorityTaskManager {
     private final PriorityQueue<Integer> queue = new PriorityQueue(10, Collections.reverseOrder());
 
     public static class PriorityTooLowException extends IOException {
-        public PriorityTooLowException(int i, int i2) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Priority too low [priority=");
-            stringBuilder.append(i);
-            stringBuilder.append(", highest=");
-            stringBuilder.append(i2);
-            stringBuilder.append("]");
-            super(stringBuilder.toString());
+        public PriorityTooLowException(int priority, int highestPriority) {
+            super("Priority too low [priority=" + priority + ", highest=" + highestPriority + "]");
         }
     }
 
-    public void add(int i) {
+    public void add(int priority) {
         synchronized (this.lock) {
-            this.queue.add(Integer.valueOf(i));
-            this.highestPriority = Math.max(this.highestPriority, i);
+            this.queue.add(Integer.valueOf(priority));
+            this.highestPriority = Math.max(this.highestPriority, priority);
         }
     }
 
-    public void proceed(int i) throws InterruptedException {
+    public void proceed(int priority) throws InterruptedException {
         synchronized (this.lock) {
-            while (this.highestPriority != i) {
+            while (this.highestPriority != priority) {
                 this.lock.wait();
             }
         }
     }
 
-    public boolean proceedNonBlocking(int i) {
+    public boolean proceedNonBlocking(int priority) {
+        boolean z;
         synchronized (this.lock) {
-            i = this.highestPriority == i ? 1 : 0;
+            z = this.highestPriority == priority;
         }
-        return i;
+        return z;
     }
 
-    public void proceedOrThrow(int i) throws PriorityTooLowException {
+    public void proceedOrThrow(int priority) throws PriorityTooLowException {
         synchronized (this.lock) {
-            if (this.highestPriority != i) {
-                throw new PriorityTooLowException(i, this.highestPriority);
+            if (this.highestPriority != priority) {
+                throw new PriorityTooLowException(priority, this.highestPriority);
             }
         }
     }
 
-    public void remove(int i) {
+    public void remove(int priority) {
         synchronized (this.lock) {
-            this.queue.remove(Integer.valueOf(i));
-            this.highestPriority = this.queue.isEmpty() != 0 ? Integer.MIN_VALUE : ((Integer) this.queue.peek()).intValue();
+            this.queue.remove(Integer.valueOf(priority));
+            this.highestPriority = this.queue.isEmpty() ? Integer.MIN_VALUE : ((Integer) this.queue.peek()).intValue();
             this.lock.notifyAll();
         }
     }

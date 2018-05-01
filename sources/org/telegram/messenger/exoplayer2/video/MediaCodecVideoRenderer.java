@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Surface;
+import java.nio.ByteBuffer;
 import org.telegram.messenger.exoplayer2.BaseRenderer;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
@@ -82,53 +83,45 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         public final int inputSize;
         public final int width;
 
-        public CodecMaxValues(int i, int i2, int i3) {
-            this.width = i;
-            this.height = i2;
-            this.inputSize = i3;
+        public CodecMaxValues(int width, int height, int inputSize) {
+            this.width = width;
+            this.height = height;
+            this.inputSize = inputSize;
         }
     }
 
     @TargetApi(23)
     private final class OnFrameRenderedListenerV23 implements OnFrameRenderedListener {
-        private OnFrameRenderedListenerV23(MediaCodec mediaCodec) {
-            mediaCodec.setOnFrameRenderedListener(this, new Handler());
+        private OnFrameRenderedListenerV23(MediaCodec codec) {
+            codec.setOnFrameRenderedListener(this, new Handler());
         }
 
-        public void onFrameRendered(MediaCodec mediaCodec, long j, long j2) {
+        public void onFrameRendered(MediaCodec codec, long presentationTimeUs, long nanoTime) {
             if (this == MediaCodecVideoRenderer.this.tunnelingOnFrameRenderedListener) {
                 MediaCodecVideoRenderer.this.maybeNotifyRenderedFirstFrame();
             }
         }
     }
 
-    private static boolean isBufferLate(long j) {
-        return j < -30000;
-    }
-
-    private static boolean isBufferVeryLate(long j) {
-        return j < -500000;
-    }
-
     public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
         this(context, mediaCodecSelector, 0);
     }
 
-    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long j) {
-        this(context, mediaCodecSelector, j, null, null, -1);
+    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs) {
+        this(context, mediaCodecSelector, allowedJoiningTimeMs, null, null, -1);
     }
 
-    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long j, Handler handler, VideoRendererEventListener videoRendererEventListener, int i) {
-        this(context, mediaCodecSelector, j, null, false, handler, videoRendererEventListener, i);
+    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, Handler eventHandler, VideoRendererEventListener eventListener, int maxDroppedFrameCountToNotify) {
+        this(context, mediaCodecSelector, allowedJoiningTimeMs, null, false, eventHandler, eventListener, maxDroppedFrameCountToNotify);
     }
 
-    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long j, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean z, Handler handler, VideoRendererEventListener videoRendererEventListener, int i) {
-        super(2, mediaCodecSelector, drmSessionManager, z);
-        this.allowedJoiningTimeMs = j;
-        this.maxDroppedFramesToNotify = i;
+    public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+        super(2, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
+        this.allowedJoiningTimeMs = allowedJoiningTimeMs;
+        this.maxDroppedFramesToNotify = maxDroppedFramesToNotify;
         this.context = context.getApplicationContext();
         this.frameReleaseTimeHelper = new VideoFrameReleaseTimeHelper(context);
-        this.eventDispatcher = new EventDispatcher(handler, videoRendererEventListener);
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
         this.deviceNeedsAutoFrcWorkaround = deviceNeedsAutoFrcWorkaround();
         this.pendingOutputStreamOffsetsUs = new long[10];
         this.outputStreamOffsetUs = C0542C.TIME_UNSET;
@@ -142,97 +135,71 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected int supportsFormat(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, Format format) throws DecoderQueryException {
-        String str = format.sampleMimeType;
-        int i = 0;
-        if (!MimeTypes.isVideo(str)) {
+        String mimeType = format.sampleMimeType;
+        if (!MimeTypes.isVideo(mimeType)) {
             return 0;
         }
-        boolean z;
+        boolean requiresSecureDecryption = false;
         DrmInitData drmInitData = format.drmInitData;
         if (drmInitData != null) {
-            int i2 = 0;
-            z = i2;
-            while (i2 < drmInitData.schemeDataCount) {
-                z |= drmInitData.get(i2).requiresSecureDecryption;
-                i2++;
+            for (int i = 0; i < drmInitData.schemeDataCount; i++) {
+                requiresSecureDecryption |= drmInitData.get(i).requiresSecureDecryption;
             }
-        } else {
-            z = false;
         }
-        MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(str, z);
-        int i3 = 2;
+        MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(mimeType, requiresSecureDecryption);
         if (decoderInfo == null) {
-            if (!z || mediaCodecSelector.getDecoderInfo(str, false) == null) {
-                i3 = 1;
-            }
-            return i3;
-        } else if (BaseRenderer.supportsFormatDrm(drmSessionManager, drmInitData) == null) {
-            return 2;
+            return (!requiresSecureDecryption || mediaCodecSelector.getDecoderInfo(mimeType, false) == null) ? 1 : 2;
         } else {
-            mediaCodecSelector = decoderInfo.isCodecSupported(format.codecs);
-            if (mediaCodecSelector != null && format.width > null && format.height > null) {
+            if (!BaseRenderer.supportsFormatDrm(drmSessionManager, drmInitData)) {
+                return 2;
+            }
+            boolean decoderCapable = decoderInfo.isCodecSupported(format.codecs);
+            if (decoderCapable && format.width > 0 && format.height > 0) {
                 if (Util.SDK_INT >= 21) {
-                    mediaCodecSelector = decoderInfo.isVideoSizeAndRateSupportedV21(format.width, format.height, (double) format.frameRate);
+                    decoderCapable = decoderInfo.isVideoSizeAndRateSupportedV21(format.width, format.height, (double) format.frameRate);
                 } else {
-                    mediaCodecSelector = format.width * format.height <= MediaCodecUtil.maxH264DecodableFrameSize() ? 1 : null;
-                    if (mediaCodecSelector == null) {
-                        drmSessionManager = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("FalseCheck [legacyFrameSize, ");
-                        stringBuilder.append(format.width);
-                        stringBuilder.append("x");
-                        stringBuilder.append(format.height);
-                        stringBuilder.append("] [");
-                        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
-                        stringBuilder.append("]");
-                        Log.d(drmSessionManager, stringBuilder.toString());
+                    decoderCapable = format.width * format.height <= MediaCodecUtil.maxH264DecodableFrameSize();
+                    if (!decoderCapable) {
+                        Log.d(TAG, "FalseCheck [legacyFrameSize, " + format.width + "x" + format.height + "] [" + Util.DEVICE_DEBUG_INFO + "]");
                     }
                 }
             }
-            drmSessionManager = decoderInfo.adaptive != null ? 16 : 8;
-            if (decoderInfo.tunneling != null) {
-                i = 32;
-            }
-            return (mediaCodecSelector != null ? 4 : 3) | (drmSessionManager | i);
+            return ((decoderInfo.adaptive ? 16 : 8) | (decoderInfo.tunneling ? 32 : 0)) | (decoderCapable ? 4 : 3);
         }
     }
 
-    protected void onEnabled(boolean z) throws ExoPlaybackException {
-        super.onEnabled(z);
+    protected void onEnabled(boolean joining) throws ExoPlaybackException {
+        super.onEnabled(joining);
         this.tunnelingAudioSessionId = getConfiguration().tunnelingAudioSessionId;
-        this.tunneling = this.tunnelingAudioSessionId;
+        this.tunneling = this.tunnelingAudioSessionId != 0;
         this.eventDispatcher.enabled(this.decoderCounters);
         this.frameReleaseTimeHelper.enable();
     }
 
-    protected void onStreamChanged(Format[] formatArr, long j) throws ExoPlaybackException {
-        this.streamFormats = formatArr;
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
+        this.streamFormats = formats;
         if (this.outputStreamOffsetUs == C0542C.TIME_UNSET) {
-            this.outputStreamOffsetUs = j;
+            this.outputStreamOffsetUs = offsetUs;
         } else {
             if (this.pendingOutputStreamOffsetCount == this.pendingOutputStreamOffsetsUs.length) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Too many stream changes, so dropping offset: ");
-                stringBuilder.append(this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1]);
-                Log.w(str, stringBuilder.toString());
+                Log.w(TAG, "Too many stream changes, so dropping offset: " + this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1]);
             } else {
                 this.pendingOutputStreamOffsetCount++;
             }
-            this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1] = j;
+            this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1] = offsetUs;
         }
-        super.onStreamChanged(formatArr, j);
+        super.onStreamChanged(formats, offsetUs);
     }
 
-    protected void onPositionReset(long j, boolean z) throws ExoPlaybackException {
-        super.onPositionReset(j, z);
+    protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
+        super.onPositionReset(positionUs, joining);
         clearRenderedFirstFrame();
         this.consecutiveDroppedFrameCount = 0;
         if (this.pendingOutputStreamOffsetCount != 0) {
             this.outputStreamOffsetUs = this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1];
             this.pendingOutputStreamOffsetCount = 0;
         }
-        if (z) {
+        if (joining) {
             setJoiningDeadlineMs();
         } else {
             this.joiningDeadlineMs = C0542C.TIME_UNSET;
@@ -286,17 +253,17 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         }
     }
 
-    public void handleMessage(int i, Object obj) throws ExoPlaybackException {
-        if (i == 1) {
-            setSurface((Surface) obj);
-        } else if (i == 4) {
-            this.scalingMode = ((Integer) obj).intValue();
-            i = getCodec();
-            if (i != 0) {
-                setVideoScalingMode(i, this.scalingMode);
+    public void handleMessage(int messageType, Object message) throws ExoPlaybackException {
+        if (messageType == 1) {
+            setSurface((Surface) message);
+        } else if (messageType == 4) {
+            this.scalingMode = ((Integer) message).intValue();
+            MediaCodec codec = getCodec();
+            if (codec != null) {
+                setVideoScalingMode(codec, this.scalingMode);
             }
         } else {
-            super.handleMessage(i, obj);
+            super.handleMessage(messageType, message);
         }
     }
 
@@ -340,28 +307,23 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         }
     }
 
-    protected boolean shouldInitCodec(MediaCodecInfo mediaCodecInfo) {
-        if (this.surface == null) {
-            if (shouldUseDummySurface(mediaCodecInfo) == null) {
-                return null;
-            }
-        }
-        return true;
+    protected boolean shouldInitCodec(MediaCodecInfo codecInfo) {
+        return this.surface != null || shouldUseDummySurface(codecInfo);
     }
 
-    protected void configureCodec(MediaCodecInfo mediaCodecInfo, MediaCodec mediaCodec, Format format, MediaCrypto mediaCrypto) throws DecoderQueryException {
-        this.codecMaxValues = getCodecMaxValues(mediaCodecInfo, format, this.streamFormats);
-        format = getMediaFormat(format, this.codecMaxValues, this.deviceNeedsAutoFrcWorkaround, this.tunnelingAudioSessionId);
+    protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format, MediaCrypto crypto) throws DecoderQueryException {
+        this.codecMaxValues = getCodecMaxValues(codecInfo, format, this.streamFormats);
+        MediaFormat mediaFormat = getMediaFormat(format, this.codecMaxValues, this.deviceNeedsAutoFrcWorkaround, this.tunnelingAudioSessionId);
         if (this.surface == null) {
-            Assertions.checkState(shouldUseDummySurface(mediaCodecInfo));
+            Assertions.checkState(shouldUseDummySurface(codecInfo));
             if (this.dummySurface == null) {
-                this.dummySurface = DummySurface.newInstanceV17(this.context, mediaCodecInfo.secure);
+                this.dummySurface = DummySurface.newInstanceV17(this.context, codecInfo.secure);
             }
             this.surface = this.dummySurface;
         }
-        mediaCodec.configure(format, this.surface, mediaCrypto, 0);
-        if (Util.SDK_INT >= 23 && this.tunneling != null) {
-            this.tunnelingOnFrameRenderedListener = new OnFrameRenderedListenerV23(mediaCodec);
+        codec.configure(mediaFormat, this.surface, crypto, 0);
+        if (Util.SDK_INT >= 23 && this.tunneling) {
+            this.tunnelingOnFrameRenderedListener = new OnFrameRenderedListenerV23(codec);
         }
     }
 
@@ -369,6 +331,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         try {
             super.releaseCodec();
         } finally {
+            boolean z = false;
             this.buffersInCodecCount = 0;
             this.forceRenderFrame = false;
             if (this.dummySurface != null) {
@@ -387,306 +350,193 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         this.forceRenderFrame = false;
     }
 
-    protected void onCodecInitialized(String str, long j, long j2) {
-        this.eventDispatcher.decoderInitialized(str, j, j2);
-        this.codecNeedsSetOutputSurfaceWorkaround = codecNeedsSetOutputSurfaceWorkaround(str);
+    protected void onCodecInitialized(String name, long initializedTimestampMs, long initializationDurationMs) {
+        this.eventDispatcher.decoderInitialized(name, initializedTimestampMs, initializationDurationMs);
+        this.codecNeedsSetOutputSurfaceWorkaround = codecNeedsSetOutputSurfaceWorkaround(name);
     }
 
-    protected void onInputFormatChanged(Format format) throws ExoPlaybackException {
-        super.onInputFormatChanged(format);
-        this.eventDispatcher.inputFormatChanged(format);
-        this.pendingPixelWidthHeightRatio = getPixelWidthHeightRatio(format);
-        this.pendingRotationDegrees = getRotationDegrees(format);
+    protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
+        super.onInputFormatChanged(newFormat);
+        this.eventDispatcher.inputFormatChanged(newFormat);
+        this.pendingPixelWidthHeightRatio = getPixelWidthHeightRatio(newFormat);
+        this.pendingRotationDegrees = getRotationDegrees(newFormat);
     }
 
-    protected void onQueueInputBuffer(DecoderInputBuffer decoderInputBuffer) {
+    protected void onQueueInputBuffer(DecoderInputBuffer buffer) {
         this.buffersInCodecCount++;
-        if (Util.SDK_INT < 23 && this.tunneling != null) {
+        if (Util.SDK_INT < 23 && this.tunneling) {
             maybeNotifyRenderedFirstFrame();
         }
     }
 
-    protected void onOutputFormatChanged(MediaCodec mediaCodec, MediaFormat mediaFormat) {
+    protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) {
         int integer;
-        int i = (mediaFormat.containsKey(KEY_CROP_RIGHT) && mediaFormat.containsKey(KEY_CROP_LEFT) && mediaFormat.containsKey(KEY_CROP_BOTTOM) && mediaFormat.containsKey(KEY_CROP_TOP)) ? 1 : 0;
-        if (i != 0) {
-            integer = (mediaFormat.getInteger(KEY_CROP_RIGHT) - mediaFormat.getInteger(KEY_CROP_LEFT)) + 1;
+        boolean hasCrop = outputFormat.containsKey(KEY_CROP_RIGHT) && outputFormat.containsKey(KEY_CROP_LEFT) && outputFormat.containsKey(KEY_CROP_BOTTOM) && outputFormat.containsKey(KEY_CROP_TOP);
+        if (hasCrop) {
+            integer = (outputFormat.getInteger(KEY_CROP_RIGHT) - outputFormat.getInteger(KEY_CROP_LEFT)) + 1;
         } else {
-            integer = mediaFormat.getInteger("width");
+            integer = outputFormat.getInteger("width");
         }
         this.currentWidth = integer;
-        if (i != 0) {
-            i = (mediaFormat.getInteger(KEY_CROP_BOTTOM) - mediaFormat.getInteger(KEY_CROP_TOP)) + 1;
+        if (hasCrop) {
+            integer = (outputFormat.getInteger(KEY_CROP_BOTTOM) - outputFormat.getInteger(KEY_CROP_TOP)) + 1;
         } else {
-            i = mediaFormat.getInteger("height");
+            integer = outputFormat.getInteger("height");
         }
-        this.currentHeight = i;
+        this.currentHeight = integer;
         this.currentPixelWidthHeightRatio = this.pendingPixelWidthHeightRatio;
         if (Util.SDK_INT < 21) {
             this.currentUnappliedRotationDegrees = this.pendingRotationDegrees;
         } else if (this.pendingRotationDegrees == 90 || this.pendingRotationDegrees == 270) {
-            mediaFormat = this.currentWidth;
+            int rotatedHeight = this.currentWidth;
             this.currentWidth = this.currentHeight;
-            this.currentHeight = mediaFormat;
-            this.currentPixelWidthHeightRatio = NUM / this.currentPixelWidthHeightRatio;
+            this.currentHeight = rotatedHeight;
+            this.currentPixelWidthHeightRatio = 1.0f / this.currentPixelWidthHeightRatio;
         }
-        setVideoScalingMode(mediaCodec, this.scalingMode);
+        setVideoScalingMode(codec, this.scalingMode);
     }
 
-    protected boolean canReconfigureCodec(MediaCodec mediaCodec, boolean z, Format format, Format format2) {
-        return (areAdaptationCompatible(z, format, format2) == null || format2.width > this.codecMaxValues.width || format2.height > this.codecMaxValues.height || getMaxInputSize(format2) > this.codecMaxValues.inputSize) ? null : true;
+    protected boolean canReconfigureCodec(MediaCodec codec, boolean codecIsAdaptive, Format oldFormat, Format newFormat) {
+        return areAdaptationCompatible(codecIsAdaptive, oldFormat, newFormat) && newFormat.width <= this.codecMaxValues.width && newFormat.height <= this.codecMaxValues.height && getMaxInputSize(newFormat) <= this.codecMaxValues.inputSize;
     }
 
-    protected boolean processOutputBuffer(long r25, long r27, android.media.MediaCodec r29, java.nio.ByteBuffer r30, int r31, int r32, long r33, boolean r35) throws org.telegram.messenger.exoplayer2.ExoPlaybackException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r24 = this;
-        r7 = r24;
-        r8 = r27;
-        r10 = r29;
-        r11 = r31;
-        r0 = r33;
-    L_0x000a:
-        r2 = r7.pendingOutputStreamOffsetCount;
-        r12 = 1;
-        r13 = 0;
-        if (r2 == 0) goto L_0x002d;
-    L_0x0010:
-        r2 = r7.pendingOutputStreamOffsetsUs;
-        r3 = r2[r13];
-        r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
-        if (r2 < 0) goto L_0x002d;
-    L_0x0018:
-        r2 = r7.pendingOutputStreamOffsetsUs;
-        r3 = r2[r13];
-        r7.outputStreamOffsetUs = r3;
-        r2 = r7.pendingOutputStreamOffsetCount;
-        r2 = r2 - r12;
-        r7.pendingOutputStreamOffsetCount = r2;
-        r2 = r7.pendingOutputStreamOffsetsUs;
-        r3 = r7.pendingOutputStreamOffsetsUs;
-        r4 = r7.pendingOutputStreamOffsetCount;
-        java.lang.System.arraycopy(r2, r12, r3, r13, r4);
-        goto L_0x000a;
-    L_0x002d:
-        r2 = r7.outputStreamOffsetUs;
-        r14 = r0 - r2;
-        if (r35 == 0) goto L_0x0037;
-    L_0x0033:
-        r7.skipOutputBuffer(r10, r11, r14);
-        return r12;
-    L_0x0037:
-        r2 = r0 - r25;
-        r4 = r7.surface;
-        r12 = r7.dummySurface;
-        if (r4 != r12) goto L_0x004d;
-    L_0x003f:
-        r0 = isBufferLate(r2);
-        if (r0 == 0) goto L_0x004c;
-    L_0x0045:
-        r7.forceRenderFrame = r13;
-        r7.skipOutputBuffer(r10, r11, r14);
-        r0 = 1;
-        return r0;
-    L_0x004c:
-        return r13;
-    L_0x004d:
-        r4 = r7.renderedFirstFrame;
-        if (r4 == 0) goto L_0x00e1;
-    L_0x0051:
-        r4 = r7.forceRenderFrame;
-        if (r4 == 0) goto L_0x0057;
-    L_0x0055:
-        goto L_0x00e1;
-    L_0x0057:
-        r4 = r24.getState();
-        r12 = 2;
-        if (r4 == r12) goto L_0x005f;
-    L_0x005e:
-        return r13;
-    L_0x005f:
-        r16 = android.os.SystemClock.elapsedRealtime();
-        r18 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r16 = r16 * r18;
-        r20 = r16 - r8;
-        r16 = r2 - r20;
-        r2 = java.lang.System.nanoTime();
-        r16 = r16 * r18;
-        r22 = r14;
-        r13 = r2 + r16;
-        r4 = r7.frameReleaseTimeHelper;
-        r12 = r4.adjustReleaseTime(r0, r13);
-        r0 = r12 - r2;
-        r14 = r0 / r18;
-        r0 = r7.shouldDropBuffersToKeyframe(r14, r8);
-        if (r0 == 0) goto L_0x0097;
-    L_0x0085:
-        r0 = r7;
-        r1 = r10;
-        r2 = r11;
-        r3 = r22;
-        r5 = r25;
-        r0 = r0.maybeDropBuffersToKeyframe(r1, r2, r3, r5);
-        if (r0 == 0) goto L_0x0097;
-    L_0x0092:
-        r0 = 1;
-        r7.forceRenderFrame = r0;
-        r0 = 0;
-        return r0;
-    L_0x0097:
-        r0 = 1;
-        r1 = r7.shouldDropOutputBuffer(r14, r8);
-        if (r1 == 0) goto L_0x00a4;
-    L_0x009e:
-        r3 = r22;
-        r7.dropOutputBuffer(r10, r11, r3);
-        return r0;
-    L_0x00a4:
-        r3 = r22;
-        r0 = org.telegram.messenger.exoplayer2.util.Util.SDK_INT;
-        r1 = 21;
-        if (r0 < r1) goto L_0x00be;
-    L_0x00ac:
-        r0 = 50000; // 0xc350 float:7.0065E-41 double:2.47033E-319;
-        r2 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1));
-        if (r2 >= 0) goto L_0x00bc;
-    L_0x00b3:
-        r0 = r7;
-        r1 = r10;
-        r2 = r11;
-        r5 = r12;
-        r0.renderOutputBufferV21(r1, r2, r3, r5);
-        r0 = 1;
-        return r0;
-    L_0x00bc:
-        r0 = 0;
-        goto L_0x00e0;
-    L_0x00be:
-        r0 = 30000; // 0x7530 float:4.2039E-41 double:1.4822E-319;
-        r2 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1));
-        if (r2 >= 0) goto L_0x00bc;
-    L_0x00c4:
-        r0 = 11000; // 0x2af8 float:1.5414E-41 double:5.4347E-320;
-        r2 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1));
-        if (r2 <= 0) goto L_0x00db;
-    L_0x00ca:
-        r0 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r5 = r14 - r0;
-        r5 = r5 / r18;	 Catch:{ InterruptedException -> 0x00d4 }
-        java.lang.Thread.sleep(r5);	 Catch:{ InterruptedException -> 0x00d4 }
-        goto L_0x00db;
-    L_0x00d4:
-        r0 = java.lang.Thread.currentThread();
-        r0.interrupt();
-    L_0x00db:
-        r7.renderOutputBuffer(r10, r11, r3);
-        r0 = 1;
-        return r0;
-    L_0x00e0:
-        return r0;
-    L_0x00e1:
-        r0 = r13;
-        r3 = r14;
-        r7.forceRenderFrame = r0;
-        r0 = org.telegram.messenger.exoplayer2.util.Util.SDK_INT;
-        r1 = 21;
-        if (r0 < r1) goto L_0x00f7;
-    L_0x00eb:
-        r5 = java.lang.System.nanoTime();
-        r0 = r7;
-        r1 = r10;
-        r2 = r11;
-        r0.renderOutputBufferV21(r1, r2, r3, r5);
-    L_0x00f5:
-        r0 = 1;
-        goto L_0x00fb;
-    L_0x00f7:
-        r7.renderOutputBuffer(r10, r11, r3);
-        goto L_0x00f5;
-    L_0x00fb:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.video.MediaCodecVideoRenderer.processOutputBuffer(long, long, android.media.MediaCodec, java.nio.ByteBuffer, int, int, long, boolean):boolean");
+    protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
+        while (this.pendingOutputStreamOffsetCount != 0 && bufferPresentationTimeUs >= this.pendingOutputStreamOffsetsUs[0]) {
+            this.outputStreamOffsetUs = this.pendingOutputStreamOffsetsUs[0];
+            this.pendingOutputStreamOffsetCount--;
+            System.arraycopy(this.pendingOutputStreamOffsetsUs, 1, this.pendingOutputStreamOffsetsUs, 0, this.pendingOutputStreamOffsetCount);
+        }
+        long presentationTimeUs = bufferPresentationTimeUs - this.outputStreamOffsetUs;
+        if (shouldSkip) {
+            skipOutputBuffer(codec, bufferIndex, presentationTimeUs);
+            return true;
+        }
+        long earlyUs = bufferPresentationTimeUs - positionUs;
+        if (this.surface == this.dummySurface) {
+            if (!isBufferLate(earlyUs)) {
+                return false;
+            }
+            this.forceRenderFrame = false;
+            skipOutputBuffer(codec, bufferIndex, presentationTimeUs);
+            return true;
+        } else if (!this.renderedFirstFrame || this.forceRenderFrame) {
+            this.forceRenderFrame = false;
+            if (Util.SDK_INT >= 21) {
+                renderOutputBufferV21(codec, bufferIndex, presentationTimeUs, System.nanoTime());
+            } else {
+                renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
+            }
+            return true;
+        } else if (getState() != 2) {
+            return false;
+        } else {
+            earlyUs -= (SystemClock.elapsedRealtime() * 1000) - elapsedRealtimeUs;
+            long systemTimeNs = System.nanoTime();
+            long adjustedReleaseTimeNs = this.frameReleaseTimeHelper.adjustReleaseTime(bufferPresentationTimeUs, systemTimeNs + (1000 * earlyUs));
+            earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
+            if (shouldDropBuffersToKeyframe(earlyUs, elapsedRealtimeUs) && maybeDropBuffersToKeyframe(codec, bufferIndex, presentationTimeUs, positionUs)) {
+                this.forceRenderFrame = true;
+                return false;
+            } else if (shouldDropOutputBuffer(earlyUs, elapsedRealtimeUs)) {
+                dropOutputBuffer(codec, bufferIndex, presentationTimeUs);
+                return true;
+            } else {
+                if (Util.SDK_INT >= 21) {
+                    if (earlyUs < 50000) {
+                        renderOutputBufferV21(codec, bufferIndex, presentationTimeUs, adjustedReleaseTimeNs);
+                        return true;
+                    }
+                } else if (earlyUs < 30000) {
+                    if (earlyUs > 11000) {
+                        try {
+                            Thread.sleep((earlyUs - 10000) / 1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 
-    protected void onProcessedOutputBuffer(long j) {
+    protected void onProcessedOutputBuffer(long presentationTimeUs) {
         this.buffersInCodecCount--;
     }
 
-    protected boolean shouldDropOutputBuffer(long j, long j2) {
-        return isBufferLate(j);
+    protected boolean shouldDropOutputBuffer(long earlyUs, long elapsedRealtimeUs) {
+        return isBufferLate(earlyUs);
     }
 
-    protected boolean shouldDropBuffersToKeyframe(long j, long j2) {
-        return isBufferVeryLate(j);
+    protected boolean shouldDropBuffersToKeyframe(long earlyUs, long elapsedRealtimeUs) {
+        return isBufferVeryLate(earlyUs);
     }
 
-    protected void skipOutputBuffer(MediaCodec mediaCodec, int i, long j) {
+    protected void skipOutputBuffer(MediaCodec codec, int index, long presentationTimeUs) {
         TraceUtil.beginSection("skipVideoBuffer");
-        mediaCodec.releaseOutputBuffer(i, 0);
+        codec.releaseOutputBuffer(index, false);
         TraceUtil.endSection();
-        mediaCodec = this.decoderCounters;
-        mediaCodec.skippedOutputBufferCount++;
+        DecoderCounters decoderCounters = this.decoderCounters;
+        decoderCounters.skippedOutputBufferCount++;
     }
 
-    protected void dropOutputBuffer(MediaCodec mediaCodec, int i, long j) {
+    protected void dropOutputBuffer(MediaCodec codec, int index, long presentationTimeUs) {
         TraceUtil.beginSection("dropVideoBuffer");
-        mediaCodec.releaseOutputBuffer(i, 0);
+        codec.releaseOutputBuffer(index, false);
         TraceUtil.endSection();
         updateDroppedBufferCounters(1);
     }
 
-    protected boolean maybeDropBuffersToKeyframe(MediaCodec mediaCodec, int i, long j, long j2) throws ExoPlaybackException {
-        mediaCodec = skipSource(j2);
-        if (mediaCodec == null) {
-            return null;
+    protected boolean maybeDropBuffersToKeyframe(MediaCodec codec, int index, long presentationTimeUs, long positionUs) throws ExoPlaybackException {
+        int droppedSourceBufferCount = skipSource(positionUs);
+        if (droppedSourceBufferCount == 0) {
+            return false;
         }
-        i = this.decoderCounters;
-        i.droppedToKeyframeCount++;
-        updateDroppedBufferCounters(this.buffersInCodecCount + mediaCodec);
+        DecoderCounters decoderCounters = this.decoderCounters;
+        decoderCounters.droppedToKeyframeCount++;
+        updateDroppedBufferCounters(this.buffersInCodecCount + droppedSourceBufferCount);
         flushCodec();
         return true;
     }
 
-    protected void updateDroppedBufferCounters(int i) {
+    protected void updateDroppedBufferCounters(int droppedBufferCount) {
         DecoderCounters decoderCounters = this.decoderCounters;
-        decoderCounters.droppedBufferCount += i;
-        this.droppedFrames += i;
-        this.consecutiveDroppedFrameCount += i;
+        decoderCounters.droppedBufferCount += droppedBufferCount;
+        this.droppedFrames += droppedBufferCount;
+        this.consecutiveDroppedFrameCount += droppedBufferCount;
         this.decoderCounters.maxConsecutiveDroppedBufferCount = Math.max(this.consecutiveDroppedFrameCount, this.decoderCounters.maxConsecutiveDroppedBufferCount);
         if (this.droppedFrames >= this.maxDroppedFramesToNotify) {
             maybeNotifyDroppedFrames();
         }
     }
 
-    protected void renderOutputBuffer(MediaCodec mediaCodec, int i, long j) {
+    protected void renderOutputBuffer(MediaCodec codec, int index, long presentationTimeUs) {
         maybeNotifyVideoSizeChanged();
         TraceUtil.beginSection("releaseOutputBuffer");
-        mediaCodec.releaseOutputBuffer(i, true);
+        codec.releaseOutputBuffer(index, true);
         TraceUtil.endSection();
-        mediaCodec = this.decoderCounters;
-        mediaCodec.renderedOutputBufferCount++;
-        this.consecutiveDroppedFrameCount = null;
+        DecoderCounters decoderCounters = this.decoderCounters;
+        decoderCounters.renderedOutputBufferCount++;
+        this.consecutiveDroppedFrameCount = 0;
         maybeNotifyRenderedFirstFrame();
     }
 
     @TargetApi(21)
-    protected void renderOutputBufferV21(MediaCodec mediaCodec, int i, long j, long j2) {
+    protected void renderOutputBufferV21(MediaCodec codec, int index, long presentationTimeUs, long releaseTimeNs) {
         maybeNotifyVideoSizeChanged();
         TraceUtil.beginSection("releaseOutputBuffer");
-        mediaCodec.releaseOutputBuffer(i, j2);
+        codec.releaseOutputBuffer(index, releaseTimeNs);
         TraceUtil.endSection();
-        mediaCodec = this.decoderCounters;
-        mediaCodec.renderedOutputBufferCount++;
-        this.consecutiveDroppedFrameCount = null;
+        DecoderCounters decoderCounters = this.decoderCounters;
+        decoderCounters.renderedOutputBufferCount++;
+        this.consecutiveDroppedFrameCount = 0;
         maybeNotifyRenderedFirstFrame();
     }
 
-    private boolean shouldUseDummySurface(MediaCodecInfo mediaCodecInfo) {
-        return (Util.SDK_INT < 23 || this.tunneling || codecNeedsSetOutputSurfaceWorkaround(mediaCodecInfo.name) || (mediaCodecInfo.secure != null && DummySurface.isSecureSupported(this.context) == null)) ? null : true;
+    private boolean shouldUseDummySurface(MediaCodecInfo codecInfo) {
+        return Util.SDK_INT >= 23 && !this.tunneling && !codecNeedsSetOutputSurfaceWorkaround(codecInfo.name) && (!codecInfo.secure || DummySurface.isSecureSupported(this.context));
     }
 
     private void setJoiningDeadlineMs() {
@@ -743,136 +593,117 @@ Error: java.lang.NullPointerException
 
     private void maybeNotifyDroppedFrames() {
         if (this.droppedFrames > 0) {
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            this.eventDispatcher.droppedFrames(this.droppedFrames, elapsedRealtime - this.droppedFrameAccumulationStartTimeMs);
+            long now = SystemClock.elapsedRealtime();
+            this.eventDispatcher.droppedFrames(this.droppedFrames, now - this.droppedFrameAccumulationStartTimeMs);
             this.droppedFrames = 0;
-            this.droppedFrameAccumulationStartTimeMs = elapsedRealtime;
+            this.droppedFrameAccumulationStartTimeMs = now;
         }
+    }
+
+    private static boolean isBufferLate(long earlyUs) {
+        return earlyUs < -30000;
+    }
+
+    private static boolean isBufferVeryLate(long earlyUs) {
+        return earlyUs < -500000;
     }
 
     @TargetApi(23)
-    private static void setOutputSurfaceV23(MediaCodec mediaCodec, Surface surface) {
-        mediaCodec.setOutputSurface(surface);
+    private static void setOutputSurfaceV23(MediaCodec codec, Surface surface) {
+        codec.setOutputSurface(surface);
     }
 
     @TargetApi(21)
-    private static void configureTunnelingV21(MediaFormat mediaFormat, int i) {
+    private static void configureTunnelingV21(MediaFormat mediaFormat, int tunnelingAudioSessionId) {
         mediaFormat.setFeatureEnabled("tunneled-playback", true);
-        mediaFormat.setInteger("audio-session-id", i);
+        mediaFormat.setInteger("audio-session-id", tunnelingAudioSessionId);
     }
 
-    protected CodecMaxValues getCodecMaxValues(MediaCodecInfo mediaCodecInfo, Format format, Format[] formatArr) throws DecoderQueryException {
-        int i = format.width;
-        int i2 = format.height;
+    protected CodecMaxValues getCodecMaxValues(MediaCodecInfo codecInfo, Format format, Format[] streamFormats) throws DecoderQueryException {
+        int maxWidth = format.width;
+        int maxHeight = format.height;
         int maxInputSize = getMaxInputSize(format);
-        if (formatArr.length == 1) {
-            return new CodecMaxValues(i, i2, maxInputSize);
+        if (streamFormats.length == 1) {
+            return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
         }
-        int length = formatArr.length;
-        int i3 = i2;
-        int i4 = maxInputSize;
-        i2 = 0;
-        maxInputSize = i;
-        for (i = i2; i < length; i++) {
-            Format format2 = formatArr[i];
-            if (areAdaptationCompatible(mediaCodecInfo.adaptive, format, format2)) {
-                int i5;
-                if (format2.width != -1) {
-                    if (format2.height != -1) {
-                        i5 = 0;
-                        i2 |= i5;
-                        maxInputSize = Math.max(maxInputSize, format2.width);
-                        i3 = Math.max(i3, format2.height);
-                        i4 = Math.max(i4, getMaxInputSize(format2));
-                    }
+        boolean haveUnknownDimensions = false;
+        for (Format streamFormat : streamFormats) {
+            if (areAdaptationCompatible(codecInfo.adaptive, format, streamFormat)) {
+                int i;
+                if (streamFormat.width == -1 || streamFormat.height == -1) {
+                    i = 1;
+                } else {
+                    i = 0;
                 }
-                i5 = 1;
-                i2 |= i5;
-                maxInputSize = Math.max(maxInputSize, format2.width);
-                i3 = Math.max(i3, format2.height);
-                i4 = Math.max(i4, getMaxInputSize(format2));
+                haveUnknownDimensions |= i;
+                maxWidth = Math.max(maxWidth, streamFormat.width);
+                maxHeight = Math.max(maxHeight, streamFormat.height);
+                maxInputSize = Math.max(maxInputSize, getMaxInputSize(streamFormat));
             }
         }
-        if (i2 != 0) {
-            formatArr = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Resolutions unknown. Codec max resolution: ");
-            stringBuilder.append(maxInputSize);
-            stringBuilder.append("x");
-            stringBuilder.append(i3);
-            Log.w(formatArr, stringBuilder.toString());
-            mediaCodecInfo = getCodecMaxSize(mediaCodecInfo, format);
-            if (mediaCodecInfo != null) {
-                maxInputSize = Math.max(maxInputSize, mediaCodecInfo.x);
-                i3 = Math.max(i3, mediaCodecInfo.y);
-                i4 = Math.max(i4, getMaxInputSize(format.sampleMimeType, maxInputSize, i3));
-                mediaCodecInfo = TAG;
-                format = new StringBuilder();
-                format.append("Codec max resolution adjusted to: ");
-                format.append(maxInputSize);
-                format.append("x");
-                format.append(i3);
-                Log.w(mediaCodecInfo, format.toString());
+        if (haveUnknownDimensions) {
+            Log.w(TAG, "Resolutions unknown. Codec max resolution: " + maxWidth + "x" + maxHeight);
+            Point codecMaxSize = getCodecMaxSize(codecInfo, format);
+            if (codecMaxSize != null) {
+                maxWidth = Math.max(maxWidth, codecMaxSize.x);
+                maxHeight = Math.max(maxHeight, codecMaxSize.y);
+                maxInputSize = Math.max(maxInputSize, getMaxInputSize(format.sampleMimeType, maxWidth, maxHeight));
+                Log.w(TAG, "Codec max resolution adjusted to: " + maxWidth + "x" + maxHeight);
             }
         }
-        return new CodecMaxValues(maxInputSize, i3, i4);
+        return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
     }
 
     @SuppressLint({"InlinedApi"})
-    protected MediaFormat getMediaFormat(Format format, CodecMaxValues codecMaxValues, boolean z, int i) {
-        format = getMediaFormatForPlayback(format);
-        format.setInteger("max-width", codecMaxValues.width);
-        format.setInteger("max-height", codecMaxValues.height);
+    protected MediaFormat getMediaFormat(Format format, CodecMaxValues codecMaxValues, boolean deviceNeedsAutoFrcWorkaround, int tunnelingAudioSessionId) {
+        MediaFormat frameworkMediaFormat = getMediaFormatForPlayback(format);
+        frameworkMediaFormat.setInteger("max-width", codecMaxValues.width);
+        frameworkMediaFormat.setInteger("max-height", codecMaxValues.height);
         if (codecMaxValues.inputSize != -1) {
-            format.setInteger("max-input-size", codecMaxValues.inputSize);
+            frameworkMediaFormat.setInteger("max-input-size", codecMaxValues.inputSize);
         }
-        if (z) {
-            format.setInteger("auto-frc", false);
+        if (deviceNeedsAutoFrcWorkaround) {
+            frameworkMediaFormat.setInteger("auto-frc", 0);
         }
-        if (i != 0) {
-            configureTunnelingV21(format, i);
+        if (tunnelingAudioSessionId != 0) {
+            configureTunnelingV21(frameworkMediaFormat, tunnelingAudioSessionId);
         }
-        return format;
+        return frameworkMediaFormat;
     }
 
-    private static Point getCodecMaxSize(MediaCodecInfo mediaCodecInfo, Format format) throws DecoderQueryException {
-        int i = 0;
-        int i2 = format.height > format.width ? 1 : 0;
-        int i3 = i2 != 0 ? format.height : format.width;
-        int i4 = i2 != 0 ? format.width : format.height;
-        float f = ((float) i4) / ((float) i3);
-        int[] iArr = STANDARD_LONG_EDGE_VIDEO_PX;
-        int length = iArr.length;
-        while (i < length) {
-            int i5 = iArr[i];
-            int i6 = (int) (((float) i5) * f);
-            if (i5 > i3) {
-                if (i6 > i4) {
-                    int i7;
-                    if (Util.SDK_INT >= 21) {
-                        i7 = i2 != 0 ? i6 : i5;
-                        if (i2 == 0) {
-                            i5 = i6;
-                        }
-                        Point alignVideoSizeV21 = mediaCodecInfo.alignVideoSizeV21(i7, i5);
-                        if (mediaCodecInfo.isVideoSizeAndRateSupportedV21(alignVideoSizeV21.x, alignVideoSizeV21.y, (double) format.frameRate)) {
-                            return alignVideoSizeV21;
-                        }
-                    } else {
-                        i5 = Util.ceilDivide(i5, 16) * 16;
-                        i7 = 16 * Util.ceilDivide(i6, 16);
-                        if (i5 * i7 <= MediaCodecUtil.maxH264DecodableFrameSize()) {
-                            format = i2 != 0 ? i7 : i5;
-                            if (i2 != 0) {
-                                i7 = i5;
-                            }
-                            return new Point(format, i7);
-                        }
+    private static Point getCodecMaxSize(MediaCodecInfo codecInfo, Format format) throws DecoderQueryException {
+        boolean isVerticalVideo = format.height > format.width;
+        int formatLongEdgePx = isVerticalVideo ? format.height : format.width;
+        int formatShortEdgePx = isVerticalVideo ? format.width : format.height;
+        float aspectRatio = ((float) formatShortEdgePx) / ((float) formatLongEdgePx);
+        for (int longEdgePx : STANDARD_LONG_EDGE_VIDEO_PX) {
+            int longEdgePx2;
+            int shortEdgePx = (int) (((float) longEdgePx2) * aspectRatio);
+            if (longEdgePx2 <= formatLongEdgePx || shortEdgePx <= formatShortEdgePx) {
+                return null;
+            }
+            if (Util.SDK_INT >= 21) {
+                int i;
+                if (isVerticalVideo) {
+                    i = shortEdgePx;
+                } else {
+                    i = longEdgePx2;
+                }
+                Point alignedSize = codecInfo.alignVideoSizeV21(i, isVerticalVideo ? longEdgePx2 : shortEdgePx);
+                if (codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, (double) format.frameRate)) {
+                    return alignedSize;
+                }
+            } else {
+                longEdgePx2 = Util.ceilDivide(longEdgePx2, 16) * 16;
+                shortEdgePx = Util.ceilDivide(shortEdgePx, 16) * 16;
+                if (longEdgePx2 * shortEdgePx <= MediaCodecUtil.maxH264DecodableFrameSize()) {
+                    int i2 = isVerticalVideo ? shortEdgePx : longEdgePx2;
+                    if (!isVerticalVideo) {
+                        longEdgePx2 = shortEdgePx;
                     }
-                    i++;
+                    return new Point(i2, longEdgePx2);
                 }
             }
-            return null;
         }
         return null;
     }
@@ -881,102 +712,102 @@ Error: java.lang.NullPointerException
         if (format.maxInputSize == -1) {
             return getMaxInputSize(format.sampleMimeType, format.width, format.height);
         }
-        int i = 0;
-        int i2 = 0;
-        while (i < format.initializationData.size()) {
-            i2 += ((byte[]) format.initializationData.get(i)).length;
-            i++;
+        int totalInitializationDataSize = 0;
+        for (int i = 0; i < format.initializationData.size(); i++) {
+            totalInitializationDataSize += ((byte[]) format.initializationData.get(i)).length;
         }
-        return format.maxInputSize + i2;
+        return format.maxInputSize + totalInitializationDataSize;
     }
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static int getMaxInputSize(String str, int i, int i2) {
-        if (i != -1) {
-            if (i2 != -1) {
-                int i3 = 4;
-                switch (str.hashCode()) {
-                    case -1664118616:
-                        if (str.equals(MimeTypes.VIDEO_H263) != null) {
-                            str = null;
-                            break;
-                        }
-                    case -1662541442:
-                        if (str.equals(MimeTypes.VIDEO_H265) != null) {
-                            str = 4;
-                            break;
-                        }
-                    case 1187890754:
-                        if (str.equals(MimeTypes.VIDEO_MP4V) != null) {
-                            str = true;
-                            break;
-                        }
-                    case 1331836730:
-                        if (str.equals("video/avc") != null) {
-                            str = 2;
-                            break;
-                        }
-                    case 1599127256:
-                        if (str.equals(MimeTypes.VIDEO_VP8) != null) {
-                            str = 3;
-                            break;
-                        }
-                    case 1599127257:
-                        if (str.equals(MimeTypes.VIDEO_VP9) != null) {
-                            str = 5;
-                            break;
-                        }
-                    default:
-                }
-                str = -1;
-                switch (str) {
-                    case null:
-                    case 1:
-                        i *= i2;
-                        break;
-                    case 2:
-                        if ("BRAVIA 4K 2015".equals(Util.MODEL) == null) {
-                            i = ((Util.ceilDivide(i, 16) * Util.ceilDivide(i2, 16)) * 16) * 16;
-                            break;
-                        }
-                        return -1;
-                    case 3:
-                        i *= i2;
-                        break;
-                    case 4:
-                    case 5:
-                        i *= i2;
-                        break;
-                    default:
-                        return -1;
-                }
-                i3 = 2;
-                return (i * 3) / (2 * i3);
-            }
+    private static int getMaxInputSize(String sampleMimeType, int width, int height) {
+        if (width == -1 || height == -1) {
+            return -1;
         }
-        return -1;
+        int i;
+        int maxPixels;
+        int minCompressionRatio;
+        switch (sampleMimeType.hashCode()) {
+            case -1664118616:
+                if (sampleMimeType.equals(MimeTypes.VIDEO_H263)) {
+                    i = 0;
+                    break;
+                }
+            case -1662541442:
+                if (sampleMimeType.equals(MimeTypes.VIDEO_H265)) {
+                    i = 4;
+                    break;
+                }
+            case 1187890754:
+                if (sampleMimeType.equals(MimeTypes.VIDEO_MP4V)) {
+                    i = 1;
+                    break;
+                }
+            case 1331836730:
+                if (sampleMimeType.equals("video/avc")) {
+                    i = 2;
+                    break;
+                }
+            case 1599127256:
+                if (sampleMimeType.equals(MimeTypes.VIDEO_VP8)) {
+                    i = 3;
+                    break;
+                }
+            case 1599127257:
+                if (sampleMimeType.equals(MimeTypes.VIDEO_VP9)) {
+                    i = 5;
+                    break;
+                }
+            default:
+                i = -1;
+                break;
+        }
+        switch (i) {
+            case 0:
+            case 1:
+                maxPixels = width * height;
+                minCompressionRatio = 2;
+                break;
+            case 2:
+                if (!"BRAVIA 4K 2015".equals(Util.MODEL)) {
+                    maxPixels = ((Util.ceilDivide(width, 16) * Util.ceilDivide(height, 16)) * 16) * 16;
+                    minCompressionRatio = 2;
+                    break;
+                }
+                return -1;
+            case 3:
+                maxPixels = width * height;
+                minCompressionRatio = 2;
+                break;
+            case 4:
+            case 5:
+                maxPixels = width * height;
+                minCompressionRatio = 4;
+                break;
+            default:
+                return -1;
+        }
+        return (maxPixels * 3) / (minCompressionRatio * 2);
     }
 
-    private static void setVideoScalingMode(MediaCodec mediaCodec, int i) {
-        mediaCodec.setVideoScalingMode(i);
+    private static void setVideoScalingMode(MediaCodec codec, int scalingMode) {
+        codec.setVideoScalingMode(scalingMode);
     }
 
     private static boolean deviceNeedsAutoFrcWorkaround() {
         return Util.SDK_INT <= 22 && "foster".equals(Util.DEVICE) && "NVIDIA".equals(Util.MANUFACTURER);
     }
 
-    private static boolean codecNeedsSetOutputSurfaceWorkaround(String str) {
-        if (!((("deb".equals(Util.DEVICE) || "flo".equals(Util.DEVICE)) && "OMX.qcom.video.decoder.avc".equals(str)) || (("tcl_eu".equals(Util.DEVICE) || "SVP-DTV15".equals(Util.DEVICE) || "BRAVIA_ATV2".equals(Util.DEVICE)) && "OMX.MTK.VIDEO.DECODER.AVC".equals(str)))) {
-            if ("OMX.k3.video.decoder.avc".equals(str) == null || "ALE-L21".equals(Util.MODEL) == null) {
-                return null;
-            }
+    private static boolean codecNeedsSetOutputSurfaceWorkaround(String name) {
+        if ((("deb".equals(Util.DEVICE) || "flo".equals(Util.DEVICE)) && "OMX.qcom.video.decoder.avc".equals(name)) || ((("tcl_eu".equals(Util.DEVICE) || "SVP-DTV15".equals(Util.DEVICE) || "BRAVIA_ATV2".equals(Util.DEVICE)) && "OMX.MTK.VIDEO.DECODER.AVC".equals(name)) || ("OMX.k3.video.decoder.avc".equals(name) && "ALE-L21".equals(Util.MODEL)))) {
+            return true;
         }
-        return true;
+        return false;
     }
 
-    private static boolean areAdaptationCompatible(boolean z, Format format, Format format2) {
-        return format.sampleMimeType.equals(format2.sampleMimeType) && getRotationDegrees(format) == getRotationDegrees(format2) && (z || (format.width == format2.width && format.height == format2.height));
+    private static boolean areAdaptationCompatible(boolean codecIsAdaptive, Format first, Format second) {
+        return first.sampleMimeType.equals(second.sampleMimeType) && getRotationDegrees(first) == getRotationDegrees(second) && (codecIsAdaptive || (first.width == second.width && first.height == second.height));
     }
 
     private static float getPixelWidthHeightRatio(Format format) {
@@ -984,6 +815,6 @@ Error: java.lang.NullPointerException
     }
 
     private static int getRotationDegrees(Format format) {
-        return format.rotationDegrees == -1 ? null : format.rotationDegrees;
+        return format.rotationDegrees == -1 ? 0 : format.rotationDegrees;
     }
 }

@@ -156,105 +156,90 @@ abstract class Atom {
         public final long endPosition;
         public final List<LeafAtom> leafChildren = new ArrayList();
 
-        public ContainerAtom(int i, long j) {
-            super(i);
-            this.endPosition = j;
+        public ContainerAtom(int type, long endPosition) {
+            super(type);
+            this.endPosition = endPosition;
         }
 
-        public void add(LeafAtom leafAtom) {
-            this.leafChildren.add(leafAtom);
+        public void add(LeafAtom atom) {
+            this.leafChildren.add(atom);
         }
 
-        public void add(ContainerAtom containerAtom) {
-            this.containerChildren.add(containerAtom);
+        public void add(ContainerAtom atom) {
+            this.containerChildren.add(atom);
         }
 
-        public LeafAtom getLeafAtomOfType(int i) {
-            int size = this.leafChildren.size();
-            for (int i2 = 0; i2 < size; i2++) {
-                LeafAtom leafAtom = (LeafAtom) this.leafChildren.get(i2);
-                if (leafAtom.type == i) {
-                    return leafAtom;
+        public LeafAtom getLeafAtomOfType(int type) {
+            int childrenSize = this.leafChildren.size();
+            for (int i = 0; i < childrenSize; i++) {
+                LeafAtom atom = (LeafAtom) this.leafChildren.get(i);
+                if (atom.type == type) {
+                    return atom;
                 }
             }
-            return 0;
+            return null;
         }
 
-        public ContainerAtom getContainerAtomOfType(int i) {
-            int size = this.containerChildren.size();
-            for (int i2 = 0; i2 < size; i2++) {
-                ContainerAtom containerAtom = (ContainerAtom) this.containerChildren.get(i2);
-                if (containerAtom.type == i) {
-                    return containerAtom;
+        public ContainerAtom getContainerAtomOfType(int type) {
+            int childrenSize = this.containerChildren.size();
+            for (int i = 0; i < childrenSize; i++) {
+                ContainerAtom atom = (ContainerAtom) this.containerChildren.get(i);
+                if (atom.type == type) {
+                    return atom;
                 }
             }
-            return 0;
+            return null;
         }
 
-        public int getChildAtomOfTypeCount(int i) {
+        public int getChildAtomOfTypeCount(int type) {
+            int i;
+            int count = 0;
             int size = this.leafChildren.size();
-            int i2 = 0;
-            int i3 = 0;
-            int i4 = i3;
-            while (i3 < size) {
-                if (((LeafAtom) this.leafChildren.get(i3)).type == i) {
-                    i4++;
+            for (i = 0; i < size; i++) {
+                if (((LeafAtom) this.leafChildren.get(i)).type == type) {
+                    count++;
                 }
-                i3++;
             }
             size = this.containerChildren.size();
-            while (i2 < size) {
-                if (((ContainerAtom) this.containerChildren.get(i2)).type == i) {
-                    i4++;
+            for (i = 0; i < size; i++) {
+                if (((ContainerAtom) this.containerChildren.get(i)).type == type) {
+                    count++;
                 }
-                i2++;
             }
-            return i4;
+            return count;
         }
 
         public String toString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(Atom.getAtomTypeString(this.type));
-            stringBuilder.append(" leaves: ");
-            stringBuilder.append(Arrays.toString(this.leafChildren.toArray()));
-            stringBuilder.append(" containers: ");
-            stringBuilder.append(Arrays.toString(this.containerChildren.toArray()));
-            return stringBuilder.toString();
+            return Atom.getAtomTypeString(this.type) + " leaves: " + Arrays.toString(this.leafChildren.toArray()) + " containers: " + Arrays.toString(this.containerChildren.toArray());
         }
     }
 
     static final class LeafAtom extends Atom {
         public final ParsableByteArray data;
 
-        public LeafAtom(int i, ParsableByteArray parsableByteArray) {
-            super(i);
-            this.data = parsableByteArray;
+        public LeafAtom(int type, ParsableByteArray data) {
+            super(type);
+            this.data = data;
         }
     }
 
-    public static int parseFullAtomFlags(int i) {
-        return i & 16777215;
-    }
-
-    public static int parseFullAtomVersion(int i) {
-        return (i >> 24) & 255;
-    }
-
-    public Atom(int i) {
-        this.type = i;
+    public Atom(int type) {
+        this.type = type;
     }
 
     public String toString() {
         return getAtomTypeString(this.type);
     }
 
-    public static String getAtomTypeString(int i) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-        stringBuilder.append((char) ((i >> 24) & 255));
-        stringBuilder.append((char) ((i >> 16) & 255));
-        stringBuilder.append((char) ((i >> 8) & 255));
-        stringBuilder.append((char) (i & 255));
-        return stringBuilder.toString();
+    public static int parseFullAtomVersion(int fullAtomInt) {
+        return (fullAtomInt >> 24) & 255;
+    }
+
+    public static int parseFullAtomFlags(int fullAtomInt) {
+        return 16777215 & fullAtomInt;
+    }
+
+    public static String getAtomTypeString(int type) {
+        return TtmlNode.ANONYMOUS_REGION_ID + ((char) ((type >> 24) & 255)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
     }
 }

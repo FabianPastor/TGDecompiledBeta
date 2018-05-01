@@ -34,17 +34,136 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         int estimateLength();
     }
 
+    private static class CharacterLiteral implements Rule {
+        private final char mValue;
+
+        CharacterLiteral(char value) {
+            this.mValue = value;
+        }
+
+        public int estimateLength() {
+            return 1;
+        }
+
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            buffer.append(this.mValue);
+        }
+    }
+
+    private interface NumberRule extends Rule {
+        void appendTo(StringBuffer stringBuffer, int i);
+    }
+
+    private static class PaddedNumberField implements NumberRule {
+        private final int mField;
+        private final int mSize;
+
+        PaddedNumberField(int field, int size) {
+            if (size < 3) {
+                throw new IllegalArgumentException();
+            }
+            this.mField = field;
+            this.mSize = size;
+        }
+
+        public int estimateLength() {
+            return 4;
+        }
+
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(this.mField));
+        }
+
+        public final void appendTo(StringBuffer buffer, int value) {
+            int i;
+            if (value < 100) {
+                i = this.mSize;
+                while (true) {
+                    i--;
+                    if (i >= 2) {
+                        buffer.append('0');
+                    } else {
+                        buffer.append((char) ((value / 10) + 48));
+                        buffer.append((char) ((value % 10) + 48));
+                        return;
+                    }
+                }
+            }
+            int digits;
+            if (value < 1000) {
+                digits = 3;
+            } else {
+                digits = Integer.toString(value).length();
+            }
+            i = this.mSize;
+            while (true) {
+                i--;
+                if (i >= digits) {
+                    buffer.append('0');
+                } else {
+                    buffer.append(Integer.toString(value));
+                    return;
+                }
+            }
+        }
+    }
+
+    private static class StringLiteral implements Rule {
+        private final String mValue;
+
+        StringLiteral(String value) {
+            this.mValue = value;
+        }
+
+        public int estimateLength() {
+            return this.mValue.length();
+        }
+
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            buffer.append(this.mValue);
+        }
+    }
+
+    private static class TextField implements Rule {
+        private final int mField;
+        private final String[] mValues;
+
+        TextField(int field, String[] values) {
+            this.mField = field;
+            this.mValues = values;
+        }
+
+        public int estimateLength() {
+            int max = 0;
+            int i = this.mValues.length;
+            while (true) {
+                i--;
+                if (i < 0) {
+                    return max;
+                }
+                int len = this.mValues[i].length();
+                if (len > max) {
+                    max = len;
+                }
+            }
+        }
+
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            buffer.append(this.mValues[calendar.get(this.mField)]);
+        }
+    }
+
     private static class TimeZoneDisplayKey {
         private final Locale mLocale;
         private final int mStyle;
         private final TimeZone mTimeZone;
 
-        TimeZoneDisplayKey(TimeZone timeZone, boolean z, int i, Locale locale) {
+        TimeZoneDisplayKey(TimeZone timeZone, boolean daylight, int style, Locale locale) {
             this.mTimeZone = timeZone;
-            if (z) {
-                this.mStyle = Integer.MIN_VALUE | i;
+            if (daylight) {
+                this.mStyle = Integer.MIN_VALUE | style;
             } else {
-                this.mStyle = i;
+                this.mStyle = style;
             }
             this.mLocale = locale;
         }
@@ -54,83 +173,17 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         }
 
         public boolean equals(Object obj) {
-            boolean z = true;
             if (this == obj) {
                 return true;
             }
             if (!(obj instanceof TimeZoneDisplayKey)) {
                 return false;
             }
-            TimeZoneDisplayKey timeZoneDisplayKey = (TimeZoneDisplayKey) obj;
-            if (!this.mTimeZone.equals(timeZoneDisplayKey.mTimeZone) || this.mStyle != timeZoneDisplayKey.mStyle || this.mLocale.equals(timeZoneDisplayKey.mLocale) == null) {
-                z = false;
+            TimeZoneDisplayKey other = (TimeZoneDisplayKey) obj;
+            if (this.mTimeZone.equals(other.mTimeZone) && this.mStyle == other.mStyle && this.mLocale.equals(other.mLocale)) {
+                return true;
             }
-            return z;
-        }
-    }
-
-    private static class CharacterLiteral implements Rule {
-        private final char mValue;
-
-        public int estimateLength() {
-            return 1;
-        }
-
-        CharacterLiteral(char c) {
-            this.mValue = c;
-        }
-
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            stringBuffer.append(this.mValue);
-        }
-    }
-
-    private interface NumberRule extends Rule {
-        void appendTo(StringBuffer stringBuffer, int i);
-    }
-
-    private static class StringLiteral implements Rule {
-        private final String mValue;
-
-        StringLiteral(String str) {
-            this.mValue = str;
-        }
-
-        public int estimateLength() {
-            return this.mValue.length();
-        }
-
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            stringBuffer.append(this.mValue);
-        }
-    }
-
-    private static class TextField implements Rule {
-        private final int mField;
-        private final String[] mValues;
-
-        TextField(int i, String[] strArr) {
-            this.mField = i;
-            this.mValues = strArr;
-        }
-
-        public int estimateLength() {
-            int i = 0;
-            int length = this.mValues.length;
-            while (true) {
-                length--;
-                if (length < 0) {
-                    return i;
-                }
-                int length2 = this.mValues[length].length();
-                if (length2 > i) {
-                    i = length2;
-                }
-            }
-        }
-
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            stringBuffer.append(this.mValues[calendar.get(this.mField)]);
+            return false;
         }
     }
 
@@ -140,23 +193,23 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         private final String mStandard;
         private final int mStyle;
 
-        TimeZoneNameRule(TimeZone timeZone, Locale locale, int i) {
+        TimeZoneNameRule(TimeZone timeZone, Locale locale, int style) {
             this.mLocale = locale;
-            this.mStyle = i;
-            this.mStandard = FastDatePrinter.getTimeZoneDisplay(timeZone, false, i, locale);
-            this.mDaylight = FastDatePrinter.getTimeZoneDisplay(timeZone, true, i, locale);
+            this.mStyle = style;
+            this.mStandard = FastDatePrinter.getTimeZoneDisplay(timeZone, false, style, locale);
+            this.mDaylight = FastDatePrinter.getTimeZoneDisplay(timeZone, true, style, locale);
         }
 
         public int estimateLength() {
             return Math.max(this.mStandard.length(), this.mDaylight.length());
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            TimeZone timeZone = calendar.getTimeZone();
-            if (!timeZone.useDaylightTime() || calendar.get(16) == null) {
-                stringBuffer.append(FastDatePrinter.getTimeZoneDisplay(timeZone, null, this.mStyle, this.mLocale));
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            TimeZone zone = calendar.getTimeZone();
+            if (!zone.useDaylightTime() || calendar.get(16) == 0) {
+                buffer.append(FastDatePrinter.getTimeZoneDisplay(zone, false, this.mStyle, this.mLocale));
             } else {
-                stringBuffer.append(FastDatePrinter.getTimeZoneDisplay(timeZone, true, this.mStyle, this.mLocale));
+                buffer.append(FastDatePrinter.getTimeZoneDisplay(zone, true, this.mStyle, this.mLocale));
             }
         }
     }
@@ -166,460 +219,424 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         static final TimeZoneNumberRule INSTANCE_NO_COLON = new TimeZoneNumberRule(false);
         final boolean mColon;
 
+        TimeZoneNumberRule(boolean colon) {
+            this.mColon = colon;
+        }
+
         public int estimateLength() {
             return 5;
         }
 
-        TimeZoneNumberRule(boolean z) {
-            this.mColon = z;
-        }
-
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            int i = calendar.get(15) + calendar.get(16);
-            if (i < 0) {
-                stringBuffer.append('-');
-                i = -i;
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            int offset = calendar.get(15) + calendar.get(16);
+            if (offset < 0) {
+                buffer.append('-');
+                offset = -offset;
             } else {
-                stringBuffer.append('+');
+                buffer.append('+');
             }
-            calendar = i / 3600000;
-            stringBuffer.append((char) ((calendar / 10) + 48));
-            stringBuffer.append((char) ((calendar % 10) + 48));
+            int hours = offset / 3600000;
+            buffer.append((char) ((hours / 10) + 48));
+            buffer.append((char) ((hours % 10) + 48));
             if (this.mColon) {
-                stringBuffer.append(':');
+                buffer.append(':');
             }
-            i = (i / 60000) - (60 * calendar);
-            stringBuffer.append((char) ((i / 10) + 48));
-            stringBuffer.append((char) ((i % 10) + 48));
-        }
-    }
-
-    private static class PaddedNumberField implements NumberRule {
-        private final int mField;
-        private final int mSize;
-
-        public int estimateLength() {
-            return 4;
-        }
-
-        PaddedNumberField(int i, int i2) {
-            if (i2 < 3) {
-                throw new IllegalArgumentException();
-            }
-            this.mField = i;
-            this.mSize = i2;
-        }
-
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(this.mField));
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            int i2;
-            if (i < 100) {
-                i2 = this.mSize;
-                while (true) {
-                    i2--;
-                    if (i2 >= 2) {
-                        stringBuffer.append('0');
-                    } else {
-                        stringBuffer.append((char) ((i / 10) + 48));
-                        stringBuffer.append((char) ((i % 10) + 48));
-                        return;
-                    }
-                }
-            }
-            if (i < 1000) {
-                i2 = 3;
-            } else {
-                i2 = Integer.toString(i).length();
-            }
-            int i3 = this.mSize;
-            while (true) {
-                i3--;
-                if (i3 >= i2) {
-                    stringBuffer.append('0');
-                } else {
-                    stringBuffer.append(Integer.toString(i));
-                    return;
-                }
-            }
+            int minutes = (offset / 60000) - (hours * 60);
+            buffer.append((char) ((minutes / 10) + 48));
+            buffer.append((char) ((minutes % 10) + 48));
         }
     }
 
     private static class TwelveHourField implements NumberRule {
         private final NumberRule mRule;
 
-        TwelveHourField(NumberRule numberRule) {
-            this.mRule = numberRule;
+        TwelveHourField(NumberRule rule) {
+            this.mRule = rule;
         }
 
         public int estimateLength() {
             return this.mRule.estimateLength();
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            int i = calendar.get(10);
-            if (i == 0) {
-                i = calendar.getLeastMaximum(10) + 1;
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            int value = calendar.get(10);
+            if (value == 0) {
+                value = calendar.getLeastMaximum(10) + 1;
             }
-            this.mRule.appendTo(stringBuffer, i);
+            this.mRule.appendTo(buffer, value);
         }
 
-        public void appendTo(StringBuffer stringBuffer, int i) {
-            this.mRule.appendTo(stringBuffer, i);
+        public void appendTo(StringBuffer buffer, int value) {
+            this.mRule.appendTo(buffer, value);
         }
     }
 
     private static class TwentyFourHourField implements NumberRule {
         private final NumberRule mRule;
 
-        TwentyFourHourField(NumberRule numberRule) {
-            this.mRule = numberRule;
+        TwentyFourHourField(NumberRule rule) {
+            this.mRule = rule;
         }
 
         public int estimateLength() {
             return this.mRule.estimateLength();
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            int i = calendar.get(11);
-            if (i == 0) {
-                i = calendar.getMaximum(11) + 1;
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            int value = calendar.get(11);
+            if (value == 0) {
+                value = calendar.getMaximum(11) + 1;
             }
-            this.mRule.appendTo(stringBuffer, i);
+            this.mRule.appendTo(buffer, value);
         }
 
-        public void appendTo(StringBuffer stringBuffer, int i) {
-            this.mRule.appendTo(stringBuffer, i);
+        public void appendTo(StringBuffer buffer, int value) {
+            this.mRule.appendTo(buffer, value);
         }
     }
 
     private static class TwoDigitMonthField implements NumberRule {
         static final TwoDigitMonthField INSTANCE = new TwoDigitMonthField();
 
+        TwoDigitMonthField() {
+        }
+
         public int estimateLength() {
             return 2;
         }
 
-        TwoDigitMonthField() {
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(2) + 1);
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(2) + 1);
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            stringBuffer.append((char) ((i / 10) + 48));
-            stringBuffer.append((char) ((i % 10) + 48));
+        public final void appendTo(StringBuffer buffer, int value) {
+            buffer.append((char) ((value / 10) + 48));
+            buffer.append((char) ((value % 10) + 48));
         }
     }
 
     private static class TwoDigitNumberField implements NumberRule {
         private final int mField;
 
+        TwoDigitNumberField(int field) {
+            this.mField = field;
+        }
+
         public int estimateLength() {
             return 2;
         }
 
-        TwoDigitNumberField(int i) {
-            this.mField = i;
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(this.mField));
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(this.mField));
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            if (i < 100) {
-                stringBuffer.append((char) ((i / 10) + 48));
-                stringBuffer.append((char) ((i % 10) + 48));
+        public final void appendTo(StringBuffer buffer, int value) {
+            if (value < 100) {
+                buffer.append((char) ((value / 10) + 48));
+                buffer.append((char) ((value % 10) + 48));
                 return;
             }
-            stringBuffer.append(Integer.toString(i));
+            buffer.append(Integer.toString(value));
         }
     }
 
     private static class TwoDigitYearField implements NumberRule {
         static final TwoDigitYearField INSTANCE = new TwoDigitYearField();
 
+        TwoDigitYearField() {
+        }
+
         public int estimateLength() {
             return 2;
         }
 
-        TwoDigitYearField() {
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(1) % 100);
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(1) % 100);
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            stringBuffer.append((char) ((i / 10) + 48));
-            stringBuffer.append((char) ((i % 10) + 48));
+        public final void appendTo(StringBuffer buffer, int value) {
+            buffer.append((char) ((value / 10) + 48));
+            buffer.append((char) ((value % 10) + 48));
         }
     }
 
     private static class UnpaddedMonthField implements NumberRule {
         static final UnpaddedMonthField INSTANCE = new UnpaddedMonthField();
 
+        UnpaddedMonthField() {
+        }
+
         public int estimateLength() {
             return 2;
         }
 
-        UnpaddedMonthField() {
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(2) + 1);
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(2) + 1);
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            if (i < 10) {
-                stringBuffer.append((char) (i + 48));
+        public final void appendTo(StringBuffer buffer, int value) {
+            if (value < 10) {
+                buffer.append((char) (value + 48));
                 return;
             }
-            stringBuffer.append((char) ((i / 10) + 48));
-            stringBuffer.append((char) ((i % 10) + 48));
+            buffer.append((char) ((value / 10) + 48));
+            buffer.append((char) ((value % 10) + 48));
         }
     }
 
     private static class UnpaddedNumberField implements NumberRule {
         private final int mField;
 
+        UnpaddedNumberField(int field) {
+            this.mField = field;
+        }
+
         public int estimateLength() {
             return 4;
         }
 
-        UnpaddedNumberField(int i) {
-            this.mField = i;
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(this.mField));
         }
 
-        public void appendTo(StringBuffer stringBuffer, Calendar calendar) {
-            appendTo(stringBuffer, calendar.get(this.mField));
-        }
-
-        public final void appendTo(StringBuffer stringBuffer, int i) {
-            if (i < 10) {
-                stringBuffer.append((char) (i + 48));
-            } else if (i < 100) {
-                stringBuffer.append((char) ((i / 10) + 48));
-                stringBuffer.append((char) ((i % 10) + 48));
+        public final void appendTo(StringBuffer buffer, int value) {
+            if (value < 10) {
+                buffer.append((char) (value + 48));
+            } else if (value < 100) {
+                buffer.append((char) ((value / 10) + 48));
+                buffer.append((char) ((value % 10) + 48));
             } else {
-                stringBuffer.append(Integer.toString(i));
+                buffer.append(Integer.toString(value));
             }
         }
     }
 
-    protected FastDatePrinter(String str, TimeZone timeZone, Locale locale) {
-        this.mPattern = str;
+    protected FastDatePrinter(String pattern, TimeZone timeZone, Locale locale) {
+        this.mPattern = pattern;
         this.mTimeZone = timeZone;
         this.mLocale = locale;
         init();
     }
 
     private void init() {
-        List parsePattern = parsePattern();
-        this.mRules = (Rule[]) parsePattern.toArray(new Rule[parsePattern.size()]);
-        int i = 0;
-        int length = this.mRules.length;
+        List<Rule> rulesList = parsePattern();
+        this.mRules = (Rule[]) rulesList.toArray(new Rule[rulesList.size()]);
+        int len = 0;
+        int i = this.mRules.length;
         while (true) {
-            length--;
-            if (length >= 0) {
-                i += this.mRules[length].estimateLength();
+            i--;
+            if (i >= 0) {
+                len += this.mRules[i].estimateLength();
             } else {
-                this.mMaxLengthEstimate = i;
+                this.mMaxLengthEstimate = len;
                 return;
             }
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     protected List<Rule> parsePattern() {
-        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(this.mLocale);
-        List<Rule> arrayList = new ArrayList();
-        String[] eras = dateFormatSymbols.getEras();
-        String[] months = dateFormatSymbols.getMonths();
-        String[] shortMonths = dateFormatSymbols.getShortMonths();
-        String[] weekdays = dateFormatSymbols.getWeekdays();
-        String[] shortWeekdays = dateFormatSymbols.getShortWeekdays();
-        String[] amPmStrings = dateFormatSymbols.getAmPmStrings();
+        DateFormatSymbols symbols = new DateFormatSymbols(this.mLocale);
+        List<Rule> rules = new ArrayList();
+        String[] ERAs = symbols.getEras();
+        String[] months = symbols.getMonths();
+        String[] shortMonths = symbols.getShortMonths();
+        String[] weekdays = symbols.getWeekdays();
+        String[] shortWeekdays = symbols.getShortWeekdays();
+        String[] AmPmStrings = symbols.getAmPmStrings();
         int length = this.mPattern.length();
-        int[] iArr = new int[1];
+        int[] indexRef = new int[1];
         int i = 0;
-        int i2 = 0;
-        while (i2 < length) {
-            iArr[i] = i2;
-            String parseToken = parseToken(r0.mPattern, iArr);
-            int i3 = iArr[i];
-            int length2 = parseToken.length();
-            if (length2 == 0) {
-                return arrayList;
+        while (i < length) {
+            indexRef[0] = i;
+            String token = parseToken(this.mPattern, indexRef);
+            i = indexRef[0];
+            int tokenLen = token.length();
+            if (tokenLen == 0) {
+                return rules;
             }
-            Object obj;
-            switch (parseToken.charAt(i)) {
+            Rule rule;
+            switch (token.charAt(0)) {
                 case '\'':
-                    CharacterLiteral characterLiteral;
-                    String substring = parseToken.substring(1);
-                    if (substring.length() == 1) {
-                        length2 = 0;
-                        characterLiteral = new CharacterLiteral(substring.charAt(0));
-                    } else {
-                        length2 = 0;
-                        characterLiteral = new StringLiteral(substring);
+                    String sub = token.substring(1);
+                    if (sub.length() != 1) {
+                        rule = new StringLiteral(sub);
+                        break;
                     }
-                    obj = characterLiteral;
-                    continue;
+                    rule = new CharacterLiteral(sub.charAt(0));
+                    break;
                 case 'D':
-                    obj = selectNumberRule(6, length2);
+                    rule = selectNumberRule(6, tokenLen);
+                    break;
                 case 'E':
-                    obj = new TextField(7, length2 < 4 ? shortWeekdays : weekdays);
+                    String[] strArr;
+                    if (tokenLen < 4) {
+                        strArr = shortWeekdays;
+                    } else {
+                        strArr = weekdays;
+                    }
+                    rule = new TextField(7, strArr);
+                    break;
                 case 'F':
-                    obj = selectNumberRule(8, length2);
+                    rule = selectNumberRule(8, tokenLen);
+                    break;
                 case 'G':
-                    obj = new TextField(0, eras);
-                    length2 = 0;
-                    continue;
+                    rule = new TextField(0, ERAs);
+                    break;
                 case 'H':
-                    obj = selectNumberRule(11, length2);
+                    rule = selectNumberRule(11, tokenLen);
+                    break;
                 case 'K':
-                    obj = selectNumberRule(10, length2);
+                    rule = selectNumberRule(10, tokenLen);
+                    break;
                 case 'M':
-                    obj = length2 >= 4 ? new TextField(2, months) : length2 == 3 ? new TextField(2, shortMonths) : length2 == 2 ? TwoDigitMonthField.INSTANCE : UnpaddedMonthField.INSTANCE;
-                case 'S':
-                    obj = selectNumberRule(14, length2);
-                case 'W':
-                    obj = selectNumberRule(4, length2);
-                case 'Z':
-                    obj = length2 == 1 ? TimeZoneNumberRule.INSTANCE_NO_COLON : TimeZoneNumberRule.INSTANCE_COLON;
-                case 'a':
-                    obj = new TextField(9, amPmStrings);
-                case 'd':
-                    obj = selectNumberRule(5, length2);
-                case 'h':
-                    obj = new TwelveHourField(selectNumberRule(10, length2));
-                case 'k':
-                    obj = new TwentyFourHourField(selectNumberRule(11, length2));
-                case 'm':
-                    obj = selectNumberRule(12, length2);
-                case 's':
-                    obj = selectNumberRule(13, length2);
-                case 'w':
-                    obj = selectNumberRule(3, length2);
-                case 'y':
-                    if (length2 == 2) {
-                        obj = TwoDigitYearField.INSTANCE;
-                    } else {
-                        if (length2 < 4) {
-                            length2 = 4;
+                    if (tokenLen < 4) {
+                        if (tokenLen != 3) {
+                            if (tokenLen != 2) {
+                                rule = UnpaddedMonthField.INSTANCE;
+                                break;
+                            }
+                            rule = TwoDigitMonthField.INSTANCE;
+                            break;
                         }
-                        obj = selectNumberRule(1, length2);
+                        rule = new TextField(2, shortMonths);
+                        break;
                     }
+                    rule = new TextField(2, months);
+                    break;
+                case 'S':
+                    rule = selectNumberRule(14, tokenLen);
+                    break;
+                case 'W':
+                    rule = selectNumberRule(4, tokenLen);
+                    break;
+                case 'Z':
+                    if (tokenLen != 1) {
+                        rule = TimeZoneNumberRule.INSTANCE_COLON;
+                        break;
+                    }
+                    rule = TimeZoneNumberRule.INSTANCE_NO_COLON;
+                    break;
+                case 'a':
+                    rule = new TextField(9, AmPmStrings);
+                    break;
+                case 'd':
+                    rule = selectNumberRule(5, tokenLen);
+                    break;
+                case 'h':
+                    rule = new TwelveHourField(selectNumberRule(10, tokenLen));
+                    break;
+                case 'k':
+                    rule = new TwentyFourHourField(selectNumberRule(11, tokenLen));
+                    break;
+                case 'm':
+                    rule = selectNumberRule(12, tokenLen);
+                    break;
+                case 's':
+                    rule = selectNumberRule(13, tokenLen);
+                    break;
+                case 'w':
+                    rule = selectNumberRule(3, tokenLen);
+                    break;
+                case 'y':
+                    if (tokenLen != 2) {
+                        if (tokenLen < 4) {
+                            tokenLen = 4;
+                        }
+                        rule = selectNumberRule(1, tokenLen);
+                        break;
+                    }
+                    rule = TwoDigitYearField.INSTANCE;
+                    break;
                 case 'z':
-                    if (length2 >= 4) {
-                        obj = new TimeZoneNameRule(r0.mTimeZone, r0.mLocale, 1);
-                    } else {
-                        obj = new TimeZoneNameRule(r0.mTimeZone, r0.mLocale, 0);
-                        length2 = 0;
-                        continue;
+                    if (tokenLen < 4) {
+                        rule = new TimeZoneNameRule(this.mTimeZone, this.mLocale, 0);
+                        break;
                     }
+                    rule = new TimeZoneNameRule(this.mTimeZone, this.mLocale, 1);
+                    break;
                 default:
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Illegal pattern component: ");
-                    stringBuilder.append(parseToken);
-                    throw new IllegalArgumentException(stringBuilder.toString());
+                    throw new IllegalArgumentException("Illegal pattern component: " + token);
             }
-            length2 = 0;
-            arrayList.add(obj);
-            i2 = i3 + 1;
-            i = length2;
+            rules.add(rule);
+            i++;
         }
-        return arrayList;
+        return rules;
     }
 
-    protected String parseToken(String str, int[] iArr) {
-        StringBuilder stringBuilder = new StringBuilder();
-        int i = iArr[0];
-        int length = str.length();
-        char charAt = str.charAt(i);
-        if ((charAt >= 'A' && charAt <= 'Z') || (charAt >= 'a' && charAt <= 'z')) {
-            stringBuilder.append(charAt);
-            while (true) {
-                int i2 = i + 1;
-                if (i2 >= length || str.charAt(i2) != charAt) {
-                    break;
-                }
-                stringBuilder.append(charAt);
-                i = i2;
-            }
-        } else {
-            stringBuilder.append('\'');
-            int i3 = 0;
+    protected String parseToken(String pattern, int[] indexRef) {
+        StringBuilder buf = new StringBuilder();
+        int i = indexRef[0];
+        int length = pattern.length();
+        char c = pattern.charAt(i);
+        if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z')) {
+            buf.append('\'');
+            boolean inLiteral = false;
             while (i < length) {
-                char charAt2 = str.charAt(i);
-                if (charAt2 != '\'') {
-                    if (i3 == 0 && ((charAt2 >= 'A' && charAt2 <= 'Z') || (charAt2 >= 'a' && charAt2 <= 'z'))) {
+                c = pattern.charAt(i);
+                if (c != '\'') {
+                    if (!inLiteral && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
                         i--;
                         break;
                     }
-                    stringBuilder.append(charAt2);
+                    buf.append(c);
+                } else if (i + 1 >= length || pattern.charAt(i + 1) != '\'') {
+                    inLiteral = !inLiteral;
                 } else {
-                    int i4 = i + 1;
-                    if (i4 >= length || str.charAt(i4) != '\'') {
-                        i3 ^= 1;
-                    } else {
-                        stringBuilder.append(charAt2);
-                        i = i4;
-                    }
+                    i++;
+                    buf.append(c);
                 }
                 i++;
             }
-        }
-        iArr[0] = i;
-        return stringBuilder.toString();
-    }
-
-    protected NumberRule selectNumberRule(int i, int i2) {
-        switch (i2) {
-            case 1:
-                return new UnpaddedNumberField(i);
-            case 2:
-                return new TwoDigitNumberField(i);
-            default:
-                return new PaddedNumberField(i, i2);
-        }
-    }
-
-    public StringBuffer format(Object obj, StringBuffer stringBuffer, FieldPosition fieldPosition) {
-        if ((obj instanceof Date) != null) {
-            return format((Date) obj, stringBuffer);
-        }
-        if ((obj instanceof Calendar) != null) {
-            return format((Calendar) obj, stringBuffer);
-        }
-        if ((obj instanceof Long) != null) {
-            return format(((Long) obj).longValue(), stringBuffer);
-        }
-        fieldPosition = new StringBuilder();
-        fieldPosition.append("Unknown class: ");
-        if (obj == null) {
-            obj = "<null>";
         } else {
-            obj = obj.getClass().getName();
+            buf.append(c);
+            while (i + 1 < length && pattern.charAt(i + 1) == c) {
+                buf.append(c);
+                i++;
+            }
         }
-        fieldPosition.append(obj);
-        throw new IllegalArgumentException(fieldPosition.toString());
+        indexRef[0] = i;
+        return buf.toString();
     }
 
-    public String format(long j) {
-        Calendar newCalendar = newCalendar();
-        newCalendar.setTimeInMillis(j);
-        return applyRulesToString(newCalendar);
+    protected NumberRule selectNumberRule(int field, int padding) {
+        switch (padding) {
+            case 1:
+                return new UnpaddedNumberField(field);
+            case 2:
+                return new TwoDigitNumberField(field);
+            default:
+                return new PaddedNumberField(field, padding);
+        }
     }
 
-    private String applyRulesToString(Calendar calendar) {
-        return applyRules(calendar, new StringBuffer(this.mMaxLengthEstimate)).toString();
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+        if (obj instanceof Date) {
+            return format((Date) obj, toAppendTo);
+        }
+        if (obj instanceof Calendar) {
+            return format((Calendar) obj, toAppendTo);
+        }
+        if (obj instanceof Long) {
+            return format(((Long) obj).longValue(), toAppendTo);
+        }
+        String str;
+        StringBuilder append = new StringBuilder().append("Unknown class: ");
+        if (obj == null) {
+            str = "<null>";
+        } else {
+            str = obj.getClass().getName();
+        }
+        throw new IllegalArgumentException(append.append(str).toString());
+    }
+
+    public String format(long millis) {
+        Calendar c = newCalendar();
+        c.setTimeInMillis(millis);
+        return applyRulesToString(c);
+    }
+
+    private String applyRulesToString(Calendar c) {
+        return applyRules(c, new StringBuffer(this.mMaxLengthEstimate)).toString();
     }
 
     private GregorianCalendar newCalendar() {
@@ -627,34 +644,34 @@ public class FastDatePrinter implements Serializable, DatePrinter {
     }
 
     public String format(Date date) {
-        Calendar newCalendar = newCalendar();
-        newCalendar.setTime(date);
-        return applyRulesToString(newCalendar);
+        Calendar c = newCalendar();
+        c.setTime(date);
+        return applyRulesToString(c);
     }
 
     public String format(Calendar calendar) {
         return format(calendar, new StringBuffer(this.mMaxLengthEstimate)).toString();
     }
 
-    public StringBuffer format(long j, StringBuffer stringBuffer) {
-        return format(new Date(j), stringBuffer);
+    public StringBuffer format(long millis, StringBuffer buf) {
+        return format(new Date(millis), buf);
     }
 
-    public StringBuffer format(Date date, StringBuffer stringBuffer) {
-        Calendar newCalendar = newCalendar();
-        newCalendar.setTime(date);
-        return applyRules(newCalendar, stringBuffer);
+    public StringBuffer format(Date date, StringBuffer buf) {
+        Calendar c = newCalendar();
+        c.setTime(date);
+        return applyRules(c, buf);
     }
 
-    public StringBuffer format(Calendar calendar, StringBuffer stringBuffer) {
-        return applyRules(calendar, stringBuffer);
+    public StringBuffer format(Calendar calendar, StringBuffer buf) {
+        return applyRules(calendar, buf);
     }
 
-    protected StringBuffer applyRules(Calendar calendar, StringBuffer stringBuffer) {
-        for (Rule appendTo : this.mRules) {
-            appendTo.appendTo(stringBuffer, calendar);
+    protected StringBuffer applyRules(Calendar calendar, StringBuffer buf) {
+        for (Rule rule : this.mRules) {
+            rule.appendTo(buf, calendar);
         }
-        return stringBuffer;
+        return buf;
     }
 
     public String getPattern() {
@@ -674,46 +691,40 @@ public class FastDatePrinter implements Serializable, DatePrinter {
     }
 
     public boolean equals(Object obj) {
-        boolean z = false;
         if (!(obj instanceof FastDatePrinter)) {
             return false;
         }
-        FastDatePrinter fastDatePrinter = (FastDatePrinter) obj;
-        if (this.mPattern.equals(fastDatePrinter.mPattern) && this.mTimeZone.equals(fastDatePrinter.mTimeZone) && this.mLocale.equals(fastDatePrinter.mLocale) != null) {
-            z = true;
+        FastDatePrinter other = (FastDatePrinter) obj;
+        if (this.mPattern.equals(other.mPattern) && this.mTimeZone.equals(other.mTimeZone) && this.mLocale.equals(other.mLocale)) {
+            return true;
         }
-        return z;
+        return false;
     }
 
     public int hashCode() {
-        return this.mPattern.hashCode() + (13 * (this.mTimeZone.hashCode() + (this.mLocale.hashCode() * 13)));
+        return this.mPattern.hashCode() + ((this.mTimeZone.hashCode() + (this.mLocale.hashCode() * 13)) * 13);
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("FastDatePrinter[");
-        stringBuilder.append(this.mPattern);
-        stringBuilder.append(",");
-        stringBuilder.append(this.mLocale);
-        stringBuilder.append(",");
-        stringBuilder.append(this.mTimeZone.getID());
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "FastDatePrinter[" + this.mPattern + "," + this.mLocale + "," + this.mTimeZone.getID() + "]";
     }
 
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        objectInputStream.defaultReadObject();
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
         init();
     }
 
-    static String getTimeZoneDisplay(TimeZone timeZone, boolean z, int i, Locale locale) {
-        TimeZoneDisplayKey timeZoneDisplayKey = new TimeZoneDisplayKey(timeZone, z, i, locale);
-        String str = (String) cTimeZoneDisplayCache.get(timeZoneDisplayKey);
-        if (str != null) {
-            return str;
+    static String getTimeZoneDisplay(TimeZone tz, boolean daylight, int style, Locale locale) {
+        TimeZoneDisplayKey key = new TimeZoneDisplayKey(tz, daylight, style, locale);
+        String value = (String) cTimeZoneDisplayCache.get(key);
+        if (value != null) {
+            return value;
         }
-        str = timeZone.getDisplayName(z, i, locale);
-        String str2 = (String) cTimeZoneDisplayCache.putIfAbsent(timeZoneDisplayKey, str);
-        return str2 != null ? str2 : str;
+        value = tz.getDisplayName(daylight, style, locale);
+        String prior = (String) cTimeZoneDisplayCache.putIfAbsent(key, value);
+        if (prior != null) {
+            return prior;
+        }
+        return value;
     }
 }

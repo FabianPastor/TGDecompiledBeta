@@ -18,27 +18,11 @@ public interface ExoMediaDrm<T extends ExoMediaCrypto> {
     public static final int KEY_TYPE_RELEASE = 3;
     public static final int KEY_TYPE_STREAMING = 1;
 
-    public interface KeyRequest {
-        byte[] getData();
-
-        String getDefaultUrl();
-    }
-
-    public interface KeyStatus {
-        byte[] getKeyId();
-
-        int getStatusCode();
-    }
-
     public interface OnEventListener<T extends ExoMediaCrypto> {
         void onEvent(ExoMediaDrm<? extends T> exoMediaDrm, byte[] bArr, int i, int i2, byte[] bArr2);
     }
 
-    public interface OnKeyStatusChangeListener<T extends ExoMediaCrypto> {
-        void onKeyStatusChange(ExoMediaDrm<? extends T> exoMediaDrm, byte[] bArr, List<KeyStatus> list, boolean z);
-    }
-
-    public interface ProvisionRequest {
+    public interface KeyRequest {
         byte[] getData();
 
         String getDefaultUrl();
@@ -48,9 +32,9 @@ public interface ExoMediaDrm<T extends ExoMediaCrypto> {
         private final byte[] data;
         private final String defaultUrl;
 
-        public DefaultKeyRequest(byte[] bArr, String str) {
-            this.data = bArr;
-            this.defaultUrl = str;
+        public DefaultKeyRequest(byte[] data, String defaultUrl) {
+            this.data = data;
+            this.defaultUrl = defaultUrl;
         }
 
         public byte[] getData() {
@@ -62,13 +46,19 @@ public interface ExoMediaDrm<T extends ExoMediaCrypto> {
         }
     }
 
+    public interface KeyStatus {
+        byte[] getKeyId();
+
+        int getStatusCode();
+    }
+
     public static final class DefaultKeyStatus implements KeyStatus {
         private final byte[] keyId;
         private final int statusCode;
 
-        DefaultKeyStatus(int i, byte[] bArr) {
-            this.statusCode = i;
-            this.keyId = bArr;
+        DefaultKeyStatus(int statusCode, byte[] keyId) {
+            this.statusCode = statusCode;
+            this.keyId = keyId;
         }
 
         public int getStatusCode() {
@@ -80,13 +70,19 @@ public interface ExoMediaDrm<T extends ExoMediaCrypto> {
         }
     }
 
+    public interface ProvisionRequest {
+        byte[] getData();
+
+        String getDefaultUrl();
+    }
+
     public static final class DefaultProvisionRequest implements ProvisionRequest {
         private final byte[] data;
         private final String defaultUrl;
 
-        public DefaultProvisionRequest(byte[] bArr, String str) {
-            this.data = bArr;
-            this.defaultUrl = str;
+        public DefaultProvisionRequest(byte[] data, String defaultUrl) {
+            this.data = data;
+            this.defaultUrl = defaultUrl;
         }
 
         public byte[] getData() {
@@ -96,6 +92,10 @@ public interface ExoMediaDrm<T extends ExoMediaCrypto> {
         public String getDefaultUrl() {
             return this.defaultUrl;
         }
+    }
+
+    public interface OnKeyStatusChangeListener<T extends ExoMediaCrypto> {
+        void onKeyStatusChange(ExoMediaDrm<? extends T> exoMediaDrm, byte[] bArr, List<KeyStatus> list, boolean z);
     }
 
     void closeSession(byte[] bArr);

@@ -49,49 +49,49 @@ public class ShareDialogCell extends FrameLayout {
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 17.0f, 39.0f, 0.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(NUM), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
     }
 
-    public void setDialog(int i, boolean z, CharSequence charSequence) {
-        TLObject tLObject = null;
-        if (i > 0) {
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+    public void setDialog(int uid, boolean checked, CharSequence name) {
+        TLObject photo = null;
+        if (uid > 0) {
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
             this.avatarDrawable.setInfo(user);
             if (UserObject.isUserSelf(user)) {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", C0446R.string.SavedMessages));
                 this.avatarDrawable.setSavedMessages(1);
             } else {
-                if (charSequence != null) {
-                    this.nameTextView.setText(charSequence);
+                if (name != null) {
+                    this.nameTextView.setText(name);
                 } else if (user != null) {
                     this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                 } else {
                     this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 }
                 if (!(user == null || user.photo == null)) {
-                    tLObject = user.photo.photo_small;
+                    photo = user.photo.photo_small;
                 }
             }
         } else {
-            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
-            if (charSequence != null) {
-                this.nameTextView.setText(charSequence);
-            } else if (chat != 0) {
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid));
+            if (name != null) {
+                this.nameTextView.setText(name);
+            } else if (chat != null) {
                 this.nameTextView.setText(chat.title);
             } else {
                 this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
             this.avatarDrawable.setInfo(chat);
             if (!(chat == null || chat.photo == null)) {
-                tLObject = chat.photo.photo_small;
+                photo = chat.photo.photo_small;
             }
         }
-        this.imageView.setImage(tLObject, "50_50", this.avatarDrawable);
-        this.checkBox.setChecked(z, null);
+        this.imageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.checkBox.setChecked(checked, false);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checkBox.setChecked(z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        this.checkBox.setChecked(checked, animated);
     }
 }

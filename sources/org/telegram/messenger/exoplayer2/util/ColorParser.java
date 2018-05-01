@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.util;
 import android.text.TextUtils;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -13,10 +14,6 @@ public final class ColorParser {
     private static final Pattern RGBA_PATTERN_FLOAT_ALPHA = Pattern.compile("^rgba\\((\\d{1,3}),(\\d{1,3}),(\\d{1,3}),(\\d*\\.?\\d*?)\\)$");
     private static final Pattern RGBA_PATTERN_INT_ALPHA = Pattern.compile("^rgba\\((\\d{1,3}),(\\d{1,3}),(\\d{1,3}),(\\d{1,3})\\)$");
     private static final Pattern RGB_PATTERN = Pattern.compile("^rgb\\((\\d{1,3}),(\\d{1,3}),(\\d{1,3})\\)$");
-
-    private static int argb(int i, int i2, int i3, int i4) {
-        return (((i << 24) | (i2 << 16)) | (i3 << 8)) | i4;
-    }
 
     static {
         COLOR_MAP.put("aliceblue", Integer.valueOf(-984833));
@@ -170,53 +167,58 @@ public final class ColorParser {
         COLOR_MAP.put("yellowgreen", Integer.valueOf(-6632142));
     }
 
-    public static int parseTtmlColor(String str) {
-        return parseColorInternal(str, false);
+    public static int parseTtmlColor(String colorExpression) {
+        return parseColorInternal(colorExpression, false);
     }
 
-    public static int parseCssColor(String str) {
-        return parseColorInternal(str, true);
+    public static int parseCssColor(String colorExpression) {
+        return parseColorInternal(colorExpression, true);
     }
 
-    private static int parseColorInternal(String str, boolean z) {
-        Assertions.checkArgument(TextUtils.isEmpty(str) ^ true);
-        str = str.replace(" ", TtmlNode.ANONYMOUS_REGION_ID);
-        if (str.charAt(0) == '#') {
-            z = (int) Long.parseLong(str.substring(1), 16);
-            if (str.length() == 7) {
-                str = -16777216 | z;
-            } else if (str.length() == 9) {
-                str = ((z & 255) << 24) | (z >>> 8);
-            } else {
-                throw new IllegalArgumentException();
+    private static int parseColorInternal(String colorExpression, boolean alphaHasFloatFormat) {
+        Assertions.checkArgument(!TextUtils.isEmpty(colorExpression));
+        colorExpression = colorExpression.replace(" ", TtmlNode.ANONYMOUS_REGION_ID);
+        if (colorExpression.charAt(0) == '#') {
+            int color = (int) Long.parseLong(colorExpression.substring(1), 16);
+            if (colorExpression.length() == 7) {
+                return color | Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
             }
-            return str;
+            if (colorExpression.length() == 9) {
+                return ((color & 255) << 24) | (color >>> 8);
+            }
+            throw new IllegalArgumentException();
         }
-        if (str.startsWith(RGBA)) {
-            str = (z ? RGBA_PATTERN_FLOAT_ALPHA : RGBA_PATTERN_INT_ALPHA).matcher(str);
-            if (str.matches()) {
-                if (z) {
-                    z = (int) (true * Float.parseFloat(str.group(4)));
+        Matcher matcher;
+        if (colorExpression.startsWith(RGBA)) {
+            matcher = (alphaHasFloatFormat ? RGBA_PATTERN_FLOAT_ALPHA : RGBA_PATTERN_INT_ALPHA).matcher(colorExpression);
+            if (matcher.matches()) {
+                int parseFloat;
+                if (alphaHasFloatFormat) {
+                    parseFloat = (int) (255.0f * Float.parseFloat(matcher.group(4)));
                 } else {
-                    z = Integer.parseInt(str.group(4), 10);
+                    parseFloat = Integer.parseInt(matcher.group(4), 10);
                 }
-                return argb(z, Integer.parseInt(str.group(1), 10), Integer.parseInt(str.group(2), 10), Integer.parseInt(str.group(3), 10));
+                return argb(parseFloat, Integer.parseInt(matcher.group(1), 10), Integer.parseInt(matcher.group(2), 10), Integer.parseInt(matcher.group(3), 10));
             }
-        } else if (str.startsWith(RGB)) {
-            str = RGB_PATTERN.matcher(str);
-            if (str.matches()) {
-                return rgb(Integer.parseInt(str.group(1), 10), Integer.parseInt(str.group(2), 10), Integer.parseInt(str.group(3), 10));
+        } else if (colorExpression.startsWith(RGB)) {
+            matcher = RGB_PATTERN.matcher(colorExpression);
+            if (matcher.matches()) {
+                return rgb(Integer.parseInt(matcher.group(1), 10), Integer.parseInt(matcher.group(2), 10), Integer.parseInt(matcher.group(3), 10));
             }
         } else {
-            Integer num = (Integer) COLOR_MAP.get(Util.toLowerInvariant(str));
-            if (num != null) {
-                return num.intValue();
+            Integer color2 = (Integer) COLOR_MAP.get(Util.toLowerInvariant(colorExpression));
+            if (color2 != null) {
+                return color2.intValue();
             }
         }
         throw new IllegalArgumentException();
     }
 
-    private static int rgb(int i, int i2, int i3) {
-        return argb(255, i, i2, i3);
+    private static int argb(int alpha, int red, int green, int blue) {
+        return (((alpha << 24) | (red << 16)) | (green << 8)) | blue;
+    }
+
+    private static int rgb(int red, int green, int blue) {
+        return argb(255, red, green, blue);
     }
 }

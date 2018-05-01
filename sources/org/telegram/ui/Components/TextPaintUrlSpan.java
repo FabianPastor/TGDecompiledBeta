@@ -9,28 +9,28 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
     private TextPaint textPaint;
     private int textSize;
 
-    public TextPaintUrlSpan(TextPaint textPaint, String str) {
-        this.textPaint = textPaint;
-        this.currentUrl = str;
+    public TextPaintUrlSpan(TextPaint paint, String url) {
+        this.textPaint = paint;
+        this.currentUrl = url;
     }
 
     public String getUrl() {
         return this.currentUrl;
     }
 
-    public void updateMeasureState(TextPaint textPaint) {
+    public void updateMeasureState(TextPaint p) {
         if (this.textPaint != null) {
-            textPaint.setColor(this.textPaint.getColor());
-            textPaint.setTypeface(this.textPaint.getTypeface());
-            textPaint.setFlags(this.textPaint.getFlags());
+            p.setColor(this.textPaint.getColor());
+            p.setTypeface(this.textPaint.getTypeface());
+            p.setFlags(this.textPaint.getFlags());
         }
     }
 
-    public void updateDrawState(TextPaint textPaint) {
+    public void updateDrawState(TextPaint p) {
         if (this.textPaint != null) {
-            textPaint.setColor(this.textPaint.getColor());
-            textPaint.setTypeface(this.textPaint.getTypeface());
-            textPaint.setFlags(this.textPaint.getFlags());
+            p.setColor(this.textPaint.getColor());
+            p.setTypeface(this.textPaint.getTypeface());
+            p.setFlags(this.textPaint.getFlags());
         }
     }
 }

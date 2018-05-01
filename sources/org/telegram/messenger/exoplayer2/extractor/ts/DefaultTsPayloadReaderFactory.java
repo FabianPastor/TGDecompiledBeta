@@ -31,47 +31,46 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
         this(0);
     }
 
-    public DefaultTsPayloadReaderFactory(int i) {
-        this(i, Collections.emptyList());
+    public DefaultTsPayloadReaderFactory(int flags) {
+        this(flags, Collections.emptyList());
     }
 
-    public DefaultTsPayloadReaderFactory(int i, List<Format> list) {
-        this.flags = i;
-        if (isSet(32) == 0 && list.isEmpty() != 0) {
-            list = Collections.singletonList(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, null, null));
+    public DefaultTsPayloadReaderFactory(int flags, List<Format> closedCaptionFormats) {
+        this.flags = flags;
+        if (!isSet(32) && closedCaptionFormats.isEmpty()) {
+            closedCaptionFormats = Collections.singletonList(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, 0, null));
         }
-        this.closedCaptionFormats = list;
+        this.closedCaptionFormats = closedCaptionFormats;
     }
 
     public SparseArray<TsPayloadReader> createInitialPayloadReaders() {
         return new SparseArray();
     }
 
-    public TsPayloadReader createPayloadReader(int i, EsInfo esInfo) {
-        TsPayloadReader tsPayloadReader = null;
-        switch (i) {
+    public TsPayloadReader createPayloadReader(int streamType, EsInfo esInfo) {
+        switch (streamType) {
             case 2:
                 return new PesReader(new H262Reader());
             case 3:
             case 4:
                 return new PesReader(new MpegAudioReader(esInfo.language));
             case 15:
-                if (isSet(2) == 0) {
-                    tsPayloadReader = new PesReader(new AdtsReader(false, esInfo.language));
+                if (isSet(2)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new AdtsReader(false, esInfo.language));
             case 17:
-                if (isSet(2) == 0) {
-                    tsPayloadReader = new PesReader(new LatmReader(esInfo.language));
+                if (isSet(2)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new LatmReader(esInfo.language));
             case 21:
                 return new PesReader(new Id3Reader());
             case 27:
-                if (isSet(4) == 0) {
-                    tsPayloadReader = new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
+                if (isSet(4)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
             case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                 return new PesReader(new H265Reader(buildSeiReader(esInfo)));
             case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
@@ -83,10 +82,10 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
             case TsExtractor.TS_STREAM_TYPE_DTS /*138*/:
                 return new PesReader(new DtsReader(esInfo.language));
             case 134:
-                if (isSet(16) == 0) {
-                    tsPayloadReader = new SectionReader(new SpliceInfoSectionReader());
+                if (isSet(16)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new SectionReader(new SpliceInfoSectionReader());
             default:
                 return null;
         }
@@ -97,34 +96,34 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
             return new SeiReader(this.closedCaptionFormats);
         }
         ParsableByteArray parsableByteArray = new ParsableByteArray(esInfo.descriptorBytes);
-        esInfo = this.closedCaptionFormats;
+        List<Format> closedCaptionFormats = this.closedCaptionFormats;
         while (parsableByteArray.bytesLeft() > 0) {
-            int position = parsableByteArray.getPosition() + parsableByteArray.readUnsignedByte();
+            int nextDescriptorPosition = parsableByteArray.getPosition() + parsableByteArray.readUnsignedByte();
             if (parsableByteArray.readUnsignedByte() == 134) {
-                esInfo = new ArrayList();
-                int readUnsignedByte = parsableByteArray.readUnsignedByte() & 31;
-                for (int i = 0; i < readUnsignedByte; i++) {
-                    int i2;
-                    String str;
-                    String readString = parsableByteArray.readString(3);
-                    int readUnsignedByte2 = parsableByteArray.readUnsignedByte();
-                    if (((readUnsignedByte2 & 128) != 0 ? 1 : null) != null) {
-                        i2 = readUnsignedByte2 & 63;
-                        str = MimeTypes.APPLICATION_CEA708;
+                closedCaptionFormats = new ArrayList();
+                int numberOfServices = parsableByteArray.readUnsignedByte() & 31;
+                for (int i = 0; i < numberOfServices; i++) {
+                    String mimeType;
+                    int accessibilityChannel;
+                    String language = parsableByteArray.readString(3);
+                    int captionTypeByte = parsableByteArray.readUnsignedByte();
+                    if ((captionTypeByte & 128) != 0) {
+                        mimeType = MimeTypes.APPLICATION_CEA708;
+                        accessibilityChannel = captionTypeByte & 63;
                     } else {
-                        i2 = 1;
-                        str = MimeTypes.APPLICATION_CEA608;
+                        mimeType = MimeTypes.APPLICATION_CEA608;
+                        accessibilityChannel = 1;
                     }
-                    esInfo.add(Format.createTextSampleFormat(null, str, null, -1, 0, readString, i2, null));
+                    closedCaptionFormats.add(Format.createTextSampleFormat(null, mimeType, null, -1, 0, language, accessibilityChannel, null));
                     parsableByteArray.skipBytes(2);
                 }
             }
-            parsableByteArray.setPosition(position);
+            parsableByteArray.setPosition(nextDescriptorPosition);
         }
-        return new SeiReader(esInfo);
+        return new SeiReader(closedCaptionFormats);
     }
 
-    private boolean isSet(int i) {
-        return (i & this.flags) != 0;
+    private boolean isSet(int flag) {
+        return (this.flags & flag) != 0;
     }
 }

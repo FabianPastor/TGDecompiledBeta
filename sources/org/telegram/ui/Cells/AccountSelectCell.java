@@ -50,8 +50,8 @@ public class AccountSelectCell extends FrameLayout {
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -59,15 +59,20 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
     }
 
-    public void setAccount(int i) {
-        this.accountNumber = i;
-        User currentUser = UserConfig.getInstance(this.accountNumber).getCurrentUser();
-        this.avatarDrawable.setInfo(currentUser);
-        this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
-        TLObject tLObject = (currentUser.photo == null || currentUser.photo.photo_small == null || currentUser.photo.photo_small.volume_id == 0 || currentUser.photo.photo_small.local_id == 0) ? null : currentUser.photo.photo_small;
-        this.imageView.getImageReceiver().setCurrentAccount(i);
-        this.imageView.setImage(tLObject, "50_50", this.avatarDrawable);
-        this.checkImageView.setVisibility(i == UserConfig.selectedAccount ? 0 : 4);
+    public void setAccount(int account) {
+        TLObject avatar;
+        this.accountNumber = account;
+        User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        this.avatarDrawable.setInfo(user);
+        this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+        if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
+            avatar = null;
+        } else {
+            avatar = user.photo.photo_small;
+        }
+        this.imageView.getImageReceiver().setCurrentAccount(account);
+        this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
+        this.checkImageView.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
     }
 
     public int getAccountNumber() {

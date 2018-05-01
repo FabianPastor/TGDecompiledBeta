@@ -20,16 +20,16 @@ public final class DownloaderConstructorHelper {
     private final PriorityTaskManager priorityTaskManager;
     private final Factory upstreamDataSourceFactory;
 
-    public DownloaderConstructorHelper(Cache cache, Factory factory) {
-        this(cache, factory, null, null, null);
+    public DownloaderConstructorHelper(Cache cache, Factory upstreamDataSourceFactory) {
+        this(cache, upstreamDataSourceFactory, null, null, null);
     }
 
-    public DownloaderConstructorHelper(Cache cache, Factory factory, Factory factory2, DataSink.Factory factory3, PriorityTaskManager priorityTaskManager) {
-        Assertions.checkNotNull(factory);
+    public DownloaderConstructorHelper(Cache cache, Factory upstreamDataSourceFactory, Factory cacheReadDataSourceFactory, DataSink.Factory cacheWriteDataSinkFactory, PriorityTaskManager priorityTaskManager) {
+        Assertions.checkNotNull(upstreamDataSourceFactory);
         this.cache = cache;
-        this.upstreamDataSourceFactory = factory;
-        this.cacheReadDataSourceFactory = factory2;
-        this.cacheWriteDataSinkFactory = factory3;
+        this.upstreamDataSourceFactory = upstreamDataSourceFactory;
+        this.cacheReadDataSourceFactory = cacheReadDataSourceFactory;
+        this.cacheWriteDataSinkFactory = cacheWriteDataSinkFactory;
         this.priorityTaskManager = priorityTaskManager;
     }
 
@@ -41,13 +41,16 @@ public final class DownloaderConstructorHelper {
         return this.priorityTaskManager != null ? this.priorityTaskManager : new PriorityTaskManager();
     }
 
-    public CacheDataSource buildCacheDataSource(boolean z) {
-        DataSource createDataSource = this.cacheReadDataSourceFactory != null ? this.cacheReadDataSourceFactory.createDataSource() : new FileDataSource();
-        if (z) {
-            return new CacheDataSource(this.cache, DummyDataSource.INSTANCE, createDataSource, null, 1, null);
+    public CacheDataSource buildCacheDataSource(boolean offline) {
+        DataSource cacheReadDataSource = this.cacheReadDataSourceFactory != null ? this.cacheReadDataSourceFactory.createDataSource() : new FileDataSource();
+        if (offline) {
+            return new CacheDataSource(this.cache, DummyDataSource.INSTANCE, cacheReadDataSource, null, 1, null);
         }
-        DataSink createDataSink = this.cacheWriteDataSinkFactory ? this.cacheWriteDataSinkFactory.createDataSink() : new CacheDataSink(this.cache, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
-        z = this.upstreamDataSourceFactory.createDataSource();
-        return new CacheDataSource(this.cache, this.priorityTaskManager == null ? z : new PriorityDataSource(z, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD), createDataSource, createDataSink, 1, null);
+        DataSink cacheWriteDataSink = this.cacheWriteDataSinkFactory != null ? this.cacheWriteDataSinkFactory.createDataSink() : new CacheDataSink(this.cache, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
+        DataSource upstream = this.upstreamDataSourceFactory.createDataSource();
+        if (this.priorityTaskManager != null) {
+            Object upstream2 = new PriorityDataSource(upstream, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD);
+        }
+        return new CacheDataSource(this.cache, upstream, cacheReadDataSource, cacheWriteDataSink, 1, null);
     }
 }

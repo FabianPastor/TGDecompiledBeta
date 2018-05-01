@@ -12,12 +12,12 @@ public final class EmptySampleStream implements SampleStream {
     public void maybeThrowError() throws IOException {
     }
 
-    public int skipData(long j) {
-        return 0;
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+        buffer.setFlags(4);
+        return -4;
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z) {
-        decoderInputBuffer.setFlags(4);
-        return -4;
+    public int skipData(long positionUs) {
+        return 0;
     }
 }

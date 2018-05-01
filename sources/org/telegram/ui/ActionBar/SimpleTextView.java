@@ -7,8 +7,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.Callback;
 import android.text.Layout;
+import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
+import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
@@ -29,21 +33,17 @@ public class SimpleTextView extends View implements Callback {
     private int textWidth;
     private boolean wasLayout;
 
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
     public SimpleTextView(Context context) {
         super(context);
     }
 
-    public void setTextColor(int i) {
-        this.textPaint.setColor(i);
+    public void setTextColor(int color) {
+        this.textPaint.setColor(color);
         invalidate();
     }
 
-    public void setLinkTextColor(int i) {
-        this.textPaint.linkColor = i;
+    public void setLinkTextColor(int color) {
+        this.textPaint.linkColor = color;
         invalidate();
     }
 
@@ -52,18 +52,18 @@ public class SimpleTextView extends View implements Callback {
         this.wasLayout = false;
     }
 
-    public void setTextSize(int i) {
-        i = (float) AndroidUtilities.dp((float) i);
-        if (i != this.textPaint.getTextSize()) {
-            this.textPaint.setTextSize(i);
-            if (recreateLayoutMaybe() == 0) {
+    public void setTextSize(int size) {
+        int newSize = AndroidUtilities.dp((float) size);
+        if (((float) newSize) != this.textPaint.getTextSize()) {
+            this.textPaint.setTextSize((float) newSize);
+            if (!recreateLayoutMaybe()) {
                 invalidate();
             }
         }
     }
 
-    public void setGravity(int i) {
-        this.gravity = i;
+    public void setGravity(int value) {
+        this.gravity = value;
     }
 
     public void setTypeface(Typeface typeface) {
@@ -71,106 +71,72 @@ public class SimpleTextView extends View implements Callback {
     }
 
     public int getSideDrawablesSize() {
-        int i = 0;
+        int size = 0;
         if (this.leftDrawable != null) {
-            i = 0 + (this.leftDrawable.getIntrinsicWidth() + this.drawablePadding);
+            size = 0 + (this.leftDrawable.getIntrinsicWidth() + this.drawablePadding);
         }
-        return this.rightDrawable != null ? i + (this.rightDrawable.getIntrinsicWidth() + this.drawablePadding) : i;
+        if (this.rightDrawable != null) {
+            return size + (this.rightDrawable.getIntrinsicWidth() + this.drawablePadding);
+        }
+        return size;
     }
 
     public Paint getPaint() {
         return this.textPaint;
     }
 
-    private void calcOffset(int i) {
+    private void calcOffset(int width) {
         if (this.layout.getLineCount() > 0) {
             this.textWidth = (int) Math.ceil((double) this.layout.getLineWidth(0));
             this.textHeight = this.layout.getLineBottom(0);
             if ((this.gravity & 7) == 3) {
                 this.offsetX = -((int) this.layout.getLineLeft(0));
             } else if (this.layout.getLineLeft(0) == 0.0f) {
-                this.offsetX = i - this.textWidth;
+                this.offsetX = width - this.textWidth;
             } else {
-                this.offsetX = -AndroidUtilities.dp(NUM);
+                this.offsetX = -AndroidUtilities.dp(8.0f);
             }
             this.offsetX += getPaddingLeft();
         }
     }
 
-    private boolean createLayout(int r15) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r14 = this;
-        r0 = r14.text;
-        if (r0 == 0) goto L_0x004c;
-    L_0x0004:
-        r0 = r14.leftDrawable;	 Catch:{ Exception -> 0x0054 }
-        if (r0 == 0) goto L_0x0012;	 Catch:{ Exception -> 0x0054 }
-    L_0x0008:
-        r0 = r14.leftDrawable;	 Catch:{ Exception -> 0x0054 }
-        r0 = r0.getIntrinsicWidth();	 Catch:{ Exception -> 0x0054 }
-        r15 = r15 - r0;	 Catch:{ Exception -> 0x0054 }
-        r0 = r14.drawablePadding;	 Catch:{ Exception -> 0x0054 }
-        r15 = r15 - r0;	 Catch:{ Exception -> 0x0054 }
-    L_0x0012:
-        r0 = r14.rightDrawable;	 Catch:{ Exception -> 0x0054 }
-        if (r0 == 0) goto L_0x0020;	 Catch:{ Exception -> 0x0054 }
-    L_0x0016:
-        r0 = r14.rightDrawable;	 Catch:{ Exception -> 0x0054 }
-        r0 = r0.getIntrinsicWidth();	 Catch:{ Exception -> 0x0054 }
-        r15 = r15 - r0;	 Catch:{ Exception -> 0x0054 }
-        r0 = r14.drawablePadding;	 Catch:{ Exception -> 0x0054 }
-        r15 = r15 - r0;	 Catch:{ Exception -> 0x0054 }
-    L_0x0020:
-        r0 = r14.text;	 Catch:{ Exception -> 0x0054 }
-        r1 = r14.textPaint;	 Catch:{ Exception -> 0x0054 }
-        r2 = (float) r15;	 Catch:{ Exception -> 0x0054 }
-        r3 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x0054 }
-        r5 = android.text.TextUtils.ellipsize(r0, r1, r2, r3);	 Catch:{ Exception -> 0x0054 }
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0054 }
-        r6 = 0;	 Catch:{ Exception -> 0x0054 }
-        r7 = r5.length();	 Catch:{ Exception -> 0x0054 }
-        r8 = r14.textPaint;	 Catch:{ Exception -> 0x0054 }
-        r1 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;	 Catch:{ Exception -> 0x0054 }
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);	 Catch:{ Exception -> 0x0054 }
-        r9 = r15 + r1;	 Catch:{ Exception -> 0x0054 }
-        r10 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0054 }
-        r11 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x0054 }
-        r12 = 0;	 Catch:{ Exception -> 0x0054 }
-        r13 = 0;	 Catch:{ Exception -> 0x0054 }
-        r4 = r0;	 Catch:{ Exception -> 0x0054 }
-        r4.<init>(r5, r6, r7, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x0054 }
-        r14.layout = r0;	 Catch:{ Exception -> 0x0054 }
-        r14.calcOffset(r15);	 Catch:{ Exception -> 0x0054 }
-        goto L_0x0054;
-    L_0x004c:
-        r15 = 0;
-        r14.layout = r15;
-        r15 = 0;
-        r14.textWidth = r15;
-        r14.textHeight = r15;
-    L_0x0054:
-        r14.invalidate();
-        r15 = 1;
-        return r15;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.SimpleTextView.createLayout(int):boolean");
-    }
-
-    protected void onMeasure(int i, int i2) {
-        i = MeasureSpec.getSize(i);
-        int size = MeasureSpec.getSize(i2);
-        createLayout((i - getPaddingLeft()) - getPaddingRight());
-        if (MeasureSpec.getMode(i2) != NUM) {
-            size = this.textHeight;
+    private boolean createLayout(int width) {
+        if (this.text != null) {
+            try {
+                if (this.leftDrawable != null) {
+                    width = (width - this.leftDrawable.getIntrinsicWidth()) - this.drawablePadding;
+                }
+                if (this.rightDrawable != null) {
+                    width = (width - this.rightDrawable.getIntrinsicWidth()) - this.drawablePadding;
+                }
+                CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
+                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                calcOffset(width);
+            } catch (Exception e) {
+            }
+        } else {
+            this.layout = null;
+            this.textWidth = 0;
+            this.textHeight = 0;
         }
-        setMeasuredDimension(i, size);
+        invalidate();
+        return true;
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int finalHeight;
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        createLayout((width - getPaddingLeft()) - getPaddingRight());
+        if (MeasureSpec.getMode(heightMeasureSpec) == NUM) {
+            finalHeight = height;
+        } else {
+            finalHeight = this.textHeight;
+        }
+        setMeasuredDimension(width, finalHeight);
+    }
+
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         this.wasLayout = true;
     }
 
@@ -182,20 +148,20 @@ Error: java.lang.NullPointerException
         return this.textHeight;
     }
 
-    public void setLeftDrawableTopPadding(int i) {
-        this.leftDrawableTopPadding = i;
+    public void setLeftDrawableTopPadding(int value) {
+        this.leftDrawableTopPadding = value;
     }
 
-    public void setRightDrawableTopPadding(int i) {
-        this.rightDrawableTopPadding = i;
+    public void setRightDrawableTopPadding(int value) {
+        this.rightDrawableTopPadding = value;
     }
 
-    public void setLeftDrawable(int i) {
-        setLeftDrawable(i == 0 ? 0 : getContext().getResources().getDrawable(i));
+    public void setLeftDrawable(int resId) {
+        setLeftDrawable(resId == 0 ? null : getContext().getResources().getDrawable(resId));
     }
 
-    public void setRightDrawable(int i) {
-        setRightDrawable(i == 0 ? 0 : getContext().getResources().getDrawable(i));
+    public void setRightDrawable(int resId) {
+        setRightDrawable(resId == 0 ? null : getContext().getResources().getDrawable(resId));
     }
 
     public void setLeftDrawable(Drawable drawable) {
@@ -207,7 +173,7 @@ Error: java.lang.NullPointerException
             if (drawable != null) {
                 drawable.setCallback(this);
             }
-            if (recreateLayoutMaybe() == null) {
+            if (!recreateLayoutMaybe()) {
                 invalidate();
             }
         }
@@ -222,27 +188,29 @@ Error: java.lang.NullPointerException
             if (drawable != null) {
                 drawable.setCallback(this);
             }
-            if (recreateLayoutMaybe() == null) {
+            if (!recreateLayoutMaybe()) {
                 invalidate();
             }
         }
     }
 
-    public void setText(CharSequence charSequence) {
-        setText(charSequence, false);
+    public void setText(CharSequence value) {
+        setText(value, false);
     }
 
-    public void setText(CharSequence charSequence, boolean z) {
-        if (!(this.text == null && charSequence == null) && (z || !this.text || charSequence == null || !this.text.equals(charSequence))) {
-            this.text = charSequence;
-            recreateLayoutMaybe();
+    public void setText(CharSequence value, boolean force) {
+        if (this.text != null || value != null) {
+            if (force || this.text == null || value == null || !this.text.equals(value)) {
+                this.text = value;
+                recreateLayoutMaybe();
+            }
         }
     }
 
-    public void setDrawablePadding(int i) {
-        if (this.drawablePadding != i) {
-            this.drawablePadding = i;
-            if (recreateLayoutMaybe() == 0) {
+    public void setDrawablePadding(int value) {
+        if (this.drawablePadding != value) {
+            this.drawablePadding = value;
+            if (!recreateLayoutMaybe()) {
                 invalidate();
             }
         }
@@ -264,14 +232,14 @@ Error: java.lang.NullPointerException
     }
 
     public int getTextStartX() {
-        int i = 0;
         if (this.layout == null) {
             return 0;
         }
+        int textOffsetX = 0;
         if (this.leftDrawable != null && (this.gravity & 7) == 3) {
-            i = 0 + (this.drawablePadding + this.leftDrawable.getIntrinsicWidth());
+            textOffsetX = 0 + (this.drawablePadding + this.leftDrawable.getIntrinsicWidth());
         }
-        return (((int) getX()) + this.offsetX) + i;
+        return (((int) getX()) + this.offsetX) + textOffsetX;
     }
 
     public TextPaint getTextPaint() {
@@ -286,38 +254,42 @@ Error: java.lang.NullPointerException
     }
 
     protected void onDraw(Canvas canvas) {
-        int i = 0;
+        int textOffsetX = 0;
         if (this.leftDrawable != null) {
-            int intrinsicHeight = ((this.textHeight - this.leftDrawable.getIntrinsicHeight()) / 2) + this.leftDrawableTopPadding;
-            this.leftDrawable.setBounds(0, intrinsicHeight, this.leftDrawable.getIntrinsicWidth(), this.leftDrawable.getIntrinsicHeight() + intrinsicHeight);
+            int y = ((this.textHeight - this.leftDrawable.getIntrinsicHeight()) / 2) + this.leftDrawableTopPadding;
+            this.leftDrawable.setBounds(0, y, this.leftDrawable.getIntrinsicWidth(), this.leftDrawable.getIntrinsicHeight() + y);
             this.leftDrawable.draw(canvas);
             if ((this.gravity & 7) == 3) {
-                i = 0 + (this.drawablePadding + this.leftDrawable.getIntrinsicWidth());
+                textOffsetX = 0 + (this.drawablePadding + this.leftDrawable.getIntrinsicWidth());
             }
         }
         if (this.rightDrawable != null) {
-            intrinsicHeight = (this.textWidth + i) + this.drawablePadding;
-            int intrinsicHeight2 = ((this.textHeight - this.rightDrawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
-            this.rightDrawable.setBounds(intrinsicHeight, intrinsicHeight2, this.rightDrawable.getIntrinsicWidth() + intrinsicHeight, this.rightDrawable.getIntrinsicHeight() + intrinsicHeight2);
+            int x = (this.textWidth + textOffsetX) + this.drawablePadding;
+            y = ((this.textHeight - this.rightDrawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
+            this.rightDrawable.setBounds(x, y, this.rightDrawable.getIntrinsicWidth() + x, this.rightDrawable.getIntrinsicHeight() + y);
             this.rightDrawable.draw(canvas);
         }
         if (this.layout != null) {
-            if (this.offsetX + i != 0) {
+            if (this.offsetX + textOffsetX != 0) {
                 canvas.save();
-                canvas.translate((float) (this.offsetX + i), 0.0f);
+                canvas.translate((float) (this.offsetX + textOffsetX), 0.0f);
             }
             this.layout.draw(canvas);
-            if (this.offsetX + i != 0) {
+            if (this.offsetX + textOffsetX != 0) {
                 canvas.restore();
             }
         }
     }
 
-    public void invalidateDrawable(Drawable drawable) {
-        if (drawable == this.leftDrawable) {
+    public void invalidateDrawable(Drawable who) {
+        if (who == this.leftDrawable) {
             invalidate(this.leftDrawable.getBounds());
-        } else if (drawable == this.rightDrawable) {
+        } else if (who == this.rightDrawable) {
             invalidate(this.rightDrawable.getBounds());
         }
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 }

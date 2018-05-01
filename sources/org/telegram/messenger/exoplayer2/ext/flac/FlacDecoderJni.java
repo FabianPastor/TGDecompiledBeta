@@ -41,8 +41,8 @@ final class FlacDecoderJni {
         }
     }
 
-    public void setData(ByteBuffer byteBuffer) {
-        this.byteBufferData = byteBuffer;
+    public void setData(ByteBuffer byteBufferData) {
+        this.byteBufferData = byteBufferData;
         this.extractorInput = null;
         this.tempBuffer = null;
     }
@@ -53,16 +53,15 @@ final class FlacDecoderJni {
         if (this.tempBuffer == null) {
             this.tempBuffer = new byte[8192];
         }
-        this.endOfExtractorInput = null;
+        this.endOfExtractorInput = false;
     }
 
     public boolean isEndOfData() {
-        boolean z = true;
         if (this.byteBufferData != null) {
-            if (this.byteBufferData.remaining() != 0) {
-                z = false;
+            if (this.byteBufferData.remaining() == 0) {
+                return true;
             }
-            return z;
+            return false;
         } else if (this.extractorInput != null) {
             return this.endOfExtractorInput;
         } else {
@@ -70,37 +69,38 @@ final class FlacDecoderJni {
         }
     }
 
-    public int read(ByteBuffer byteBuffer) throws IOException, InterruptedException {
-        int remaining = byteBuffer.remaining();
+    public int read(ByteBuffer target) throws IOException, InterruptedException {
+        int byteCount = target.remaining();
         if (this.byteBufferData != null) {
-            remaining = Math.min(remaining, this.byteBufferData.remaining());
-            int limit = this.byteBufferData.limit();
-            this.byteBufferData.limit(this.byteBufferData.position() + remaining);
-            byteBuffer.put(this.byteBufferData);
-            this.byteBufferData.limit(limit);
-        } else if (this.extractorInput == null) {
-            return -1;
-        } else {
-            remaining = Math.min(remaining, 8192);
-            int readFromExtractorInput = readFromExtractorInput(0, remaining);
-            if (readFromExtractorInput < 4) {
-                readFromExtractorInput += readFromExtractorInput(readFromExtractorInput, remaining - readFromExtractorInput);
+            byteCount = Math.min(byteCount, this.byteBufferData.remaining());
+            int originalLimit = this.byteBufferData.limit();
+            this.byteBufferData.limit(this.byteBufferData.position() + byteCount);
+            target.put(this.byteBufferData);
+            this.byteBufferData.limit(originalLimit);
+        } else if (this.extractorInput != null) {
+            byteCount = Math.min(byteCount, 8192);
+            int read = readFromExtractorInput(0, byteCount);
+            if (read < 4) {
+                read += readFromExtractorInput(read, byteCount - read);
             }
-            remaining = readFromExtractorInput;
-            byteBuffer.put(this.tempBuffer, 0, remaining);
+            byteCount = read;
+            target.put(this.tempBuffer, 0, byteCount);
+        } else {
+            int i = byteCount;
+            return -1;
         }
-        return remaining;
+        return byteCount;
     }
 
     public FlacStreamInfo decodeMetadata() throws IOException, InterruptedException {
         return flacDecodeMetadata(this.nativeDecoderContext);
     }
 
-    public int decodeSample(ByteBuffer byteBuffer) throws IOException, InterruptedException {
-        if (byteBuffer.isDirect()) {
-            return flacDecodeToBuffer(this.nativeDecoderContext, byteBuffer);
+    public int decodeSample(ByteBuffer output) throws IOException, InterruptedException {
+        if (output.isDirect()) {
+            return flacDecodeToBuffer(this.nativeDecoderContext, output);
         }
-        return flacDecodeToArray(this.nativeDecoderContext, byteBuffer.array());
+        return flacDecodeToArray(this.nativeDecoderContext, output.array());
     }
 
     public long getDecodePosition() {
@@ -111,8 +111,8 @@ final class FlacDecoderJni {
         return flacGetLastTimestamp(this.nativeDecoderContext);
     }
 
-    public long getSeekPosition(long j) {
-        return flacGetSeekPosition(this.nativeDecoderContext, j);
+    public long getSeekPosition(long timeUs) {
+        return flacGetSeekPosition(this.nativeDecoderContext, timeUs);
     }
 
     public String getStateString() {
@@ -123,18 +123,18 @@ final class FlacDecoderJni {
         flacFlush(this.nativeDecoderContext);
     }
 
-    public void reset(long j) {
-        flacReset(this.nativeDecoderContext, j);
+    public void reset(long newPosition) {
+        flacReset(this.nativeDecoderContext, newPosition);
     }
 
     public void release() {
         flacRelease(this.nativeDecoderContext);
     }
 
-    private int readFromExtractorInput(int i, int i2) throws IOException, InterruptedException {
-        i = this.extractorInput.read(this.tempBuffer, i, i2);
-        if (i != -1) {
-            return i;
+    private int readFromExtractorInput(int offset, int length) throws IOException, InterruptedException {
+        int read = this.extractorInput.read(this.tempBuffer, offset, length);
+        if (read != -1) {
+            return read;
         }
         this.endOfExtractorInput = true;
         return 0;

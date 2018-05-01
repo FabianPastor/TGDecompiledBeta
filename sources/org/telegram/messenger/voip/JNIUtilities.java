@@ -9,15 +9,15 @@ import org.telegram.messenger.ApplicationLoader;
 public class JNIUtilities {
     @TargetApi(23)
     public static String getCurrentNetworkInterfaceName() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
-        Network activeNetwork = connectivityManager.getActiveNetwork();
-        if (activeNetwork == null) {
+        ConnectivityManager cm = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
+        Network net = cm.getActiveNetwork();
+        if (net == null) {
             return null;
         }
-        LinkProperties linkProperties = connectivityManager.getLinkProperties(activeNetwork);
-        if (linkProperties == null) {
-            return null;
+        LinkProperties props = cm.getLinkProperties(net);
+        if (props != null) {
+            return props.getInterfaceName();
         }
-        return linkProperties.getInterfaceName();
+        return null;
     }
 }

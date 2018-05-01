@@ -10,23 +10,23 @@ public final class DefaultHttpDataSourceFactory extends BaseFactory {
     private final int readTimeoutMillis;
     private final String userAgent;
 
-    public DefaultHttpDataSourceFactory(String str) {
-        this(str, null);
+    public DefaultHttpDataSourceFactory(String userAgent) {
+        this(userAgent, null);
     }
 
-    public DefaultHttpDataSourceFactory(String str, TransferListener<? super DataSource> transferListener) {
-        this(str, transferListener, 8000, 8000, false);
+    public DefaultHttpDataSourceFactory(String userAgent, TransferListener<? super DataSource> listener) {
+        this(userAgent, listener, 8000, 8000, false);
     }
 
-    public DefaultHttpDataSourceFactory(String str, TransferListener<? super DataSource> transferListener, int i, int i2, boolean z) {
-        this.userAgent = str;
-        this.listener = transferListener;
-        this.connectTimeoutMillis = i;
-        this.readTimeoutMillis = i2;
-        this.allowCrossProtocolRedirects = z;
+    public DefaultHttpDataSourceFactory(String userAgent, TransferListener<? super DataSource> listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        this.userAgent = userAgent;
+        this.listener = listener;
+        this.connectTimeoutMillis = connectTimeoutMillis;
+        this.readTimeoutMillis = readTimeoutMillis;
+        this.allowCrossProtocolRedirects = allowCrossProtocolRedirects;
     }
 
-    protected DefaultHttpDataSource createDataSourceInternal(RequestProperties requestProperties) {
-        return new DefaultHttpDataSource(this.userAgent, null, this.listener, this.connectTimeoutMillis, this.readTimeoutMillis, this.allowCrossProtocolRedirects, requestProperties);
+    protected DefaultHttpDataSource createDataSourceInternal(RequestProperties defaultRequestProperties) {
+        return new DefaultHttpDataSource(this.userAgent, null, this.listener, this.connectTimeoutMillis, this.readTimeoutMillis, this.allowCrossProtocolRedirects, defaultRequestProperties);
     }
 }

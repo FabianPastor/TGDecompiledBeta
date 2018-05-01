@@ -21,14 +21,14 @@ public final class LoopingMediaSource implements MediaSource {
             super(timeline);
         }
 
-        public int getNextWindowIndex(int i, int i2, boolean z) {
-            i = this.timeline.getNextWindowIndex(i, i2, z);
-            return i == -1 ? getFirstWindowIndex(z) : i;
+        public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            int childNextWindowIndex = this.timeline.getNextWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
+            return childNextWindowIndex == -1 ? getFirstWindowIndex(shuffleModeEnabled) : childNextWindowIndex;
         }
 
-        public int getPreviousWindowIndex(int i, int i2, boolean z) {
-            i = this.timeline.getPreviousWindowIndex(i, i2, z);
-            return i == -1 ? getLastWindowIndex(z) : i;
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            int childPreviousWindowIndex = this.timeline.getPreviousWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
+            return childPreviousWindowIndex == -1 ? getLastWindowIndex(shuffleModeEnabled) : childPreviousWindowIndex;
         }
     }
 
@@ -38,14 +38,14 @@ public final class LoopingMediaSource implements MediaSource {
         private final int childWindowCount;
         private final int loopCount;
 
-        public LoopingTimeline(Timeline timeline, int i) {
-            super(new UnshuffledShuffleOrder(i));
-            this.childTimeline = timeline;
-            this.childPeriodCount = timeline.getPeriodCount();
-            this.childWindowCount = timeline.getWindowCount();
-            this.loopCount = i;
-            if (this.childPeriodCount > null) {
-                Assertions.checkState(i <= Integer.MAX_VALUE / this.childPeriodCount ? true : null, "LoopingMediaSource contains too many periods");
+        public LoopingTimeline(Timeline childTimeline, int loopCount) {
+            super(new UnshuffledShuffleOrder(loopCount));
+            this.childTimeline = childTimeline;
+            this.childPeriodCount = childTimeline.getPeriodCount();
+            this.childWindowCount = childTimeline.getWindowCount();
+            this.loopCount = loopCount;
+            if (this.childPeriodCount > 0) {
+                Assertions.checkState(loopCount <= ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount, "LoopingMediaSource contains too many periods");
             }
         }
 
@@ -57,55 +57,55 @@ public final class LoopingMediaSource implements MediaSource {
             return this.childPeriodCount * this.loopCount;
         }
 
-        protected int getChildIndexByPeriodIndex(int i) {
-            return i / this.childPeriodCount;
+        protected int getChildIndexByPeriodIndex(int periodIndex) {
+            return periodIndex / this.childPeriodCount;
         }
 
-        protected int getChildIndexByWindowIndex(int i) {
-            return i / this.childWindowCount;
+        protected int getChildIndexByWindowIndex(int windowIndex) {
+            return windowIndex / this.childWindowCount;
         }
 
-        protected int getChildIndexByChildUid(Object obj) {
-            if (obj instanceof Integer) {
-                return ((Integer) obj).intValue();
+        protected int getChildIndexByChildUid(Object childUid) {
+            if (childUid instanceof Integer) {
+                return ((Integer) childUid).intValue();
             }
             return -1;
         }
 
-        protected Timeline getTimelineByChildIndex(int i) {
+        protected Timeline getTimelineByChildIndex(int childIndex) {
             return this.childTimeline;
         }
 
-        protected int getFirstPeriodIndexByChildIndex(int i) {
-            return i * this.childPeriodCount;
+        protected int getFirstPeriodIndexByChildIndex(int childIndex) {
+            return this.childPeriodCount * childIndex;
         }
 
-        protected int getFirstWindowIndexByChildIndex(int i) {
-            return i * this.childWindowCount;
+        protected int getFirstWindowIndexByChildIndex(int childIndex) {
+            return this.childWindowCount * childIndex;
         }
 
-        protected Object getChildUidByChildIndex(int i) {
-            return Integer.valueOf(i);
+        protected Object getChildUidByChildIndex(int childIndex) {
+            return Integer.valueOf(childIndex);
         }
     }
 
-    public LoopingMediaSource(MediaSource mediaSource) {
-        this(mediaSource, ConnectionsManager.DEFAULT_DATACENTER_ID);
+    public LoopingMediaSource(MediaSource childSource) {
+        this(childSource, ConnectionsManager.DEFAULT_DATACENTER_ID);
     }
 
-    public LoopingMediaSource(MediaSource mediaSource, int i) {
-        Assertions.checkArgument(i > 0);
-        this.childSource = mediaSource;
-        this.loopCount = i;
+    public LoopingMediaSource(MediaSource childSource, int loopCount) {
+        Assertions.checkArgument(loopCount > 0);
+        this.childSource = childSource;
+        this.loopCount = loopCount;
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, final Listener listener) {
-        Assertions.checkState(this.wasPrepareSourceCalled ^ true, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, final Listener listener) {
+        Assertions.checkState(!this.wasPrepareSourceCalled, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.wasPrepareSourceCalled = true;
-        this.childSource.prepareSource(exoPlayer, false, new Listener() {
-            public void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj) {
+        this.childSource.prepareSource(player, false, new Listener() {
+            public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
                 LoopingMediaSource.this.childPeriodCount = timeline.getPeriodCount();
-                listener.onSourceInfoRefreshed(LoopingMediaSource.this, LoopingMediaSource.this.loopCount != Integer.MAX_VALUE ? new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount) : new InfinitelyLoopingTimeline(timeline), obj);
+                listener.onSourceInfoRefreshed(LoopingMediaSource.this, LoopingMediaSource.this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID ? new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount) : new InfinitelyLoopingTimeline(timeline), manifest);
             }
         });
     }
@@ -114,11 +114,11 @@ public final class LoopingMediaSource implements MediaSource {
         this.childSource.maybeThrowSourceInfoRefreshError();
     }
 
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         if (this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID) {
-            return this.childSource.createPeriod(mediaPeriodId.copyWithPeriodIndex(mediaPeriodId.periodIndex % this.childPeriodCount), allocator);
+            return this.childSource.createPeriod(id.copyWithPeriodIndex(id.periodIndex % this.childPeriodCount), allocator);
         }
-        return this.childSource.createPeriod(mediaPeriodId, allocator);
+        return this.childSource.createPeriod(id, allocator);
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {

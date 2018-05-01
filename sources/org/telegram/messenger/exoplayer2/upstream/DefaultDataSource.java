@@ -2,7 +2,9 @@ package org.telegram.messenger.exoplayer2.upstream;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -23,18 +25,18 @@ public final class DefaultDataSource implements DataSource {
     private DataSource rawResourceDataSource;
     private DataSource rtmpDataSource;
 
-    public DefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, String str, boolean z) {
-        this(context, transferListener, str, 8000, 8000, z);
+    public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, boolean allowCrossProtocolRedirects) {
+        this(context, listener, userAgent, 8000, 8000, allowCrossProtocolRedirects);
     }
 
-    public DefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, String str, int i, int i2, boolean z) {
-        this(context, transferListener, new DefaultHttpDataSource(str, null, transferListener, i, i2, z, null));
+    public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        this(context, listener, new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, null));
     }
 
-    public DefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, DataSource dataSource) {
+    public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, DataSource baseDataSource) {
         this.context = context.getApplicationContext();
-        this.listener = transferListener;
-        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource);
+        this.listener = listener;
+        this.baseDataSource = (DataSource) Assertions.checkNotNull(baseDataSource);
     }
 
     public long open(DataSpec dataSpec) throws IOException {
@@ -62,8 +64,8 @@ public final class DefaultDataSource implements DataSource {
         return this.dataSource.open(dataSpec);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        return this.dataSource.read(bArr, i, i2);
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
+        return this.dataSource.read(buffer, offset, readLength);
     }
 
     public Uri getUri() {
@@ -101,65 +103,26 @@ public final class DefaultDataSource implements DataSource {
         return this.contentDataSource;
     }
 
-    private org.telegram.messenger.exoplayer2.upstream.DataSource getRtmpDataSource() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r3 = this;
-        r0 = r3.rtmpDataSource;
-        if (r0 != 0) goto L_0x004f;
-    L_0x0004:
-        r0 = "org.telegram.messenger.exoplayer2.ext.rtmp.RtmpDataSource";	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r0 = java.lang.Class.forName(r0);	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r1 = 0;	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r2 = new java.lang.Class[r1];	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r0 = r0.getDeclaredConstructor(r2);	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r1 = new java.lang.Object[r1];	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r0 = r0.newInstance(r1);	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r0 = (org.telegram.messenger.exoplayer2.upstream.DataSource) r0;	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        r3.rtmpDataSource = r0;	 Catch:{ ClassNotFoundException -> 0x0040, InstantiationException -> 0x0037, IllegalAccessException -> 0x002e, NoSuchMethodException -> 0x0025, InvocationTargetException -> 0x001c }
-        goto L_0x0047;
-    L_0x001c:
-        r0 = move-exception;
-        r1 = "DefaultDataSource";
-        r2 = "Error instantiating RtmpDataSource";
-        android.util.Log.e(r1, r2, r0);
-        goto L_0x0047;
-    L_0x0025:
-        r0 = move-exception;
-        r1 = "DefaultDataSource";
-        r2 = "Error instantiating RtmpDataSource";
-        android.util.Log.e(r1, r2, r0);
-        goto L_0x0047;
-    L_0x002e:
-        r0 = move-exception;
-        r1 = "DefaultDataSource";
-        r2 = "Error instantiating RtmpDataSource";
-        android.util.Log.e(r1, r2, r0);
-        goto L_0x0047;
-    L_0x0037:
-        r0 = move-exception;
-        r1 = "DefaultDataSource";
-        r2 = "Error instantiating RtmpDataSource";
-        android.util.Log.e(r1, r2, r0);
-        goto L_0x0047;
-    L_0x0040:
-        r0 = "DefaultDataSource";
-        r1 = "Attempting to play RTMP stream without depending on the RTMP extension";
-        android.util.Log.w(r0, r1);
-    L_0x0047:
-        r0 = r3.rtmpDataSource;
-        if (r0 != 0) goto L_0x004f;
-    L_0x004b:
-        r0 = r3.baseDataSource;
-        r3.rtmpDataSource = r0;
-    L_0x004f:
-        r0 = r3.rtmpDataSource;
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.DefaultDataSource.getRtmpDataSource():org.telegram.messenger.exoplayer2.upstream.DataSource");
+    private DataSource getRtmpDataSource() {
+        if (this.rtmpDataSource == null) {
+            try {
+                this.rtmpDataSource = (DataSource) Class.forName("org.telegram.messenger.exoplayer2.ext.rtmp.RtmpDataSource").getDeclaredConstructor(new Class[0]).newInstance(new Object[0]);
+            } catch (ClassNotFoundException e) {
+                Log.w(TAG, "Attempting to play RTMP stream without depending on the RTMP extension");
+            } catch (InstantiationException e2) {
+                Log.e(TAG, "Error instantiating RtmpDataSource", e2);
+            } catch (IllegalAccessException e3) {
+                Log.e(TAG, "Error instantiating RtmpDataSource", e3);
+            } catch (NoSuchMethodException e4) {
+                Log.e(TAG, "Error instantiating RtmpDataSource", e4);
+            } catch (InvocationTargetException e5) {
+                Log.e(TAG, "Error instantiating RtmpDataSource", e5);
+            }
+            if (this.rtmpDataSource == null) {
+                this.rtmpDataSource = this.baseDataSource;
+            }
+        }
+        return this.rtmpDataSource;
     }
 
     private DataSource getDataSchemeDataSource() {

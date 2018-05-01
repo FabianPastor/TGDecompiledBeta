@@ -14,27 +14,27 @@ public class GroupCreateDividerItemDecoration extends ItemDecoration {
     private boolean searching;
     private boolean single;
 
-    public void setSearching(boolean z) {
-        this.searching = z;
+    public void setSearching(boolean value) {
+        this.searching = value;
     }
 
-    public void setSingle(boolean z) {
-        this.single = z;
+    public void setSingle(boolean value) {
+        this.single = value;
     }
 
-    public void onDraw(Canvas canvas, RecyclerView recyclerView, State state) {
-        state = recyclerView.getWidth();
-        int childCount = recyclerView.getChildCount() - (this.single ^ 1);
+    public void onDraw(Canvas canvas, RecyclerView parent, State state) {
+        int width = parent.getWidth();
+        int childCount = parent.getChildCount() - (this.single ? 0 : 1);
         for (int i = 0; i < childCount; i++) {
-            View childAt = recyclerView.getChildAt(i);
-            recyclerView.getChildAdapterPosition(childAt);
-            float bottom = (float) childAt.getBottom();
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), bottom, (float) (state - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), bottom, Theme.dividerPaint);
+            View child = parent.getChildAt(i);
+            int position = parent.getChildAdapterPosition(child);
+            int top = child.getBottom();
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
         }
     }
 
-    public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, State state) {
-        super.getItemOffsets(rect, view, recyclerView, state);
-        rect.top = 1;
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
+        super.getItemOffsets(outRect, view, parent, state);
+        outRect.top = 1;
     }
 }

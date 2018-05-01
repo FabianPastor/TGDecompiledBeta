@@ -7,11 +7,11 @@ abstract class CodeSignatureImpl extends MemberSignatureImpl implements CodeSign
     String[] parameterNames;
     Class[] parameterTypes;
 
-    CodeSignatureImpl(int i, String str, Class cls, Class[] clsArr, String[] strArr, Class[] clsArr2) {
-        super(i, str, cls);
-        this.parameterTypes = clsArr;
-        this.parameterNames = strArr;
-        this.exceptionTypes = clsArr2;
+    CodeSignatureImpl(int modifiers, String name, Class declaringType, Class[] parameterTypes, String[] parameterNames, Class[] exceptionTypes) {
+        super(modifiers, name, declaringType);
+        this.parameterTypes = parameterTypes;
+        this.parameterNames = parameterNames;
+        this.exceptionTypes = exceptionTypes;
     }
 
     public Class[] getParameterTypes() {

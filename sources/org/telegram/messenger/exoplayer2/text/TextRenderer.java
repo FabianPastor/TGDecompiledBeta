@@ -34,45 +34,39 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     private Format streamFormat;
     private SubtitleOutputBuffer subtitle;
 
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface ReplacementState {
-    }
-
     @Deprecated
     public interface Output extends TextOutput {
     }
 
-    public boolean isReady() {
-        return true;
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReplacementState {
     }
 
-    public TextRenderer(TextOutput textOutput, Looper looper) {
-        this(textOutput, looper, SubtitleDecoderFactory.DEFAULT);
+    public TextRenderer(TextOutput output, Looper outputLooper) {
+        this(output, outputLooper, SubtitleDecoderFactory.DEFAULT);
     }
 
-    public TextRenderer(TextOutput textOutput, Looper looper, SubtitleDecoderFactory subtitleDecoderFactory) {
+    public TextRenderer(TextOutput output, Looper outputLooper, SubtitleDecoderFactory decoderFactory) {
         super(3);
-        this.output = (TextOutput) Assertions.checkNotNull(textOutput);
-        if (looper == null) {
-            textOutput = null;
-        } else {
-            textOutput = new Handler(looper, this);
-        }
-        this.outputHandler = textOutput;
-        this.decoderFactory = subtitleDecoderFactory;
+        this.output = (TextOutput) Assertions.checkNotNull(output);
+        this.outputHandler = outputLooper == null ? null : new Handler(outputLooper, this);
+        this.decoderFactory = decoderFactory;
         this.formatHolder = new FormatHolder();
     }
 
     public int supportsFormat(Format format) {
-        if (!this.decoderFactory.supportsFormat(format)) {
-            return MimeTypes.isText(format.sampleMimeType) != null ? 1 : null;
+        if (this.decoderFactory.supportsFormat(format)) {
+            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
         } else {
-            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) != null ? 4 : 2;
+            if (MimeTypes.isText(format.sampleMimeType)) {
+                return 1;
+            }
+            return 0;
         }
     }
 
-    protected void onStreamChanged(Format[] formatArr, long j) throws ExoPlaybackException {
-        this.streamFormat = formatArr[0];
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
+        this.streamFormat = formats[0];
         if (this.decoder != null) {
             this.decoderReplacementState = 1;
         } else {
@@ -80,11 +74,11 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         }
     }
 
-    protected void onPositionReset(long j, boolean z) {
+    protected void onPositionReset(long positionUs, boolean joining) {
         clearOutput();
         this.inputStreamEnded = false;
         this.outputStreamEnded = false;
-        if (this.decoderReplacementState != null) {
+        if (this.decoderReplacementState != 0) {
             replaceDecoder();
             return;
         }
@@ -92,31 +86,29 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         this.decoder.flush();
     }
 
-    public void render(long j, long j2) throws ExoPlaybackException {
-        if (this.outputStreamEnded == null) {
+    public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
+        if (!this.outputStreamEnded) {
             if (this.nextSubtitle == null) {
-                this.decoder.setPositionUs(j);
+                this.decoder.setPositionUs(positionUs);
                 try {
                     this.nextSubtitle = (SubtitleOutputBuffer) this.decoder.dequeueOutputBuffer();
-                } catch (long j3) {
-                    throw ExoPlaybackException.createForRenderer(j3, getIndex());
+                } catch (SubtitleDecoderException e) {
+                    throw ExoPlaybackException.createForRenderer(e, getIndex());
                 }
             }
             if (getState() == 2) {
+                boolean textRendererNeedsUpdate = false;
                 if (this.subtitle != null) {
-                    long nextEventTime = getNextEventTime();
-                    j2 = 0;
-                    while (nextEventTime <= j3) {
+                    long subtitleNextEventTimeUs = getNextEventTime();
+                    while (subtitleNextEventTimeUs <= positionUs) {
                         this.nextSubtitleEventIndex++;
-                        nextEventTime = getNextEventTime();
-                        j2 = 1;
+                        subtitleNextEventTimeUs = getNextEventTime();
+                        textRendererNeedsUpdate = true;
                     }
-                } else {
-                    j2 = 0;
                 }
                 if (this.nextSubtitle != null) {
                     if (this.nextSubtitle.isEndOfStream()) {
-                        if (j2 == null && getNextEventTime() == Long.MAX_VALUE) {
+                        if (!textRendererNeedsUpdate && getNextEventTime() == Long.MAX_VALUE) {
                             if (this.decoderReplacementState == 2) {
                                 replaceDecoder();
                             } else {
@@ -124,21 +116,21 @@ public final class TextRenderer extends BaseRenderer implements Callback {
                                 this.outputStreamEnded = true;
                             }
                         }
-                    } else if (this.nextSubtitle.timeUs <= j3) {
+                    } else if (this.nextSubtitle.timeUs <= positionUs) {
                         if (this.subtitle != null) {
                             this.subtitle.release();
                         }
                         this.subtitle = this.nextSubtitle;
                         this.nextSubtitle = null;
-                        this.nextSubtitleEventIndex = this.subtitle.getNextEventTimeIndex(j3);
-                        j2 = 1;
+                        this.nextSubtitleEventIndex = this.subtitle.getNextEventTimeIndex(positionUs);
+                        textRendererNeedsUpdate = true;
                     }
                 }
-                if (j2 != null) {
-                    updateOutput(this.subtitle.getCues(j3));
+                if (textRendererNeedsUpdate) {
+                    updateOutput(this.subtitle.getCues(positionUs));
                 }
                 if (this.decoderReplacementState != 2) {
-                    while (this.inputStreamEnded == null) {
+                    while (!this.inputStreamEnded) {
                         try {
                             if (this.nextInputBuffer == null) {
                                 this.nextInputBuffer = (SubtitleInputBuffer) this.decoder.dequeueInputBuffer();
@@ -153,9 +145,9 @@ public final class TextRenderer extends BaseRenderer implements Callback {
                                 this.decoderReplacementState = 2;
                                 return;
                             }
-                            j3 = readSource(this.formatHolder, this.nextInputBuffer, false);
-                            if (j3 == -4) {
-                                if (this.nextInputBuffer.isEndOfStream() != null) {
+                            int result = readSource(this.formatHolder, this.nextInputBuffer, false);
+                            if (result == -4) {
+                                if (this.nextInputBuffer.isEndOfStream()) {
                                     this.inputStreamEnded = true;
                                 } else {
                                     this.nextInputBuffer.subsampleOffsetUs = this.formatHolder.format.subsampleOffsetUs;
@@ -163,11 +155,11 @@ public final class TextRenderer extends BaseRenderer implements Callback {
                                 }
                                 this.decoder.queueInputBuffer(this.nextInputBuffer);
                                 this.nextInputBuffer = null;
-                            } else if (j3 == -3) {
+                            } else if (result == -3) {
                                 return;
                             }
-                        } catch (long j32) {
-                            throw ExoPlaybackException.createForRenderer(j32, getIndex());
+                        } catch (SubtitleDecoderException e2) {
+                            throw ExoPlaybackException.createForRenderer(e2, getIndex());
                         }
                     }
                 }
@@ -183,6 +175,10 @@ public final class TextRenderer extends BaseRenderer implements Callback {
 
     public boolean isEnded() {
         return this.outputStreamEnded;
+    }
+
+    public boolean isReady() {
+        return true;
     }
 
     private void releaseBuffers() {
@@ -211,19 +207,17 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
 
     private long getNextEventTime() {
-        if (this.nextSubtitleEventIndex != -1) {
-            if (this.nextSubtitleEventIndex < this.subtitle.getEventTimeCount()) {
-                return this.subtitle.getEventTime(this.nextSubtitleEventIndex);
-            }
+        if (this.nextSubtitleEventIndex == -1 || this.nextSubtitleEventIndex >= this.subtitle.getEventTimeCount()) {
+            return Long.MAX_VALUE;
         }
-        return Long.MAX_VALUE;
+        return this.subtitle.getEventTime(this.nextSubtitleEventIndex);
     }
 
-    private void updateOutput(List<Cue> list) {
+    private void updateOutput(List<Cue> cues) {
         if (this.outputHandler != null) {
-            this.outputHandler.obtainMessage(0, list).sendToTarget();
+            this.outputHandler.obtainMessage(0, cues).sendToTarget();
         } else {
-            invokeUpdateOutputInternal(list);
+            invokeUpdateOutputInternal(cues);
         }
     }
 
@@ -231,15 +225,17 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         updateOutput(Collections.emptyList());
     }
 
-    public boolean handleMessage(Message message) {
-        if (message.what != 0) {
-            throw new IllegalStateException();
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case 0:
+                invokeUpdateOutputInternal((List) msg.obj);
+                return true;
+            default:
+                throw new IllegalStateException();
         }
-        invokeUpdateOutputInternal((List) message.obj);
-        return true;
     }
 
-    private void invokeUpdateOutputInternal(List<Cue> list) {
-        this.output.onCues(list);
+    private void invokeUpdateOutputInternal(List<Cue> cues) {
+        this.output.onCues(cues);
     }
 }

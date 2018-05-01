@@ -53,167 +53,136 @@ public class BotHelpCell extends View {
         invalidate();
     }
 
-    public void setText(String str) {
-        if (str != null) {
-            if (str.length() != 0) {
-                if (str == null || this.oldText == null || !str.equals(this.oldText)) {
-                    int minTabletSide;
-                    this.oldText = str;
-                    int i = 0;
-                    setVisibility(0);
-                    if (AndroidUtilities.isTablet()) {
-                        minTabletSide = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
-                    } else {
-                        minTabletSide = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
-                    }
-                    str = str.split("\n");
-                    CharSequence spannableStringBuilder = new SpannableStringBuilder();
-                    Object string = LocaleController.getString("BotInfoTitle", C0446R.string.BotInfoTitle);
-                    spannableStringBuilder.append(string);
-                    spannableStringBuilder.append("\n\n");
-                    for (int i2 = 0; i2 < str.length; i2++) {
-                        spannableStringBuilder.append(str[i2].trim());
-                        if (i2 != str.length - 1) {
-                            spannableStringBuilder.append("\n");
-                        }
-                    }
-                    MessageObject.addLinks(false, spannableStringBuilder);
-                    spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, string.length(), 33);
-                    Emoji.replaceEmoji(spannableStringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-                    try {
-                        this.textLayout = new StaticLayout(spannableStringBuilder, Theme.chat_msgTextPaint, minTabletSide, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                        this.width = 0;
-                        this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
-                        int lineCount = this.textLayout.getLineCount();
-                        while (i < lineCount) {
-                            this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(i) + this.textLayout.getLineLeft(i)));
-                            i++;
-                        }
-                        if (this.width > minTabletSide) {
-                            this.width = minTabletSide;
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                    this.width += AndroidUtilities.dp(22.0f);
-                    return;
-                }
-                return;
+    public void setText(String text) {
+        if (text == null || text.length() == 0) {
+            setVisibility(8);
+        } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
+            int maxWidth;
+            int a;
+            this.oldText = text;
+            setVisibility(0);
+            if (AndroidUtilities.isTablet()) {
+                maxWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
+            } else {
+                maxWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
             }
+            String[] lines = text.split("\n");
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+            String help = LocaleController.getString("BotInfoTitle", C0446R.string.BotInfoTitle);
+            stringBuilder.append(help);
+            stringBuilder.append("\n\n");
+            for (a = 0; a < lines.length; a++) {
+                stringBuilder.append(lines[a].trim());
+                if (a != lines.length - 1) {
+                    stringBuilder.append("\n");
+                }
+            }
+            MessageObject.addLinks(false, stringBuilder);
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
+            Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            try {
+                this.textLayout = new StaticLayout(stringBuilder, Theme.chat_msgTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.width = 0;
+                this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
+                int count = this.textLayout.getLineCount();
+                for (a = 0; a < count; a++) {
+                    this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(a) + this.textLayout.getLineLeft(a)));
+                }
+                if (this.width > maxWidth) {
+                    this.width = maxWidth;
+                }
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+            this.width += AndroidUtilities.dp(22.0f);
         }
-        setVisibility(8);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        Throwable e;
-        boolean z;
-        boolean z2;
-        float x = motionEvent.getX();
-        float y = motionEvent.getY();
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        boolean result = false;
         if (this.textLayout != null) {
-            if (motionEvent.getAction() != 0) {
-                if (this.pressedLink == null || motionEvent.getAction() != 1) {
-                    if (motionEvent.getAction() == 3) {
-                        resetPressedLink();
-                    }
-                }
-            }
-            if (motionEvent.getAction() == 0) {
-                resetPressedLink();
-                try {
-                    int i = (int) (x - ((float) this.textX));
-                    int lineForVertical = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
-                    x = (float) i;
-                    int offsetForHorizontal = this.textLayout.getOffsetForHorizontal(lineForVertical, x);
-                    float lineLeft = this.textLayout.getLineLeft(lineForVertical);
-                    if (lineLeft > x || lineLeft + this.textLayout.getLineWidth(lineForVertical) < x) {
-                        resetPressedLink();
-                    } else {
-                        Spannable spannable = (Spannable) this.textLayout.getText();
-                        ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
-                        if (clickableSpanArr.length != 0) {
+            if (event.getAction() == 0 || (this.pressedLink != null && event.getAction() == 1)) {
+                if (event.getAction() == 0) {
+                    resetPressedLink();
+                    try {
+                        int x2 = (int) (x - ((float) this.textX));
+                        int line = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
+                        int off = this.textLayout.getOffsetForHorizontal(line, (float) x2);
+                        float left = this.textLayout.getLineLeft(line);
+                        if (left > ((float) x2) || this.textLayout.getLineWidth(line) + left < ((float) x2)) {
                             resetPressedLink();
-                            this.pressedLink = clickableSpanArr[0];
-                            try {
-                                lineForVertical = spannable.getSpanStart(this.pressedLink);
-                                this.urlPath.setCurrentLayout(this.textLayout, lineForVertical, 0.0f);
-                                this.textLayout.getSelectionPath(lineForVertical, spannable.getSpanEnd(this.pressedLink), this.urlPath);
-                            } catch (Throwable e2) {
+                        } else {
+                            Spannable buffer = (Spannable) this.textLayout.getText();
+                            ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
+                            if (link.length != 0) {
+                                resetPressedLink();
+                                this.pressedLink = link[0];
+                                result = true;
                                 try {
-                                    FileLog.m3e(e2);
-                                } catch (Exception e3) {
-                                    e2 = e3;
-                                    z = true;
-                                    resetPressedLink();
-                                    FileLog.m3e(e2);
-                                    z2 = z;
-                                    if (!z2) {
-                                    }
-                                    return true;
+                                    int start = buffer.getSpanStart(this.pressedLink);
+                                    this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
+                                    this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
                                 }
+                            } else {
+                                resetPressedLink();
                             }
                         }
+                    } catch (Throwable e2) {
                         resetPressedLink();
+                        FileLog.m3e(e2);
                     }
-                } catch (Exception e4) {
-                    e2 = e4;
-                    z = false;
-                    resetPressedLink();
-                    FileLog.m3e(e2);
-                    z2 = z;
-                    if (z2) {
-                    }
-                    return true;
-                }
-            } else if (this.pressedLink != null) {
-                try {
-                    if (this.pressedLink instanceof URLSpanNoUnderline) {
-                        String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
-                        if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
-                            this.delegate.didPressUrl(url);
+                } else if (this.pressedLink != null) {
+                    try {
+                        if (this.pressedLink instanceof URLSpanNoUnderline) {
+                            String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
+                            if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
+                                this.delegate.didPressUrl(url);
+                            }
+                        } else if (this.pressedLink instanceof URLSpan) {
+                            Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
+                        } else {
+                            this.pressedLink.onClick(this);
                         }
-                    } else if (this.pressedLink instanceof URLSpan) {
-                        Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
-                    } else {
-                        this.pressedLink.onClick(this);
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
                     }
-                } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    resetPressedLink();
+                    result = true;
                 }
+            } else if (event.getAction() == 3) {
                 resetPressedLink();
             }
-            z2 = true;
-            if (z2 || super.onTouchEvent(motionEvent) != null) {
-                return true;
-            }
-            return false;
         }
-        z2 = false;
-        if (z2) {
+        if (result || super.onTouchEvent(event)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), this.height + AndroidUtilities.dp(8.0f));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), this.height + AndroidUtilities.dp(8.0f));
     }
 
     protected void onDraw(Canvas canvas) {
-        int width = (canvas.getWidth() - this.width) / 2;
-        int dp = AndroidUtilities.dp(4.0f);
-        Theme.chat_msgInMediaShadowDrawable.setBounds(width, dp, this.width + width, this.height + dp);
+        int x = (canvas.getWidth() - this.width) / 2;
+        int y = AndroidUtilities.dp(4.0f);
+        Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, this.width + x, this.height + y);
         Theme.chat_msgInMediaShadowDrawable.draw(canvas);
-        Theme.chat_msgInMediaDrawable.setBounds(width, dp, this.width + width, this.height + dp);
+        Theme.chat_msgInMediaDrawable.setBounds(x, y, this.width + x, this.height + y);
         Theme.chat_msgInMediaDrawable.draw(canvas);
         Theme.chat_msgTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
         Theme.chat_msgTextPaint.linkColor = Theme.getColor(Theme.key_chat_messageLinkIn);
         canvas.save();
-        int dp2 = AndroidUtilities.dp(11.0f) + width;
-        this.textX = dp2;
-        float f = (float) dp2;
-        int dp3 = AndroidUtilities.dp(11.0f) + dp;
-        this.textY = dp3;
-        canvas.translate(f, (float) dp3);
+        int dp = AndroidUtilities.dp(11.0f) + x;
+        this.textX = dp;
+        float f = (float) dp;
+        int dp2 = AndroidUtilities.dp(11.0f) + y;
+        this.textY = dp2;
+        canvas.translate(f, (float) dp2);
         if (this.pressedLink != null) {
             canvas.drawPath(this.urlPath, Theme.chat_urlPaint);
         }

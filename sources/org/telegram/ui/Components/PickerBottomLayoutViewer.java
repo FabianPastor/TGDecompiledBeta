@@ -18,75 +18,63 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this(context, true);
     }
 
-    public PickerBottomLayoutViewer(Context context, boolean z) {
+    public PickerBottomLayoutViewer(Context context, boolean darkTheme) {
         super(context);
-        this.isDarkTheme = z;
-        setBackgroundColor(this.isDarkTheme ? true : true);
+        this.isDarkTheme = darkTheme;
+        setBackgroundColor(this.isDarkTheme ? -15066598 : -1);
         this.cancelButton = new TextView(context);
         this.cancelButton.setTextSize(1, 14.0f);
-        int i = -15095832;
         this.cancelButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.cancelButton.setGravity(17);
-        z = this.cancelButton;
-        boolean z2 = this.isDarkTheme;
-        int i2 = Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR;
-        z.setBackgroundDrawable(Theme.createSelectorDrawable(z2 ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.cancelButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.cancelButton.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         this.doneButton = new TextView(context);
         this.doneButton.setTextSize(1, 14.0f);
-        z = this.doneButton;
-        if (this.isDarkTheme) {
-            i = -1;
-        }
-        z.setTextColor(i);
+        this.doneButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.doneButton.setGravity(17);
-        z = this.doneButton;
-        if (this.isDarkTheme) {
-            i2 = Theme.ACTION_BAR_PICKER_SELECTOR_COLOR;
-        }
-        z.setBackgroundDrawable(Theme.createSelectorDrawable(i2, 0));
+        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.doneButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.doneButton.setText(LocaleController.getString("Send", C0446R.string.Send).toUpperCase());
         this.doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButtonBadgeTextView = new TextView(context);
         this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.doneButtonBadgeTextView.setTextSize(1, true);
+        this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
         this.doneButtonBadgeTextView.setTextColor(-1);
         this.doneButtonBadgeTextView.setGravity(17);
-        this.doneButtonBadgeTextView.setBackgroundResource(this.isDarkTheme ? true : true);
-        this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(true));
+        this.doneButtonBadgeTextView.setBackgroundResource(this.isDarkTheme ? C0446R.drawable.photobadge : C0446R.drawable.bluecounter);
+        this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
         this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
         addView(this.doneButtonBadgeTextView, LayoutHelper.createFrame(-2, 23.0f, 53, 0.0f, 0.0f, 7.0f, 0.0f));
     }
 
-    public void updateSelectedCount(int i, boolean z) {
-        int i2 = -15095832;
-        if (i == 0) {
+    public void updateSelectedCount(int count, boolean disable) {
+        int i = -1;
+        if (count == 0) {
             this.doneButtonBadgeTextView.setVisibility(8);
-            if (z) {
-                this.doneButton.setTextColor(true);
+            if (disable) {
+                this.doneButton.setTextColor(-6710887);
                 this.doneButton.setEnabled(false);
                 return;
             }
-            i = this.doneButton;
-            if (this.isDarkTheme) {
-                i2 = -1;
+            TextView textView = this.doneButton;
+            if (!this.isDarkTheme) {
+                i = -15095832;
             }
-            i.setTextColor(i2);
+            textView.setTextColor(i);
             return;
         }
         this.doneButtonBadgeTextView.setVisibility(0);
-        this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(i)}));
-        i = this.doneButton;
-        if (this.isDarkTheme) {
-            i2 = -1;
+        this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(count)}));
+        textView = this.doneButton;
+        if (!this.isDarkTheme) {
+            i = -15095832;
         }
-        i.setTextColor(i2);
-        if (z) {
+        textView.setTextColor(i);
+        if (disable) {
             this.doneButton.setEnabled(true);
         }
     }

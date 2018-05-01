@@ -21,7 +21,7 @@ public final class C0542C {
     public static final String CENC_TYPE_cbcs = "cbcs";
     public static final String CENC_TYPE_cenc = "cenc";
     public static final String CENC_TYPE_cens = "cens";
-    public static final int CHANNEL_OUT_7POINT1_SURROUND = (Util.SDK_INT < 23 ? 1020 : 6396);
+    public static final int CHANNEL_OUT_7POINT1_SURROUND;
     public static final UUID CLEARKEY_UUID = new UUID(-2129748144642739255L, 8654423357094679310L);
     public static final int COLOR_RANGE_FULL = 1;
     public static final int COLOR_RANGE_LIMITED = 2;
@@ -220,19 +220,25 @@ public final class C0542C {
     public @interface VideoScalingMode {
     }
 
-    public static long msToUs(long j) {
-        return j != TIME_UNSET ? j == Long.MIN_VALUE ? j : j * 1000 : j;
-    }
-
     private C0542C() {
     }
 
-    public static long usToMs(long j) {
-        if (j != TIME_UNSET) {
-            return j == Long.MIN_VALUE ? j : j / 1000;
+    static {
+        int i;
+        if (Util.SDK_INT < 23) {
+            i = 1020;
         } else {
-            return j;
+            i = 6396;
         }
+        CHANNEL_OUT_7POINT1_SURROUND = i;
+    }
+
+    public static long usToMs(long timeUs) {
+        return (timeUs == TIME_UNSET || timeUs == Long.MIN_VALUE) ? timeUs : timeUs / 1000;
+    }
+
+    public static long msToUs(long timeMs) {
+        return (timeMs == TIME_UNSET || timeMs == Long.MIN_VALUE) ? timeMs : timeMs * 1000;
     }
 
     @TargetApi(21)

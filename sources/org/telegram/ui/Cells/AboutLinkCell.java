@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,20 +47,27 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     public AboutLinkCell(Context context) {
+        float f = 16.0f;
         super(context);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
-        addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 5.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
-        setWillNotDraw(null);
+        View view = this.imageView;
+        int i = (LocaleController.isRTL ? 5 : 3) | 48;
+        float f2 = LocaleController.isRTL ? 0.0f : 16.0f;
+        if (!LocaleController.isRTL) {
+            f = 0.0f;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f2, 5.0f, f, 0.0f));
+        setWillNotDraw(false);
     }
 
     public ImageView getImageView() {
         return this.imageView;
     }
 
-    public void setDelegate(AboutLinkCellDelegate aboutLinkCellDelegate) {
-        this.delegate = aboutLinkCellDelegate;
+    public void setDelegate(AboutLinkCellDelegate botHelpCellDelegate) {
+        this.delegate = botHelpCellDelegate;
     }
 
     private void resetPressedLink() {
@@ -69,126 +77,101 @@ public class AboutLinkCell extends FrameLayout {
         invalidate();
     }
 
-    public void setTextAndIcon(String str, int i, boolean z) {
-        if (!TextUtils.isEmpty(str)) {
-            if (str == null || this.oldText == null || !str.equals(this.oldText)) {
-                this.oldText = str;
+    public void setTextAndIcon(String text, int resId, boolean parseLinks) {
+        if (!TextUtils.isEmpty(text)) {
+            if (text == null || this.oldText == null || !text.equals(this.oldText)) {
+                this.oldText = text;
                 this.stringBuilder = new SpannableStringBuilder(this.oldText);
-                if (z) {
+                if (parseLinks) {
                     MessageObject.addLinks(false, this.stringBuilder, false);
                 }
                 Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                 requestLayout();
-                if (i == 0) {
-                    this.imageView.setImageDrawable(0);
+                if (resId == 0) {
+                    this.imageView.setImageDrawable(null);
                 } else {
-                    this.imageView.setImageResource(i);
+                    this.imageView.setImageResource(resId);
                 }
             }
         }
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        Throwable e;
-        boolean z;
-        boolean z2;
-        float x = motionEvent.getX();
-        float y = motionEvent.getY();
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        boolean result = false;
         if (this.textLayout != null) {
-            if (motionEvent.getAction() != 0) {
-                if (this.pressedLink == null || motionEvent.getAction() != 1) {
-                    if (motionEvent.getAction() == 3) {
-                        resetPressedLink();
-                    }
-                }
-            }
-            if (motionEvent.getAction() == 0) {
-                resetPressedLink();
-                try {
-                    int i = (int) (x - ((float) this.textX));
-                    int lineForVertical = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
-                    x = (float) i;
-                    int offsetForHorizontal = this.textLayout.getOffsetForHorizontal(lineForVertical, x);
-                    float lineLeft = this.textLayout.getLineLeft(lineForVertical);
-                    if (lineLeft > x || lineLeft + this.textLayout.getLineWidth(lineForVertical) < x) {
-                        resetPressedLink();
-                    } else {
-                        Spannable spannable = (Spannable) this.textLayout.getText();
-                        ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
-                        if (clickableSpanArr.length != 0) {
+            if (event.getAction() == 0 || (this.pressedLink != null && event.getAction() == 1)) {
+                if (event.getAction() == 0) {
+                    resetPressedLink();
+                    try {
+                        int x2 = (int) (x - ((float) this.textX));
+                        int line = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
+                        int off = this.textLayout.getOffsetForHorizontal(line, (float) x2);
+                        float left = this.textLayout.getLineLeft(line);
+                        if (left > ((float) x2) || this.textLayout.getLineWidth(line) + left < ((float) x2)) {
                             resetPressedLink();
-                            this.pressedLink = clickableSpanArr[0];
-                            try {
-                                lineForVertical = spannable.getSpanStart(this.pressedLink);
-                                this.urlPath.setCurrentLayout(this.textLayout, lineForVertical, 0.0f);
-                                this.textLayout.getSelectionPath(lineForVertical, spannable.getSpanEnd(this.pressedLink), this.urlPath);
-                            } catch (Throwable e2) {
+                        } else {
+                            Spannable buffer = (Spannable) this.textLayout.getText();
+                            ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
+                            if (link.length != 0) {
+                                resetPressedLink();
+                                this.pressedLink = link[0];
+                                result = true;
                                 try {
-                                    FileLog.m3e(e2);
-                                } catch (Exception e3) {
-                                    e2 = e3;
-                                    z = true;
-                                    resetPressedLink();
-                                    FileLog.m3e(e2);
-                                    z2 = z;
-                                    if (!z2) {
-                                    }
-                                    return true;
+                                    int start = buffer.getSpanStart(this.pressedLink);
+                                    this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
+                                    this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
                                 }
+                            } else {
+                                resetPressedLink();
                             }
                         }
+                    } catch (Throwable e2) {
                         resetPressedLink();
+                        FileLog.m3e(e2);
                     }
-                } catch (Exception e4) {
-                    e2 = e4;
-                    z = false;
-                    resetPressedLink();
-                    FileLog.m3e(e2);
-                    z2 = z;
-                    if (z2) {
-                    }
-                    return true;
-                }
-            } else if (this.pressedLink != null) {
-                try {
-                    if (this.pressedLink instanceof URLSpanNoUnderline) {
-                        String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
-                        if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
-                            this.delegate.didPressUrl(url);
+                } else if (this.pressedLink != null) {
+                    try {
+                        if (this.pressedLink instanceof URLSpanNoUnderline) {
+                            String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
+                            if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
+                                this.delegate.didPressUrl(url);
+                            }
+                        } else if (this.pressedLink instanceof URLSpan) {
+                            Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
+                        } else {
+                            this.pressedLink.onClick(this);
                         }
-                    } else if (this.pressedLink instanceof URLSpan) {
-                        Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
-                    } else {
-                        this.pressedLink.onClick(this);
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
                     }
-                } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    resetPressedLink();
+                    result = true;
                 }
+            } else if (event.getAction() == 3) {
                 resetPressedLink();
             }
-            z2 = true;
-            if (z2 || super.onTouchEvent(motionEvent) != null) {
-                return true;
-            }
-            return false;
         }
-        z2 = false;
-        if (z2) {
+        if (result || super.onTouchEvent(event)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int i, int i2) {
-        if (this.stringBuilder != 0) {
-            int size = MeasureSpec.getSize(i) - AndroidUtilities.dp(87.0f);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (this.stringBuilder != null) {
+            int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f);
             if (VERSION.SDK_INT >= 24) {
-                this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, size).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+                this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
             } else {
-                this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, size, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec((this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.dp(20.0f)) + AndroidUtilities.dp(16.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.dp(20.0f)) + AndroidUtilities.dp(16.0f), NUM));
     }
 
     protected void onDraw(Canvas canvas) {

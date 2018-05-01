@@ -5,35 +5,35 @@ import org.telegram.messenger.exoplayer2.source.dash.DashSegmentIndex;
 final class SingleSegmentIndex implements DashSegmentIndex {
     private final RangedUri uri;
 
-    public long getDurationUs(int i, long j) {
-        return j;
+    public SingleSegmentIndex(RangedUri uri) {
+        this.uri = uri;
+    }
+
+    public int getSegmentNum(long timeUs, long periodDurationUs) {
+        return 0;
+    }
+
+    public long getTimeUs(int segmentNum) {
+        return 0;
+    }
+
+    public long getDurationUs(int segmentNum, long periodDurationUs) {
+        return periodDurationUs;
+    }
+
+    public RangedUri getSegmentUrl(int segmentNum) {
+        return this.uri;
     }
 
     public int getFirstSegmentNum() {
         return 0;
     }
 
-    public int getSegmentCount(long j) {
+    public int getSegmentCount(long periodDurationUs) {
         return 1;
-    }
-
-    public int getSegmentNum(long j, long j2) {
-        return 0;
-    }
-
-    public long getTimeUs(int i) {
-        return 0;
     }
 
     public boolean isExplicit() {
         return true;
-    }
-
-    public SingleSegmentIndex(RangedUri rangedUri) {
-        this.uri = rangedUri;
-    }
-
-    public RangedUri getSegmentUrl(int i) {
-        return this.uri;
     }
 }

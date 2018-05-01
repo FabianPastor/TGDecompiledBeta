@@ -12,143 +12,136 @@ public class LruCache {
     private int maxSize;
     private int size;
 
-    protected void entryRemoved(boolean z, String str, BitmapDrawable bitmapDrawable, BitmapDrawable bitmapDrawable2) {
-    }
-
-    protected int sizeOf(String str, BitmapDrawable bitmapDrawable) {
-        return 1;
-    }
-
-    public LruCache(int i) {
-        if (i <= 0) {
+    public LruCache(int maxSize) {
+        if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize <= 0");
         }
-        this.maxSize = i;
+        this.maxSize = maxSize;
         this.map = new LinkedHashMap(0, 0.75f, true);
         this.mapFilters = new LinkedHashMap();
     }
 
-    public final BitmapDrawable get(String str) {
-        if (str == null) {
+    public final BitmapDrawable get(String key) {
+        if (key == null) {
             throw new NullPointerException("key == null");
         }
         synchronized (this) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) this.map.get(str);
-            if (bitmapDrawable != null) {
-                return bitmapDrawable;
+            BitmapDrawable mapValue = (BitmapDrawable) this.map.get(key);
+            if (mapValue != null) {
+                return mapValue;
             }
             return null;
         }
     }
 
-    public ArrayList<String> getFilterKeys(String str) {
-        ArrayList arrayList = (ArrayList) this.mapFilters.get(str);
-        return arrayList != null ? new ArrayList(arrayList) : null;
+    public ArrayList<String> getFilterKeys(String key) {
+        ArrayList<String> arr = (ArrayList) this.mapFilters.get(key);
+        if (arr != null) {
+            return new ArrayList(arr);
+        }
+        return null;
     }
 
-    public BitmapDrawable put(String str, BitmapDrawable bitmapDrawable) {
-        if (str != null) {
-            if (bitmapDrawable != null) {
-                BitmapDrawable bitmapDrawable2;
-                synchronized (this) {
-                    this.size += safeSizeOf(str, bitmapDrawable);
-                    bitmapDrawable2 = (BitmapDrawable) this.map.put(str, bitmapDrawable);
-                    if (bitmapDrawable2 != null) {
-                        this.size -= safeSizeOf(str, bitmapDrawable2);
-                    }
-                }
-                String[] split = str.split("@");
-                if (split.length > 1) {
-                    ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
-                    if (arrayList == null) {
-                        arrayList = new ArrayList();
-                        this.mapFilters.put(split[0], arrayList);
-                    }
-                    if (!arrayList.contains(split[1])) {
-                        arrayList.add(split[1]);
-                    }
-                }
-                if (bitmapDrawable2 != null) {
-                    entryRemoved(false, str, bitmapDrawable2, bitmapDrawable);
-                }
-                trimToSize(this.maxSize, str);
-                return bitmapDrawable2;
+    public BitmapDrawable put(String key, BitmapDrawable value) {
+        if (key == null || value == null) {
+            throw new NullPointerException("key == null || value == null");
+        }
+        BitmapDrawable previous;
+        synchronized (this) {
+            this.size += safeSizeOf(key, value);
+            previous = (BitmapDrawable) this.map.put(key, value);
+            if (previous != null) {
+                this.size -= safeSizeOf(key, previous);
             }
         }
-        throw new NullPointerException("key == null || value == null");
+        String[] args = key.split("@");
+        if (args.length > 1) {
+            ArrayList<String> arr = (ArrayList) this.mapFilters.get(args[0]);
+            if (arr == null) {
+                arr = new ArrayList();
+                this.mapFilters.put(args[0], arr);
+            }
+            if (!arr.contains(args[1])) {
+                arr.add(args[1]);
+            }
+        }
+        if (previous != null) {
+            entryRemoved(false, key, previous, value);
+        }
+        trimToSize(this.maxSize, key);
+        return previous;
     }
 
-    private void trimToSize(int i, String str) {
+    private void trimToSize(int maxSize, String justAdded) {
         synchronized (this) {
-            Iterator it = this.map.entrySet().iterator();
-            while (it.hasNext() && this.size > i) {
-                if (this.map.isEmpty()) {
-                    break;
-                }
-                Entry entry = (Entry) it.next();
-                String str2 = (String) entry.getKey();
-                if (str == null || !str.equals(str2)) {
-                    BitmapDrawable bitmapDrawable = (BitmapDrawable) entry.getValue();
-                    this.size -= safeSizeOf(str2, bitmapDrawable);
-                    it.remove();
-                    String[] split = str2.split("@");
-                    if (split.length > 1) {
-                        ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
-                        if (arrayList != null) {
-                            arrayList.remove(split[1]);
-                            if (arrayList.isEmpty()) {
-                                this.mapFilters.remove(split[0]);
+            Iterator<Entry<String, BitmapDrawable>> iterator = this.map.entrySet().iterator();
+            while (iterator.hasNext() && this.size > maxSize && !this.map.isEmpty()) {
+                Entry<String, BitmapDrawable> entry = (Entry) iterator.next();
+                String key = (String) entry.getKey();
+                if (justAdded == null || !justAdded.equals(key)) {
+                    BitmapDrawable value = (BitmapDrawable) entry.getValue();
+                    this.size -= safeSizeOf(key, value);
+                    iterator.remove();
+                    String[] args = key.split("@");
+                    if (args.length > 1) {
+                        ArrayList<String> arr = (ArrayList) this.mapFilters.get(args[0]);
+                        if (arr != null) {
+                            arr.remove(args[1]);
+                            if (arr.isEmpty()) {
+                                this.mapFilters.remove(args[0]);
                             }
                         }
                     }
-                    entryRemoved(true, str2, bitmapDrawable, null);
+                    entryRemoved(true, key, value, null);
                 }
             }
         }
     }
 
-    public final BitmapDrawable remove(String str) {
-        if (str == null) {
+    public final BitmapDrawable remove(String key) {
+        if (key == null) {
             throw new NullPointerException("key == null");
         }
-        BitmapDrawable bitmapDrawable;
+        BitmapDrawable previous;
         synchronized (this) {
-            bitmapDrawable = (BitmapDrawable) this.map.remove(str);
-            if (bitmapDrawable != null) {
-                this.size -= safeSizeOf(str, bitmapDrawable);
+            previous = (BitmapDrawable) this.map.remove(key);
+            if (previous != null) {
+                this.size -= safeSizeOf(key, previous);
             }
         }
-        if (bitmapDrawable != null) {
-            String[] split = str.split("@");
-            if (split.length > 1) {
-                ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
-                if (arrayList != null) {
-                    arrayList.remove(split[1]);
-                    if (arrayList.isEmpty()) {
-                        this.mapFilters.remove(split[0]);
+        if (previous != null) {
+            String[] args = key.split("@");
+            if (args.length > 1) {
+                ArrayList<String> arr = (ArrayList) this.mapFilters.get(args[0]);
+                if (arr != null) {
+                    arr.remove(args[1]);
+                    if (arr.isEmpty()) {
+                        this.mapFilters.remove(args[0]);
                     }
                 }
             }
-            entryRemoved(false, str, bitmapDrawable, null);
+            entryRemoved(false, key, previous, null);
         }
-        return bitmapDrawable;
+        return previous;
     }
 
-    public boolean contains(String str) {
-        return this.map.containsKey(str);
+    public boolean contains(String key) {
+        return this.map.containsKey(key);
     }
 
-    private int safeSizeOf(String str, BitmapDrawable bitmapDrawable) {
-        int sizeOf = sizeOf(str, bitmapDrawable);
-        if (sizeOf >= 0) {
-            return sizeOf;
+    protected void entryRemoved(boolean evicted, String key, BitmapDrawable oldValue, BitmapDrawable newValue) {
+    }
+
+    private int safeSizeOf(String key, BitmapDrawable value) {
+        int result = sizeOf(key, value);
+        if (result >= 0) {
+            return result;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Negative size: ");
-        stringBuilder.append(str);
-        stringBuilder.append("=");
-        stringBuilder.append(bitmapDrawable);
-        throw new IllegalStateException(stringBuilder.toString());
+        throw new IllegalStateException("Negative size: " + key + "=" + value);
+    }
+
+    protected int sizeOf(String key, BitmapDrawable value) {
+        return 1;
     }
 
     public final void evictAll() {

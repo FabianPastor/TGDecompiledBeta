@@ -18,13 +18,6 @@ public class CloseProgressDrawable2 extends Drawable {
     private Paint paint = new Paint(1);
     private RectF rect = new RectF();
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
     public CloseProgressDrawable2() {
         this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -42,245 +35,89 @@ public class CloseProgressDrawable2 extends Drawable {
         this.animating = false;
     }
 
-    public void setColor(int i) {
-        this.paint.setColor(i);
+    public void setColor(int value) {
+        this.paint.setColor(value);
     }
 
     public void draw(Canvas canvas) {
-        float f;
-        float f2;
-        float f3;
-        float f4;
-        float f5;
-        int centerX;
-        int centerY;
-        RectF rectF;
-        Canvas canvas2 = canvas;
-        long currentTimeMillis = System.currentTimeMillis();
-        float f6 = 0.0f;
+        long newTime = System.currentTimeMillis();
         if (this.lastFrameTime != 0) {
-            long j = currentTimeMillis - r0.lastFrameTime;
-            if (r0.animating || r0.angle != 0.0f) {
-                r0.angle += ((float) (360 * j)) / 500.0f;
-                if (r0.animating || r0.angle < 720.0f) {
-                    r0.angle -= (float) (((int) (r0.angle / 720.0f)) * 720);
+            long dt = newTime - this.lastFrameTime;
+            if (this.animating || this.angle != 0.0f) {
+                this.angle += ((float) (360 * dt)) / 500.0f;
+                if (this.animating || this.angle < 720.0f) {
+                    this.angle -= (float) (((int) (this.angle / 720.0f)) * 720);
                 } else {
-                    r0.angle = 0.0f;
+                    this.angle = 0.0f;
                 }
                 invalidateSelf();
             }
         }
         canvas.save();
-        canvas2.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        canvas2.rotate(-45.0f);
-        if (r0.angle >= 0.0f && r0.angle < 90.0f) {
-            f = 1.0f - (r0.angle / 90.0f);
-            f2 = 0.0f;
-            f3 = 1.0f;
-        } else if (r0.angle >= 90.0f && r0.angle < 180.0f) {
-            f3 = 1.0f - ((r0.angle - 90.0f) / 90.0f);
-            f = 0.0f;
-            f2 = f;
-            f4 = 1.0f;
-            if (f == 0.0f) {
-                f5 = 8.0f;
-                canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
-            } else {
-                f5 = 8.0f;
-            }
-            if (f3 != 0.0f) {
-                canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
-            }
-            if (f4 != 0.0f) {
-                canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
-            }
-            if (f2 != 1.0f) {
-                canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
-            }
-            canvas.restore();
-            centerX = getBounds().centerX();
-            centerY = getBounds().centerY();
-            r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-            rectF = r0.rect;
-            if (r0.angle < 360.0f) {
-                f6 = r0.angle - 360.0f;
-            }
-            if (r0.angle >= 360.0f) {
-            }
-            canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-            r0.lastFrameTime = currentTimeMillis;
-        } else if (r0.angle < 180.0f || r0.angle >= 270.0f) {
-            if (r0.angle >= 270.0f && r0.angle < 360.0f) {
-                f = (r0.angle - 270.0f) / 90.0f;
-            } else if (r0.angle >= 360.0f && r0.angle < 450.0f) {
-                f = 1.0f - ((r0.angle - 360.0f) / 90.0f);
-            } else if (r0.angle >= 450.0f && r0.angle < 540.0f) {
-                f = (r0.angle - 450.0f) / 90.0f;
-                f3 = 0.0f;
-                f4 = f3;
-                f2 = f4;
-                if (f == 0.0f) {
-                    f5 = 8.0f;
-                    canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
-                } else {
-                    f5 = 8.0f;
-                }
-                if (f3 != 0.0f) {
-                    canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
-                }
-                if (f4 != 0.0f) {
-                    canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
-                }
-                if (f2 != 1.0f) {
-                    canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
-                }
-                canvas.restore();
-                centerX = getBounds().centerX();
-                centerY = getBounds().centerY();
-                r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-                rectF = r0.rect;
-                if (r0.angle < 360.0f) {
-                    f6 = r0.angle - 360.0f;
-                }
-                if (r0.angle >= 360.0f) {
-                }
-                canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-                r0.lastFrameTime = currentTimeMillis;
-            } else if (r0.angle >= 540.0f && r0.angle < 630.0f) {
-                f3 = (r0.angle - 540.0f) / 90.0f;
-                f4 = 0.0f;
-                f2 = f4;
-                f = 1.0f;
-                if (f == 0.0f) {
-                    f5 = 8.0f;
-                } else {
-                    f5 = 8.0f;
-                    canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
-                }
-                if (f3 != 0.0f) {
-                    canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
-                }
-                if (f4 != 0.0f) {
-                    canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
-                }
-                if (f2 != 1.0f) {
-                    canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
-                }
-                canvas.restore();
-                centerX = getBounds().centerX();
-                centerY = getBounds().centerY();
-                r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-                rectF = r0.rect;
-                if (r0.angle < 360.0f) {
-                    f6 = r0.angle - 360.0f;
-                }
-                if (r0.angle >= 360.0f) {
-                }
-                canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-                r0.lastFrameTime = currentTimeMillis;
-            } else if (r0.angle < 630.0f || r0.angle >= 720.0f) {
-                f2 = 0.0f;
-                f = 1.0f;
-                f3 = f;
-            } else {
-                f4 = (r0.angle - 630.0f) / 90.0f;
-                f2 = 0.0f;
-                f = 1.0f;
-                f3 = f;
-                if (f == 0.0f) {
-                    f5 = 8.0f;
-                    canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
-                } else {
-                    f5 = 8.0f;
-                }
-                if (f3 != 0.0f) {
-                    canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
-                }
-                if (f4 != 0.0f) {
-                    canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
-                }
-                if (f2 != 1.0f) {
-                    canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
-                }
-                canvas.restore();
-                centerX = getBounds().centerX();
-                centerY = getBounds().centerY();
-                r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-                rectF = r0.rect;
-                if (r0.angle < 360.0f) {
-                    f6 = r0.angle - 360.0f;
-                }
-                canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-                r0.lastFrameTime = currentTimeMillis;
-            }
-            f2 = f;
-            f = 0.0f;
-            f3 = f;
-        } else {
-            f4 = 1.0f - ((r0.angle - 180.0f) / 90.0f);
-            f = 0.0f;
-            f3 = f;
-            f2 = f3;
-            if (f == 0.0f) {
-                f5 = 8.0f;
-            } else {
-                f5 = 8.0f;
-                canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
-            }
-            if (f3 != 0.0f) {
-                canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
-            }
-            if (f4 != 0.0f) {
-                canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
-            }
-            if (f2 != 1.0f) {
-                canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
-            }
-            canvas.restore();
-            centerX = getBounds().centerX();
-            centerY = getBounds().centerY();
-            r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-            rectF = r0.rect;
-            if (r0.angle < 360.0f) {
-                f6 = r0.angle - 360.0f;
-            }
-            if (r0.angle >= 360.0f) {
-            }
-            canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-            r0.lastFrameTime = currentTimeMillis;
+        canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
+        canvas.rotate(-45.0f);
+        float progress1 = 1.0f;
+        float progress2 = 1.0f;
+        float progress3 = 1.0f;
+        float progress4 = 0.0f;
+        if (this.angle >= 0.0f && this.angle < 90.0f) {
+            progress1 = 1.0f - (this.angle / 90.0f);
+        } else if (this.angle >= 90.0f && this.angle < 180.0f) {
+            progress1 = 0.0f;
+            progress2 = 1.0f - ((this.angle - 90.0f) / 90.0f);
+        } else if (this.angle >= 180.0f && this.angle < 270.0f) {
+            progress2 = 0.0f;
+            progress1 = 0.0f;
+            progress3 = 1.0f - ((this.angle - 180.0f) / 90.0f);
+        } else if (this.angle >= 270.0f && this.angle < 360.0f) {
+            progress3 = 0.0f;
+            progress2 = 0.0f;
+            progress1 = 0.0f;
+            progress4 = (this.angle - 270.0f) / 90.0f;
+        } else if (this.angle >= 360.0f && this.angle < 450.0f) {
+            progress3 = 0.0f;
+            progress2 = 0.0f;
+            progress1 = 0.0f;
+            progress4 = 1.0f - ((this.angle - 360.0f) / 90.0f);
+        } else if (this.angle >= 450.0f && this.angle < 540.0f) {
+            progress3 = 0.0f;
+            progress2 = 0.0f;
+            progress1 = (this.angle - 450.0f) / 90.0f;
+        } else if (this.angle >= 540.0f && this.angle < 630.0f) {
+            progress3 = 0.0f;
+            progress2 = (this.angle - 540.0f) / 90.0f;
+        } else if (this.angle >= 630.0f && this.angle < 720.0f) {
+            progress3 = (this.angle - 630.0f) / 90.0f;
         }
-        f4 = f3;
-        if (f == 0.0f) {
-            f5 = 8.0f;
-        } else {
-            f5 = 8.0f;
-            canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * f, r0.paint);
+        if (progress1 != 0.0f) {
+            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * progress1, this.paint);
         }
-        if (f3 != 0.0f) {
-            canvas2.drawLine(((float) (-AndroidUtilities.dp(f5))) * f3, 0.0f, 0.0f, 0.0f, r0.paint);
+        if (progress2 != 0.0f) {
+            canvas.drawLine(((float) (-AndroidUtilities.dp(8.0f))) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
         }
-        if (f4 != 0.0f) {
-            canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f5))) * f4, 0.0f, 0.0f, r0.paint);
+        if (progress3 != 0.0f) {
+            canvas.drawLine(0.0f, ((float) (-AndroidUtilities.dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
         }
-        if (f2 != 1.0f) {
-            canvas2.drawLine(((float) AndroidUtilities.dp(f5)) * f2, 0.0f, (float) AndroidUtilities.dp(f5), 0.0f, r0.paint);
+        if (progress4 != 1.0f) {
+            canvas.drawLine(((float) AndroidUtilities.dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         }
         canvas.restore();
-        centerX = getBounds().centerX();
-        centerY = getBounds().centerY();
-        r0.rect.set((float) (centerX - AndroidUtilities.dp(f5)), (float) (centerY - AndroidUtilities.dp(f5)), (float) (centerX + AndroidUtilities.dp(f5)), (float) (centerY + AndroidUtilities.dp(f5)));
-        rectF = r0.rect;
-        if (r0.angle < 360.0f) {
-            f6 = r0.angle - 360.0f;
-        }
-        if (r0.angle >= 360.0f) {
-        }
-        canvas2.drawArc(rectF, f6 - 45.0f, r0.angle >= 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
-        r0.lastFrameTime = currentTimeMillis;
+        int cx = getBounds().centerX();
+        int cy = getBounds().centerY();
+        this.rect.set((float) (cx - AndroidUtilities.dp(8.0f)), (float) (cy - AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(8.0f) + cx), (float) (AndroidUtilities.dp(8.0f) + cy));
+        canvas.drawArc(this.rect, (this.angle < 360.0f ? 0.0f : this.angle - 360.0f) - 45.0f, this.angle < 360.0f ? this.angle : 720.0f - this.angle, false, this.paint);
+        this.lastFrameTime = newTime;
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-        this.paint.setColorFilter(colorFilter);
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+        this.paint.setColorFilter(cf);
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

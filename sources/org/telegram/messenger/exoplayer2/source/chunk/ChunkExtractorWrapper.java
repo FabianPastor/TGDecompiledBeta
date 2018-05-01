@@ -34,10 +34,10 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
         private TrackOutput trackOutput;
         private final int type;
 
-        public BindingTrackOutput(int i, int i2, Format format) {
-            this.id = i;
-            this.type = i2;
-            this.manifestFormat = format;
+        public BindingTrackOutput(int id, int type, Format manifestFormat) {
+            this.id = id;
+            this.type = type;
+            this.manifestFormat = manifestFormat;
         }
 
         public void bind(TrackOutputProvider trackOutputProvider) {
@@ -59,23 +59,23 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
             this.trackOutput.format(this.sampleFormat);
         }
 
-        public int sampleData(ExtractorInput extractorInput, int i, boolean z) throws IOException, InterruptedException {
-            return this.trackOutput.sampleData(extractorInput, i, z);
+        public int sampleData(ExtractorInput input, int length, boolean allowEndOfInput) throws IOException, InterruptedException {
+            return this.trackOutput.sampleData(input, length, allowEndOfInput);
         }
 
-        public void sampleData(ParsableByteArray parsableByteArray, int i) {
-            this.trackOutput.sampleData(parsableByteArray, i);
+        public void sampleData(ParsableByteArray data, int length) {
+            this.trackOutput.sampleData(data, length);
         }
 
-        public void sampleMetadata(long j, int i, int i2, int i3, CryptoData cryptoData) {
-            this.trackOutput.sampleMetadata(j, i, i2, i3, cryptoData);
+        public void sampleMetadata(long timeUs, int flags, int size, int offset, CryptoData cryptoData) {
+            this.trackOutput.sampleMetadata(timeUs, flags, size, offset, cryptoData);
         }
     }
 
-    public ChunkExtractorWrapper(Extractor extractor, int i, Format format) {
+    public ChunkExtractorWrapper(Extractor extractor, int primaryTrackType, Format primaryTrackManifestFormat) {
         this.extractor = extractor;
-        this.primaryTrackType = i;
-        this.primaryTrackManifestFormat = format;
+        this.primaryTrackType = primaryTrackType;
+        this.primaryTrackManifestFormat = primaryTrackManifestFormat;
     }
 
     public SeekMap getSeekMap() {
@@ -99,23 +99,23 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
         this.extractorInitialized = true;
     }
 
-    public TrackOutput track(int i, int i2) {
-        TrackOutput trackOutput = (BindingTrackOutput) this.bindingTrackOutputs.get(i);
-        if (trackOutput == null) {
+    public TrackOutput track(int id, int type) {
+        BindingTrackOutput bindingTrackOutput = (BindingTrackOutput) this.bindingTrackOutputs.get(id);
+        if (bindingTrackOutput == null) {
             Assertions.checkState(this.sampleFormats == null);
-            trackOutput = new BindingTrackOutput(i, i2, i2 == this.primaryTrackType ? this.primaryTrackManifestFormat : null);
-            trackOutput.bind(this.trackOutputProvider);
-            this.bindingTrackOutputs.put(i, trackOutput);
+            bindingTrackOutput = new BindingTrackOutput(id, type, type == this.primaryTrackType ? this.primaryTrackManifestFormat : null);
+            bindingTrackOutput.bind(this.trackOutputProvider);
+            this.bindingTrackOutputs.put(id, bindingTrackOutput);
         }
-        return trackOutput;
+        return bindingTrackOutput;
     }
 
     public void endTracks() {
-        Format[] formatArr = new Format[this.bindingTrackOutputs.size()];
+        Format[] sampleFormats = new Format[this.bindingTrackOutputs.size()];
         for (int i = 0; i < this.bindingTrackOutputs.size(); i++) {
-            formatArr[i] = ((BindingTrackOutput) this.bindingTrackOutputs.valueAt(i)).sampleFormat;
+            sampleFormats[i] = ((BindingTrackOutput) this.bindingTrackOutputs.valueAt(i)).sampleFormat;
         }
-        this.sampleFormats = formatArr;
+        this.sampleFormats = sampleFormats;
     }
 
     public void seekMap(SeekMap seekMap) {

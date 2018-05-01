@@ -14,14 +14,14 @@ public final class SpliceInfoSectionReader implements SectionPayloadReader {
     private TrackOutput output;
     private TimestampAdjuster timestampAdjuster;
 
-    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
+    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.timestampAdjuster = timestampAdjuster;
-        trackIdGenerator.generateNewId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 4);
-        this.output.format(Format.createSampleFormat(trackIdGenerator.getFormatId(), MimeTypes.APPLICATION_SCTE35, null, -1, null));
+        idGenerator.generateNewId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 4);
+        this.output.format(Format.createSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_SCTE35, null, -1, null));
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
+    public void consume(ParsableByteArray sectionData) {
         if (!this.formatDeclared) {
             if (this.timestampAdjuster.getTimestampOffsetUs() != C0542C.TIME_UNSET) {
                 this.output.format(Format.createSampleFormat(null, MimeTypes.APPLICATION_SCTE35, this.timestampAdjuster.getTimestampOffsetUs()));
@@ -30,8 +30,8 @@ public final class SpliceInfoSectionReader implements SectionPayloadReader {
                 return;
             }
         }
-        int bytesLeft = parsableByteArray.bytesLeft();
-        this.output.sampleData(parsableByteArray, bytesLeft);
-        this.output.sampleMetadata(this.timestampAdjuster.getLastAdjustedTimestampUs(), 1, bytesLeft, 0, null);
+        int sampleSize = sectionData.bytesLeft();
+        this.output.sampleData(sectionData, sampleSize);
+        this.output.sampleMetadata(this.timestampAdjuster.getLastAdjustedTimestampUs(), 1, sampleSize, 0, null);
     }
 }

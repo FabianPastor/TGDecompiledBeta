@@ -37,68 +37,59 @@ public class DefaultSsChunkSource implements SsChunkSource {
     public static final class Factory implements org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory {
         private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
 
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory) {
-            this.dataSourceFactory = factory;
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this.dataSourceFactory = dataSourceFactory;
         }
 
-        public SsChunkSource createChunkSource(LoaderErrorThrower loaderErrorThrower, SsManifest ssManifest, int i, TrackSelection trackSelection, TrackEncryptionBox[] trackEncryptionBoxArr) {
-            return new DefaultSsChunkSource(loaderErrorThrower, ssManifest, i, trackSelection, this.dataSourceFactory.createDataSource(), trackEncryptionBoxArr);
+        public SsChunkSource createChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, SsManifest manifest, int elementIndex, TrackSelection trackSelection, TrackEncryptionBox[] trackEncryptionBoxes) {
+            return new DefaultSsChunkSource(manifestLoaderErrorThrower, manifest, elementIndex, trackSelection, this.dataSourceFactory.createDataSource(), trackEncryptionBoxes);
         }
     }
 
-    public void onChunkLoadCompleted(Chunk chunk) {
-    }
-
-    public DefaultSsChunkSource(LoaderErrorThrower loaderErrorThrower, SsManifest ssManifest, int i, TrackSelection trackSelection, DataSource dataSource, TrackEncryptionBox[] trackEncryptionBoxArr) {
-        SsManifest ssManifest2 = ssManifest;
-        int i2 = i;
-        TrackSelection trackSelection2 = trackSelection;
-        this.manifestLoaderErrorThrower = loaderErrorThrower;
-        this.manifest = ssManifest2;
-        this.streamElementIndex = i2;
-        this.trackSelection = trackSelection2;
+    public DefaultSsChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, SsManifest manifest, int streamElementIndex, TrackSelection trackSelection, DataSource dataSource, TrackEncryptionBox[] trackEncryptionBoxes) {
+        this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
+        this.manifest = manifest;
+        this.streamElementIndex = streamElementIndex;
+        this.trackSelection = trackSelection;
         this.dataSource = dataSource;
-        StreamElement streamElement = ssManifest2.streamElements[i2];
+        StreamElement streamElement = manifest.streamElements[streamElementIndex];
         this.extractorWrappers = new ChunkExtractorWrapper[trackSelection.length()];
-        int i3 = 0;
-        while (i3 < r0.extractorWrappers.length) {
-            int indexInTrackGroup = trackSelection2.getIndexInTrackGroup(i3);
-            Format format = streamElement.formats[indexInTrackGroup];
-            int i4 = i3;
-            Track track = r7;
-            Track track2 = new Track(indexInTrackGroup, streamElement.type, streamElement.timescale, C0542C.TIME_UNSET, ssManifest2.durationUs, format, 0, trackEncryptionBoxArr, streamElement.type == 2 ? 4 : 0, null, null);
-            r0.extractorWrappers[i4] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, track, null), streamElement.type, format);
-            i3 = i4 + 1;
+        for (int i = 0; i < this.extractorWrappers.length; i++) {
+            int manifestTrackIndex = trackSelection.getIndexInTrackGroup(i);
+            Format format = streamElement.formats[manifestTrackIndex];
+            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0542C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
         }
     }
 
-    public long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters) {
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        long secondSyncUs;
         StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
-        int chunkIndex = streamElement.getChunkIndex(j);
-        long startTimeUs = streamElement.getStartTimeUs(chunkIndex);
-        long startTimeUs2 = (startTimeUs >= j || chunkIndex >= streamElement.chunkCount - 1) ? startTimeUs : streamElement.getStartTimeUs(chunkIndex + 1);
-        return Util.resolveSeekPositionUs(j, seekParameters, startTimeUs, startTimeUs2);
+        int chunkIndex = streamElement.getChunkIndex(positionUs);
+        long firstSyncUs = streamElement.getStartTimeUs(chunkIndex);
+        if (firstSyncUs >= positionUs || chunkIndex >= streamElement.chunkCount - 1) {
+            secondSyncUs = firstSyncUs;
+        } else {
+            secondSyncUs = streamElement.getStartTimeUs(chunkIndex + 1);
+        }
+        return Util.resolveSeekPositionUs(positionUs, seekParameters, firstSyncUs, secondSyncUs);
     }
 
-    public void updateManifest(SsManifest ssManifest) {
-        StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
-        int i = streamElement.chunkCount;
-        StreamElement streamElement2 = ssManifest.streamElements[this.streamElementIndex];
-        if (i != 0) {
-            if (streamElement2.chunkCount != 0) {
-                int i2 = i - 1;
-                long startTimeUs = streamElement.getStartTimeUs(i2) + streamElement.getChunkDurationUs(i2);
-                long startTimeUs2 = streamElement2.getStartTimeUs(0);
-                if (startTimeUs <= startTimeUs2) {
-                    this.currentManifestChunkOffset += i;
-                } else {
-                    this.currentManifestChunkOffset += streamElement.getChunkIndex(startTimeUs2);
-                }
-                this.manifest = ssManifest;
+    public void updateManifest(SsManifest newManifest) {
+        StreamElement currentElement = this.manifest.streamElements[this.streamElementIndex];
+        int currentElementChunkCount = currentElement.chunkCount;
+        StreamElement newElement = newManifest.streamElements[this.streamElementIndex];
+        if (currentElementChunkCount == 0 || newElement.chunkCount == 0) {
+            this.currentManifestChunkOffset += currentElementChunkCount;
+        } else {
+            long currentElementEndTimeUs = currentElement.getStartTimeUs(currentElementChunkCount - 1) + currentElement.getChunkDurationUs(currentElementChunkCount - 1);
+            long newElementStartTimeUs = newElement.getStartTimeUs(0);
+            if (currentElementEndTimeUs <= newElementStartTimeUs) {
+                this.currentManifestChunkOffset += currentElementChunkCount;
+            } else {
+                this.currentManifestChunkOffset += currentElement.getChunkIndex(newElementStartTimeUs);
             }
         }
-        this.currentManifestChunkOffset += i;
-        this.manifest = ssManifest;
+        this.manifest = newManifest;
     }
 
     public void maybeThrowError() throws IOException {
@@ -108,64 +99,66 @@ public class DefaultSsChunkSource implements SsChunkSource {
         this.manifestLoaderErrorThrower.maybeThrowError();
     }
 
-    public int getPreferredQueueSize(long j, List<? extends MediaChunk> list) {
-        if (this.fatalError == null) {
-            if (this.trackSelection.length() >= 2) {
-                return this.trackSelection.evaluateQueueSize(j, list);
-            }
+    public int getPreferredQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
+        if (this.fatalError != null || this.trackSelection.length() < 2) {
+            return queue.size();
         }
-        return list.size();
+        return this.trackSelection.evaluateQueueSize(playbackPositionUs, queue);
     }
 
-    public final void getNextChunk(MediaChunk mediaChunk, long j, long j2, ChunkHolder chunkHolder) {
-        long j3 = j;
-        long j4 = j2;
-        ChunkHolder chunkHolder2 = chunkHolder;
+    public final void getNextChunk(MediaChunk previous, long playbackPositionUs, long loadPositionUs, ChunkHolder out) {
         if (this.fatalError == null) {
-            StreamElement streamElement = r0.manifest.streamElements[r0.streamElementIndex];
+            StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
             if (streamElement.chunkCount == 0) {
-                chunkHolder2.endOfStream = r0.manifest.isLive ^ 1;
+                out.endOfStream = !this.manifest.isLive;
                 return;
             }
             int chunkIndex;
-            if (mediaChunk == null) {
-                chunkIndex = streamElement.getChunkIndex(j4);
+            if (previous == null) {
+                chunkIndex = streamElement.getChunkIndex(loadPositionUs);
             } else {
-                chunkIndex = mediaChunk.getNextChunkIndex() - r0.currentManifestChunkOffset;
+                chunkIndex = previous.getNextChunkIndex() - this.currentManifestChunkOffset;
                 if (chunkIndex < 0) {
-                    r0.fatalError = new BehindLiveWindowException();
+                    this.fatalError = new BehindLiveWindowException();
                     return;
                 }
             }
-            int i = chunkIndex;
-            if (i >= streamElement.chunkCount) {
-                chunkHolder2.endOfStream = r0.manifest.isLive ^ 1;
+            if (chunkIndex >= streamElement.chunkCount) {
+                boolean z;
+                if (this.manifest.isLive) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                out.endOfStream = z;
                 return;
             }
-            r0.trackSelection.updateSelectedTrack(j3, j4 - j3, resolveTimeToLiveEdgeUs(j3));
-            long startTimeUs = streamElement.getStartTimeUs(i);
-            long chunkDurationUs = startTimeUs + streamElement.getChunkDurationUs(i);
-            int i2 = i + r0.currentManifestChunkOffset;
-            chunkIndex = r0.trackSelection.getSelectedIndex();
-            ChunkExtractorWrapper chunkExtractorWrapper = r0.extractorWrappers[chunkIndex];
-            chunkHolder2.chunk = newMediaChunk(r0.trackSelection.getSelectedFormat(), r0.dataSource, streamElement.buildRequestUri(r0.trackSelection.getIndexInTrackGroup(chunkIndex), i), null, i2, startTimeUs, chunkDurationUs, r0.trackSelection.getSelectionReason(), r0.trackSelection.getSelectionData(), chunkExtractorWrapper);
+            this.trackSelection.updateSelectedTrack(playbackPositionUs, loadPositionUs - playbackPositionUs, resolveTimeToLiveEdgeUs(playbackPositionUs));
+            long chunkStartTimeUs = streamElement.getStartTimeUs(chunkIndex);
+            long chunkEndTimeUs = chunkStartTimeUs + streamElement.getChunkDurationUs(chunkIndex);
+            int currentAbsoluteChunkIndex = chunkIndex + this.currentManifestChunkOffset;
+            int trackSelectionIndex = this.trackSelection.getSelectedIndex();
+            out.chunk = newMediaChunk(this.trackSelection.getSelectedFormat(), this.dataSource, streamElement.buildRequestUri(this.trackSelection.getIndexInTrackGroup(trackSelectionIndex), chunkIndex), null, currentAbsoluteChunkIndex, chunkStartTimeUs, chunkEndTimeUs, this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), this.extractorWrappers[trackSelectionIndex]);
         }
     }
 
-    public boolean onChunkLoadError(Chunk chunk, boolean z, Exception exception) {
-        return (!z || ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), exception) == null) ? null : true;
+    public void onChunkLoadCompleted(Chunk chunk) {
     }
 
-    private static MediaChunk newMediaChunk(Format format, DataSource dataSource, Uri uri, String str, int i, long j, long j2, int i2, Object obj, ChunkExtractorWrapper chunkExtractorWrapper) {
-        return new ContainerMediaChunk(dataSource, new DataSpec(uri, 0, -1, str), format, i2, obj, j, j2, i, 1, j, chunkExtractorWrapper);
+    public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e) {
+        return cancelable && ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), e);
     }
 
-    private long resolveTimeToLiveEdgeUs(long j) {
+    private static MediaChunk newMediaChunk(Format format, DataSource dataSource, Uri uri, String cacheKey, int chunkIndex, long chunkStartTimeUs, long chunkEndTimeUs, int trackSelectionReason, Object trackSelectionData, ChunkExtractorWrapper extractorWrapper) {
+        return new ContainerMediaChunk(dataSource, new DataSpec(uri, 0, -1, cacheKey), format, trackSelectionReason, trackSelectionData, chunkStartTimeUs, chunkEndTimeUs, chunkIndex, 1, chunkStartTimeUs, extractorWrapper);
+    }
+
+    private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
         if (!this.manifest.isLive) {
             return C0542C.TIME_UNSET;
         }
-        StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
-        int i = streamElement.chunkCount - 1;
-        return (streamElement.getStartTimeUs(i) + streamElement.getChunkDurationUs(i)) - j;
+        StreamElement currentElement = this.manifest.streamElements[this.streamElementIndex];
+        int lastChunkIndex = currentElement.chunkCount - 1;
+        return (currentElement.getStartTimeUs(lastChunkIndex) + currentElement.getChunkDurationUs(lastChunkIndex)) - playbackPositionUs;
     }
 }

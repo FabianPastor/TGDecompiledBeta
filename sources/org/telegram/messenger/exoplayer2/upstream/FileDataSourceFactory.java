@@ -9,8 +9,8 @@ public final class FileDataSourceFactory implements Factory {
         this(null);
     }
 
-    public FileDataSourceFactory(TransferListener<? super FileDataSource> transferListener) {
-        this.listener = transferListener;
+    public FileDataSourceFactory(TransferListener<? super FileDataSource> listener) {
+        this.listener = listener;
     }
 
     public DataSource createDataSource() {

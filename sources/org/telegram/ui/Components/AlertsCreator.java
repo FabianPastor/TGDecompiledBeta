@@ -29,6 +29,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.TL_account_changePhone;
 import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
 import org.telegram.tgnet.TLRPC.TL_account_getPassword;
@@ -82,718 +83,665 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
-    public static Dialog processError(int i, TL_error tL_error, BaseFragment baseFragment, TLObject tLObject, Object... objArr) {
-        if (tL_error.code != 406) {
-            if (tL_error.text != null) {
-                if (!((tLObject instanceof TL_channels_joinChannel) || (tLObject instanceof TL_channels_editAdmin) || (tLObject instanceof TL_channels_inviteToChannel) || (tLObject instanceof TL_messages_addChatUser) || (tLObject instanceof TL_messages_startBot))) {
-                    if (!(tLObject instanceof TL_channels_editBanned)) {
-                        if (tLObject instanceof TL_messages_createChat) {
-                            if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                showFloodWaitAlert(tL_error.text, baseFragment);
-                            } else {
-                                showAddUserAlert(tL_error.text, baseFragment, false);
-                            }
-                        } else if (tLObject instanceof TL_channels_createChannel) {
-                            if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                showFloodWaitAlert(tL_error.text, baseFragment);
-                            } else {
-                                showAddUserAlert(tL_error.text, baseFragment, false);
-                            }
-                        } else if (!(tLObject instanceof TL_messages_editMessage)) {
-                            if (!((tLObject instanceof TL_messages_sendMessage) || (tLObject instanceof TL_messages_sendMedia) || (tLObject instanceof TL_messages_sendBroadcast) || (tLObject instanceof TL_messages_sendInlineBotResult))) {
-                                if (!(tLObject instanceof TL_messages_forwardMessages)) {
-                                    if ((tLObject instanceof TL_messages_importChatInvite) != 0) {
-                                        if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                            showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                        } else if (tL_error.text.equals("USERS_TOO_MUCH") != 0) {
-                                            showSimpleAlert(baseFragment, LocaleController.getString("JoinToGroupErrorFull", C0446R.string.JoinToGroupErrorFull));
-                                        } else {
-                                            showSimpleAlert(baseFragment, LocaleController.getString("JoinToGroupErrorNotExist", C0446R.string.JoinToGroupErrorNotExist));
-                                        }
-                                    } else if ((tLObject instanceof TL_messages_getAttachedStickers) != 0) {
-                                        if (!(baseFragment == null || baseFragment.getParentActivity() == 0)) {
-                                            i = baseFragment.getParentActivity();
-                                            baseFragment = new StringBuilder();
-                                            baseFragment.append(LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                                            baseFragment.append("\n");
-                                            baseFragment.append(tL_error.text);
-                                            Toast.makeText(i, baseFragment.toString(), 0).show();
-                                        }
-                                    } else if ((tLObject instanceof TL_account_confirmPhone) != 0) {
-                                        if (tL_error.text.contains("PHONE_CODE_EMPTY") == 0) {
-                                            if (tL_error.text.contains("PHONE_CODE_INVALID") == 0) {
-                                                if (tL_error.text.contains("PHONE_CODE_EXPIRED") != 0) {
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
-                                                } else if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                                } else {
-                                                    showSimpleAlert(baseFragment, tL_error.text);
-                                                }
-                                            }
-                                        }
-                                        showSimpleAlert(baseFragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
-                                    } else if ((tLObject instanceof TL_auth_resendCode) != 0) {
-                                        if (tL_error.text.contains("PHONE_NUMBER_INVALID") != 0) {
-                                            showSimpleAlert(baseFragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
-                                        } else {
-                                            if (tL_error.text.contains("PHONE_CODE_EMPTY") == 0) {
-                                                if (tL_error.text.contains("PHONE_CODE_INVALID") == 0) {
-                                                    if (tL_error.text.contains("PHONE_CODE_EXPIRED") != 0) {
-                                                        showSimpleAlert(baseFragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
-                                                    } else if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                        showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                                    } else if (tL_error.code != C0542C.PRIORITY_DOWNLOAD) {
-                                                        i = new StringBuilder();
-                                                        i.append(LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                                                        i.append("\n");
-                                                        i.append(tL_error.text);
-                                                        showSimpleAlert(baseFragment, i.toString());
-                                                    }
-                                                }
-                                            }
-                                            showSimpleAlert(baseFragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
-                                        }
-                                    } else if ((tLObject instanceof TL_account_sendConfirmPhoneCode) != 0) {
-                                        if (tL_error.code == 400) {
-                                            return showSimpleAlert(baseFragment, LocaleController.getString("CancelLinkExpired", C0446R.string.CancelLinkExpired));
-                                        }
-                                        if (tL_error.text != 0) {
-                                            if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                return showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                            }
-                                            return showSimpleAlert(baseFragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                                        }
-                                    } else if ((tLObject instanceof TL_account_changePhone) != 0) {
-                                        if (tL_error.text.contains("PHONE_NUMBER_INVALID") != 0) {
-                                            showSimpleAlert(baseFragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
-                                        } else {
-                                            if (tL_error.text.contains("PHONE_CODE_EMPTY") == 0) {
-                                                if (tL_error.text.contains("PHONE_CODE_INVALID") == 0) {
-                                                    if (tL_error.text.contains("PHONE_CODE_EXPIRED") != 0) {
-                                                        showSimpleAlert(baseFragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
-                                                    } else if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                        showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                                    } else {
-                                                        showSimpleAlert(baseFragment, tL_error.text);
-                                                    }
-                                                }
-                                            }
-                                            showSimpleAlert(baseFragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
-                                        }
-                                    } else if ((tLObject instanceof TL_account_sendChangePhoneCode) == 0) {
-                                        objArr = -1;
-                                        if ((tLObject instanceof TL_updateUserName) != 0) {
-                                            i = tL_error.text;
-                                            tL_error = i.hashCode();
-                                            if (tL_error != 288843630) {
-                                                if (tL_error == 533175271) {
-                                                    if (i.equals("USERNAME_OCCUPIED") != 0) {
-                                                        objArr = 1;
-                                                    }
-                                                }
-                                            } else if (i.equals("USERNAME_INVALID") != 0) {
-                                                objArr = null;
-                                            }
-                                            switch (objArr) {
-                                                case null:
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("UsernameInvalid", C0446R.string.UsernameInvalid));
-                                                    break;
-                                                case 1:
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("UsernameInUse", C0446R.string.UsernameInUse));
-                                                    break;
-                                                default:
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                                                    break;
-                                            }
-                                        } else if ((tLObject instanceof TL_contacts_importContacts) != 0) {
-                                            if (tL_error != null) {
-                                                if (tL_error.text.startsWith("FLOOD_WAIT") == 0) {
-                                                    i = new StringBuilder();
-                                                    i.append(LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                                                    i.append("\n");
-                                                    i.append(tL_error.text);
-                                                    showSimpleAlert(baseFragment, i.toString());
-                                                }
-                                            }
-                                            showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                        } else {
-                                            if ((tLObject instanceof TL_account_getPassword) == 0) {
-                                                if ((tLObject instanceof TL_account_getTmpPassword) == 0) {
-                                                    if ((tLObject instanceof TL_payments_sendPaymentForm) != 0) {
-                                                        i = tL_error.text;
-                                                        tLObject = i.hashCode();
-                                                        if (tLObject != -NUM) {
-                                                            if (tLObject == -784238410) {
-                                                                if (i.equals("PAYMENT_FAILED") != 0) {
-                                                                    objArr = 1;
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static Dialog processError(int currentAccount, TL_error error, BaseFragment fragment, TLObject request, Object... args) {
+        boolean z = false;
+        if (error.code == 406 || error.text == null) {
+            return null;
+        }
+        if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot) && !(request instanceof TL_channels_editBanned)) {
+            if (!(request instanceof TL_messages_createChat)) {
+                if (!(request instanceof TL_channels_createChannel)) {
+                    if (!(request instanceof TL_messages_editMessage)) {
+                        if (!(request instanceof TL_messages_sendMessage) && !(request instanceof TL_messages_sendMedia) && !(request instanceof TL_messages_sendBroadcast) && !(request instanceof TL_messages_sendInlineBotResult) && !(request instanceof TL_messages_forwardMessages)) {
+                            if (!(request instanceof TL_messages_importChatInvite)) {
+                                if (!(request instanceof TL_messages_getAttachedStickers)) {
+                                    if (!(request instanceof TL_account_confirmPhone)) {
+                                        if (!(request instanceof TL_auth_resendCode)) {
+                                            if (!(request instanceof TL_account_sendConfirmPhoneCode)) {
+                                                if (!(request instanceof TL_account_changePhone)) {
+                                                    if (!(request instanceof TL_account_sendChangePhoneCode)) {
+                                                        String str;
+                                                        if (!(request instanceof TL_updateUserName)) {
+                                                            if (!(request instanceof TL_contacts_importContacts)) {
+                                                                if (!(request instanceof TL_account_getPassword) && !(request instanceof TL_account_getTmpPassword)) {
+                                                                    if (!(request instanceof TL_payments_sendPaymentForm)) {
+                                                                        if (request instanceof TL_payments_validateRequestedInfo) {
+                                                                            String str2 = error.text;
+                                                                            boolean z2 = true;
+                                                                            switch (str2.hashCode()) {
+                                                                                case 1758025548:
+                                                                                    if (str2.equals("SHIPPING_NOT_AVAILABLE")) {
+                                                                                        z2 = false;
+                                                                                        break;
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                            switch (z2) {
+                                                                                case false:
+                                                                                    showSimpleToast(fragment, LocaleController.getString("PaymentNoShippingMethod", C0446R.string.PaymentNoShippingMethod));
+                                                                                    break;
+                                                                                default:
+                                                                                    showSimpleToast(fragment, error.text);
+                                                                                    break;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    str = error.text;
+                                                                    switch (str.hashCode()) {
+                                                                        case -1144062453:
+                                                                            if (str.equals("BOT_PRECHECKOUT_FAILED")) {
+                                                                                break;
+                                                                            }
+                                                                        case -784238410:
+                                                                            if (str.equals("PAYMENT_FAILED")) {
+                                                                                z = true;
+                                                                                break;
+                                                                            }
+                                                                        default:
+                                                                            z = true;
+                                                                            break;
+                                                                    }
+                                                                    switch (z) {
+                                                                        case false:
+                                                                            showSimpleToast(fragment, LocaleController.getString("PaymentPrecheckoutFailed", C0446R.string.PaymentPrecheckoutFailed));
+                                                                            break;
+                                                                        case true:
+                                                                            showSimpleToast(fragment, LocaleController.getString("PaymentFailed", C0446R.string.PaymentFailed));
+                                                                            break;
+                                                                        default:
+                                                                            showSimpleToast(fragment, error.text);
+                                                                            break;
+                                                                    }
+                                                                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                                    showSimpleToast(fragment, getFloodWaitString(error.text));
+                                                                } else {
+                                                                    showSimpleToast(fragment, error.text);
                                                                 }
+                                                            } else if (error == null || error.text.startsWith("FLOOD_WAIT")) {
+                                                                showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                                            } else {
+                                                                showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred) + "\n" + error.text);
                                                             }
-                                                        } else if (i.equals("BOT_PRECHECKOUT_FAILED") != 0) {
-                                                            objArr = null;
-                                                        }
-                                                        switch (objArr) {
-                                                            case null:
-                                                                showSimpleToast(baseFragment, LocaleController.getString("PaymentPrecheckoutFailed", C0446R.string.PaymentPrecheckoutFailed));
-                                                                break;
-                                                            case 1:
-                                                                showSimpleToast(baseFragment, LocaleController.getString("PaymentFailed", C0446R.string.PaymentFailed));
-                                                                break;
-                                                            default:
-                                                                showSimpleToast(baseFragment, tL_error.text);
-                                                                break;
-                                                        }
-                                                    } else if ((tLObject instanceof TL_payments_validateRequestedInfo) != 0) {
-                                                        i = tL_error.text;
-                                                        if (i.hashCode() == NUM) {
-                                                            if (i.equals("SHIPPING_NOT_AVAILABLE") != 0) {
-                                                                objArr = null;
-                                                            }
-                                                        }
-                                                        if (objArr != null) {
-                                                            showSimpleToast(baseFragment, tL_error.text);
                                                         } else {
-                                                            showSimpleToast(baseFragment, LocaleController.getString("PaymentNoShippingMethod", C0446R.string.PaymentNoShippingMethod));
+                                                            str = error.text;
+                                                            switch (str.hashCode()) {
+                                                                case 288843630:
+                                                                    if (str.equals("USERNAME_INVALID")) {
+                                                                        break;
+                                                                    }
+                                                                case 533175271:
+                                                                    if (str.equals("USERNAME_OCCUPIED")) {
+                                                                        z = true;
+                                                                        break;
+                                                                    }
+                                                                default:
+                                                                    z = true;
+                                                                    break;
+                                                            }
+                                                            switch (z) {
+                                                                case false:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("UsernameInvalid", C0446R.string.UsernameInvalid));
+                                                                    break;
+                                                                case true:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("UsernameInUse", C0446R.string.UsernameInUse));
+                                                                    break;
+                                                                default:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
+                                                                    break;
+                                                            }
                                                         }
+                                                    } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
+                                                    } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
+                                                    } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
+                                                    } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                                    } else if (error.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
+                                                        showSimpleAlert(fragment, LocaleController.formatString("ChangePhoneNumberOccupied", C0446R.string.ChangePhoneNumberOccupied, (String) args[0]));
+                                                    } else {
+                                                        showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
                                                     }
-                                                }
-                                            }
-                                            if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                showSimpleToast(baseFragment, getFloodWaitString(tL_error.text));
-                                            } else {
-                                                showSimpleToast(baseFragment, tL_error.text);
-                                            }
-                                        }
-                                    } else if (tL_error.text.contains("PHONE_NUMBER_INVALID") != 0) {
-                                        showSimpleAlert(baseFragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
-                                    } else {
-                                        if (tL_error.text.contains("PHONE_CODE_EMPTY") == 0) {
-                                            if (tL_error.text.contains("PHONE_CODE_INVALID") == 0) {
-                                                if (tL_error.text.contains("PHONE_CODE_EXPIRED") != 0) {
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
-                                                } else if (tL_error.text.startsWith("FLOOD_WAIT") != 0) {
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
-                                                } else if (tL_error.text.startsWith("PHONE_NUMBER_OCCUPIED") != 0) {
-                                                    showSimpleAlert(baseFragment, LocaleController.formatString("ChangePhoneNumberOccupied", C0446R.string.ChangePhoneNumberOccupied, new Object[]{(String) objArr[0]}));
+                                                } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
+                                                } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
+                                                } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
+                                                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
                                                 } else {
-                                                    showSimpleAlert(baseFragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
+                                                    showSimpleAlert(fragment, error.text);
+                                                }
+                                            } else if (error.code == 400) {
+                                                return showSimpleAlert(fragment, LocaleController.getString("CancelLinkExpired", C0446R.string.CancelLinkExpired));
+                                            } else {
+                                                if (error.text != null) {
+                                                    if (error.text.startsWith("FLOOD_WAIT")) {
+                                                        return showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                                    }
+                                                    return showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
                                                 }
                                             }
+                                        } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
+                                        } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
+                                        } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
+                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                        } else if (error.code != C0542C.PRIORITY_DOWNLOAD) {
+                                            showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred) + "\n" + error.text);
                                         }
-                                        showSimpleAlert(baseFragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
+                                    } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("InvalidCode", C0446R.string.InvalidCode));
+                                    } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("CodeExpired", C0446R.string.CodeExpired));
+                                    } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                    } else {
+                                        showSimpleAlert(fragment, error.text);
                                     }
+                                } else if (!(fragment == null || fragment.getParentActivity() == null)) {
+                                    Toast.makeText(fragment.getParentActivity(), LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred) + "\n" + error.text, 0).show();
                                 }
+                            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                showSimpleAlert(fragment, LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                            } else if (error.text.equals("USERS_TOO_MUCH")) {
+                                showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorFull", C0446R.string.JoinToGroupErrorFull));
+                            } else {
+                                showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", C0446R.string.JoinToGroupErrorNotExist));
                             }
-                            if (tL_error.text.equals("PEER_FLOOD") != null) {
-                                NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, new Object[]{Integer.valueOf(0)});
-                            }
-                        } else if (tL_error.text.equals("MESSAGE_NOT_MODIFIED") == 0) {
-                            showSimpleAlert(baseFragment, LocaleController.getString("EditMessageError", C0446R.string.EditMessageError));
+                        } else if (error.text.equals("PEER_FLOOD")) {
+                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
                         }
-                        return null;
+                    } else if (!error.text.equals("MESSAGE_NOT_MODIFIED")) {
+                        showSimpleAlert(fragment, LocaleController.getString("EditMessageError", C0446R.string.EditMessageError));
                     }
+                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                    showFloodWaitAlert(error.text, fragment);
+                } else {
+                    showAddUserAlert(error.text, fragment, false);
                 }
-                if (baseFragment != null) {
-                    showAddUserAlert(tL_error.text, baseFragment, ((Boolean) objArr[0]).booleanValue());
-                } else if (tL_error.text.equals("PEER_FLOOD") != null) {
-                    NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, new Object[]{Integer.valueOf(1)});
-                }
-                return null;
+            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                showFloodWaitAlert(error.text, fragment);
+            } else {
+                showAddUserAlert(error.text, fragment, false);
             }
+        } else if (fragment != null) {
+            showAddUserAlert(error.text, fragment, ((Boolean) args[0]).booleanValue());
+        } else if (error.text.equals("PEER_FLOOD")) {
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
         }
         return null;
     }
 
-    public static Toast showSimpleToast(BaseFragment baseFragment, String str) {
-        if (!(str == null || baseFragment == null)) {
-            if (baseFragment.getParentActivity() != null) {
-                baseFragment = Toast.makeText(baseFragment.getParentActivity(), str, 1);
-                baseFragment.show();
-                return baseFragment;
-            }
+    public static Toast showSimpleToast(BaseFragment baseFragment, String text) {
+        if (text == null || baseFragment == null || baseFragment.getParentActivity() == null) {
+            return null;
         }
-        return null;
+        Toast toast = Toast.makeText(baseFragment.getParentActivity(), text, 1);
+        toast.show();
+        return toast;
     }
 
-    public static Dialog showSimpleAlert(BaseFragment baseFragment, String str) {
-        if (!(str == null || baseFragment == null)) {
-            if (baseFragment.getParentActivity() != null) {
-                Builder builder = new Builder(baseFragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                builder.setMessage(str);
-                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
-                str = builder.create();
-                baseFragment.showDialog(str);
-                return str;
-            }
+    public static Dialog showSimpleAlert(BaseFragment baseFragment, String text) {
+        if (text == null || baseFragment == null || baseFragment.getParentActivity() == null) {
+            return null;
         }
-        return null;
+        Builder builder = new Builder(baseFragment.getParentActivity());
+        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+        builder.setMessage(text);
+        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+        Dialog dialog = builder.create();
+        baseFragment.showDialog(dialog);
+        return dialog;
     }
 
-    public static Dialog createMuteAlert(Context context, final long j) {
+    public static Dialog createMuteAlert(Context context, final long dialog_id) {
         if (context == null) {
             return null;
         }
         BottomSheet.Builder builder = new BottomSheet.Builder(context);
         builder.setTitle(LocaleController.getString("Notifications", C0446R.string.Notifications));
-        context = new CharSequence[4];
-        context[0] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
-        context[1] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Hours", 8));
-        context[2] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
-        context[3] = LocaleController.getString("MuteDisable", C0446R.string.MuteDisable);
-        builder.setItems(context, new OnClickListener() {
+        CharSequence[] items = new CharSequence[4];
+        items[0] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
+        items[1] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Hours", 8));
+        items[2] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
+        items[3] = LocaleController.getString("MuteDisable", C0446R.string.MuteDisable);
+        builder.setItems(items, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
+                long flags;
+                int untilTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
                 if (i == 0) {
-                    dialogInterface += 3600;
+                    untilTime += 3600;
                 } else if (i == 1) {
-                    dialogInterface += 28800;
+                    untilTime += 28800;
                 } else if (i == 2) {
-                    dialogInterface += 172800;
+                    untilTime += 172800;
                 } else if (i == 3) {
-                    dialogInterface = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    untilTime = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 }
-                Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                long j = 1;
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                 if (i == 3) {
-                    i = new StringBuilder();
-                    i.append("notify2_");
-                    i.append(j);
-                    edit.putInt(i.toString(), 2);
+                    editor.putInt("notify2_" + dialog_id, 2);
+                    flags = 1;
                 } else {
-                    i = new StringBuilder();
-                    i.append("notify2_");
-                    i.append(j);
-                    edit.putInt(i.toString(), 3);
-                    i = new StringBuilder();
-                    i.append("notifyuntil_");
-                    i.append(j);
-                    edit.putInt(i.toString(), dialogInterface);
-                    j = (((long) dialogInterface) << 32) | 1;
+                    editor.putInt("notify2_" + dialog_id, 3);
+                    editor.putInt("notifyuntil_" + dialog_id, untilTime);
+                    flags = (((long) untilTime) << 32) | 1;
                 }
-                NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(j);
-                MessagesStorage.getInstance(UserConfig.selectedAccount).setDialogFlags(j, j);
-                edit.commit();
-                TL_dialog tL_dialog = (TL_dialog) MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(j);
-                if (tL_dialog != null) {
-                    tL_dialog.notify_settings = new TL_peerNotifySettings();
-                    tL_dialog.notify_settings.mute_until = dialogInterface;
+                NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(dialog_id);
+                MessagesStorage.getInstance(UserConfig.selectedAccount).setDialogFlags(dialog_id, flags);
+                editor.commit();
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(dialog_id);
+                if (dialog != null) {
+                    dialog.notify_settings = new TL_peerNotifySettings();
+                    dialog.notify_settings.mute_until = untilTime;
                 }
-                NotificationsController.getInstance(UserConfig.selectedAccount).updateServerNotificationsSettings(j);
+                NotificationsController.getInstance(UserConfig.selectedAccount).updateServerNotificationsSettings(dialog_id);
             }
         });
         return builder.create();
     }
 
-    public static Dialog createReportAlert(Context context, long j, int i, BaseFragment baseFragment) {
-        if (context != null) {
-            if (baseFragment != null) {
-                BottomSheet.Builder builder = new BottomSheet.Builder(context);
-                builder.setTitle(LocaleController.getString("ReportChat", C0446R.string.ReportChat));
-                final long j2 = j;
-                final int i2 = i;
-                final BaseFragment baseFragment2 = baseFragment;
-                final Context context2 = context;
-                builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", C0446R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", C0446R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", C0446R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", C0446R.string.ReportChatOther)}, new OnClickListener() {
-
-                    /* renamed from: org.telegram.ui.Components.AlertsCreator$2$1 */
-                    class C20361 implements RequestDelegate {
-                        public void run(TLObject tLObject, TL_error tL_error) {
-                        }
-
-                        C20361() {
-                        }
-                    }
-
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (i == 3) {
-                            dialogInterface = new Bundle();
-                            dialogInterface.putLong("dialog_id", j2);
-                            dialogInterface.putLong("message_id", (long) i2);
-                            baseFragment2.presentFragment(new ReportOtherActivity(dialogInterface));
-                            return;
-                        }
-                        TLObject tL_messages_report;
-                        dialogInterface = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) j2);
-                        if (i2 != 0) {
-                            tL_messages_report = new TL_messages_report();
-                            tL_messages_report.peer = dialogInterface;
-                            tL_messages_report.id.add(Integer.valueOf(i2));
-                            if (i == 0) {
-                                tL_messages_report.reason = new TL_inputReportReasonSpam();
-                            } else if (i == 1) {
-                                tL_messages_report.reason = new TL_inputReportReasonViolence();
-                            } else if (i == 2) {
-                                tL_messages_report.reason = new TL_inputReportReasonPornography();
-                            }
-                        } else {
-                            tL_messages_report = new TL_account_reportPeer();
-                            tL_messages_report.peer = dialogInterface;
-                            if (i == 0) {
-                                tL_messages_report.reason = new TL_inputReportReasonSpam();
-                            } else if (i == 1) {
-                                tL_messages_report.reason = new TL_inputReportReasonViolence();
-                            } else if (i == 2) {
-                                tL_messages_report.reason = new TL_inputReportReasonPornography();
-                            }
-                        }
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tL_messages_report, new C20361());
-                        Toast.makeText(context2, LocaleController.getString("ReportChatSent", C0446R.string.ReportChatSent), 0).show();
-                    }
-                });
-                return builder.create();
-            }
+    public static Dialog createReportAlert(Context context, long dialog_id, int messageId, BaseFragment parentFragment) {
+        if (context == null || parentFragment == null) {
+            return null;
         }
-        return null;
-    }
+        BottomSheet.Builder builder = new BottomSheet.Builder(context);
+        builder.setTitle(LocaleController.getString("ReportChat", C0446R.string.ReportChat));
+        final long j = dialog_id;
+        final int i = messageId;
+        final BaseFragment baseFragment = parentFragment;
+        final Context context2 = context;
+        builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", C0446R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", C0446R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", C0446R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", C0446R.string.ReportChatOther)}, new OnClickListener() {
 
-    private static String getFloodWaitString(String str) {
-        str = Utilities.parseInt(str).intValue();
-        if (str < 60) {
-            str = LocaleController.formatPluralString("Seconds", str);
-        } else {
-            str = LocaleController.formatPluralString("Minutes", str / 60);
-        }
-        return LocaleController.formatString("FloodWaitTime", C0446R.string.FloodWaitTime, str);
-    }
-
-    public static void showFloodWaitAlert(String str, BaseFragment baseFragment) {
-        if (!(str == null || !str.startsWith("FLOOD_WAIT") || baseFragment == null)) {
-            if (baseFragment.getParentActivity() != null) {
-                str = Utilities.parseInt(str).intValue();
-                if (str < 60) {
-                    str = LocaleController.formatPluralString("Seconds", str);
-                } else {
-                    str = LocaleController.formatPluralString("Minutes", str / 60);
+            /* renamed from: org.telegram.ui.Components.AlertsCreator$2$1 */
+            class C20361 implements RequestDelegate {
+                C20361() {
                 }
-                Builder builder = new Builder(baseFragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                builder.setMessage(LocaleController.formatString("FloodWaitTime", C0446R.string.FloodWaitTime, str));
-                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
-                baseFragment.showDialog(builder.create(), true, null);
+
+                public void run(TLObject response, TL_error error) {
+                }
             }
+
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 3) {
+                    Bundle args = new Bundle();
+                    args.putLong("dialog_id", j);
+                    args.putLong("message_id", (long) i);
+                    baseFragment.presentFragment(new ReportOtherActivity(args));
+                    return;
+                }
+                TLObject req;
+                InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) j);
+                TLObject request;
+                if (i != 0) {
+                    request = new TL_messages_report();
+                    request.peer = peer;
+                    request.id.add(Integer.valueOf(i));
+                    if (i == 0) {
+                        request.reason = new TL_inputReportReasonSpam();
+                    } else if (i == 1) {
+                        request.reason = new TL_inputReportReasonViolence();
+                    } else if (i == 2) {
+                        request.reason = new TL_inputReportReasonPornography();
+                    }
+                    req = request;
+                } else {
+                    request = new TL_account_reportPeer();
+                    request.peer = peer;
+                    if (i == 0) {
+                        request.reason = new TL_inputReportReasonSpam();
+                    } else if (i == 1) {
+                        request.reason = new TL_inputReportReasonViolence();
+                    } else if (i == 2) {
+                        request.reason = new TL_inputReportReasonPornography();
+                    }
+                    req = request;
+                }
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C20361());
+                Toast.makeText(context2, LocaleController.getString("ReportChatSent", C0446R.string.ReportChatSent), 0).show();
+            }
+        });
+        return builder.create();
+    }
+
+    private static String getFloodWaitString(String error) {
+        String timeString;
+        int time = Utilities.parseInt(error).intValue();
+        if (time < 60) {
+            timeString = LocaleController.formatPluralString("Seconds", time);
+        } else {
+            timeString = LocaleController.formatPluralString("Minutes", time / 60);
+        }
+        return LocaleController.formatString("FloodWaitTime", C0446R.string.FloodWaitTime, timeString);
+    }
+
+    public static void showFloodWaitAlert(String error, BaseFragment fragment) {
+        if (error != null && error.startsWith("FLOOD_WAIT") && fragment != null && fragment.getParentActivity() != null) {
+            String timeString;
+            int time = Utilities.parseInt(error).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
+            } else {
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
+            }
+            Builder builder = new Builder(fragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+            builder.setMessage(LocaleController.formatString("FloodWaitTime", C0446R.string.FloodWaitTime, timeString));
+            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+            fragment.showDialog(builder.create(), true, null);
         }
     }
 
-    public static void showSendMediaAlert(int i, BaseFragment baseFragment) {
-        if (i != 0) {
-            Builder builder = new Builder(baseFragment.getParentActivity());
+    public static void showSendMediaAlert(int result, BaseFragment fragment) {
+        if (result != 0) {
+            Builder builder = new Builder(fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-            if (i == 1) {
+            if (result == 1) {
                 builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickers", C0446R.string.ErrorSendRestrictedStickers));
-            } else if (i == 2) {
+            } else if (result == 2) {
                 builder.setMessage(LocaleController.getString("ErrorSendRestrictedMedia", C0446R.string.ErrorSendRestrictedMedia));
             }
             builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
-            baseFragment.showDialog(builder.create(), true, null);
+            fragment.showDialog(builder.create(), true, null);
         }
     }
 
-    public static void showAddUserAlert(String str, final BaseFragment baseFragment, boolean z) {
-        if (!(str == null || baseFragment == null)) {
-            if (baseFragment.getParentActivity() != null) {
-                Builder builder = new Builder(baseFragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                boolean z2 = true;
-                switch (str.hashCode()) {
-                    case -1763467626:
-                        if (str.equals("USERS_TOO_FEW")) {
-                            z2 = true;
-                            break;
-                        }
+    public static void showAddUserAlert(String error, final BaseFragment fragment, boolean isChannel) {
+        if (error != null && fragment != null && fragment.getParentActivity() != null) {
+            Builder builder = new Builder(fragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+            boolean z = true;
+            switch (error.hashCode()) {
+                case -1763467626:
+                    if (error.equals("USERS_TOO_FEW")) {
+                        z = true;
                         break;
-                    case -538116776:
-                        if (str.equals("USER_BLOCKED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case -512775857:
-                        if (str.equals("USER_RESTRICTED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case -454039871:
-                        if (str.equals("PEER_FLOOD")) {
-                            z2 = false;
-                            break;
-                        }
-                        break;
-                    case -420079733:
-                        if (str.equals("BOTS_TOO_MUCH")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 98635865:
-                        if (str.equals("USER_KICKED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 517420851:
-                        if (str.equals("USER_BOT")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 845559454:
-                        if (str.equals("YOU_BLOCKED_USER")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 916342611:
-                        if (str.equals("USER_ADMIN_INVALID")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1047173446:
-                        if (str.equals("CHAT_ADMIN_BAN_REQUIRED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1167301807:
-                        if (str.equals("USERS_TOO_MUCH")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1227003815:
-                        if (str.equals("USER_ID_INVALID")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1253103379:
-                        if (str.equals("ADMINS_TOO_MUCH")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1623167701:
-                        if (str.equals("USER_NOT_MUTUAL_CONTACT")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1754587486:
-                        if (str.equals("CHAT_ADMIN_INVITE_REQUIRED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    case 1916725894:
-                        if (str.equals("USER_PRIVACY_RESTRICTED")) {
-                            z2 = true;
-                            break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                switch (z2) {
-                    case false:
-                        builder.setMessage(LocaleController.getString("NobodyLikesSpam2", true));
-                        builder.setNegativeButton(LocaleController.getString("MoreInfo", true), new OnClickListener() {
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                MessagesController.getInstance(baseFragment.getCurrentAccount()).openByUserName("spambot", baseFragment, 1);
-                            }
-                        });
-                        break;
-                    case true:
-                    case true:
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("GroupUserCantAdd", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("ChannelUserCantAdd", true));
-                            break;
-                        }
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("GroupUserAddLimit", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("ChannelUserAddLimit", true));
-                            break;
-                        }
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("GroupUserLeftError", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("ChannelUserLeftError", true));
-                            break;
-                        }
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("GroupUserCantAdmin", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("ChannelUserCantAdmin", true));
-                            break;
-                        }
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("GroupUserCantBot", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("ChannelUserCantBot", true));
-                            break;
-                        }
-                    case true:
-                        if (!z) {
-                            builder.setMessage(LocaleController.getString("InviteToGroupError", true));
-                            break;
-                        } else {
-                            builder.setMessage(LocaleController.getString("InviteToChannelError", true));
-                            break;
-                        }
-                    case true:
-                        builder.setMessage(LocaleController.getString("CreateGroupError", true));
-                        break;
-                    case true:
-                        builder.setMessage(LocaleController.getString("UserRestricted", true));
-                        break;
-                    case true:
-                        builder.setMessage(LocaleController.getString("YouBlockedUser", true));
-                        break;
-                    case true:
-                    case true:
-                        builder.setMessage(LocaleController.getString("AddAdminErrorBlacklisted", true));
-                        break;
-                    case true:
-                        builder.setMessage(LocaleController.getString("AddAdminErrorNotAMember", true));
-                        break;
-                    case true:
-                        builder.setMessage(LocaleController.getString("AddBannedErrorAdmin", true));
-                        break;
-                    default:
-                        z = new StringBuilder();
-                        z.append(LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred));
-                        z.append("\n");
-                        z.append(str);
-                        builder.setMessage(z.toString());
-                        break;
-                }
-                builder.setPositiveButton(LocaleController.getString("OK", true), null);
-                baseFragment.showDialog(builder.create(), true, null);
-            }
-        }
-    }
-
-    public static Dialog createColorSelectDialog(Activity activity, long j, boolean z, boolean z2, Runnable runnable) {
-        int i;
-        Context context = activity;
-        final long j2 = j;
-        SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-        if (z) {
-            i = notificationsSettings.getInt("GroupLed", -16776961);
-        } else if (z2) {
-            i = notificationsSettings.getInt("MessagesLed", -16776961);
-        } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("color_");
-            stringBuilder.append(j2);
-            if (notificationsSettings.contains(stringBuilder.toString())) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("color_");
-                stringBuilder.append(j2);
-                i = notificationsSettings.getInt(stringBuilder.toString(), -16776961);
-            } else if (((int) j2) < 0) {
-                i = notificationsSettings.getInt("GroupLed", -16776961);
-            } else {
-                i = notificationsSettings.getInt("MessagesLed", -16776961);
-            }
-        }
-        final View linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(1);
-        String[] strArr = new String[]{LocaleController.getString("ColorRed", C0446R.string.ColorRed), LocaleController.getString("ColorOrange", C0446R.string.ColorOrange), LocaleController.getString("ColorYellow", C0446R.string.ColorYellow), LocaleController.getString("ColorGreen", C0446R.string.ColorGreen), LocaleController.getString("ColorCyan", C0446R.string.ColorCyan), LocaleController.getString("ColorBlue", C0446R.string.ColorBlue), LocaleController.getString("ColorViolet", C0446R.string.ColorViolet), LocaleController.getString("ColorPink", C0446R.string.ColorPink), LocaleController.getString("ColorWhite", C0446R.string.ColorWhite)};
-        final int[] iArr = new int[]{i};
-        for (int i2 = 0; i2 < 9; i2++) {
-            View radioColorCell = new RadioColorCell(context);
-            radioColorCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            radioColorCell.setTag(Integer.valueOf(i2));
-            radioColorCell.setCheckColor(TextColorCell.colors[i2], TextColorCell.colors[i2]);
-            radioColorCell.setTextAndValue(strArr[i2], i == TextColorCell.colorsToSave[i2]);
-            linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    int childCount = linearLayout.getChildCount();
-                    for (int i = 0; i < childCount; i++) {
-                        View view2 = (RadioColorCell) linearLayout.getChildAt(i);
-                        view2.setChecked(view2 == view, true);
                     }
-                    iArr[0] = TextColorCell.colorsToSave[((Integer) view.getTag()).intValue()];
+                    break;
+                case -538116776:
+                    if (error.equals("USER_BLOCKED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case -512775857:
+                    if (error.equals("USER_RESTRICTED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case -454039871:
+                    if (error.equals("PEER_FLOOD")) {
+                        z = false;
+                        break;
+                    }
+                    break;
+                case -420079733:
+                    if (error.equals("BOTS_TOO_MUCH")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 98635865:
+                    if (error.equals("USER_KICKED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 517420851:
+                    if (error.equals("USER_BOT")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 845559454:
+                    if (error.equals("YOU_BLOCKED_USER")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 916342611:
+                    if (error.equals("USER_ADMIN_INVALID")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1047173446:
+                    if (error.equals("CHAT_ADMIN_BAN_REQUIRED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1167301807:
+                    if (error.equals("USERS_TOO_MUCH")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1227003815:
+                    if (error.equals("USER_ID_INVALID")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1253103379:
+                    if (error.equals("ADMINS_TOO_MUCH")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1623167701:
+                    if (error.equals("USER_NOT_MUTUAL_CONTACT")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1754587486:
+                    if (error.equals("CHAT_ADMIN_INVITE_REQUIRED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1916725894:
+                    if (error.equals("USER_PRIVACY_RESTRICTED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+            }
+            switch (z) {
+                case false:
+                    builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0446R.string.NobodyLikesSpam2));
+                    builder.setNegativeButton(LocaleController.getString("MoreInfo", C0446R.string.MoreInfo), new OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            MessagesController.getInstance(fragment.getCurrentAccount()).openByUserName("spambot", fragment, 1);
+                        }
+                    });
+                    break;
+                case true:
+                case true:
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("GroupUserCantAdd", C0446R.string.GroupUserCantAdd));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelUserCantAdd", C0446R.string.ChannelUserCantAdd));
+                        break;
+                    }
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("GroupUserAddLimit", C0446R.string.GroupUserAddLimit));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelUserAddLimit", C0446R.string.ChannelUserAddLimit));
+                        break;
+                    }
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("GroupUserLeftError", C0446R.string.GroupUserLeftError));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelUserLeftError", C0446R.string.ChannelUserLeftError));
+                        break;
+                    }
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("GroupUserCantAdmin", C0446R.string.GroupUserCantAdmin));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelUserCantAdmin", C0446R.string.ChannelUserCantAdmin));
+                        break;
+                    }
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("GroupUserCantBot", C0446R.string.GroupUserCantBot));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelUserCantBot", C0446R.string.ChannelUserCantBot));
+                        break;
+                    }
+                case true:
+                    if (!isChannel) {
+                        builder.setMessage(LocaleController.getString("InviteToGroupError", C0446R.string.InviteToGroupError));
+                        break;
+                    } else {
+                        builder.setMessage(LocaleController.getString("InviteToChannelError", C0446R.string.InviteToChannelError));
+                        break;
+                    }
+                case true:
+                    builder.setMessage(LocaleController.getString("CreateGroupError", C0446R.string.CreateGroupError));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("UserRestricted", C0446R.string.UserRestricted));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("YouBlockedUser", C0446R.string.YouBlockedUser));
+                    break;
+                case true:
+                case true:
+                    builder.setMessage(LocaleController.getString("AddAdminErrorBlacklisted", C0446R.string.AddAdminErrorBlacklisted));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("AddAdminErrorNotAMember", C0446R.string.AddAdminErrorNotAMember));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("AddBannedErrorAdmin", C0446R.string.AddBannedErrorAdmin));
+                    break;
+                default:
+                    builder.setMessage(LocaleController.getString("ErrorOccurred", C0446R.string.ErrorOccurred) + "\n" + error);
+                    break;
+            }
+            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+            fragment.showDialog(builder.create(), true, null);
+        }
+    }
+
+    public static Dialog createColorSelectDialog(Activity parentActivity, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        int currentColor;
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+        if (globalGroup) {
+            currentColor = preferences.getInt("GroupLed", -16776961);
+        } else if (globalAll) {
+            currentColor = preferences.getInt("MessagesLed", -16776961);
+        } else {
+            if (preferences.contains("color_" + dialog_id)) {
+                currentColor = preferences.getInt("color_" + dialog_id, -16776961);
+            } else if (((int) dialog_id) < 0) {
+                currentColor = preferences.getInt("GroupLed", -16776961);
+            } else {
+                currentColor = preferences.getInt("MessagesLed", -16776961);
+            }
+        }
+        View linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        String[] descriptions = new String[]{LocaleController.getString("ColorRed", C0446R.string.ColorRed), LocaleController.getString("ColorOrange", C0446R.string.ColorOrange), LocaleController.getString("ColorYellow", C0446R.string.ColorYellow), LocaleController.getString("ColorGreen", C0446R.string.ColorGreen), LocaleController.getString("ColorCyan", C0446R.string.ColorCyan), LocaleController.getString("ColorBlue", C0446R.string.ColorBlue), LocaleController.getString("ColorViolet", C0446R.string.ColorViolet), LocaleController.getString("ColorPink", C0446R.string.ColorPink), LocaleController.getString("ColorWhite", C0446R.string.ColorWhite)};
+        final int[] selectedColor = new int[]{currentColor};
+        for (int a = 0; a < 9; a++) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(TextColorCell.colors[a], TextColorCell.colors[a]);
+            cell.setTextAndValue(descriptions[a], currentColor == TextColorCell.colorsToSave[a]);
+            linearLayout.addView(cell);
+            linearLayout = linearLayout;
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selectedColor[0] = TextColorCell.colorsToSave[((Integer) v.getTag()).intValue()];
                 }
             });
         }
-        Builder builder = new Builder(context);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("LedColor", C0446R.string.LedColor));
         builder.setView(linearLayout);
-        final boolean z3 = z2;
-        final int[] iArr2 = iArr;
-        final boolean z4 = z;
-        final long j3 = j2;
-        final Runnable runnable2 = runnable;
+        final boolean z = globalAll;
+        final boolean z2 = globalGroup;
+        final long j = dialog_id;
+        final Runnable runnable = onSelect;
         builder.setPositiveButton(LocaleController.getString("Set", C0446R.string.Set), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                if (z3 != 0) {
-                    dialogInterface.putInt("MessagesLed", iArr2[0]);
-                } else if (z4 != 0) {
-                    dialogInterface.putInt("GroupLed", iArr2[0]);
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                if (z) {
+                    editor.putInt("MessagesLed", selectedColor[0]);
+                } else if (z2) {
+                    editor.putInt("GroupLed", selectedColor[0]);
                 } else {
-                    i = new StringBuilder();
-                    i.append("color_");
-                    i.append(j3);
-                    dialogInterface.putInt(i.toString(), iArr2[0]);
+                    editor.putInt("color_" + j, selectedColor[0]);
                 }
-                dialogInterface.commit();
+                editor.commit();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        });
+        final boolean z3 = globalAll;
+        final boolean z4 = globalGroup;
+        final long j2 = dialog_id;
+        final Runnable runnable2 = onSelect;
+        builder.setNeutralButton(LocaleController.getString("LedDisabled", C0446R.string.LedDisabled), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                if (z3) {
+                    editor.putInt("MessagesLed", 0);
+                } else if (z4) {
+                    editor.putInt("GroupLed", 0);
+                } else {
+                    editor.putInt("color_" + j2, 0);
+                }
+                editor.commit();
                 if (runnable2 != null) {
                     runnable2.run();
                 }
             }
         });
-        z3 = z2;
-        final boolean z5 = z;
-        final long j4 = j2;
-        final Runnable runnable3 = runnable;
-        builder.setNeutralButton(LocaleController.getString("LedDisabled", C0446R.string.LedDisabled), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                if (z3 != 0) {
-                    dialogInterface.putInt("MessagesLed", 0);
-                } else if (z5 != 0) {
-                    dialogInterface.putInt("GroupLed", 0);
-                } else {
-                    i = new StringBuilder();
-                    i.append("color_");
-                    i.append(j4);
-                    dialogInterface.putInt(i.toString(), 0);
-                }
-                dialogInterface.commit();
-                if (runnable3 != null) {
-                    runnable3.run();
-                }
-            }
-        });
-        if (!(z2 || z)) {
-            final Runnable runnable4 = runnable;
+        if (!(globalAll || globalGroup)) {
+            final long j3 = dialog_id;
+            final Runnable runnable3 = onSelect;
             builder.setNegativeButton(LocaleController.getString("Default", C0446R.string.Default), new OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                    i = new StringBuilder();
-                    i.append("color_");
-                    i.append(j2);
-                    dialogInterface.remove(i.toString());
-                    dialogInterface.commit();
-                    if (runnable4 != null) {
-                        runnable4.run();
+                public void onClick(DialogInterface dialog, int which) {
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                    editor.remove("color_" + j3);
+                    editor.commit();
+                    if (runnable3 != null) {
+                        runnable3.run();
                     }
                 }
             });
@@ -801,386 +749,79 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    public static Dialog createVibrationSelectDialog(Activity activity, BaseFragment baseFragment, long j, boolean z, boolean z2, Runnable runnable) {
-        z = j != 0 ? "vibrate_" : z ? "vibrate_group" : "vibrate_messages";
-        return createVibrationSelectDialog(activity, baseFragment, j, z, runnable);
-    }
-
-    public static Dialog createVibrationSelectDialog(Activity activity, BaseFragment baseFragment, long j, String str, Runnable runnable) {
-        String[] strArr;
-        Context context = activity;
-        long j2 = j;
-        String str2 = str;
-        SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-        boolean z = true;
-        int[] iArr = new int[1];
-        boolean z2 = false;
-        if (j2 != 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(str2);
-            stringBuilder.append(j2);
-            iArr[0] = notificationsSettings.getInt(stringBuilder.toString(), 0);
-            if (iArr[0] == 3) {
-                iArr[0] = 2;
-            } else if (iArr[0] == 2) {
-                iArr[0] = 3;
-            }
-            strArr = new String[]{LocaleController.getString("VibrationDefault", C0446R.string.VibrationDefault), LocaleController.getString("Short", C0446R.string.Short), LocaleController.getString("Long", C0446R.string.Long), LocaleController.getString("VibrationDisabled", C0446R.string.VibrationDisabled)};
+    public static Dialog createVibrationSelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        String prefix;
+        if (dialog_id != 0) {
+            prefix = "vibrate_";
         } else {
-            iArr[0] = notificationsSettings.getInt(str2, 0);
-            if (iArr[0] == 0) {
-                iArr[0] = 1;
-            } else if (iArr[0] == 1) {
-                iArr[0] = 2;
-            } else if (iArr[0] == 2) {
-                iArr[0] = 0;
-            }
-            strArr = new String[]{LocaleController.getString("VibrationDisabled", C0446R.string.VibrationDisabled), LocaleController.getString("VibrationDefault", C0446R.string.VibrationDefault), LocaleController.getString("Short", C0446R.string.Short), LocaleController.getString("Long", C0446R.string.Long), LocaleController.getString("OnlyIfSilent", C0446R.string.OnlyIfSilent)};
+            prefix = globalGroup ? "vibrate_group" : "vibrate_messages";
         }
-        String[] strArr2 = strArr;
-        View linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(1);
-        int i = 0;
-        while (i < strArr2.length) {
-            View radioColorCell = new RadioColorCell(context);
-            radioColorCell.setPadding(AndroidUtilities.dp(4.0f), z2, AndroidUtilities.dp(4.0f), z2);
-            radioColorCell.setTag(Integer.valueOf(i));
-            radioColorCell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            radioColorCell.setTextAndValue(strArr2[i], iArr[z2] == i ? z : z2);
-            linearLayout.addView(radioColorCell);
-            final int[] iArr2 = iArr;
-            final long j3 = j2;
-            C10788 c10788 = r1;
-            final String str3 = str2;
-            View view = radioColorCell;
-            final BaseFragment baseFragment2 = baseFragment;
-            int i2 = i;
-            final Runnable runnable2 = runnable;
-            C10788 c107882 = new View.OnClickListener() {
-                public void onClick(View view) {
-                    iArr2[0] = ((Integer) view.getTag()).intValue();
-                    view = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                    if (j3 != 0) {
-                        StringBuilder stringBuilder;
-                        if (iArr2[0] == 0) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(str3);
-                            stringBuilder.append(j3);
-                            view.putInt(stringBuilder.toString(), 0);
-                        } else if (iArr2[0] == 1) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(str3);
-                            stringBuilder.append(j3);
-                            view.putInt(stringBuilder.toString(), 1);
-                        } else if (iArr2[0] == 2) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(str3);
-                            stringBuilder.append(j3);
-                            view.putInt(stringBuilder.toString(), 3);
-                        } else if (iArr2[0] == 3) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(str3);
-                            stringBuilder.append(j3);
-                            view.putInt(stringBuilder.toString(), 2);
-                        }
-                    } else if (iArr2[0] == 0) {
-                        view.putInt(str3, 2);
-                    } else if (iArr2[0] == 1) {
-                        view.putInt(str3, 0);
-                    } else if (iArr2[0] == 2) {
-                        view.putInt(str3, 1);
-                    } else if (iArr2[0] == 3) {
-                        view.putInt(str3, 3);
-                    } else if (iArr2[0] == 4) {
-                        view.putInt(str3, 4);
-                    }
-                    view.commit();
-                    if (baseFragment2 != null) {
-                        baseFragment2.dismissCurrentDialig();
-                    }
-                    if (runnable2 != null) {
-                        runnable2.run();
-                    }
-                }
-            };
-            view.setOnClickListener(c10788);
-            i = i2 + 1;
-            z = true;
-            z2 = false;
-        }
-        Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("Vibrate", C0446R.string.Vibrate));
-        builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-        return builder.create();
+        return createVibrationSelectDialog(parentActivity, parentFragment, dialog_id, prefix, onSelect);
     }
 
-    public static Dialog createLocationUpdateDialog(Activity activity, User user, IntCallback intCallback) {
-        Context context = activity;
-        final int[] iArr = new int[1];
-        int i = 3;
-        String[] strArr = new String[]{LocaleController.getString("SendLiveLocationFor15m", C0446R.string.SendLiveLocationFor15m), LocaleController.getString("SendLiveLocationFor1h", C0446R.string.SendLiveLocationFor1h), LocaleController.getString("SendLiveLocationFor8h", C0446R.string.SendLiveLocationFor8h)};
-        final View linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(1);
-        View textView = new TextView(context);
-        if (user != null) {
-            textView.setText(LocaleController.formatString("LiveLocationAlertPrivate", C0446R.string.LiveLocationAlertPrivate, UserObject.getFirstName(user)));
+    public static Dialog createVibrationSelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, String prefKeyPrefix, Runnable onSelect) {
+        String[] descriptions;
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+        final int[] selected = new int[1];
+        if (dialog_id != 0) {
+            selected[0] = preferences.getInt(prefKeyPrefix + dialog_id, 0);
+            if (selected[0] == 3) {
+                selected[0] = 2;
+            } else if (selected[0] == 2) {
+                selected[0] = 3;
+            }
+            descriptions = new String[]{LocaleController.getString("VibrationDefault", C0446R.string.VibrationDefault), LocaleController.getString("Short", C0446R.string.Short), LocaleController.getString("Long", C0446R.string.Long), LocaleController.getString("VibrationDisabled", C0446R.string.VibrationDisabled)};
         } else {
-            textView.setText(LocaleController.getString("LiveLocationAlertGroup", C0446R.string.LiveLocationAlertGroup));
-        }
-        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        textView.setTextSize(1, 16.0f);
-        textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        if (LocaleController.isRTL) {
-            i = 5;
-        }
-        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, i | 48, 24, 0, 24, 8));
-        i = 0;
-        while (i < strArr.length) {
-            textView = new RadioColorCell(context);
-            textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            textView.setTag(Integer.valueOf(i));
-            textView.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            textView.setTextAndValue(strArr[i], iArr[0] == i);
-            linearLayout.addView(textView);
-            textView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    iArr[0] = ((Integer) view.getTag()).intValue();
-                    int childCount = linearLayout.getChildCount();
-                    for (int i = 0; i < childCount; i++) {
-                        View childAt = linearLayout.getChildAt(i);
-                        if (childAt instanceof RadioColorCell) {
-                            ((RadioColorCell) childAt).setChecked(childAt == view, true);
-                        }
-                    }
-                }
-            });
-            i++;
-        }
-        Builder builder = new Builder(context);
-        builder.setTopImage(new ShareLocationDrawable(context, false), Theme.getColor(Theme.key_dialogTopBackground));
-        builder.setView(linearLayout);
-        final IntCallback intCallback2 = intCallback;
-        builder.setPositiveButton(LocaleController.getString("ShareFile", C0446R.string.ShareFile), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = iArr[0] == null ? 900 : iArr[0] == 1 ? 3600 : 28800;
-                intCallback2.run(dialogInterface);
+            selected[0] = preferences.getInt(prefKeyPrefix, 0);
+            if (selected[0] == 0) {
+                selected[0] = 1;
+            } else if (selected[0] == 1) {
+                selected[0] = 2;
+            } else if (selected[0] == 2) {
+                selected[0] = 0;
             }
-        });
-        builder.setNeutralButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-        return builder.create();
-    }
-
-    public static Dialog createFreeSpaceDialog(LaunchActivity launchActivity) {
-        final Context context = launchActivity;
-        final int[] iArr = new int[1];
-        int i = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
-        int i2 = 3;
-        if (i == 2) {
-            iArr[0] = 3;
-        } else if (i == 0) {
-            iArr[0] = 1;
-        } else if (i == 1) {
-            iArr[0] = 2;
-        } else if (i == 3) {
-            iArr[0] = 0;
+            descriptions = new String[]{LocaleController.getString("VibrationDisabled", C0446R.string.VibrationDisabled), LocaleController.getString("VibrationDefault", C0446R.string.VibrationDefault), LocaleController.getString("Short", C0446R.string.Short), LocaleController.getString("Long", C0446R.string.Long), LocaleController.getString("OnlyIfSilent", C0446R.string.OnlyIfSilent)};
         }
-        String[] strArr = new String[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("LowDiskSpaceNeverRemove", C0446R.string.LowDiskSpaceNeverRemove)};
-        final View linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        View textView = new TextView(context);
-        textView.setText(LocaleController.getString("LowDiskSpaceTitle2", C0446R.string.LowDiskSpaceTitle2));
-        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        textView.setTextSize(1, 16.0f);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        }
-        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, i2 | 48, 24, 0, 24, 8));
-        i2 = 0;
-        while (i2 < strArr.length) {
-            textView = new RadioColorCell(context);
-            textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            textView.setTag(Integer.valueOf(i2));
-            textView.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            textView.setTextAndValue(strArr[i2], iArr[0] == i2);
-            linearLayout.addView(textView);
-            textView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    int intValue = ((Integer) view.getTag()).intValue();
-                    if (intValue == 0) {
-                        iArr[0] = 3;
-                    } else if (intValue == 1) {
-                        iArr[0] = 0;
-                    } else if (intValue == 2) {
-                        iArr[0] = 1;
-                    } else if (intValue == 3) {
-                        iArr[0] = 2;
-                    }
-                    intValue = linearLayout.getChildCount();
-                    for (int i = 0; i < intValue; i++) {
-                        View childAt = linearLayout.getChildAt(i);
-                        if (childAt instanceof RadioColorCell) {
-                            ((RadioColorCell) childAt).setChecked(childAt == view, true);
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            final long j = dialog_id;
+            final String str = prefKeyPrefix;
+            final BaseFragment baseFragment = parentFragment;
+            final Runnable runnable = onSelect;
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                    if (j != 0) {
+                        if (selected[0] == 0) {
+                            editor.putInt(str + j, 0);
+                        } else if (selected[0] == 1) {
+                            editor.putInt(str + j, 1);
+                        } else if (selected[0] == 2) {
+                            editor.putInt(str + j, 3);
+                        } else if (selected[0] == 3) {
+                            editor.putInt(str + j, 2);
                         }
+                    } else if (selected[0] == 0) {
+                        editor.putInt(str, 2);
+                    } else if (selected[0] == 1) {
+                        editor.putInt(str, 0);
+                    } else if (selected[0] == 2) {
+                        editor.putInt(str, 1);
+                    } else if (selected[0] == 3) {
+                        editor.putInt(str, 3);
+                    } else if (selected[0] == 4) {
+                        editor.putInt(str, 4);
                     }
-                }
-            });
-            i2++;
-        }
-        Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", C0446R.string.LowDiskSpaceTitle));
-        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", C0446R.string.LowDiskSpaceMessage));
-        builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                MessagesController.getGlobalMainSettings().edit().putInt("keep_media", iArr[0]).commit();
-            }
-        });
-        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                context.presentFragment(new CacheControlActivity());
-            }
-        });
-        return builder.create();
-    }
-
-    public static Dialog createPrioritySelectDialog(Activity activity, BaseFragment baseFragment, long j, boolean z, boolean z2, Runnable runnable) {
-        String[] strArr;
-        Context context = activity;
-        long j2 = j;
-        SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-        boolean z3 = true;
-        int[] iArr = new int[1];
-        boolean z4 = false;
-        if (j2 != 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("priority_");
-            stringBuilder.append(j2);
-            iArr[0] = notificationsSettings.getInt(stringBuilder.toString(), 3);
-            if (iArr[0] == 3) {
-                iArr[0] = 0;
-            } else if (iArr[0] == 4) {
-                iArr[0] = 1;
-            } else if (iArr[0] == 5) {
-                iArr[0] = 2;
-            } else if (iArr[0] == 0) {
-                iArr[0] = 3;
-            } else {
-                iArr[0] = 4;
-            }
-            strArr = new String[]{LocaleController.getString("NotificationsPrioritySettings", C0446R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityLow", C0446R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", C0446R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", C0446R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", C0446R.string.NotificationsPriorityUrgent)};
-        } else {
-            if (z2) {
-                iArr[0] = notificationsSettings.getInt("priority_messages", 1);
-            } else if (z) {
-                iArr[0] = notificationsSettings.getInt("priority_group", 1);
-            }
-            if (iArr[0] == 4) {
-                iArr[0] = 0;
-            } else if (iArr[0] == 5) {
-                iArr[0] = 1;
-            } else if (iArr[0] == 0) {
-                iArr[0] = 2;
-            } else {
-                iArr[0] = 3;
-            }
-            strArr = new String[]{LocaleController.getString("NotificationsPriorityLow", C0446R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", C0446R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", C0446R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", C0446R.string.NotificationsPriorityUrgent)};
-        }
-        String[] strArr2 = strArr;
-        View linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(1);
-        int i = 0;
-        while (i < strArr2.length) {
-            View radioColorCell = new RadioColorCell(context);
-            radioColorCell.setPadding(AndroidUtilities.dp(4.0f), z4, AndroidUtilities.dp(4.0f), z4);
-            radioColorCell.setTag(Integer.valueOf(i));
-            radioColorCell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            radioColorCell.setTextAndValue(strArr2[i], iArr[z4] == i ? z3 : z4);
-            linearLayout.addView(radioColorCell);
-            final int[] iArr2 = iArr;
-            final long j3 = j2;
-            final boolean z5 = z;
-            AnonymousClass14 anonymousClass14 = r1;
-            final BaseFragment baseFragment2 = baseFragment;
-            View view = radioColorCell;
-            final Runnable runnable2 = runnable;
-            AnonymousClass14 anonymousClass142 = new View.OnClickListener() {
-                public void onClick(View view) {
-                    int i = 0;
-                    iArr2[0] = ((Integer) view.getTag()).intValue();
-                    view = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                    if (j3 != 0) {
-                        if (iArr2[0] == 0) {
-                            i = 3;
-                        } else if (iArr2[0] == 1) {
-                            i = 4;
-                        } else if (iArr2[0] == 2) {
-                            i = 5;
-                        } else if (iArr2[0] != 3) {
-                            i = 1;
-                        }
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("priority_");
-                        stringBuilder.append(j3);
-                        view.putInt(stringBuilder.toString(), i);
-                    } else {
-                        if (iArr2[0] == 0) {
-                            i = 4;
-                        } else if (iArr2[0] == 1) {
-                            i = 5;
-                        } else if (iArr2[0] != 2) {
-                            i = 1;
-                        }
-                        view.putInt(z5 ? "priority_group" : "priority_messages", i);
-                    }
-                    view.commit();
-                    if (baseFragment2 != null) {
-                        baseFragment2.dismissCurrentDialig();
-                    }
-                    if (runnable2 != null) {
-                        runnable2.run();
-                    }
-                }
-            };
-            view.setOnClickListener(anonymousClass14);
-            i++;
-            z3 = true;
-            z4 = false;
-        }
-        Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("NotificationsImportance", C0446R.string.NotificationsImportance));
-        builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-        return builder.create();
-    }
-
-    public static Dialog createPopupSelectDialog(Activity activity, final BaseFragment baseFragment, final boolean z, boolean z2, final Runnable runnable) {
-        SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-        final int[] iArr = new int[1];
-        if (z2) {
-            iArr[0] = notificationsSettings.getInt("popupAll", 0);
-        } else if (z) {
-            iArr[0] = notificationsSettings.getInt("popupGroup", 0);
-        }
-        z2 = new String[]{LocaleController.getString("NoPopup", C0446R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", C0446R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", C0446R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", C0446R.string.AlwaysShowPopup)};
-        View linearLayout = new LinearLayout(activity);
-        linearLayout.setOrientation(1);
-        int i = 0;
-        while (i < z2.length) {
-            View radioColorCell = new RadioColorCell(activity);
-            radioColorCell.setTag(Integer.valueOf(i));
-            radioColorCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            radioColorCell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            radioColorCell.setTextAndValue(z2[i], iArr[0] == i);
-            linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    iArr[0] = ((Integer) view.getTag()).intValue();
-                    view = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
-                    view.putInt(z ? "popupGroup" : "popupAll", iArr[0]);
-                    view.commit();
+                    editor.commit();
                     if (baseFragment != null) {
                         baseFragment.dismissCurrentDialig();
                     }
@@ -1189,48 +830,341 @@ public class AlertsCreator {
                     }
                 }
             });
-            i++;
+            a++;
         }
-        baseFragment = new Builder((Context) activity);
-        baseFragment.setTitle(LocaleController.getString("PopupNotification", true));
-        baseFragment.setView(linearLayout);
-        baseFragment.setPositiveButton(LocaleController.getString("Cancel", true), false);
-        return baseFragment.create();
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTitle(LocaleController.getString("Vibrate", C0446R.string.Vibrate));
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        return builder.create();
     }
 
-    public static Dialog createSingleChoiceDialog(Activity activity, final BaseFragment baseFragment, String[] strArr, String str, int i, final OnClickListener onClickListener) {
-        View linearLayout = new LinearLayout(activity);
+    public static Dialog createLocationUpdateDialog(Activity parentActivity, User user, IntCallback callback) {
+        final int[] selected = new int[1];
+        String[] descriptions = new String[]{LocaleController.getString("SendLiveLocationFor15m", C0446R.string.SendLiveLocationFor15m), LocaleController.getString("SendLiveLocationFor1h", C0446R.string.SendLiveLocationFor1h), LocaleController.getString("SendLiveLocationFor8h", C0446R.string.SendLiveLocationFor8h)};
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        int i2 = 0;
-        while (i2 < strArr.length) {
-            View radioColorCell = new RadioColorCell(activity);
-            radioColorCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            radioColorCell.setTag(Integer.valueOf(i2));
-            radioColorCell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            radioColorCell.setTextAndValue(strArr[i2], i == i2);
-            linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    view = ((Integer) view.getTag()).intValue();
+        TextView titleTextView = new TextView(parentActivity);
+        if (user != null) {
+            titleTextView.setText(LocaleController.formatString("LiveLocationAlertPrivate", C0446R.string.LiveLocationAlertPrivate, UserObject.getFirstName(user)));
+        } else {
+            titleTextView.setText(LocaleController.getString("LiveLocationAlertGroup", C0446R.string.LiveLocationAlertGroup));
+        }
+        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        titleTextView.setTextSize(1, 16.0f);
+        titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        linearLayout.addView(titleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, 8));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = linearLayout.getChildAt(a);
+                        if (child instanceof RadioColorCell) {
+                            boolean z;
+                            RadioColorCell radioColorCell = (RadioColorCell) child;
+                            if (child == v) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            radioColorCell.setChecked(z, true);
+                        }
+                    }
+                }
+            });
+            a++;
+        }
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTopImage(new ShareLocationDrawable(parentActivity, false), Theme.getColor(Theme.key_dialogTopBackground));
+        builder.setView(linearLayout);
+        final IntCallback intCallback = callback;
+        builder.setPositiveButton(LocaleController.getString("ShareFile", C0446R.string.ShareFile), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                int time;
+                if (selected[0] == 0) {
+                    time = 900;
+                } else if (selected[0] == 1) {
+                    time = 3600;
+                } else {
+                    time = 28800;
+                }
+                intCallback.run(time);
+            }
+        });
+        builder.setNeutralButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static Dialog createFreeSpaceDialog(LaunchActivity parentActivity) {
+        final int[] selected = new int[1];
+        int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+        if (keepMedia == 2) {
+            selected[0] = 3;
+        } else if (keepMedia == 0) {
+            selected[0] = 1;
+        } else if (keepMedia == 1) {
+            selected[0] = 2;
+        } else if (keepMedia == 3) {
+            selected[0] = 0;
+        }
+        String[] descriptions = new String[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("LowDiskSpaceNeverRemove", C0446R.string.LowDiskSpaceNeverRemove)};
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        View titleTextView = new TextView(parentActivity);
+        titleTextView.setText(LocaleController.getString("LowDiskSpaceTitle2", C0446R.string.LowDiskSpaceTitle2));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        titleTextView.setTextSize(1, 16.0f);
+        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        linearLayout.addView(titleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, 8));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int num = ((Integer) v.getTag()).intValue();
+                    if (num == 0) {
+                        selected[0] = 3;
+                    } else if (num == 1) {
+                        selected[0] = 0;
+                    } else if (num == 2) {
+                        selected[0] = 1;
+                    } else if (num == 3) {
+                        selected[0] = 2;
+                    }
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = linearLayout.getChildAt(a);
+                        if (child instanceof RadioColorCell) {
+                            boolean z;
+                            RadioColorCell radioColorCell = (RadioColorCell) child;
+                            if (child == v) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            radioColorCell.setChecked(z, true);
+                        }
+                    }
+                }
+            });
+            a++;
+        }
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", C0446R.string.LowDiskSpaceTitle));
+        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", C0446R.string.LowDiskSpaceMessage));
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                MessagesController.getGlobalMainSettings().edit().putInt("keep_media", selected[0]).commit();
+            }
+        });
+        final LaunchActivity launchActivity = parentActivity;
+        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                launchActivity.presentFragment(new CacheControlActivity());
+            }
+        });
+        return builder.create();
+    }
+
+    public static Dialog createPrioritySelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        String[] descriptions;
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+        final int[] selected = new int[1];
+        if (dialog_id != 0) {
+            selected[0] = preferences.getInt("priority_" + dialog_id, 3);
+            if (selected[0] == 3) {
+                selected[0] = 0;
+            } else if (selected[0] == 4) {
+                selected[0] = 1;
+            } else if (selected[0] == 5) {
+                selected[0] = 2;
+            } else if (selected[0] == 0) {
+                selected[0] = 3;
+            } else {
+                selected[0] = 4;
+            }
+            descriptions = new String[]{LocaleController.getString("NotificationsPrioritySettings", C0446R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityLow", C0446R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", C0446R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", C0446R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", C0446R.string.NotificationsPriorityUrgent)};
+        } else {
+            if (globalAll) {
+                selected[0] = preferences.getInt("priority_messages", 1);
+            } else if (globalGroup) {
+                selected[0] = preferences.getInt("priority_group", 1);
+            }
+            if (selected[0] == 4) {
+                selected[0] = 0;
+            } else if (selected[0] == 5) {
+                selected[0] = 1;
+            } else if (selected[0] == 0) {
+                selected[0] = 2;
+            } else {
+                selected[0] = 3;
+            }
+            descriptions = new String[]{LocaleController.getString("NotificationsPriorityLow", C0446R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", C0446R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", C0446R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", C0446R.string.NotificationsPriorityUrgent)};
+        }
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            final long j = dialog_id;
+            final boolean z = globalGroup;
+            final BaseFragment baseFragment = parentFragment;
+            final Runnable runnable = onSelect;
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                    int option;
+                    if (j != 0) {
+                        if (selected[0] == 0) {
+                            option = 3;
+                        } else if (selected[0] == 1) {
+                            option = 4;
+                        } else if (selected[0] == 2) {
+                            option = 5;
+                        } else if (selected[0] == 3) {
+                            option = 0;
+                        } else {
+                            option = 1;
+                        }
+                        editor.putInt("priority_" + j, option);
+                    } else {
+                        String str;
+                        if (selected[0] == 0) {
+                            option = 4;
+                        } else if (selected[0] == 1) {
+                            option = 5;
+                        } else if (selected[0] == 2) {
+                            option = 0;
+                        } else {
+                            option = 1;
+                        }
+                        if (z) {
+                            str = "priority_group";
+                        } else {
+                            str = "priority_messages";
+                        }
+                        editor.putInt(str, option);
+                    }
+                    editor.commit();
                     if (baseFragment != null) {
                         baseFragment.dismissCurrentDialig();
                     }
-                    onClickListener.onClick(null, view);
+                    if (runnable != null) {
+                        runnable.run();
+                    }
                 }
             });
-            i2++;
+            a++;
         }
-        baseFragment = new Builder((Context) activity);
-        baseFragment.setTitle(str);
-        baseFragment.setView(linearLayout);
-        baseFragment.setPositiveButton(LocaleController.getString("Cancel", NUM), null);
-        return baseFragment.create();
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTitle(LocaleController.getString("NotificationsImportance", C0446R.string.NotificationsImportance));
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, boolean globalAll, final Runnable onSelect) {
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+        final int[] selected = new int[1];
+        if (globalAll) {
+            selected[0] = preferences.getInt("popupAll", 0);
+        } else if (globalGroup) {
+            selected[0] = preferences.getInt("popupGroup", 0);
+        }
+        String[] descriptions = new String[]{LocaleController.getString("NoPopup", C0446R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", C0446R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", C0446R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", C0446R.string.AlwaysShowPopup)};
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                    editor.putInt(globalGroup ? "popupGroup" : "popupAll", selected[0]);
+                    editor.commit();
+                    if (parentFragment != null) {
+                        parentFragment.dismissCurrentDialig();
+                    }
+                    if (onSelect != null) {
+                        onSelect.run();
+                    }
+                }
+            });
+            a++;
+        }
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTitle(LocaleController.getString("PopupNotification", C0446R.string.PopupNotification));
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static Dialog createSingleChoiceDialog(Activity parentActivity, final BaseFragment parentFragment, String[] options, String title, int selected, final OnClickListener listener) {
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        for (int a = 0; a < options.length; a++) {
+            boolean z;
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            String str = options[a];
+            if (selected == a) {
+                z = true;
+            } else {
+                z = false;
+            }
+            cell.setTextAndValue(str, z);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int sel = ((Integer) v.getTag()).intValue();
+                    if (parentFragment != null) {
+                        parentFragment.dismissCurrentDialig();
+                    }
+                    listener.onClick(null, sel);
+                }
+            });
+        }
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTitle(title);
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        return builder.create();
     }
 
     public static Builder createTTLAlert(Context context, final EncryptedChat encryptedChat) {
         Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("MessageLifetime", C0446R.string.MessageLifetime));
-        final View numberPicker = new NumberPicker(context);
+        final NumberPicker numberPicker = new NumberPicker(context);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(20);
         if (encryptedChat.ttl > 0 && encryptedChat.ttl < 16) {
@@ -1249,47 +1183,50 @@ public class AlertsCreator {
             numberPicker.setValue(0);
         }
         numberPicker.setFormatter(new Formatter() {
-            public String format(int i) {
-                if (i == 0) {
+            public String format(int value) {
+                if (value == 0) {
                     return LocaleController.getString("ShortMessageLifetimeForever", C0446R.string.ShortMessageLifetimeForever);
                 }
-                if (i >= 1 && i < 16) {
-                    return LocaleController.formatTTLString(i);
+                if (value >= 1 && value < 16) {
+                    return LocaleController.formatTTLString(value);
                 }
-                if (i == 16) {
+                if (value == 16) {
                     return LocaleController.formatTTLString(30);
                 }
-                if (i == 17) {
+                if (value == 17) {
                     return LocaleController.formatTTLString(60);
                 }
-                if (i == 18) {
+                if (value == 18) {
                     return LocaleController.formatTTLString(3600);
                 }
-                if (i == 19) {
+                if (value == 19) {
                     return LocaleController.formatTTLString(86400);
                 }
-                return i == 20 ? LocaleController.formatTTLString(604800) : TtmlNode.ANONYMOUS_REGION_ID;
+                if (value == 20) {
+                    return LocaleController.formatTTLString(604800);
+                }
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
         });
         builder.setView(numberPicker);
         builder.setNegativeButton(LocaleController.getString("Done", C0446R.string.Done), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = encryptedChat.ttl;
-                i = numberPicker.getValue();
-                if (i >= 0 && i < 16) {
-                    encryptedChat.ttl = i;
-                } else if (i == 16) {
+            public void onClick(DialogInterface dialog, int which) {
+                int oldValue = encryptedChat.ttl;
+                which = numberPicker.getValue();
+                if (which >= 0 && which < 16) {
+                    encryptedChat.ttl = which;
+                } else if (which == 16) {
                     encryptedChat.ttl = 30;
-                } else if (i == 17) {
+                } else if (which == 17) {
                     encryptedChat.ttl = 60;
-                } else if (i == 18) {
+                } else if (which == 18) {
                     encryptedChat.ttl = 3600;
-                } else if (i == 19) {
+                } else if (which == 19) {
                     encryptedChat.ttl = 86400;
-                } else if (i == 20) {
+                } else if (which == 20) {
                     encryptedChat.ttl = 604800;
                 }
-                if (dialogInterface != encryptedChat.ttl) {
+                if (oldValue != encryptedChat.ttl) {
                     SecretChatHelper.getInstance(UserConfig.selectedAccount).sendTTLMessage(encryptedChat, null);
                     MessagesStorage.getInstance(UserConfig.selectedAccount).updateEncryptedChatTTL(encryptedChat);
                 }

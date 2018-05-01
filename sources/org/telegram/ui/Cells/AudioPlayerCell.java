@@ -24,6 +24,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.RadialProgress;
 
 public class AudioPlayerCell extends View implements FileDownloadProgressListener {
@@ -43,44 +44,41 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
 
-    public void onProgressUpload(String str, float f, boolean z) {
-    }
-
     public AudioPlayerCell(Context context) {
         super(context);
     }
 
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int i, int i2) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.descriptionLayout = null;
         this.titleLayout = null;
-        int size = (MeasureSpec.getSize(i) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
+        int maxWidth = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
         try {
-            String musicTitle = r1.currentMessageObject.getMusicTitle();
-            r1.titleLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace('\n', ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(musicTitle)), size), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, size + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String title = this.currentMessageObject.getMusicTitle();
+            this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
         try {
-            musicTitle = r1.currentMessageObject.getMusicAuthor();
-            r1.descriptionLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace('\n', ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(musicTitle)), size), TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String author = this.currentMessageObject.getMusicAuthor();
+            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(author.replace('\n', ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(author)), maxWidth), TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e2) {
             FileLog.m3e(e2);
         }
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(56.0f));
-        int size2 = LocaleController.isRTL ? (MeasureSpec.getSize(i) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
-        RadialProgress radialProgress = r1.radialProgress;
-        int dp = AndroidUtilities.dp(4.0f) + size2;
-        r1.buttonX = dp;
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(56.0f));
+        int x = LocaleController.isRTL ? (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
+        RadialProgress radialProgress = this.radialProgress;
+        int dp = AndroidUtilities.dp(4.0f) + x;
+        this.buttonX = dp;
         int dp2 = AndroidUtilities.dp(6.0f);
-        r1.buttonY = dp2;
-        radialProgress.setProgressRect(dp, dp2, size2 + AndroidUtilities.dp(48.0f), AndroidUtilities.dp(50.0f));
+        this.buttonY = dp2;
+        radialProgress.setProgressRect(dp, dp2, AndroidUtilities.dp(48.0f) + x, AndroidUtilities.dp(50.0f));
     }
 
     public void setMessageObject(MessageObject messageObject) {
         this.currentMessageObject = messageObject;
         requestLayout();
-        updateButtonState(null);
+        updateButtonState(false);
     }
 
     protected void onDetachedFromWindow() {
@@ -92,77 +90,58 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         return this.currentMessageObject;
     }
 
-    private boolean checkAudioMotionEvent(MotionEvent motionEvent) {
-        boolean z;
-        int x = (int) motionEvent.getX();
-        int y = (int) motionEvent.getY();
-        int dp = AndroidUtilities.dp(36.0f);
+    private boolean checkAudioMotionEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        int side = AndroidUtilities.dp(36.0f);
+        boolean area = false;
         if (this.miniButtonState >= 0) {
-            int dp2 = AndroidUtilities.dp(27.0f);
-            if (x >= this.buttonX + dp2 && x <= (this.buttonX + dp2) + dp && y >= this.buttonY + dp2 && y <= (this.buttonY + dp2) + dp) {
-                z = true;
-                if (motionEvent.getAction() != 0) {
-                    if (z) {
-                        this.miniButtonPressed = true;
-                        invalidate();
-                        updateRadialProgressBackground();
-                        return true;
-                    }
-                } else if (this.miniButtonPressed) {
-                    if (motionEvent.getAction() == 1) {
-                        this.miniButtonPressed = false;
-                        playSoundEffect(0);
-                        didPressedMiniButton(true);
-                        invalidate();
-                    } else if (motionEvent.getAction() != 3) {
-                        this.miniButtonPressed = false;
-                        invalidate();
-                    } else if (motionEvent.getAction() == 2 && !z) {
-                        this.miniButtonPressed = false;
-                        invalidate();
-                    }
-                    updateRadialProgressBackground();
-                }
-                return false;
+            int offset = AndroidUtilities.dp(27.0f);
+            if (x < this.buttonX + offset || x > (this.buttonX + offset) + side || y < this.buttonY + offset || y > (this.buttonY + offset) + side) {
+                area = false;
+            } else {
+                area = true;
             }
         }
-        z = false;
-        if (motionEvent.getAction() != 0) {
-            if (this.miniButtonPressed) {
-                if (motionEvent.getAction() == 1) {
-                    this.miniButtonPressed = false;
-                    playSoundEffect(0);
-                    didPressedMiniButton(true);
-                    invalidate();
-                } else if (motionEvent.getAction() != 3) {
-                    this.miniButtonPressed = false;
-                    invalidate();
-                } else {
-                    this.miniButtonPressed = false;
-                    invalidate();
-                }
-                updateRadialProgressBackground();
+        if (event.getAction() == 0) {
+            if (!area) {
+                return false;
             }
-        } else if (z) {
             this.miniButtonPressed = true;
             invalidate();
             updateRadialProgressBackground();
             return true;
+        } else if (!this.miniButtonPressed) {
+            return false;
+        } else {
+            if (event.getAction() == 1) {
+                this.miniButtonPressed = false;
+                playSoundEffect(0);
+                didPressedMiniButton(true);
+                invalidate();
+            } else if (event.getAction() == 3) {
+                this.miniButtonPressed = false;
+                invalidate();
+            } else if (event.getAction() == 2 && !area) {
+                this.miniButtonPressed = false;
+                invalidate();
+            }
+            updateRadialProgressBackground();
+            return false;
         }
-        return false;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (this.currentMessageObject == null) {
-            return super.onTouchEvent(motionEvent);
+            return super.onTouchEvent(event);
         }
-        boolean checkAudioMotionEvent = checkAudioMotionEvent(motionEvent);
-        if (motionEvent.getAction() == 3) {
-            this.miniButtonPressed = false;
-            this.buttonPressed = false;
-            checkAudioMotionEvent = false;
+        boolean result = checkAudioMotionEvent(event);
+        if (event.getAction() != 3) {
+            return result;
         }
-        return checkAudioMotionEvent;
+        this.miniButtonPressed = false;
+        this.buttonPressed = false;
+        return false;
     }
 
     private void updateRadialProgressBackground() {
@@ -172,14 +151,14 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         }
     }
 
-    private void didPressedMiniButton(boolean z) {
-        if (!this.miniButtonState) {
+    private void didPressedMiniButton(boolean animated) {
+        if (this.miniButtonState == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
             invalidate();
-        } else if (this.miniButtonState) {
+        } else if (this.miniButtonState == 1) {
             if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                 MediaController.getInstance().cleanupPlayer(true, true);
             }
@@ -248,159 +227,144 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
     }
 
     private Drawable getMiniDrawableForCurrentState() {
+        int i = 0;
         if (this.miniButtonState < 0) {
             return null;
         }
         this.radialProgress.setAlphaForPrevious(false);
-        return Theme.chat_fileMiniStatesDrawable[this.miniButtonState + 2][this.miniButtonPressed];
+        CombinedDrawable[] combinedDrawableArr = Theme.chat_fileMiniStatesDrawable[this.miniButtonState + 2];
+        if (this.miniButtonPressed) {
+            i = 1;
+        }
+        return combinedDrawableArr[i];
     }
 
     private Drawable getDrawableForCurrentState() {
+        int i = 0;
         if (this.buttonState == -1) {
             return null;
         }
         this.radialProgress.setAlphaForPrevious(false);
-        return Theme.chat_fileStatesDrawable[this.buttonState + 5][this.buttonPressed];
+        Drawable[] drawableArr = Theme.chat_fileStatesDrawable[this.buttonState + 5];
+        if (this.buttonPressed) {
+            i = 1;
+        }
+        return drawableArr[i];
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateButtonState(boolean z) {
-        File file;
+    public void updateButtonState(boolean animated) {
         String fileName = this.currentMessageObject.getFileName();
+        File cacheFile = null;
         if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
-            file = new File(this.currentMessageObject.messageOwner.attachPath);
+            cacheFile = new File(this.currentMessageObject.messageOwner.attachPath);
+            if (!cacheFile.exists()) {
+                cacheFile = null;
+            }
         }
-        file = null;
-        if (file == null) {
-            file = FileLoader.getPathToAttach(this.currentMessageObject.getDocument());
+        if (cacheFile == null) {
+            cacheFile = FileLoader.getPathToAttach(this.currentMessageObject.getDocument());
         }
-        boolean z2 = false;
         if (TextUtils.isEmpty(fileName)) {
             this.radialProgress.setBackground(null, false, false);
             return;
         }
-        if (file.exists() && file.length() == 0) {
-            file.delete();
+        if (cacheFile.exists() && cacheFile.length() == 0) {
+            cacheFile.delete();
         }
-        boolean exists = file.exists();
+        boolean fileExists = cacheFile.exists();
         if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0) {
-            this.hasMiniProgress = exists ? 1 : 2;
-            exists = true;
+            this.hasMiniProgress = fileExists ? 1 : 2;
+            fileExists = true;
         }
-        Float fileProgress;
+        boolean playing;
+        Float progress;
         if (this.hasMiniProgress != 0) {
-            RadialProgress radialProgress;
-            Drawable miniDrawableForCurrentState;
+            boolean z;
             this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outLoader : Theme.key_chat_inLoader));
-            exists = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (exists) {
-                if (!exists || !MediaController.getInstance().isMessagePaused()) {
-                    this.buttonState = 1;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
-                    if (this.hasMiniProgress != 1) {
-                        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                        this.miniButtonState = -1;
-                    } else {
-                        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
-                        if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                            this.radialProgress.setProgress(0.0f, z);
-                            this.miniButtonState = 0;
-                        } else {
-                            this.miniButtonState = 1;
-                            fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                            if (fileProgress == null) {
-                                this.radialProgress.setProgress(fileProgress.floatValue(), z);
-                            } else {
-                                this.radialProgress.setProgress(0.0f, z);
-                            }
-                        }
-                    }
-                    radialProgress = this.radialProgress;
-                    miniDrawableForCurrentState = getMiniDrawableForCurrentState();
-                    if (this.miniButtonState == 1) {
-                        z2 = true;
-                    }
-                    radialProgress.setMiniBackground(miniDrawableForCurrentState, z2, z);
-                }
+            playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                this.buttonState = 0;
+            } else {
+                this.buttonState = 1;
             }
-            this.buttonState = 0;
-            this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
-            if (this.hasMiniProgress != 1) {
+            this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+            if (this.hasMiniProgress == 1) {
+                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                this.miniButtonState = -1;
+            } else {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
                 if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                     this.miniButtonState = 1;
-                    fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                    if (fileProgress == null) {
-                        this.radialProgress.setProgress(0.0f, z);
+                    progress = ImageLoader.getInstance().getFileProgress(fileName);
+                    if (progress != null) {
+                        this.radialProgress.setProgress(progress.floatValue(), animated);
                     } else {
-                        this.radialProgress.setProgress(fileProgress.floatValue(), z);
+                        this.radialProgress.setProgress(0.0f, animated);
                     }
                 } else {
-                    this.radialProgress.setProgress(0.0f, z);
+                    this.radialProgress.setProgress(0.0f, animated);
                     this.miniButtonState = 0;
                 }
-            } else {
-                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                this.miniButtonState = -1;
             }
-            radialProgress = this.radialProgress;
-            miniDrawableForCurrentState = getMiniDrawableForCurrentState();
+            RadialProgress radialProgress = this.radialProgress;
+            Drawable miniDrawableForCurrentState = getMiniDrawableForCurrentState();
             if (this.miniButtonState == 1) {
-                z2 = true;
+                z = true;
+            } else {
+                z = false;
             }
-            radialProgress.setMiniBackground(miniDrawableForCurrentState, z2, z);
-        } else if (exists) {
+            radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated);
+        } else if (fileExists) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (isPlayingMessage) {
-                if (!isPlayingMessage || !MediaController.getInstance().isMessagePaused()) {
-                    this.buttonState = 1;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
-                    invalidate();
-                }
+            playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                this.buttonState = 0;
+            } else {
+                this.buttonState = 1;
             }
-            this.buttonState = 0;
-            this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+            this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
             invalidate();
         } else {
             DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
             if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                 this.buttonState = 4;
-                fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                if (fileProgress != null) {
-                    this.radialProgress.setProgress(fileProgress.floatValue(), z);
+                progress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (progress != null) {
+                    this.radialProgress.setProgress(progress.floatValue(), animated);
                 } else {
-                    this.radialProgress.setProgress(0.0f, z);
+                    this.radialProgress.setProgress(0.0f, animated);
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, z);
+                this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
             } else {
                 this.buttonState = 2;
-                this.radialProgress.setProgress(0.0f, z);
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setProgress(0.0f, animated);
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
             }
             invalidate();
         }
     }
 
-    public void onFailedDownload(String str) {
-        updateButtonState(null);
+    public void onFailedDownload(String fileName) {
+        updateButtonState(false);
     }
 
-    public void onSuccessDownload(String str) {
+    public void onSuccessDownload(String fileName) {
         this.radialProgress.setProgress(1.0f, true);
         updateButtonState(true);
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.radialProgress.setProgress(f, true);
-        if (this.hasMiniProgress != null) {
+    public void onProgressDownload(String fileName, float progress) {
+        this.radialProgress.setProgress(progress, true);
+        if (this.hasMiniProgress != 0) {
             if (this.miniButtonState != 1) {
                 updateButtonState(false);
             }
         } else if (this.buttonState != 4) {
             updateButtonState(false);
         }
+    }
+
+    public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
     }
 
     public int getObserverTag() {

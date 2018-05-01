@@ -18,190 +18,146 @@ class PositionMap<E> implements Cloneable {
         ContainerHelpers() {
         }
 
-        static int binarySearch(int[] iArr, int i, int i2) {
-            i--;
-            int i3 = 0;
-            while (i3 <= i) {
-                int i4 = (i3 + i) >>> 1;
-                int i5 = iArr[i4];
-                if (i5 < i2) {
-                    i3 = i4 + 1;
-                } else if (i5 <= i2) {
-                    return i4;
+        static int binarySearch(int[] array, int size, int value) {
+            int lo = 0;
+            int hi = size - 1;
+            while (lo <= hi) {
+                int i = (lo + hi) >>> 1;
+                int midVal = array[i];
+                if (midVal < value) {
+                    lo = i + 1;
+                } else if (midVal <= value) {
+                    return i;
                 } else {
-                    i = i4 - 1;
+                    hi = i - 1;
                 }
             }
-            return i3 ^ -1;
+            return lo ^ -1;
         }
-    }
-
-    static int idealByteArraySize(int i) {
-        for (int i2 = 4; i2 < 32; i2++) {
-            int i3 = (1 << i2) - 12;
-            if (i <= i3) {
-                return i3;
-            }
-        }
-        return i;
-    }
-
-    public void insertKeyRange(int i, int i2) {
-    }
-
-    public void removeKeyRange(ArrayList<E> arrayList, int i, int i2) {
     }
 
     PositionMap() {
         this(10);
     }
 
-    PositionMap(int i) {
+    PositionMap(int initialCapacity) {
         this.mGarbage = false;
-        if (i == 0) {
+        if (initialCapacity == 0) {
             this.mKeys = ContainerHelpers.EMPTY_INTS;
             this.mValues = ContainerHelpers.EMPTY_OBJECTS;
         } else {
-            i = idealIntArraySize(i);
-            this.mKeys = new int[i];
-            this.mValues = new Object[i];
+            initialCapacity = idealIntArraySize(initialCapacity);
+            this.mKeys = new int[initialCapacity];
+            this.mValues = new Object[initialCapacity];
         }
         this.mSize = 0;
     }
 
-    public org.telegram.messenger.support.widget.PositionMap<E> clone() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r2 = this;
-        r0 = 0;
-        r1 = super.clone();	 Catch:{ CloneNotSupportedException -> 0x001c }
-        r1 = (org.telegram.messenger.support.widget.PositionMap) r1;	 Catch:{ CloneNotSupportedException -> 0x001c }
-        r0 = r2.mKeys;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r0.clone();	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = (int[]) r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r1.mKeys = r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r2.mValues;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r0.clone();	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = (java.lang.Object[]) r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r1.mValues = r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        goto L_0x001d;
-    L_0x001c:
-        r1 = r0;
-    L_0x001d:
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.widget.PositionMap.clone():org.telegram.messenger.support.widget.PositionMap<E>");
-    }
-
-    public E get(int i) {
-        return get(i, null);
-    }
-
-    public E get(int i, E e) {
-        i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, i);
-        if (i >= 0) {
-            if (this.mValues[i] != DELETED) {
-                return this.mValues[i];
-            }
+    public PositionMap<E> clone() {
+        PositionMap<E> clone = null;
+        try {
+            clone = (PositionMap) super.clone();
+            clone.mKeys = (int[]) this.mKeys.clone();
+            clone.mValues = (Object[]) this.mValues.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            return clone;
         }
-        return e;
     }
 
-    public void delete(int i) {
-        i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, i);
+    public E get(int key) {
+        return get(key, null);
+    }
+
+    public E get(int key, E valueIfKeyNotFound) {
+        int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
+        return (i < 0 || this.mValues[i] == DELETED) ? valueIfKeyNotFound : this.mValues[i];
+    }
+
+    public void delete(int key) {
+        int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
         if (i >= 0 && this.mValues[i] != DELETED) {
             this.mValues[i] = DELETED;
             this.mGarbage = true;
         }
     }
 
-    public void remove(int i) {
-        delete(i);
+    public void remove(int key) {
+        delete(key);
     }
 
-    public void removeAt(int i) {
-        if (this.mValues[i] != DELETED) {
-            this.mValues[i] = DELETED;
+    public void removeAt(int index) {
+        if (this.mValues[index] != DELETED) {
+            this.mValues[index] = DELETED;
             this.mGarbage = true;
         }
     }
 
-    public void removeAtRange(int i, int i2) {
-        i2 = Math.min(this.mSize, i2 + i);
-        while (i < i2) {
+    public void removeAtRange(int index, int size) {
+        int end = Math.min(this.mSize, index + size);
+        for (int i = index; i < end; i++) {
             removeAt(i);
-            i++;
         }
+    }
+
+    public void insertKeyRange(int keyStart, int count) {
+    }
+
+    public void removeKeyRange(ArrayList<E> arrayList, int keyStart, int count) {
     }
 
     private void gc() {
-        int i = this.mSize;
-        int[] iArr = this.mKeys;
-        Object[] objArr = this.mValues;
-        int i2 = 0;
-        int i3 = i2;
-        while (i2 < i) {
-            Object obj = objArr[i2];
-            if (obj != DELETED) {
-                if (i2 != i3) {
-                    iArr[i3] = iArr[i2];
-                    objArr[i3] = obj;
-                    objArr[i2] = null;
+        int n = this.mSize;
+        int o = 0;
+        int[] keys = this.mKeys;
+        Object[] values = this.mValues;
+        for (int i = 0; i < n; i++) {
+            Object val = values[i];
+            if (val != DELETED) {
+                if (i != o) {
+                    keys[o] = keys[i];
+                    values[o] = val;
+                    values[i] = null;
                 }
-                i3++;
+                o++;
             }
-            i2++;
         }
         this.mGarbage = false;
-        this.mSize = i3;
+        this.mSize = o;
     }
 
-    public void put(int i, E e) {
-        int binarySearch = ContainerHelpers.binarySearch(this.mKeys, this.mSize, i);
-        if (binarySearch >= 0) {
-            this.mValues[binarySearch] = e;
-        } else {
-            binarySearch ^= -1;
-            if (binarySearch >= this.mSize || this.mValues[binarySearch] != DELETED) {
-                if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                    gc();
-                    binarySearch = ContainerHelpers.binarySearch(this.mKeys, this.mSize, i) ^ -1;
-                }
-                if (this.mSize >= this.mKeys.length) {
-                    int idealIntArraySize = idealIntArraySize(this.mSize + 1);
-                    Object obj = new int[idealIntArraySize];
-                    Object obj2 = new Object[idealIntArraySize];
-                    System.arraycopy(this.mKeys, 0, obj, 0, this.mKeys.length);
-                    System.arraycopy(this.mValues, 0, obj2, 0, this.mValues.length);
-                    this.mKeys = obj;
-                    this.mValues = obj2;
-                }
-                if (this.mSize - binarySearch != 0) {
-                    int i2 = binarySearch + 1;
-                    System.arraycopy(this.mKeys, binarySearch, this.mKeys, i2, this.mSize - binarySearch);
-                    System.arraycopy(this.mValues, binarySearch, this.mValues, i2, this.mSize - binarySearch);
-                }
-                this.mKeys[binarySearch] = i;
-                this.mValues[binarySearch] = e;
-                this.mSize++;
-            } else {
-                this.mKeys[binarySearch] = i;
-                this.mValues[binarySearch] = e;
-            }
+    public void put(int key, E value) {
+        int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
+        if (i >= 0) {
+            this.mValues[i] = value;
+            return;
         }
+        i ^= -1;
+        if (i >= this.mSize || this.mValues[i] != DELETED) {
+            if (this.mGarbage && this.mSize >= this.mKeys.length) {
+                gc();
+                i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key) ^ -1;
+            }
+            if (this.mSize >= this.mKeys.length) {
+                int n = idealIntArraySize(this.mSize + 1);
+                int[] nkeys = new int[n];
+                Object[] nvalues = new Object[n];
+                System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
+                System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
+                this.mKeys = nkeys;
+                this.mValues = nvalues;
+            }
+            if (this.mSize - i != 0) {
+                System.arraycopy(this.mKeys, i, this.mKeys, i + 1, this.mSize - i);
+                System.arraycopy(this.mValues, i, this.mValues, i + 1, this.mSize - i);
+            }
+            this.mKeys[i] = key;
+            this.mValues[i] = value;
+            this.mSize++;
+            return;
+        }
+        this.mKeys[i] = key;
+        this.mValues[i] = value;
     }
 
     public int size() {
@@ -211,40 +167,40 @@ Error: java.lang.NullPointerException
         return this.mSize;
     }
 
-    public int keyAt(int i) {
+    public int keyAt(int index) {
         if (this.mGarbage) {
             gc();
         }
-        return this.mKeys[i];
+        return this.mKeys[index];
     }
 
-    public E valueAt(int i) {
+    public E valueAt(int index) {
         if (this.mGarbage) {
             gc();
         }
-        return this.mValues[i];
+        return this.mValues[index];
     }
 
-    public void setValueAt(int i, E e) {
+    public void setValueAt(int index, E value) {
         if (this.mGarbage) {
             gc();
         }
-        this.mValues[i] = e;
+        this.mValues[index] = value;
     }
 
-    public int indexOfKey(int i) {
+    public int indexOfKey(int key) {
         if (this.mGarbage) {
             gc();
         }
-        return ContainerHelpers.binarySearch(this.mKeys, this.mSize, i);
+        return ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
     }
 
-    public int indexOfValue(E e) {
+    public int indexOfValue(E value) {
         if (this.mGarbage) {
             gc();
         }
         for (int i = 0; i < this.mSize; i++) {
-            if (this.mValues[i] == e) {
+            if (this.mValues[i] == value) {
                 return i;
             }
         }
@@ -252,86 +208,95 @@ Error: java.lang.NullPointerException
     }
 
     public void clear() {
-        int i = this.mSize;
-        Object[] objArr = this.mValues;
-        for (int i2 = 0; i2 < i; i2++) {
-            objArr[i2] = null;
+        int n = this.mSize;
+        Object[] values = this.mValues;
+        for (int i = 0; i < n; i++) {
+            values[i] = null;
         }
         this.mSize = 0;
         this.mGarbage = false;
     }
 
-    public void append(int i, E e) {
-        if (this.mSize == 0 || i > this.mKeys[this.mSize - 1]) {
+    public void append(int key, E value) {
+        if (this.mSize == 0 || key > this.mKeys[this.mSize - 1]) {
             if (this.mGarbage && this.mSize >= this.mKeys.length) {
                 gc();
             }
-            int i2 = this.mSize;
-            if (i2 >= this.mKeys.length) {
-                int idealIntArraySize = idealIntArraySize(i2 + 1);
-                Object obj = new int[idealIntArraySize];
-                Object obj2 = new Object[idealIntArraySize];
-                System.arraycopy(this.mKeys, 0, obj, 0, this.mKeys.length);
-                System.arraycopy(this.mValues, 0, obj2, 0, this.mValues.length);
-                this.mKeys = obj;
-                this.mValues = obj2;
+            int pos = this.mSize;
+            if (pos >= this.mKeys.length) {
+                int n = idealIntArraySize(pos + 1);
+                int[] nkeys = new int[n];
+                Object[] nvalues = new Object[n];
+                System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
+                System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
+                this.mKeys = nkeys;
+                this.mValues = nvalues;
             }
-            this.mKeys[i2] = i;
-            this.mValues[i2] = e;
-            this.mSize = i2 + 1;
+            this.mKeys[pos] = key;
+            this.mValues[pos] = value;
+            this.mSize = pos + 1;
             return;
         }
-        put(i, e);
+        put(key, value);
     }
 
     public String toString() {
         if (size() <= 0) {
             return "{}";
         }
-        StringBuilder stringBuilder = new StringBuilder(this.mSize * 28);
-        stringBuilder.append('{');
+        StringBuilder buffer = new StringBuilder(this.mSize * 28);
+        buffer.append('{');
         for (int i = 0; i < this.mSize; i++) {
             if (i > 0) {
-                stringBuilder.append(", ");
+                buffer.append(", ");
             }
-            stringBuilder.append(keyAt(i));
-            stringBuilder.append('=');
-            PositionMap valueAt = valueAt(i);
-            if (valueAt != this) {
-                stringBuilder.append(valueAt);
+            buffer.append(keyAt(i));
+            buffer.append('=');
+            PositionMap value = valueAt(i);
+            if (value != this) {
+                buffer.append(value);
             } else {
-                stringBuilder.append("(this Map)");
+                buffer.append("(this Map)");
             }
         }
-        stringBuilder.append('}');
-        return stringBuilder.toString();
+        buffer.append('}');
+        return buffer.toString();
     }
 
-    static int idealBooleanArraySize(int i) {
-        return idealByteArraySize(i);
+    static int idealByteArraySize(int need) {
+        for (int i = 4; i < 32; i++) {
+            if (need <= (1 << i) - 12) {
+                return (1 << i) - 12;
+            }
+        }
+        return need;
     }
 
-    static int idealShortArraySize(int i) {
-        return idealByteArraySize(i * 2) / 2;
+    static int idealBooleanArraySize(int need) {
+        return idealByteArraySize(need);
     }
 
-    static int idealCharArraySize(int i) {
-        return idealByteArraySize(i * 2) / 2;
+    static int idealShortArraySize(int need) {
+        return idealByteArraySize(need * 2) / 2;
     }
 
-    static int idealIntArraySize(int i) {
-        return idealByteArraySize(i * 4) / 4;
+    static int idealCharArraySize(int need) {
+        return idealByteArraySize(need * 2) / 2;
     }
 
-    static int idealFloatArraySize(int i) {
-        return idealByteArraySize(i * 4) / 4;
+    static int idealIntArraySize(int need) {
+        return idealByteArraySize(need * 4) / 4;
     }
 
-    static int idealObjectArraySize(int i) {
-        return idealByteArraySize(i * 4) / 4;
+    static int idealFloatArraySize(int need) {
+        return idealByteArraySize(need * 4) / 4;
     }
 
-    static int idealLongArraySize(int i) {
-        return idealByteArraySize(i * 8) / 8;
+    static int idealObjectArraySize(int need) {
+        return idealByteArraySize(need * 4) / 4;
+    }
+
+    static int idealLongArraySize(int need) {
+        return idealByteArraySize(need * 8) / 8;
     }
 }

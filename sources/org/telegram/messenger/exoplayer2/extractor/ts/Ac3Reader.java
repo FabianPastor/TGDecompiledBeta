@@ -34,18 +34,15 @@ public final class Ac3Reader implements ElementaryStreamReader {
     private @interface State {
     }
 
-    public void packetFinished() {
-    }
-
     public Ac3Reader() {
         this(null);
     }
 
-    public Ac3Reader(String str) {
+    public Ac3Reader(String language) {
         this.headerScratchBits = new ParsableBitArray(new byte[128]);
         this.headerScratchBytes = new ParsableByteArray(this.headerScratchBits.data);
         this.state = 0;
-        this.language = str;
+        this.language = language;
     }
 
     public void seek() {
@@ -54,21 +51,21 @@ public final class Ac3Reader implements ElementaryStreamReader {
         this.lastByteWas0B = false;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.trackFormatId = trackIdGenerator.getFormatId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 1);
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator generator) {
+        generator.generateNewId();
+        this.trackFormatId = generator.getFormatId();
+        this.output = extractorOutput.track(generator.getTrackId(), 1);
     }
 
-    public void packetStarted(long j, boolean z) {
-        this.timeUs = j;
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        this.timeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
-        while (parsableByteArray.bytesLeft() > 0) {
+    public void consume(ParsableByteArray data) {
+        while (data.bytesLeft() > 0) {
             switch (this.state) {
                 case 0:
-                    if (!skipToNextSync(parsableByteArray)) {
+                    if (!skipToNextSync(data)) {
                         break;
                     }
                     this.state = 1;
@@ -77,7 +74,7 @@ public final class Ac3Reader implements ElementaryStreamReader {
                     this.bytesRead = 2;
                     break;
                 case 1:
-                    if (!continueRead(parsableByteArray, this.headerScratchBytes.data, 128)) {
+                    if (!continueRead(data, this.headerScratchBytes.data, 128)) {
                         break;
                     }
                     parseHeader();
@@ -86,9 +83,9 @@ public final class Ac3Reader implements ElementaryStreamReader {
                     this.state = 2;
                     break;
                 case 2:
-                    int min = Math.min(parsableByteArray.bytesLeft(), this.sampleSize - this.bytesRead);
-                    this.output.sampleData(parsableByteArray, min);
-                    this.bytesRead += min;
+                    int bytesToRead = Math.min(data.bytesLeft(), this.sampleSize - this.bytesRead);
+                    this.output.sampleData(data, bytesToRead);
+                    this.bytesRead += bytesToRead;
                     if (this.bytesRead != this.sampleSize) {
                         break;
                     }
@@ -102,46 +99,40 @@ public final class Ac3Reader implements ElementaryStreamReader {
         }
     }
 
-    private boolean continueRead(ParsableByteArray parsableByteArray, byte[] bArr, int i) {
-        int min = Math.min(parsableByteArray.bytesLeft(), i - this.bytesRead);
-        parsableByteArray.readBytes(bArr, this.bytesRead, min);
-        this.bytesRead += min;
-        return this.bytesRead == i ? true : null;
+    public void packetFinished() {
     }
 
-    private boolean skipToNextSync(ParsableByteArray parsableByteArray) {
-        while (true) {
-            boolean z = false;
-            if (parsableByteArray.bytesLeft() <= 0) {
-                return false;
-            }
+    private boolean continueRead(ParsableByteArray source, byte[] target, int targetLength) {
+        int bytesToRead = Math.min(source.bytesLeft(), targetLength - this.bytesRead);
+        source.readBytes(target, this.bytesRead, bytesToRead);
+        this.bytesRead += bytesToRead;
+        return this.bytesRead == targetLength;
+    }
+
+    private boolean skipToNextSync(ParsableByteArray pesBuffer) {
+        while (pesBuffer.bytesLeft() > 0) {
             if (this.lastByteWas0B) {
-                int readUnsignedByte = parsableByteArray.readUnsignedByte();
-                if (readUnsignedByte == 119) {
+                int secondByte = pesBuffer.readUnsignedByte();
+                if (secondByte == 119) {
                     this.lastByteWas0B = false;
                     return true;
                 }
-                if (readUnsignedByte == 11) {
-                    z = true;
-                }
-                this.lastByteWas0B = z;
+                this.lastByteWas0B = secondByte == 11;
             } else {
-                if (parsableByteArray.readUnsignedByte() == 11) {
-                    z = true;
-                }
-                this.lastByteWas0B = z;
+                this.lastByteWas0B = pesBuffer.readUnsignedByte() == 11;
             }
         }
+        return false;
     }
 
     private void parseHeader() {
         this.headerScratchBits.setPosition(0);
-        Ac3SyncFrameInfo parseAc3SyncframeInfo = Ac3Util.parseAc3SyncframeInfo(this.headerScratchBits);
-        if (!(this.format != null && parseAc3SyncframeInfo.channelCount == this.format.channelCount && parseAc3SyncframeInfo.sampleRate == this.format.sampleRate && parseAc3SyncframeInfo.mimeType == this.format.sampleMimeType)) {
-            this.format = Format.createAudioSampleFormat(this.trackFormatId, parseAc3SyncframeInfo.mimeType, null, -1, -1, parseAc3SyncframeInfo.channelCount, parseAc3SyncframeInfo.sampleRate, null, null, 0, this.language);
+        Ac3SyncFrameInfo frameInfo = Ac3Util.parseAc3SyncframeInfo(this.headerScratchBits);
+        if (!(this.format != null && frameInfo.channelCount == this.format.channelCount && frameInfo.sampleRate == this.format.sampleRate && frameInfo.mimeType == this.format.sampleMimeType)) {
+            this.format = Format.createAudioSampleFormat(this.trackFormatId, frameInfo.mimeType, null, -1, -1, frameInfo.channelCount, frameInfo.sampleRate, null, null, 0, this.language);
             this.output.format(this.format);
         }
-        this.sampleSize = parseAc3SyncframeInfo.frameSize;
-        this.sampleDurationUs = (C0542C.MICROS_PER_SECOND * ((long) parseAc3SyncframeInfo.sampleCount)) / ((long) this.format.sampleRate);
+        this.sampleSize = frameInfo.frameSize;
+        this.sampleDurationUs = (C0542C.MICROS_PER_SECOND * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
     }
 }

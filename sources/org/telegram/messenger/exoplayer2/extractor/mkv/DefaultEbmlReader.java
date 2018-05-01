@@ -27,17 +27,17 @@ final class DefaultEbmlReader implements EbmlReader {
         private final long elementEndPosition;
         private final int elementId;
 
-        private MasterElement(int i, long j) {
-            this.elementId = i;
-            this.elementEndPosition = j;
+        private MasterElement(int elementId, long elementEndPosition) {
+            this.elementId = elementId;
+            this.elementEndPosition = elementEndPosition;
         }
     }
 
     DefaultEbmlReader() {
     }
 
-    public void init(EbmlReaderOutput ebmlReaderOutput) {
-        this.output = ebmlReaderOutput;
+    public void init(EbmlReaderOutput eventHandler) {
+        this.output = eventHandler;
     }
 
     public void reset() {
@@ -46,76 +46,63 @@ final class DefaultEbmlReader implements EbmlReader {
         this.varintReader.reset();
     }
 
-    public boolean read(ExtractorInput extractorInput) throws IOException, InterruptedException {
+    public boolean read(ExtractorInput input) throws IOException, InterruptedException {
         Assertions.checkState(this.output != null);
         while (true) {
-            if (this.masterElementsStack.isEmpty() || extractorInput.getPosition() < ((MasterElement) this.masterElementsStack.peek()).elementEndPosition) {
+            if (this.masterElementsStack.isEmpty() || input.getPosition() < ((MasterElement) this.masterElementsStack.peek()).elementEndPosition) {
                 if (this.elementState == 0) {
-                    long readUnsignedVarint = this.varintReader.readUnsignedVarint(extractorInput, true, false, 4);
-                    if (readUnsignedVarint == -2) {
-                        readUnsignedVarint = maybeResyncToNextLevel1Element(extractorInput);
+                    long result = this.varintReader.readUnsignedVarint(input, true, false, 4);
+                    if (result == -2) {
+                        result = maybeResyncToNextLevel1Element(input);
                     }
-                    if (readUnsignedVarint == -1) {
+                    if (result == -1) {
                         return false;
                     }
-                    this.elementId = (int) readUnsignedVarint;
+                    this.elementId = (int) result;
                     this.elementState = 1;
                 }
                 if (this.elementState == 1) {
-                    this.elementContentSize = this.varintReader.readUnsignedVarint(extractorInput, false, true, 8);
+                    this.elementContentSize = this.varintReader.readUnsignedVarint(input, false, true, 8);
                     this.elementState = 2;
                 }
-                int elementType = this.output.getElementType(this.elementId);
-                StringBuilder stringBuilder;
-                switch (elementType) {
+                int type = this.output.getElementType(this.elementId);
+                switch (type) {
                     case 0:
-                        extractorInput.skipFully((int) this.elementContentSize);
+                        input.skipFully((int) this.elementContentSize);
                         this.elementState = 0;
                     case 1:
-                        long position = extractorInput.getPosition();
-                        this.masterElementsStack.add(new MasterElement(this.elementId, position + this.elementContentSize));
-                        this.output.startMasterElement(this.elementId, position, this.elementContentSize);
+                        long elementContentPosition = input.getPosition();
+                        this.masterElementsStack.add(new MasterElement(this.elementId, elementContentPosition + this.elementContentSize));
+                        this.output.startMasterElement(this.elementId, elementContentPosition, this.elementContentSize);
                         this.elementState = 0;
                         return true;
                     case 2:
                         if (this.elementContentSize > 8) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("Invalid integer size: ");
-                            stringBuilder.append(this.elementContentSize);
-                            throw new ParserException(stringBuilder.toString());
+                            throw new ParserException("Invalid integer size: " + this.elementContentSize);
                         }
-                        this.output.integerElement(this.elementId, readInteger(extractorInput, (int) this.elementContentSize));
+                        this.output.integerElement(this.elementId, readInteger(input, (int) this.elementContentSize));
                         this.elementState = 0;
                         return true;
                     case 3:
                         if (this.elementContentSize > 2147483647L) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("String element size: ");
-                            stringBuilder.append(this.elementContentSize);
-                            throw new ParserException(stringBuilder.toString());
+                            throw new ParserException("String element size: " + this.elementContentSize);
                         }
-                        this.output.stringElement(this.elementId, readString(extractorInput, (int) this.elementContentSize));
+                        this.output.stringElement(this.elementId, readString(input, (int) this.elementContentSize));
                         this.elementState = 0;
                         return true;
                     case 4:
-                        this.output.binaryElement(this.elementId, (int) this.elementContentSize, extractorInput);
+                        this.output.binaryElement(this.elementId, (int) this.elementContentSize, input);
                         this.elementState = 0;
                         return true;
                     case 5:
                         if (this.elementContentSize == 4 || this.elementContentSize == 8) {
-                            this.output.floatElement(this.elementId, readFloat(extractorInput, (int) this.elementContentSize));
+                            this.output.floatElement(this.elementId, readFloat(input, (int) this.elementContentSize));
                             this.elementState = 0;
                             return true;
                         }
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("Invalid float size: ");
-                        stringBuilder.append(this.elementContentSize);
-                        throw new ParserException(stringBuilder.toString());
+                        throw new ParserException("Invalid float size: " + this.elementContentSize);
                     default:
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("Invalid element type ");
-                        stringBuilder2.append(elementType);
-                        throw new ParserException(stringBuilder2.toString());
+                        throw new ParserException("Invalid element type " + type);
                 }
             }
             this.output.endMasterElement(((MasterElement) this.masterElementsStack.pop()).elementId);
@@ -123,47 +110,45 @@ final class DefaultEbmlReader implements EbmlReader {
         }
     }
 
-    private long maybeResyncToNextLevel1Element(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        extractorInput.resetPeekPosition();
+    private long maybeResyncToNextLevel1Element(ExtractorInput input) throws IOException, InterruptedException {
+        input.resetPeekPosition();
         while (true) {
-            extractorInput.peekFully(this.scratch, 0, 4);
-            int parseUnsignedVarintLength = VarintReader.parseUnsignedVarintLength(this.scratch[0]);
-            if (parseUnsignedVarintLength != -1 && parseUnsignedVarintLength <= 4) {
-                int assembleVarint = (int) VarintReader.assembleVarint(this.scratch, parseUnsignedVarintLength, false);
-                if (this.output.isLevel1Element(assembleVarint)) {
-                    extractorInput.skipFully(parseUnsignedVarintLength);
-                    return (long) assembleVarint;
+            input.peekFully(this.scratch, 0, 4);
+            int varintLength = VarintReader.parseUnsignedVarintLength(this.scratch[0]);
+            if (varintLength != -1 && varintLength <= 4) {
+                int potentialId = (int) VarintReader.assembleVarint(this.scratch, varintLength, false);
+                if (this.output.isLevel1Element(potentialId)) {
+                    input.skipFully(varintLength);
+                    return (long) potentialId;
                 }
             }
-            extractorInput.skipFully(1);
+            input.skipFully(1);
         }
     }
 
-    private long readInteger(ExtractorInput extractorInput, int i) throws IOException, InterruptedException {
-        int i2 = 0;
-        extractorInput.readFully(this.scratch, 0, i);
-        long j = 0;
-        while (i2 < i) {
-            i2++;
-            j = (j << 8) | ((long) (this.scratch[i2] & 255));
+    private long readInteger(ExtractorInput input, int byteLength) throws IOException, InterruptedException {
+        input.readFully(this.scratch, 0, byteLength);
+        long value = 0;
+        for (int i = 0; i < byteLength; i++) {
+            value = (value << 8) | ((long) (this.scratch[i] & 255));
         }
-        return j;
+        return value;
     }
 
-    private double readFloat(ExtractorInput extractorInput, int i) throws IOException, InterruptedException {
-        long readInteger = readInteger(extractorInput, i);
-        if (i == 4) {
-            return (double) Float.intBitsToFloat((int) readInteger);
+    private double readFloat(ExtractorInput input, int byteLength) throws IOException, InterruptedException {
+        long integerValue = readInteger(input, byteLength);
+        if (byteLength == 4) {
+            return (double) Float.intBitsToFloat((int) integerValue);
         }
-        return Double.longBitsToDouble(readInteger);
+        return Double.longBitsToDouble(integerValue);
     }
 
-    private String readString(ExtractorInput extractorInput, int i) throws IOException, InterruptedException {
-        if (i == 0) {
+    private String readString(ExtractorInput input, int byteLength) throws IOException, InterruptedException {
+        if (byteLength == 0) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
-        byte[] bArr = new byte[i];
-        extractorInput.readFully(bArr, 0, i);
-        return new String(bArr);
+        byte[] stringBytes = new byte[byteLength];
+        input.readFully(stringBytes, 0, byteLength);
+        return new String(stringBytes);
     }
 }

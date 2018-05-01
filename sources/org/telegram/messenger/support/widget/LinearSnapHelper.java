@@ -11,22 +11,22 @@ public class LinearSnapHelper extends SnapHelper {
     private OrientationHelper mHorizontalHelper;
     private OrientationHelper mVerticalHelper;
 
-    public int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View view) {
-        int[] iArr = new int[2];
+    public int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View targetView) {
+        int[] out = new int[2];
         if (layoutManager.canScrollHorizontally()) {
-            iArr[0] = distanceToCenter(layoutManager, view, getHorizontalHelper(layoutManager));
+            out[0] = distanceToCenter(layoutManager, targetView, getHorizontalHelper(layoutManager));
         } else {
-            iArr[0] = 0;
+            out[0] = 0;
         }
         if (layoutManager.canScrollVertically()) {
-            iArr[1] = distanceToCenter(layoutManager, view, getVerticalHelper(layoutManager));
+            out[1] = distanceToCenter(layoutManager, targetView, getVerticalHelper(layoutManager));
         } else {
-            iArr[1] = 0;
+            out[1] = 0;
         }
-        return iArr;
+        return out;
     }
 
-    public int findTargetSnapPosition(LayoutManager layoutManager, int i, int i2) {
+    public int findTargetSnapPosition(LayoutManager layoutManager, int velocityX, int velocityY) {
         if (!(layoutManager instanceof ScrollVectorProvider)) {
             return -1;
         }
@@ -34,134 +34,140 @@ public class LinearSnapHelper extends SnapHelper {
         if (itemCount == 0) {
             return -1;
         }
-        View findSnapView = findSnapView(layoutManager);
-        if (findSnapView == null) {
+        View currentView = findSnapView(layoutManager);
+        if (currentView == null) {
             return -1;
         }
-        int position = layoutManager.getPosition(findSnapView);
-        if (position == -1) {
+        int currentPosition = layoutManager.getPosition(currentView);
+        if (currentPosition == -1) {
             return -1;
         }
-        int i3 = itemCount - 1;
-        PointF computeScrollVectorForPosition = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(i3);
-        if (computeScrollVectorForPosition == null) {
+        PointF vectorForEnd = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(itemCount - 1);
+        if (vectorForEnd == null) {
             return -1;
         }
+        int hDeltaJump;
+        int vDeltaJump;
+        int deltaJump;
         if (layoutManager.canScrollHorizontally()) {
-            i = estimateNextPositionDiffForFling(layoutManager, getHorizontalHelper(layoutManager), i, 0);
-            if (computeScrollVectorForPosition.x < 0.0f) {
-                i = -i;
+            hDeltaJump = estimateNextPositionDiffForFling(layoutManager, getHorizontalHelper(layoutManager), velocityX, 0);
+            if (vectorForEnd.x < 0.0f) {
+                hDeltaJump = -hDeltaJump;
             }
         } else {
-            i = 0;
+            hDeltaJump = 0;
         }
         if (layoutManager.canScrollVertically()) {
-            i2 = estimateNextPositionDiffForFling(layoutManager, getVerticalHelper(layoutManager), 0, i2);
-            if (computeScrollVectorForPosition.y < 0.0f) {
-                i2 = -i2;
+            vDeltaJump = estimateNextPositionDiffForFling(layoutManager, getVerticalHelper(layoutManager), 0, velocityY);
+            if (vectorForEnd.y < 0.0f) {
+                vDeltaJump = -vDeltaJump;
             }
         } else {
-            i2 = 0;
+            vDeltaJump = 0;
         }
-        if (layoutManager.canScrollVertically() != null) {
-            i = i2;
+        if (layoutManager.canScrollVertically()) {
+            deltaJump = vDeltaJump;
+        } else {
+            deltaJump = hDeltaJump;
         }
-        if (i == 0) {
+        if (deltaJump == 0) {
             return -1;
         }
-        position += i;
-        if (position < 0) {
-            position = 0;
+        int targetPos = currentPosition + deltaJump;
+        if (targetPos < 0) {
+            targetPos = 0;
         }
-        if (position >= itemCount) {
-            position = i3;
+        if (targetPos >= itemCount) {
+            return itemCount - 1;
         }
-        return position;
+        return targetPos;
     }
 
     public View findSnapView(LayoutManager layoutManager) {
         if (layoutManager.canScrollVertically()) {
             return findCenterView(layoutManager, getVerticalHelper(layoutManager));
         }
-        return layoutManager.canScrollHorizontally() ? findCenterView(layoutManager, getHorizontalHelper(layoutManager)) : null;
-    }
-
-    private int distanceToCenter(LayoutManager layoutManager, View view, OrientationHelper orientationHelper) {
-        int decoratedStart = orientationHelper.getDecoratedStart(view) + (orientationHelper.getDecoratedMeasurement(view) / 2);
-        if (layoutManager.getClipToPadding() != null) {
-            layoutManager = orientationHelper.getStartAfterPadding() + (orientationHelper.getTotalSpace() / 2);
-        } else {
-            layoutManager = orientationHelper.getEnd() / 2;
+        if (layoutManager.canScrollHorizontally()) {
+            return findCenterView(layoutManager, getHorizontalHelper(layoutManager));
         }
-        return decoratedStart - layoutManager;
+        return null;
     }
 
-    private int estimateNextPositionDiffForFling(LayoutManager layoutManager, OrientationHelper orientationHelper, int i, int i2) {
-        i = calculateScrollDistance(i, i2);
-        layoutManager = computeDistancePerChild(layoutManager, orientationHelper);
-        if (layoutManager <= null) {
+    private int distanceToCenter(LayoutManager layoutManager, View targetView, OrientationHelper helper) {
+        int containerCenter;
+        int childCenter = helper.getDecoratedStart(targetView) + (helper.getDecoratedMeasurement(targetView) / 2);
+        if (layoutManager.getClipToPadding()) {
+            containerCenter = helper.getStartAfterPadding() + (helper.getTotalSpace() / 2);
+        } else {
+            containerCenter = helper.getEnd() / 2;
+        }
+        return childCenter - containerCenter;
+    }
+
+    private int estimateNextPositionDiffForFling(LayoutManager layoutManager, OrientationHelper helper, int velocityX, int velocityY) {
+        int[] distances = calculateScrollDistance(velocityX, velocityY);
+        float distancePerChild = computeDistancePerChild(layoutManager, helper);
+        if (distancePerChild <= 0.0f) {
             return 0;
         }
-        return Math.round(((float) (Math.abs(i[0]) > Math.abs(i[1]) ? i[0] : i[1])) / layoutManager);
+        return Math.round(((float) (Math.abs(distances[0]) > Math.abs(distances[1]) ? distances[0] : distances[1])) / distancePerChild);
     }
 
-    private View findCenterView(LayoutManager layoutManager, OrientationHelper orientationHelper) {
+    private View findCenterView(LayoutManager layoutManager, OrientationHelper helper) {
         int childCount = layoutManager.getChildCount();
-        View view = null;
         if (childCount == 0) {
             return null;
         }
-        int startAfterPadding;
+        int center;
+        View closestChild = null;
         if (layoutManager.getClipToPadding()) {
-            startAfterPadding = orientationHelper.getStartAfterPadding() + (orientationHelper.getTotalSpace() / 2);
+            center = helper.getStartAfterPadding() + (helper.getTotalSpace() / 2);
         } else {
-            startAfterPadding = orientationHelper.getEnd() / 2;
+            center = helper.getEnd() / 2;
         }
-        int i = ConnectionsManager.DEFAULT_DATACENTER_ID;
-        for (int i2 = 0; i2 < childCount; i2++) {
-            View childAt = layoutManager.getChildAt(i2);
-            int abs = Math.abs((orientationHelper.getDecoratedStart(childAt) + (orientationHelper.getDecoratedMeasurement(childAt) / 2)) - startAfterPadding);
-            if (abs < i) {
-                view = childAt;
-                i = abs;
+        int absClosest = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        for (int i = 0; i < childCount; i++) {
+            View child = layoutManager.getChildAt(i);
+            int absDistance = Math.abs((helper.getDecoratedStart(child) + (helper.getDecoratedMeasurement(child) / 2)) - center);
+            if (absDistance < absClosest) {
+                absClosest = absDistance;
+                closestChild = child;
             }
         }
-        return view;
+        return closestChild;
     }
 
-    private float computeDistancePerChild(LayoutManager layoutManager, OrientationHelper orientationHelper) {
+    private float computeDistancePerChild(LayoutManager layoutManager, OrientationHelper helper) {
+        View minPosView = null;
+        View maxPosView = null;
+        int minPos = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int maxPos = Integer.MIN_VALUE;
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
             return INVALID_DISTANCE;
         }
-        View view = null;
-        int i = ConnectionsManager.DEFAULT_DATACENTER_ID;
-        int i2 = Integer.MIN_VALUE;
-        View view2 = null;
-        for (int i3 = 0; i3 < childCount; i3++) {
-            View childAt = layoutManager.getChildAt(i3);
-            int position = layoutManager.getPosition(childAt);
-            if (position != -1) {
-                if (position < i) {
-                    view = childAt;
-                    i = position;
+        for (int i = 0; i < childCount; i++) {
+            View child = layoutManager.getChildAt(i);
+            int pos = layoutManager.getPosition(child);
+            if (pos != -1) {
+                if (pos < minPos) {
+                    minPos = pos;
+                    minPosView = child;
                 }
-                if (position > i2) {
-                    view2 = childAt;
-                    i2 = position;
+                if (pos > maxPos) {
+                    maxPos = pos;
+                    maxPosView = child;
                 }
             }
         }
-        if (view != null) {
-            if (view2 != null) {
-                orientationHelper = Math.max(orientationHelper.getDecoratedEnd(view), orientationHelper.getDecoratedEnd(view2)) - Math.min(orientationHelper.getDecoratedStart(view), orientationHelper.getDecoratedStart(view2));
-                if (orientationHelper == null) {
-                    return INVALID_DISTANCE;
-                }
-                return (INVALID_DISTANCE * ((float) orientationHelper)) / ((float) ((i2 - i) + 1));
-            }
+        if (minPosView == null || maxPosView == null) {
+            return INVALID_DISTANCE;
         }
-        return INVALID_DISTANCE;
+        int distance = Math.max(helper.getDecoratedEnd(minPosView), helper.getDecoratedEnd(maxPosView)) - Math.min(helper.getDecoratedStart(minPosView), helper.getDecoratedStart(maxPosView));
+        if (distance == 0) {
+            return INVALID_DISTANCE;
+        }
+        return (INVALID_DISTANCE * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
     }
 
     private OrientationHelper getVerticalHelper(LayoutManager layoutManager) {

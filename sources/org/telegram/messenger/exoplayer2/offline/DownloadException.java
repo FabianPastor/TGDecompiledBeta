@@ -3,11 +3,11 @@ package org.telegram.messenger.exoplayer2.offline;
 import java.io.IOException;
 
 public final class DownloadException extends IOException {
-    public DownloadException(String str) {
-        super(str);
+    public DownloadException(String message) {
+        super(message);
     }
 
-    public DownloadException(Throwable th) {
-        super(th);
+    public DownloadException(Throwable cause) {
+        super(cause);
     }
 }

@@ -30,112 +30,111 @@ public final class SingleSampleMediaSource implements MediaSource {
         void onLoadError(int i, IOException iOException);
     }
 
+    private static final class EventListenerWrapper implements MediaSourceEventListener {
+        private final EventListener eventListener;
+        private final int eventSourceId;
+
+        public EventListenerWrapper(EventListener eventListener, int eventSourceId) {
+            this.eventListener = (EventListener) Assertions.checkNotNull(eventListener);
+            this.eventSourceId = eventSourceId;
+        }
+
+        public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
+        }
+
+        public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+        }
+
+        public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+        }
+
+        public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
+            this.eventListener.onLoadError(this.eventSourceId, error);
+        }
+
+        public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
+        }
+
+        public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
+        }
+    }
+
     public static final class Factory {
         private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
         private boolean isCreateCalled;
         private int minLoadableRetryCount = 3;
         private boolean treatLoadErrorsAsEndOfStream;
 
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory) {
-            this.dataSourceFactory = (org.telegram.messenger.exoplayer2.upstream.DataSource.Factory) Assertions.checkNotNull(factory);
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this.dataSourceFactory = (org.telegram.messenger.exoplayer2.upstream.DataSource.Factory) Assertions.checkNotNull(dataSourceFactory);
         }
 
-        public Factory setMinLoadableRetryCount(int i) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.minLoadableRetryCount = i;
+        public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.minLoadableRetryCount = minLoadableRetryCount;
             return this;
         }
 
-        public Factory setTreatLoadErrorsAsEndOfStream(boolean z) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.treatLoadErrorsAsEndOfStream = z;
+        public Factory setTreatLoadErrorsAsEndOfStream(boolean treatLoadErrorsAsEndOfStream) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.treatLoadErrorsAsEndOfStream = treatLoadErrorsAsEndOfStream;
             return this;
         }
 
-        public SingleSampleMediaSource createMediaSource(Uri uri, Format format, long j) {
-            return createMediaSource(uri, format, j, null, null);
+        public SingleSampleMediaSource createMediaSource(Uri uri, Format format, long durationUs) {
+            return createMediaSource(uri, format, durationUs, null, null);
         }
 
-        public SingleSampleMediaSource createMediaSource(Uri uri, Format format, long j, Handler handler, MediaSourceEventListener mediaSourceEventListener) {
+        public SingleSampleMediaSource createMediaSource(Uri uri, Format format, long durationUs, Handler eventHandler, MediaSourceEventListener eventListener) {
             this.isCreateCalled = true;
-            return new SingleSampleMediaSource(uri, this.dataSourceFactory, format, j, this.minLoadableRetryCount, handler, mediaSourceEventListener, this.treatLoadErrorsAsEndOfStream);
+            return new SingleSampleMediaSource(uri, this.dataSourceFactory, format, durationUs, this.minLoadableRetryCount, eventHandler, eventListener, this.treatLoadErrorsAsEndOfStream);
         }
     }
 
-    private static final class EventListenerWrapper implements MediaSourceEventListener {
-        private final EventListener eventListener;
-        private final int eventSourceId;
+    @Deprecated
+    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs) {
+        this(uri, dataSourceFactory, format, durationUs, 3);
+    }
 
-        public void onDownstreamFormatChanged(int i, Format format, int i2, Object obj, long j) {
-        }
+    @Deprecated
+    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount) {
+        this(uri, dataSourceFactory, format, durationUs, minLoadableRetryCount, null, null, false);
+    }
 
-        public void onLoadCanceled(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5) {
-        }
+    @Deprecated
+    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, int eventSourceId, boolean treatLoadErrorsAsEndOfStream) {
+        this(uri, dataSourceFactory, format, durationUs, minLoadableRetryCount, eventHandler, eventListener == null ? null : new EventListenerWrapper(eventListener, eventSourceId), treatLoadErrorsAsEndOfStream);
+    }
 
-        public void onLoadCompleted(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5) {
-        }
+    private SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, boolean treatLoadErrorsAsEndOfStream) {
+        this.dataSourceFactory = dataSourceFactory;
+        this.format = format;
+        this.durationUs = durationUs;
+        this.minLoadableRetryCount = minLoadableRetryCount;
+        this.treatLoadErrorsAsEndOfStream = treatLoadErrorsAsEndOfStream;
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
+        this.dataSpec = new DataSpec(uri);
+        this.timeline = new SinglePeriodTimeline(durationUs, true, false);
+    }
 
-        public void onLoadStarted(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3) {
-        }
-
-        public void onUpstreamDiscarded(int i, long j, long j2) {
-        }
-
-        public EventListenerWrapper(EventListener eventListener, int i) {
-            this.eventListener = (EventListener) Assertions.checkNotNull(eventListener);
-            this.eventSourceId = i;
-        }
-
-        public void onLoadError(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5, IOException iOException, boolean z) {
-            this.eventListener.onLoadError(this.eventSourceId, iOException);
-        }
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        Assertions.checkState(!this.isPrepared, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        this.isPrepared = true;
+        listener.onSourceInfoRefreshed(this, this.timeline, null);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
     }
 
-    public void releaseSource() {
-    }
-
-    @Deprecated
-    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, Format format, long j) {
-        this(uri, factory, format, j, 3);
-    }
-
-    @Deprecated
-    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, Format format, long j, int i) {
-        this(uri, factory, format, j, i, null, null, false);
-    }
-
-    @Deprecated
-    public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, Format format, long j, int i, Handler handler, EventListener eventListener, int i2, boolean z) {
-        EventListener eventListener2 = eventListener;
-        this(uri, factory, format, j, i, handler, eventListener2 == null ? null : new EventListenerWrapper(eventListener2, i2), z);
-    }
-
-    private SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, Format format, long j, int i, Handler handler, MediaSourceEventListener mediaSourceEventListener, boolean z) {
-        this.dataSourceFactory = factory;
-        this.format = format;
-        this.durationUs = j;
-        this.minLoadableRetryCount = i;
-        this.treatLoadErrorsAsEndOfStream = z;
-        this.eventDispatcher = new EventDispatcher(handler, mediaSourceEventListener);
-        this.dataSpec = new DataSpec(uri);
-        this.timeline = new SinglePeriodTimeline(j, true, null);
-    }
-
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        Assertions.checkState(this.isPrepared ^ 1, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
-        this.isPrepared = true;
-        listener.onSourceInfoRefreshed(this, this.timeline, false);
-    }
-
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
-        Assertions.checkArgument(mediaPeriodId.periodIndex == null ? true : null);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        Assertions.checkArgument(id.periodIndex == 0);
         return new SingleSampleMediaPeriod(this.dataSpec, this.dataSourceFactory, this.format, this.durationUs, this.minLoadableRetryCount, this.eventDispatcher, this.treatLoadErrorsAsEndOfStream);
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
         ((SingleSampleMediaPeriod) mediaPeriod).release();
+    }
+
+    public void releaseSource() {
     }
 }

@@ -11,37 +11,41 @@ final class SsaSubtitle implements Subtitle {
     private final long[] cueTimesUs;
     private final Cue[] cues;
 
-    public SsaSubtitle(Cue[] cueArr, long[] jArr) {
-        this.cues = cueArr;
-        this.cueTimesUs = jArr;
+    public SsaSubtitle(Cue[] cues, long[] cueTimesUs) {
+        this.cues = cues;
+        this.cueTimesUs = cueTimesUs;
     }
 
-    public int getNextEventTimeIndex(long j) {
-        j = Util.binarySearchCeil(this.cueTimesUs, j, false, false);
-        return j < this.cueTimesUs.length ? j : -1;
+    public int getNextEventTimeIndex(long timeUs) {
+        int index = Util.binarySearchCeil(this.cueTimesUs, timeUs, false, false);
+        return index < this.cueTimesUs.length ? index : -1;
     }
 
     public int getEventTimeCount() {
         return this.cueTimesUs.length;
     }
 
-    public long getEventTime(int i) {
-        boolean z = false;
-        Assertions.checkArgument(i >= 0);
-        if (i < this.cueTimesUs.length) {
+    public long getEventTime(int index) {
+        boolean z;
+        boolean z2 = true;
+        if (index >= 0) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
-        return this.cueTimesUs[i];
+        if (index >= this.cueTimesUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
+        return this.cueTimesUs[index];
     }
 
-    public List<Cue> getCues(long j) {
-        j = Util.binarySearchFloor(this.cueTimesUs, j, true, false);
-        if (j != -1) {
-            if (this.cues[j] != null) {
-                return Collections.singletonList(this.cues[j]);
-            }
+    public List<Cue> getCues(long timeUs) {
+        int index = Util.binarySearchFloor(this.cueTimesUs, timeUs, true, false);
+        if (index == -1 || this.cues[index] == null) {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
+        return Collections.singletonList(this.cues[index]);
     }
 }

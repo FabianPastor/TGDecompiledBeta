@@ -22,82 +22,73 @@ public final class MediaCodecInfo {
     public final boolean secure;
     public final boolean tunneling;
 
-    public static MediaCodecInfo newPassthroughInstance(String str) {
-        return new MediaCodecInfo(str, null, null, false, false);
+    public static MediaCodecInfo newPassthroughInstance(String name) {
+        return new MediaCodecInfo(name, null, null, false, false);
     }
 
-    public static MediaCodecInfo newInstance(String str, String str2, CodecCapabilities codecCapabilities) {
-        return new MediaCodecInfo(str, str2, codecCapabilities, false, false);
+    public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities) {
+        return new MediaCodecInfo(name, mimeType, capabilities, false, false);
     }
 
-    public static MediaCodecInfo newInstance(String str, String str2, CodecCapabilities codecCapabilities, boolean z, boolean z2) {
-        return new MediaCodecInfo(str, str2, codecCapabilities, z, z2);
+    public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
+        return new MediaCodecInfo(name, mimeType, capabilities, forceDisableAdaptive, forceSecure);
     }
 
-    private MediaCodecInfo(String str, String str2, CodecCapabilities codecCapabilities, boolean z, boolean z2) {
-        this.name = (String) Assertions.checkNotNull(str);
-        this.mimeType = str2;
-        this.capabilities = codecCapabilities;
-        str = null;
-        z = (z || codecCapabilities == null || !isAdaptive(codecCapabilities)) ? false : true;
-        this.adaptive = z;
-        z = codecCapabilities != null && isTunneling(codecCapabilities);
-        this.tunneling = z;
-        if (z2 || !(codecCapabilities == null || isSecure(codecCapabilities) == null)) {
-            str = 1;
+    private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
+        boolean z;
+        boolean z2 = false;
+        this.name = (String) Assertions.checkNotNull(name);
+        this.mimeType = mimeType;
+        this.capabilities = capabilities;
+        if (forceDisableAdaptive || capabilities == null || !isAdaptive(capabilities)) {
+            z = false;
+        } else {
+            z = true;
         }
-        this.secure = str;
+        this.adaptive = z;
+        if (capabilities == null || !isTunneling(capabilities)) {
+            z = false;
+        } else {
+            z = true;
+        }
+        this.tunneling = z;
+        if (forceSecure || (capabilities != null && isSecure(capabilities))) {
+            z2 = true;
+        }
+        this.secure = z2;
     }
 
     public CodecProfileLevel[] getProfileLevels() {
-        if (this.capabilities != null) {
-            if (this.capabilities.profileLevels != null) {
-                return this.capabilities.profileLevels;
-            }
-        }
-        return new CodecProfileLevel[0];
+        return (this.capabilities == null || this.capabilities.profileLevels == null) ? new CodecProfileLevel[0] : this.capabilities.profileLevels;
     }
 
-    public boolean isCodecSupported(String str) {
-        if (str != null) {
-            if (this.mimeType != null) {
-                String mediaMimeType = MimeTypes.getMediaMimeType(str);
-                if (mediaMimeType == null) {
+    public boolean isCodecSupported(String codec) {
+        if (codec == null || this.mimeType == null) {
+            return true;
+        }
+        String codecMimeType = MimeTypes.getMediaMimeType(codec);
+        if (codecMimeType == null) {
+            return true;
+        }
+        if (this.mimeType.equals(codecMimeType)) {
+            Pair<Integer, Integer> codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(codec);
+            if (codecProfileAndLevel == null) {
+                return true;
+            }
+            for (CodecProfileLevel capabilities : getProfileLevels()) {
+                if (capabilities.profile == ((Integer) codecProfileAndLevel.first).intValue() && capabilities.level >= ((Integer) codecProfileAndLevel.second).intValue()) {
                     return true;
                 }
-                StringBuilder stringBuilder;
-                if (this.mimeType.equals(mediaMimeType)) {
-                    Pair codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(str);
-                    if (codecProfileAndLevel == null) {
-                        return true;
-                    }
-                    for (CodecProfileLevel codecProfileLevel : getProfileLevels()) {
-                        if (codecProfileLevel.profile == ((Integer) codecProfileAndLevel.first).intValue() && codecProfileLevel.level >= ((Integer) codecProfileAndLevel.second).intValue()) {
-                            return true;
-                        }
-                    }
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("codec.profileLevel, ");
-                    stringBuilder.append(str);
-                    stringBuilder.append(", ");
-                    stringBuilder.append(mediaMimeType);
-                    logNoSupport(stringBuilder.toString());
-                    return false;
-                }
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("codec.mime ");
-                stringBuilder.append(str);
-                stringBuilder.append(", ");
-                stringBuilder.append(mediaMimeType);
-                logNoSupport(stringBuilder.toString());
-                return false;
             }
+            logNoSupport("codec.profileLevel, " + codec + ", " + codecMimeType);
+            return false;
         }
-        return true;
+        logNoSupport("codec.mime " + codec + ", " + codecMimeType);
+        return false;
     }
 
     @TargetApi(21)
-    public boolean isVideoSizeAndRateSupportedV21(int i, int i2, double d) {
+    public boolean isVideoSizeAndRateSupportedV21(int width, int height, double frameRate) {
         if (this.capabilities == null) {
             logNoSupport("sizeAndRate.caps");
             return false;
@@ -107,35 +98,18 @@ public final class MediaCodecInfo {
             logNoSupport("sizeAndRate.vCaps");
             return false;
         }
-        if (!areSizeAndRateSupportedV21(videoCapabilities, i, i2, d)) {
-            StringBuilder stringBuilder;
-            if (i < i2) {
-                if (areSizeAndRateSupportedV21(videoCapabilities, i2, i, d)) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("sizeAndRate.rotated, ");
-                    stringBuilder.append(i);
-                    stringBuilder.append("x");
-                    stringBuilder.append(i2);
-                    stringBuilder.append("x");
-                    stringBuilder.append(d);
-                    logAssumedSupport(stringBuilder.toString());
-                }
+        if (!areSizeAndRateSupportedV21(videoCapabilities, width, height, frameRate)) {
+            if (width >= height || !areSizeAndRateSupportedV21(videoCapabilities, height, width, frameRate)) {
+                logNoSupport("sizeAndRate.support, " + width + "x" + height + "x" + frameRate);
+                return false;
             }
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("sizeAndRate.support, ");
-            stringBuilder.append(i);
-            stringBuilder.append("x");
-            stringBuilder.append(i2);
-            stringBuilder.append("x");
-            stringBuilder.append(d);
-            logNoSupport(stringBuilder.toString());
-            return false;
+            logAssumedSupport("sizeAndRate.rotated, " + width + "x" + height + "x" + frameRate);
         }
         return true;
     }
 
     @TargetApi(21)
-    public Point alignVideoSizeV21(int i, int i2) {
+    public Point alignVideoSizeV21(int width, int height) {
         if (this.capabilities == null) {
             logNoSupport("align.caps");
             return null;
@@ -147,11 +121,11 @@ public final class MediaCodecInfo {
         }
         int widthAlignment = videoCapabilities.getWidthAlignment();
         int heightAlignment = videoCapabilities.getHeightAlignment();
-        return new Point(Util.ceilDivide(i, widthAlignment) * widthAlignment, Util.ceilDivide(i2, heightAlignment) * heightAlignment);
+        return new Point(Util.ceilDivide(width, widthAlignment) * widthAlignment, Util.ceilDivide(height, heightAlignment) * heightAlignment);
     }
 
     @TargetApi(21)
-    public boolean isAudioSampleRateSupportedV21(int i) {
+    public boolean isAudioSampleRateSupportedV21(int sampleRate) {
         if (this.capabilities == null) {
             logNoSupport("sampleRate.caps");
             return false;
@@ -160,19 +134,16 @@ public final class MediaCodecInfo {
         if (audioCapabilities == null) {
             logNoSupport("sampleRate.aCaps");
             return false;
-        } else if (audioCapabilities.isSampleRateSupported(i)) {
+        } else if (audioCapabilities.isSampleRateSupported(sampleRate)) {
             return true;
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("sampleRate.support, ");
-            stringBuilder.append(i);
-            logNoSupport(stringBuilder.toString());
+            logNoSupport("sampleRate.support, " + sampleRate);
             return false;
         }
     }
 
     @TargetApi(21)
-    public boolean isAudioChannelCountSupportedV21(int i) {
+    public boolean isAudioChannelCountSupportedV21(int channelCount) {
         if (this.capabilities == null) {
             logNoSupport("channelCount.caps");
             return false;
@@ -181,106 +152,73 @@ public final class MediaCodecInfo {
         if (audioCapabilities == null) {
             logNoSupport("channelCount.aCaps");
             return false;
-        } else if (adjustMaxInputChannelCount(this.name, this.mimeType, audioCapabilities.getMaxInputChannelCount()) >= i) {
+        } else if (adjustMaxInputChannelCount(this.name, this.mimeType, audioCapabilities.getMaxInputChannelCount()) >= channelCount) {
             return true;
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("channelCount.support, ");
-            stringBuilder.append(i);
-            logNoSupport(stringBuilder.toString());
+            logNoSupport("channelCount.support, " + channelCount);
             return false;
         }
     }
 
-    private void logNoSupport(String str) {
-        String str2 = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("NoSupport [");
-        stringBuilder.append(str);
-        stringBuilder.append("] [");
-        stringBuilder.append(this.name);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.mimeType);
-        stringBuilder.append("] [");
-        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
-        stringBuilder.append("]");
-        Log.d(str2, stringBuilder.toString());
+    private void logNoSupport(String message) {
+        Log.d(TAG, "NoSupport [" + message + "] [" + this.name + ", " + this.mimeType + "] [" + Util.DEVICE_DEBUG_INFO + "]");
     }
 
-    private void logAssumedSupport(String str) {
-        String str2 = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("AssumedSupport [");
-        stringBuilder.append(str);
-        stringBuilder.append("] [");
-        stringBuilder.append(this.name);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.mimeType);
-        stringBuilder.append("] [");
-        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
-        stringBuilder.append("]");
-        Log.d(str2, stringBuilder.toString());
+    private void logAssumedSupport(String message) {
+        Log.d(TAG, "AssumedSupport [" + message + "] [" + this.name + ", " + this.mimeType + "] [" + Util.DEVICE_DEBUG_INFO + "]");
     }
 
-    private static int adjustMaxInputChannelCount(String str, String str2, int i) {
-        if (i <= 1) {
-            if (Util.SDK_INT < 26 || i <= 0) {
-                if (!(MimeTypes.AUDIO_MPEG.equals(str2) || MimeTypes.AUDIO_AMR_NB.equals(str2) || MimeTypes.AUDIO_AMR_WB.equals(str2) || MimeTypes.AUDIO_AAC.equals(str2) || MimeTypes.AUDIO_VORBIS.equals(str2) || MimeTypes.AUDIO_OPUS.equals(str2) || MimeTypes.AUDIO_RAW.equals(str2) || MimeTypes.AUDIO_FLAC.equals(str2) || MimeTypes.AUDIO_ALAW.equals(str2) || MimeTypes.AUDIO_MLAW.equals(str2))) {
-                    if (!MimeTypes.AUDIO_MSGSM.equals(str2)) {
-                        str2 = MimeTypes.AUDIO_AC3.equals(str2) ? 6 : MimeTypes.AUDIO_E_AC3.equals(str2) != null ? 16 : 30;
-                        String str3 = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("AssumedMaxChannelAdjustment: ");
-                        stringBuilder.append(str);
-                        stringBuilder.append(", [");
-                        stringBuilder.append(i);
-                        stringBuilder.append(" to ");
-                        stringBuilder.append(str2);
-                        stringBuilder.append("]");
-                        Log.w(str3, stringBuilder.toString());
-                        return str2;
-                    }
-                }
-                return i;
-            }
+    private static int adjustMaxInputChannelCount(String name, String mimeType, int maxChannelCount) {
+        if (maxChannelCount > 1) {
+            return maxChannelCount;
         }
-        return i;
+        if ((Util.SDK_INT >= 26 && maxChannelCount > 0) || MimeTypes.AUDIO_MPEG.equals(mimeType) || MimeTypes.AUDIO_AMR_NB.equals(mimeType) || MimeTypes.AUDIO_AMR_WB.equals(mimeType) || MimeTypes.AUDIO_AAC.equals(mimeType) || MimeTypes.AUDIO_VORBIS.equals(mimeType) || MimeTypes.AUDIO_OPUS.equals(mimeType) || MimeTypes.AUDIO_RAW.equals(mimeType) || MimeTypes.AUDIO_FLAC.equals(mimeType) || MimeTypes.AUDIO_ALAW.equals(mimeType) || MimeTypes.AUDIO_MLAW.equals(mimeType) || MimeTypes.AUDIO_MSGSM.equals(mimeType)) {
+            return maxChannelCount;
+        }
+        int assumedMaxChannelCount;
+        if (MimeTypes.AUDIO_AC3.equals(mimeType)) {
+            assumedMaxChannelCount = 6;
+        } else if (MimeTypes.AUDIO_E_AC3.equals(mimeType)) {
+            assumedMaxChannelCount = 16;
+        } else {
+            assumedMaxChannelCount = 30;
+        }
+        Log.w(TAG, "AssumedMaxChannelAdjustment: " + name + ", [" + maxChannelCount + " to " + assumedMaxChannelCount + "]");
+        return assumedMaxChannelCount;
     }
 
-    private static boolean isAdaptive(CodecCapabilities codecCapabilities) {
-        return (Util.SDK_INT < 19 || isAdaptiveV19(codecCapabilities) == null) ? null : true;
+    private static boolean isAdaptive(CodecCapabilities capabilities) {
+        return Util.SDK_INT >= 19 && isAdaptiveV19(capabilities);
     }
 
     @TargetApi(19)
-    private static boolean isAdaptiveV19(CodecCapabilities codecCapabilities) {
-        return codecCapabilities.isFeatureSupported("adaptive-playback");
+    private static boolean isAdaptiveV19(CodecCapabilities capabilities) {
+        return capabilities.isFeatureSupported("adaptive-playback");
     }
 
-    private static boolean isTunneling(CodecCapabilities codecCapabilities) {
-        return (Util.SDK_INT < 21 || isTunnelingV21(codecCapabilities) == null) ? null : true;
-    }
-
-    @TargetApi(21)
-    private static boolean isTunnelingV21(CodecCapabilities codecCapabilities) {
-        return codecCapabilities.isFeatureSupported("tunneled-playback");
-    }
-
-    private static boolean isSecure(CodecCapabilities codecCapabilities) {
-        return (Util.SDK_INT < 21 || isSecureV21(codecCapabilities) == null) ? null : true;
+    private static boolean isTunneling(CodecCapabilities capabilities) {
+        return Util.SDK_INT >= 21 && isTunnelingV21(capabilities);
     }
 
     @TargetApi(21)
-    private static boolean isSecureV21(CodecCapabilities codecCapabilities) {
-        return codecCapabilities.isFeatureSupported("secure-playback");
+    private static boolean isTunnelingV21(CodecCapabilities capabilities) {
+        return capabilities.isFeatureSupported("tunneled-playback");
+    }
+
+    private static boolean isSecure(CodecCapabilities capabilities) {
+        return Util.SDK_INT >= 21 && isSecureV21(capabilities);
     }
 
     @TargetApi(21)
-    private static boolean areSizeAndRateSupportedV21(VideoCapabilities videoCapabilities, int i, int i2, double d) {
-        if (d != -1.0d) {
-            if (d > 0.0d) {
-                return videoCapabilities.areSizeAndRateSupported(i, i2, d);
-            }
+    private static boolean isSecureV21(CodecCapabilities capabilities) {
+        return capabilities.isFeatureSupported("secure-playback");
+    }
+
+    @TargetApi(21)
+    private static boolean areSizeAndRateSupportedV21(VideoCapabilities capabilities, int width, int height, double frameRate) {
+        if (frameRate == -1.0d || frameRate <= 0.0d) {
+            return capabilities.isSizeSupported(width, height);
         }
-        return videoCapabilities.isSizeSupported(i, i2);
+        return capabilities.areSizeAndRateSupported(width, height, frameRate);
     }
 }

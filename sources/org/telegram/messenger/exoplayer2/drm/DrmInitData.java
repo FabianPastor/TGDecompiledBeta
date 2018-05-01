@@ -24,12 +24,12 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
         C05671() {
         }
 
-        public DrmInitData createFromParcel(Parcel parcel) {
-            return new DrmInitData(parcel);
+        public DrmInitData createFromParcel(Parcel in) {
+            return new DrmInitData(in);
         }
 
-        public DrmInitData[] newArray(int i) {
-            return new DrmInitData[i];
+        public DrmInitData[] newArray(int size) {
+            return new DrmInitData[size];
         }
     }
 
@@ -46,48 +46,39 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
             C05681() {
             }
 
-            public SchemeData createFromParcel(Parcel parcel) {
-                return new SchemeData(parcel);
+            public SchemeData createFromParcel(Parcel in) {
+                return new SchemeData(in);
             }
 
-            public SchemeData[] newArray(int i) {
-                return new SchemeData[i];
+            public SchemeData[] newArray(int size) {
+                return new SchemeData[size];
             }
         }
 
-        public int describeContents() {
-            return 0;
+        public SchemeData(UUID uuid, String mimeType, byte[] data) {
+            this(uuid, mimeType, data, false);
         }
 
-        public SchemeData(UUID uuid, String str, byte[] bArr) {
-            this(uuid, str, bArr, false);
-        }
-
-        public SchemeData(UUID uuid, String str, byte[] bArr, boolean z) {
+        public SchemeData(UUID uuid, String mimeType, byte[] data, boolean requiresSecureDecryption) {
             this.uuid = (UUID) Assertions.checkNotNull(uuid);
-            this.mimeType = (String) Assertions.checkNotNull(str);
-            this.data = bArr;
-            this.requiresSecureDecryption = z;
+            this.mimeType = (String) Assertions.checkNotNull(mimeType);
+            this.data = data;
+            this.requiresSecureDecryption = requiresSecureDecryption;
         }
 
-        SchemeData(Parcel parcel) {
-            this.uuid = new UUID(parcel.readLong(), parcel.readLong());
-            this.mimeType = parcel.readString();
-            this.data = parcel.createByteArray();
-            this.requiresSecureDecryption = parcel.readByte() != null ? true : null;
+        SchemeData(Parcel in) {
+            this.uuid = new UUID(in.readLong(), in.readLong());
+            this.mimeType = in.readString();
+            this.data = in.createByteArray();
+            this.requiresSecureDecryption = in.readByte() != (byte) 0;
         }
 
-        public boolean matches(UUID uuid) {
-            if (!C0542C.UUID_NIL.equals(this.uuid)) {
-                if (uuid.equals(this.uuid) == null) {
-                    return null;
-                }
-            }
-            return true;
+        public boolean matches(UUID schemeUuid) {
+            return C0542C.UUID_NIL.equals(this.uuid) || schemeUuid.equals(this.uuid);
         }
 
-        public boolean canReplace(SchemeData schemeData) {
-            return (!hasData() || schemeData.hasData() || matches(schemeData.uuid) == null) ? null : true;
+        public boolean canReplace(SchemeData other) {
+            return hasData() && !other.hasData() && matches(other.uuid);
         }
 
         public boolean hasData() {
@@ -98,102 +89,96 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
             if (!(obj instanceof SchemeData)) {
                 return false;
             }
-            boolean z = true;
             if (obj == this) {
                 return true;
             }
-            SchemeData schemeData = (SchemeData) obj;
-            if (!this.mimeType.equals(schemeData.mimeType) || !Util.areEqual(this.uuid, schemeData.uuid) || Arrays.equals(this.data, schemeData.data) == null) {
-                z = false;
+            SchemeData other = (SchemeData) obj;
+            if (this.mimeType.equals(other.mimeType) && Util.areEqual(this.uuid, other.uuid) && Arrays.equals(this.data, other.data)) {
+                return true;
             }
-            return z;
+            return false;
         }
 
         public int hashCode() {
             if (this.hashCode == 0) {
-                this.hashCode = (31 * ((this.uuid.hashCode() * 31) + this.mimeType.hashCode())) + Arrays.hashCode(this.data);
+                this.hashCode = (((this.uuid.hashCode() * 31) + this.mimeType.hashCode()) * 31) + Arrays.hashCode(this.data);
             }
             return this.hashCode;
         }
 
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeLong(this.uuid.getMostSignificantBits());
-            parcel.writeLong(this.uuid.getLeastSignificantBits());
-            parcel.writeString(this.mimeType);
-            parcel.writeByteArray(this.data);
-            parcel.writeByte((byte) this.requiresSecureDecryption);
+        public int describeContents() {
+            return 0;
+        }
+
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(this.uuid.getMostSignificantBits());
+            dest.writeLong(this.uuid.getLeastSignificantBits());
+            dest.writeString(this.mimeType);
+            dest.writeByteArray(this.data);
+            dest.writeByte((byte) (this.requiresSecureDecryption ? 1 : 0));
         }
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-    public static DrmInitData createSessionCreationData(DrmInitData drmInitData, DrmInitData drmInitData2) {
-        String str;
-        int length;
-        List arrayList = new ArrayList();
+    public static DrmInitData createSessionCreationData(DrmInitData manifestData, DrmInitData mediaData) {
         int i = 0;
-        if (drmInitData != null) {
-            str = drmInitData.schemeType;
-            for (SchemeData schemeData : drmInitData.schemeDatas) {
-                if (schemeData.hasData()) {
-                    arrayList.add(schemeData);
+        List result = new ArrayList();
+        String schemeType = null;
+        if (manifestData != null) {
+            schemeType = manifestData.schemeType;
+            for (SchemeData data : manifestData.schemeDatas) {
+                SchemeData data2;
+                if (data2.hasData()) {
+                    result.add(data2);
                 }
             }
-        } else {
-            str = null;
         }
-        if (drmInitData2 != null) {
-            if (str == null) {
-                str = drmInitData2.schemeType;
+        if (mediaData != null) {
+            if (schemeType == null) {
+                schemeType = mediaData.schemeType;
             }
-            drmInitData = arrayList.size();
-            drmInitData2 = drmInitData2.schemeDatas;
-            length = drmInitData2.length;
+            int manifestDatasCount = result.size();
+            SchemeData[] schemeDataArr = mediaData.schemeDatas;
+            int length = schemeDataArr.length;
             while (i < length) {
-                SchemeData schemeData2 = drmInitData2[i];
-                if (schemeData2.hasData() && !containsSchemeDataWithUuid(arrayList, drmInitData, schemeData2.uuid)) {
-                    arrayList.add(schemeData2);
+                data2 = schemeDataArr[i];
+                if (data2.hasData() && !containsSchemeDataWithUuid(result, manifestDatasCount, data2.uuid)) {
+                    result.add(data2);
                 }
                 i++;
             }
         }
-        if (arrayList.isEmpty() != null) {
-            return null;
+        return result.isEmpty() ? null : new DrmInitData(schemeType, result);
+    }
+
+    public DrmInitData(List<SchemeData> schemeDatas) {
+        this(null, false, (SchemeData[]) schemeDatas.toArray(new SchemeData[schemeDatas.size()]));
+    }
+
+    public DrmInitData(String schemeType, List<SchemeData> schemeDatas) {
+        this(schemeType, false, (SchemeData[]) schemeDatas.toArray(new SchemeData[schemeDatas.size()]));
+    }
+
+    public DrmInitData(SchemeData... schemeDatas) {
+        this(null, schemeDatas);
+    }
+
+    public DrmInitData(String schemeType, SchemeData... schemeDatas) {
+        this(schemeType, true, schemeDatas);
+    }
+
+    private DrmInitData(String schemeType, boolean cloneSchemeDatas, SchemeData... schemeDatas) {
+        this.schemeType = schemeType;
+        if (cloneSchemeDatas) {
+            schemeDatas = (SchemeData[]) schemeDatas.clone();
         }
-        return new DrmInitData(str, arrayList);
+        Arrays.sort(schemeDatas, this);
+        this.schemeDatas = schemeDatas;
+        this.schemeDataCount = schemeDatas.length;
     }
 
-    public DrmInitData(List<SchemeData> list) {
-        this(null, false, (SchemeData[]) list.toArray(new SchemeData[list.size()]));
-    }
-
-    public DrmInitData(String str, List<SchemeData> list) {
-        this(str, false, (SchemeData[]) list.toArray(new SchemeData[list.size()]));
-    }
-
-    public DrmInitData(SchemeData... schemeDataArr) {
-        this(null, schemeDataArr);
-    }
-
-    public DrmInitData(String str, SchemeData... schemeDataArr) {
-        this(str, true, schemeDataArr);
-    }
-
-    private DrmInitData(String str, boolean z, SchemeData... schemeDataArr) {
-        this.schemeType = str;
-        if (z) {
-            schemeDataArr = (SchemeData[]) schemeDataArr.clone();
-        }
-        Arrays.sort(schemeDataArr, this);
-        this.schemeDatas = schemeDataArr;
-        this.schemeDataCount = schemeDataArr.length;
-    }
-
-    DrmInitData(Parcel parcel) {
-        this.schemeType = parcel.readString();
-        this.schemeDatas = (SchemeData[]) parcel.createTypedArray(SchemeData.CREATOR);
+    DrmInitData(Parcel in) {
+        this.schemeType = in.readString();
+        this.schemeDatas = (SchemeData[]) in.createTypedArray(SchemeData.CREATOR);
         this.schemeDataCount = this.schemeDatas.length;
     }
 
@@ -207,57 +192,55 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
         return null;
     }
 
-    public SchemeData get(int i) {
-        return this.schemeDatas[i];
+    public SchemeData get(int index) {
+        return this.schemeDatas[index];
     }
 
-    public DrmInitData copyWithSchemeType(String str) {
-        if (Util.areEqual(this.schemeType, str)) {
-            return this;
-        }
-        return new DrmInitData(str, false, this.schemeDatas);
+    public DrmInitData copyWithSchemeType(String schemeType) {
+        return Util.areEqual(this.schemeType, schemeType) ? this : new DrmInitData(schemeType, false, this.schemeDatas);
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * (this.schemeType == null ? 0 : this.schemeType.hashCode())) + Arrays.hashCode(this.schemeDatas);
+            this.hashCode = ((this.schemeType == null ? 0 : this.schemeType.hashCode()) * 31) + Arrays.hashCode(this.schemeDatas);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                DrmInitData drmInitData = (DrmInitData) obj;
-                if (!Util.areEqual(this.schemeType, drmInitData.schemeType) || Arrays.equals(this.schemeDatas, drmInitData.schemeDatas) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        DrmInitData other = (DrmInitData) obj;
+        if (Util.areEqual(this.schemeType, other.schemeType) && Arrays.equals(this.schemeDatas, other.schemeDatas)) {
+            return true;
         }
         return false;
     }
 
-    public int compare(SchemeData schemeData, SchemeData schemeData2) {
-        if (C0542C.UUID_NIL.equals(schemeData.uuid)) {
-            return C0542C.UUID_NIL.equals(schemeData2.uuid) != null ? null : 1;
+    public int compare(SchemeData first, SchemeData second) {
+        if (C0542C.UUID_NIL.equals(first.uuid)) {
+            return C0542C.UUID_NIL.equals(second.uuid) ? 0 : 1;
         } else {
-            return schemeData.uuid.compareTo(schemeData2.uuid);
+            return first.uuid.compareTo(second.uuid);
         }
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.schemeType);
-        parcel.writeTypedArray(this.schemeDatas, 0);
+    public int describeContents() {
+        return 0;
     }
 
-    private static boolean containsSchemeDataWithUuid(ArrayList<SchemeData> arrayList, int i, UUID uuid) {
-        for (int i2 = 0; i2 < i; i2++) {
-            if (((SchemeData) arrayList.get(i2)).uuid.equals(uuid)) {
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.schemeType);
+        dest.writeTypedArray(this.schemeDatas, 0);
+    }
+
+    private static boolean containsSchemeDataWithUuid(ArrayList<SchemeData> datas, int limit, UUID uuid) {
+        for (int i = 0; i < limit; i++) {
+            if (((SchemeData) datas.get(i)).uuid.equals(uuid)) {
                 return true;
             }
         }

@@ -5,7 +5,6 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
-import org.telegram.messenger.exoplayer2.source.chunk.ChunkExtractorWrapper.TrackOutputProvider;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -19,11 +18,11 @@ public class ContainerMediaChunk extends BaseMediaChunk {
     private volatile boolean loadCompleted;
     private final long sampleOffsetUs;
 
-    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, long j, long j2, int i2, int i3, long j3, ChunkExtractorWrapper chunkExtractorWrapper) {
-        super(dataSource, dataSpec, format, i, obj, j, j2, i2);
-        this.chunkCount = i3;
-        this.sampleOffsetUs = j3;
-        this.extractorWrapper = chunkExtractorWrapper;
+    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int chunkCount, long sampleOffsetUs, ChunkExtractorWrapper extractorWrapper) {
+        super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
+        this.chunkCount = chunkCount;
+        this.sampleOffsetUs = sampleOffsetUs;
+        this.extractorWrapper = extractorWrapper;
     }
 
     public int getNextChunkIndex() {
@@ -47,26 +46,22 @@ public class ContainerMediaChunk extends BaseMediaChunk {
     }
 
     public final void load() throws IOException, InterruptedException {
-        DataSpec subrange = this.dataSpec.subrange((long) this.bytesLoaded);
-        ExtractorInput defaultExtractorInput;
+        DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
+        ExtractorInput input;
         try {
-            defaultExtractorInput = new DefaultExtractorInput(this.dataSource, subrange.absoluteStreamPosition, this.dataSource.open(subrange));
+            input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
-                TrackOutputProvider output = getOutput();
+                BaseMediaChunkOutput output = getOutput();
                 output.setSampleOffsetUs(this.sampleOffsetUs);
                 this.extractorWrapper.init(output);
             }
             Extractor extractor = this.extractorWrapper.extractor;
-            boolean z = false;
-            int i = 0;
-            while (i == 0 && !this.loadCanceled) {
-                i = extractor.read(defaultExtractorInput, null);
+            int result = 0;
+            while (result == 0 && !this.loadCanceled) {
+                result = extractor.read(input, null);
             }
-            if (i != 1) {
-                z = true;
-            }
-            Assertions.checkState(z);
-            this.bytesLoaded = (int) (defaultExtractorInput.getPosition() - this.dataSpec.absoluteStreamPosition);
+            Assertions.checkState(result != 1);
+            this.bytesLoaded = (int) (input.getPosition() - this.dataSpec.absoluteStreamPosition);
             Util.closeQuietly(this.dataSource);
             this.loadCompleted = true;
         } catch (Throwable th) {

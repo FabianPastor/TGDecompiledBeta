@@ -21,13 +21,13 @@ public final class ExoPlayerFactory {
     }
 
     @Deprecated
-    public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int i) {
-        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, i), trackSelector, loadControl);
+    public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode) {
+        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, extensionRendererMode), trackSelector, loadControl);
     }
 
     @Deprecated
-    public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int i, long j) {
-        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, i, j), trackSelector, loadControl);
+    public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
+        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, extensionRendererMode, allowedVideoJoiningTimeMs), trackSelector, loadControl);
     }
 
     public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector) {
@@ -42,11 +42,11 @@ public final class ExoPlayerFactory {
         return new SimpleExoPlayer(renderersFactory, trackSelector, loadControl);
     }
 
-    public static ExoPlayer newInstance(Renderer[] rendererArr, TrackSelector trackSelector) {
-        return newInstance(rendererArr, trackSelector, new DefaultLoadControl());
+    public static ExoPlayer newInstance(Renderer[] renderers, TrackSelector trackSelector) {
+        return newInstance(renderers, trackSelector, new DefaultLoadControl());
     }
 
-    public static ExoPlayer newInstance(Renderer[] rendererArr, TrackSelector trackSelector, LoadControl loadControl) {
-        return new ExoPlayerImpl(rendererArr, trackSelector, loadControl, Clock.DEFAULT);
+    public static ExoPlayer newInstance(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl) {
+        return new ExoPlayerImpl(renderers, trackSelector, loadControl, Clock.DEFAULT);
     }
 }

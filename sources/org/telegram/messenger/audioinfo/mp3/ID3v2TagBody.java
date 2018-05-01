@@ -11,9 +11,9 @@ public class ID3v2TagBody {
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
-    ID3v2TagBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader) throws IOException {
-        this.input = new RangeInputStream(inputStream, j, (long) i);
-        this.tagHeader = iD3v2TagHeader;
+    ID3v2TagBody(InputStream delegate, long position, int length, ID3v2TagHeader tagHeader) throws IOException {
+        this.input = new RangeInputStream(delegate, position, (long) length);
+        this.tagHeader = tagHeader;
     }
 
     public ID3v2DataInput getData() {
@@ -32,50 +32,46 @@ public class ID3v2TagBody {
         return this.tagHeader;
     }
 
-    public ID3v2FrameBody frameBody(ID3v2FrameHeader iD3v2FrameHeader) throws IOException, ID3v2Exception {
-        int bodySize = iD3v2FrameHeader.getBodySize();
+    public ID3v2FrameBody frameBody(ID3v2FrameHeader frameHeader) throws IOException, ID3v2Exception {
+        int dataLength = frameHeader.getBodySize();
         InputStream inputStream = this.input;
-        if (iD3v2FrameHeader.isUnsynchronization()) {
-            byte[] readFully = this.data.readFully(iD3v2FrameHeader.getBodySize());
-            int length = readFully.length;
+        if (frameHeader.isUnsynchronization()) {
+            byte[] bytes = this.data.readFully(frameHeader.getBodySize());
+            boolean ff = false;
+            int length = bytes.length;
             int i = 0;
-            int i2 = i;
-            int i3 = i2;
+            int len = 0;
             while (i < length) {
-                byte b = readFully[i];
-                if (i2 == 0 || b != (byte) 0) {
-                    i2 = i3 + 1;
-                    readFully[i3] = b;
-                    i3 = i2;
+                int len2;
+                byte b = bytes[i];
+                if (ff && b == (byte) 0) {
+                    len2 = len;
+                } else {
+                    len2 = len + 1;
+                    bytes[len] = b;
                 }
-                i2 = b == (byte) -1 ? 1 : 0;
+                if (b == (byte) -1) {
+                    ff = true;
+                } else {
+                    ff = false;
+                }
                 i++;
+                len = len2;
             }
-            inputStream = new ByteArrayInputStream(readFully, 0, i3);
-            bodySize = i3;
+            dataLength = len;
+            inputStream = new ByteArrayInputStream(bytes, 0, len);
         }
-        if (iD3v2FrameHeader.isEncryption()) {
+        if (frameHeader.isEncryption()) {
             throw new ID3v2Exception("Frame encryption is not supported");
         }
-        int dataLengthIndicator;
-        InputStream inflaterInputStream;
-        if (iD3v2FrameHeader.isCompression()) {
-            dataLengthIndicator = iD3v2FrameHeader.getDataLengthIndicator();
-            inflaterInputStream = new InflaterInputStream(inputStream);
-        } else {
-            dataLengthIndicator = bodySize;
-            inflaterInputStream = inputStream;
+        if (frameHeader.isCompression()) {
+            dataLength = frameHeader.getDataLengthIndicator();
+            inputStream = new InflaterInputStream(inputStream);
         }
-        return new ID3v2FrameBody(inflaterInputStream, (long) iD3v2FrameHeader.getHeaderSize(), dataLengthIndicator, this.tagHeader, iD3v2FrameHeader);
+        return new ID3v2FrameBody(inputStream, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("id3v2tag[pos=");
-        stringBuilder.append(getPosition());
-        stringBuilder.append(", ");
-        stringBuilder.append(getRemainingLength());
-        stringBuilder.append(" left]");
-        return stringBuilder.toString();
+        return "id3v2tag[pos=" + getPosition() + ", " + getRemainingLength() + " left]";
     }
 }

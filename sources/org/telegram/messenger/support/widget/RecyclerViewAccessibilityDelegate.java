@@ -13,22 +13,25 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
     public static class ItemDelegate extends AccessibilityDelegateCompat {
         final RecyclerViewAccessibilityDelegate mRecyclerViewDelegate;
 
-        public ItemDelegate(RecyclerViewAccessibilityDelegate recyclerViewAccessibilityDelegate) {
-            this.mRecyclerViewDelegate = recyclerViewAccessibilityDelegate;
+        public ItemDelegate(RecyclerViewAccessibilityDelegate recyclerViewDelegate) {
+            this.mRecyclerViewDelegate = recyclerViewDelegate;
         }
 
-        public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
-            super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfoCompat);
+        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+            super.onInitializeAccessibilityNodeInfo(host, info);
             if (!this.mRecyclerViewDelegate.shouldIgnore() && this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager() != null) {
-                this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfoForItem(view, accessibilityNodeInfoCompat);
+                this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfoForItem(host, info);
             }
         }
 
-        public boolean performAccessibilityAction(View view, int i, Bundle bundle) {
-            if (super.performAccessibilityAction(view, i, bundle)) {
+        public boolean performAccessibilityAction(View host, int action, Bundle args) {
+            if (super.performAccessibilityAction(host, action, args)) {
                 return true;
             }
-            return (this.mRecyclerViewDelegate.shouldIgnore() || this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager() == null) ? null : this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().performAccessibilityActionForItem(view, i, bundle);
+            if (this.mRecyclerViewDelegate.shouldIgnore() || this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager() == null) {
+                return false;
+            }
+            return this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().performAccessibilityActionForItem(host, action, args);
         }
     }
 
@@ -40,28 +43,31 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
         return this.mRecyclerView.hasPendingAdapterUpdates();
     }
 
-    public boolean performAccessibilityAction(View view, int i, Bundle bundle) {
-        if (super.performAccessibilityAction(view, i, bundle) != null) {
+    public boolean performAccessibilityAction(View host, int action, Bundle args) {
+        if (super.performAccessibilityAction(host, action, args)) {
             return true;
         }
-        return (shouldIgnore() != null || this.mRecyclerView.getLayoutManager() == null) ? null : this.mRecyclerView.getLayoutManager().performAccessibilityAction(i, bundle);
+        if (shouldIgnore() || this.mRecyclerView.getLayoutManager() == null) {
+            return false;
+        }
+        return this.mRecyclerView.getLayoutManager().performAccessibilityAction(action, args);
     }
 
-    public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
-        super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfoCompat);
-        accessibilityNodeInfoCompat.setClassName(RecyclerView.class.getName());
-        if (shouldIgnore() == null && this.mRecyclerView.getLayoutManager() != null) {
-            this.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfo(accessibilityNodeInfoCompat);
+    public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+        super.onInitializeAccessibilityNodeInfo(host, info);
+        info.setClassName(RecyclerView.class.getName());
+        if (!shouldIgnore() && this.mRecyclerView.getLayoutManager() != null) {
+            this.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfo(info);
         }
     }
 
-    public void onInitializeAccessibilityEvent(View view, AccessibilityEvent accessibilityEvent) {
-        super.onInitializeAccessibilityEvent(view, accessibilityEvent);
-        accessibilityEvent.setClassName(RecyclerView.class.getName());
-        if ((view instanceof RecyclerView) && !shouldIgnore()) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (recyclerView.getLayoutManager() != null) {
-                recyclerView.getLayoutManager().onInitializeAccessibilityEvent(accessibilityEvent);
+    public void onInitializeAccessibilityEvent(View host, AccessibilityEvent event) {
+        super.onInitializeAccessibilityEvent(host, event);
+        event.setClassName(RecyclerView.class.getName());
+        if ((host instanceof RecyclerView) && !shouldIgnore()) {
+            RecyclerView rv = (RecyclerView) host;
+            if (rv.getLayoutManager() != null) {
+                rv.getLayoutManager().onInitializeAccessibilityEvent(event);
             }
         }
     }

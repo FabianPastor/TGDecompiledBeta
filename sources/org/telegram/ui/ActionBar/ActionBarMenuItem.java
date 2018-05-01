@@ -86,14 +86,26 @@ public class ActionBarMenuItem extends FrameLayout {
         C07232() {
         }
 
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getActionMasked() == 0 && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
-                view.getHitRect(ActionBarMenuItem.this.rect);
-                if (ActionBarMenuItem.this.rect.contains((int) motionEvent.getX(), (int) motionEvent.getY()) == null) {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getActionMasked() == 0 && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
+                v.getHitRect(ActionBarMenuItem.this.rect);
+                if (!ActionBarMenuItem.this.rect.contains((int) event.getX(), (int) event.getY())) {
                     ActionBarMenuItem.this.popupWindow.dismiss();
                 }
             }
-            return null;
+            return false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
+    class C18893 implements OnDispatchKeyEventListener {
+        C18893() {
+        }
+
+        public void onDispatchKeyEvent(KeyEvent keyEvent) {
+            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
+                ActionBarMenuItem.this.popupWindow.dismiss();
+            }
         }
     }
 
@@ -146,9 +158,9 @@ public class ActionBarMenuItem extends FrameLayout {
         C07266() {
         }
 
-        public boolean onKey(View view, int i, KeyEvent keyEvent) {
-            if (i != 82 || keyEvent.getRepeatCount() != null || keyEvent.getAction() != 1 || ActionBarMenuItem.this.popupWindow == null || ActionBarMenuItem.this.popupWindow.isShowing() == null) {
-                return null;
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode != 82 || event.getRepeatCount() != 0 || event.getAction() != 1 || ActionBarMenuItem.this.popupWindow == null || !ActionBarMenuItem.this.popupWindow.isShowing()) {
+                return false;
             }
             ActionBarMenuItem.this.popupWindow.dismiss();
             return true;
@@ -157,22 +169,22 @@ public class ActionBarMenuItem extends FrameLayout {
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$9 */
     class C07289 implements Callback {
-        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            return false;
-        }
-
-        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode actionMode) {
-        }
-
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-            return false;
-        }
-
         C07289() {
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
         }
     }
 
@@ -181,104 +193,92 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public static class ActionBarMenuItemSearchListener {
-        public boolean canCollapseSearch() {
-            return true;
+        public void onSearchExpand() {
         }
 
-        public void onCaptionCleared() {
+        public boolean canCollapseSearch() {
+            return true;
         }
 
         public void onSearchCollapse() {
         }
 
-        public void onSearchExpand() {
+        public void onTextChanged(EditText editText) {
         }
 
         public void onSearchPressed(EditText editText) {
         }
 
-        public void onTextChanged(EditText editText) {
+        public void onCaptionCleared() {
         }
     }
 
-    /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
-    class C18893 implements OnDispatchKeyEventListener {
-        C18893() {
-        }
-
-        public void onDispatchKeyEvent(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == null && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing() != null) {
-                ActionBarMenuItem.this.popupWindow.dismiss();
-            }
-        }
-    }
-
-    public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2) {
+    public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor, int iconColor) {
         super(context);
-        if (i != 0) {
-            setBackgroundDrawable(Theme.createSelectorDrawable(i));
+        if (backgroundColor != 0) {
+            setBackgroundDrawable(Theme.createSelectorDrawable(backgroundColor));
         }
-        this.parentMenu = actionBarMenu;
+        this.parentMenu = menu;
         this.iconView = new ImageView(context);
         this.iconView.setScaleType(ScaleType.CENTER);
-        addView(this.iconView, LayoutHelper.createFrame(-1, -NUM));
-        if (i2 != 0) {
-            this.iconView.setColorFilter(new PorterDuffColorFilter(i2, Mode.MULTIPLY));
+        addView(this.iconView, LayoutHelper.createFrame(-1, -1.0f));
+        if (iconColor != 0) {
+            this.iconView.setColorFilter(new PorterDuffColorFilter(iconColor, Mode.MULTIPLY));
         }
     }
 
-    public void setLongClickEnabled(boolean z) {
-        this.longClickEnabled = z;
+    public void setLongClickEnabled(boolean value) {
+        this.longClickEnabled = value;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getActionMasked() == 0) {
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getActionMasked() == 0) {
             if (this.longClickEnabled && hasSubMenu() && (this.popupWindow == null || !(this.popupWindow == null || this.popupWindow.isShowing()))) {
                 this.showMenuRunnable = new C07221();
                 AndroidUtilities.runOnUIThread(this.showMenuRunnable, 200);
             }
-        } else if (motionEvent.getActionMasked() == 2) {
+        } else if (event.getActionMasked() == 2) {
             if (!hasSubMenu() || (this.popupWindow != null && (this.popupWindow == null || this.popupWindow.isShowing()))) {
                 if (this.popupWindow != null && this.popupWindow.isShowing()) {
                     getLocationOnScreen(this.location);
-                    float x = motionEvent.getX() + ((float) this.location[0]);
-                    float y = motionEvent.getY() + ((float) this.location[1]);
+                    float x = event.getX() + ((float) this.location[0]);
+                    float y = event.getY() + ((float) this.location[1]);
                     this.popupLayout.getLocationOnScreen(this.location);
                     x -= (float) this.location[0];
                     y -= (float) this.location[1];
                     this.selectedMenuView = null;
-                    for (int i = 0; i < this.popupLayout.getItemsCount(); i++) {
-                        View itemAt = this.popupLayout.getItemAt(i);
-                        itemAt.getHitRect(this.rect);
-                        if (((Integer) itemAt.getTag()).intValue() < 100) {
+                    for (int a = 0; a < this.popupLayout.getItemsCount(); a++) {
+                        View child = this.popupLayout.getItemAt(a);
+                        child.getHitRect(this.rect);
+                        if (((Integer) child.getTag()).intValue() < 100) {
                             if (this.rect.contains((int) x, (int) y)) {
-                                itemAt.setPressed(true);
-                                itemAt.setSelected(true);
+                                child.setPressed(true);
+                                child.setSelected(true);
                                 if (VERSION.SDK_INT >= 21) {
                                     if (VERSION.SDK_INT == 21) {
-                                        itemAt.getBackground().setVisible(true, false);
+                                        child.getBackground().setVisible(true, false);
                                     }
-                                    itemAt.drawableHotspotChanged(x, y - ((float) itemAt.getTop()));
+                                    child.drawableHotspotChanged(x, y - ((float) child.getTop()));
                                 }
-                                this.selectedMenuView = itemAt;
+                                this.selectedMenuView = child;
                             } else {
-                                itemAt.setPressed(false);
-                                itemAt.setSelected(false);
+                                child.setPressed(false);
+                                child.setSelected(false);
                                 if (VERSION.SDK_INT == 21) {
-                                    itemAt.getBackground().setVisible(false, false);
+                                    child.getBackground().setVisible(false, false);
                                 }
                             }
                         }
                     }
                 }
-            } else if (motionEvent.getY() > ((float) getHeight())) {
+            } else if (event.getY() > ((float) getHeight())) {
                 if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
                 toggleSubMenu();
                 return true;
             }
-        } else if (this.popupWindow != null && this.popupWindow.isShowing() && motionEvent.getActionMasked() == 1) {
+        } else if (this.popupWindow != null && this.popupWindow.isShowing() && event.getActionMasked() == 1) {
             if (this.selectedMenuView != null) {
                 this.selectedMenuView.setSelected(false);
                 if (this.parentMenu != null) {
@@ -294,26 +294,26 @@ public class ActionBarMenuItem extends FrameLayout {
             this.selectedMenuView.setSelected(false);
             this.selectedMenuView = null;
         }
-        return super.onTouchEvent(motionEvent);
+        return super.onTouchEvent(event);
     }
 
-    public void setDelegate(ActionBarMenuItemDelegate actionBarMenuItemDelegate) {
-        this.delegate = actionBarMenuItemDelegate;
+    public void setDelegate(ActionBarMenuItemDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    public void setIconColor(int i) {
-        this.iconView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+    public void setIconColor(int color) {
+        this.iconView.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         if (this.clearButton != null) {
-            this.clearButton.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+            this.clearButton.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
     }
 
-    public void setSubMenuOpenSide(int i) {
-        this.subMenuOpenSide = i;
+    public void setSubMenuOpenSide(int side) {
+        this.subMenuOpenSide = side;
     }
 
-    public void setLayoutInScreen(boolean z) {
-        this.layoutInScreen = z;
+    public void setLayoutInScreen(boolean value) {
+        this.layoutInScreen = value;
     }
 
     private void createPopupLayout() {
@@ -326,23 +326,23 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void addSubItem(View view, int i, int i2) {
+    public void addSubItem(View view, int width, int height) {
         createPopupLayout();
-        this.popupLayout.addView(view, new LayoutParams(i, i2));
+        this.popupLayout.addView(view, new LayoutParams(width, height));
     }
 
-    public void addSubItem(int i, View view, int i2, int i3) {
+    public void addSubItem(int id, View view, int width, int height) {
         createPopupLayout();
-        view.setLayoutParams(new LayoutParams(i2, i3));
+        view.setLayoutParams(new LayoutParams(width, height));
         this.popupLayout.addView(view);
-        view.setTag(Integer.valueOf(i));
+        view.setTag(Integer.valueOf(id));
         view.setOnClickListener(new C07244());
-        view.setBackgroundDrawable(Theme.getSelectorDrawable(0));
+        view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
     }
 
-    public TextView addSubItem(int i, String str) {
+    public TextView addSubItem(int id, String text) {
         createPopupLayout();
-        View textView = new TextView(getContext());
+        TextView textView = new TextView(getContext());
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
         textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         if (LocaleController.isRTL) {
@@ -353,11 +353,11 @@ public class ActionBarMenuItem extends FrameLayout {
         textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
         textView.setTextSize(1, 16.0f);
         textView.setMinWidth(AndroidUtilities.dp(196.0f));
-        textView.setTag(Integer.valueOf(i));
-        textView.setText(str);
+        textView.setTag(Integer.valueOf(id));
+        textView.setText(text);
         this.popupLayout.addView(textView);
         LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
-        if (LocaleController.isRTL != null) {
+        if (LocaleController.isRTL) {
             layoutParams.gravity = 5;
         }
         layoutParams.width = -1;
@@ -367,20 +367,20 @@ public class ActionBarMenuItem extends FrameLayout {
         return textView;
     }
 
-    public void redrawPopup(int i) {
+    public void redrawPopup(int color) {
         if (this.popupLayout != null) {
-            this.popupLayout.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+            this.popupLayout.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
             this.popupLayout.invalidate();
         }
     }
 
-    public void setPopupItemsColor(int i) {
+    public void setPopupItemsColor(int color) {
         if (this.popupLayout != null) {
-            int childCount = this.popupLayout.linearLayout.getChildCount();
-            for (int i2 = 0; i2 < childCount; i2++) {
-                View childAt = this.popupLayout.linearLayout.getChildAt(i2);
-                if (childAt instanceof TextView) {
-                    ((TextView) childAt).setTextColor(i);
+            int count = this.popupLayout.linearLayout.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.popupLayout.linearLayout.getChildAt(a);
+                if (child instanceof TextView) {
+                    ((TextView) child).setTextColor(color);
                 }
             }
         }
@@ -440,43 +440,43 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void openSearch(boolean z) {
-        if (!(this.searchContainer == null || this.searchContainer.getVisibility() == 0)) {
-            if (this.parentMenu != null) {
-                this.parentMenu.parentActionBar.onSearchFieldVisibilityChanged(toggleSearch(z));
-            }
+    public void openSearch(boolean openKeyboard) {
+        if (this.searchContainer != null && this.searchContainer.getVisibility() != 0 && this.parentMenu != null) {
+            this.parentMenu.parentActionBar.onSearchFieldVisibilityChanged(toggleSearch(openKeyboard));
         }
     }
 
-    public boolean toggleSearch(boolean z) {
+    public boolean toggleSearch(boolean openKeyboard) {
         if (this.searchContainer == null) {
             return false;
         }
-        if (this.searchContainer.getVisibility() == 0) {
-            if (this.listener == null || (this.listener != null && this.listener.canCollapseSearch())) {
-                this.searchContainer.setVisibility(8);
-                this.searchField.clearFocus();
-                setVisibility(0);
-                if (z) {
-                    AndroidUtilities.hideKeyboard(this.searchField);
-                }
-                if (this.listener) {
-                    this.listener.onSearchCollapse();
-                }
+        if (this.searchContainer.getVisibility() != 0) {
+            this.searchContainer.setVisibility(0);
+            setVisibility(8);
+            this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            this.searchField.requestFocus();
+            if (openKeyboard) {
+                AndroidUtilities.showKeyboard(this.searchField);
             }
+            if (this.listener != null) {
+                this.listener.onSearchExpand();
+            }
+            return true;
+        } else if (this.listener != null && (this.listener == null || !this.listener.canCollapseSearch())) {
+            return false;
+        } else {
+            this.searchContainer.setVisibility(8);
+            this.searchField.clearFocus();
+            setVisibility(0);
+            if (openKeyboard) {
+                AndroidUtilities.hideKeyboard(this.searchField);
+            }
+            if (this.listener == null) {
+                return false;
+            }
+            this.listener.onSearchCollapse();
             return false;
         }
-        this.searchContainer.setVisibility(0);
-        setVisibility(8);
-        this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
-        this.searchField.requestFocus();
-        if (z) {
-            AndroidUtilities.showKeyboard(this.searchField);
-        }
-        if (this.listener) {
-            this.listener.onSearchExpand();
-        }
-        return true;
     }
 
     public void closeSubMenu() {
@@ -485,8 +485,8 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void setIcon(int i) {
-        this.iconView.setImageResource(i);
+    public void setIcon(int resId) {
+        this.iconView.setImageResource(resId);
     }
 
     public void setIcon(Drawable drawable) {
@@ -501,145 +501,147 @@ public class ActionBarMenuItem extends FrameLayout {
         return this.searchField;
     }
 
-    public ActionBarMenuItem setOverrideMenuClick(boolean z) {
-        this.overrideMenuClick = z;
+    public ActionBarMenuItem setOverrideMenuClick(boolean value) {
+        this.overrideMenuClick = value;
         return this;
     }
 
-    public ActionBarMenuItem setIsSearchField(boolean z) {
-        if (this.parentMenu == null) {
-            return this;
-        }
-        if (z && this.searchContainer == null) {
-            this.searchContainer = new FrameLayout(getContext()) {
-                protected void onMeasure(int i, int i2) {
-                    int measuredWidth;
-                    measureChildWithMargins(ActionBarMenuItem.this.clearButton, i, 0, i2, 0);
-                    if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
-                        measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, i, MeasureSpec.getSize(i) / 2, i2, 0);
-                        measuredWidth = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
-                    } else {
-                        measuredWidth = 0;
-                    }
-                    measureChildWithMargins(ActionBarMenuItem.this.searchField, i, measuredWidth, i2, 0);
-                    MeasureSpec.getSize(i);
-                    MeasureSpec.getSize(i2);
-                    setMeasuredDimension(MeasureSpec.getSize(i), MeasureSpec.getSize(i2));
-                }
-
-                protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                    super.onLayout(z, i, i2, i3, i4);
-                    i = 0;
-                    if (!LocaleController.isRTL) {
-                        if (!ActionBarMenuItem.this.searchFieldCaption.getVisibility()) {
-                            i = AndroidUtilities.dp(NUM) + ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth();
+    public ActionBarMenuItem setIsSearchField(boolean value) {
+        if (this.parentMenu != null) {
+            if (value && this.searchContainer == null) {
+                this.searchContainer = new FrameLayout(getContext()) {
+                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        int width;
+                        measureChildWithMargins(ActionBarMenuItem.this.clearButton, widthMeasureSpec, 0, heightMeasureSpec, 0);
+                        if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, widthMeasureSpec, MeasureSpec.getSize(widthMeasureSpec) / 2, heightMeasureSpec, 0);
+                            width = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
+                        } else {
+                            width = 0;
                         }
+                        measureChildWithMargins(ActionBarMenuItem.this.searchField, widthMeasureSpec, width, heightMeasureSpec, 0);
+                        int w = MeasureSpec.getSize(widthMeasureSpec);
+                        int h = MeasureSpec.getSize(heightMeasureSpec);
+                        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
                     }
-                    ActionBarMenuItem.this.searchField.layout(i, ActionBarMenuItem.this.searchField.getTop(), ActionBarMenuItem.this.searchField.getMeasuredWidth() + i, ActionBarMenuItem.this.searchField.getBottom());
-                }
-            };
-            this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, 6, 0, 0, 0));
-            this.searchContainer.setVisibility(8);
-            this.searchFieldCaption = new TextView(getContext());
-            this.searchFieldCaption.setTextSize(1, 18.0f);
-            this.searchFieldCaption.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
-            this.searchFieldCaption.setSingleLine(true);
-            this.searchFieldCaption.setEllipsize(TruncateAt.END);
-            this.searchFieldCaption.setVisibility(8);
-            this.searchFieldCaption.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.searchField = new EditTextBoldCursor(getContext()) {
-                public boolean onKeyDown(int i, KeyEvent keyEvent) {
-                    if (i != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) {
-                        return super.onKeyDown(i, keyEvent);
-                    }
-                    ActionBarMenuItem.this.clearButton.callOnClick();
-                    return true;
-                }
 
-                public boolean dispatchKeyEvent(KeyEvent keyEvent) {
-                    return super.dispatchKeyEvent(keyEvent);
+                    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                        int x;
+                        super.onLayout(changed, left, top, right, bottom);
+                        if (LocaleController.isRTL) {
+                            x = 0;
+                        } else if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            x = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
+                        } else {
+                            x = 0;
+                        }
+                        ActionBarMenuItem.this.searchField.layout(x, ActionBarMenuItem.this.searchField.getTop(), ActionBarMenuItem.this.searchField.getMeasuredWidth() + x, ActionBarMenuItem.this.searchField.getBottom());
+                    }
+                };
+                this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, 6, 0, 0, 0));
+                this.searchContainer.setVisibility(8);
+                this.searchFieldCaption = new TextView(getContext());
+                this.searchFieldCaption.setTextSize(1, 18.0f);
+                this.searchFieldCaption.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+                this.searchFieldCaption.setSingleLine(true);
+                this.searchFieldCaption.setEllipsize(TruncateAt.END);
+                this.searchFieldCaption.setVisibility(8);
+                this.searchFieldCaption.setGravity(LocaleController.isRTL ? 5 : 3);
+                this.searchField = new EditTextBoldCursor(getContext()) {
+                    public boolean onKeyDown(int keyCode, KeyEvent event) {
+                        if (keyCode != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) {
+                            return super.onKeyDown(keyCode, event);
+                        }
+                        ActionBarMenuItem.this.clearButton.callOnClick();
+                        return true;
+                    }
+
+                    public boolean dispatchKeyEvent(KeyEvent event) {
+                        return super.dispatchKeyEvent(event);
+                    }
+                };
+                this.searchField.setCursorWidth(1.5f);
+                this.searchField.setCursorColor(-1);
+                this.searchField.setTextSize(1, 18.0f);
+                this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
+                this.searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+                this.searchField.setSingleLine(true);
+                this.searchField.setBackgroundResource(0);
+                this.searchField.setPadding(0, 0, 0, 0);
+                this.searchField.setInputType(this.searchField.getInputType() | 524288);
+                if (VERSION.SDK_INT < 23) {
+                    this.searchField.setCustomSelectionActionModeCallback(new C07289());
                 }
-            };
-            this.searchField.setCursorWidth(1.5f);
-            this.searchField.setCursorColor(-1);
-            this.searchField.setTextSize(1, 18.0f);
-            this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
-            this.searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
-            this.searchField.setSingleLine(true);
-            this.searchField.setBackgroundResource(0);
-            this.searchField.setPadding(0, 0, 0, 0);
-            this.searchField.setInputType(this.searchField.getInputType() | 524288);
-            if (VERSION.SDK_INT < 23) {
-                this.searchField.setCustomSelectionActionModeCallback(new C07289());
-            }
-            this.searchField.setOnEditorActionListener(new OnEditorActionListener() {
-                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    if (keyEvent != null && ((keyEvent.getAction() == 1 && keyEvent.getKeyCode() == 84) || (keyEvent.getAction() == null && keyEvent.getKeyCode() == 66))) {
-                        AndroidUtilities.hideKeyboard(ActionBarMenuItem.this.searchField);
+                this.searchField.setOnEditorActionListener(new OnEditorActionListener() {
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (event != null && ((event.getAction() == 1 && event.getKeyCode() == 84) || (event.getAction() == 0 && event.getKeyCode() == 66))) {
+                            AndroidUtilities.hideKeyboard(ActionBarMenuItem.this.searchField);
+                            if (ActionBarMenuItem.this.listener != null) {
+                                ActionBarMenuItem.this.listener.onSearchPressed(ActionBarMenuItem.this.searchField);
+                            }
+                        }
+                        return false;
+                    }
+                });
+                this.searchField.addTextChangedListener(new TextWatcher() {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (ActionBarMenuItem.this.ignoreOnTextChange) {
+                            ActionBarMenuItem.this.ignoreOnTextChange = false;
+                            return;
+                        }
                         if (ActionBarMenuItem.this.listener != null) {
-                            ActionBarMenuItem.this.listener.onSearchPressed(ActionBarMenuItem.this.searchField);
+                            ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
+                        }
+                        if (ActionBarMenuItem.this.clearButton == null) {
                         }
                     }
-                    return null;
-                }
-            });
-            this.searchField.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable editable) {
-                }
 
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    if (ActionBarMenuItem.this.ignoreOnTextChange != null) {
-                        ActionBarMenuItem.this.ignoreOnTextChange = 0;
-                        return;
+                    public void afterTextChanged(Editable s) {
                     }
-                    if (ActionBarMenuItem.this.listener != null) {
-                        ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
-                    }
-                    ActionBarMenuItem.this.clearButton;
+                });
+                this.searchField.setImeOptions(33554435);
+                this.searchField.setTextIsSelectable(false);
+                if (LocaleController.isRTL) {
+                    this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
+                    this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
+                } else {
+                    this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 19, 0.0f, 5.5f, 0.0f, 0.0f));
+                    this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
                 }
-            });
-            this.searchField.setImeOptions(33554435);
-            this.searchField.setTextIsSelectable(false);
-            if (LocaleController.isRTL) {
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
-                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
-            } else {
-                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 19, 0.0f, 5.5f, 0.0f, 0.0f));
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
+                this.clearButton = new ImageView(getContext());
+                ImageView imageView = this.clearButton;
+                Drawable closeProgressDrawable2 = new CloseProgressDrawable2();
+                this.progressDrawable = closeProgressDrawable2;
+                imageView.setImageDrawable(closeProgressDrawable2);
+                this.clearButton.setColorFilter(new PorterDuffColorFilter(this.parentMenu.parentActionBar.itemsColor, Mode.MULTIPLY));
+                this.clearButton.setScaleType(ScaleType.CENTER);
+                this.clearButton.setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        if (ActionBarMenuItem.this.searchField.length() != 0) {
+                            ActionBarMenuItem.this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                        } else if (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            ActionBarMenuItem.this.searchFieldCaption.setVisibility(8);
+                            if (ActionBarMenuItem.this.listener != null) {
+                                ActionBarMenuItem.this.listener.onCaptionCleared();
+                            }
+                        }
+                        ActionBarMenuItem.this.searchField.requestFocus();
+                        AndroidUtilities.showKeyboard(ActionBarMenuItem.this.searchField);
+                    }
+                });
+                this.searchContainer.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
             }
-            this.clearButton = new ImageView(getContext());
-            ImageView imageView = this.clearButton;
-            Drawable closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            imageView.setImageDrawable(closeProgressDrawable2);
-            this.clearButton.setColorFilter(new PorterDuffColorFilter(this.parentMenu.parentActionBar.itemsColor, Mode.MULTIPLY));
-            this.clearButton.setScaleType(ScaleType.CENTER);
-            this.clearButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    if (ActionBarMenuItem.this.searchField.length() != null) {
-                        ActionBarMenuItem.this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                    } else if (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == null) {
-                        ActionBarMenuItem.this.searchFieldCaption.setVisibility(8);
-                        if (ActionBarMenuItem.this.listener != null) {
-                            ActionBarMenuItem.this.listener.onCaptionCleared();
-                        }
-                    }
-                    ActionBarMenuItem.this.searchField.requestFocus();
-                    AndroidUtilities.showKeyboard(ActionBarMenuItem.this.searchField);
-                }
-            });
-            this.searchContainer.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
+            this.isSearchField = value;
         }
-        this.isSearchField = z;
         return this;
     }
 
-    public void setShowSearchProgress(boolean z) {
+    public void setShowSearchProgress(boolean show) {
         if (this.progressDrawable != null) {
-            if (z) {
+            if (show) {
                 this.progressDrawable.startAnimation();
             } else {
                 this.progressDrawable.stopAnimation();
@@ -647,14 +649,15 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void setSearchFieldCaption(CharSequence charSequence) {
-        if (TextUtils.isEmpty(charSequence)) {
+    public void setSearchFieldCaption(CharSequence caption) {
+        if (TextUtils.isEmpty(caption)) {
             this.searchFieldCaption.setVisibility(8);
         } else {
             this.searchFieldCaption.setVisibility(0);
-            this.searchFieldCaption.setText(charSequence);
+            this.searchFieldCaption.setText(caption);
         }
-        charSequence = this.clearButton;
+        if (this.clearButton == null) {
+        }
     }
 
     public void setIgnoreOnTextChange() {
@@ -671,99 +674,98 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public ActionBarMenuItem setActionBarMenuItemSearchListener(ActionBarMenuItemSearchListener actionBarMenuItemSearchListener) {
-        this.listener = actionBarMenuItemSearchListener;
+    public ActionBarMenuItem setActionBarMenuItemSearchListener(ActionBarMenuItemSearchListener listener) {
+        this.listener = listener;
         return this;
     }
 
-    public ActionBarMenuItem setAllowCloseAnimation(boolean z) {
-        this.allowCloseAnimation = z;
+    public ActionBarMenuItem setAllowCloseAnimation(boolean value) {
+        this.allowCloseAnimation = value;
         return this;
     }
 
-    public void setPopupAnimationEnabled(boolean z) {
+    public void setPopupAnimationEnabled(boolean value) {
         if (this.popupWindow != null) {
-            this.popupWindow.setAnimationEnabled(z);
+            this.popupWindow.setAnimationEnabled(value);
         }
-        this.animationEnabled = z;
+        this.animationEnabled = value;
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
-        if (this.popupWindow && this.popupWindow.isShowing()) {
-            updateOrShowPopup(false, 1);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (this.popupWindow != null && this.popupWindow.isShowing()) {
+            updateOrShowPopup(false, true);
         }
     }
 
-    public void setAdditionalOffset(int i) {
-        this.additionalOffset = i;
+    public void setAdditionalOffset(int value) {
+        this.additionalOffset = value;
     }
 
-    private void updateOrShowPopup(boolean z, boolean z2) {
-        int top;
+    private void updateOrShowPopup(boolean show, boolean update) {
+        int offsetY;
         if (this.parentMenu != null) {
-            top = (-this.parentMenu.parentActionBar.getMeasuredHeight()) + this.parentMenu.getTop();
+            offsetY = (-this.parentMenu.parentActionBar.getMeasuredHeight()) + this.parentMenu.getTop();
         } else {
             float scaleY = getScaleY();
-            top = (-((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)))) + this.additionalOffset;
+            offsetY = (-((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)))) + this.additionalOffset;
         }
-        int i = top;
-        if (z) {
+        if (show) {
             this.popupLayout.scrollToTop();
         }
-        View view;
+        View parent;
         if (this.parentMenu != null) {
-            view = this.parentMenu.parentActionBar;
+            parent = this.parentMenu.parentActionBar;
             if (this.subMenuOpenSide == 0) {
-                if (z) {
-                    this.popupWindow.showAsDropDown(view, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), i);
+                if (show) {
+                    this.popupWindow.showAsDropDown(parent, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), offsetY);
                 }
-                if (z2) {
-                    this.popupWindow.update(view, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), i, -1, -1);
+                if (update) {
+                    this.popupWindow.update(parent, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), offsetY, -1, -1);
                     return;
                 }
                 return;
             }
-            if (z) {
-                this.popupWindow.showAsDropDown(view, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), i);
+            if (show) {
+                this.popupWindow.showAsDropDown(parent, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), offsetY);
             }
-            if (z2) {
-                this.popupWindow.update(view, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), i, -1, -1);
+            if (update) {
+                this.popupWindow.update(parent, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), offsetY, -1, -1);
             }
         } else if (this.subMenuOpenSide != 0) {
-            if (z) {
-                this.popupWindow.showAsDropDown(this, -AndroidUtilities.dp(8.0f), i);
+            if (show) {
+                this.popupWindow.showAsDropDown(this, -AndroidUtilities.dp(8.0f), offsetY);
             }
-            if (z2) {
-                this.popupWindow.update(this, -AndroidUtilities.dp(8.0f), i, -1, -1);
+            if (update) {
+                this.popupWindow.update(this, -AndroidUtilities.dp(8.0f), offsetY, -1, -1);
             }
         } else if (getParent() != null) {
-            view = (View) getParent();
-            if (z) {
-                this.popupWindow.showAsDropDown(view, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), i);
+            parent = (View) getParent();
+            if (show) {
+                this.popupWindow.showAsDropDown(parent, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY);
             }
-            if (z2) {
-                this.popupWindow.update(view, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), i, -1, -1);
+            if (update) {
+                this.popupWindow.update(parent, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY, -1, -1);
             }
         }
     }
 
-    public void hideSubItem(int i) {
-        i = this.popupLayout.findViewWithTag(Integer.valueOf(i));
-        if (i != 0 && i.getVisibility() != 8) {
-            i.setVisibility(8);
+    public void hideSubItem(int id) {
+        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+        if (view != null && view.getVisibility() != 8) {
+            view.setVisibility(8);
         }
     }
 
-    public boolean isSubItemVisible(int i) {
-        i = this.popupLayout.findViewWithTag(Integer.valueOf(i));
-        return i != 0 && i.getVisibility() == 0;
+    public boolean isSubItemVisible(int id) {
+        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+        return view != null && view.getVisibility() == 0;
     }
 
-    public void showSubItem(int i) {
-        i = this.popupLayout.findViewWithTag(Integer.valueOf(i));
-        if (i != 0 && i.getVisibility() != 0) {
-            i.setVisibility(0);
+    public void showSubItem(int id) {
+        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+        if (view != null && view.getVisibility() != 0) {
+            view.setVisibility(0);
         }
     }
 }

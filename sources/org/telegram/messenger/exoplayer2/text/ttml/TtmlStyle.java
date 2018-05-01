@@ -44,10 +44,10 @@ final class TtmlStyle {
     }
 
     public int getStyle() {
+        int i = 0;
         if (this.bold == -1 && this.italic == -1) {
             return -1;
         }
-        int i = 0;
         int i2 = this.bold == 1 ? 1 : 0;
         if (this.italic == 1) {
             i = 2;
@@ -59,9 +59,19 @@ final class TtmlStyle {
         return this.linethrough == 1;
     }
 
-    public TtmlStyle setLinethrough(boolean z) {
-        Assertions.checkState(this.inheritableStyle == null);
-        this.linethrough = z;
+    public TtmlStyle setLinethrough(boolean linethrough) {
+        boolean z;
+        int i = 1;
+        if (this.inheritableStyle == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
+        if (!linethrough) {
+            i = 0;
+        }
+        this.linethrough = i;
         return this;
     }
 
@@ -69,21 +79,51 @@ final class TtmlStyle {
         return this.underline == 1;
     }
 
-    public TtmlStyle setUnderline(boolean z) {
-        Assertions.checkState(this.inheritableStyle == null);
-        this.underline = z;
+    public TtmlStyle setUnderline(boolean underline) {
+        boolean z;
+        int i = 1;
+        if (this.inheritableStyle == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
+        if (!underline) {
+            i = 0;
+        }
+        this.underline = i;
         return this;
     }
 
-    public TtmlStyle setBold(boolean z) {
-        Assertions.checkState(this.inheritableStyle == null);
-        this.bold = z;
+    public TtmlStyle setBold(boolean bold) {
+        boolean z;
+        int i = 1;
+        if (this.inheritableStyle == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
+        if (!bold) {
+            i = 0;
+        }
+        this.bold = i;
         return this;
     }
 
-    public TtmlStyle setItalic(boolean z) {
-        Assertions.checkState(this.inheritableStyle == null);
-        this.italic = z;
+    public TtmlStyle setItalic(boolean italic) {
+        boolean z;
+        int i = 1;
+        if (this.inheritableStyle == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
+        if (!italic) {
+            i = 0;
+        }
+        this.italic = i;
         return this;
     }
 
@@ -91,9 +131,9 @@ final class TtmlStyle {
         return this.fontFamily;
     }
 
-    public TtmlStyle setFontFamily(String str) {
+    public TtmlStyle setFontFamily(String fontFamily) {
         Assertions.checkState(this.inheritableStyle == null);
-        this.fontFamily = str;
+        this.fontFamily = fontFamily;
         return this;
     }
 
@@ -104,9 +144,9 @@ final class TtmlStyle {
         throw new IllegalStateException("Font color has not been defined.");
     }
 
-    public TtmlStyle setFontColor(int i) {
+    public TtmlStyle setFontColor(int fontColor) {
         Assertions.checkState(this.inheritableStyle == null);
-        this.fontColor = i;
+        this.fontColor = fontColor;
         this.hasFontColor = true;
         return this;
     }
@@ -122,8 +162,8 @@ final class TtmlStyle {
         throw new IllegalStateException("Background color has not been defined.");
     }
 
-    public TtmlStyle setBackgroundColor(int i) {
-        this.backgroundColor = i;
+    public TtmlStyle setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         this.hasBackgroundColor = true;
         return this;
     }
@@ -132,50 +172,50 @@ final class TtmlStyle {
         return this.hasBackgroundColor;
     }
 
-    public TtmlStyle inherit(TtmlStyle ttmlStyle) {
-        return inherit(ttmlStyle, false);
+    public TtmlStyle inherit(TtmlStyle ancestor) {
+        return inherit(ancestor, false);
     }
 
-    public TtmlStyle chain(TtmlStyle ttmlStyle) {
-        return inherit(ttmlStyle, true);
+    public TtmlStyle chain(TtmlStyle ancestor) {
+        return inherit(ancestor, true);
     }
 
-    private TtmlStyle inherit(TtmlStyle ttmlStyle, boolean z) {
-        if (ttmlStyle != null) {
-            if (!this.hasFontColor && ttmlStyle.hasFontColor) {
-                setFontColor(ttmlStyle.fontColor);
+    private TtmlStyle inherit(TtmlStyle ancestor, boolean chaining) {
+        if (ancestor != null) {
+            if (!this.hasFontColor && ancestor.hasFontColor) {
+                setFontColor(ancestor.fontColor);
             }
             if (this.bold == -1) {
-                this.bold = ttmlStyle.bold;
+                this.bold = ancestor.bold;
             }
             if (this.italic == -1) {
-                this.italic = ttmlStyle.italic;
+                this.italic = ancestor.italic;
             }
             if (this.fontFamily == null) {
-                this.fontFamily = ttmlStyle.fontFamily;
+                this.fontFamily = ancestor.fontFamily;
             }
             if (this.linethrough == -1) {
-                this.linethrough = ttmlStyle.linethrough;
+                this.linethrough = ancestor.linethrough;
             }
             if (this.underline == -1) {
-                this.underline = ttmlStyle.underline;
+                this.underline = ancestor.underline;
             }
             if (this.textAlign == null) {
-                this.textAlign = ttmlStyle.textAlign;
+                this.textAlign = ancestor.textAlign;
             }
             if (this.fontSizeUnit == -1) {
-                this.fontSizeUnit = ttmlStyle.fontSizeUnit;
-                this.fontSize = ttmlStyle.fontSize;
+                this.fontSizeUnit = ancestor.fontSizeUnit;
+                this.fontSize = ancestor.fontSize;
             }
-            if (z && !this.hasBackgroundColor && ttmlStyle.hasBackgroundColor) {
-                setBackgroundColor(ttmlStyle.backgroundColor);
+            if (chaining && !this.hasBackgroundColor && ancestor.hasBackgroundColor) {
+                setBackgroundColor(ancestor.backgroundColor);
             }
         }
         return this;
     }
 
-    public TtmlStyle setId(String str) {
-        this.id = str;
+    public TtmlStyle setId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -187,18 +227,18 @@ final class TtmlStyle {
         return this.textAlign;
     }
 
-    public TtmlStyle setTextAlign(Alignment alignment) {
-        this.textAlign = alignment;
+    public TtmlStyle setTextAlign(Alignment textAlign) {
+        this.textAlign = textAlign;
         return this;
     }
 
-    public TtmlStyle setFontSize(float f) {
-        this.fontSize = f;
+    public TtmlStyle setFontSize(float fontSize) {
+        this.fontSize = fontSize;
         return this;
     }
 
-    public TtmlStyle setFontSizeUnit(int i) {
-        this.fontSizeUnit = i;
+    public TtmlStyle setFontSizeUnit(int fontSizeUnit) {
+        this.fontSizeUnit = fontSizeUnit;
         return this;
     }
 

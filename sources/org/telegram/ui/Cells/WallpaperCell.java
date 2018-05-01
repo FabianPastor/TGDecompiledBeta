@@ -35,69 +35,58 @@ public class WallpaperCell extends FrameLayout {
         addView(this.selectionView, LayoutHelper.createFrame(100, 102.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(NUM), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(102.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(102.0f), NUM));
     }
 
-    public void setWallpaper(WallPaper wallPaper, int i, Drawable drawable, boolean z) {
-        int i2 = NUM;
-        int i3 = 4;
-        int i4 = 0;
-        if (wallPaper == null) {
+    public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper, boolean themed) {
+        int i = 0;
+        if (wallpaper == null) {
             this.imageView.setVisibility(4);
             this.imageView2.setVisibility(0);
-            if (z) {
-                wallPaper = this.selectionView;
-                if (i == true) {
-                    i3 = 0;
-                }
-                wallPaper.setVisibility(i3);
-                this.imageView2.setImageDrawable(drawable);
+            if (themed) {
+                this.selectionView.setVisibility(selectedBackground == -2 ? 0 : 4);
+                this.imageView2.setImageDrawable(themedWallpaper);
                 this.imageView2.setScaleType(ScaleType.CENTER_CROP);
                 return;
             }
-            wallPaper = this.selectionView;
-            if (i == -1) {
-                i3 = 0;
+            View view = this.selectionView;
+            if (selectedBackground != -1) {
+                i = 4;
             }
-            wallPaper.setVisibility(i3);
-            wallPaper = this.imageView2;
-            if (i != -1) {
-                if (i != 1000001) {
-                    i2 = NUM;
-                }
-            }
-            wallPaper.setBackgroundColor(i2);
+            view.setVisibility(i);
+            ImageView imageView = this.imageView2;
+            int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
+            imageView.setBackgroundColor(i2);
             this.imageView2.setScaleType(ScaleType.CENTER);
             this.imageView2.setImageResource(C0446R.drawable.ic_gallery_background);
             return;
         }
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
-        drawable = this.selectionView;
-        if (i == wallPaper.id) {
-            i3 = 0;
+        View view2 = this.selectionView;
+        if (selectedBackground != wallpaper.id) {
+            i = 4;
         }
-        drawable.setVisibility(i3);
-        if ((wallPaper instanceof TL_wallPaperSolid) != 0) {
+        view2.setVisibility(i);
+        if (wallpaper instanceof TL_wallPaperSolid) {
             this.imageView.setImageBitmap(null);
-            this.imageView.setBackgroundColor(wallPaper.bg_color | Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+            this.imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR | wallpaper.bg_color);
             return;
         }
-        i = AndroidUtilities.dp(NUM);
-        z = false;
-        while (i4 < wallPaper.sizes.size()) {
-            PhotoSize photoSize = (PhotoSize) wallPaper.sizes.get(i4);
-            if (photoSize != null) {
-                int i5 = photoSize.f43w >= photoSize.f42h ? photoSize.f43w : photoSize.f42h;
-                if (!z || ((i > 100 && z.location != null && z.location.dc_id == Integer.MIN_VALUE) || (photoSize instanceof TL_photoCachedSize) || i5 <= i)) {
-                    z = photoSize;
+        int side = AndroidUtilities.dp(100.0f);
+        PhotoSize size = null;
+        for (int a = 0; a < wallpaper.sizes.size(); a++) {
+            PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
+            if (obj != null) {
+                int currentSide = obj.f43w >= obj.f42h ? obj.f43w : obj.f42h;
+                if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
+                    size = obj;
                 }
             }
-            i4++;
         }
-        if (z && z.location != null) {
-            this.imageView.setImage(z.location, "100_100", (Drawable) null);
+        if (!(size == null || size.location == null)) {
+            this.imageView.setImage(size.location, "100_100", (Drawable) null);
         }
         this.imageView.setBackgroundColor(NUM);
     }

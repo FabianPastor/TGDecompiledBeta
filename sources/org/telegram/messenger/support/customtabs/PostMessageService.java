@@ -15,12 +15,12 @@ public class PostMessageService extends Service {
         C23211() {
         }
 
-        public void onMessageChannelReady(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) throws RemoteException {
-            iCustomTabsCallback.onMessageChannelReady(bundle);
+        public void onMessageChannelReady(ICustomTabsCallback callback, Bundle extras) throws RemoteException {
+            callback.onMessageChannelReady(extras);
         }
 
-        public void onPostMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) throws RemoteException {
-            iCustomTabsCallback.onPostMessage(str, bundle);
+        public void onPostMessage(ICustomTabsCallback callback, String message, Bundle extras) throws RemoteException {
+            callback.onPostMessage(message, extras);
         }
     }
 

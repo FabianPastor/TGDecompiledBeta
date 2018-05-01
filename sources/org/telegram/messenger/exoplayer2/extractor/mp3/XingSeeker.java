@@ -16,111 +16,85 @@ final class XingSeeker implements Seeker {
     private final long[] tableOfContents;
     private final int xingFrameSize;
 
-    public static XingSeeker create(long j, long j2, MpegAudioHeader mpegAudioHeader, ParsableByteArray parsableByteArray) {
-        long j3 = j;
-        MpegAudioHeader mpegAudioHeader2 = mpegAudioHeader;
-        int i = mpegAudioHeader2.samplesPerFrame;
-        int i2 = mpegAudioHeader2.sampleRate;
-        int readInt = parsableByteArray.readInt();
-        if ((readInt & 1) == 1) {
-            int readUnsignedIntToInt = parsableByteArray.readUnsignedIntToInt();
-            if (readUnsignedIntToInt != 0) {
-                long scaleLargeTimestamp = Util.scaleLargeTimestamp((long) readUnsignedIntToInt, ((long) i) * C0542C.MICROS_PER_SECOND, (long) i2);
-                if ((readInt & 6) != 6) {
-                    return new XingSeeker(j2, mpegAudioHeader2.frameSize, scaleLargeTimestamp);
+    public static XingSeeker create(long inputLength, long position, MpegAudioHeader mpegAudioHeader, ParsableByteArray frame) {
+        int samplesPerFrame = mpegAudioHeader.samplesPerFrame;
+        int sampleRate = mpegAudioHeader.sampleRate;
+        int flags = frame.readInt();
+        if ((flags & 1) == 1) {
+            int frameCount = frame.readUnsignedIntToInt();
+            if (frameCount != 0) {
+                long durationUs = Util.scaleLargeTimestamp((long) frameCount, ((long) samplesPerFrame) * C0542C.MICROS_PER_SECOND, (long) sampleRate);
+                if ((flags & 6) != 6) {
+                    return new XingSeeker(position, mpegAudioHeader.frameSize, durationUs);
                 }
-                long readUnsignedIntToInt2 = (long) parsableByteArray.readUnsignedIntToInt();
-                long[] jArr = new long[100];
-                for (int i3 = 0; i3 < 100; i3++) {
-                    jArr[i3] = (long) parsableByteArray.readUnsignedByte();
+                long dataSize = (long) frame.readUnsignedIntToInt();
+                long[] tableOfContents = new long[100];
+                for (int i = 0; i < 100; i++) {
+                    tableOfContents[i] = (long) frame.readUnsignedByte();
                 }
-                if (j3 != -1) {
-                    long j4 = j2 + readUnsignedIntToInt2;
-                    if (j3 != j4) {
-                        String str = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("XING data size mismatch: ");
-                        stringBuilder.append(j3);
-                        stringBuilder.append(", ");
-                        stringBuilder.append(j4);
-                        Log.w(str, stringBuilder.toString());
-                    }
+                if (!(inputLength == -1 || inputLength == position + dataSize)) {
+                    Log.w(TAG, "XING data size mismatch: " + inputLength + ", " + (position + dataSize));
                 }
-                return new XingSeeker(j2, mpegAudioHeader2.frameSize, scaleLargeTimestamp, readUnsignedIntToInt2, jArr);
+                return new XingSeeker(position, mpegAudioHeader.frameSize, durationUs, dataSize, tableOfContents);
             }
         }
         return null;
     }
 
-    private XingSeeker(long j, int i, long j2) {
-        this(j, i, j2, -1, null);
+    private XingSeeker(long dataStartPosition, int xingFrameSize, long durationUs) {
+        this(dataStartPosition, xingFrameSize, durationUs, -1, null);
     }
 
-    private XingSeeker(long j, int i, long j2, long j3, long[] jArr) {
-        this.dataStartPosition = j;
-        this.xingFrameSize = i;
-        this.durationUs = j2;
-        this.dataSize = j3;
-        this.tableOfContents = jArr;
+    private XingSeeker(long dataStartPosition, int xingFrameSize, long durationUs, long dataSize, long[] tableOfContents) {
+        this.dataStartPosition = dataStartPosition;
+        this.xingFrameSize = xingFrameSize;
+        this.durationUs = durationUs;
+        this.dataSize = dataSize;
+        this.tableOfContents = tableOfContents;
     }
 
     public boolean isSeekable() {
         return this.tableOfContents != null;
     }
 
-    public SeekPoints getSeekPoints(long j) {
-        XingSeeker xingSeeker = this;
+    public SeekPoints getSeekPoints(long timeUs) {
         if (!isSeekable()) {
-            return new SeekPoints(new SeekPoint(0, xingSeeker.dataStartPosition + ((long) xingSeeker.xingFrameSize)));
+            return new SeekPoints(new SeekPoint(0, this.dataStartPosition + ((long) this.xingFrameSize)));
         }
-        long constrainValue = Util.constrainValue(j, 0, xingSeeker.durationUs);
-        double d = (((double) constrainValue) * 100.0d) / ((double) xingSeeker.durationUs);
-        double d2 = 0.0d;
-        if (d > 0.0d) {
-            if (d >= 100.0d) {
-                d2 = 256.0d;
-            } else {
-                double d3;
-                int i = (int) d;
-                double d4 = (double) xingSeeker.tableOfContents[i];
-                if (i == 99) {
-                    d3 = 256.0d;
-                } else {
-                    d3 = (double) xingSeeker.tableOfContents[i + 1];
-                }
-                d2 = d4 + ((d - ((double) i)) * (d3 - d4));
-            }
+        double scaledPosition;
+        timeUs = Util.constrainValue(timeUs, 0, this.durationUs);
+        double percent = (((double) timeUs) * 100.0d) / ((double) this.durationUs);
+        if (percent <= 0.0d) {
+            scaledPosition = 0.0d;
+        } else if (percent >= 100.0d) {
+            scaledPosition = 256.0d;
+        } else {
+            int prevTableIndex = (int) percent;
+            double prevScaledPosition = (double) this.tableOfContents[prevTableIndex];
+            scaledPosition = prevScaledPosition + (((prevTableIndex == 99 ? 256.0d : (double) this.tableOfContents[prevTableIndex + 1]) - prevScaledPosition) * (percent - ((double) prevTableIndex)));
         }
-        return new SeekPoints(new SeekPoint(constrainValue, xingSeeker.dataStartPosition + Util.constrainValue(Math.round((d2 / 256.0d) * ((double) xingSeeker.dataSize)), (long) xingSeeker.xingFrameSize, xingSeeker.dataSize - 1)));
+        return new SeekPoints(new SeekPoint(timeUs, this.dataStartPosition + Util.constrainValue(Math.round((scaledPosition / 256.0d) * ((double) this.dataSize)), (long) this.xingFrameSize, this.dataSize - 1)));
     }
 
-    public long getTimeUs(long j) {
-        long j2 = j - this.dataStartPosition;
-        if (isSeekable() != null) {
-            if (j2 > ((long) this.xingFrameSize)) {
-                long j3;
-                j = (((double) j2) * 4643211215818981376L) / ((double) this.dataSize);
-                int binarySearchFloor = Util.binarySearchFloor(this.tableOfContents, (long) j, true, true);
-                long timeUsForTableIndex = getTimeUsForTableIndex(binarySearchFloor);
-                long j4 = this.tableOfContents[binarySearchFloor];
-                int i = binarySearchFloor + 1;
-                long timeUsForTableIndex2 = getTimeUsForTableIndex(i);
-                if (binarySearchFloor == 99) {
-                    j3 = 256;
-                } else {
-                    j3 = this.tableOfContents[i];
-                }
-                return timeUsForTableIndex + Math.round((j4 == j3 ? 0 : (j - ((double) j4)) / ((double) (j3 - j4))) * ((double) (timeUsForTableIndex2 - timeUsForTableIndex)));
-            }
+    public long getTimeUs(long position) {
+        long positionOffset = position - this.dataStartPosition;
+        if (!isSeekable() || positionOffset <= ((long) this.xingFrameSize)) {
+            return 0;
         }
-        return 0;
+        double scaledPosition = (((double) positionOffset) * 256.0d) / ((double) this.dataSize);
+        int prevTableIndex = Util.binarySearchFloor(this.tableOfContents, (long) scaledPosition, true, true);
+        long prevTimeUs = getTimeUsForTableIndex(prevTableIndex);
+        long prevScaledPosition = this.tableOfContents[prevTableIndex];
+        long nextTimeUs = getTimeUsForTableIndex(prevTableIndex + 1);
+        long nextScaledPosition = prevTableIndex == 99 ? 256 : this.tableOfContents[prevTableIndex + 1];
+        return Math.round(((double) (nextTimeUs - prevTimeUs)) * (prevScaledPosition == nextScaledPosition ? 0.0d : (scaledPosition - ((double) prevScaledPosition)) / ((double) (nextScaledPosition - prevScaledPosition)))) + prevTimeUs;
     }
 
     public long getDurationUs() {
         return this.durationUs;
     }
 
-    private long getTimeUsForTableIndex(int i) {
-        return (this.durationUs * ((long) i)) / 100;
+    private long getTimeUsForTableIndex(int tableIndex) {
+        return (this.durationUs * ((long) tableIndex)) / 100;
     }
 }

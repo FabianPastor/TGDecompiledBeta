@@ -10,26 +10,21 @@ public class MP3Frame {
         CRC16() {
         }
 
-        public void update(int i, int i2) {
-            i2 = 1 << (i2 - 1);
+        public void update(int value, int length) {
+            int mask = 1 << (length - 1);
             do {
-                int i3 = 0;
-                int i4 = (this.crc & 32768) == 0 ? 1 : 0;
-                if ((i & i2) == 0) {
-                    i3 = 1;
-                }
-                if ((i4 ^ i3) != 0) {
+                if ((((value & mask) == 0 ? 1 : 0) ^ ((this.crc & 32768) == 0 ? 1 : 0)) != 0) {
                     this.crc = (short) (this.crc << 1);
                     this.crc = (short) (this.crc ^ 32773);
                 } else {
                     this.crc = (short) (this.crc << 1);
                 }
-                i2 >>>= 1;
-            } while (i2 != 0);
+                mask >>>= 1;
+            } while (mask != 0);
         }
 
-        public void update(byte b) {
-            update(b, 8);
+        public void update(byte value) {
+            update(value, 8);
         }
 
         public short getValue() {
@@ -69,44 +64,37 @@ public class MP3Frame {
         private final int protection;
         private final int version;
 
-        public int getVBRIOffset() {
-            return 36;
-        }
-
-        public Header(int i, int i2, int i3) throws MP3Exception {
-            this.version = (i >> 3) & 3;
+        public Header(int b1, int b2, int b3) throws MP3Exception {
+            this.version = (b1 >> 3) & 3;
             if (this.version == 1) {
                 throw new MP3Exception("Reserved version");
             }
-            this.layer = (i >> 1) & 3;
+            this.layer = (b1 >> 1) & 3;
             if (this.layer == 0) {
                 throw new MP3Exception("Reserved layer");
             }
-            this.bitrate = (i2 >> 4) & 15;
+            this.bitrate = (b2 >> 4) & 15;
             if (this.bitrate == 15) {
                 throw new MP3Exception("Reserved bitrate");
             } else if (this.bitrate == 0) {
                 throw new MP3Exception("Free bitrate");
             } else {
-                this.frequency = (i2 >> 2) & 3;
+                this.frequency = (b2 >> 2) & 3;
                 if (this.frequency == 3) {
                     throw new MP3Exception("Reserved frequency");
                 }
-                int i4 = 6;
-                this.channelMode = (i3 >> 6) & 3;
-                this.padding = (i2 >> 1) & 1;
-                this.protection = i & 1;
-                if (this.protection != 0) {
-                    i4 = 4;
+                this.channelMode = (b3 >> 6) & 3;
+                this.padding = (b2 >> 1) & 1;
+                this.protection = b1 & 1;
+                int minFrameSize = 4;
+                if (this.protection == 0) {
+                    minFrameSize = 4 + 2;
                 }
                 if (this.layer == 1) {
-                    i4 += getSideInfoSize();
+                    minFrameSize += getSideInfoSize();
                 }
-                if (getFrameSize() < i4) {
-                    i2 = new StringBuilder();
-                    i2.append("Frame size must be at least ");
-                    i2.append(i4);
-                    throw new MP3Exception(i2.toString());
+                if (getFrameSize() < minFrameSize) {
+                    throw new MP3Exception("Frame size must be at least " + minFrameSize);
                 }
             }
         }
@@ -132,7 +120,10 @@ public class MP3Frame {
         }
 
         public int getSampleCount() {
-            return this.layer == 3 ? 384 : 1152;
+            if (this.layer == 3) {
+                return 384;
+            }
+            return 1152;
         }
 
         public int getFrameSize() {
@@ -147,13 +138,16 @@ public class MP3Frame {
             return (int) getTotalDuration((long) getFrameSize());
         }
 
-        public long getTotalDuration(long j) {
-            j = (1000 * (((long) getSampleCount()) * j)) / ((long) (getFrameSize() * getFrequency()));
-            return (getVersion() == 3 || getChannelMode() != 3) ? j : j / 2;
+        public long getTotalDuration(long totalSize) {
+            long duration = (1000 * (((long) getSampleCount()) * totalSize)) / ((long) (getFrameSize() * getFrequency()));
+            if (getVersion() == 3 || getChannelMode() != 3) {
+                return duration;
+            }
+            return duration / 2;
         }
 
         public boolean isCompatible(Header header) {
-            return (this.layer == header.layer && this.version == header.version && this.frequency == header.frequency && this.channelMode == header.channelMode) ? true : null;
+            return this.layer == header.layer && this.version == header.version && this.frequency == header.frequency && this.channelMode == header.channelMode;
         }
 
         public int getSideInfoSize() {
@@ -161,17 +155,20 @@ public class MP3Frame {
         }
 
         public int getXingOffset() {
-            return 4 + getSideInfoSize();
+            return getSideInfoSize() + 4;
+        }
+
+        public int getVBRIOffset() {
+            return 36;
         }
     }
 
-    MP3Frame(Header header, byte[] bArr) {
+    MP3Frame(Header header, byte[] bytes) {
         this.header = header;
-        this.bytes = bArr;
+        this.bytes = bytes;
     }
 
     boolean isChecksumError() {
-        boolean z = false;
         if (this.header.getProtection() != 0 || this.header.getLayer() != 1) {
             return false;
         }
@@ -180,12 +177,12 @@ public class MP3Frame {
         crc16.update(this.bytes[3]);
         int sideInfoSize = this.header.getSideInfoSize();
         for (int i = 0; i < sideInfoSize; i++) {
-            crc16.update(this.bytes[6 + i]);
+            crc16.update(this.bytes[i + 6]);
         }
         if ((((this.bytes[4] & 255) << 8) | (this.bytes[5] & 255)) != crc16.getValue()) {
-            z = true;
+            return true;
         }
-        return z;
+        return false;
     }
 
     public int getSize() {
@@ -198,42 +195,35 @@ public class MP3Frame {
 
     boolean isXingFrame() {
         int xingOffset = this.header.getXingOffset();
-        if (this.bytes.length >= xingOffset + 12 && xingOffset >= 0) {
-            if (this.bytes.length >= xingOffset + 8) {
-                if (this.bytes[xingOffset] == (byte) 88 && this.bytes[xingOffset + 1] == (byte) 105 && this.bytes[xingOffset + 2] == (byte) 110 && this.bytes[xingOffset + 3] == (byte) 103) {
-                    return true;
-                }
-                if (this.bytes[xingOffset] == (byte) 73 && this.bytes[xingOffset + 1] == (byte) 110 && this.bytes[xingOffset + 2] == (byte) 102 && this.bytes[xingOffset + 3] == (byte) 111) {
-                    return true;
-                }
-                return false;
-            }
+        if (this.bytes.length < xingOffset + 12 || xingOffset < 0 || this.bytes.length < xingOffset + 8) {
+            return false;
+        }
+        if (this.bytes[xingOffset] == (byte) 88 && this.bytes[xingOffset + 1] == (byte) 105 && this.bytes[xingOffset + 2] == (byte) 110 && this.bytes[xingOffset + 3] == (byte) 103) {
+            return true;
+        }
+        if (this.bytes[xingOffset] == (byte) 73 && this.bytes[xingOffset + 1] == (byte) 110 && this.bytes[xingOffset + 2] == (byte) 102 && this.bytes[xingOffset + 3] == (byte) 111) {
+            return true;
         }
         return false;
     }
 
     boolean isVBRIFrame() {
-        int vBRIOffset = this.header.getVBRIOffset();
-        boolean z = false;
-        if (this.bytes.length < vBRIOffset + 26) {
-            return false;
+        int vbriOffset = this.header.getVBRIOffset();
+        if (this.bytes.length >= vbriOffset + 26 && this.bytes[vbriOffset] == (byte) 86 && this.bytes[vbriOffset + 1] == (byte) 66 && this.bytes[vbriOffset + 2] == (byte) 82 && this.bytes[vbriOffset + 3] == (byte) 73) {
+            return true;
         }
-        if (this.bytes[vBRIOffset] == (byte) 86 && this.bytes[vBRIOffset + 1] == (byte) 66 && this.bytes[vBRIOffset + 2] == (byte) 82 && this.bytes[vBRIOffset + 3] == (byte) 73) {
-            z = true;
-        }
-        return z;
+        return false;
     }
 
     public int getNumberOfFrames() {
-        int xingOffset;
         if (isXingFrame()) {
-            xingOffset = this.header.getXingOffset();
+            int xingOffset = this.header.getXingOffset();
             if ((this.bytes[xingOffset + 7] & 1) != 0) {
-                return (this.bytes[xingOffset + 11] & 255) | ((((this.bytes[xingOffset + 8] & 255) << 24) | ((this.bytes[xingOffset + 9] & 255) << 16)) | ((this.bytes[xingOffset + 10] & 255) << 8));
+                return ((((this.bytes[xingOffset + 8] & 255) << 24) | ((this.bytes[xingOffset + 9] & 255) << 16)) | ((this.bytes[xingOffset + 10] & 255) << 8)) | (this.bytes[xingOffset + 11] & 255);
             }
         } else if (isVBRIFrame()) {
-            xingOffset = this.header.getVBRIOffset();
-            return (this.bytes[xingOffset + 17] & 255) | ((((this.bytes[xingOffset + 14] & 255) << 24) | ((this.bytes[xingOffset + 15] & 255) << 16)) | ((this.bytes[xingOffset + 16] & 255) << 8));
+            int vbriOffset = this.header.getVBRIOffset();
+            return ((((this.bytes[vbriOffset + 14] & 255) << 24) | ((this.bytes[vbriOffset + 15] & 255) << 16)) | ((this.bytes[vbriOffset + 16] & 255) << 8)) | (this.bytes[vbriOffset + 17] & 255);
         }
         return -1;
     }

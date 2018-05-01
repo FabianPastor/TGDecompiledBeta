@@ -8,8 +8,8 @@ abstract class TagPayloadReader {
     protected final TrackOutput output;
 
     public static final class UnsupportedFormatException extends ParserException {
-        public UnsupportedFormatException(String str) {
-            super(str);
+        public UnsupportedFormatException(String msg) {
+            super(msg);
         }
     }
 
@@ -19,13 +19,13 @@ abstract class TagPayloadReader {
 
     public abstract void seek();
 
-    protected TagPayloadReader(TrackOutput trackOutput) {
-        this.output = trackOutput;
+    protected TagPayloadReader(TrackOutput output) {
+        this.output = output;
     }
 
-    public final void consume(ParsableByteArray parsableByteArray, long j) throws ParserException {
-        if (parseHeader(parsableByteArray)) {
-            parsePayload(parsableByteArray, j);
+    public final void consume(ParsableByteArray data, long timeUs) throws ParserException {
+        if (parseHeader(data)) {
+            parsePayload(data, timeUs);
         }
     }
 }

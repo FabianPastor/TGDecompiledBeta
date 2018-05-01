@@ -4,8 +4,8 @@ public final class Allocation {
     public final byte[] data;
     public final int offset;
 
-    public Allocation(byte[] bArr, int i) {
-        this.data = bArr;
-        this.offset = i;
+    public Allocation(byte[] data, int offset) {
+        this.data = data;
+        this.offset = offset;
     }
 }

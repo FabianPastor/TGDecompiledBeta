@@ -13,29 +13,18 @@ public class RecordStatusDrawable extends StatusDrawable {
     private RectF rect = new RectF();
     private boolean started = false;
 
-    public int getOpacity() {
-        return 0;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public void setIsChat(boolean z) {
-        this.isChat = z;
+    public void setIsChat(boolean value) {
+        this.isChat = value;
     }
 
     private void update() {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = currentTimeMillis - this.lastUpdateTime;
-        this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 50;
-        if (j <= 50) {
-            currentTimeMillis = j;
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.lastUpdateTime;
+        this.lastUpdateTime = newTime;
+        if (dt > 50) {
+            dt = 50;
         }
-        this.progress += ((float) currentTimeMillis) / 300.0f;
+        this.progress += ((float) dt) / 300.0f;
         while (this.progress > 1.0f) {
             this.progress -= 1.0f;
         }
@@ -54,24 +43,33 @@ public class RecordStatusDrawable extends StatusDrawable {
 
     public void draw(Canvas canvas) {
         canvas.save();
-        canvas.translate(0.0f, (float) ((getIntrinsicHeight() / 2) + AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f)));
-        for (int i = 0; i < 4; i++) {
-            if (i == 0) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * this.progress));
-            } else if (i == 3) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * (1.0f - this.progress)));
+        canvas.translate(0.0f, (float) (AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f) + (getIntrinsicHeight() / 2)));
+        for (int a = 0; a < 4; a++) {
+            if (a == 0) {
+                Theme.chat_statusRecordPaint.setAlpha((int) (this.progress * 255.0f));
+            } else if (a == 3) {
+                Theme.chat_statusRecordPaint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
             } else {
                 Theme.chat_statusRecordPaint.setAlpha(255);
             }
-            float dp = ((float) (AndroidUtilities.dp(4.0f) * i)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
-            float f = -dp;
-            this.rect.set(f, f, dp, dp);
+            float side = ((float) (AndroidUtilities.dp(4.0f) * a)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
+            this.rect.set(-side, -side, side, side);
             canvas.drawArc(this.rect, -15.0f, 30.0f, false, Theme.chat_statusRecordPaint);
         }
         canvas.restore();
-        if (this.started != null) {
+        if (this.started) {
             update();
         }
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return 0;
     }
 
     public int getIntrinsicWidth() {

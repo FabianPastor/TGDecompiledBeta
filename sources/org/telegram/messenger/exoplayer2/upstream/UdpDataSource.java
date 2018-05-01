@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
+import java.net.SocketException;
 
 public final class UdpDataSource implements DataSource {
     public static final int DEAFULT_SOCKET_TIMEOUT_MILLIS = 8000;
@@ -24,24 +25,24 @@ public final class UdpDataSource implements DataSource {
     private Uri uri;
 
     public static final class UdpDataSourceException extends IOException {
-        public UdpDataSourceException(IOException iOException) {
-            super(iOException);
+        public UdpDataSourceException(IOException cause) {
+            super(cause);
         }
     }
 
-    public UdpDataSource(TransferListener<? super UdpDataSource> transferListener) {
-        this(transferListener, 2000);
+    public UdpDataSource(TransferListener<? super UdpDataSource> listener) {
+        this(listener, 2000);
     }
 
-    public UdpDataSource(TransferListener<? super UdpDataSource> transferListener, int i) {
-        this(transferListener, i, 8000);
+    public UdpDataSource(TransferListener<? super UdpDataSource> listener, int maxPacketSize) {
+        this(listener, maxPacketSize, 8000);
     }
 
-    public UdpDataSource(TransferListener<? super UdpDataSource> transferListener, int i, int i2) {
-        this.listener = transferListener;
-        this.socketTimeoutMillis = i2;
-        this.packetBuffer = new byte[i];
-        this.packet = new DatagramPacket(this.packetBuffer, 0, i);
+    public UdpDataSource(TransferListener<? super UdpDataSource> listener, int maxPacketSize, int socketTimeoutMillis) {
+        this.listener = listener;
+        this.socketTimeoutMillis = socketTimeoutMillis;
+        this.packetBuffer = new byte[maxPacketSize];
+        this.packet = new DatagramPacket(this.packetBuffer, 0, maxPacketSize);
     }
 
     public long open(DataSpec dataSpec) throws UdpDataSourceException {
@@ -65,17 +66,17 @@ public final class UdpDataSource implements DataSource {
                     this.listener.onTransferStart(this, dataSpec);
                 }
                 return -1;
-            } catch (DataSpec dataSpec2) {
-                throw new UdpDataSourceException(dataSpec2);
+            } catch (SocketException e) {
+                throw new UdpDataSourceException(e);
             }
-        } catch (DataSpec dataSpec22) {
-            throw new UdpDataSourceException(dataSpec22);
+        } catch (IOException e2) {
+            throw new UdpDataSourceException(e2);
         }
     }
 
-    public int read(byte[] bArr, int i, int i2) throws UdpDataSourceException {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] buffer, int offset, int readLength) throws UdpDataSourceException {
+        if (readLength == 0) {
+            return 0;
         }
         if (this.packetRemaining == 0) {
             try {
@@ -84,15 +85,15 @@ public final class UdpDataSource implements DataSource {
                 if (this.listener != null) {
                     this.listener.onBytesTransferred(this, this.packetRemaining);
                 }
-            } catch (byte[] bArr2) {
-                throw new UdpDataSourceException(bArr2);
+            } catch (IOException e) {
+                throw new UdpDataSourceException(e);
             }
         }
-        int length = this.packet.getLength() - this.packetRemaining;
-        i2 = Math.min(this.packetRemaining, i2);
-        System.arraycopy(this.packetBuffer, length, bArr2, i, i2);
-        this.packetRemaining -= i2;
-        return i2;
+        int packetOffset = this.packet.getLength() - this.packetRemaining;
+        int bytesToRead = Math.min(this.packetRemaining, readLength);
+        System.arraycopy(this.packetBuffer, packetOffset, buffer, offset, bytesToRead);
+        this.packetRemaining -= bytesToRead;
+        return bytesToRead;
     }
 
     public Uri getUri() {
@@ -100,46 +101,26 @@ public final class UdpDataSource implements DataSource {
     }
 
     public void close() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r3 = this;
-        r0 = 0;
-        r3.uri = r0;
-        r1 = r3.multicastSocket;
-        if (r1 == 0) goto L_0x0010;
-    L_0x0007:
-        r1 = r3.multicastSocket;	 Catch:{ IOException -> 0x000e }
-        r2 = r3.address;	 Catch:{ IOException -> 0x000e }
-        r1.leaveGroup(r2);	 Catch:{ IOException -> 0x000e }
-    L_0x000e:
-        r3.multicastSocket = r0;
-    L_0x0010:
-        r1 = r3.socket;
-        if (r1 == 0) goto L_0x001b;
-    L_0x0014:
-        r1 = r3.socket;
-        r1.close();
-        r3.socket = r0;
-    L_0x001b:
-        r3.address = r0;
-        r3.socketAddress = r0;
-        r0 = 0;
-        r3.packetRemaining = r0;
-        r1 = r3.opened;
-        if (r1 == 0) goto L_0x0031;
-    L_0x0026:
-        r3.opened = r0;
-        r0 = r3.listener;
-        if (r0 == 0) goto L_0x0031;
-    L_0x002c:
-        r0 = r3.listener;
-        r0.onTransferEnd(r3);
-    L_0x0031:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.UdpDataSource.close():void");
+        this.uri = null;
+        if (this.multicastSocket != null) {
+            try {
+                this.multicastSocket.leaveGroup(this.address);
+            } catch (IOException e) {
+            }
+            this.multicastSocket = null;
+        }
+        if (this.socket != null) {
+            this.socket.close();
+            this.socket = null;
+        }
+        this.address = null;
+        this.socketAddress = null;
+        this.packetRemaining = 0;
+        if (this.opened) {
+            this.opened = false;
+            if (this.listener != null) {
+                this.listener.onTransferEnd(this);
+            }
+        }
     }
 }

@@ -6,7 +6,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
 import org.telegram.messenger.exoplayer2.Player.EventListener;
@@ -49,58 +51,48 @@ final class ExoPlayerImpl implements ExoPlayer {
     private final TrackSelector trackSelector;
     private final Window window;
 
-    public TextComponent getTextComponent() {
-        return null;
+    @SuppressLint({"HandlerLeak"})
+    public ExoPlayerImpl(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl, Clock clock) {
+        Log.i(TAG, "Init " + Integer.toHexString(System.identityHashCode(this)) + " [" + ExoPlayerLibraryInfo.VERSION_SLASHY + "] [" + Util.DEVICE_DEBUG_INFO + "]");
+        Assertions.checkState(renderers.length > 0);
+        this.renderers = (Renderer[]) Assertions.checkNotNull(renderers);
+        this.trackSelector = (TrackSelector) Assertions.checkNotNull(trackSelector);
+        this.playWhenReady = false;
+        this.repeatMode = 0;
+        this.shuffleModeEnabled = false;
+        this.listeners = new CopyOnWriteArraySet();
+        this.emptyTrackSelectorResult = new TrackSelectorResult(TrackGroupArray.EMPTY, new boolean[renderers.length], new TrackSelectionArray(new TrackSelection[renderers.length]), null, new RendererConfiguration[renderers.length]);
+        this.window = new Window();
+        this.period = new Period();
+        this.playbackParameters = PlaybackParameters.DEFAULT;
+        this.eventHandler = new Handler(Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper()) {
+            public void handleMessage(Message msg) {
+                ExoPlayerImpl.this.handleEvent(msg);
+            }
+        };
+        this.playbackInfo = new PlaybackInfo(Timeline.EMPTY, 0, this.emptyTrackSelectorResult);
+        this.internalPlayer = new ExoPlayerImplInternal(renderers, trackSelector, this.emptyTrackSelectorResult, loadControl, this.playWhenReady, this.repeatMode, this.shuffleModeEnabled, this.eventHandler, this, clock);
+        this.internalPlayerHandler = new Handler(this.internalPlayer.getPlaybackLooper());
     }
 
     public VideoComponent getVideoComponent() {
         return null;
     }
 
-    @SuppressLint({"HandlerLeak"})
-    public ExoPlayerImpl(Renderer[] rendererArr, TrackSelector trackSelector, LoadControl loadControl, Clock clock) {
-        Object obj = rendererArr;
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Init ");
-        stringBuilder.append(Integer.toHexString(System.identityHashCode(this)));
-        stringBuilder.append(" [");
-        stringBuilder.append(ExoPlayerLibraryInfo.VERSION_SLASHY);
-        stringBuilder.append("] [");
-        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
-        stringBuilder.append("]");
-        Log.i(str, stringBuilder.toString());
-        Assertions.checkState(obj.length > 0);
-        r11.renderers = (Renderer[]) Assertions.checkNotNull(obj);
-        r11.trackSelector = (TrackSelector) Assertions.checkNotNull(trackSelector);
-        r11.playWhenReady = false;
-        r11.repeatMode = 0;
-        r11.shuffleModeEnabled = false;
-        r11.listeners = new CopyOnWriteArraySet();
-        r11.emptyTrackSelectorResult = new TrackSelectorResult(TrackGroupArray.EMPTY, new boolean[obj.length], new TrackSelectionArray(new TrackSelection[obj.length]), null, new RendererConfiguration[obj.length]);
-        r11.window = new Window();
-        r11.period = new Period();
-        r11.playbackParameters = PlaybackParameters.DEFAULT;
-        r11.eventHandler = new Handler(Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper()) {
-            public void handleMessage(Message message) {
-                ExoPlayerImpl.this.handleEvent(message);
-            }
-        };
-        r11.playbackInfo = new PlaybackInfo(Timeline.EMPTY, 0, r11.emptyTrackSelectorResult);
-        r11.internalPlayer = new ExoPlayerImplInternal(obj, trackSelector, r11.emptyTrackSelectorResult, loadControl, r11.playWhenReady, r11.repeatMode, r11.shuffleModeEnabled, r11.eventHandler, r11, clock);
-        r11.internalPlayerHandler = new Handler(r11.internalPlayer.getPlaybackLooper());
+    public TextComponent getTextComponent() {
+        return null;
     }
 
     public Looper getPlaybackLooper() {
         return this.internalPlayer.getPlaybackLooper();
     }
 
-    public void addListener(EventListener eventListener) {
-        this.listeners.add(eventListener);
+    public void addListener(EventListener listener) {
+        this.listeners.add(listener);
     }
 
-    public void removeListener(EventListener eventListener) {
-        this.listeners.remove(eventListener);
+    public void removeListener(EventListener listener) {
+        this.listeners.remove(listener);
     }
 
     public int getPlaybackState() {
@@ -111,21 +103,21 @@ final class ExoPlayerImpl implements ExoPlayer {
         prepare(mediaSource, true, true);
     }
 
-    public void prepare(MediaSource mediaSource, boolean z, boolean z2) {
-        PlaybackInfo resetPlaybackInfo = getResetPlaybackInfo(z, z2, 2);
+    public void prepare(MediaSource mediaSource, boolean resetPosition, boolean resetState) {
+        PlaybackInfo playbackInfo = getResetPlaybackInfo(resetPosition, resetState, 2);
         this.hasPendingPrepare = true;
         this.pendingOperationAcks++;
-        this.internalPlayer.prepare(mediaSource, z);
-        updatePlaybackInfo(resetPlaybackInfo, false, 4, 1, false);
+        this.internalPlayer.prepare(mediaSource, resetPosition);
+        updatePlaybackInfo(playbackInfo, false, 4, 1, false);
     }
 
-    public void setPlayWhenReady(boolean z) {
-        if (this.playWhenReady != z) {
-            this.playWhenReady = z;
-            this.internalPlayer.setPlayWhenReady(z);
+    public void setPlayWhenReady(boolean playWhenReady) {
+        if (this.playWhenReady != playWhenReady) {
+            this.playWhenReady = playWhenReady;
+            this.internalPlayer.setPlayWhenReady(playWhenReady);
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
-                ((EventListener) it.next()).onPlayerStateChanged(z, this.playbackInfo.playbackState);
+                ((EventListener) it.next()).onPlayerStateChanged(playWhenReady, this.playbackInfo.playbackState);
             }
         }
     }
@@ -134,13 +126,13 @@ final class ExoPlayerImpl implements ExoPlayer {
         return this.playWhenReady;
     }
 
-    public void setRepeatMode(int i) {
-        if (this.repeatMode != i) {
-            this.repeatMode = i;
-            this.internalPlayer.setRepeatMode(i);
+    public void setRepeatMode(int repeatMode) {
+        if (this.repeatMode != repeatMode) {
+            this.repeatMode = repeatMode;
+            this.internalPlayer.setRepeatMode(repeatMode);
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
-                ((EventListener) it.next()).onRepeatModeChanged(i);
+                ((EventListener) it.next()).onRepeatModeChanged(repeatMode);
             }
         }
     }
@@ -149,13 +141,13 @@ final class ExoPlayerImpl implements ExoPlayer {
         return this.repeatMode;
     }
 
-    public void setShuffleModeEnabled(boolean z) {
-        if (this.shuffleModeEnabled != z) {
-            this.shuffleModeEnabled = z;
-            this.internalPlayer.setShuffleModeEnabled(z);
+    public void setShuffleModeEnabled(boolean shuffleModeEnabled) {
+        if (this.shuffleModeEnabled != shuffleModeEnabled) {
+            this.shuffleModeEnabled = shuffleModeEnabled;
+            this.internalPlayer.setShuffleModeEnabled(shuffleModeEnabled);
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
-                ((EventListener) it.next()).onShuffleModeEnabledChanged(z);
+                ((EventListener) it.next()).onShuffleModeEnabledChanged(shuffleModeEnabled);
             }
         }
     }
@@ -172,44 +164,47 @@ final class ExoPlayerImpl implements ExoPlayer {
         seekToDefaultPosition(getCurrentWindowIndex());
     }
 
-    public void seekToDefaultPosition(int i) {
-        seekTo(i, C0542C.TIME_UNSET);
+    public void seekToDefaultPosition(int windowIndex) {
+        seekTo(windowIndex, C0542C.TIME_UNSET);
     }
 
-    public void seekTo(long j) {
-        seekTo(getCurrentWindowIndex(), j);
+    public void seekTo(long positionMs) {
+        seekTo(getCurrentWindowIndex(), positionMs);
     }
 
-    public void seekTo(int i, long j) {
+    public void seekTo(int windowIndex, long positionMs) {
         Timeline timeline = this.playbackInfo.timeline;
-        if (i >= 0) {
-            if (timeline.isEmpty() || i < timeline.getWindowCount()) {
-                this.hasPendingSeek = true;
-                this.pendingOperationAcks++;
-                if (isPlayingAd()) {
-                    Log.w(TAG, "seekTo ignored because an ad is playing");
-                    this.eventHandler.obtainMessage(0, 1, -1, this.playbackInfo).sendToTarget();
-                    return;
-                }
-                this.maskingWindowIndex = i;
-                if (timeline.isEmpty()) {
-                    this.maskingWindowPositionMs = j == C0542C.TIME_UNSET ? 0 : j;
-                    this.maskingPeriodIndex = 0;
-                } else {
-                    long defaultPositionUs = j == C0542C.TIME_UNSET ? timeline.getWindow(i, this.window).getDefaultPositionUs() : C0542C.msToUs(j);
-                    Pair periodPosition = timeline.getPeriodPosition(this.window, this.period, i, defaultPositionUs);
-                    this.maskingWindowPositionMs = C0542C.usToMs(defaultPositionUs);
-                    this.maskingPeriodIndex = ((Integer) periodPosition.first).intValue();
-                }
-                this.internalPlayer.seekTo(timeline, i, C0542C.msToUs(j));
-                i = this.listeners.iterator();
-                while (i.hasNext() != null) {
-                    ((EventListener) i.next()).onPositionDiscontinuity(1);
-                }
-                return;
-            }
+        if (windowIndex < 0 || (!timeline.isEmpty() && windowIndex >= timeline.getWindowCount())) {
+            throw new IllegalSeekPositionException(timeline, windowIndex, positionMs);
         }
-        throw new IllegalSeekPositionException(timeline, i, j);
+        this.hasPendingSeek = true;
+        this.pendingOperationAcks++;
+        if (isPlayingAd()) {
+            Log.w(TAG, "seekTo ignored because an ad is playing");
+            this.eventHandler.obtainMessage(0, 1, -1, this.playbackInfo).sendToTarget();
+            return;
+        }
+        this.maskingWindowIndex = windowIndex;
+        if (timeline.isEmpty()) {
+            long j;
+            if (positionMs == C0542C.TIME_UNSET) {
+                j = 0;
+            } else {
+                j = positionMs;
+            }
+            this.maskingWindowPositionMs = j;
+            this.maskingPeriodIndex = 0;
+        } else {
+            long windowPositionUs = positionMs == C0542C.TIME_UNSET ? timeline.getWindow(windowIndex, this.window).getDefaultPositionUs() : C0542C.msToUs(positionMs);
+            Pair<Integer, Long> periodIndexAndPositon = timeline.getPeriodPosition(this.window, this.period, windowIndex, windowPositionUs);
+            this.maskingWindowPositionMs = C0542C.usToMs(windowPositionUs);
+            this.maskingPeriodIndex = ((Integer) periodIndexAndPositon.first).intValue();
+        }
+        this.internalPlayer.seekTo(timeline, windowIndex, C0542C.msToUs(positionMs));
+        Iterator it = this.listeners.iterator();
+        while (it.hasNext()) {
+            ((EventListener) it.next()).onPositionDiscontinuity(1);
+        }
     }
 
     public void setPlaybackParameters(PlaybackParameters playbackParameters) {
@@ -234,33 +229,22 @@ final class ExoPlayerImpl implements ExoPlayer {
         stop(false);
     }
 
-    public void stop(boolean z) {
-        PlaybackInfo resetPlaybackInfo = getResetPlaybackInfo(z, z, 1);
+    public void stop(boolean reset) {
+        PlaybackInfo playbackInfo = getResetPlaybackInfo(reset, reset, 1);
         this.pendingOperationAcks++;
-        this.internalPlayer.stop(z);
-        updatePlaybackInfo(resetPlaybackInfo, false, 4, 1, false);
+        this.internalPlayer.stop(reset);
+        updatePlaybackInfo(playbackInfo, false, 4, 1, false);
     }
 
     public void release() {
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Release ");
-        stringBuilder.append(Integer.toHexString(System.identityHashCode(this)));
-        stringBuilder.append(" [");
-        stringBuilder.append(ExoPlayerLibraryInfo.VERSION_SLASHY);
-        stringBuilder.append("] [");
-        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
-        stringBuilder.append("] [");
-        stringBuilder.append(ExoPlayerLibraryInfo.registeredModules());
-        stringBuilder.append("]");
-        Log.i(str, stringBuilder.toString());
+        Log.i(TAG, "Release " + Integer.toHexString(System.identityHashCode(this)) + " [" + ExoPlayerLibraryInfo.VERSION_SLASHY + "] [" + Util.DEVICE_DEBUG_INFO + "] [" + ExoPlayerLibraryInfo.registeredModules() + "]");
         this.internalPlayer.release();
         this.eventHandler.removeCallbacksAndMessages(null);
     }
 
-    public void sendMessages(ExoPlayerMessage... exoPlayerMessageArr) {
-        for (ExoPlayerMessage exoPlayerMessage : exoPlayerMessageArr) {
-            createMessage(exoPlayerMessage.target).setType(exoPlayerMessage.messageType).setPayload(exoPlayerMessage.message).send();
+    public void sendMessages(ExoPlayerMessage... messages) {
+        for (ExoPlayerMessage message : messages) {
+            createMessage(message.target).setType(message.messageType).setPayload(message.message).send();
         }
     }
 
@@ -268,65 +252,26 @@ final class ExoPlayerImpl implements ExoPlayer {
         return new PlayerMessage(this.internalPlayer, target, this.playbackInfo.timeline, getCurrentWindowIndex(), this.internalPlayerHandler);
     }
 
-    public void blockingSendMessages(org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage... r8) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r7 = this;
-        r0 = new java.util.ArrayList;
-        r0.<init>();
-        r1 = 0;
-        r2 = r8.length;
-        r3 = r1;
-    L_0x0008:
-        if (r3 >= r2) goto L_0x0028;
-    L_0x000a:
-        r4 = r8[r3];
-        r5 = r4.target;
-        r5 = r7.createMessage(r5);
-        r6 = r4.messageType;
-        r5 = r5.setType(r6);
-        r4 = r4.message;
-        r4 = r5.setPayload(r4);
-        r4 = r4.send();
-        r0.add(r4);
-        r3 = r3 + 1;
-        goto L_0x0008;
-    L_0x0028:
-        r8 = r0.iterator();
-        r0 = r1;
-    L_0x002d:
-        r2 = r8.hasNext();
-        if (r2 == 0) goto L_0x0047;
-    L_0x0033:
-        r2 = r8.next();
-        r2 = (org.telegram.messenger.exoplayer2.PlayerMessage) r2;
-        r3 = 1;
-        r4 = r0;
-        r0 = r3;
-    L_0x003c:
-        if (r0 == 0) goto L_0x0045;
-    L_0x003e:
-        r2.blockUntilDelivered();	 Catch:{ InterruptedException -> 0x0043 }
-        r0 = r1;
-        goto L_0x003c;
-    L_0x0043:
-        r4 = r3;
-        goto L_0x003c;
-    L_0x0045:
-        r0 = r4;
-        goto L_0x002d;
-    L_0x0047:
-        if (r0 == 0) goto L_0x0050;
-    L_0x0049:
-        r8 = java.lang.Thread.currentThread();
-        r8.interrupt();
-    L_0x0050:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.ExoPlayerImpl.blockingSendMessages(org.telegram.messenger.exoplayer2.ExoPlayer$ExoPlayerMessage[]):void");
+    public void blockingSendMessages(ExoPlayerMessage... messages) {
+        List<PlayerMessage> playerMessages = new ArrayList();
+        for (ExoPlayerMessage message : messages) {
+            playerMessages.add(createMessage(message.target).setType(message.messageType).setPayload(message.message).send());
+        }
+        boolean wasInterrupted = false;
+        for (PlayerMessage message2 : playerMessages) {
+            boolean blockMessage = true;
+            while (blockMessage) {
+                try {
+                    message2.blockUntilDelivered();
+                    blockMessage = false;
+                } catch (InterruptedException e) {
+                    wasInterrupted = true;
+                }
+            }
+        }
+        if (wasInterrupted) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public int getCurrentPeriodIndex() {
@@ -367,9 +312,9 @@ Error: java.lang.NullPointerException
         if (!isPlayingAd()) {
             return timeline.getWindow(getCurrentWindowIndex(), this.window).getDurationMs();
         }
-        MediaPeriodId mediaPeriodId = this.playbackInfo.periodId;
-        timeline.getPeriod(mediaPeriodId.periodIndex, this.period);
-        return C0542C.usToMs(this.period.getAdDurationUs(mediaPeriodId.adGroupIndex, mediaPeriodId.adIndexInAdGroup));
+        MediaPeriodId periodId = this.playbackInfo.periodId;
+        timeline.getPeriod(periodId.periodIndex, this.period);
+        return C0542C.usToMs(this.period.getAdDurationUs(periodId.adGroupIndex, periodId.adIndexInAdGroup));
     }
 
     public long getCurrentPosition() {
@@ -387,18 +332,15 @@ Error: java.lang.NullPointerException
     }
 
     public int getBufferedPercentage() {
-        long bufferedPosition = getBufferedPosition();
+        long position = getBufferedPosition();
         long duration = getDuration();
-        if (bufferedPosition == C0542C.TIME_UNSET) {
+        if (position == C0542C.TIME_UNSET || duration == C0542C.TIME_UNSET) {
             return 0;
         }
-        if (duration == C0542C.TIME_UNSET) {
-            return 0;
+        if (duration != 0) {
+            return Util.constrainValue((int) ((100 * position) / duration), 0, 100);
         }
-        if (duration == 0) {
-            return 100;
-        }
-        return Util.constrainValue((int) ((bufferedPosition * 100) / duration), 0, 100);
+        return 100;
     }
 
     public boolean isCurrentWindowDynamic() {
@@ -435,8 +377,8 @@ Error: java.lang.NullPointerException
         return this.renderers.length;
     }
 
-    public int getRendererType(int i) {
-        return this.renderers[i].getTrackType();
+    public int getRendererType(int index) {
+        return this.renderers[index].getTrackType();
     }
 
     public TrackGroupArray getCurrentTrackGroups() {
@@ -455,14 +397,22 @@ Error: java.lang.NullPointerException
         return this.playbackInfo.manifest;
     }
 
-    void handleEvent(Message message) {
+    void handleEvent(Message msg) {
         Iterator it;
-        switch (message.what) {
+        switch (msg.what) {
             case 0:
-                handlePlaybackInfo((PlaybackInfo) message.obj, message.arg1, message.arg2 != -1, message.arg2);
+                boolean z;
+                PlaybackInfo playbackInfo = (PlaybackInfo) msg.obj;
+                int i = msg.arg1;
+                if (msg.arg2 != -1) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                handlePlaybackInfo(playbackInfo, i, z, msg.arg2);
                 return;
             case 1:
-                PlaybackParameters playbackParameters = (PlaybackParameters) message.obj;
+                PlaybackParameters playbackParameters = msg.obj;
                 if (!this.playbackParameters.equals(playbackParameters)) {
                     this.playbackParameters = playbackParameters;
                     it = this.listeners.iterator();
@@ -473,10 +423,10 @@ Error: java.lang.NullPointerException
                 }
                 return;
             case 2:
-                ExoPlaybackException exoPlaybackException = (ExoPlaybackException) message.obj;
+                ExoPlaybackException exception = msg.obj;
                 it = this.listeners.iterator();
                 while (it.hasNext()) {
-                    ((EventListener) it.next()).onPlayerError(exoPlaybackException);
+                    ((EventListener) it.next()).onPlayerError(exception);
                 }
                 return;
             default:
@@ -484,158 +434,117 @@ Error: java.lang.NullPointerException
         }
     }
 
-    private void handlePlaybackInfo(PlaybackInfo playbackInfo, int i, boolean z, int i2) {
-        this.pendingOperationAcks -= i;
+    private void handlePlaybackInfo(PlaybackInfo playbackInfo, int operationAcks, boolean positionDiscontinuity, int positionDiscontinuityReason) {
+        this.pendingOperationAcks -= operationAcks;
         if (this.pendingOperationAcks == 0) {
-            if (playbackInfo.timeline == 0) {
+            if (playbackInfo.timeline == null) {
                 playbackInfo = playbackInfo.copyWithTimeline(Timeline.EMPTY, playbackInfo.manifest);
             }
-            PlaybackInfo playbackInfo2 = playbackInfo;
-            if (playbackInfo2.startPositionUs == C0542C.TIME_UNSET) {
-                playbackInfo2 = playbackInfo2.fromNewPosition(playbackInfo2.periodId, 0, playbackInfo2.contentPositionUs);
+            if (playbackInfo.startPositionUs == C0542C.TIME_UNSET) {
+                playbackInfo = playbackInfo.fromNewPosition(playbackInfo.periodId, 0, playbackInfo.contentPositionUs);
             }
-            PlaybackInfo playbackInfo3 = playbackInfo2;
-            if ((this.playbackInfo.timeline.isEmpty() == null || this.hasPendingPrepare != null) && playbackInfo3.timeline.isEmpty() != null) {
+            if ((!this.playbackInfo.timeline.isEmpty() || this.hasPendingPrepare) && playbackInfo.timeline.isEmpty()) {
                 this.maskingPeriodIndex = 0;
                 this.maskingWindowIndex = 0;
                 this.maskingWindowPositionMs = 0;
             }
-            int i3 = this.hasPendingPrepare != null ? 0 : 2;
-            boolean z2 = this.hasPendingSeek;
+            int timelineChangeReason = this.hasPendingPrepare ? 0 : 2;
+            boolean seekProcessed = this.hasPendingSeek;
             this.hasPendingPrepare = false;
             this.hasPendingSeek = false;
-            updatePlaybackInfo(playbackInfo3, z, i2, i3, z2);
+            updatePlaybackInfo(playbackInfo, positionDiscontinuity, positionDiscontinuityReason, timelineChangeReason, seekProcessed);
         }
     }
 
-    private PlaybackInfo getResetPlaybackInfo(boolean z, boolean z2, int i) {
-        ExoPlayerImpl exoPlayerImpl = this;
-        if (z) {
-            exoPlayerImpl.maskingWindowIndex = 0;
-            exoPlayerImpl.maskingPeriodIndex = 0;
-            exoPlayerImpl.maskingWindowPositionMs = 0;
+    private PlaybackInfo getResetPlaybackInfo(boolean resetPosition, boolean resetState, int playbackState) {
+        if (resetPosition) {
+            this.maskingWindowIndex = 0;
+            this.maskingPeriodIndex = 0;
+            this.maskingWindowPositionMs = 0;
         } else {
-            exoPlayerImpl.maskingWindowIndex = getCurrentWindowIndex();
-            exoPlayerImpl.maskingPeriodIndex = getCurrentPeriodIndex();
-            exoPlayerImpl.maskingWindowPositionMs = getCurrentPosition();
+            this.maskingWindowIndex = getCurrentWindowIndex();
+            this.maskingPeriodIndex = getCurrentPeriodIndex();
+            this.maskingWindowPositionMs = getCurrentPosition();
         }
-        return new PlaybackInfo(z2 ? Timeline.EMPTY : exoPlayerImpl.playbackInfo.timeline, z2 ? null : exoPlayerImpl.playbackInfo.manifest, exoPlayerImpl.playbackInfo.periodId, exoPlayerImpl.playbackInfo.startPositionUs, exoPlayerImpl.playbackInfo.contentPositionUs, i, false, z2 ? exoPlayerImpl.emptyTrackSelectorResult : exoPlayerImpl.playbackInfo.trackSelectorResult);
+        return new PlaybackInfo(resetState ? Timeline.EMPTY : this.playbackInfo.timeline, resetState ? null : this.playbackInfo.manifest, this.playbackInfo.periodId, this.playbackInfo.startPositionUs, this.playbackInfo.contentPositionUs, playbackState, false, resetState ? this.emptyTrackSelectorResult : this.playbackInfo.trackSelectorResult);
     }
 
-    private void updatePlaybackInfo(PlaybackInfo playbackInfo, boolean z, int i, int i2, boolean z2) {
-        Object obj;
-        Object obj2;
-        Object obj3;
-        Object obj4 = 1;
-        if (this.playbackInfo.timeline == playbackInfo.timeline) {
-            if (this.playbackInfo.manifest == playbackInfo.manifest) {
-                obj = null;
-                obj2 = this.playbackInfo.playbackState == playbackInfo.playbackState ? 1 : null;
-                obj3 = this.playbackInfo.isLoading == playbackInfo.isLoading ? 1 : null;
-                if (this.playbackInfo.trackSelectorResult != playbackInfo.trackSelectorResult) {
-                    obj4 = null;
-                }
-                this.playbackInfo = playbackInfo;
-                if (obj != null || i2 == 0) {
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onTimelineChanged(this.playbackInfo.timeline, this.playbackInfo.manifest, i2);
-                    }
-                }
-                if (z) {
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onPositionDiscontinuity(i);
-                    }
-                }
-                if (obj4 != null) {
-                    this.trackSelector.onSelectionActivated(this.playbackInfo.trackSelectorResult.info);
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onTracksChanged(this.playbackInfo.trackSelectorResult.groups, this.playbackInfo.trackSelectorResult.selections);
-                    }
-                }
-                if (obj3 != null) {
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onLoadingChanged(this.playbackInfo.isLoading);
-                    }
-                }
-                if (obj2 != null) {
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onPlayerStateChanged(this.playWhenReady, this.playbackInfo.playbackState);
-                    }
-                }
-                if (z2) {
-                    playbackInfo = this.listeners.iterator();
-                    while (playbackInfo.hasNext()) {
-                        ((EventListener) playbackInfo.next()).onSeekProcessed();
-                    }
-                }
+    private void updatePlaybackInfo(PlaybackInfo newPlaybackInfo, boolean positionDiscontinuity, int positionDiscontinuityReason, int timelineChangeReason, boolean seekProcessed) {
+        boolean timelineOrManifestChanged;
+        boolean playbackStateChanged;
+        boolean isLoadingChanged;
+        boolean trackSelectorResultChanged;
+        Iterator it;
+        if (this.playbackInfo.timeline == newPlaybackInfo.timeline && this.playbackInfo.manifest == newPlaybackInfo.manifest) {
+            timelineOrManifestChanged = false;
+        } else {
+            timelineOrManifestChanged = true;
+        }
+        if (this.playbackInfo.playbackState != newPlaybackInfo.playbackState) {
+            playbackStateChanged = true;
+        } else {
+            playbackStateChanged = false;
+        }
+        if (this.playbackInfo.isLoading != newPlaybackInfo.isLoading) {
+            isLoadingChanged = true;
+        } else {
+            isLoadingChanged = false;
+        }
+        if (this.playbackInfo.trackSelectorResult != newPlaybackInfo.trackSelectorResult) {
+            trackSelectorResultChanged = true;
+        } else {
+            trackSelectorResultChanged = false;
+        }
+        this.playbackInfo = newPlaybackInfo;
+        if (timelineOrManifestChanged || timelineChangeReason == 0) {
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onTimelineChanged(this.playbackInfo.timeline, this.playbackInfo.manifest, timelineChangeReason);
             }
         }
-        obj = 1;
-        if (this.playbackInfo.playbackState == playbackInfo.playbackState) {
-        }
-        if (this.playbackInfo.isLoading == playbackInfo.isLoading) {
-        }
-        if (this.playbackInfo.trackSelectorResult != playbackInfo.trackSelectorResult) {
-            obj4 = null;
-        }
-        this.playbackInfo = playbackInfo;
-        playbackInfo = this.listeners.iterator();
-        while (playbackInfo.hasNext()) {
-            ((EventListener) playbackInfo.next()).onTimelineChanged(this.playbackInfo.timeline, this.playbackInfo.manifest, i2);
-        }
-        if (z) {
-            playbackInfo = this.listeners.iterator();
-            while (playbackInfo.hasNext()) {
-                ((EventListener) playbackInfo.next()).onPositionDiscontinuity(i);
+        if (positionDiscontinuity) {
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onPositionDiscontinuity(positionDiscontinuityReason);
             }
         }
-        if (obj4 != null) {
+        if (trackSelectorResultChanged) {
             this.trackSelector.onSelectionActivated(this.playbackInfo.trackSelectorResult.info);
-            playbackInfo = this.listeners.iterator();
-            while (playbackInfo.hasNext()) {
-                ((EventListener) playbackInfo.next()).onTracksChanged(this.playbackInfo.trackSelectorResult.groups, this.playbackInfo.trackSelectorResult.selections);
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onTracksChanged(this.playbackInfo.trackSelectorResult.groups, this.playbackInfo.trackSelectorResult.selections);
             }
         }
-        if (obj3 != null) {
-            playbackInfo = this.listeners.iterator();
-            while (playbackInfo.hasNext()) {
-                ((EventListener) playbackInfo.next()).onLoadingChanged(this.playbackInfo.isLoading);
+        if (isLoadingChanged) {
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onLoadingChanged(this.playbackInfo.isLoading);
             }
         }
-        if (obj2 != null) {
-            playbackInfo = this.listeners.iterator();
-            while (playbackInfo.hasNext()) {
-                ((EventListener) playbackInfo.next()).onPlayerStateChanged(this.playWhenReady, this.playbackInfo.playbackState);
+        if (playbackStateChanged) {
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onPlayerStateChanged(this.playWhenReady, this.playbackInfo.playbackState);
             }
         }
-        if (z2) {
-            playbackInfo = this.listeners.iterator();
-            while (playbackInfo.hasNext()) {
-                ((EventListener) playbackInfo.next()).onSeekProcessed();
+        if (seekProcessed) {
+            it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onSeekProcessed();
             }
         }
     }
 
-    private long playbackInfoPositionUsToWindowPositionMs(long j) {
-        j = C0542C.usToMs(j);
+    private long playbackInfoPositionUsToWindowPositionMs(long positionUs) {
+        long positionMs = C0542C.usToMs(positionUs);
         if (this.playbackInfo.periodId.isAd()) {
-            return j;
+            return positionMs;
         }
         this.playbackInfo.timeline.getPeriod(this.playbackInfo.periodId.periodIndex, this.period);
-        return j + this.period.getPositionInWindowMs();
+        return positionMs + this.period.getPositionInWindowMs();
     }
 
     private boolean shouldMaskPosition() {
-        if (!this.playbackInfo.timeline.isEmpty()) {
-            if (this.pendingOperationAcks <= 0) {
-                return false;
-            }
-        }
-        return true;
+        return this.playbackInfo.timeline.isEmpty() || this.pendingOperationAcks > 0;
     }
 }

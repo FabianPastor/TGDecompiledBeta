@@ -26,51 +26,60 @@ public final class WebvttDecoder extends SimpleSubtitleDecoder {
         super("WebvttDecoder");
     }
 
-    protected WebvttSubtitle decode(byte[] bArr, int i, boolean z) throws SubtitleDecoderException {
-        this.parsableWebvttData.reset(bArr, i);
+    protected WebvttSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
+        this.parsableWebvttData.reset(bytes, length);
         this.webvttCueBuilder.reset();
         this.definedStyles.clear();
         WebvttParserUtil.validateWebvttHeaderLine(this.parsableWebvttData);
-        while (TextUtils.isEmpty(this.parsableWebvttData.readLine()) == null) {
-        }
-        bArr = new ArrayList();
+        do {
+        } while (!TextUtils.isEmpty(this.parsableWebvttData.readLine()));
+        ArrayList<WebvttCue> subtitles = new ArrayList();
         while (true) {
-            boolean nextEvent = getNextEvent(this.parsableWebvttData);
-            if (!nextEvent) {
-                return new WebvttSubtitle(bArr);
+            int event = getNextEvent(this.parsableWebvttData);
+            if (event == 0) {
+                return new WebvttSubtitle(subtitles);
             }
-            if (nextEvent) {
+            if (event == 1) {
                 skipComment(this.parsableWebvttData);
-            } else if (nextEvent) {
-                if (bArr.isEmpty() == 0) {
+            } else if (event == 2) {
+                if (subtitles.isEmpty()) {
+                    this.parsableWebvttData.readLine();
+                    WebvttCssStyle styleBlock = this.cssParser.parseBlock(this.parsableWebvttData);
+                    if (styleBlock != null) {
+                        this.definedStyles.add(styleBlock);
+                    }
+                } else {
                     throw new SubtitleDecoderException("A style block was found after the first cue.");
                 }
-                this.parsableWebvttData.readLine();
-                i = this.cssParser.parseBlock(this.parsableWebvttData);
-                if (i != 0) {
-                    this.definedStyles.add(i);
-                }
-            } else if (nextEvent && this.cueParser.parseCue(this.parsableWebvttData, this.webvttCueBuilder, this.definedStyles) != 0) {
-                bArr.add(this.webvttCueBuilder.build());
+            } else if (event == 3 && this.cueParser.parseCue(this.parsableWebvttData, this.webvttCueBuilder, this.definedStyles)) {
+                subtitles.add(this.webvttCueBuilder.build());
                 this.webvttCueBuilder.reset();
             }
         }
     }
 
-    private static int getNextEvent(ParsableByteArray parsableByteArray) {
-        int i = 0;
-        int i2 = -1;
-        while (i2 == -1) {
-            i = parsableByteArray.getPosition();
-            String readLine = parsableByteArray.readLine();
-            i2 = readLine == null ? 0 : STYLE_START.equals(readLine) ? 2 : COMMENT_START.startsWith(readLine) ? 1 : 3;
+    private static int getNextEvent(ParsableByteArray parsableWebvttData) {
+        int foundEvent = -1;
+        int currentInputPosition = 0;
+        while (foundEvent == -1) {
+            currentInputPosition = parsableWebvttData.getPosition();
+            String line = parsableWebvttData.readLine();
+            if (line == null) {
+                foundEvent = 0;
+            } else if (STYLE_START.equals(line)) {
+                foundEvent = 2;
+            } else if (COMMENT_START.startsWith(line)) {
+                foundEvent = 1;
+            } else {
+                foundEvent = 3;
+            }
         }
-        parsableByteArray.setPosition(i);
-        return i2;
+        parsableWebvttData.setPosition(currentInputPosition);
+        return foundEvent;
     }
 
-    private static void skipComment(ParsableByteArray parsableByteArray) {
-        while (!TextUtils.isEmpty(parsableByteArray.readLine())) {
-        }
+    private static void skipComment(ParsableByteArray parsableWebvttData) {
+        do {
+        } while (!TextUtils.isEmpty(parsableWebvttData.readLine()));
     }
 }

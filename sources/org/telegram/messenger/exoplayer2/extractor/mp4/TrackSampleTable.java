@@ -11,35 +11,41 @@ final class TrackSampleTable {
     public final int[] sizes;
     public final long[] timestampsUs;
 
-    public TrackSampleTable(long[] jArr, int[] iArr, int i, long[] jArr2, int[] iArr2) {
-        boolean z = false;
-        Assertions.checkArgument(iArr.length == jArr2.length);
-        Assertions.checkArgument(jArr.length == jArr2.length);
-        if (iArr2.length == jArr2.length) {
+    public TrackSampleTable(long[] offsets, int[] sizes, int maximumSize, long[] timestampsUs, int[] flags) {
+        boolean z;
+        boolean z2 = true;
+        Assertions.checkArgument(sizes.length == timestampsUs.length);
+        if (offsets.length == timestampsUs.length) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
-        this.offsets = jArr;
-        this.sizes = iArr;
-        this.maximumSize = i;
-        this.timestampsUs = jArr2;
-        this.flags = iArr2;
-        this.sampleCount = jArr.length;
+        if (flags.length != timestampsUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
+        this.offsets = offsets;
+        this.sizes = sizes;
+        this.maximumSize = maximumSize;
+        this.timestampsUs = timestampsUs;
+        this.flags = flags;
+        this.sampleCount = offsets.length;
     }
 
-    public int getIndexOfEarlierOrEqualSynchronizationSample(long j) {
-        for (j = Util.binarySearchFloor(this.timestampsUs, j, true, false); j >= null; j--) {
-            if ((this.flags[j] & 1) != 0) {
-                return j;
+    public int getIndexOfEarlierOrEqualSynchronizationSample(long timeUs) {
+        for (int i = Util.binarySearchFloor(this.timestampsUs, timeUs, true, false); i >= 0; i--) {
+            if ((this.flags[i] & 1) != 0) {
+                return i;
             }
         }
         return -1;
     }
 
-    public int getIndexOfLaterOrEqualSynchronizationSample(long j) {
-        for (j = Util.binarySearchCeil(this.timestampsUs, j, true, false); j < this.timestampsUs.length; j++) {
-            if ((this.flags[j] & 1) != 0) {
-                return j;
+    public int getIndexOfLaterOrEqualSynchronizationSample(long timeUs) {
+        for (int i = Util.binarySearchCeil(this.timestampsUs, timeUs, true, false); i < this.timestampsUs.length; i++) {
+            if ((this.flags[i] & 1) != 0) {
+                return i;
             }
         }
         return -1;

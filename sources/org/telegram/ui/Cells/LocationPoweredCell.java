@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,7 +20,7 @@ public class LocationPoweredCell extends FrameLayout {
 
     public LocationPoweredCell(Context context) {
         super(context);
-        View linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context);
         addView(linearLayout, LayoutHelper.createFrame(-2, -2, 17));
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 16.0f);
@@ -40,7 +39,7 @@ public class LocationPoweredCell extends FrameLayout {
         linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 }

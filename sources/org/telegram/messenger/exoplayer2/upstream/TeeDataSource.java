@@ -8,26 +8,26 @@ public final class TeeDataSource implements DataSource {
     private final DataSink dataSink;
     private final DataSource upstream;
 
-    public TeeDataSource(DataSource dataSource, DataSink dataSink) {
-        this.upstream = (DataSource) Assertions.checkNotNull(dataSource);
+    public TeeDataSource(DataSource upstream, DataSink dataSink) {
+        this.upstream = (DataSource) Assertions.checkNotNull(upstream);
         this.dataSink = (DataSink) Assertions.checkNotNull(dataSink);
     }
 
     public long open(DataSpec dataSpec) throws IOException {
-        long open = this.upstream.open(dataSpec);
-        if (dataSpec.length == -1 && open != -1) {
-            dataSpec = new DataSpec(dataSpec.uri, dataSpec.absoluteStreamPosition, dataSpec.position, open, dataSpec.key, dataSpec.flags);
+        long dataLength = this.upstream.open(dataSpec);
+        if (dataSpec.length == -1 && dataLength != -1) {
+            dataSpec = new DataSpec(dataSpec.uri, dataSpec.absoluteStreamPosition, dataSpec.position, dataLength, dataSpec.key, dataSpec.flags);
         }
         this.dataSink.open(dataSpec);
-        return open;
+        return dataLength;
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        i2 = this.upstream.read(bArr, i, i2);
-        if (i2 > 0) {
-            this.dataSink.write(bArr, i, i2);
+    public int read(byte[] buffer, int offset, int max) throws IOException {
+        int num = this.upstream.read(buffer, offset, max);
+        if (num > 0) {
+            this.dataSink.write(buffer, offset, num);
         }
-        return i2;
+        return num;
     }
 
     public Uri getUri() {

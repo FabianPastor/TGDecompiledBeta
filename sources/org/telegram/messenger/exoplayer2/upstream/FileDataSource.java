@@ -13,8 +13,8 @@ public final class FileDataSource implements DataSource {
     private Uri uri;
 
     public static class FileDataSourceException extends IOException {
-        public FileDataSourceException(IOException iOException) {
-            super(iOException);
+        public FileDataSourceException(IOException cause) {
+            super(cause);
         }
     }
 
@@ -22,8 +22,8 @@ public final class FileDataSource implements DataSource {
         this(null);
     }
 
-    public FileDataSource(TransferListener<? super FileDataSource> transferListener) {
-        this.listener = transferListener;
+    public FileDataSource(TransferListener<? super FileDataSource> listener) {
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws FileDataSourceException {
@@ -40,29 +40,31 @@ public final class FileDataSource implements DataSource {
                 this.listener.onTransferStart(this, dataSpec);
             }
             return this.bytesRemaining;
-        } catch (DataSpec dataSpec2) {
-            throw new FileDataSourceException(dataSpec2);
+        } catch (IOException e) {
+            throw new FileDataSourceException(e);
         }
     }
 
-    public int read(byte[] bArr, int i, int i2) throws FileDataSourceException {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] buffer, int offset, int readLength) throws FileDataSourceException {
+        if (readLength == 0) {
+            return 0;
         }
         if (this.bytesRemaining == 0) {
             return -1;
         }
         try {
-            bArr = this.file.read(bArr, i, (int) Math.min(this.bytesRemaining, (long) i2));
-            if (bArr > null) {
-                this.bytesRemaining -= (long) bArr;
-                if (this.listener != 0) {
-                    this.listener.onBytesTransferred(this, bArr);
-                }
+            int bytesRead = this.file.read(buffer, offset, (int) Math.min(this.bytesRemaining, (long) readLength));
+            if (bytesRead <= 0) {
+                return bytesRead;
             }
-            return bArr;
-        } catch (byte[] bArr2) {
-            throw new FileDataSourceException(bArr2);
+            this.bytesRemaining -= (long) bytesRead;
+            if (this.listener == null) {
+                return bytesRead;
+            }
+            this.listener.onBytesTransferred(this, bytesRead);
+            return bytesRead;
+        } catch (IOException e) {
+            throw new FileDataSourceException(e);
         }
     }
 

@@ -24,54 +24,51 @@ public final class RawCcExtractor implements Extractor {
     private static final int TIMESTAMP_SIZE_V1 = 8;
     private final ParsableByteArray dataScratch = new ParsableByteArray(9);
     private final Format format;
-    private int parserState = null;
+    private int parserState = 0;
     private int remainingSampleCount;
     private int sampleBytesWritten;
     private long timestampUs;
     private TrackOutput trackOutput;
     private int version;
 
-    public void release() {
-    }
-
     public RawCcExtractor(Format format) {
         this.format = format;
     }
 
-    public void init(ExtractorOutput extractorOutput) {
-        extractorOutput.seekMap(new Unseekable(C0542C.TIME_UNSET));
-        this.trackOutput = extractorOutput.track(0, 3);
-        extractorOutput.endTracks();
+    public void init(ExtractorOutput output) {
+        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
+        this.trackOutput = output.track(0, 3);
+        output.endTracks();
         this.trackOutput.format(this.format);
     }
 
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
         this.dataScratch.reset();
-        extractorInput.peekFully(this.dataScratch.data, 0, 8);
+        input.peekFully(this.dataScratch.data, 0, 8);
         if (this.dataScratch.readInt() == HEADER_ID) {
             return true;
         }
         return false;
     }
 
-    public int read(ExtractorInput extractorInput, PositionHolder positionHolder) throws IOException, InterruptedException {
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
         while (true) {
             switch (this.parserState) {
-                case null:
-                    if (parseHeader(extractorInput) != null) {
+                case 0:
+                    if (parseHeader(input)) {
                         this.parserState = 1;
                         break;
                     }
                     return -1;
                 case 1:
-                    if (parseTimestampAndSampleCount(extractorInput) != null) {
+                    if (parseTimestampAndSampleCount(input)) {
                         this.parserState = 2;
                         break;
                     }
                     this.parserState = 0;
                     return -1;
                 case 2:
-                    parseSamples(extractorInput);
+                    parseSamples(input);
                     this.parserState = 1;
                     return 0;
                 default:
@@ -80,13 +77,16 @@ public final class RawCcExtractor implements Extractor {
         }
     }
 
-    public void seek(long j, long j2) {
+    public void seek(long position, long timeUs) {
         this.parserState = 0;
     }
 
-    private boolean parseHeader(ExtractorInput extractorInput) throws IOException, InterruptedException {
+    public void release() {
+    }
+
+    private boolean parseHeader(ExtractorInput input) throws IOException, InterruptedException {
         this.dataScratch.reset();
-        if (extractorInput.readFully(this.dataScratch.data, 0, 8, true) == null) {
+        if (!input.readFully(this.dataScratch.data, 0, 8, true)) {
             return false;
         }
         if (this.dataScratch.readInt() != HEADER_ID) {
@@ -96,19 +96,16 @@ public final class RawCcExtractor implements Extractor {
         return true;
     }
 
-    private boolean parseTimestampAndSampleCount(ExtractorInput extractorInput) throws IOException, InterruptedException {
+    private boolean parseTimestampAndSampleCount(ExtractorInput input) throws IOException, InterruptedException {
         this.dataScratch.reset();
         if (this.version == 0) {
-            if (extractorInput.readFully(this.dataScratch.data, 0, 5, true) == null) {
+            if (!input.readFully(this.dataScratch.data, 0, 5, true)) {
                 return false;
             }
             this.timestampUs = (this.dataScratch.readUnsignedInt() * 1000) / 45;
         } else if (this.version != 1) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unsupported version number: ");
-            stringBuilder.append(this.version);
-            throw new ParserException(stringBuilder.toString());
-        } else if (extractorInput.readFully(this.dataScratch.data, 0, 9, true) == null) {
+            throw new ParserException("Unsupported version number: " + this.version);
+        } else if (!input.readFully(this.dataScratch.data, 0, 9, true)) {
             return false;
         } else {
             this.timestampUs = this.dataScratch.readLong();
@@ -118,15 +115,15 @@ public final class RawCcExtractor implements Extractor {
         return true;
     }
 
-    private void parseSamples(ExtractorInput extractorInput) throws IOException, InterruptedException {
+    private void parseSamples(ExtractorInput input) throws IOException, InterruptedException {
         while (this.remainingSampleCount > 0) {
             this.dataScratch.reset();
-            extractorInput.readFully(this.dataScratch.data, 0, 3);
+            input.readFully(this.dataScratch.data, 0, 3);
             this.trackOutput.sampleData(this.dataScratch, 3);
             this.sampleBytesWritten += 3;
             this.remainingSampleCount--;
         }
-        if (this.sampleBytesWritten > null) {
+        if (this.sampleBytesWritten > 0) {
             this.trackOutput.sampleMetadata(this.timestampUs, 1, this.sampleBytesWritten, 0, null);
         }
     }

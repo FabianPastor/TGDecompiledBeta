@@ -9,13 +9,13 @@ public final class TimestampAdjuster {
     private volatile long lastSampleTimestamp = C0542C.TIME_UNSET;
     private long timestampOffsetUs;
 
-    public TimestampAdjuster(long j) {
-        setFirstSampleTimestampUs(j);
+    public TimestampAdjuster(long firstSampleTimestampUs) {
+        setFirstSampleTimestampUs(firstSampleTimestampUs);
     }
 
-    public synchronized void setFirstSampleTimestampUs(long j) {
+    public synchronized void setFirstSampleTimestampUs(long firstSampleTimestampUs) {
         Assertions.checkState(this.lastSampleTimestamp == C0542C.TIME_UNSET);
-        this.firstSampleTimestampUs = j;
+        this.firstSampleTimestampUs = firstSampleTimestampUs;
     }
 
     public long getFirstSampleTimestampUs() {
@@ -33,43 +33,47 @@ public final class TimestampAdjuster {
         if (this.firstSampleTimestampUs == Long.MAX_VALUE) {
             return 0;
         }
-        return this.lastSampleTimestamp == C0542C.TIME_UNSET ? C0542C.TIME_UNSET : this.timestampOffsetUs;
+        return this.lastSampleTimestamp != C0542C.TIME_UNSET ? this.timestampOffsetUs : C0542C.TIME_UNSET;
     }
 
     public void reset() {
         this.lastSampleTimestamp = C0542C.TIME_UNSET;
     }
 
-    public long adjustTsTimestamp(long j) {
-        if (j == C0542C.TIME_UNSET) {
+    public long adjustTsTimestamp(long pts) {
+        if (pts == C0542C.TIME_UNSET) {
             return C0542C.TIME_UNSET;
         }
         if (this.lastSampleTimestamp != C0542C.TIME_UNSET) {
-            long usToPts = usToPts(this.lastSampleTimestamp);
-            long j2 = (usToPts + 4294967296L) / MAX_PTS_PLUS_ONE;
-            long j3 = j + ((j2 - 1) * MAX_PTS_PLUS_ONE);
-            j2 = j + (MAX_PTS_PLUS_ONE * j2);
-            j = Math.abs(j3 - usToPts) < Math.abs(j2 - usToPts) ? j3 : j2;
+            long lastPts = usToPts(this.lastSampleTimestamp);
+            long closestWrapCount = (4294967296L + lastPts) / MAX_PTS_PLUS_ONE;
+            long ptsWrapBelow = pts + (MAX_PTS_PLUS_ONE * (closestWrapCount - 1));
+            long ptsWrapAbove = pts + (MAX_PTS_PLUS_ONE * closestWrapCount);
+            if (Math.abs(ptsWrapBelow - lastPts) < Math.abs(ptsWrapAbove - lastPts)) {
+                pts = ptsWrapBelow;
+            } else {
+                pts = ptsWrapAbove;
+            }
         }
-        return adjustSampleTimestamp(ptsToUs(j));
+        return adjustSampleTimestamp(ptsToUs(pts));
     }
 
-    public long adjustSampleTimestamp(long j) {
-        if (j == C0542C.TIME_UNSET) {
+    public long adjustSampleTimestamp(long timeUs) {
+        if (timeUs == C0542C.TIME_UNSET) {
             return C0542C.TIME_UNSET;
         }
         if (this.lastSampleTimestamp != C0542C.TIME_UNSET) {
-            this.lastSampleTimestamp = j;
+            this.lastSampleTimestamp = timeUs;
         } else {
             if (this.firstSampleTimestampUs != Long.MAX_VALUE) {
-                this.timestampOffsetUs = this.firstSampleTimestampUs - j;
+                this.timestampOffsetUs = this.firstSampleTimestampUs - timeUs;
             }
             synchronized (this) {
-                this.lastSampleTimestamp = j;
+                this.lastSampleTimestamp = timeUs;
                 notifyAll();
             }
         }
-        return j + this.timestampOffsetUs;
+        return this.timestampOffsetUs + timeUs;
     }
 
     public synchronized void waitUntilInitialized() throws InterruptedException {
@@ -78,11 +82,11 @@ public final class TimestampAdjuster {
         }
     }
 
-    public static long ptsToUs(long j) {
-        return (j * C0542C.MICROS_PER_SECOND) / 90000;
+    public static long ptsToUs(long pts) {
+        return (C0542C.MICROS_PER_SECOND * pts) / 90000;
     }
 
-    public static long usToPts(long j) {
-        return (j * 90000) / C0542C.MICROS_PER_SECOND;
+    public static long usToPts(long us) {
+        return (90000 * us) / C0542C.MICROS_PER_SECOND;
     }
 }

@@ -14,56 +14,60 @@ public final class UrlLinkFrame extends Id3Frame {
         C05871() {
         }
 
-        public UrlLinkFrame createFromParcel(Parcel parcel) {
-            return new UrlLinkFrame(parcel);
+        public UrlLinkFrame createFromParcel(Parcel in) {
+            return new UrlLinkFrame(in);
         }
 
-        public UrlLinkFrame[] newArray(int i) {
-            return new UrlLinkFrame[i];
+        public UrlLinkFrame[] newArray(int size) {
+            return new UrlLinkFrame[size];
         }
     }
 
-    public UrlLinkFrame(String str, String str2, String str3) {
-        super(str);
-        this.description = str2;
-        this.url = str3;
+    public UrlLinkFrame(String id, String description, String url) {
+        super(id);
+        this.description = description;
+        this.url = url;
     }
 
-    UrlLinkFrame(Parcel parcel) {
-        super(parcel.readString());
-        this.description = parcel.readString();
-        this.url = parcel.readString();
+    UrlLinkFrame(Parcel in) {
+        super(in.readString());
+        this.description = in.readString();
+        this.url = in.readString();
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                UrlLinkFrame urlLinkFrame = (UrlLinkFrame) obj;
-                if (!this.id.equals(urlLinkFrame.id) || !Util.areEqual(this.description, urlLinkFrame.description) || Util.areEqual(this.url, urlLinkFrame.url) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        UrlLinkFrame other = (UrlLinkFrame) obj;
+        if (this.id.equals(other.id) && Util.areEqual(this.description, other.description) && Util.areEqual(this.url, other.url)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int hashCode = 31 * (((527 + this.id.hashCode()) * 31) + (this.description != null ? this.description.hashCode() : 0));
+        int hashCode2 = (this.id.hashCode() + 527) * 31;
+        if (this.description != null) {
+            hashCode = this.description.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (hashCode2 + hashCode) * 31;
         if (this.url != null) {
             i = this.url.hashCode();
         }
         return hashCode + i;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.id);
-        parcel.writeString(this.description);
-        parcel.writeString(this.url);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.description);
+        dest.writeString(this.url);
     }
 }

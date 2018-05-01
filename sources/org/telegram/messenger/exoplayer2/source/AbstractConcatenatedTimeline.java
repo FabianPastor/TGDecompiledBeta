@@ -28,125 +28,134 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         this.childCount = shuffleOrder.getLength();
     }
 
-    public int getNextWindowIndex(int i, int i2, boolean z) {
-        int childIndexByWindowIndex = getChildIndexByWindowIndex(i);
-        int firstWindowIndexByChildIndex = getFirstWindowIndexByChildIndex(childIndexByWindowIndex);
-        i = getTimelineByChildIndex(childIndexByWindowIndex).getNextWindowIndex(i - firstWindowIndexByChildIndex, i2 == 2 ? 0 : i2, z);
-        if (i != -1) {
-            return firstWindowIndexByChildIndex + i;
+    public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+        int i;
+        int childIndex = getChildIndexByWindowIndex(windowIndex);
+        int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
+        Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
+        int i2 = windowIndex - firstWindowIndexInChild;
+        if (repeatMode == 2) {
+            i = 0;
+        } else {
+            i = repeatMode;
         }
-        i = getNextChildIndex(childIndexByWindowIndex, z);
-        while (i != -1 && getTimelineByChildIndex(i).isEmpty()) {
-            i = getNextChildIndex(i, z);
+        int nextWindowIndexInChild = timelineByChildIndex.getNextWindowIndex(i2, i, shuffleModeEnabled);
+        if (nextWindowIndexInChild != -1) {
+            return firstWindowIndexInChild + nextWindowIndexInChild;
         }
-        if (i != -1) {
-            return getFirstWindowIndexByChildIndex(i) + getTimelineByChildIndex(i).getFirstWindowIndex(z);
+        int nextChildIndex = getNextChildIndex(childIndex, shuffleModeEnabled);
+        while (nextChildIndex != -1 && getTimelineByChildIndex(nextChildIndex).isEmpty()) {
+            nextChildIndex = getNextChildIndex(nextChildIndex, shuffleModeEnabled);
         }
-        if (i2 == 2) {
-            return getFirstWindowIndex(z);
+        if (nextChildIndex != -1) {
+            return getFirstWindowIndexByChildIndex(nextChildIndex) + getTimelineByChildIndex(nextChildIndex).getFirstWindowIndex(shuffleModeEnabled);
         }
-        return -1;
+        return repeatMode == 2 ? getFirstWindowIndex(shuffleModeEnabled) : -1;
     }
 
-    public int getPreviousWindowIndex(int i, int i2, boolean z) {
-        int childIndexByWindowIndex = getChildIndexByWindowIndex(i);
-        int firstWindowIndexByChildIndex = getFirstWindowIndexByChildIndex(childIndexByWindowIndex);
-        i = getTimelineByChildIndex(childIndexByWindowIndex).getPreviousWindowIndex(i - firstWindowIndexByChildIndex, i2 == 2 ? 0 : i2, z);
-        if (i != -1) {
-            return firstWindowIndexByChildIndex + i;
+    public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+        int i;
+        int childIndex = getChildIndexByWindowIndex(windowIndex);
+        int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
+        Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
+        int i2 = windowIndex - firstWindowIndexInChild;
+        if (repeatMode == 2) {
+            i = 0;
+        } else {
+            i = repeatMode;
         }
-        i = getPreviousChildIndex(childIndexByWindowIndex, z);
-        while (i != -1 && getTimelineByChildIndex(i).isEmpty()) {
-            i = getPreviousChildIndex(i, z);
+        int previousWindowIndexInChild = timelineByChildIndex.getPreviousWindowIndex(i2, i, shuffleModeEnabled);
+        if (previousWindowIndexInChild != -1) {
+            return firstWindowIndexInChild + previousWindowIndexInChild;
         }
-        if (i != -1) {
-            return getFirstWindowIndexByChildIndex(i) + getTimelineByChildIndex(i).getLastWindowIndex(z);
+        int previousChildIndex = getPreviousChildIndex(childIndex, shuffleModeEnabled);
+        while (previousChildIndex != -1 && getTimelineByChildIndex(previousChildIndex).isEmpty()) {
+            previousChildIndex = getPreviousChildIndex(previousChildIndex, shuffleModeEnabled);
         }
-        if (i2 == 2) {
-            return getLastWindowIndex(z);
+        if (previousChildIndex != -1) {
+            return getFirstWindowIndexByChildIndex(previousChildIndex) + getTimelineByChildIndex(previousChildIndex).getLastWindowIndex(shuffleModeEnabled);
         }
-        return -1;
+        return repeatMode == 2 ? getLastWindowIndex(shuffleModeEnabled) : -1;
     }
 
-    public int getLastWindowIndex(boolean z) {
+    public int getLastWindowIndex(boolean shuffleModeEnabled) {
         if (this.childCount == 0) {
             return -1;
         }
-        int lastIndex = z ? this.shuffleOrder.getLastIndex() : this.childCount - 1;
-        while (getTimelineByChildIndex(lastIndex).isEmpty()) {
-            lastIndex = getPreviousChildIndex(lastIndex, z);
-            if (lastIndex == -1) {
+        int lastChildIndex = shuffleModeEnabled ? this.shuffleOrder.getLastIndex() : this.childCount - 1;
+        while (getTimelineByChildIndex(lastChildIndex).isEmpty()) {
+            lastChildIndex = getPreviousChildIndex(lastChildIndex, shuffleModeEnabled);
+            if (lastChildIndex == -1) {
                 return -1;
             }
         }
-        return getFirstWindowIndexByChildIndex(lastIndex) + getTimelineByChildIndex(lastIndex).getLastWindowIndex(z);
+        return getFirstWindowIndexByChildIndex(lastChildIndex) + getTimelineByChildIndex(lastChildIndex).getLastWindowIndex(shuffleModeEnabled);
     }
 
-    public int getFirstWindowIndex(boolean z) {
+    public int getFirstWindowIndex(boolean shuffleModeEnabled) {
         if (this.childCount == 0) {
             return -1;
         }
-        int firstIndex = z ? this.shuffleOrder.getFirstIndex() : 0;
-        while (getTimelineByChildIndex(firstIndex).isEmpty()) {
-            firstIndex = getNextChildIndex(firstIndex, z);
-            if (firstIndex == -1) {
+        int firstChildIndex = shuffleModeEnabled ? this.shuffleOrder.getFirstIndex() : 0;
+        while (getTimelineByChildIndex(firstChildIndex).isEmpty()) {
+            firstChildIndex = getNextChildIndex(firstChildIndex, shuffleModeEnabled);
+            if (firstChildIndex == -1) {
                 return -1;
             }
         }
-        return getFirstWindowIndexByChildIndex(firstIndex) + getTimelineByChildIndex(firstIndex).getFirstWindowIndex(z);
+        return getFirstWindowIndexByChildIndex(firstChildIndex) + getTimelineByChildIndex(firstChildIndex).getFirstWindowIndex(shuffleModeEnabled);
     }
 
-    public final Window getWindow(int i, Window window, boolean z, long j) {
-        int childIndexByWindowIndex = getChildIndexByWindowIndex(i);
-        int firstWindowIndexByChildIndex = getFirstWindowIndexByChildIndex(childIndexByWindowIndex);
-        int firstPeriodIndexByChildIndex = getFirstPeriodIndexByChildIndex(childIndexByWindowIndex);
-        getTimelineByChildIndex(childIndexByWindowIndex).getWindow(i - firstWindowIndexByChildIndex, window, z, j);
-        window.firstPeriodIndex += firstPeriodIndexByChildIndex;
-        window.lastPeriodIndex += firstPeriodIndexByChildIndex;
+    public final Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+        int childIndex = getChildIndexByWindowIndex(windowIndex);
+        int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
+        int firstPeriodIndexInChild = getFirstPeriodIndexByChildIndex(childIndex);
+        getTimelineByChildIndex(childIndex).getWindow(windowIndex - firstWindowIndexInChild, window, setIds, defaultPositionProjectionUs);
+        window.firstPeriodIndex += firstPeriodIndexInChild;
+        window.lastPeriodIndex += firstPeriodIndexInChild;
         return window;
     }
 
-    public final Period getPeriod(int i, Period period, boolean z) {
-        int childIndexByPeriodIndex = getChildIndexByPeriodIndex(i);
-        int firstWindowIndexByChildIndex = getFirstWindowIndexByChildIndex(childIndexByPeriodIndex);
-        getTimelineByChildIndex(childIndexByPeriodIndex).getPeriod(i - getFirstPeriodIndexByChildIndex(childIndexByPeriodIndex), period, z);
-        period.windowIndex += firstWindowIndexByChildIndex;
-        if (z) {
-            period.uid = Pair.create(getChildUidByChildIndex(childIndexByPeriodIndex), period.uid);
+    public final Period getPeriod(int periodIndex, Period period, boolean setIds) {
+        int childIndex = getChildIndexByPeriodIndex(periodIndex);
+        int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
+        getTimelineByChildIndex(childIndex).getPeriod(periodIndex - getFirstPeriodIndexByChildIndex(childIndex), period, setIds);
+        period.windowIndex += firstWindowIndexInChild;
+        if (setIds) {
+            period.uid = Pair.create(getChildUidByChildIndex(childIndex), period.uid);
         }
         return period;
     }
 
-    public final int getIndexOfPeriod(Object obj) {
-        int i = -1;
-        if (!(obj instanceof Pair)) {
+    public final int getIndexOfPeriod(Object uid) {
+        if (!(uid instanceof Pair)) {
             return -1;
         }
-        Pair pair = (Pair) obj;
-        Object obj2 = pair.first;
-        obj = pair.second;
-        int childIndexByChildUid = getChildIndexByChildUid(obj2);
-        if (childIndexByChildUid == -1) {
+        Pair<?, ?> childUidAndPeriodUid = (Pair) uid;
+        Object childUid = childUidAndPeriodUid.first;
+        Object periodUid = childUidAndPeriodUid.second;
+        int childIndex = getChildIndexByChildUid(childUid);
+        if (childIndex == -1) {
             return -1;
         }
-        obj = getTimelineByChildIndex(childIndexByChildUid).getIndexOfPeriod(obj);
-        if (obj != -1) {
-            i = getFirstPeriodIndexByChildIndex(childIndexByChildUid) + obj;
+        int periodIndexInChild = getTimelineByChildIndex(childIndex).getIndexOfPeriod(periodUid);
+        if (periodIndexInChild != -1) {
+            return getFirstPeriodIndexByChildIndex(childIndex) + periodIndexInChild;
         }
-        return i;
+        return -1;
     }
 
-    private int getNextChildIndex(int i, boolean z) {
-        if (z) {
-            return this.shuffleOrder.getNextIndex(i);
+    private int getNextChildIndex(int childIndex, boolean shuffleModeEnabled) {
+        if (shuffleModeEnabled) {
+            return this.shuffleOrder.getNextIndex(childIndex);
         }
-        return i < this.childCount + -1 ? i + 1 : -1;
+        return childIndex < this.childCount + -1 ? childIndex + 1 : -1;
     }
 
-    private int getPreviousChildIndex(int i, boolean z) {
-        if (z) {
-            return this.shuffleOrder.getPreviousIndex(i);
+    private int getPreviousChildIndex(int childIndex, boolean shuffleModeEnabled) {
+        if (shuffleModeEnabled) {
+            return this.shuffleOrder.getPreviousIndex(childIndex);
         }
-        return i > 0 ? i - 1 : -1;
+        return childIndex > 0 ? childIndex - 1 : -1;
     }
 }

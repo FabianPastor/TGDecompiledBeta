@@ -11,15 +11,15 @@ public final class SpliceNullCommand extends SpliceCommand {
         C05901() {
         }
 
-        public SpliceNullCommand createFromParcel(Parcel parcel) {
+        public SpliceNullCommand createFromParcel(Parcel in) {
             return new SpliceNullCommand();
         }
 
-        public SpliceNullCommand[] newArray(int i) {
-            return new SpliceNullCommand[i];
+        public SpliceNullCommand[] newArray(int size) {
+            return new SpliceNullCommand[size];
         }
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
     }
 }

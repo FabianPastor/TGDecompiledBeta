@@ -14,6 +14,7 @@ import org.telegram.messenger.C0446R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -25,11 +26,11 @@ public class DialogsEmptyCell extends LinearLayout {
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
     class C08741 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+        C08741() {
         }
 
-        C08741() {
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 
@@ -45,11 +46,11 @@ public class DialogsEmptyCell extends LinearLayout {
         this.emptyTextView1.setTextSize(1, 20.0f);
         addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2));
         this.emptyTextView2 = new TextView(context);
-        context = LocaleController.getString("NoChatsHelp", C0446R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", C0446R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-            context = context.replace('\n', ' ');
+            help = help.replace('\n', ' ');
         }
-        this.emptyTextView2.setText(context);
+        this.emptyTextView2.setText(help);
         this.emptyTextView2.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView2.setTextSize(1, 15.0f);
         this.emptyTextView2.setGravity(17);
@@ -58,15 +59,15 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.emptyTextView2, LayoutHelper.createLinear(-2, -2));
     }
 
-    protected void onMeasure(int i, int i2) {
-        i2 = MeasureSpec.getSize(i2);
-        if (i2 == 0) {
-            i2 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int totalHeight = MeasureSpec.getSize(heightMeasureSpec);
+        if (totalHeight == 0) {
+            totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        ArrayList arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
+        ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
         if (!arrayList.isEmpty()) {
-            i2 -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
+            totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(totalHeight, NUM));
     }
 }

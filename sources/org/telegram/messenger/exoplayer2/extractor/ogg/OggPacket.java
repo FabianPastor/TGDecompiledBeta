@@ -23,43 +23,47 @@ final class OggPacket {
         this.populated = false;
     }
 
-    public boolean populate(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        Assertions.checkState(extractorInput != null);
+    public boolean populate(ExtractorInput input) throws IOException, InterruptedException {
+        Assertions.checkState(input != null);
         if (this.populated) {
             this.populated = false;
             this.packetArray.reset();
         }
         while (!this.populated) {
-            int i;
-            int i2;
+            int segmentIndex;
             if (this.currentSegmentIndex < 0) {
-                if (!this.pageHeader.populate(extractorInput, true)) {
+                if (!this.pageHeader.populate(input, true)) {
                     return false;
                 }
-                i = this.pageHeader.headerSize;
+                segmentIndex = 0;
+                int bytesToSkip = this.pageHeader.headerSize;
                 if ((this.pageHeader.type & 1) == 1 && this.packetArray.limit() == 0) {
-                    i += calculatePacketSize(0);
-                    i2 = this.segmentCount + 0;
+                    bytesToSkip += calculatePacketSize(0);
+                    segmentIndex = 0 + this.segmentCount;
+                }
+                input.skipFully(bytesToSkip);
+                this.currentSegmentIndex = segmentIndex;
+            }
+            int size = calculatePacketSize(this.currentSegmentIndex);
+            segmentIndex = this.currentSegmentIndex + this.segmentCount;
+            if (size > 0) {
+                boolean z;
+                if (this.packetArray.capacity() < this.packetArray.limit() + size) {
+                    this.packetArray.data = Arrays.copyOf(this.packetArray.data, this.packetArray.limit() + size);
+                }
+                input.readFully(this.packetArray.data, this.packetArray.limit(), size);
+                this.packetArray.setLimit(this.packetArray.limit() + size);
+                if (this.pageHeader.laces[segmentIndex - 1] != 255) {
+                    z = true;
                 } else {
-                    i2 = 0;
+                    z = false;
                 }
-                extractorInput.skipFully(i);
-                this.currentSegmentIndex = i2;
+                this.populated = z;
             }
-            i = calculatePacketSize(this.currentSegmentIndex);
-            i2 = this.currentSegmentIndex + this.segmentCount;
-            if (i > 0) {
-                if (this.packetArray.capacity() < this.packetArray.limit() + i) {
-                    this.packetArray.data = Arrays.copyOf(this.packetArray.data, this.packetArray.limit() + i);
-                }
-                extractorInput.readFully(this.packetArray.data, this.packetArray.limit(), i);
-                this.packetArray.setLimit(this.packetArray.limit() + i);
-                this.populated = this.pageHeader.laces[i2 + -1] != 255;
+            if (segmentIndex == this.pageHeader.pageSegmentCount) {
+                segmentIndex = -1;
             }
-            if (i2 == this.pageHeader.pageSegmentCount) {
-                i2 = -1;
-            }
-            this.currentSegmentIndex = i2;
+            this.currentSegmentIndex = segmentIndex;
         }
         return true;
     }
@@ -78,19 +82,19 @@ final class OggPacket {
         }
     }
 
-    private int calculatePacketSize(int i) {
-        int i2 = 0;
+    private int calculatePacketSize(int startSegmentIndex) {
         this.segmentCount = 0;
-        while (this.segmentCount + i < this.pageHeader.pageSegmentCount) {
+        int size = 0;
+        while (this.segmentCount + startSegmentIndex < this.pageHeader.pageSegmentCount) {
             int[] iArr = this.pageHeader.laces;
-            int i3 = this.segmentCount;
-            this.segmentCount = i3 + 1;
-            int i4 = iArr[i3 + i];
-            i2 += i4;
-            if (i4 != 255) {
+            int i = this.segmentCount;
+            this.segmentCount = i + 1;
+            int segmentLength = iArr[i + startSegmentIndex];
+            size += segmentLength;
+            if (segmentLength != 255) {
                 break;
             }
         }
-        return i2;
+        return size;
     }
 }

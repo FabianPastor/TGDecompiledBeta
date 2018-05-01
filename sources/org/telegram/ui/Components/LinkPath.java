@@ -10,26 +10,32 @@ public class LinkPath extends Path {
     private float heightOffset;
     private float lastTop = -1.0f;
 
-    public void setCurrentLayout(StaticLayout staticLayout, int i, float f) {
-        this.currentLayout = staticLayout;
-        this.currentLine = staticLayout.getLineForOffset(i);
+    public void setCurrentLayout(StaticLayout layout, int start, float yOffset) {
+        this.currentLayout = layout;
+        this.currentLine = layout.getLineForOffset(start);
         this.lastTop = -1.0f;
-        this.heightOffset = f;
+        this.heightOffset = yOffset;
     }
 
-    public void addRect(float f, float f2, float f3, float f4, Direction direction) {
-        float f5 = f2 + this.heightOffset;
-        f4 += this.heightOffset;
+    public void addRect(float left, float top, float right, float bottom, Direction dir) {
+        top += this.heightOffset;
+        bottom += this.heightOffset;
         if (this.lastTop == -1.0f) {
-            this.lastTop = f5;
-        } else if (this.lastTop != f5) {
-            this.lastTop = f5;
+            this.lastTop = top;
+        } else if (this.lastTop != top) {
+            this.lastTop = top;
             this.currentLine++;
         }
-        f2 = this.currentLayout.getLineRight(this.currentLine);
+        float lineRight = this.currentLayout.getLineRight(this.currentLine);
         float lineLeft = this.currentLayout.getLineLeft(this.currentLine);
-        if (f < f2) {
-            super.addRect(f < lineLeft ? lineLeft : f, f5, f3 > f2 ? f2 : f3, f4 - (f4 != ((float) this.currentLayout.getHeight()) ? this.currentLayout.getSpacingAdd() : 0.0f), direction);
+        if (left < lineRight) {
+            if (right > lineRight) {
+                right = lineRight;
+            }
+            if (left < lineLeft) {
+                left = lineLeft;
+            }
+            super.addRect(left, top, right, bottom - (bottom != ((float) this.currentLayout.getHeight()) ? this.currentLayout.getSpacingAdd() : 0.0f), dir);
         }
     }
 }

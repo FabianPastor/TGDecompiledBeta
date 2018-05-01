@@ -12,20 +12,16 @@ final class ResamplingAudioProcessor implements AudioProcessor {
     private ByteBuffer outputBuffer = EMPTY_BUFFER;
     private int sampleRateHz = -1;
 
-    public int getOutputEncoding() {
-        return 2;
-    }
-
-    public boolean configure(int i, int i2, int i3) throws UnhandledFormatException {
-        if (i3 != 3 && i3 != 2 && i3 != Integer.MIN_VALUE && i3 != NUM) {
-            throw new UnhandledFormatException(i, i2, i3);
-        } else if (this.sampleRateHz == i && this.channelCount == i2 && this.encoding == i3) {
+    public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
+        if (encoding != 3 && encoding != 2 && encoding != Integer.MIN_VALUE && encoding != NUM) {
+            throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
+        } else if (this.sampleRateHz == sampleRateHz && this.channelCount == channelCount && this.encoding == encoding) {
             return false;
         } else {
-            this.sampleRateHz = i;
-            this.channelCount = i2;
-            this.encoding = i3;
-            if (i3 == 2) {
+            this.sampleRateHz = sampleRateHz;
+            this.channelCount = channelCount;
+            this.encoding = encoding;
+            if (encoding == 2) {
                 this.buffer = EMPTY_BUFFER;
             }
             return true;
@@ -40,52 +36,61 @@ final class ResamplingAudioProcessor implements AudioProcessor {
         return this.channelCount;
     }
 
+    public int getOutputEncoding() {
+        return 2;
+    }
+
     public int getOutputSampleRateHz() {
         return this.sampleRateHz;
     }
 
-    public void queueInput(ByteBuffer byteBuffer) {
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        int i = limit - position;
-        int i2 = this.encoding;
-        if (i2 == Integer.MIN_VALUE) {
-            i = (i / 3) * 2;
-        } else if (i2 == 3) {
-            i *= 2;
-        } else if (i2 != NUM) {
-            throw new IllegalStateException();
-        } else {
-            i /= 2;
+    public void queueInput(ByteBuffer inputBuffer) {
+        int resampledSize;
+        int position = inputBuffer.position();
+        int limit = inputBuffer.limit();
+        int size = limit - position;
+        switch (this.encoding) {
+            case Integer.MIN_VALUE:
+                resampledSize = (size / 3) * 2;
+                break;
+            case 3:
+                resampledSize = size * 2;
+                break;
+            case 1073741824:
+                resampledSize = size / 2;
+                break;
+            default:
+                throw new IllegalStateException();
         }
-        if (this.buffer.capacity() < i) {
-            this.buffer = ByteBuffer.allocateDirect(i).order(ByteOrder.nativeOrder());
+        if (this.buffer.capacity() < resampledSize) {
+            this.buffer = ByteBuffer.allocateDirect(resampledSize).order(ByteOrder.nativeOrder());
         } else {
             this.buffer.clear();
         }
-        i = this.encoding;
-        if (i == Integer.MIN_VALUE) {
-            while (position < limit) {
-                this.buffer.put(byteBuffer.get(position + 1));
-                this.buffer.put(byteBuffer.get(position + 2));
-                position += 3;
-            }
-        } else if (i == 3) {
-            while (position < limit) {
-                this.buffer.put((byte) 0);
-                this.buffer.put((byte) ((byteBuffer.get(position) & 255) - 128));
-                position++;
-            }
-        } else if (i != NUM) {
-            throw new IllegalStateException();
-        } else {
-            while (position < limit) {
-                this.buffer.put(byteBuffer.get(position + 2));
-                this.buffer.put(byteBuffer.get(position + 3));
-                position += 4;
-            }
+        int i;
+        switch (this.encoding) {
+            case Integer.MIN_VALUE:
+                for (i = position; i < limit; i += 3) {
+                    this.buffer.put(inputBuffer.get(i + 1));
+                    this.buffer.put(inputBuffer.get(i + 2));
+                }
+                break;
+            case 3:
+                for (i = position; i < limit; i++) {
+                    this.buffer.put((byte) 0);
+                    this.buffer.put((byte) ((inputBuffer.get(i) & 255) - 128));
+                }
+                break;
+            case 1073741824:
+                for (i = position; i < limit; i += 4) {
+                    this.buffer.put(inputBuffer.get(i + 2));
+                    this.buffer.put(inputBuffer.get(i + 3));
+                }
+                break;
+            default:
+                throw new IllegalStateException();
         }
-        byteBuffer.position(byteBuffer.limit());
+        inputBuffer.position(inputBuffer.limit());
         this.buffer.flip();
         this.outputBuffer = this.buffer;
     }
@@ -95,9 +100,9 @@ final class ResamplingAudioProcessor implements AudioProcessor {
     }
 
     public ByteBuffer getOutput() {
-        ByteBuffer byteBuffer = this.outputBuffer;
+        ByteBuffer outputBuffer = this.outputBuffer;
         this.outputBuffer = EMPTY_BUFFER;
-        return byteBuffer;
+        return outputBuffer;
     }
 
     public boolean isEnded() {

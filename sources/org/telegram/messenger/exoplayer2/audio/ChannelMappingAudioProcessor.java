@@ -15,36 +15,38 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
     private int[] pendingOutputChannels;
     private int sampleRateHz = -1;
 
-    public int getOutputEncoding() {
-        return 2;
+    public void setChannelMap(int[] outputChannels) {
+        this.pendingOutputChannels = outputChannels;
     }
 
-    public void setChannelMap(int[] iArr) {
-        this.pendingOutputChannels = iArr;
-    }
-
-    public boolean configure(int i, int i2, int i3) throws UnhandledFormatException {
-        boolean equals = Arrays.equals(this.pendingOutputChannels, this.outputChannels) ^ true;
+    public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
+        boolean outputChannelsChanged = !Arrays.equals(this.pendingOutputChannels, this.outputChannels);
         this.outputChannels = this.pendingOutputChannels;
         if (this.outputChannels == null) {
             this.active = false;
-            return equals;
-        } else if (i3 != 2) {
-            throw new UnhandledFormatException(i, i2, i3);
-        } else if (!equals && this.sampleRateHz == i && this.channelCount == i2) {
+            return outputChannelsChanged;
+        } else if (encoding != 2) {
+            throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
+        } else if (!outputChannelsChanged && this.sampleRateHz == sampleRateHz && this.channelCount == channelCount) {
             return false;
         } else {
-            this.sampleRateHz = i;
-            this.channelCount = i2;
-            this.active = i2 != this.outputChannels.length;
-            int i4 = 0;
-            while (i4 < this.outputChannels.length) {
-                int i5 = this.outputChannels[i4];
-                if (i5 >= i2) {
-                    throw new UnhandledFormatException(i, i2, i3);
+            boolean z;
+            this.sampleRateHz = sampleRateHz;
+            this.channelCount = channelCount;
+            if (channelCount != this.outputChannels.length) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.active = z;
+            int i = 0;
+            while (i < this.outputChannels.length) {
+                int channelIndex = this.outputChannels[i];
+                if (channelIndex >= channelCount) {
+                    throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
                 }
-                this.active = (i5 != i4 ? 1 : 0) | this.active;
-                i4++;
+                this.active = (channelIndex != i ? 1 : 0) | this.active;
+                i++;
             }
             return true;
         }
@@ -58,26 +60,30 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         return this.outputChannels == null ? this.channelCount : this.outputChannels.length;
     }
 
+    public int getOutputEncoding() {
+        return 2;
+    }
+
     public int getOutputSampleRateHz() {
         return this.sampleRateHz;
     }
 
-    public void queueInput(ByteBuffer byteBuffer) {
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        int length = (((limit - position) / (this.channelCount * 2)) * this.outputChannels.length) * 2;
-        if (this.buffer.capacity() < length) {
-            this.buffer = ByteBuffer.allocateDirect(length).order(ByteOrder.nativeOrder());
+    public void queueInput(ByteBuffer inputBuffer) {
+        int position = inputBuffer.position();
+        int limit = inputBuffer.limit();
+        int outputSize = (this.outputChannels.length * ((limit - position) / (this.channelCount * 2))) * 2;
+        if (this.buffer.capacity() < outputSize) {
+            this.buffer = ByteBuffer.allocateDirect(outputSize).order(ByteOrder.nativeOrder());
         } else {
             this.buffer.clear();
         }
         while (position < limit) {
-            for (int i : this.outputChannels) {
-                this.buffer.putShort(byteBuffer.getShort((i * 2) + position));
+            for (int channelIndex : this.outputChannels) {
+                this.buffer.putShort(inputBuffer.getShort((channelIndex * 2) + position));
             }
             position += this.channelCount * 2;
         }
-        byteBuffer.position(limit);
+        inputBuffer.position(limit);
         this.buffer.flip();
         this.outputBuffer = this.buffer;
     }
@@ -87,9 +93,9 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
     }
 
     public ByteBuffer getOutput() {
-        ByteBuffer byteBuffer = this.outputBuffer;
+        ByteBuffer outputBuffer = this.outputBuffer;
         this.outputBuffer = EMPTY_BUFFER;
-        return byteBuffer;
+        return outputBuffer;
     }
 
     public boolean isEnded() {

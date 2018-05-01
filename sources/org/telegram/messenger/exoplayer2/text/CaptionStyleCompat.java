@@ -35,12 +35,12 @@ public final class CaptionStyleCompat {
         return createFromCaptionStyleV19(captionStyle);
     }
 
-    public CaptionStyleCompat(int i, int i2, int i3, int i4, int i5, Typeface typeface) {
-        this.foregroundColor = i;
-        this.backgroundColor = i2;
-        this.windowColor = i3;
-        this.edgeType = i4;
-        this.edgeColor = i5;
+    public CaptionStyleCompat(int foregroundColor, int backgroundColor, int windowColor, int edgeType, int edgeColor, Typeface typeface) {
+        this.foregroundColor = foregroundColor;
+        this.backgroundColor = backgroundColor;
+        this.windowColor = windowColor;
+        this.edgeType = edgeType;
+        this.edgeColor = edgeColor;
         this.typeface = typeface;
     }
 

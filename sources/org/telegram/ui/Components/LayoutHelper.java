@@ -9,117 +9,117 @@ public class LayoutHelper {
     public static final int MATCH_PARENT = -1;
     public static final int WRAP_CONTENT = -2;
 
-    private static int getSize(float f) {
-        if (f >= 0.0f) {
-            f = (float) AndroidUtilities.dp(f);
+    private static int getSize(float size) {
+        if (size >= 0.0f) {
+            size = (float) AndroidUtilities.dp(size);
         }
-        return (int) f;
+        return (int) size;
     }
 
-    public static LayoutParams createScroll(int i, int i2, int i3) {
-        return new LayoutParams(getSize((float) i), getSize((float) i2), i3);
+    public static LayoutParams createScroll(int width, int height, int gravity) {
+        return new LayoutParams(getSize((float) width), getSize((float) height), gravity);
     }
 
-    public static LayoutParams createFrame(int i, float f, int i2, float f2, float f3, float f4, float f5) {
-        LayoutParams layoutParams = new LayoutParams(getSize((float) i), getSize(f), i2);
-        layoutParams.setMargins(AndroidUtilities.dp(f2), AndroidUtilities.dp(f3), AndroidUtilities.dp(f4), AndroidUtilities.dp(f5));
+    public static LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
+        LayoutParams layoutParams = new LayoutParams(getSize((float) width), getSize(height), gravity);
+        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
         return layoutParams;
     }
 
-    public static LayoutParams createFrame(int i, int i2, int i3) {
-        return new LayoutParams(getSize((float) i), getSize((float) i2), i3);
+    public static LayoutParams createFrame(int width, int height, int gravity) {
+        return new LayoutParams(getSize((float) width), getSize((float) height), gravity);
     }
 
-    public static LayoutParams createFrame(int i, float f) {
-        return new LayoutParams(getSize((float) i), getSize(f));
+    public static LayoutParams createFrame(int width, float height) {
+        return new LayoutParams(getSize((float) width), getSize(height));
     }
 
-    public static RelativeLayout.LayoutParams createRelative(float f, float f2, int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(getSize(f), getSize(f2));
-        if (i5 >= 0) {
-            layoutParams.addRule(i5);
+    public static RelativeLayout.LayoutParams createRelative(float width, float height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignParent, int alignRelative, int anchorRelative) {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(getSize(width), getSize(height));
+        if (alignParent >= 0) {
+            layoutParams.addRule(alignParent);
         }
-        if (i6 >= 0 && i7 >= 0) {
-            layoutParams.addRule(i6, i7);
+        if (alignRelative >= 0 && anchorRelative >= 0) {
+            layoutParams.addRule(alignRelative, anchorRelative);
         }
-        layoutParams.leftMargin = AndroidUtilities.dp((float) i);
-        layoutParams.topMargin = AndroidUtilities.dp((float) i2);
-        layoutParams.rightMargin = AndroidUtilities.dp((float) i3);
-        layoutParams.bottomMargin = AndroidUtilities.dp((float) i4);
+        layoutParams.leftMargin = AndroidUtilities.dp((float) leftMargin);
+        layoutParams.topMargin = AndroidUtilities.dp((float) topMargin);
+        layoutParams.rightMargin = AndroidUtilities.dp((float) rightMargin);
+        layoutParams.bottomMargin = AndroidUtilities.dp((float) bottomMargin);
         return layoutParams;
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2, int i3, int i4, int i5, int i6) {
-        return createRelative((float) i, (float) i2, i3, i4, i5, i6, -1, -1, -1);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+        return createRelative((float) width, (float) height, leftMargin, topMargin, rightMargin, bottomMargin, -1, -1, -1);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        return createRelative((float) i, (float) i2, i3, i4, i5, i6, i7, -1, -1);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignParent) {
+        return createRelative((float) width, (float) height, leftMargin, topMargin, rightMargin, bottomMargin, alignParent, -1, -1);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(float f, float f2, int i, int i2, int i3, int i4, int i5, int i6) {
-        return createRelative(f, f2, i, i2, i3, i4, -1, i5, i6);
+    public static RelativeLayout.LayoutParams createRelative(float width, float height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignRelative, int anchorRelative) {
+        return createRelative(width, height, leftMargin, topMargin, rightMargin, bottomMargin, -1, alignRelative, anchorRelative);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2, int i3, int i4, int i5) {
-        return createRelative((float) i, (float) i2, 0, 0, 0, 0, i3, i4, i5);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignParent, int alignRelative, int anchorRelative) {
+        return createRelative((float) width, (float) height, 0, 0, 0, 0, alignParent, alignRelative, anchorRelative);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2) {
-        return createRelative((float) i, (float) i2, 0, 0, 0, 0, -1, -1, -1);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height) {
+        return createRelative((float) width, (float) height, 0, 0, 0, 0, -1, -1, -1);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2, int i3) {
-        return createRelative((float) i, (float) i2, 0, 0, 0, 0, i3, -1, -1);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignParent) {
+        return createRelative((float) width, (float) height, 0, 0, 0, 0, alignParent, -1, -1);
     }
 
-    public static RelativeLayout.LayoutParams createRelative(int i, int i2, int i3, int i4) {
-        return createRelative((float) i, (float) i2, 0, 0, 0, 0, -1, i3, i4);
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignRelative, int anchorRelative) {
+        return createRelative((float) width, (float) height, 0, 0, 0, 0, -1, alignRelative, anchorRelative);
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, float f, int i3, int i4, int i5, int i6, int i7) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2), f);
-        layoutParams.setMargins(AndroidUtilities.dp((float) i4), AndroidUtilities.dp((float) i5), AndroidUtilities.dp((float) i6), AndroidUtilities.dp((float) i7));
-        layoutParams.gravity = i3;
+    public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height), weight);
+        layoutParams.setMargins(AndroidUtilities.dp((float) leftMargin), AndroidUtilities.dp((float) topMargin), AndroidUtilities.dp((float) rightMargin), AndroidUtilities.dp((float) bottomMargin));
+        layoutParams.gravity = gravity;
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, float f, int i3, int i4, int i5, int i6) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2), f);
-        layoutParams.setMargins(AndroidUtilities.dp((float) i3), AndroidUtilities.dp((float) i4), AndroidUtilities.dp((float) i5), AndroidUtilities.dp((float) i6));
+    public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height), weight);
+        layoutParams.setMargins(AndroidUtilities.dp((float) leftMargin), AndroidUtilities.dp((float) topMargin), AndroidUtilities.dp((float) rightMargin), AndroidUtilities.dp((float) bottomMargin));
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2));
-        layoutParams.setMargins(AndroidUtilities.dp((float) i4), AndroidUtilities.dp((float) i5), AndroidUtilities.dp((float) i6), AndroidUtilities.dp((float) i7));
-        layoutParams.gravity = i3;
+    public static LinearLayout.LayoutParams createLinear(int width, int height, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height));
+        layoutParams.setMargins(AndroidUtilities.dp((float) leftMargin), AndroidUtilities.dp((float) topMargin), AndroidUtilities.dp((float) rightMargin), AndroidUtilities.dp((float) bottomMargin));
+        layoutParams.gravity = gravity;
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, float f, float f2, float f3, float f4) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2));
-        layoutParams.setMargins(AndroidUtilities.dp(f), AndroidUtilities.dp(f2), AndroidUtilities.dp(f3), AndroidUtilities.dp(f4));
+    public static LinearLayout.LayoutParams createLinear(int width, int height, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height));
+        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, float f, int i3) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2), f);
-        layoutParams.gravity = i3;
+    public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int gravity) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height), weight);
+        layoutParams.gravity = gravity;
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, int i3) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2));
-        layoutParams.gravity = i3;
+    public static LinearLayout.LayoutParams createLinear(int width, int height, int gravity) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height));
+        layoutParams.gravity = gravity;
         return layoutParams;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2, float f) {
-        return new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2), f);
+    public static LinearLayout.LayoutParams createLinear(int width, int height, float weight) {
+        return new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height), weight);
     }
 
-    public static LinearLayout.LayoutParams createLinear(int i, int i2) {
-        return new LinearLayout.LayoutParams(getSize((float) i), getSize((float) i2));
+    public static LinearLayout.LayoutParams createLinear(int width, int height) {
+        return new LinearLayout.LayoutParams(getSize((float) width), getSize((float) height));
     }
 }

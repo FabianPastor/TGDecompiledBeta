@@ -11,10 +11,10 @@ public class Point {
     /* renamed from: z */
     public double f22z;
 
-    public Point(double d, double d2, double d3) {
-        this.f20x = d;
-        this.f21y = d2;
-        this.f22z = d3;
+    public Point(double x, double y, double z) {
+        this.f20x = x;
+        this.f21y = y;
+        this.f22z = z;
     }
 
     public Point(Point point) {
@@ -24,7 +24,7 @@ public class Point {
     }
 
     public boolean equals(Object obj) {
-        boolean z = false;
+        boolean z = true;
         if (obj == null) {
             return false;
         }
@@ -34,25 +34,25 @@ public class Point {
         if (!(obj instanceof Point)) {
             return false;
         }
-        Point point = (Point) obj;
-        if (this.f20x == point.f20x && this.f21y == point.f21y && this.f22z == point.f22z) {
-            z = true;
+        Point other = (Point) obj;
+        if (!(this.f20x == other.f20x && this.f21y == other.f21y && this.f22z == other.f22z)) {
+            z = false;
         }
         return z;
     }
 
-    Point multiplySum(Point point, double d) {
-        return new Point((this.f20x + point.f20x) * d, (this.f21y + point.f21y) * d, (this.f22z + point.f22z) * d);
+    Point multiplySum(Point point, double scalar) {
+        return new Point((this.f20x + point.f20x) * scalar, (this.f21y + point.f21y) * scalar, (this.f22z + point.f22z) * scalar);
     }
 
-    Point multiplyAndAdd(double d, Point point) {
-        return new Point((this.f20x * d) + point.f20x, (this.f21y * d) + point.f21y, (this.f22z * d) + point.f22z);
+    Point multiplyAndAdd(double scalar, Point point) {
+        return new Point((this.f20x * scalar) + point.f20x, (this.f21y * scalar) + point.f21y, (this.f22z * scalar) + point.f22z);
     }
 
-    void alteringAddMultiplication(Point point, double d) {
-        this.f20x += point.f20x * d;
-        this.f21y += point.f21y * d;
-        this.f22z += point.f22z * d;
+    void alteringAddMultiplication(Point point, double scalar) {
+        this.f20x += point.f20x * scalar;
+        this.f21y += point.f21y * scalar;
+        this.f22z += point.f22z * scalar;
     }
 
     Point add(Point point) {
@@ -63,8 +63,8 @@ public class Point {
         return new Point(this.f20x - point.f20x, this.f21y - point.f21y, this.f22z - point.f22z);
     }
 
-    Point multiplyByScalar(double d) {
-        return new Point(this.f20x * d, this.f21y * d, this.f22z * d);
+    Point multiplyByScalar(double scalar) {
+        return new Point(this.f20x * scalar, this.f21y * scalar, this.f22z * scalar);
     }
 
     Point getNormalized() {

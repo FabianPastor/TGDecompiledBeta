@@ -31,29 +31,36 @@ public final class MergingMediaSource implements MediaSource {
         public @interface Reason {
         }
 
-        public IllegalMergeException(int i) {
-            this.reason = i;
+        public IllegalMergeException(int reason) {
+            this.reason = reason;
         }
     }
 
-    public MergingMediaSource(MediaSource... mediaSourceArr) {
-        this(new DefaultCompositeSequenceableLoaderFactory(), mediaSourceArr);
+    public MergingMediaSource(MediaSource... mediaSources) {
+        this(new DefaultCompositeSequenceableLoaderFactory(), mediaSources);
     }
 
-    public MergingMediaSource(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, MediaSource... mediaSourceArr) {
-        this.mediaSources = mediaSourceArr;
+    public MergingMediaSource(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, MediaSource... mediaSources) {
+        this.mediaSources = mediaSources;
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
-        this.pendingTimelineSources = new ArrayList(Arrays.asList(mediaSourceArr));
+        this.pendingTimelineSources = new ArrayList(Arrays.asList(mediaSources));
         this.periodCount = -1;
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        Assertions.checkState(!this.listener, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        boolean z;
+        if (this.listener == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.listener = listener;
-        for (z = false; z < this.mediaSources.length; z++) {
-            this.mediaSources[z].prepareSource(exoPlayer, false, new Listener() {
-                public void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj) {
-                    MergingMediaSource.this.handleSourceInfoRefreshed(z, timeline, obj);
+        for (int i = 0; i < this.mediaSources.length; i++) {
+            final int sourceIndex = i;
+            this.mediaSources[sourceIndex].prepareSource(player, false, new Listener() {
+                public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
+                    MergingMediaSource.this.handleSourceInfoRefreshed(sourceIndex, timeline, manifest);
                 }
             });
         }
@@ -63,43 +70,43 @@ public final class MergingMediaSource implements MediaSource {
         if (this.mergeError != null) {
             throw this.mergeError;
         }
-        for (MediaSource maybeThrowSourceInfoRefreshError : this.mediaSources) {
-            maybeThrowSourceInfoRefreshError.maybeThrowSourceInfoRefreshError();
+        for (MediaSource mediaSource : this.mediaSources) {
+            mediaSource.maybeThrowSourceInfoRefreshError();
         }
     }
 
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
-        MediaPeriod[] mediaPeriodArr = new MediaPeriod[this.mediaSources.length];
-        for (int i = 0; i < mediaPeriodArr.length; i++) {
-            mediaPeriodArr[i] = this.mediaSources[i].createPeriod(mediaPeriodId, allocator);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        MediaPeriod[] periods = new MediaPeriod[this.mediaSources.length];
+        for (int i = 0; i < periods.length; i++) {
+            periods[i] = this.mediaSources[i].createPeriod(id, allocator);
         }
-        return new MergingMediaPeriod(this.compositeSequenceableLoaderFactory, mediaPeriodArr);
+        return new MergingMediaPeriod(this.compositeSequenceableLoaderFactory, periods);
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
-        MergingMediaPeriod mergingMediaPeriod = (MergingMediaPeriod) mediaPeriod;
+        MergingMediaPeriod mergingPeriod = (MergingMediaPeriod) mediaPeriod;
         for (int i = 0; i < this.mediaSources.length; i++) {
-            this.mediaSources[i].releasePeriod(mergingMediaPeriod.periods[i]);
+            this.mediaSources[i].releasePeriod(mergingPeriod.periods[i]);
         }
     }
 
     public void releaseSource() {
-        for (MediaSource releaseSource : this.mediaSources) {
-            releaseSource.releaseSource();
+        for (MediaSource mediaSource : this.mediaSources) {
+            mediaSource.releaseSource();
         }
     }
 
-    private void handleSourceInfoRefreshed(int i, Timeline timeline, Object obj) {
+    private void handleSourceInfoRefreshed(int sourceIndex, Timeline timeline, Object manifest) {
         if (this.mergeError == null) {
             this.mergeError = checkTimelineMerges(timeline);
         }
         if (this.mergeError == null) {
-            this.pendingTimelineSources.remove(this.mediaSources[i]);
-            if (i == 0) {
+            this.pendingTimelineSources.remove(this.mediaSources[sourceIndex]);
+            if (sourceIndex == 0) {
                 this.primaryTimeline = timeline;
-                this.primaryManifest = obj;
+                this.primaryManifest = manifest;
             }
-            if (this.pendingTimelineSources.isEmpty() != 0) {
+            if (this.pendingTimelineSources.isEmpty()) {
                 this.listener.onSourceInfoRefreshed(this, this.primaryTimeline, this.primaryManifest);
             }
         }

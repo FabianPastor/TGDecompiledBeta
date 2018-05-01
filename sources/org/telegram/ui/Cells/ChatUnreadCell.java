@@ -36,8 +36,8 @@ public class ChatUnreadCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
     }
 
-    public void setText(String str) {
-        this.textView.setText(str);
+    public void setText(String text) {
+        this.textView.setText(text);
     }
 
     public ImageView getImageView() {
@@ -52,7 +52,7 @@ public class ChatUnreadCell extends FrameLayout {
         return this.backgroundLayout;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 }

@@ -23,14 +23,10 @@ public final class ExoPlayerLibraryInfo {
         return str;
     }
 
-    public static synchronized void registerModule(String str) {
+    public static synchronized void registerModule(String name) {
         synchronized (ExoPlayerLibraryInfo.class) {
-            if (registeredModules.add(str)) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(registeredModulesString);
-                stringBuilder.append(", ");
-                stringBuilder.append(str);
-                registeredModulesString = stringBuilder.toString();
+            if (registeredModules.add(name)) {
+                registeredModulesString += ", " + name;
             }
         }
     }

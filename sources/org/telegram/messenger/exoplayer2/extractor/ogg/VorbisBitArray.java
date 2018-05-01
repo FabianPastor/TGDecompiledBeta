@@ -8,9 +8,9 @@ final class VorbisBitArray {
     private int byteOffset;
     private final byte[] data;
 
-    public VorbisBitArray(byte[] bArr) {
-        this.data = bArr;
-        this.byteLimit = bArr.length;
+    public VorbisBitArray(byte[] data) {
+        this.data = data;
+        this.byteLimit = data.length;
     }
 
     public void reset() {
@@ -19,30 +19,30 @@ final class VorbisBitArray {
     }
 
     public boolean readBit() {
-        boolean z = (((this.data[this.byteOffset] & 255) >> this.bitOffset) & 1) == 1;
+        boolean returnValue = (((this.data[this.byteOffset] & 255) >> this.bitOffset) & 1) == 1;
         skipBits(1);
-        return z;
+        return returnValue;
     }
 
-    public int readBits(int i) {
-        int i2 = this.byteOffset;
-        int min = Math.min(i, 8 - this.bitOffset);
-        int i3 = i2 + 1;
-        i2 = ((this.data[i2] & 255) >> this.bitOffset) & (255 >> (8 - min));
-        while (min < i) {
-            i2 |= (this.data[i3] & 255) << min;
-            min += 8;
-            i3++;
+    public int readBits(int numBits) {
+        int tempByteOffset = this.byteOffset;
+        int bitsRead = Math.min(numBits, 8 - this.bitOffset);
+        int tempByteOffset2 = tempByteOffset + 1;
+        int returnValue = ((this.data[tempByteOffset] & 255) >> this.bitOffset) & (255 >> (8 - bitsRead));
+        while (bitsRead < numBits) {
+            returnValue |= (this.data[tempByteOffset2] & 255) << bitsRead;
+            bitsRead += 8;
+            tempByteOffset2++;
         }
-        i2 &= -1 >>> (32 - i);
-        skipBits(i);
-        return i2;
+        returnValue &= -1 >>> (32 - numBits);
+        skipBits(numBits);
+        return returnValue;
     }
 
-    public void skipBits(int i) {
-        int i2 = i / 8;
-        this.byteOffset += i2;
-        this.bitOffset += i - (i2 * 8);
+    public void skipBits(int numBits) {
+        int numBytes = numBits / 8;
+        this.byteOffset += numBytes;
+        this.bitOffset += numBits - (numBytes * 8);
         if (this.bitOffset > 7) {
             this.byteOffset++;
             this.bitOffset -= 8;
@@ -54,9 +54,9 @@ final class VorbisBitArray {
         return (this.byteOffset * 8) + this.bitOffset;
     }
 
-    public void setPosition(int i) {
-        this.byteOffset = i / 8;
-        this.bitOffset = i - (this.byteOffset * 8);
+    public void setPosition(int position) {
+        this.byteOffset = position / 8;
+        this.bitOffset = position - (this.byteOffset * 8);
         assertValidOffset();
     }
 

@@ -15,51 +15,51 @@ final class PlaybackInfo {
     public final Timeline timeline;
     public final TrackSelectorResult trackSelectorResult;
 
-    public PlaybackInfo(Timeline timeline, long j, TrackSelectorResult trackSelectorResult) {
-        this(timeline, null, new MediaPeriodId(0), j, C0542C.TIME_UNSET, 1, false, trackSelectorResult);
+    public PlaybackInfo(Timeline timeline, long startPositionUs, TrackSelectorResult trackSelectorResult) {
+        this(timeline, null, new MediaPeriodId(0), startPositionUs, C0542C.TIME_UNSET, 1, false, trackSelectorResult);
     }
 
-    public PlaybackInfo(Timeline timeline, Object obj, MediaPeriodId mediaPeriodId, long j, long j2, int i, boolean z, TrackSelectorResult trackSelectorResult) {
+    public PlaybackInfo(Timeline timeline, Object manifest, MediaPeriodId periodId, long startPositionUs, long contentPositionUs, int playbackState, boolean isLoading, TrackSelectorResult trackSelectorResult) {
         this.timeline = timeline;
-        this.manifest = obj;
-        this.periodId = mediaPeriodId;
-        this.startPositionUs = j;
-        this.contentPositionUs = j2;
-        this.positionUs = j;
-        this.bufferedPositionUs = j;
-        this.playbackState = i;
-        this.isLoading = z;
+        this.manifest = manifest;
+        this.periodId = periodId;
+        this.startPositionUs = startPositionUs;
+        this.contentPositionUs = contentPositionUs;
+        this.positionUs = startPositionUs;
+        this.bufferedPositionUs = startPositionUs;
+        this.playbackState = playbackState;
+        this.isLoading = isLoading;
         this.trackSelectorResult = trackSelectorResult;
     }
 
-    public PlaybackInfo fromNewPosition(int i, long j, long j2) {
-        return fromNewPosition(new MediaPeriodId(i), j, j2);
+    public PlaybackInfo fromNewPosition(int periodIndex, long startPositionUs, long contentPositionUs) {
+        return fromNewPosition(new MediaPeriodId(periodIndex), startPositionUs, contentPositionUs);
     }
 
-    public PlaybackInfo fromNewPosition(MediaPeriodId mediaPeriodId, long j, long j2) {
-        return new PlaybackInfo(this.timeline, this.manifest, mediaPeriodId, j, j2, this.playbackState, this.isLoading, this.trackSelectorResult);
+    public PlaybackInfo fromNewPosition(MediaPeriodId periodId, long startPositionUs, long contentPositionUs) {
+        return new PlaybackInfo(this.timeline, this.manifest, periodId, startPositionUs, contentPositionUs, this.playbackState, this.isLoading, this.trackSelectorResult);
     }
 
-    public PlaybackInfo copyWithPeriodIndex(int i) {
-        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId.copyWithPeriodIndex(i), this.startPositionUs, this.contentPositionUs, this.playbackState, this.isLoading, this.trackSelectorResult);
+    public PlaybackInfo copyWithPeriodIndex(int periodIndex) {
+        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId.copyWithPeriodIndex(periodIndex), this.startPositionUs, this.contentPositionUs, this.playbackState, this.isLoading, this.trackSelectorResult);
         copyMutablePositions(this, playbackInfo);
         return playbackInfo;
     }
 
-    public PlaybackInfo copyWithTimeline(Timeline timeline, Object obj) {
-        PlaybackInfo playbackInfo = new PlaybackInfo(timeline, obj, this.periodId, this.startPositionUs, this.contentPositionUs, this.playbackState, this.isLoading, this.trackSelectorResult);
+    public PlaybackInfo copyWithTimeline(Timeline timeline, Object manifest) {
+        PlaybackInfo playbackInfo = new PlaybackInfo(timeline, manifest, this.periodId, this.startPositionUs, this.contentPositionUs, this.playbackState, this.isLoading, this.trackSelectorResult);
         copyMutablePositions(this, playbackInfo);
         return playbackInfo;
     }
 
-    public PlaybackInfo copyWithPlaybackState(int i) {
-        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId, this.startPositionUs, this.contentPositionUs, i, this.isLoading, this.trackSelectorResult);
+    public PlaybackInfo copyWithPlaybackState(int playbackState) {
+        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId, this.startPositionUs, this.contentPositionUs, playbackState, this.isLoading, this.trackSelectorResult);
         copyMutablePositions(this, playbackInfo);
         return playbackInfo;
     }
 
-    public PlaybackInfo copyWithIsLoading(boolean z) {
-        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId, this.startPositionUs, this.contentPositionUs, this.playbackState, z, this.trackSelectorResult);
+    public PlaybackInfo copyWithIsLoading(boolean isLoading) {
+        PlaybackInfo playbackInfo = new PlaybackInfo(this.timeline, this.manifest, this.periodId, this.startPositionUs, this.contentPositionUs, this.playbackState, isLoading, this.trackSelectorResult);
         copyMutablePositions(this, playbackInfo);
         return playbackInfo;
     }
@@ -70,8 +70,8 @@ final class PlaybackInfo {
         return playbackInfo;
     }
 
-    private static void copyMutablePositions(PlaybackInfo playbackInfo, PlaybackInfo playbackInfo2) {
-        playbackInfo2.positionUs = playbackInfo.positionUs;
-        playbackInfo2.bufferedPositionUs = playbackInfo.bufferedPositionUs;
+    private static void copyMutablePositions(PlaybackInfo from, PlaybackInfo to) {
+        to.positionUs = from.positionUs;
+        to.bufferedPositionUs = from.bufferedPositionUs;
     }
 }

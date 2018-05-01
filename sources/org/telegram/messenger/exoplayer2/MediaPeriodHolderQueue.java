@@ -49,7 +49,7 @@ final class MediaPeriodHolderQueue {
             this.loading.next = mediaPeriodHolder;
         }
         this.loading = mediaPeriodHolder;
-        this.length += 1;
+        this.length++;
     }
 
     public MediaPeriodHolder advancePlayingPeriod() {
@@ -71,27 +71,27 @@ final class MediaPeriodHolderQueue {
     }
 
     public boolean removeAfter(MediaPeriodHolder mediaPeriodHolder) {
-        boolean z = false;
         Assertions.checkState(mediaPeriodHolder != null);
+        boolean removedReading = false;
         this.loading = mediaPeriodHolder;
         while (mediaPeriodHolder.next != null) {
             mediaPeriodHolder = mediaPeriodHolder.next;
             if (mediaPeriodHolder == this.reading) {
                 this.reading = this.playing;
-                z = true;
+                removedReading = true;
             }
             mediaPeriodHolder.release();
             this.length--;
         }
         this.loading.next = null;
-        return z;
+        return removedReading;
     }
 
     public void clear() {
-        MediaPeriodHolder frontPeriod = getFrontPeriod();
-        if (frontPeriod != null) {
-            frontPeriod.release();
-            removeAfter(frontPeriod);
+        MediaPeriodHolder front = getFrontPeriod();
+        if (front != null) {
+            front.release();
+            removeAfter(front);
         }
         this.playing = null;
         this.loading = null;

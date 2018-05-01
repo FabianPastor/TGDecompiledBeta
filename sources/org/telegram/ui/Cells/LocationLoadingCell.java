@@ -26,17 +26,24 @@ public class LocationLoadingCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.dp(56.0f)) * 2.5f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.dp(56.0f)) * 2.5f), NUM));
     }
 
-    public void setLoading(boolean z) {
-        int i = 4;
-        this.progressBar.setVisibility(z ? 0 : 4);
-        TextView textView = this.textView;
-        if (!z) {
+    public void setLoading(boolean value) {
+        int i;
+        int i2 = 4;
+        RadialProgressView radialProgressView = this.progressBar;
+        if (value) {
             i = 0;
+        } else {
+            i = 4;
         }
-        textView.setVisibility(i);
+        radialProgressView.setVisibility(i);
+        TextView textView = this.textView;
+        if (!value) {
+            i2 = 0;
+        }
+        textView.setVisibility(i2);
     }
 }

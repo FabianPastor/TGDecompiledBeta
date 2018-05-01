@@ -25,21 +25,21 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private final DataSource fileDataSource;
     private TransferListener<? super DataSource> listener;
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, String str, boolean z) {
-        this(context, transferListener, str, 8000, 8000, z);
+    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, boolean allowCrossProtocolRedirects) {
+        this(context, listener, userAgent, 8000, 8000, allowCrossProtocolRedirects);
     }
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, String str, int i, int i2, boolean z) {
-        this(context, transferListener, new DefaultHttpDataSource(str, null, transferListener, i, i2, z, null));
+    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        this(context, listener, new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, null));
     }
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> transferListener, DataSource dataSource) {
-        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource);
-        this.fileDataSource = new FileDataSource(transferListener);
-        this.encryptedFileDataSource = new EncryptedFileDataSource(transferListener);
-        this.assetDataSource = new AssetDataSource(context, transferListener);
-        this.contentDataSource = new ContentDataSource(context, transferListener);
-        this.listener = transferListener;
+    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, DataSource baseDataSource) {
+        this.baseDataSource = (DataSource) Assertions.checkNotNull(baseDataSource);
+        this.fileDataSource = new FileDataSource(listener);
+        this.encryptedFileDataSource = new EncryptedFileDataSource(listener);
+        this.assetDataSource = new AssetDataSource(context, listener);
+        this.contentDataSource = new ContentDataSource(context, listener);
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
@@ -65,8 +65,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
         return this.dataSource.open(dataSpec);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        return this.dataSource.read(bArr, i, i2);
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
+        return this.dataSource.read(buffer, offset, readLength);
     }
 
     public Uri getUri() {

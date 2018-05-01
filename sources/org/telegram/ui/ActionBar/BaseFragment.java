@@ -28,70 +28,6 @@ public class BaseFragment {
     protected boolean swipeBackEnabled;
     protected Dialog visibleDialog;
 
-    public View createView(Context context) {
-        return null;
-    }
-
-    public boolean dismissDialogOnPause(Dialog dialog) {
-        return true;
-    }
-
-    public boolean extendActionMode(Menu menu) {
-        return false;
-    }
-
-    public boolean needDelayOpenAnimation() {
-        return false;
-    }
-
-    public void onActivityResultFragment(int i, int i2, Intent intent) {
-    }
-
-    public boolean onBackPressed() {
-        return true;
-    }
-
-    protected void onBecomeFullyVisible() {
-    }
-
-    public void onConfigurationChanged(Configuration configuration) {
-    }
-
-    protected AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
-        return null;
-    }
-
-    protected void onDialogDismiss(Dialog dialog) {
-    }
-
-    public boolean onFragmentCreate() {
-        return true;
-    }
-
-    public void onLowMemory() {
-    }
-
-    protected void onRemoveFromParent() {
-    }
-
-    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-    }
-
-    public void onResume() {
-    }
-
-    protected void onTransitionAnimationEnd(boolean z, boolean z2) {
-    }
-
-    protected void onTransitionAnimationStart(boolean z, boolean z2) {
-    }
-
-    public void restoreSelfArgs(Bundle bundle) {
-    }
-
-    public void saveSelfArgs(Bundle bundle) {
-    }
-
     public BaseFragment() {
         this.isFinished = false;
         this.visibleDialog = null;
@@ -102,22 +38,22 @@ public class BaseFragment {
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
-    public BaseFragment(Bundle bundle) {
+    public BaseFragment(Bundle args) {
         this.isFinished = false;
         this.visibleDialog = null;
         this.currentAccount = UserConfig.selectedAccount;
         this.classGuid = 0;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
-        this.arguments = bundle;
+        this.arguments = args;
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
-    public void setCurrentAccount(int i) {
+    public void setCurrentAccount(int account) {
         if (this.fragmentView != null) {
             throw new IllegalStateException("trying to set current account when fragment UI already created");
         }
-        this.currentAccount = i;
+        this.currentAccount = account;
     }
 
     public ActionBar getActionBar() {
@@ -126,6 +62,10 @@ public class BaseFragment {
 
     public View getFragmentView() {
         return this.fragmentView;
+    }
+
+    public View createView(Context context) {
+        return null;
     }
 
     public Bundle getArguments() {
@@ -137,13 +77,13 @@ public class BaseFragment {
     }
 
     protected void clearViews() {
-        ViewGroup viewGroup;
+        ViewGroup parent;
         if (this.fragmentView != null) {
-            viewGroup = (ViewGroup) this.fragmentView.getParent();
-            if (viewGroup != null) {
+            parent = (ViewGroup) this.fragmentView.getParent();
+            if (parent != null) {
                 try {
                     onRemoveFromParent();
-                    viewGroup.removeView(this.fragmentView);
+                    parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -151,10 +91,10 @@ public class BaseFragment {
             this.fragmentView = null;
         }
         if (this.actionBar != null) {
-            viewGroup = (ViewGroup) this.actionBar.getParent();
-            if (viewGroup != null) {
+            parent = (ViewGroup) this.actionBar.getParent();
+            if (parent != null) {
                 try {
-                    viewGroup.removeView(this.actionBar);
+                    parent.removeView(this.actionBar);
                 } catch (Throwable e2) {
                     FileLog.m3e(e2);
                 }
@@ -164,15 +104,19 @@ public class BaseFragment {
         this.parentLayout = null;
     }
 
-    protected void setParentLayout(ActionBarLayout actionBarLayout) {
-        if (this.parentLayout != actionBarLayout) {
-            this.parentLayout = actionBarLayout;
+    protected void onRemoveFromParent() {
+    }
+
+    protected void setParentLayout(ActionBarLayout layout) {
+        if (this.parentLayout != layout) {
+            ViewGroup parent;
+            this.parentLayout = layout;
             if (this.fragmentView != null) {
-                ViewGroup viewGroup = (ViewGroup) this.fragmentView.getParent();
-                if (viewGroup != null) {
+                parent = (ViewGroup) this.fragmentView.getParent();
+                if (parent != null) {
                     try {
                         onRemoveFromParent();
-                        viewGroup.removeView(this.fragmentView);
+                        parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
@@ -182,18 +126,18 @@ public class BaseFragment {
                 }
             }
             if (this.actionBar != null) {
-                actionBarLayout = (this.parentLayout == null || this.parentLayout.getContext() == this.actionBar.getContext()) ? null : true;
-                if (this.actionBar.getAddToContainer() || actionBarLayout != null) {
-                    ViewGroup viewGroup2 = (ViewGroup) this.actionBar.getParent();
-                    if (viewGroup2 != null) {
+                boolean differentParent = (this.parentLayout == null || this.parentLayout.getContext() == this.actionBar.getContext()) ? false : true;
+                if (this.actionBar.getAddToContainer() || differentParent) {
+                    parent = (ViewGroup) this.actionBar.getParent();
+                    if (parent != null) {
                         try {
-                            viewGroup2.removeView(this.actionBar);
+                            parent.removeView(this.actionBar);
                         } catch (Throwable e2) {
                             FileLog.m3e(e2);
                         }
                     }
                 }
-                if (actionBarLayout != null) {
+                if (differentParent) {
                     this.actionBar = null;
                 }
             }
@@ -218,20 +162,20 @@ public class BaseFragment {
         finishFragment(true);
     }
 
-    public void finishFragment(boolean z) {
-        if (!this.isFinished) {
-            if (this.parentLayout != null) {
-                this.parentLayout.closeLastFragment(z);
-            }
+    public void finishFragment(boolean animated) {
+        if (!this.isFinished && this.parentLayout != null) {
+            this.parentLayout.closeLastFragment(animated);
         }
     }
 
     public void removeSelfFromStack() {
-        if (!this.isFinished) {
-            if (this.parentLayout != null) {
-                this.parentLayout.removeFragmentFromStack(this);
-            }
+        if (!this.isFinished && this.parentLayout != null) {
+            this.parentLayout.removeFragmentFromStack(this);
         }
+    }
+
+    public boolean onFragmentCreate() {
+        return true;
     }
 
     public void onFragmentDestroy() {
@@ -240,6 +184,13 @@ public class BaseFragment {
         if (this.actionBar != null) {
             this.actionBar.setEnabled(false);
         }
+    }
+
+    public boolean needDelayOpenAnimation() {
+        return false;
+    }
+
+    public void onResume() {
     }
 
     public void onPause() {
@@ -256,34 +207,54 @@ public class BaseFragment {
         }
     }
 
-    public BaseFragment getFragmentForAlert(int i) {
-        if (this.parentLayout != null) {
-            if (this.parentLayout.fragmentsStack.size() > 1 + i) {
-                return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - i);
-            }
+    public BaseFragment getFragmentForAlert(int offset) {
+        if (this.parentLayout == null || this.parentLayout.fragmentsStack.size() <= offset + 1) {
+            return this;
         }
-        return this;
+        return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - offset);
     }
 
-    public boolean presentFragment(BaseFragment baseFragment) {
-        return (this.parentLayout == null || this.parentLayout.presentFragment(baseFragment) == null) ? null : true;
+    public void onConfigurationChanged(Configuration newConfig) {
     }
 
-    public boolean presentFragment(BaseFragment baseFragment, boolean z) {
-        return (this.parentLayout == null || this.parentLayout.presentFragment(baseFragment, z) == null) ? null : true;
+    public boolean onBackPressed() {
+        return true;
     }
 
-    public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
-        return (this.parentLayout == null || this.parentLayout.presentFragment(baseFragment, z, z2, true) == null) ? false : true;
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+    }
+
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+    }
+
+    public void saveSelfArgs(Bundle args) {
+    }
+
+    public void restoreSelfArgs(Bundle args) {
+    }
+
+    public boolean presentFragment(BaseFragment fragment) {
+        return this.parentLayout != null && this.parentLayout.presentFragment(fragment);
+    }
+
+    public boolean presentFragment(BaseFragment fragment, boolean removeLast) {
+        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast);
+    }
+
+    public boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation) {
+        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true);
     }
 
     public Activity getParentActivity() {
-        return this.parentLayout != null ? this.parentLayout.parentActivity : null;
+        if (this.parentLayout != null) {
+            return this.parentLayout.parentActivity;
+        }
+        return null;
     }
 
-    public void startActivityForResult(Intent intent, int i) {
+    public void startActivityForResult(Intent intent, int requestCode) {
         if (this.parentLayout != null) {
-            this.parentLayout.startActivityForResult(intent, i);
+            this.parentLayout.startActivityForResult(intent, requestCode);
         }
     }
 
@@ -296,6 +267,10 @@ public class BaseFragment {
                 FileLog.m3e(e);
             }
         }
+    }
+
+    public boolean dismissDialogOnPause(Dialog dialog) {
+        return true;
     }
 
     public void onBeginSlide() {
@@ -312,6 +287,22 @@ public class BaseFragment {
         }
     }
 
+    protected void onTransitionAnimationStart(boolean isOpen, boolean backward) {
+    }
+
+    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    }
+
+    protected void onBecomeFullyVisible() {
+    }
+
+    protected AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
+        return null;
+    }
+
+    public void onLowMemory() {
+    }
+
     public Dialog showDialog(Dialog dialog) {
         return showDialog(dialog, false, null);
     }
@@ -320,38 +311,39 @@ public class BaseFragment {
         return showDialog(dialog, false, onDismissListener);
     }
 
-    public Dialog showDialog(Dialog dialog, boolean z, final OnDismissListener onDismissListener) {
-        if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking)) {
-            if (z || !this.parentLayout.checkTransitionAnimation()) {
-                try {
-                    if (this.visibleDialog) {
-                        this.visibleDialog.dismiss();
-                        this.visibleDialog = null;
-                    }
-                } catch (Throwable e) {
-                    FileLog.m3e(e);
+    public Dialog showDialog(Dialog dialog, boolean allowInTransition, final OnDismissListener onDismissListener) {
+        Dialog dialog2 = null;
+        if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking || (!allowInTransition && this.parentLayout.checkTransitionAnimation()))) {
+            try {
+                if (this.visibleDialog != null) {
+                    this.visibleDialog.dismiss();
+                    this.visibleDialog = null;
                 }
-                try {
-                    this.visibleDialog = dialog;
-                    this.visibleDialog.setCanceledOnTouchOutside(true);
-                    this.visibleDialog.setOnDismissListener(new OnDismissListener() {
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            if (onDismissListener != null) {
-                                onDismissListener.onDismiss(dialogInterface);
-                            }
-                            BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
-                            BaseFragment.this.visibleDialog = null;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+            try {
+                this.visibleDialog = dialog;
+                this.visibleDialog.setCanceledOnTouchOutside(true);
+                this.visibleDialog.setOnDismissListener(new OnDismissListener() {
+                    public void onDismiss(DialogInterface dialog) {
+                        if (onDismissListener != null) {
+                            onDismissListener.onDismiss(dialog);
                         }
-                    });
-                    this.visibleDialog.show();
-                    return this.visibleDialog;
-                } catch (Throwable e2) {
-                    FileLog.m3e(e2);
-                    return null;
-                }
+                        BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
+                        BaseFragment.this.visibleDialog = null;
+                    }
+                });
+                this.visibleDialog.show();
+                dialog2 = this.visibleDialog;
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
             }
         }
-        return null;
+        return dialog2;
+    }
+
+    protected void onDialogDismiss(Dialog dialog) {
     }
 
     public Dialog getVisibleDialog() {
@@ -360,6 +352,10 @@ public class BaseFragment {
 
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
+    }
+
+    public boolean extendActionMode(Menu menu) {
+        return false;
     }
 
     public ThemeDescription[] getThemeDescriptions() {

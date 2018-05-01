@@ -34,13 +34,39 @@ public class PhotoCropActivity extends BaseFragment {
     private boolean sameBitmap = false;
     private PhotoCropView view;
 
+    public interface PhotoEditActivityDelegate {
+        void didFinishEdit(Bitmap bitmap);
+    }
+
+    /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
+    class C22261 extends ActionBarMenuOnItemClick {
+        C22261() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoCropActivity.this.finishFragment();
+            } else if (id == 1) {
+                if (!(PhotoCropActivity.this.delegate == null || PhotoCropActivity.this.doneButtonPressed)) {
+                    Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
+                    if (bitmap == PhotoCropActivity.this.imageToCrop) {
+                        PhotoCropActivity.this.sameBitmap = true;
+                    }
+                    PhotoCropActivity.this.delegate.didFinishEdit(bitmap);
+                    PhotoCropActivity.this.doneButtonPressed = true;
+                }
+                PhotoCropActivity.this.finishFragment();
+            }
+        }
+    }
+
     private class PhotoCropView extends FrameLayout {
         int bitmapHeight;
         int bitmapWidth;
         int bitmapX;
         int bitmapY;
         Paint circlePaint = null;
-        int draggingState = null;
+        int draggingState = 0;
         boolean freeform;
         Paint halfPaint = null;
         float oldX = 0.0f;
@@ -59,41 +85,39 @@ public class PhotoCropActivity extends BaseFragment {
             }
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                view = motionEvent.getX();
+                float x = motionEvent.getX();
                 float y = motionEvent.getY();
-                int dp = AndroidUtilities.dp(14.0f);
-                float f;
+                int cornerSide = AndroidUtilities.dp(14.0f);
                 if (motionEvent.getAction() == 0) {
-                    f = (float) dp;
-                    if (PhotoCropView.this.rectX - f < view && PhotoCropView.this.rectX + f > view && PhotoCropView.this.rectY - f < y && PhotoCropView.this.rectY + f > y) {
+                    if (PhotoCropView.this.rectX - ((float) cornerSide) < x && PhotoCropView.this.rectX + ((float) cornerSide) > x && PhotoCropView.this.rectY - ((float) cornerSide) < y && PhotoCropView.this.rectY + ((float) cornerSide) > y) {
                         PhotoCropView.this.draggingState = 1;
-                    } else if ((PhotoCropView.this.rectX - f) + PhotoCropView.this.rectSizeX < view && (PhotoCropView.this.rectX + f) + PhotoCropView.this.rectSizeX > view && PhotoCropView.this.rectY - f < y && PhotoCropView.this.rectY + f > y) {
+                    } else if ((PhotoCropView.this.rectX - ((float) cornerSide)) + PhotoCropView.this.rectSizeX < x && (PhotoCropView.this.rectX + ((float) cornerSide)) + PhotoCropView.this.rectSizeX > x && PhotoCropView.this.rectY - ((float) cornerSide) < y && PhotoCropView.this.rectY + ((float) cornerSide) > y) {
                         PhotoCropView.this.draggingState = 2;
-                    } else if (PhotoCropView.this.rectX - f < view && PhotoCropView.this.rectX + f > view && (PhotoCropView.this.rectY - f) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + f) + PhotoCropView.this.rectSizeY > y) {
+                    } else if (PhotoCropView.this.rectX - ((float) cornerSide) < x && PhotoCropView.this.rectX + ((float) cornerSide) > x && (PhotoCropView.this.rectY - ((float) cornerSide)) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + ((float) cornerSide)) + PhotoCropView.this.rectSizeY > y) {
                         PhotoCropView.this.draggingState = 3;
-                    } else if ((PhotoCropView.this.rectX - f) + PhotoCropView.this.rectSizeX < view && (PhotoCropView.this.rectX + f) + PhotoCropView.this.rectSizeX > view && (PhotoCropView.this.rectY - f) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + f) + PhotoCropView.this.rectSizeY > y) {
+                    } else if ((PhotoCropView.this.rectX - ((float) cornerSide)) + PhotoCropView.this.rectSizeX < x && (PhotoCropView.this.rectX + ((float) cornerSide)) + PhotoCropView.this.rectSizeX > x && (PhotoCropView.this.rectY - ((float) cornerSide)) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + ((float) cornerSide)) + PhotoCropView.this.rectSizeY > y) {
                         PhotoCropView.this.draggingState = 4;
-                    } else if (PhotoCropView.this.rectX >= view || PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX <= view || PhotoCropView.this.rectY >= y || PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY <= y) {
+                    } else if (PhotoCropView.this.rectX >= x || PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX <= x || PhotoCropView.this.rectY >= y || PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY <= y) {
                         PhotoCropView.this.draggingState = 0;
                     } else {
                         PhotoCropView.this.draggingState = 5;
                     }
-                    if (PhotoCropView.this.draggingState != null) {
+                    if (PhotoCropView.this.draggingState != 0) {
                         PhotoCropView.this.requestDisallowInterceptTouchEvent(true);
                     }
-                    PhotoCropView.this.oldX = view;
+                    PhotoCropView.this.oldX = x;
                     PhotoCropView.this.oldY = y;
                 } else if (motionEvent.getAction() == 1) {
                     PhotoCropView.this.draggingState = 0;
-                } else if (motionEvent.getAction() == 2 && PhotoCropView.this.draggingState != null) {
-                    motionEvent = view - PhotoCropView.this.oldX;
-                    f = y - PhotoCropView.this.oldY;
+                } else if (motionEvent.getAction() == 2 && PhotoCropView.this.draggingState != 0) {
+                    float diffX = x - PhotoCropView.this.oldX;
+                    float diffY = y - PhotoCropView.this.oldY;
                     PhotoCropView photoCropView;
                     if (PhotoCropView.this.draggingState == 5) {
                         photoCropView = PhotoCropView.this;
-                        photoCropView.rectX += motionEvent;
-                        motionEvent = PhotoCropView.this;
-                        motionEvent.rectY += f;
+                        photoCropView.rectX += diffX;
+                        photoCropView = PhotoCropView.this;
+                        photoCropView.rectY += diffY;
                         if (PhotoCropView.this.rectX < ((float) PhotoCropView.this.bitmapX)) {
                             PhotoCropView.this.rectX = (float) PhotoCropView.this.bitmapX;
                         } else if (PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
@@ -105,131 +129,131 @@ public class PhotoCropActivity extends BaseFragment {
                             PhotoCropView.this.rectY = ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectSizeY;
                         }
                     } else if (PhotoCropView.this.draggingState == 1) {
-                        if (PhotoCropView.this.rectSizeX - motionEvent < 160.0f) {
-                            motionEvent = PhotoCropView.this.rectSizeX - NUM;
+                        if (PhotoCropView.this.rectSizeX - diffX < 160.0f) {
+                            diffX = PhotoCropView.this.rectSizeX - 160.0f;
                         }
-                        if (PhotoCropView.this.rectX + motionEvent < ((float) PhotoCropView.this.bitmapX)) {
-                            motionEvent = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
+                        if (PhotoCropView.this.rectX + diffX < ((float) PhotoCropView.this.bitmapX)) {
+                            diffX = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
                         }
                         if (PhotoCropView.this.freeform) {
-                            if (PhotoCropView.this.rectSizeY - f < 160.0f) {
-                                f = PhotoCropView.this.rectSizeY - 160.0f;
+                            if (PhotoCropView.this.rectSizeY - diffY < 160.0f) {
+                                diffY = PhotoCropView.this.rectSizeY - 160.0f;
                             }
-                            if (PhotoCropView.this.rectY + f < ((float) PhotoCropView.this.bitmapY)) {
-                                f = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
+                            if (PhotoCropView.this.rectY + diffY < ((float) PhotoCropView.this.bitmapY)) {
+                                diffY = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
                             }
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectX += motionEvent;
+                            photoCropView.rectX += diffX;
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectY += f;
+                            photoCropView.rectY += diffY;
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectSizeX -= motionEvent;
-                            motionEvent = PhotoCropView.this;
-                            motionEvent.rectSizeY -= f;
+                            photoCropView.rectSizeX -= diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY -= diffY;
                         } else {
-                            if (PhotoCropView.this.rectY + motionEvent < ((float) PhotoCropView.this.bitmapY)) {
-                                motionEvent = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
+                            if (PhotoCropView.this.rectY + diffX < ((float) PhotoCropView.this.bitmapY)) {
+                                diffX = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
                             }
-                            r1 = PhotoCropView.this;
-                            r1.rectX += motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectY += motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeX -= motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeY -= motionEvent;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectY += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeX -= diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY -= diffX;
                         }
                     } else if (PhotoCropView.this.draggingState == 2) {
-                        if (PhotoCropView.this.rectSizeX + motionEvent < 160.0f) {
-                            motionEvent = -(PhotoCropView.this.rectSizeX - NUM);
+                        if (PhotoCropView.this.rectSizeX + diffX < 160.0f) {
+                            diffX = -(PhotoCropView.this.rectSizeX - 160.0f);
                         }
-                        if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + motionEvent > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
-                            motionEvent = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
+                        if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
+                            diffX = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
                         }
                         if (PhotoCropView.this.freeform) {
-                            if (PhotoCropView.this.rectSizeY - f < 160.0f) {
-                                f = PhotoCropView.this.rectSizeY - 160.0f;
+                            if (PhotoCropView.this.rectSizeY - diffY < 160.0f) {
+                                diffY = PhotoCropView.this.rectSizeY - 160.0f;
                             }
-                            if (PhotoCropView.this.rectY + f < ((float) PhotoCropView.this.bitmapY)) {
-                                f = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
+                            if (PhotoCropView.this.rectY + diffY < ((float) PhotoCropView.this.bitmapY)) {
+                                diffY = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
                             }
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectY += f;
+                            photoCropView.rectY += diffY;
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectSizeX += motionEvent;
-                            motionEvent = PhotoCropView.this;
-                            motionEvent.rectSizeY -= f;
+                            photoCropView.rectSizeX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY -= diffY;
                         } else {
-                            if (PhotoCropView.this.rectY - motionEvent < ((float) PhotoCropView.this.bitmapY)) {
-                                motionEvent = PhotoCropView.this.rectY - ((float) PhotoCropView.this.bitmapY);
+                            if (PhotoCropView.this.rectY - diffX < ((float) PhotoCropView.this.bitmapY)) {
+                                diffX = PhotoCropView.this.rectY - ((float) PhotoCropView.this.bitmapY);
                             }
-                            r1 = PhotoCropView.this;
-                            r1.rectY -= motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeX += motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeY += motionEvent;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectY -= diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY += diffX;
                         }
                     } else if (PhotoCropView.this.draggingState == 3) {
-                        if (PhotoCropView.this.rectSizeX - motionEvent < 160.0f) {
-                            motionEvent = PhotoCropView.this.rectSizeX - NUM;
+                        if (PhotoCropView.this.rectSizeX - diffX < 160.0f) {
+                            diffX = PhotoCropView.this.rectSizeX - 160.0f;
                         }
-                        if (PhotoCropView.this.rectX + motionEvent < ((float) PhotoCropView.this.bitmapX)) {
-                            motionEvent = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
+                        if (PhotoCropView.this.rectX + diffX < ((float) PhotoCropView.this.bitmapX)) {
+                            diffX = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
                         }
                         if (PhotoCropView.this.freeform) {
-                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + f > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                f = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
+                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + diffY > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
+                                diffY = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
                             }
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectX += motionEvent;
+                            photoCropView.rectX += diffX;
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectSizeX -= motionEvent;
-                            motionEvent = PhotoCropView.this;
-                            motionEvent.rectSizeY += f;
-                            if (PhotoCropView.this.rectSizeY < NUM) {
+                            photoCropView.rectSizeX -= diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY += diffY;
+                            if (PhotoCropView.this.rectSizeY < 160.0f) {
                                 PhotoCropView.this.rectSizeY = 160.0f;
                             }
                         } else {
-                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - motionEvent > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                motionEvent = ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - ((float) PhotoCropView.this.bitmapY)) - ((float) PhotoCropView.this.bitmapHeight);
-                            }
-                            r1 = PhotoCropView.this;
-                            r1.rectX += motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeX -= motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeY -= motionEvent;
-                        }
-                    } else if (PhotoCropView.this.draggingState == 4) {
-                        if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + motionEvent > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
-                            motionEvent = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
-                        }
-                        if (PhotoCropView.this.freeform) {
-                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + f > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                f = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
+                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - diffX > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
+                                diffX = ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - ((float) PhotoCropView.this.bitmapY)) - ((float) PhotoCropView.this.bitmapHeight);
                             }
                             photoCropView = PhotoCropView.this;
-                            photoCropView.rectSizeX += motionEvent;
-                            motionEvent = PhotoCropView.this;
-                            motionEvent.rectSizeY += f;
-                        } else {
-                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) + motionEvent > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                motionEvent = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeX;
-                            }
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeX += motionEvent;
-                            r1 = PhotoCropView.this;
-                            r1.rectSizeY += motionEvent;
+                            photoCropView.rectX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeX -= diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY -= diffX;
                         }
-                        if (PhotoCropView.this.rectSizeX < NUM) {
+                    } else if (PhotoCropView.this.draggingState == 4) {
+                        if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
+                            diffX = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
+                        }
+                        if (PhotoCropView.this.freeform) {
+                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + diffY > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
+                                diffY = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
+                            }
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY += diffY;
+                        } else {
+                            if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
+                                diffX = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeX;
+                            }
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeX += diffX;
+                            photoCropView = PhotoCropView.this;
+                            photoCropView.rectSizeY += diffX;
+                        }
+                        if (PhotoCropView.this.rectSizeX < 160.0f) {
                             PhotoCropView.this.rectSizeX = 160.0f;
                         }
-                        if (PhotoCropView.this.rectSizeY < NUM) {
+                        if (PhotoCropView.this.rectSizeY < 160.0f) {
                             PhotoCropView.this.rectSizeY = 160.0f;
                         }
                     }
-                    PhotoCropView.this.oldX = view;
+                    PhotoCropView.this.oldX = x;
                     PhotoCropView.this.oldY = y;
                     PhotoCropView.this.invalidate();
                 }
@@ -256,79 +280,77 @@ public class PhotoCropActivity extends BaseFragment {
         }
 
         private void updateBitmapSize() {
-            if (!(this.viewWidth == 0 || this.viewHeight == 0)) {
-                if (PhotoCropActivity.this.imageToCrop != null) {
-                    float f = (this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth);
-                    float f2 = (this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight);
-                    float f3 = this.rectSizeX / ((float) this.bitmapWidth);
-                    float f4 = this.rectSizeY / ((float) this.bitmapHeight);
-                    float width = (float) PhotoCropActivity.this.imageToCrop.getWidth();
-                    float height = (float) PhotoCropActivity.this.imageToCrop.getHeight();
-                    float f5 = ((float) this.viewWidth) / width;
-                    float f6 = ((float) this.viewHeight) / height;
-                    if (f5 > f6) {
-                        this.bitmapHeight = this.viewHeight;
-                        this.bitmapWidth = (int) Math.ceil((double) (width * f6));
-                    } else {
-                        this.bitmapWidth = this.viewWidth;
-                        this.bitmapHeight = (int) Math.ceil((double) (height * f5));
-                    }
-                    this.bitmapX = ((this.viewWidth - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f);
-                    this.bitmapY = ((this.viewHeight - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f);
-                    if (this.rectX != -1.0f || this.rectY != -1.0f) {
-                        this.rectX = (f * ((float) this.bitmapWidth)) + ((float) this.bitmapX);
-                        this.rectY = (f2 * ((float) this.bitmapHeight)) + ((float) this.bitmapY);
-                        this.rectSizeX = f3 * ((float) this.bitmapWidth);
-                        this.rectSizeY = f4 * ((float) this.bitmapHeight);
-                    } else if (this.freeform) {
-                        this.rectY = (float) this.bitmapY;
-                        this.rectX = (float) this.bitmapX;
-                        this.rectSizeX = (float) this.bitmapWidth;
-                        this.rectSizeY = (float) this.bitmapHeight;
-                    } else if (this.bitmapWidth > this.bitmapHeight) {
-                        this.rectY = (float) this.bitmapY;
-                        this.rectX = (float) (((this.viewWidth - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f));
-                        this.rectSizeX = (float) this.bitmapHeight;
-                        this.rectSizeY = (float) this.bitmapHeight;
-                    } else {
-                        this.rectX = (float) this.bitmapX;
-                        this.rectY = (float) (((this.viewHeight - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f));
-                        this.rectSizeX = (float) this.bitmapWidth;
-                        this.rectSizeY = (float) this.bitmapWidth;
-                    }
-                    invalidate();
+            if (this.viewWidth != 0 && this.viewHeight != 0 && PhotoCropActivity.this.imageToCrop != null) {
+                float percX = (this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth);
+                float percY = (this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight);
+                float percSizeX = this.rectSizeX / ((float) this.bitmapWidth);
+                float percSizeY = this.rectSizeY / ((float) this.bitmapHeight);
+                float w = (float) PhotoCropActivity.this.imageToCrop.getWidth();
+                float h = (float) PhotoCropActivity.this.imageToCrop.getHeight();
+                float scaleX = ((float) this.viewWidth) / w;
+                float scaleY = ((float) this.viewHeight) / h;
+                if (scaleX > scaleY) {
+                    this.bitmapHeight = this.viewHeight;
+                    this.bitmapWidth = (int) Math.ceil((double) (w * scaleY));
+                } else {
+                    this.bitmapWidth = this.viewWidth;
+                    this.bitmapHeight = (int) Math.ceil((double) (h * scaleX));
                 }
+                this.bitmapX = ((this.viewWidth - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f);
+                this.bitmapY = ((this.viewHeight - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f);
+                if (this.rectX != -1.0f || this.rectY != -1.0f) {
+                    this.rectX = (((float) this.bitmapWidth) * percX) + ((float) this.bitmapX);
+                    this.rectY = (((float) this.bitmapHeight) * percY) + ((float) this.bitmapY);
+                    this.rectSizeX = ((float) this.bitmapWidth) * percSizeX;
+                    this.rectSizeY = ((float) this.bitmapHeight) * percSizeY;
+                } else if (this.freeform) {
+                    this.rectY = (float) this.bitmapY;
+                    this.rectX = (float) this.bitmapX;
+                    this.rectSizeX = (float) this.bitmapWidth;
+                    this.rectSizeY = (float) this.bitmapHeight;
+                } else if (this.bitmapWidth > this.bitmapHeight) {
+                    this.rectY = (float) this.bitmapY;
+                    this.rectX = (float) (((this.viewWidth - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f));
+                    this.rectSizeX = (float) this.bitmapHeight;
+                    this.rectSizeY = (float) this.bitmapHeight;
+                } else {
+                    this.rectX = (float) this.bitmapX;
+                    this.rectY = (float) (((this.viewHeight - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f));
+                    this.rectSizeX = (float) this.bitmapWidth;
+                    this.rectSizeY = (float) this.bitmapWidth;
+                }
+                invalidate();
             }
         }
 
-        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-            super.onLayout(z, i, i2, i3, i4);
-            this.viewWidth = (i3 - i) - AndroidUtilities.dp(28.0f);
-            this.viewHeight = (i4 - i2) - AndroidUtilities.dp(28.0f);
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            super.onLayout(changed, left, top, right, bottom);
+            this.viewWidth = (right - left) - AndroidUtilities.dp(28.0f);
+            this.viewHeight = (bottom - top) - AndroidUtilities.dp(28.0f);
             updateBitmapSize();
         }
 
         public Bitmap getBitmap() {
-            int width = (int) (((this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth)) * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            int height = (int) (((this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight)) * ((float) PhotoCropActivity.this.imageToCrop.getHeight()));
-            int width2 = (int) ((this.rectSizeX / ((float) this.bitmapWidth)) * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            int width3 = (int) ((this.rectSizeY / ((float) this.bitmapWidth)) * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            if (width < 0) {
-                width = 0;
+            int x = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * ((this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth)));
+            int y = (int) (((float) PhotoCropActivity.this.imageToCrop.getHeight()) * ((this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight)));
+            int sizeX = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * (this.rectSizeX / ((float) this.bitmapWidth)));
+            int sizeY = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * (this.rectSizeY / ((float) this.bitmapWidth)));
+            if (x < 0) {
+                x = 0;
             }
-            if (height < 0) {
-                height = 0;
+            if (y < 0) {
+                y = 0;
             }
-            if (width + width2 > PhotoCropActivity.this.imageToCrop.getWidth()) {
-                width2 = PhotoCropActivity.this.imageToCrop.getWidth() - width;
+            if (x + sizeX > PhotoCropActivity.this.imageToCrop.getWidth()) {
+                sizeX = PhotoCropActivity.this.imageToCrop.getWidth() - x;
             }
-            if (height + width3 > PhotoCropActivity.this.imageToCrop.getHeight()) {
-                width3 = PhotoCropActivity.this.imageToCrop.getHeight() - height;
+            if (y + sizeY > PhotoCropActivity.this.imageToCrop.getHeight()) {
+                sizeY = PhotoCropActivity.this.imageToCrop.getHeight() - y;
             }
             try {
-                return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, width, height, width2, width3);
-            } catch (Throwable th) {
-                FileLog.m3e(th);
+                return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, x, y, sizeX, sizeY);
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
                 return null;
             }
         }
@@ -338,89 +360,65 @@ public class PhotoCropActivity extends BaseFragment {
                 try {
                     PhotoCropActivity.this.drawable.setBounds(this.bitmapX, this.bitmapY, this.bitmapX + this.bitmapWidth, this.bitmapY + this.bitmapHeight);
                     PhotoCropActivity.this.drawable.draw(canvas);
-                } catch (Throwable th) {
-                    FileLog.m3e(th);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
             }
             canvas.drawRect((float) this.bitmapX, (float) this.bitmapY, (float) (this.bitmapX + this.bitmapWidth), this.rectY, this.halfPaint);
-            canvas.drawRect((float) this.bitmapX, this.rectY, this.rectX, this.rectY + this.rectSizeY, this.halfPaint);
-            canvas.drawRect(this.rectX + this.rectSizeX, this.rectY, (float) (this.bitmapX + this.bitmapWidth), this.rectY + this.rectSizeY, this.halfPaint);
-            canvas.drawRect((float) this.bitmapX, this.rectY + this.rectSizeY, (float) (this.bitmapX + this.bitmapWidth), (float) (this.bitmapY + this.bitmapHeight), this.halfPaint);
-            canvas.drawRect(this.rectX, this.rectY, this.rectX + this.rectSizeX, this.rectY + this.rectSizeY, this.rectPaint);
-            int dp = AndroidUtilities.dp(1.0f);
-            float f = (float) dp;
-            float f2 = (float) (dp * 3);
             Canvas canvas2 = canvas;
-            canvas2.drawRect(this.rectX + f, this.rectY + f, ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + f), this.rectY + f2, this.circlePaint);
+            canvas2.drawRect((float) this.bitmapX, this.rectY, this.rectX, this.rectSizeY + this.rectY, this.halfPaint);
             canvas2 = canvas;
-            canvas2.drawRect(this.rectX + f, this.rectY + f, this.rectX + f2, ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + f), this.circlePaint);
-            canvas.drawRect(((this.rectX + this.rectSizeX) - f) - ((float) AndroidUtilities.dp(20.0f)), this.rectY + f, (this.rectX + this.rectSizeX) - f, this.rectY + f2, this.circlePaint);
+            canvas2.drawRect(this.rectSizeX + this.rectX, this.rectY, (float) (this.bitmapX + this.bitmapWidth), this.rectSizeY + this.rectY, this.halfPaint);
             canvas2 = canvas;
-            canvas2.drawRect((this.rectX + this.rectSizeX) - f2, this.rectY + f, (this.rectX + this.rectSizeX) - f, ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + f), this.circlePaint);
-            canvas.drawRect(this.rectX + f, ((this.rectY + this.rectSizeY) - f) - ((float) AndroidUtilities.dp(20.0f)), this.rectX + f2, (this.rectY + this.rectSizeY) - f, this.circlePaint);
+            canvas2.drawRect((float) this.bitmapX, this.rectSizeY + this.rectY, (float) (this.bitmapX + this.bitmapWidth), (float) (this.bitmapY + this.bitmapHeight), this.halfPaint);
             canvas2 = canvas;
-            canvas2.drawRect(this.rectX + f, (this.rectY + this.rectSizeY) - f2, ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + f), (this.rectY + this.rectSizeY) - f, this.circlePaint);
-            canvas.drawRect(((this.rectX + this.rectSizeX) - f) - ((float) AndroidUtilities.dp(20.0f)), (this.rectY + this.rectSizeY) - f2, (this.rectX + this.rectSizeX) - f, (this.rectY + this.rectSizeY) - f, this.circlePaint);
-            canvas.drawRect((this.rectX + this.rectSizeX) - f2, ((this.rectY + this.rectSizeY) - f) - ((float) AndroidUtilities.dp(20.0f)), (this.rectX + this.rectSizeX) - f, (this.rectY + this.rectSizeY) - f, this.circlePaint);
-            for (dp = 1; dp < 3; dp++) {
-                float f3 = (float) dp;
+            canvas2.drawRect(this.rectX, this.rectY, this.rectSizeX + this.rectX, this.rectSizeY + this.rectY, this.rectPaint);
+            int side = AndroidUtilities.dp(1.0f);
+            canvas2 = canvas;
+            canvas2.drawRect(((float) side) + this.rectX, ((float) side) + this.rectY, ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + ((float) side)), ((float) (side * 3)) + this.rectY, this.circlePaint);
+            canvas2 = canvas;
+            canvas2.drawRect(((float) side) + this.rectX, ((float) side) + this.rectY, ((float) (side * 3)) + this.rectX, ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + ((float) side)), this.circlePaint);
+            canvas2 = canvas;
+            canvas2.drawRect(((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), ((float) side) + this.rectY, (this.rectX + this.rectSizeX) - ((float) side), ((float) (side * 3)) + this.rectY, this.circlePaint);
+            canvas2 = canvas;
+            canvas2.drawRect((this.rectX + this.rectSizeX) - ((float) (side * 3)), ((float) side) + this.rectY, (this.rectX + this.rectSizeX) - ((float) side), ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + ((float) side)), this.circlePaint);
+            canvas2 = canvas;
+            canvas2.drawRect(((float) side) + this.rectX, ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), ((float) (side * 3)) + this.rectX, (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            canvas2 = canvas;
+            canvas2.drawRect(((float) side) + this.rectX, (this.rectY + this.rectSizeY) - ((float) (side * 3)), ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + ((float) side)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            canvas.drawRect(((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), (this.rectY + this.rectSizeY) - ((float) (side * 3)), (this.rectX + this.rectSizeX) - ((float) side), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            canvas.drawRect((this.rectX + this.rectSizeX) - ((float) (side * 3)), ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), (this.rectX + this.rectSizeX) - ((float) side), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            for (int a = 1; a < 3; a++) {
                 canvas2 = canvas;
-                canvas2.drawRect(((this.rectSizeX / 3.0f) * f3) + this.rectX, this.rectY + f, ((this.rectSizeX / 3.0f) * f3) + (this.rectX + f), (this.rectY + this.rectSizeY) - f, this.circlePaint);
+                canvas2.drawRect(((this.rectSizeX / 3.0f) * ((float) a)) + this.rectX, ((float) side) + this.rectY, ((this.rectSizeX / 3.0f) * ((float) a)) + (this.rectX + ((float) side)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
                 canvas2 = canvas;
-                canvas2.drawRect(this.rectX + f, ((this.rectSizeY / 3.0f) * f3) + this.rectY, this.rectSizeX + (this.rectX - f), (this.rectY + ((this.rectSizeY / 3.0f) * f3)) + f, this.circlePaint);
+                canvas2.drawRect(((float) side) + this.rectX, ((this.rectSizeY / 3.0f) * ((float) a)) + this.rectY, this.rectSizeX + (this.rectX - ((float) side)), ((float) side) + (this.rectY + ((this.rectSizeY / 3.0f) * ((float) a))), this.circlePaint);
             }
         }
     }
 
-    public interface PhotoEditActivityDelegate {
-        void didFinishEdit(Bitmap bitmap);
-    }
-
-    /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class C22261 extends ActionBarMenuOnItemClick {
-        C22261() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                PhotoCropActivity.this.finishFragment();
-            } else if (i == 1) {
-                if (PhotoCropActivity.this.delegate != 0 && PhotoCropActivity.this.doneButtonPressed == 0) {
-                    i = PhotoCropActivity.this.view.getBitmap();
-                    if (i == PhotoCropActivity.this.imageToCrop) {
-                        PhotoCropActivity.this.sameBitmap = true;
-                    }
-                    PhotoCropActivity.this.delegate.didFinishEdit(i);
-                    PhotoCropActivity.this.doneButtonPressed = true;
-                }
-                PhotoCropActivity.this.finishFragment();
-            }
-        }
-    }
-
-    public PhotoCropActivity(Bundle bundle) {
-        super(bundle);
+    public PhotoCropActivity(Bundle args) {
+        super(args);
     }
 
     public boolean onFragmentCreate() {
         this.swipeBackEnabled = false;
         if (this.imageToCrop == null) {
-            String string = getArguments().getString("photoPath");
-            Uri uri = (Uri) getArguments().getParcelable("photoUri");
-            if (string == null && uri == null) {
+            String photoPath = getArguments().getString("photoPath");
+            Uri photoUri = (Uri) getArguments().getParcelable("photoUri");
+            if (photoPath == null && photoUri == null) {
                 return false;
             }
-            if (string != null && !new File(string).exists()) {
+            if (photoPath != null && !new File(photoPath).exists()) {
                 return false;
             }
-            int dp;
+            int size;
             if (AndroidUtilities.isTablet()) {
-                dp = AndroidUtilities.dp(520.0f);
+                size = AndroidUtilities.dp(520.0f);
             } else {
-                dp = Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
+                size = Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
             }
-            float f = (float) dp;
-            this.imageToCrop = ImageLoader.loadBitmap(string, uri, f, f, true);
+            this.imageToCrop = ImageLoader.loadBitmap(photoPath, photoUri, (float) size, (float) size, true);
             if (this.imageToCrop == null) {
                 return false;
             }
@@ -459,7 +457,7 @@ public class PhotoCropActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    public void setDelegate(PhotoEditActivityDelegate photoEditActivityDelegate) {
-        this.delegate = photoEditActivityDelegate;
+    public void setDelegate(PhotoEditActivityDelegate delegate) {
+        this.delegate = delegate;
     }
 }

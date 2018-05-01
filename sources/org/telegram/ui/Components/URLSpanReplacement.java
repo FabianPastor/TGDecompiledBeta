@@ -6,11 +6,11 @@ import android.view.View;
 import org.telegram.messenger.browser.Browser;
 
 public class URLSpanReplacement extends URLSpan {
-    public URLSpanReplacement(String str) {
-        super(str);
+    public URLSpanReplacement(String url) {
+        super(url);
     }
 
-    public void onClick(View view) {
-        Browser.openUrl(view.getContext(), Uri.parse(getURL()));
+    public void onClick(View widget) {
+        Browser.openUrl(widget.getContext(), Uri.parse(getURL()));
     }
 }

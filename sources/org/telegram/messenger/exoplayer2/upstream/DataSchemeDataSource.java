@@ -15,48 +15,41 @@ public final class DataSchemeDataSource implements DataSource {
 
     public long open(DataSpec dataSpec) throws IOException {
         this.dataSpec = dataSpec;
-        dataSpec = dataSpec.uri;
-        String scheme = dataSpec.getScheme();
+        Uri uri = dataSpec.uri;
+        String scheme = uri.getScheme();
         if (SCHEME_DATA.equals(scheme)) {
-            String[] split = dataSpec.getSchemeSpecificPart().split(",");
-            if (split.length > 2) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Unexpected URI format: ");
-                stringBuilder.append(dataSpec);
-                throw new ParserException(stringBuilder.toString());
+            String[] uriParts = uri.getSchemeSpecificPart().split(",");
+            if (uriParts.length > 2) {
+                throw new ParserException("Unexpected URI format: " + uri);
             }
-            dataSpec = split[1];
-            if (split[0].contains(";base64")) {
+            String dataString = uriParts[1];
+            if (uriParts[0].contains(";base64")) {
                 try {
-                    this.data = Base64.decode(dataSpec, 0);
-                } catch (Throwable e) {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("Error while parsing Base64 encoded string: ");
-                    stringBuilder2.append(dataSpec);
-                    throw new ParserException(stringBuilder2.toString(), e);
+                    this.data = Base64.decode(dataString, 0);
+                } catch (IllegalArgumentException e) {
+                    throw new ParserException("Error while parsing Base64 encoded string: " + dataString, e);
                 }
             }
-            this.data = URLDecoder.decode(dataSpec, C0542C.ASCII_NAME).getBytes();
+            this.data = URLDecoder.decode(dataString, C0542C.ASCII_NAME).getBytes();
             return (long) this.data.length;
         }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append("Unsupported scheme: ");
-        stringBuilder.append(scheme);
-        throw new ParserException(stringBuilder.toString());
+        throw new ParserException("Unsupported scheme: " + scheme);
     }
 
-    public int read(byte[] bArr, int i, int i2) {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] buffer, int offset, int readLength) {
+        if (readLength == 0) {
+            return 0;
         }
-        int length = this.data.length - this.bytesRead;
-        if (length == 0) {
+        int remainingBytes = this.data.length - this.bytesRead;
+        if (remainingBytes == 0) {
+            int i = readLength;
             return -1;
         }
-        i2 = Math.min(i2, length);
-        System.arraycopy(this.data, this.bytesRead, bArr, i, i2);
-        this.bytesRead += i2;
-        return i2;
+        readLength = Math.min(readLength, remainingBytes);
+        System.arraycopy(this.data, this.bytesRead, buffer, offset, readLength);
+        this.bytesRead += readLength;
+        i = readLength;
+        return readLength;
     }
 
     public Uri getUri() {

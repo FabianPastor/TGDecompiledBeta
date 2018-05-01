@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.TraceUtil;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Loader implements LoaderErrorThrower {
@@ -21,12 +22,24 @@ public final class Loader implements LoaderErrorThrower {
     private final ExecutorService downloadExecutorService;
     private IOException fatalError;
 
+    public interface Loadable {
+        void cancelLoad();
+
+        boolean isLoadCanceled();
+
+        void load() throws IOException, InterruptedException;
+    }
+
     public interface Callback<T extends Loadable> {
         void onLoadCanceled(T t, long j, long j2, boolean z);
 
         void onLoadCompleted(T t, long j, long j2);
 
         int onLoadError(T t, long j, long j2, IOException iOException);
+    }
+
+    public interface ReleaseCallback {
+        void onLoaderReleased();
     }
 
     @SuppressLint({"HandlerLeak"})
@@ -46,36 +59,36 @@ public final class Loader implements LoaderErrorThrower {
         private volatile boolean released;
         private final long startTimeMs;
 
-        public LoadTask(Looper looper, T t, Callback<T> callback, int i, long j) {
+        public LoadTask(Looper looper, T loadable, Callback<T> callback, int defaultMinRetryCount, long startTimeMs) {
             super(looper);
-            this.loadable = t;
+            this.loadable = loadable;
             this.callback = callback;
-            this.defaultMinRetryCount = i;
-            this.startTimeMs = j;
+            this.defaultMinRetryCount = defaultMinRetryCount;
+            this.startTimeMs = startTimeMs;
         }
 
-        public void maybeThrowError(int i) throws IOException {
-            if (this.currentError != null && this.errorCount > i) {
+        public void maybeThrowError(int minRetryCount) throws IOException {
+            if (this.currentError != null && this.errorCount > minRetryCount) {
                 throw this.currentError;
             }
         }
 
-        public void start(long j) {
+        public void start(long delayMillis) {
             Assertions.checkState(Loader.this.currentTask == null);
             Loader.this.currentTask = this;
-            if (j > 0) {
-                sendEmptyMessageDelayed(0, j);
+            if (delayMillis > 0) {
+                sendEmptyMessageDelayed(0, delayMillis);
             } else {
                 execute();
             }
         }
 
-        public void cancel(boolean z) {
-            this.released = z;
+        public void cancel(boolean released) {
+            this.released = released;
             this.currentError = null;
             if (hasMessages(0)) {
                 removeMessages(0);
-                if (!z) {
+                if (!released) {
                     sendEmptyMessage(1);
                 }
             } else {
@@ -84,159 +97,102 @@ public final class Loader implements LoaderErrorThrower {
                     this.executorThread.interrupt();
                 }
             }
-            if (z) {
+            if (released) {
                 finish();
-                long elapsedRealtime = SystemClock.elapsedRealtime();
-                this.callback.onLoadCanceled(this.loadable, elapsedRealtime, elapsedRealtime - this.startTimeMs, true);
+                long nowMs = SystemClock.elapsedRealtime();
+                this.callback.onLoadCanceled(this.loadable, nowMs, nowMs - this.startTimeMs, true);
             }
         }
 
         public void run() {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-            /*
-            r4 = this;
-            r0 = 2;
-            r1 = 3;
-            r2 = java.lang.Thread.currentThread();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r4.executorThread = r2;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2 = r4.loadable;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2 = r2.isLoadCanceled();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            if (r2 != 0) goto L_0x003c;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-        L_0x0010:
-            r2 = new java.lang.StringBuilder;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2.<init>();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r3 = "load:";	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2.append(r3);	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r3 = r4.loadable;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r3 = r3.getClass();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r3 = r3.getSimpleName();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2.append(r3);	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2 = r2.toString();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            org.telegram.messenger.exoplayer2.util.TraceUtil.beginSection(r2);	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            r2 = r4.loadable;	 Catch:{ all -> 0x0037 }
-            r2.load();	 Catch:{ all -> 0x0037 }
-            org.telegram.messenger.exoplayer2.util.TraceUtil.endSection();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            goto L_0x003c;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-        L_0x0037:
-            r2 = move-exception;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            org.telegram.messenger.exoplayer2.util.TraceUtil.endSection();	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            throw r2;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-        L_0x003c:
-            r2 = r4.released;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            if (r2 != 0) goto L_0x00a8;	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-        L_0x0040:
-            r4.sendEmptyMessage(r0);	 Catch:{ IOException -> 0x009c, InterruptedException -> 0x008b, Exception -> 0x0072, OutOfMemoryError -> 0x0059, Error -> 0x0044 }
-            goto L_0x00a8;
-        L_0x0044:
-            r0 = move-exception;
-            r1 = "LoadTask";
-            r2 = "Unexpected error loading stream";
-            android.util.Log.e(r1, r2, r0);
-            r1 = r4.released;
-            if (r1 != 0) goto L_0x0058;
-        L_0x0050:
-            r1 = 4;
-            r1 = r4.obtainMessage(r1, r0);
-            r1.sendToTarget();
-        L_0x0058:
-            throw r0;
-        L_0x0059:
-            r0 = move-exception;
-            r2 = "LoadTask";
-            r3 = "OutOfMemory error loading stream";
-            android.util.Log.e(r2, r3, r0);
-            r2 = r4.released;
-            if (r2 != 0) goto L_0x00a8;
-        L_0x0065:
-            r2 = new org.telegram.messenger.exoplayer2.upstream.Loader$UnexpectedLoaderException;
-            r2.<init>(r0);
-            r0 = r4.obtainMessage(r1, r2);
-            r0.sendToTarget();
-            goto L_0x00a8;
-        L_0x0072:
-            r0 = move-exception;
-            r2 = "LoadTask";
-            r3 = "Unexpected exception loading stream";
-            android.util.Log.e(r2, r3, r0);
-            r2 = r4.released;
-            if (r2 != 0) goto L_0x00a8;
-        L_0x007e:
-            r2 = new org.telegram.messenger.exoplayer2.upstream.Loader$UnexpectedLoaderException;
-            r2.<init>(r0);
-            r0 = r4.obtainMessage(r1, r2);
-            r0.sendToTarget();
-            goto L_0x00a8;
-        L_0x008b:
-            r1 = r4.loadable;
-            r1 = r1.isLoadCanceled();
-            org.telegram.messenger.exoplayer2.util.Assertions.checkState(r1);
-            r1 = r4.released;
-            if (r1 != 0) goto L_0x00a8;
-        L_0x0098:
-            r4.sendEmptyMessage(r0);
-            goto L_0x00a8;
-        L_0x009c:
-            r0 = move-exception;
-            r2 = r4.released;
-            if (r2 != 0) goto L_0x00a8;
-        L_0x00a1:
-            r0 = r4.obtainMessage(r1, r0);
-            r0.sendToTarget();
-        L_0x00a8:
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.Loader.LoadTask.run():void");
+            try {
+                this.executorThread = Thread.currentThread();
+                if (!this.loadable.isLoadCanceled()) {
+                    TraceUtil.beginSection("load:" + this.loadable.getClass().getSimpleName());
+                    this.loadable.load();
+                    TraceUtil.endSection();
+                }
+                if (!this.released) {
+                    sendEmptyMessage(2);
+                }
+            } catch (IOException e) {
+                if (!this.released) {
+                    obtainMessage(3, e).sendToTarget();
+                }
+            } catch (InterruptedException e2) {
+                Assertions.checkState(this.loadable.isLoadCanceled());
+                if (!this.released) {
+                    sendEmptyMessage(2);
+                }
+            } catch (Exception e3) {
+                Log.e(TAG, "Unexpected exception loading stream", e3);
+                if (!this.released) {
+                    obtainMessage(3, new UnexpectedLoaderException(e3)).sendToTarget();
+                }
+            } catch (OutOfMemoryError e4) {
+                Log.e(TAG, "OutOfMemory error loading stream", e4);
+                if (!this.released) {
+                    obtainMessage(3, new UnexpectedLoaderException(e4)).sendToTarget();
+                }
+            } catch (Error e5) {
+                Log.e(TAG, "Unexpected error loading stream", e5);
+                if (!this.released) {
+                    obtainMessage(4, e5).sendToTarget();
+                }
+                throw e5;
+            } catch (Throwable th) {
+                TraceUtil.endSection();
+            }
         }
 
-        public void handleMessage(Message message) {
+        public void handleMessage(Message msg) {
             if (!this.released) {
-                if (message.what == 0) {
+                if (msg.what == 0) {
                     execute();
-                } else if (message.what == 4) {
-                    throw ((Error) message.obj);
+                } else if (msg.what == 4) {
+                    throw ((Error) msg.obj);
                 } else {
                     finish();
-                    long elapsedRealtime = SystemClock.elapsedRealtime();
-                    long j = elapsedRealtime - this.startTimeMs;
+                    long nowMs = SystemClock.elapsedRealtime();
+                    long durationMs = nowMs - this.startTimeMs;
                     if (this.loadable.isLoadCanceled()) {
-                        this.callback.onLoadCanceled(this.loadable, elapsedRealtime, j, false);
+                        this.callback.onLoadCanceled(this.loadable, nowMs, durationMs, false);
                         return;
                     }
-                    switch (message.what) {
+                    switch (msg.what) {
                         case 1:
-                            this.callback.onLoadCanceled(this.loadable, elapsedRealtime, j, false);
-                            break;
+                            this.callback.onLoadCanceled(this.loadable, nowMs, durationMs, false);
+                            return;
                         case 2:
                             try {
-                                this.callback.onLoadCompleted(this.loadable, elapsedRealtime, j);
-                                break;
-                            } catch (Message message2) {
-                                Log.e(TAG, "Unexpected exception handling load completed", message2);
-                                Loader.this.fatalError = new UnexpectedLoaderException(message2);
-                                break;
+                                this.callback.onLoadCompleted(this.loadable, nowMs, durationMs);
+                                return;
+                            } catch (RuntimeException e) {
+                                Log.e(TAG, "Unexpected exception handling load completed", e);
+                                Loader.this.fatalError = new UnexpectedLoaderException(e);
+                                return;
                             }
                         case 3:
-                            this.currentError = (IOException) message2.obj;
-                            message2 = this.callback.onLoadError(this.loadable, elapsedRealtime, j, this.currentError);
-                            if (message2 != 3) {
-                                if (message2 != 2) {
-                                    int i = 1;
-                                    if (message2 != 1) {
-                                        i = 1 + this.errorCount;
-                                    }
-                                    this.errorCount = i;
-                                    start(getRetryDelayMillis());
-                                    break;
+                            this.currentError = (IOException) msg.obj;
+                            int retryAction = this.callback.onLoadError(this.loadable, nowMs, durationMs, this.currentError);
+                            if (retryAction == 3) {
+                                Loader.this.fatalError = this.currentError;
+                                return;
+                            } else if (retryAction != 2) {
+                                int i;
+                                if (retryAction == 1) {
+                                    i = 1;
+                                } else {
+                                    i = this.errorCount + 1;
                                 }
+                                this.errorCount = i;
+                                start(getRetryDelayMillis());
+                                return;
+                            } else {
+                                return;
                             }
-                            Loader.this.fatalError = this.currentError;
-                            break;
-                            break;
                         default:
-                            break;
+                            return;
                     }
                 }
             }
@@ -256,23 +212,11 @@ Error: java.lang.NullPointerException
         }
     }
 
-    public interface Loadable {
-        void cancelLoad();
-
-        boolean isLoadCanceled();
-
-        void load() throws IOException, InterruptedException;
-    }
-
-    public interface ReleaseCallback {
-        void onLoaderReleased();
-    }
-
     private static final class ReleaseTask extends Handler implements Runnable {
         private final ReleaseCallback callback;
 
-        public ReleaseTask(ReleaseCallback releaseCallback) {
-            this.callback = releaseCallback;
+        public ReleaseTask(ReleaseCallback callback) {
+            this.callback = callback;
         }
 
         public void run() {
@@ -281,32 +225,27 @@ Error: java.lang.NullPointerException
             }
         }
 
-        public void handleMessage(Message message) {
+        public void handleMessage(Message msg) {
             this.callback.onLoaderReleased();
         }
     }
 
     public static final class UnexpectedLoaderException extends IOException {
-        public UnexpectedLoaderException(Throwable th) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unexpected ");
-            stringBuilder.append(th.getClass().getSimpleName());
-            stringBuilder.append(": ");
-            stringBuilder.append(th.getMessage());
-            super(stringBuilder.toString(), th);
+        public UnexpectedLoaderException(Throwable cause) {
+            super("Unexpected " + cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
         }
     }
 
-    public Loader(String str) {
-        this.downloadExecutorService = Util.newSingleThreadExecutor(str);
+    public Loader(String threadName) {
+        this.downloadExecutorService = Util.newSingleThreadExecutor(threadName);
     }
 
-    public <T extends Loadable> long startLoading(T t, Callback<T> callback, int i) {
-        Looper myLooper = Looper.myLooper();
-        Assertions.checkState(myLooper != null);
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        new LoadTask(myLooper, t, callback, i, elapsedRealtime).start(null);
-        return elapsedRealtime;
+    public <T extends Loadable> long startLoading(T loadable, Callback<T> callback, int defaultMinRetryCount) {
+        Looper looper = Looper.myLooper();
+        Assertions.checkState(looper != null);
+        long startTimeMs = SystemClock.elapsedRealtime();
+        new LoadTask(looper, loadable, callback, defaultMinRetryCount, startTimeMs).start(0);
+        return startTimeMs;
     }
 
     public boolean isLoading() {
@@ -321,36 +260,34 @@ Error: java.lang.NullPointerException
         release(null);
     }
 
-    public boolean release(ReleaseCallback releaseCallback) {
-        boolean z = true;
+    public boolean release(ReleaseCallback callback) {
+        boolean callbackInvoked = false;
         if (this.currentTask != null) {
             this.currentTask.cancel(true);
-            if (releaseCallback != null) {
-                this.downloadExecutorService.execute(new ReleaseTask(releaseCallback));
+            if (callback != null) {
+                this.downloadExecutorService.execute(new ReleaseTask(callback));
             }
-        } else if (releaseCallback != null) {
-            releaseCallback.onLoaderReleased();
-            this.downloadExecutorService.shutdown();
-            return z;
+        } else if (callback != null) {
+            callback.onLoaderReleased();
+            callbackInvoked = true;
         }
-        z = false;
         this.downloadExecutorService.shutdown();
-        return z;
+        return callbackInvoked;
     }
 
     public void maybeThrowError() throws IOException {
         maybeThrowError(Integer.MIN_VALUE);
     }
 
-    public void maybeThrowError(int i) throws IOException {
+    public void maybeThrowError(int minRetryCount) throws IOException {
         if (this.fatalError != null) {
             throw this.fatalError;
         } else if (this.currentTask != null) {
             LoadTask loadTask = this.currentTask;
-            if (i == Integer.MIN_VALUE) {
-                i = this.currentTask.defaultMinRetryCount;
+            if (minRetryCount == Integer.MIN_VALUE) {
+                minRetryCount = this.currentTask.defaultMinRetryCount;
             }
-            loadTask.maybeThrowError(i);
+            loadTask.maybeThrowError(minRetryCount);
         }
     }
 }

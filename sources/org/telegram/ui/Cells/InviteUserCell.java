@@ -24,64 +24,85 @@ public class InviteUserCell extends FrameLayout {
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
 
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
-    public InviteUserCell(Context context, boolean z) {
-        Context context2 = context;
+    public InviteUserCell(Context context, boolean needCheck) {
+        int i;
+        int i2;
+        int i3 = 5;
         super(context);
-        this.avatarImageView = new BackupImageView(context2);
+        this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        int i = 3;
         addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
-        r0.nameTextView = new SimpleTextView(context2);
-        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        r0.nameTextView.setTextSize(17);
-        r0.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-        r0.statusTextView = new SimpleTextView(context2);
-        r0.statusTextView.setTextSize(16);
-        r0.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-        if (z) {
-            r0.checkBox = new GroupCreateCheckBox(context2);
-            r0.checkBox.setVisibility(0);
-            View view = r0.checkBox;
-            if (LocaleController.isRTL) {
-                i = 5;
+        this.nameTextView = new SimpleTextView(context);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setTextSize(17);
+        SimpleTextView simpleTextView = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        simpleTextView.setGravity(i | 48);
+        View view = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        this.statusTextView = new SimpleTextView(context);
+        this.statusTextView.setTextSize(16);
+        simpleTextView = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        simpleTextView.setGravity(i | 48);
+        view = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        if (needCheck) {
+            this.checkBox = new GroupCreateCheckBox(context);
+            this.checkBox.setVisibility(0);
+            View view2 = this.checkBox;
+            if (!LocaleController.isRTL) {
+                i3 = 3;
             }
-            addView(view, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
         }
     }
 
-    public void setUser(Contact contact, CharSequence charSequence) {
+    public void setUser(Contact contact, CharSequence name) {
         this.currentContact = contact;
-        this.currentName = charSequence;
-        update(null);
+        this.currentName = name;
+        update(0);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checkBox.setChecked(z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        this.checkBox.setChecked(checked, animated);
     }
 
     public Contact getContact() {
         return this.currentContact;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
     }
 
     public void recycle() {
         this.avatarImageView.getImageReceiver().cancelLoadImage();
     }
 
-    public void update(int i) {
-        if (this.currentContact != 0) {
+    public void update(int mask) {
+        if (this.currentContact != null) {
             this.avatarDrawable.setInfo(this.currentContact.contact_id, this.currentContact.first_name, this.currentContact.last_name, false);
-            if (this.currentName != 0) {
+            if (this.currentName != null) {
                 this.nameTextView.setText(this.currentName, true);
             } else {
                 this.nameTextView.setText(ContactsController.formatName(this.currentContact.first_name, this.currentContact.last_name));
@@ -95,5 +116,9 @@ public class InviteUserCell extends FrameLayout {
             }
             this.avatarImageView.setImageDrawable(this.avatarDrawable);
         }
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 }

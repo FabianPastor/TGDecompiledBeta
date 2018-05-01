@@ -7,7 +7,7 @@ import android.view.KeyEvent;
 
 public class VoIPMediaButtonReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        if ("android.intent.action.MEDIA_BUTTON".equals(intent.getAction()) != null && VoIPService.getSharedInstance() != null) {
+        if ("android.intent.action.MEDIA_BUTTON".equals(intent.getAction()) && VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().onMediaButtonEvent((KeyEvent) intent.getParcelableExtra("android.intent.extra.KEY_EVENT"));
         }
     }

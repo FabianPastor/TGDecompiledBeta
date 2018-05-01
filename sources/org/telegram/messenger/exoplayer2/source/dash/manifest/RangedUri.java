@@ -9,69 +9,63 @@ public final class RangedUri {
     private final String referenceUri;
     public final long start;
 
-    public RangedUri(String str, long j, long j2) {
-        if (str == null) {
-            str = TtmlNode.ANONYMOUS_REGION_ID;
+    public RangedUri(String referenceUri, long start, long length) {
+        if (referenceUri == null) {
+            referenceUri = TtmlNode.ANONYMOUS_REGION_ID;
         }
-        this.referenceUri = str;
-        this.start = j;
-        this.length = j2;
+        this.referenceUri = referenceUri;
+        this.start = start;
+        this.length = length;
     }
 
-    public Uri resolveUri(String str) {
-        return UriUtil.resolveToUri(str, this.referenceUri);
+    public Uri resolveUri(String baseUri) {
+        return UriUtil.resolveToUri(baseUri, this.referenceUri);
     }
 
-    public String resolveUriString(String str) {
-        return UriUtil.resolve(str, this.referenceUri);
+    public String resolveUriString(String baseUri) {
+        return UriUtil.resolve(baseUri, this.referenceUri);
     }
 
-    public RangedUri attemptMerge(RangedUri rangedUri, String str) {
-        String resolveUriString = resolveUriString(str);
-        if (rangedUri != null) {
-            if (resolveUriString.equals(rangedUri.resolveUriString(str)) != null) {
-                long j = -1;
-                long j2;
-                if (this.length != -1 && this.start + this.length == rangedUri.start) {
-                    j2 = this.start;
-                    if (rangedUri.length != -1) {
-                        j = this.length + rangedUri.length;
-                    }
-                    return new RangedUri(resolveUriString, j2, j);
-                } else if (rangedUri.length == -1 || rangedUri.start + rangedUri.length != this.start) {
-                    return null;
-                } else {
-                    j2 = rangedUri.start;
-                    if (this.length != -1) {
-                        j = rangedUri.length + this.length;
-                    }
-                    return new RangedUri(resolveUriString, j2, j);
+    public RangedUri attemptMerge(RangedUri other, String baseUri) {
+        RangedUri rangedUri = null;
+        long j = -1;
+        String resolvedUri = resolveUriString(baseUri);
+        if (other != null && resolvedUri.equals(other.resolveUriString(baseUri))) {
+            long j2;
+            if (this.length != -1 && this.start + this.length == other.start) {
+                j2 = this.start;
+                if (other.length != -1) {
+                    j = this.length + other.length;
                 }
+                rangedUri = new RangedUri(resolvedUri, j2, j);
+            } else if (other.length != -1 && other.start + other.length == this.start) {
+                j2 = other.start;
+                if (this.length != -1) {
+                    j = other.length + this.length;
+                }
+                rangedUri = new RangedUri(resolvedUri, j2, j);
             }
         }
-        return null;
+        return rangedUri;
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * (((527 + ((int) this.start)) * 31) + ((int) this.length))) + this.referenceUri.hashCode();
+            this.hashCode = ((((((int) this.start) + 527) * 31) + ((int) this.length)) * 31) + this.referenceUri.hashCode();
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                RangedUri rangedUri = (RangedUri) obj;
-                if (this.start != rangedUri.start || this.length != rangedUri.length || this.referenceUri.equals(rangedUri.referenceUri) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        RangedUri other = (RangedUri) obj;
+        if (this.start == other.start && this.length == other.length && this.referenceUri.equals(other.referenceUri)) {
+            return true;
         }
         return false;
     }

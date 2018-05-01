@@ -25,30 +25,16 @@ class LayoutState {
     }
 
     boolean hasMore(State state) {
-        return (this.mCurrentPosition < 0 || this.mCurrentPosition >= state.getItemCount()) ? null : true;
+        return this.mCurrentPosition >= 0 && this.mCurrentPosition < state.getItemCount();
     }
 
     View next(Recycler recycler) {
-        recycler = recycler.getViewForPosition(this.mCurrentPosition);
+        View view = recycler.getViewForPosition(this.mCurrentPosition);
         this.mCurrentPosition += this.mItemDirection;
-        return recycler;
+        return view;
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("LayoutState{mAvailable=");
-        stringBuilder.append(this.mAvailable);
-        stringBuilder.append(", mCurrentPosition=");
-        stringBuilder.append(this.mCurrentPosition);
-        stringBuilder.append(", mItemDirection=");
-        stringBuilder.append(this.mItemDirection);
-        stringBuilder.append(", mLayoutDirection=");
-        stringBuilder.append(this.mLayoutDirection);
-        stringBuilder.append(", mStartLine=");
-        stringBuilder.append(this.mStartLine);
-        stringBuilder.append(", mEndLine=");
-        stringBuilder.append(this.mEndLine);
-        stringBuilder.append('}');
-        return stringBuilder.toString();
+        return "LayoutState{mAvailable=" + this.mAvailable + ", mCurrentPosition=" + this.mCurrentPosition + ", mItemDirection=" + this.mItemDirection + ", mLayoutDirection=" + this.mLayoutDirection + ", mStartLine=" + this.mStartLine + ", mEndLine=" + this.mEndLine + '}';
     }
 }

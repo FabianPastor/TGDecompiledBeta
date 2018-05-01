@@ -13,42 +13,50 @@ public final class TrackEncryptionBox {
     public final boolean isEncrypted;
     public final String schemeType;
 
-    public TrackEncryptionBox(boolean z, String str, int i, byte[] bArr, int i2, int i3, byte[] bArr2) {
-        int i4 = 0;
-        int i5 = i == 0 ? 1 : 0;
-        if (bArr2 == null) {
-            i4 = 1;
+    public TrackEncryptionBox(boolean isEncrypted, String schemeType, int initializationVectorSize, byte[] keyId, int defaultEncryptedBlocks, int defaultClearBlocks, byte[] defaultInitializationVector) {
+        int i = 1;
+        int i2 = initializationVectorSize == 0 ? 1 : 0;
+        if (defaultInitializationVector != null) {
+            i = 0;
         }
-        Assertions.checkArgument(i4 ^ i5);
-        this.isEncrypted = z;
-        this.schemeType = str;
-        this.initializationVectorSize = i;
-        this.defaultInitializationVector = bArr2;
-        this.cryptoData = new CryptoData(schemeToCryptoMode(str), bArr, i2, i3);
+        Assertions.checkArgument(i ^ i2);
+        this.isEncrypted = isEncrypted;
+        this.schemeType = schemeType;
+        this.initializationVectorSize = initializationVectorSize;
+        this.defaultInitializationVector = defaultInitializationVector;
+        this.cryptoData = new CryptoData(schemeToCryptoMode(schemeType), keyId, defaultEncryptedBlocks, defaultClearBlocks);
     }
 
-    private static int schemeToCryptoMode(String str) {
-        if (str == null) {
+    private static int schemeToCryptoMode(String schemeType) {
+        if (schemeType == null) {
             return 1;
         }
         int i = -1;
-        int hashCode = str.hashCode();
-        if (hashCode != 3046605) {
-            if (hashCode != 3046671) {
-                if (hashCode != 3049879) {
-                    if (hashCode == 3049895) {
-                        if (str.equals(C0542C.CENC_TYPE_cens)) {
-                            i = 1;
-                        }
-                    }
-                } else if (str.equals(C0542C.CENC_TYPE_cenc)) {
-                    i = 0;
+        switch (schemeType.hashCode()) {
+            case 3046605:
+                if (schemeType.equals(C0542C.CENC_TYPE_cbc1)) {
+                    i = 2;
+                    break;
                 }
-            } else if (str.equals(C0542C.CENC_TYPE_cbcs)) {
-                i = 3;
-            }
-        } else if (str.equals(C0542C.CENC_TYPE_cbc1)) {
-            i = 2;
+                break;
+            case 3046671:
+                if (schemeType.equals(C0542C.CENC_TYPE_cbcs)) {
+                    i = 3;
+                    break;
+                }
+                break;
+            case 3049879:
+                if (schemeType.equals(C0542C.CENC_TYPE_cenc)) {
+                    i = 0;
+                    break;
+                }
+                break;
+            case 3049895:
+                if (schemeType.equals(C0542C.CENC_TYPE_cens)) {
+                    i = 1;
+                    break;
+                }
+                break;
         }
         switch (i) {
             case 0:
@@ -58,12 +66,7 @@ public final class TrackEncryptionBox {
             case 3:
                 return 2;
             default:
-                String str2 = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Unsupported protection scheme type '");
-                stringBuilder.append(str);
-                stringBuilder.append("'. Assuming AES-CTR crypto mode.");
-                Log.w(str2, stringBuilder.toString());
+                Log.w(TAG, "Unsupported protection scheme type '" + schemeType + "'. Assuming AES-CTR crypto mode.");
                 return 1;
         }
     }

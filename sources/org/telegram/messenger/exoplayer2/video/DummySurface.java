@@ -54,77 +54,30 @@ public final class DummySurface extends Surface {
             super("dummySurface");
         }
 
-        public org.telegram.messenger.exoplayer2.video.DummySurface init(int r4) {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-            /*
-            r3 = this;
-            r3.start();
-            r0 = new android.os.Handler;
-            r1 = r3.getLooper();
-            r0.<init>(r1, r3);
-            r3.handler = r0;
-            monitor-enter(r3);
-            r0 = r3.handler;	 Catch:{ all -> 0x0047 }
-            r1 = 1;	 Catch:{ all -> 0x0047 }
-            r2 = 0;	 Catch:{ all -> 0x0047 }
-            r4 = r0.obtainMessage(r1, r4, r2);	 Catch:{ all -> 0x0047 }
-            r4.sendToTarget();	 Catch:{ all -> 0x0047 }
-        L_0x001a:
-            r4 = r3.surface;	 Catch:{ all -> 0x0047 }
-            if (r4 != 0) goto L_0x002c;	 Catch:{ all -> 0x0047 }
-        L_0x001e:
-            r4 = r3.initException;	 Catch:{ all -> 0x0047 }
-            if (r4 != 0) goto L_0x002c;	 Catch:{ all -> 0x0047 }
-        L_0x0022:
-            r4 = r3.initError;	 Catch:{ all -> 0x0047 }
-            if (r4 != 0) goto L_0x002c;
-        L_0x0026:
-            r3.wait();	 Catch:{ InterruptedException -> 0x002a }
-            goto L_0x001a;
-        L_0x002a:
-            r2 = r1;
-            goto L_0x001a;
-        L_0x002c:
-            monitor-exit(r3);	 Catch:{ all -> 0x0047 }
-            if (r2 == 0) goto L_0x0036;
-        L_0x002f:
-            r4 = java.lang.Thread.currentThread();
-            r4.interrupt();
-        L_0x0036:
-            r4 = r3.initException;
-            if (r4 == 0) goto L_0x003d;
-        L_0x003a:
-            r4 = r3.initException;
-            throw r4;
-        L_0x003d:
-            r4 = r3.initError;
-            if (r4 == 0) goto L_0x0044;
-        L_0x0041:
-            r4 = r3.initError;
-            throw r4;
-        L_0x0044:
-            r4 = r3.surface;
-            return r4;
-        L_0x0047:
-            r4 = move-exception;
-            monitor-exit(r3);	 Catch:{ all -> 0x0047 }
-            throw r4;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.video.DummySurface.DummySurfaceThread.init(int):org.telegram.messenger.exoplayer2.video.DummySurface");
+        public DummySurface init(int secureMode) {
+            start();
+            this.handler = new Handler(getLooper(), this);
+            boolean wasInterrupted = false;
+            synchronized (this) {
+                this.handler.obtainMessage(1, secureMode, 0).sendToTarget();
+                while (this.surface == null && this.initException == null && this.initError == null) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        wasInterrupted = true;
+                    }
+                }
+            }
+            if (wasInterrupted) {
+                Thread.currentThread().interrupt();
+            }
+            if (this.initException != null) {
+                throw this.initException;
+            } else if (this.initError == null) {
+                return this.surface;
+            } else {
+                throw this.initError;
+            }
         }
 
         public void release() {
@@ -135,92 +88,88 @@ Error: java.lang.NullPointerException
             this.handler.sendEmptyMessage(2);
         }
 
-        public boolean handleMessage(Message message) {
-            switch (message.what) {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
                 case 1:
                     try {
-                        initInternal(message.arg1);
+                        initInternal(msg.arg1);
                         synchronized (this) {
                             notify();
                         }
-                    } catch (Message message2) {
-                        Log.e(DummySurface.TAG, "Failed to initialize dummy surface", message2);
-                        this.initException = message2;
+                        break;
+                    } catch (RuntimeException e) {
+                        Log.e(DummySurface.TAG, "Failed to initialize dummy surface", e);
+                        this.initException = e;
                         synchronized (this) {
                             notify();
+                            break;
                         }
-                    } catch (Message message22) {
-                        try {
-                            Log.e(DummySurface.TAG, "Failed to initialize dummy surface", message22);
-                            this.initError = message22;
-                            synchronized (this) {
-                                notify();
-                            }
-                        } catch (Throwable th) {
-                            synchronized (this) {
-                                notify();
-                            }
+                    } catch (Error e2) {
+                        Log.e(DummySurface.TAG, "Failed to initialize dummy surface", e2);
+                        this.initError = e2;
+                        synchronized (this) {
+                            notify();
+                            break;
+                        }
+                    } catch (Throwable th) {
+                        synchronized (this) {
+                            notify();
                         }
                     }
-                    return true;
                 case 2:
                     this.surfaceTexture.updateTexImage();
-                    return true;
+                    break;
                 case 3:
                     try {
                         releaseInternal();
-                    } catch (Throwable th2) {
+                        break;
+                    } catch (Throwable e3) {
+                        Log.e(DummySurface.TAG, "Failed to release dummy surface", e3);
+                        break;
+                    } finally {
                         quit();
                     }
-                    quit();
-                    return true;
-                default:
-                    return true;
             }
+            return true;
         }
 
-        private void initInternal(int i) {
-            int[] iArr;
-            EGLSurface eGLSurface;
-            boolean z = false;
+        private void initInternal(int secureMode) {
+            int[] glAttributes;
+            EGLSurface surface;
             this.display = EGL14.eglGetDisplay(0);
             Assertions.checkState(this.display != null, "eglGetDisplay failed");
-            int[] iArr2 = new int[2];
-            Assertions.checkState(EGL14.eglInitialize(this.display, iArr2, 0, iArr2, 1), "eglInitialize failed");
-            EGLConfig[] eGLConfigArr = new EGLConfig[1];
-            int[] iArr3 = new int[1];
-            boolean z2 = EGL14.eglChooseConfig(this.display, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12327, 12344, 12339, 4, 12344}, 0, eGLConfigArr, 0, 1, iArr3, 0) && iArr3[0] > 0 && eGLConfigArr[0] != null;
-            Assertions.checkState(z2, "eglChooseConfig failed");
-            EGLConfig eGLConfig = eGLConfigArr[0];
-            if (i == 0) {
-                iArr = new int[]{12440, 2, 12344};
+            int[] version = new int[2];
+            Assertions.checkState(EGL14.eglInitialize(this.display, version, 0, version, 1), "eglInitialize failed");
+            EGLConfig[] configs = new EGLConfig[1];
+            int[] numConfigs = new int[1];
+            boolean z = EGL14.eglChooseConfig(this.display, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12327, 12344, 12339, 4, 12344}, 0, configs, 0, 1, numConfigs, 0) && numConfigs[0] > 0 && configs[0] != null;
+            Assertions.checkState(z, "eglChooseConfig failed");
+            EGLConfig config = configs[0];
+            if (secureMode == 0) {
+                glAttributes = new int[]{12440, 2, 12344};
             } else {
-                iArr = new int[]{12440, 2, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
+                glAttributes = new int[]{12440, 2, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
             }
-            this.context = EGL14.eglCreateContext(this.display, eGLConfig, EGL14.EGL_NO_CONTEXT, iArr, 0);
+            this.context = EGL14.eglCreateContext(this.display, config, EGL14.EGL_NO_CONTEXT, glAttributes, 0);
             Assertions.checkState(this.context != null, "eglCreateContext failed");
-            if (i == 1) {
-                eGLSurface = EGL14.EGL_NO_SURFACE;
+            if (secureMode == 1) {
+                surface = EGL14.EGL_NO_SURFACE;
             } else {
-                int[] iArr4;
-                if (i == 2) {
-                    iArr4 = new int[]{12375, 1, 12374, 1, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
+                int[] pbufferAttributes;
+                if (secureMode == 2) {
+                    pbufferAttributes = new int[]{12375, 1, 12374, 1, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
                 } else {
-                    iArr4 = new int[]{12375, 1, 12374, 1, 12344};
+                    pbufferAttributes = new int[]{12375, 1, 12374, 1, 12344};
                 }
-                this.pbuffer = EGL14.eglCreatePbufferSurface(this.display, eGLConfig, iArr4, 0);
+                this.pbuffer = EGL14.eglCreatePbufferSurface(this.display, config, pbufferAttributes, 0);
                 Assertions.checkState(this.pbuffer != null, "eglCreatePbufferSurface failed");
-                eGLSurface = this.pbuffer;
+                surface = this.pbuffer;
             }
-            Assertions.checkState(EGL14.eglMakeCurrent(this.display, eGLSurface, eGLSurface, this.context), "eglMakeCurrent failed");
+            Assertions.checkState(EGL14.eglMakeCurrent(this.display, surface, surface, this.context), "eglMakeCurrent failed");
             GLES20.glGenTextures(1, this.textureIdHolder, 0);
             this.surfaceTexture = new SurfaceTexture(this.textureIdHolder[0]);
             this.surfaceTexture.setOnFrameAvailableListener(this);
-            SurfaceTexture surfaceTexture = this.surfaceTexture;
-            if (i != 0) {
-                z = true;
-            }
-            this.surface = new DummySurface(this, surfaceTexture, z);
+            this.surface = new DummySurface(this, this.surfaceTexture, secureMode != 0);
         }
 
         private void releaseInternal() {
@@ -261,47 +210,40 @@ Error: java.lang.NullPointerException
     }
 
     public static synchronized boolean isSecureSupported(Context context) {
-        boolean z;
+        boolean z = true;
         synchronized (DummySurface.class) {
-            z = true;
             if (!secureModeInitialized) {
-                secureMode = Util.SDK_INT < 24 ? null : getSecureModeV24(context);
+                secureMode = Util.SDK_INT < 24 ? 0 : getSecureModeV24(context);
                 secureModeInitialized = true;
             }
-            if (secureMode == null) {
+            if (secureMode == 0) {
                 z = false;
             }
         }
         return z;
     }
 
-    public static DummySurface newInstanceV17(Context context, boolean z) {
-        assertApiLevel17OrHigher();
+    public static DummySurface newInstanceV17(Context context, boolean secure) {
+        boolean z;
         int i = 0;
-        if (z) {
-            if (isSecureSupported(context) == null) {
-                context = null;
-                Assertions.checkState(context);
-                context = new DummySurfaceThread();
-                if (z) {
-                    i = secureMode;
-                }
-                return context.init(i);
-            }
+        assertApiLevel17OrHigher();
+        if (!secure || isSecureSupported(context)) {
+            z = true;
+        } else {
+            z = false;
         }
-        context = true;
-        Assertions.checkState(context);
-        context = new DummySurfaceThread();
-        if (z) {
+        Assertions.checkState(z);
+        DummySurfaceThread thread = new DummySurfaceThread();
+        if (secure) {
             i = secureMode;
         }
-        return context.init(i);
+        return thread.init(i);
     }
 
-    private DummySurface(DummySurfaceThread dummySurfaceThread, SurfaceTexture surfaceTexture, boolean z) {
+    private DummySurface(DummySurfaceThread thread, SurfaceTexture surfaceTexture, boolean secure) {
         super(surfaceTexture);
-        this.thread = dummySurfaceThread;
-        this.secure = z;
+        this.thread = thread;
+        this.secure = secure;
     }
 
     public void release() {
@@ -325,13 +267,13 @@ Error: java.lang.NullPointerException
         if (Util.SDK_INT < 26 && ("samsung".equals(Util.MANUFACTURER) || "XT1650".equals(Util.MODEL))) {
             return 0;
         }
-        if (Util.SDK_INT < 26 && context.getPackageManager().hasSystemFeature("android.hardware.vr.high_performance") == null) {
+        if (Util.SDK_INT < 26 && !context.getPackageManager().hasSystemFeature("android.hardware.vr.high_performance")) {
             return 0;
         }
-        context = EGL14.eglQueryString(EGL14.eglGetDisplay(0), 12373);
-        if (context == null || !context.contains(EXTENSION_PROTECTED_CONTENT)) {
+        String eglExtensions = EGL14.eglQueryString(EGL14.eglGetDisplay(0), 12373);
+        if (eglExtensions == null || !eglExtensions.contains(EXTENSION_PROTECTED_CONTENT)) {
             return 0;
         }
-        return context.contains(EXTENSION_SURFACELESS_CONTEXT) != null ? true : 2;
+        return eglExtensions.contains(EXTENSION_SURFACELESS_CONTEXT) ? 1 : 2;
     }
 }

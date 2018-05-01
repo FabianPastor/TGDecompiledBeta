@@ -12,12 +12,12 @@ public final class UnsupportedDrmException extends Exception {
     public @interface Reason {
     }
 
-    public UnsupportedDrmException(int i) {
-        this.reason = i;
+    public UnsupportedDrmException(int reason) {
+        this.reason = reason;
     }
 
-    public UnsupportedDrmException(int i, Exception exception) {
-        super(exception);
-        this.reason = i;
+    public UnsupportedDrmException(int reason, Exception cause) {
+        super(cause);
+        this.reason = reason;
     }
 }

@@ -20,27 +20,20 @@ final class EventSampleStream implements SampleStream {
     private long pendingSeekPositionUs = C0542C.TIME_UNSET;
     private final Format upstreamFormat;
 
-    public boolean isReady() {
-        return true;
+    EventSampleStream(EventStream eventStream, Format upstreamFormat, boolean eventStreamUpdatable) {
+        this.upstreamFormat = upstreamFormat;
+        updateEventStream(eventStream, eventStreamUpdatable);
     }
 
-    public void maybeThrowError() throws IOException {
-    }
-
-    EventSampleStream(EventStream eventStream, Format format, boolean z) {
-        this.upstreamFormat = format;
-        updateEventStream(eventStream, z);
-    }
-
-    void updateEventStream(EventStream eventStream, boolean z) {
-        long j = this.currentIndex == 0 ? C0542C.TIME_UNSET : this.eventTimesUs[this.currentIndex - 1];
-        this.eventStreamUpdatable = z;
+    void updateEventStream(EventStream eventStream, boolean eventStreamUpdatable) {
+        long lastReadPositionUs = this.currentIndex == 0 ? C0542C.TIME_UNSET : this.eventTimesUs[this.currentIndex - 1];
+        this.eventStreamUpdatable = eventStreamUpdatable;
         this.eventStream = eventStream;
         this.eventTimesUs = eventStream.presentationTimesUs;
-        if (this.pendingSeekPositionUs != -922337203NUM) {
+        if (this.pendingSeekPositionUs != C0542C.TIME_UNSET) {
             seekToUs(this.pendingSeekPositionUs);
-        } else if (j != C0542C.TIME_UNSET) {
-            this.currentIndex = Util.binarySearchCeil(this.eventTimesUs, j, false, false);
+        } else if (lastReadPositionUs != C0542C.TIME_UNSET) {
+            this.currentIndex = Util.binarySearchCeil(this.eventTimesUs, lastReadPositionUs, false, false);
         }
     }
 
@@ -48,50 +41,54 @@ final class EventSampleStream implements SampleStream {
         return this.eventStream.id();
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z) {
-        if (!z) {
-            if (this.isFormatSentDownstream) {
-                if (this.currentIndex != this.eventTimesUs.length) {
-                    formatHolder = this.currentIndex;
-                    this.currentIndex = formatHolder + 1;
-                    z = this.eventMessageEncoder.encode(this.eventStream.events[formatHolder], this.eventStream.timescale);
-                    if (!z) {
-                        return -3;
-                    }
-                    decoderInputBuffer.ensureSpaceForWrite(z.length);
-                    decoderInputBuffer.setFlags(1);
-                    decoderInputBuffer.data.put(z);
-                    decoderInputBuffer.timeUs = this.eventTimesUs[formatHolder];
-                    return -4;
-                } else if (this.eventStreamUpdatable != null) {
-                    return -3;
-                } else {
-                    decoderInputBuffer.setFlags(4);
-                    return -4;
-                }
+    public boolean isReady() {
+        return true;
+    }
+
+    public void maybeThrowError() throws IOException {
+    }
+
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+        if (formatRequired || !this.isFormatSentDownstream) {
+            formatHolder.format = this.upstreamFormat;
+            this.isFormatSentDownstream = true;
+            return -5;
+        } else if (this.currentIndex != this.eventTimesUs.length) {
+            int sampleIndex = this.currentIndex;
+            this.currentIndex = sampleIndex + 1;
+            byte[] serializedEvent = this.eventMessageEncoder.encode(this.eventStream.events[sampleIndex], this.eventStream.timescale);
+            if (serializedEvent == null) {
+                return -3;
             }
+            buffer.ensureSpaceForWrite(serializedEvent.length);
+            buffer.setFlags(1);
+            buffer.data.put(serializedEvent);
+            buffer.timeUs = this.eventTimesUs[sampleIndex];
+            return -4;
+        } else if (this.eventStreamUpdatable) {
+            return -3;
+        } else {
+            buffer.setFlags(4);
+            return -4;
         }
-        formatHolder.format = this.upstreamFormat;
-        this.isFormatSentDownstream = true;
-        return -5;
     }
 
-    public int skipData(long j) {
-        j = Math.max(this.currentIndex, Util.binarySearchCeil(this.eventTimesUs, j, true, false));
-        int i = j - this.currentIndex;
-        this.currentIndex = j;
-        return i;
+    public int skipData(long positionUs) {
+        int newIndex = Math.max(this.currentIndex, Util.binarySearchCeil(this.eventTimesUs, positionUs, true, false));
+        int skipped = newIndex - this.currentIndex;
+        this.currentIndex = newIndex;
+        return skipped;
     }
 
-    public void seekToUs(long j) {
-        boolean z = false;
-        this.currentIndex = Util.binarySearchCeil(this.eventTimesUs, j, true, false);
-        if (this.eventStreamUpdatable && this.currentIndex == this.eventTimesUs.length) {
-            z = true;
+    public void seekToUs(long positionUs) {
+        boolean isPendingSeek = true;
+        this.currentIndex = Util.binarySearchCeil(this.eventTimesUs, positionUs, true, false);
+        if (!(this.eventStreamUpdatable && this.currentIndex == this.eventTimesUs.length)) {
+            isPendingSeek = false;
         }
-        if (!z) {
-            j = C0542C.TIME_UNSET;
+        if (!isPendingSeek) {
+            positionUs = C0542C.TIME_UNSET;
         }
-        this.pendingSeekPositionUs = j;
+        this.pendingSeekPositionUs = positionUs;
     }
 }

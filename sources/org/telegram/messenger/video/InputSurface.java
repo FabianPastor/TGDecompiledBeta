@@ -31,16 +31,16 @@ public class InputSurface {
         if (this.mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
             throw new RuntimeException("unable to get EGL14 display");
         }
-        int[] iArr = new int[2];
-        if (EGL14.eglInitialize(this.mEGLDisplay, iArr, 0, iArr, 1)) {
-            EGLConfig[] eGLConfigArr = new EGLConfig[1];
-            if (EGL14.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12352, 4, EGL_RECORDABLE_ANDROID, 1, 12344}, 0, eGLConfigArr, 0, eGLConfigArr.length, new int[1], 0)) {
-                this.mEGLContext = EGL14.eglCreateContext(this.mEGLDisplay, eGLConfigArr[0], EGL14.EGL_NO_CONTEXT, new int[]{12440, 2, 12344}, 0);
+        int[] version = new int[2];
+        if (EGL14.eglInitialize(this.mEGLDisplay, version, 0, version, 1)) {
+            EGLConfig[] configs = new EGLConfig[1];
+            if (EGL14.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12352, 4, EGL_RECORDABLE_ANDROID, 1, 12344}, 0, configs, 0, configs.length, new int[1], 0)) {
+                this.mEGLContext = EGL14.eglCreateContext(this.mEGLDisplay, configs[0], EGL14.EGL_NO_CONTEXT, new int[]{12440, 2, 12344}, 0);
                 checkEglError("eglCreateContext");
                 if (this.mEGLContext == null) {
                     throw new RuntimeException("null context");
                 }
-                this.mEGLSurface = EGL14.eglCreateWindowSurface(this.mEGLDisplay, eGLConfigArr[0], this.mSurface, new int[]{12344}, 0);
+                this.mEGLSurface = EGL14.eglCreateWindowSurface(this.mEGLDisplay, configs[0], this.mSurface, new int[]{12344}, 0);
                 checkEglError("eglCreateWindowSurface");
                 if (this.mEGLSurface == null) {
                     throw new RuntimeException("surface was null");
@@ -80,16 +80,16 @@ public class InputSurface {
         return this.mSurface;
     }
 
-    public void setPresentationTime(long j) {
-        EGLExt.eglPresentationTimeANDROID(this.mEGLDisplay, this.mEGLSurface, j);
+    public void setPresentationTime(long nsecs) {
+        EGLExt.eglPresentationTimeANDROID(this.mEGLDisplay, this.mEGLSurface, nsecs);
     }
 
-    private void checkEglError(String str) {
-        str = null;
+    private void checkEglError(String msg) {
+        boolean failed = false;
         while (EGL14.eglGetError() != 12288) {
-            boolean z = true;
+            failed = true;
         }
-        if (str != null) {
+        if (failed) {
             throw new RuntimeException("EGL error encountered (see log)");
         }
     }

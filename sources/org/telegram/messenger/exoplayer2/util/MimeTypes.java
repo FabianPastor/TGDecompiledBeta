@@ -72,170 +72,153 @@ public final class MimeTypes {
     private MimeTypes() {
     }
 
-    public static boolean isAudio(String str) {
-        return BASE_TYPE_AUDIO.equals(getTopLevelType(str));
+    public static boolean isAudio(String mimeType) {
+        return BASE_TYPE_AUDIO.equals(getTopLevelType(mimeType));
     }
 
-    public static boolean isVideo(String str) {
-        return BASE_TYPE_VIDEO.equals(getTopLevelType(str));
+    public static boolean isVideo(String mimeType) {
+        return BASE_TYPE_VIDEO.equals(getTopLevelType(mimeType));
     }
 
-    public static boolean isText(String str) {
-        return BASE_TYPE_TEXT.equals(getTopLevelType(str));
+    public static boolean isText(String mimeType) {
+        return BASE_TYPE_TEXT.equals(getTopLevelType(mimeType));
     }
 
-    public static boolean isApplication(String str) {
-        return BASE_TYPE_APPLICATION.equals(getTopLevelType(str));
+    public static boolean isApplication(String mimeType) {
+        return BASE_TYPE_APPLICATION.equals(getTopLevelType(mimeType));
     }
 
-    public static String getVideoMediaMimeType(String str) {
-        if (str == null) {
+    public static String getVideoMediaMimeType(String codecs) {
+        if (codecs == null) {
             return null;
         }
-        for (String mediaMimeType : str.split(",")) {
-            String mediaMimeType2 = getMediaMimeType(mediaMimeType2);
-            if (mediaMimeType2 != null && isVideo(mediaMimeType2)) {
-                return mediaMimeType2;
+        for (String codec : codecs.split(",")) {
+            String mimeType = getMediaMimeType(codec);
+            if (mimeType != null && isVideo(mimeType)) {
+                return mimeType;
             }
         }
         return null;
     }
 
-    public static String getAudioMediaMimeType(String str) {
-        if (str == null) {
+    public static String getAudioMediaMimeType(String codecs) {
+        if (codecs == null) {
             return null;
         }
-        for (String mediaMimeType : str.split(",")) {
-            String mediaMimeType2 = getMediaMimeType(mediaMimeType2);
-            if (mediaMimeType2 != null && isAudio(mediaMimeType2)) {
-                return mediaMimeType2;
+        for (String codec : codecs.split(",")) {
+            String mimeType = getMediaMimeType(codec);
+            if (mimeType != null && isAudio(mimeType)) {
+                return mimeType;
             }
         }
         return null;
     }
 
-    public static String getMediaMimeType(String str) {
-        if (str == null) {
+    public static String getMediaMimeType(String codec) {
+        if (codec == null) {
             return null;
         }
-        str = str.trim();
-        if (!str.startsWith(VisualSampleEntry.TYPE3)) {
-            if (!str.startsWith(VisualSampleEntry.TYPE4)) {
-                if (!str.startsWith(VisualSampleEntry.TYPE7)) {
-                    if (!str.startsWith(VisualSampleEntry.TYPE6)) {
-                        if (!str.startsWith("vp9")) {
-                            if (!str.startsWith("vp09")) {
-                                if (!str.startsWith("vp8")) {
-                                    if (!str.startsWith("vp08")) {
-                                        if (str.startsWith(AudioSampleEntry.TYPE3)) {
-                                            return AUDIO_AAC;
-                                        }
-                                        if (!str.startsWith(AudioSampleEntry.TYPE8)) {
-                                            if (!str.startsWith("dac3")) {
-                                                if (!str.startsWith(AudioSampleEntry.TYPE9)) {
-                                                    if (!str.startsWith("dec3")) {
-                                                        if (str.startsWith("ec+3")) {
-                                                            return AUDIO_E_AC3_JOC;
-                                                        }
-                                                        if (!str.startsWith("dtsc")) {
-                                                            if (!str.startsWith(AudioSampleEntry.TYPE13)) {
-                                                                if (!str.startsWith(AudioSampleEntry.TYPE12)) {
-                                                                    if (!str.startsWith(AudioSampleEntry.TYPE11)) {
-                                                                        if (str.startsWith("opus")) {
-                                                                            return AUDIO_OPUS;
-                                                                        }
-                                                                        if (str.startsWith("vorbis") != null) {
-                                                                            return AUDIO_VORBIS;
-                                                                        }
-                                                                        return null;
-                                                                    }
-                                                                }
-                                                                return AUDIO_DTS_HD;
-                                                            }
-                                                        }
-                                                        return AUDIO_DTS;
-                                                    }
-                                                }
-                                                return AUDIO_E_AC3;
-                                            }
-                                        }
-                                        return AUDIO_AC3;
-                                    }
-                                }
-                                return VIDEO_VP8;
-                            }
-                        }
-                        return VIDEO_VP9;
-                    }
-                }
-                return VIDEO_H265;
-            }
+        codec = codec.trim();
+        if (codec.startsWith(VisualSampleEntry.TYPE3) || codec.startsWith(VisualSampleEntry.TYPE4)) {
+            return "video/avc";
         }
-        return "video/avc";
+        if (codec.startsWith(VisualSampleEntry.TYPE7) || codec.startsWith(VisualSampleEntry.TYPE6)) {
+            return VIDEO_H265;
+        }
+        if (codec.startsWith("vp9") || codec.startsWith("vp09")) {
+            return VIDEO_VP9;
+        }
+        if (codec.startsWith("vp8") || codec.startsWith("vp08")) {
+            return VIDEO_VP8;
+        }
+        if (codec.startsWith(AudioSampleEntry.TYPE3)) {
+            return AUDIO_AAC;
+        }
+        if (codec.startsWith(AudioSampleEntry.TYPE8) || codec.startsWith("dac3")) {
+            return AUDIO_AC3;
+        }
+        if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith("dec3")) {
+            return AUDIO_E_AC3;
+        }
+        if (codec.startsWith("ec+3")) {
+            return AUDIO_E_AC3_JOC;
+        }
+        if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {
+            return AUDIO_DTS;
+        }
+        if (codec.startsWith(AudioSampleEntry.TYPE12) || codec.startsWith(AudioSampleEntry.TYPE11)) {
+            return AUDIO_DTS_HD;
+        }
+        if (codec.startsWith("opus")) {
+            return AUDIO_OPUS;
+        }
+        if (codec.startsWith("vorbis")) {
+            return AUDIO_VORBIS;
+        }
+        return null;
     }
 
-    public static int getTrackType(String str) {
-        if (TextUtils.isEmpty(str)) {
+    public static int getTrackType(String mimeType) {
+        if (TextUtils.isEmpty(mimeType)) {
             return -1;
         }
-        if (isAudio(str)) {
+        if (isAudio(mimeType)) {
             return 1;
         }
-        if (isVideo(str)) {
+        if (isVideo(mimeType)) {
             return 2;
         }
-        if (!(isText(str) || APPLICATION_CEA608.equals(str) || APPLICATION_CEA708.equals(str) || APPLICATION_MP4CEA608.equals(str) || APPLICATION_SUBRIP.equals(str) || APPLICATION_TTML.equals(str) || APPLICATION_TX3G.equals(str) || APPLICATION_MP4VTT.equals(str) || APPLICATION_RAWCC.equals(str) || APPLICATION_VOBSUB.equals(str) || APPLICATION_PGS.equals(str))) {
-            if (!APPLICATION_DVBSUBS.equals(str)) {
-                if (!(APPLICATION_ID3.equals(str) || APPLICATION_EMSG.equals(str) || APPLICATION_SCTE35.equals(str))) {
-                    if (APPLICATION_CAMERA_MOTION.equals(str) == null) {
-                        return -1;
-                    }
-                }
-                return 4;
-            }
+        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_MP4CEA608.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType) || APPLICATION_DVBSUBS.equals(mimeType)) {
+            return 3;
         }
-        return 3;
+        if (APPLICATION_ID3.equals(mimeType) || APPLICATION_EMSG.equals(mimeType) || APPLICATION_SCTE35.equals(mimeType) || APPLICATION_CAMERA_MOTION.equals(mimeType)) {
+            return 4;
+        }
+        return -1;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static int getEncoding(String str) {
-        switch (str.hashCode()) {
+    public static int getEncoding(String mimeType) {
+        int i = -1;
+        switch (mimeType.hashCode()) {
             case -2123537834:
-                if (str.equals(AUDIO_E_AC3_JOC) != null) {
-                    str = 2;
+                if (mimeType.equals(AUDIO_E_AC3_JOC)) {
+                    i = 2;
                     break;
                 }
+                break;
             case -1095064472:
-                if (str.equals(AUDIO_DTS) != null) {
-                    str = 3;
+                if (mimeType.equals(AUDIO_DTS)) {
+                    i = 3;
                     break;
                 }
+                break;
             case 187078296:
-                if (str.equals(AUDIO_AC3) != null) {
-                    str = null;
+                if (mimeType.equals(AUDIO_AC3)) {
+                    i = 0;
                     break;
                 }
+                break;
             case 1504578661:
-                if (str.equals(AUDIO_E_AC3) != null) {
-                    str = true;
+                if (mimeType.equals(AUDIO_E_AC3)) {
+                    i = 1;
                     break;
                 }
+                break;
             case 1505942594:
-                if (str.equals(AUDIO_DTS_HD) != null) {
-                    str = 4;
+                if (mimeType.equals(AUDIO_DTS_HD)) {
+                    i = 4;
                     break;
                 }
+                break;
             case 1556697186:
-                if (str.equals(AUDIO_TRUEHD) != null) {
-                    str = 5;
+                if (mimeType.equals(AUDIO_TRUEHD)) {
+                    i = 5;
                     break;
                 }
-            default:
+                break;
         }
-        str = -1;
-        switch (str) {
-            case null:
+        switch (i) {
+            case 0:
                 return 5;
             case 1:
             case 2:
@@ -251,21 +234,18 @@ public final class MimeTypes {
         }
     }
 
-    public static int getTrackTypeOfCodec(String str) {
-        return getTrackType(getMediaMimeType(str));
+    public static int getTrackTypeOfCodec(String codec) {
+        return getTrackType(getMediaMimeType(codec));
     }
 
-    private static String getTopLevelType(String str) {
-        if (str == null) {
+    private static String getTopLevelType(String mimeType) {
+        if (mimeType == null) {
             return null;
         }
-        int indexOf = str.indexOf(47);
-        if (indexOf != -1) {
-            return str.substring(0, indexOf);
+        int indexOfSlash = mimeType.indexOf(47);
+        if (indexOfSlash != -1) {
+            return mimeType.substring(0, indexOfSlash);
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid mime type: ");
-        stringBuilder.append(str);
-        throw new IllegalArgumentException(stringBuilder.toString());
+        throw new IllegalArgumentException("Invalid mime type: " + mimeType);
     }
 }

@@ -21,6 +21,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -45,54 +46,52 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         }
     }
 
-    public void setDelegate(BaseLocationAdapterDelegate baseLocationAdapterDelegate) {
-        this.delegate = baseLocationAdapterDelegate;
+    public void setDelegate(BaseLocationAdapterDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    public void searchDelayed(final String str, final Location location) {
-        if (str != null) {
-            if (str.length() != 0) {
+    public void searchDelayed(final String query, final Location coordinate) {
+        if (query == null || query.length() == 0) {
+            this.places.clear();
+            notifyDataSetChanged();
+            return;
+        }
+        try {
+            if (this.searchTimer != null) {
+                this.searchTimer.cancel();
+            }
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+        }
+        this.searchTimer = new Timer();
+        this.searchTimer.schedule(new TimerTask() {
+
+            /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
+            class C07681 implements Runnable {
+                C07681() {
+                }
+
+                public void run() {
+                    BaseLocationAdapter.this.lastSearchLocation = null;
+                    BaseLocationAdapter.this.searchGooglePlacesWithQuery(query, coordinate);
+                }
+            }
+
+            public void run() {
                 try {
-                    if (this.searchTimer != null) {
-                        this.searchTimer.cancel();
-                    }
+                    BaseLocationAdapter.this.searchTimer.cancel();
+                    BaseLocationAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                this.searchTimer = new Timer();
-                this.searchTimer.schedule(new TimerTask() {
-
-                    /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-                    class C07681 implements Runnable {
-                        C07681() {
-                        }
-
-                        public void run() {
-                            BaseLocationAdapter.this.lastSearchLocation = null;
-                            BaseLocationAdapter.this.searchGooglePlacesWithQuery(str, location);
-                        }
-                    }
-
-                    public void run() {
-                        try {
-                            BaseLocationAdapter.this.searchTimer.cancel();
-                            BaseLocationAdapter.this.searchTimer = null;
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
-                        }
-                        AndroidUtilities.runOnUIThread(new C07681());
-                    }
-                }, 200, 500);
-                return;
+                AndroidUtilities.runOnUIThread(new C07681());
             }
-        }
-        this.places.clear();
-        notifyDataSetChanged();
+        }, 200, 500);
     }
 
-    public void searchGooglePlacesWithQuery(String str, Location location) {
-        if (this.lastSearchLocation == null || location.distanceTo(this.lastSearchLocation) >= 200.0f) {
-            this.lastSearchLocation = location;
+    public void searchGooglePlacesWithQuery(String query, Location coordinate) {
+        if (this.lastSearchLocation == null || coordinate.distanceTo(this.lastSearchLocation) >= 200.0f) {
+            this.lastSearchLocation = coordinate;
             if (this.searching) {
                 this.searching = false;
                 if (this.currentTask != null) {
@@ -101,449 +100,213 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 }
             }
             try {
+                String str;
                 this.searching = true;
                 Locale locale = Locale.US;
                 String str2 = "https://api.foursquare.com/v2/venues/search/?v=%s&locale=en&limit=25&client_id=%s&client_secret=%s&ll=%s%s";
                 r5 = new Object[5];
-                r5[3] = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())});
-                if (str == null || str.length() <= 0) {
+                r5[3] = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(coordinate.getLatitude()), Double.valueOf(coordinate.getLongitude())});
+                if (query == null || query.length() <= 0) {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("&query=");
-                    stringBuilder.append(URLEncoder.encode(str, C0542C.UTF8_NAME));
-                    str = stringBuilder.toString();
+                    str = "&query=" + URLEncoder.encode(query, C0542C.UTF8_NAME);
                 }
                 r5[4] = str;
-                str = String.format(locale, str2, r5);
+                final String url = String.format(locale, str2, r5);
                 this.currentTask = new AsyncTask<Void, Void, JSONObject>() {
                     private boolean canRetry = true;
 
                     /* JADX WARNING: inconsistent code. */
                     /* Code decompiled incorrectly, please refer to instructions dump. */
-                    private String downloadUrlContent(String str) {
-                        Throwable th;
-                        boolean z;
-                        InputStream inputStream;
-                        StringBuilder stringBuilder;
+                    private String downloadUrlContent(String url) {
                         Throwable e;
-                        int read;
-                        int i = 0;
+                        boolean canRetry = true;
+                        InputStream httpConnectionStream = null;
+                        boolean done = false;
+                        StringBuilder result = null;
+                        URLConnection httpConnection = null;
                         try {
-                            str = new URL(str).openConnection();
-                            try {
-                                str.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
-                                str.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
-                                str.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                                str.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                                str.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                                str.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                                if (str instanceof HttpURLConnection) {
-                                    HttpURLConnection httpURLConnection = (HttpURLConnection) str;
-                                    httpURLConnection.setInstanceFollowRedirects(true);
-                                    int responseCode = httpURLConnection.getResponseCode();
-                                    if (responseCode == 302 || responseCode == 301 || responseCode == 303) {
-                                        String headerField = httpURLConnection.getHeaderField("Location");
-                                        String headerField2 = httpURLConnection.getHeaderField("Set-Cookie");
-                                        URLConnection openConnection = new URL(headerField).openConnection();
-                                        try {
-                                            openConnection.setRequestProperty("Cookie", headerField2);
-                                            openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
-                                            openConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
-                                            openConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                                            openConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                                            str = openConnection;
-                                        } catch (String str2) {
-                                            th = str2;
-                                            str2 = openConnection;
-                                            if (th instanceof SocketTimeoutException) {
-                                                if (th instanceof UnknownHostException) {
-                                                    if (!(th instanceof SocketException)) {
-                                                        if (th instanceof FileNotFoundException) {
-                                                        }
-                                                        z = true;
-                                                        FileLog.m3e(th);
-                                                        inputStream = null;
-                                                        if (z) {
-                                                            stringBuilder = null;
-                                                        } else {
-                                                            if (str2 != null) {
-                                                                try {
-                                                                } catch (Throwable e2) {
-                                                                    FileLog.m3e(e2);
-                                                                }
-                                                            }
-                                                            if (inputStream == null) {
-                                                                try {
-                                                                    str2 = new byte[32768];
-                                                                    stringBuilder = null;
-                                                                    while (!isCancelled()) {
-                                                                        try {
-                                                                            read = inputStream.read(str2);
-                                                                            if (read <= 0) {
-                                                                                if (stringBuilder == null) {
-                                                                                    stringBuilder = new StringBuilder();
-                                                                                }
-                                                                                stringBuilder.append(new String(str2, 0, read, C0542C.UTF8_NAME));
-                                                                            } else if (read == -1) {
-                                                                                i = 1;
-                                                                            }
-                                                                        } catch (Throwable e22) {
-                                                                            FileLog.m3e(e22);
-                                                                        } catch (Throwable th2) {
-                                                                            e22 = th2;
-                                                                        }
-                                                                    }
-                                                                } catch (Throwable th3) {
-                                                                    e22 = th3;
-                                                                    stringBuilder = null;
-                                                                    FileLog.m3e(e22);
-                                                                    if (inputStream != null) {
-                                                                        try {
-                                                                            inputStream.close();
-                                                                        } catch (Throwable e222) {
-                                                                            FileLog.m3e(e222);
-                                                                        }
-                                                                    }
-                                                                    if (i != 0) {
-                                                                        return stringBuilder.toString();
-                                                                    }
-                                                                    return null;
-                                                                }
-                                                            }
-                                                            stringBuilder = null;
-                                                            if (inputStream != null) {
-                                                                inputStream.close();
-                                                            }
-                                                        }
-                                                        if (i != 0) {
-                                                            return stringBuilder.toString();
-                                                        }
-                                                        return null;
-                                                    }
-                                                }
-                                            }
-                                            z = false;
-                                            FileLog.m3e(th);
-                                            inputStream = null;
-                                            if (z) {
-                                                stringBuilder = null;
-                                            } else {
-                                                if (str2 != null) {
-                                                }
-                                                if (inputStream == null) {
-                                                    stringBuilder = null;
-                                                } else {
-                                                    str2 = new byte[32768];
-                                                    stringBuilder = null;
-                                                    while (!isCancelled()) {
-                                                        read = inputStream.read(str2);
-                                                        if (read <= 0) {
-                                                            if (stringBuilder == null) {
-                                                                stringBuilder = new StringBuilder();
-                                                            }
-                                                            stringBuilder.append(new String(str2, 0, read, C0542C.UTF8_NAME));
-                                                        } else if (read == -1) {
-                                                            i = 1;
-                                                        }
-                                                    }
-                                                }
-                                                if (inputStream != null) {
-                                                    inputStream.close();
-                                                }
-                                            }
-                                            if (i != 0) {
-                                                return null;
-                                            }
-                                            return stringBuilder.toString();
-                                        }
-                                    }
-                                }
-                                str2.connect();
-                                inputStream = str2.getInputStream();
-                                z = true;
-                            } catch (Throwable th4) {
-                                th = th4;
-                                if (th instanceof SocketTimeoutException) {
-                                    if (th instanceof UnknownHostException) {
-                                        if (!(th instanceof SocketException)) {
-                                            if (th.getMessage() != null && th.getMessage().contains("ECONNRESET")) {
-                                            }
-                                            z = true;
-                                            FileLog.m3e(th);
-                                            inputStream = null;
-                                            if (z) {
-                                                stringBuilder = null;
-                                            } else {
-                                                if (str2 != null) {
-                                                }
-                                                if (inputStream == null) {
-                                                    stringBuilder = null;
-                                                } else {
-                                                    str2 = new byte[32768];
-                                                    stringBuilder = null;
-                                                    while (!isCancelled()) {
-                                                        read = inputStream.read(str2);
-                                                        if (read <= 0) {
-                                                            if (stringBuilder == null) {
-                                                                stringBuilder = new StringBuilder();
-                                                            }
-                                                            stringBuilder.append(new String(str2, 0, read, C0542C.UTF8_NAME));
-                                                        } else if (read == -1) {
-                                                            i = 1;
-                                                        }
-                                                    }
-                                                }
-                                                if (inputStream != null) {
-                                                    inputStream.close();
-                                                }
-                                            }
-                                            if (i != 0) {
-                                                return null;
-                                            }
-                                            return stringBuilder.toString();
-                                        }
-                                        if (th instanceof FileNotFoundException) {
-                                        }
-                                        z = true;
-                                        FileLog.m3e(th);
-                                        inputStream = null;
-                                        if (z) {
-                                            if (str2 != null) {
-                                            }
-                                            if (inputStream == null) {
-                                                str2 = new byte[32768];
-                                                stringBuilder = null;
-                                                while (!isCancelled()) {
-                                                    read = inputStream.read(str2);
-                                                    if (read <= 0) {
-                                                        if (stringBuilder == null) {
-                                                            stringBuilder = new StringBuilder();
-                                                        }
-                                                        stringBuilder.append(new String(str2, 0, read, C0542C.UTF8_NAME));
-                                                    } else if (read == -1) {
-                                                        i = 1;
-                                                    }
-                                                }
-                                            } else {
-                                                stringBuilder = null;
-                                            }
-                                            if (inputStream != null) {
-                                                inputStream.close();
-                                            }
-                                        } else {
-                                            stringBuilder = null;
-                                        }
-                                        if (i != 0) {
-                                            return stringBuilder.toString();
-                                        }
-                                        return null;
-                                    }
-                                }
-                                z = false;
-                                FileLog.m3e(th);
-                                inputStream = null;
-                                if (z) {
-                                    stringBuilder = null;
-                                } else {
-                                    if (str2 != null) {
-                                    }
-                                    if (inputStream == null) {
-                                        stringBuilder = null;
-                                    } else {
-                                        str2 = new byte[32768];
-                                        stringBuilder = null;
-                                        while (!isCancelled()) {
-                                            read = inputStream.read(str2);
-                                            if (read <= 0) {
-                                                if (stringBuilder == null) {
-                                                    stringBuilder = new StringBuilder();
-                                                }
-                                                stringBuilder.append(new String(str2, 0, read, C0542C.UTF8_NAME));
-                                            } else if (read == -1) {
-                                                i = 1;
-                                            }
-                                        }
-                                    }
-                                    if (inputStream != null) {
-                                        inputStream.close();
-                                    }
-                                }
-                                if (i != 0) {
-                                    return null;
-                                }
-                                return stringBuilder.toString();
-                            }
-                        } catch (String str22) {
-                            th = str22;
-                            str22 = null;
-                            if (th instanceof SocketTimeoutException) {
-                                if (th instanceof UnknownHostException) {
-                                    if (!(th instanceof SocketException)) {
-                                        if (th instanceof FileNotFoundException) {
-                                        }
-                                        z = true;
-                                        FileLog.m3e(th);
-                                        inputStream = null;
-                                        if (z) {
-                                            if (str22 != null) {
-                                            }
-                                            if (inputStream == null) {
-                                                str22 = new byte[32768];
-                                                stringBuilder = null;
-                                                while (!isCancelled()) {
-                                                    read = inputStream.read(str22);
-                                                    if (read <= 0) {
-                                                        if (stringBuilder == null) {
-                                                            stringBuilder = new StringBuilder();
-                                                        }
-                                                        stringBuilder.append(new String(str22, 0, read, C0542C.UTF8_NAME));
-                                                    } else if (read == -1) {
-                                                        i = 1;
-                                                    }
-                                                }
-                                            } else {
-                                                stringBuilder = null;
-                                            }
-                                            if (inputStream != null) {
-                                                inputStream.close();
-                                            }
-                                        } else {
-                                            stringBuilder = null;
-                                        }
-                                        if (i != 0) {
-                                            return stringBuilder.toString();
-                                        }
-                                        return null;
-                                    }
+                            httpConnection = new URL(url).openConnection();
+                            httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+                            httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+                            httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                            httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+                            httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                            httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                            if (httpConnection instanceof HttpURLConnection) {
+                                HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
+                                httpURLConnection.setInstanceFollowRedirects(true);
+                                int status = httpURLConnection.getResponseCode();
+                                if (status == 302 || status == 301 || status == 303) {
+                                    String newUrl = httpURLConnection.getHeaderField("Location");
+                                    String cookies = httpURLConnection.getHeaderField("Set-Cookie");
+                                    httpConnection = new URL(newUrl).openConnection();
+                                    httpConnection.setRequestProperty("Cookie", cookies);
+                                    httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+                                    httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+                                    httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                                    httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
                                 }
                             }
-                            z = false;
-                            FileLog.m3e(th);
-                            inputStream = null;
-                            if (z) {
-                                stringBuilder = null;
-                            } else {
-                                if (str22 != null) {
+                            httpConnection.connect();
+                            httpConnectionStream = httpConnection.getInputStream();
+                        } catch (Throwable e2) {
+                            if (e2 instanceof SocketTimeoutException) {
+                                if (ConnectionsManager.isNetworkOnline()) {
+                                    canRetry = false;
                                 }
-                                if (inputStream == null) {
-                                    stringBuilder = null;
-                                } else {
-                                    str22 = new byte[32768];
-                                    stringBuilder = null;
+                            } else if (e2 instanceof UnknownHostException) {
+                                canRetry = false;
+                            } else if (e2 instanceof SocketException) {
+                                if (e2.getMessage() != null && e2.getMessage().contains("ECONNRESET")) {
+                                    canRetry = false;
+                                }
+                            } else if (e2 instanceof FileNotFoundException) {
+                                canRetry = false;
+                            }
+                            FileLog.m3e(e2);
+                        }
+                        if (canRetry) {
+                            if (httpConnection != null) {
+                                try {
+                                    if (httpConnection instanceof HttpURLConnection) {
+                                        int code = ((HttpURLConnection) httpConnection).getResponseCode();
+                                        if (code != 200) {
+                                            if (code != 202) {
+                                            }
+                                        }
+                                    }
+                                } catch (Throwable e22) {
+                                    FileLog.m3e(e22);
+                                }
+                            }
+                            if (httpConnectionStream != null) {
+                                try {
+                                    byte[] data = new byte[32768];
+                                    StringBuilder result2 = null;
                                     while (!isCancelled()) {
-                                        read = inputStream.read(str22);
-                                        if (read <= 0) {
-                                            if (stringBuilder == null) {
-                                                stringBuilder = new StringBuilder();
+                                        try {
+                                            try {
+                                                int read = httpConnectionStream.read(data);
+                                                if (read > 0) {
+                                                    if (result2 == null) {
+                                                        result = new StringBuilder();
+                                                    } else {
+                                                        result = result2;
+                                                    }
+                                                    try {
+                                                        result.append(new String(data, 0, read, C0542C.UTF8_NAME));
+                                                        result2 = result;
+                                                    } catch (Exception e3) {
+                                                        e22 = e3;
+                                                    }
+                                                } else if (read == -1) {
+                                                    done = true;
+                                                    result = result2;
+                                                } else {
+                                                    result = result2;
+                                                }
+                                            } catch (Exception e4) {
+                                                e22 = e4;
+                                                result = result2;
                                             }
-                                            stringBuilder.append(new String(str22, 0, read, C0542C.UTF8_NAME));
-                                        } else if (read == -1) {
-                                            i = 1;
+                                        } catch (Throwable th) {
+                                            e22 = th;
+                                            result = result2;
                                         }
                                     }
-                                }
-                                if (inputStream != null) {
-                                    inputStream.close();
-                                }
-                            }
-                            if (i != 0) {
-                                return null;
-                            }
-                            return stringBuilder.toString();
-                        }
-                        if (z) {
-                            if (str22 != null) {
-                                if ((str22 instanceof HttpURLConnection) && ((HttpURLConnection) str22).getResponseCode() != 200) {
-                                }
-                            }
-                            if (inputStream == null) {
-                                str22 = new byte[32768];
-                                stringBuilder = null;
-                                while (!isCancelled()) {
-                                    read = inputStream.read(str22);
-                                    if (read <= 0) {
-                                        if (stringBuilder == null) {
-                                            stringBuilder = new StringBuilder();
+                                    result = result2;
+                                } catch (Throwable th2) {
+                                    e22 = th2;
+                                    FileLog.m3e(e22);
+                                    if (httpConnectionStream != null) {
+                                        try {
+                                            httpConnectionStream.close();
+                                        } catch (Throwable e222) {
+                                            FileLog.m3e(e222);
                                         }
-                                        stringBuilder.append(new String(str22, 0, read, C0542C.UTF8_NAME));
-                                    } else if (read == -1) {
-                                        i = 1;
                                     }
+                                    if (done) {
+                                        return null;
+                                    }
+                                    return result.toString();
                                 }
-                            } else {
-                                stringBuilder = null;
                             }
-                            if (inputStream != null) {
-                                inputStream.close();
+                            if (httpConnectionStream != null) {
+                                httpConnectionStream.close();
                             }
-                        } else {
-                            stringBuilder = null;
                         }
-                        if (i != 0) {
-                            return stringBuilder.toString();
+                        if (done) {
+                            return result.toString();
+                        }
+                        return null;
+                        FileLog.m3e(e222);
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
+                        }
+                        if (done) {
+                            return result.toString();
                         }
                         return null;
                     }
 
-                    protected JSONObject doInBackground(Void... voidArr) {
-                        voidArr = downloadUrlContent(str);
+                    protected JSONObject doInBackground(Void... voids) {
+                        String code = downloadUrlContent(url);
                         if (isCancelled()) {
                             return null;
                         }
                         try {
-                            return new JSONObject(voidArr);
+                            return new JSONObject(code);
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                             return null;
                         }
                     }
 
-                    protected void onPostExecute(JSONObject jSONObject) {
-                        if (jSONObject != null) {
+                    protected void onPostExecute(JSONObject response) {
+                        if (response != null) {
                             try {
                                 BaseLocationAdapter.this.places.clear();
                                 BaseLocationAdapter.this.iconUrls.clear();
-                                jSONObject = jSONObject.getJSONObject("response").getJSONArray("venues");
-                                for (int i = 0; i < jSONObject.length(); i++) {
+                                JSONArray result = response.getJSONObject("response").getJSONArray("venues");
+                                for (int a = 0; a < result.length(); a++) {
                                     try {
-                                        JSONObject jSONObject2;
-                                        JSONObject jSONObject3 = jSONObject.getJSONObject(i);
-                                        Object obj = null;
-                                        if (jSONObject3.has("categories")) {
-                                            JSONArray jSONArray = jSONObject3.getJSONArray("categories");
-                                            if (jSONArray.length() > 0) {
-                                                JSONObject jSONObject4 = jSONArray.getJSONObject(0);
-                                                if (jSONObject4.has("icon")) {
-                                                    jSONObject2 = jSONObject4.getJSONObject("icon");
-                                                    obj = String.format(Locale.US, "%s64%s", new Object[]{jSONObject2.getString("prefix"), jSONObject2.getString("suffix")});
+                                        JSONObject object = result.getJSONObject(a);
+                                        String iconUrl = null;
+                                        if (object.has("categories")) {
+                                            JSONArray categories = object.getJSONArray("categories");
+                                            if (categories.length() > 0) {
+                                                JSONObject category = categories.getJSONObject(0);
+                                                if (category.has("icon")) {
+                                                    JSONObject icon = category.getJSONObject("icon");
+                                                    iconUrl = String.format(Locale.US, "%s64%s", new Object[]{icon.getString("prefix"), icon.getString("suffix")});
                                                 }
                                             }
                                         }
-                                        BaseLocationAdapter.this.iconUrls.add(obj);
-                                        jSONObject2 = jSONObject3.getJSONObject("location");
-                                        TL_messageMediaVenue tL_messageMediaVenue = new TL_messageMediaVenue();
-                                        tL_messageMediaVenue.geo = new TL_geoPoint();
-                                        tL_messageMediaVenue.geo.lat = jSONObject2.getDouble("lat");
-                                        tL_messageMediaVenue.geo._long = jSONObject2.getDouble("lng");
-                                        if (jSONObject2.has("address")) {
-                                            tL_messageMediaVenue.address = jSONObject2.getString("address");
-                                        } else if (jSONObject2.has("city")) {
-                                            tL_messageMediaVenue.address = jSONObject2.getString("city");
-                                        } else if (jSONObject2.has("state")) {
-                                            tL_messageMediaVenue.address = jSONObject2.getString("state");
-                                        } else if (jSONObject2.has("country")) {
-                                            tL_messageMediaVenue.address = jSONObject2.getString("country");
+                                        BaseLocationAdapter.this.iconUrls.add(iconUrl);
+                                        JSONObject location = object.getJSONObject("location");
+                                        TL_messageMediaVenue venue = new TL_messageMediaVenue();
+                                        venue.geo = new TL_geoPoint();
+                                        venue.geo.lat = location.getDouble("lat");
+                                        venue.geo._long = location.getDouble("lng");
+                                        if (location.has("address")) {
+                                            venue.address = location.getString("address");
+                                        } else if (location.has("city")) {
+                                            venue.address = location.getString("city");
+                                        } else if (location.has("state")) {
+                                            venue.address = location.getString("state");
+                                        } else if (location.has("country")) {
+                                            venue.address = location.getString("country");
                                         } else {
-                                            tL_messageMediaVenue.address = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(tL_messageMediaVenue.geo.lat), Double.valueOf(tL_messageMediaVenue.geo._long)});
+                                            venue.address = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(venue.geo.lat), Double.valueOf(venue.geo._long)});
                                         }
-                                        if (jSONObject3.has("name")) {
-                                            tL_messageMediaVenue.title = jSONObject3.getString("name");
+                                        if (object.has("name")) {
+                                            venue.title = object.getString("name");
                                         }
-                                        tL_messageMediaVenue.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
-                                        tL_messageMediaVenue.venue_id = jSONObject3.getString(TtmlNode.ATTR_ID);
-                                        tL_messageMediaVenue.provider = "foursquare";
-                                        BaseLocationAdapter.this.places.add(tL_messageMediaVenue);
+                                        venue.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
+                                        venue.venue_id = object.getString(TtmlNode.ATTR_ID);
+                                        venue.provider = "foursquare";
+                                        BaseLocationAdapter.this.places.add(venue);
                                     } catch (Throwable e) {
                                         FileLog.m3e(e);
                                     }

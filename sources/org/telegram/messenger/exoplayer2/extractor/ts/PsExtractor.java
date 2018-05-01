@@ -36,6 +36,16 @@ public final class PsExtractor implements Extractor {
     private final SparseArray<PesReader> psPayloadReaders;
     private final TimestampAdjuster timestampAdjuster;
 
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
+    static class C18451 implements ExtractorsFactory {
+        C18451() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new PsExtractor()};
+        }
+    }
+
     private static final class PesReader {
         private static final int PES_SCRATCH_SIZE = 64;
         private boolean dtsFlag;
@@ -47,8 +57,8 @@ public final class PsExtractor implements Extractor {
         private long timeUs;
         private final TimestampAdjuster timestampAdjuster;
 
-        public PesReader(ElementaryStreamReader elementaryStreamReader, TimestampAdjuster timestampAdjuster) {
-            this.pesPayloadReader = elementaryStreamReader;
+        public PesReader(ElementaryStreamReader pesPayloadReader, TimestampAdjuster timestampAdjuster) {
+            this.pesPayloadReader = pesPayloadReader;
             this.timestampAdjuster = timestampAdjuster;
         }
 
@@ -57,15 +67,15 @@ public final class PsExtractor implements Extractor {
             this.pesPayloadReader.seek();
         }
 
-        public void consume(ParsableByteArray parsableByteArray) throws ParserException {
-            parsableByteArray.readBytes(this.pesScratch.data, 0, 3);
+        public void consume(ParsableByteArray data) throws ParserException {
+            data.readBytes(this.pesScratch.data, 0, 3);
             this.pesScratch.setPosition(0);
             parseHeader();
-            parsableByteArray.readBytes(this.pesScratch.data, 0, this.extendedHeaderLength);
+            data.readBytes(this.pesScratch.data, 0, this.extendedHeaderLength);
             this.pesScratch.setPosition(0);
             parseHeaderExtension();
             this.pesPayloadReader.packetStarted(this.timeUs, true);
-            this.pesPayloadReader.consume(parsableByteArray);
+            this.pesPayloadReader.consume(data);
             this.pesPayloadReader.packetFinished();
         }
 
@@ -81,39 +91,26 @@ public final class PsExtractor implements Extractor {
             this.timeUs = 0;
             if (this.ptsFlag) {
                 this.pesScratch.skipBits(4);
-                long readBits = ((long) this.pesScratch.readBits(3)) << 30;
+                long pts = ((long) this.pesScratch.readBits(3)) << 30;
                 this.pesScratch.skipBits(1);
-                long readBits2 = readBits | ((long) (this.pesScratch.readBits(15) << 15));
+                pts |= (long) (this.pesScratch.readBits(15) << 15);
                 this.pesScratch.skipBits(1);
-                long readBits3 = readBits2 | ((long) this.pesScratch.readBits(15));
+                pts |= (long) this.pesScratch.readBits(15);
                 this.pesScratch.skipBits(1);
                 if (!this.seenFirstDts && this.dtsFlag) {
                     this.pesScratch.skipBits(4);
-                    long readBits4 = ((long) this.pesScratch.readBits(3)) << 30;
+                    long dts = ((long) this.pesScratch.readBits(3)) << 30;
                     this.pesScratch.skipBits(1);
-                    long readBits5 = readBits4 | ((long) (this.pesScratch.readBits(15) << 15));
+                    dts |= (long) (this.pesScratch.readBits(15) << 15);
                     this.pesScratch.skipBits(1);
-                    long readBits6 = readBits5 | ((long) this.pesScratch.readBits(15));
+                    dts |= (long) this.pesScratch.readBits(15);
                     this.pesScratch.skipBits(1);
-                    this.timestampAdjuster.adjustTsTimestamp(readBits6);
+                    this.timestampAdjuster.adjustTsTimestamp(dts);
                     this.seenFirstDts = true;
                 }
-                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(readBits3);
+                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts);
             }
         }
-    }
-
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
-    static class C18451 implements ExtractorsFactory {
-        C18451() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new PsExtractor()};
-        }
-    }
-
-    public void release() {
     }
 
     public PsExtractor() {
@@ -126,92 +123,95 @@ public final class PsExtractor implements Extractor {
         this.psPayloadReaders = new SparseArray();
     }
 
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        byte[] bArr = new byte[14];
-        boolean z = false;
-        extractorInput.peekFully(bArr, 0, 14);
-        if (PACK_START_CODE != (((((bArr[0] & 255) << 24) | ((bArr[1] & 255) << 16)) | ((bArr[2] & 255) << 8)) | (bArr[3] & 255)) || (bArr[4] & 196) != 68 || (bArr[6] & 4) != 4 || (bArr[8] & 4) != 4 || (bArr[9] & 1) != 1 || (bArr[12] & 3) != 3) {
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        boolean z = true;
+        byte[] scratch = new byte[14];
+        input.peekFully(scratch, 0, 14);
+        if (PACK_START_CODE != (((((scratch[0] & 255) << 24) | ((scratch[1] & 255) << 16)) | ((scratch[2] & 255) << 8)) | (scratch[3] & 255)) || (scratch[4] & 196) != 68 || (scratch[6] & 4) != 4 || (scratch[8] & 4) != 4 || (scratch[9] & 1) != 1 || (scratch[12] & 3) != 3) {
             return false;
         }
-        extractorInput.advancePeekPosition(bArr[13] & 7);
-        extractorInput.peekFully(bArr, 0, 3);
-        if (1 == ((((bArr[0] & 255) << 16) | ((bArr[1] & 255) << 8)) | (bArr[2] & 255))) {
-            z = true;
+        input.advancePeekPosition(scratch[13] & 7);
+        input.peekFully(scratch, 0, 3);
+        if (1 != ((((scratch[0] & 255) << 16) | ((scratch[1] & 255) << 8)) | (scratch[2] & 255))) {
+            z = false;
         }
         return z;
     }
 
-    public void init(ExtractorOutput extractorOutput) {
-        this.output = extractorOutput;
-        extractorOutput.seekMap(new Unseekable(C0542C.TIME_UNSET));
+    public void init(ExtractorOutput output) {
+        this.output = output;
+        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
     }
 
-    public void seek(long j, long j2) {
+    public void seek(long position, long timeUs) {
         this.timestampAdjuster.reset();
-        for (j = null; j < this.psPayloadReaders.size(); j++) {
-            ((PesReader) this.psPayloadReaders.valueAt(j)).seek();
+        for (int i = 0; i < this.psPayloadReaders.size(); i++) {
+            ((PesReader) this.psPayloadReaders.valueAt(i)).seek();
         }
     }
 
-    public int read(ExtractorInput extractorInput, PositionHolder positionHolder) throws IOException, InterruptedException {
-        if (extractorInput.peekFully(this.psPacketBuffer.data, 0, 4, true) == null) {
+    public void release() {
+    }
+
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
+        if (!input.peekFully(this.psPacketBuffer.data, 0, 4, true)) {
             return -1;
         }
         this.psPacketBuffer.setPosition(0);
-        positionHolder = this.psPacketBuffer.readInt();
-        if (positionHolder == MPEG_PROGRAM_END_CODE) {
+        int nextStartCode = this.psPacketBuffer.readInt();
+        if (nextStartCode == MPEG_PROGRAM_END_CODE) {
             return -1;
         }
-        if (positionHolder == PACK_START_CODE) {
-            extractorInput.peekFully(this.psPacketBuffer.data, 0, 10);
+        if (nextStartCode == PACK_START_CODE) {
+            input.peekFully(this.psPacketBuffer.data, 0, 10);
             this.psPacketBuffer.setPosition(9);
-            extractorInput.skipFully((this.psPacketBuffer.readUnsignedByte() & 7) + 14);
+            input.skipFully((this.psPacketBuffer.readUnsignedByte() & 7) + 14);
             return 0;
-        } else if (positionHolder == SYSTEM_HEADER_START_CODE) {
-            extractorInput.peekFully(this.psPacketBuffer.data, 0, 2);
+        } else if (nextStartCode == SYSTEM_HEADER_START_CODE) {
+            input.peekFully(this.psPacketBuffer.data, 0, 2);
             this.psPacketBuffer.setPosition(0);
-            extractorInput.skipFully(this.psPacketBuffer.readUnsignedShort() + 6);
+            input.skipFully(this.psPacketBuffer.readUnsignedShort() + 6);
             return 0;
-        } else if (((positionHolder & -256) >> 8) != 1) {
-            extractorInput.skipFully(1);
+        } else if (((nextStartCode & -256) >> 8) != 1) {
+            input.skipFully(1);
             return 0;
         } else {
-            positionHolder &= 255;
-            PesReader pesReader = (PesReader) this.psPayloadReaders.get(positionHolder);
+            int streamId = nextStartCode & 255;
+            PesReader payloadReader = (PesReader) this.psPayloadReaders.get(streamId);
             if (!this.foundAllTracks) {
-                if (pesReader == null) {
+                if (payloadReader == null) {
                     ElementaryStreamReader elementaryStreamReader = null;
-                    if (!this.foundAudioTrack && positionHolder == 189) {
+                    if (!this.foundAudioTrack && streamId == PRIVATE_STREAM_1) {
                         elementaryStreamReader = new Ac3Reader();
                         this.foundAudioTrack = true;
-                    } else if (!this.foundAudioTrack && (positionHolder & 224) == AUDIO_STREAM) {
+                    } else if (!this.foundAudioTrack && (streamId & 224) == AUDIO_STREAM) {
                         elementaryStreamReader = new MpegAudioReader();
                         this.foundAudioTrack = true;
-                    } else if (!this.foundVideoTrack && (positionHolder & VIDEO_STREAM_MASK) == 224) {
+                    } else if (!this.foundVideoTrack && (streamId & VIDEO_STREAM_MASK) == 224) {
                         elementaryStreamReader = new H262Reader();
                         this.foundVideoTrack = true;
                     }
                     if (elementaryStreamReader != null) {
-                        elementaryStreamReader.createTracks(this.output, new TrackIdGenerator(positionHolder, 256));
-                        pesReader = new PesReader(elementaryStreamReader, this.timestampAdjuster);
-                        this.psPayloadReaders.put(positionHolder, pesReader);
+                        elementaryStreamReader.createTracks(this.output, new TrackIdGenerator(streamId, 256));
+                        payloadReader = new PesReader(elementaryStreamReader, this.timestampAdjuster);
+                        this.psPayloadReaders.put(streamId, payloadReader);
                     }
                 }
-                if (!(this.foundAudioTrack == null || this.foundVideoTrack == null) || extractorInput.getPosition() > MAX_SEARCH_LENGTH) {
+                if ((this.foundAudioTrack && this.foundVideoTrack) || input.getPosition() > MAX_SEARCH_LENGTH) {
                     this.foundAllTracks = true;
                     this.output.endTracks();
                 }
             }
-            extractorInput.peekFully(this.psPacketBuffer.data, 0, 2);
+            input.peekFully(this.psPacketBuffer.data, 0, 2);
             this.psPacketBuffer.setPosition(0);
-            positionHolder = this.psPacketBuffer.readUnsignedShort() + 6;
-            if (pesReader == null) {
-                extractorInput.skipFully(positionHolder);
+            int pesLength = this.psPacketBuffer.readUnsignedShort() + 6;
+            if (payloadReader == null) {
+                input.skipFully(pesLength);
             } else {
-                this.psPacketBuffer.reset(positionHolder);
-                extractorInput.readFully(this.psPacketBuffer.data, 0, positionHolder);
+                this.psPacketBuffer.reset(pesLength);
+                input.readFully(this.psPacketBuffer.data, 0, pesLength);
                 this.psPacketBuffer.setPosition(6);
-                pesReader.consume(this.psPacketBuffer);
+                payloadReader.consume(this.psPacketBuffer);
                 this.psPacketBuffer.setLimit(this.psPacketBuffer.capacity());
             }
             return 0;

@@ -15,35 +15,35 @@ public abstract class ForwardingTimeline extends Timeline {
         return this.timeline.getWindowCount();
     }
 
-    public int getNextWindowIndex(int i, int i2, boolean z) {
-        return this.timeline.getNextWindowIndex(i, i2, z);
+    public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+        return this.timeline.getNextWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
     }
 
-    public int getPreviousWindowIndex(int i, int i2, boolean z) {
-        return this.timeline.getPreviousWindowIndex(i, i2, z);
+    public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+        return this.timeline.getPreviousWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
     }
 
-    public int getLastWindowIndex(boolean z) {
-        return this.timeline.getLastWindowIndex(z);
+    public int getLastWindowIndex(boolean shuffleModeEnabled) {
+        return this.timeline.getLastWindowIndex(shuffleModeEnabled);
     }
 
-    public int getFirstWindowIndex(boolean z) {
-        return this.timeline.getFirstWindowIndex(z);
+    public int getFirstWindowIndex(boolean shuffleModeEnabled) {
+        return this.timeline.getFirstWindowIndex(shuffleModeEnabled);
     }
 
-    public Window getWindow(int i, Window window, boolean z, long j) {
-        return this.timeline.getWindow(i, window, z, j);
+    public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+        return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
     }
 
     public int getPeriodCount() {
         return this.timeline.getPeriodCount();
     }
 
-    public Period getPeriod(int i, Period period, boolean z) {
-        return this.timeline.getPeriod(i, period, z);
+    public Period getPeriod(int periodIndex, Period period, boolean setIds) {
+        return this.timeline.getPeriod(periodIndex, period, setIds);
     }
 
-    public int getIndexOfPeriod(Object obj) {
-        return this.timeline.getIndexOfPeriod(obj);
+    public int getIndexOfPeriod(Object uid) {
+        return this.timeline.getIndexOfPeriod(uid);
     }
 }

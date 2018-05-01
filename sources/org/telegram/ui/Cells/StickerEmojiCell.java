@@ -48,45 +48,39 @@ public class StickerEmojiCell extends FrameLayout {
         return this.recent;
     }
 
-    public void setRecent(boolean z) {
-        this.recent = z;
+    public void setRecent(boolean value) {
+        this.recent = value;
     }
 
-    public void setSticker(Document document, boolean z) {
+    public void setSticker(Document document, boolean showEmoji) {
         if (document != null) {
             this.sticker = document;
             if (document.thumb != null) {
                 this.imageView.setImage(document.thumb.location, null, "webp", null);
             }
-            if (z) {
-                for (int i = 0; i < document.attributes.size(); i++) {
-                    DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i);
-                    if (documentAttribute instanceof TL_documentAttributeSticker) {
-                        if (documentAttribute.alt != null && documentAttribute.alt.length() > null) {
-                            this.emojiTextView.setText(Emoji.replaceEmoji(documentAttribute.alt, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
-                            document = true;
-                            if (document == null) {
-                                this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
-                            }
-                            this.emojiTextView.setVisibility(0);
-                            return;
+            if (showEmoji) {
+                boolean set = false;
+                for (int a = 0; a < document.attributes.size(); a++) {
+                    DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                    if (attribute instanceof TL_documentAttributeSticker) {
+                        if (attribute.alt != null && attribute.alt.length() > 0) {
+                            this.emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                            set = true;
                         }
-                        document = null;
-                        if (document == null) {
+                        if (!set) {
                             this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                         }
                         this.emojiTextView.setVisibility(0);
                         return;
                     }
                 }
-                document = null;
-                if (document == null) {
+                if (set) {
                     this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                 }
                 this.emojiTextView.setVisibility(0);
                 return;
             }
-            this.emojiTextView.setVisibility(true);
+            this.emojiTextView.setVisibility(4);
         }
     }
 
@@ -100,8 +94,8 @@ public class StickerEmojiCell extends FrameLayout {
         invalidate();
     }
 
-    public void setScaled(boolean z) {
-        this.scaled = z;
+    public void setScaled(boolean value) {
+        this.scaled = value;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -119,31 +113,31 @@ public class StickerEmojiCell extends FrameLayout {
         super.invalidate();
     }
 
-    protected boolean drawChild(Canvas canvas, View view, long j) {
-        canvas = super.drawChild(canvas, view, j);
-        if (view == this.imageView && (this.changingAlpha != null || (!(this.scaled == null || this.scale == NUM) || (this.scaled == null && this.scale != NUM)))) {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j2 = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
-            if (this.changingAlpha != null) {
-                this.time += j2;
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)))) {
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastUpdateTime;
+            this.lastUpdateTime = newTime;
+            if (this.changingAlpha) {
+                this.time += dt;
                 if (this.time > 1050) {
                     this.time = 1050;
                 }
-                this.alpha = NUM + (interpolator.getInterpolation(((float) this.time) / 1050.0f) * NUM);
-                if (this.alpha >= NUM) {
-                    this.changingAlpha = null;
+                this.alpha = 0.5f + (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f);
+                if (this.alpha >= 1.0f) {
+                    this.changingAlpha = false;
                     this.alpha = 1.0f;
                 }
                 this.imageView.getImageReceiver().setAlpha(this.alpha);
-            } else if (this.scaled == null || this.scale == NUM) {
-                this.scale += ((float) j2) / NUM;
-                if (this.scale > NUM) {
+            } else if (!this.scaled || this.scale == 0.8f) {
+                this.scale += ((float) dt) / 400.0f;
+                if (this.scale > 1.0f) {
                     this.scale = 1.0f;
                 }
             } else {
-                this.scale -= ((float) j2) / 400.0f;
-                if (this.scale < NUM) {
+                this.scale -= ((float) dt) / 400.0f;
+                if (this.scale < 0.8f) {
                     this.scale = 0.8f;
                 }
             }
@@ -152,6 +146,6 @@ public class StickerEmojiCell extends FrameLayout {
             this.imageView.invalidate();
             invalidate();
         }
-        return canvas;
+        return result;
     }
 }

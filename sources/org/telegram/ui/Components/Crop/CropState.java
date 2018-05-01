@@ -33,10 +33,10 @@ public class CropState {
         return this.height;
     }
 
-    public void translate(float f, float f2) {
-        this.f11x += f;
-        this.f12y += f2;
-        this.matrix.postTranslate(f, f2);
+    public void translate(float x, float y) {
+        this.f11x += x;
+        this.f12y += y;
+        this.matrix.postTranslate(x, y);
     }
 
     public float getX() {
@@ -53,41 +53,41 @@ public class CropState {
         return fArr[5];
     }
 
-    public void scale(float f, float f2, float f3) {
-        this.scale *= f;
-        this.matrix.postScale(f, f, f2, f3);
+    public void scale(float s, float pivotX, float pivotY) {
+        this.scale *= s;
+        this.matrix.postScale(s, s, pivotX, pivotY);
     }
 
     public float getScale() {
         return this.scale;
     }
 
-    public void rotate(float f, float f2, float f3) {
-        this.rotation += f;
-        this.matrix.postRotate(f, f2, f3);
+    public void rotate(float angle, float pivotX, float pivotY) {
+        this.rotation += angle;
+        this.matrix.postRotate(angle, pivotX, pivotY);
     }
 
     public float getRotation() {
         return this.rotation;
     }
 
-    public void reset(CropAreaView cropAreaView) {
+    public void reset(CropAreaView areaView) {
         this.matrix.reset();
         this.f11x = 0.0f;
         this.f12y = 0.0f;
         this.rotation = 0.0f;
-        this.minimumScale = cropAreaView.getCropWidth() / this.width;
+        this.minimumScale = areaView.getCropWidth() / this.width;
         this.scale = this.minimumScale;
         this.matrix.postScale(this.scale, this.scale);
     }
 
-    public void getConcatMatrix(Matrix matrix) {
-        matrix.postConcat(this.matrix);
+    public void getConcatMatrix(Matrix toMatrix) {
+        toMatrix.postConcat(this.matrix);
     }
 
     public Matrix getMatrix() {
-        Matrix matrix = new Matrix();
-        matrix.set(this.matrix);
-        return matrix;
+        Matrix m = new Matrix();
+        m.set(this.matrix);
+        return m;
     }
 }

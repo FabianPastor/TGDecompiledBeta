@@ -6,8 +6,8 @@ import org.telegram.messenger.exoplayer2.ParserException;
 public class UnrecognizedInputFormatException extends ParserException {
     public final Uri uri;
 
-    public UnrecognizedInputFormatException(String str, Uri uri) {
-        super(str);
+    public UnrecognizedInputFormatException(String message, Uri uri) {
+        super(message);
         this.uri = uri;
     }
 }

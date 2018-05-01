@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -47,17 +48,17 @@ public class CheckBox extends View {
         C11161() {
         }
 
-        public void onAnimationEnd(Animator animator) {
-            if (animator.equals(CheckBox.this.checkAnimator) != null) {
+        public void onAnimationEnd(Animator animation) {
+            if (animation.equals(CheckBox.this.checkAnimator)) {
                 CheckBox.this.checkAnimator = null;
             }
-            if (CheckBox.this.isChecked == null) {
+            if (!CheckBox.this.isChecked) {
                 CheckBox.this.checkedText = null;
             }
         }
     }
 
-    public CheckBox(Context context, int i) {
+    public CheckBox(Context context, int resId) {
         super(context);
         if (paint == null) {
             paint = new Paint(1);
@@ -77,77 +78,45 @@ public class CheckBox extends View {
         this.textPaint = new TextPaint(1);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.checkDrawable = context.getResources().getDrawable(i).mutate();
+        this.checkDrawable = context.getResources().getDrawable(resId).mutate();
     }
 
-    public void setVisibility(int r3) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        super.setVisibility(r3);
-        if (r3 != 0) goto L_0x0047;
-    L_0x0005:
-        r3 = r2.drawBitmap;
-        if (r3 != 0) goto L_0x0047;
-    L_0x0009:
-        r3 = r2.size;	 Catch:{ Throwable -> 0x0047 }
-        r3 = (float) r3;	 Catch:{ Throwable -> 0x0047 }
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Throwable -> 0x0047 }
-        r0 = r2.size;	 Catch:{ Throwable -> 0x0047 }
-        r0 = (float) r0;	 Catch:{ Throwable -> 0x0047 }
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Throwable -> 0x0047 }
-        r1 = android.graphics.Bitmap.Config.ARGB_4444;	 Catch:{ Throwable -> 0x0047 }
-        r3 = android.graphics.Bitmap.createBitmap(r3, r0, r1);	 Catch:{ Throwable -> 0x0047 }
-        r2.drawBitmap = r3;	 Catch:{ Throwable -> 0x0047 }
-        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0047 }
-        r0 = r2.drawBitmap;	 Catch:{ Throwable -> 0x0047 }
-        r3.<init>(r0);	 Catch:{ Throwable -> 0x0047 }
-        r2.bitmapCanvas = r3;	 Catch:{ Throwable -> 0x0047 }
-        r3 = r2.size;	 Catch:{ Throwable -> 0x0047 }
-        r3 = (float) r3;	 Catch:{ Throwable -> 0x0047 }
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Throwable -> 0x0047 }
-        r0 = r2.size;	 Catch:{ Throwable -> 0x0047 }
-        r0 = (float) r0;	 Catch:{ Throwable -> 0x0047 }
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Throwable -> 0x0047 }
-        r1 = android.graphics.Bitmap.Config.ARGB_4444;	 Catch:{ Throwable -> 0x0047 }
-        r3 = android.graphics.Bitmap.createBitmap(r3, r0, r1);	 Catch:{ Throwable -> 0x0047 }
-        r2.checkBitmap = r3;	 Catch:{ Throwable -> 0x0047 }
-        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0047 }
-        r0 = r2.checkBitmap;	 Catch:{ Throwable -> 0x0047 }
-        r3.<init>(r0);	 Catch:{ Throwable -> 0x0047 }
-        r2.checkCanvas = r3;	 Catch:{ Throwable -> 0x0047 }
-    L_0x0047:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.CheckBox.setVisibility(int):void");
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if (visibility == 0 && this.drawBitmap == null) {
+            try {
+                this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
+                this.bitmapCanvas = new Canvas(this.drawBitmap);
+                this.checkBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
+                this.checkCanvas = new Canvas(this.checkBitmap);
+            } catch (Throwable th) {
+            }
+        }
     }
 
     @Keep
-    public void setProgress(float f) {
-        if (this.progress != f) {
-            this.progress = f;
+    public void setProgress(float value) {
+        if (this.progress != value) {
+            this.progress = value;
             invalidate();
         }
     }
 
-    public void setDrawBackground(boolean z) {
-        this.drawBackground = z;
+    public void setDrawBackground(boolean value) {
+        this.drawBackground = value;
     }
 
-    public void setHasBorder(boolean z) {
-        this.hasBorder = z;
+    public void setHasBorder(boolean value) {
+        this.hasBorder = value;
     }
 
-    public void setCheckOffset(int i) {
-        this.checkOffset = i;
+    public void setCheckOffset(int value) {
+        this.checkOffset = value;
     }
 
-    public void setSize(int i) {
-        this.size = i;
-        if (i == 40) {
+    public void setSize(int size) {
+        this.size = size;
+        if (size == 40) {
             this.textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
         }
     }
@@ -156,21 +125,21 @@ Error: java.lang.NullPointerException
         return this.progress;
     }
 
-    public void setColor(int i, int i2) {
-        this.color = i;
-        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i2, Mode.MULTIPLY));
-        this.textPaint.setColor(i2);
+    public void setColor(int backgroundColor, int checkColor) {
+        this.color = backgroundColor;
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
+        this.textPaint.setColor(checkColor);
         invalidate();
     }
 
-    public void setBackgroundColor(int i) {
-        this.color = i;
+    public void setBackgroundColor(int backgroundColor) {
+        this.color = backgroundColor;
         invalidate();
     }
 
-    public void setCheckColor(int i) {
-        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
-        this.textPaint.setColor(i);
+    public void setCheckColor(int checkColor) {
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
+        this.textPaint.setColor(checkColor);
         invalidate();
     }
 
@@ -181,11 +150,11 @@ Error: java.lang.NullPointerException
         }
     }
 
-    private void animateToCheckedState(boolean z) {
-        this.isCheckAnimation = z;
+    private void animateToCheckedState(boolean newCheckedState) {
+        this.isCheckAnimation = newCheckedState;
         String str = "progress";
         float[] fArr = new float[1];
-        fArr[0] = z ? true : false;
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.addListener(new C11161());
         this.checkAnimator.setDuration(300);
@@ -202,42 +171,36 @@ Error: java.lang.NullPointerException
         this.attachedToWindow = false;
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        setChecked(-1, z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        setChecked(-1, checked, animated);
     }
 
-    public void setNum(int i) {
-        if (i >= 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-            stringBuilder.append(i + 1);
-            this.checkedText = stringBuilder.toString();
-        } else if (this.checkAnimator == 0) {
-            this.checkedText = 0;
+    public void setNum(int num) {
+        if (num >= 0) {
+            this.checkedText = TtmlNode.ANONYMOUS_REGION_ID + (num + 1);
+        } else if (this.checkAnimator == null) {
+            this.checkedText = null;
         }
         invalidate();
     }
 
-    public void setChecked(int i, boolean z, boolean z2) {
-        if (i >= 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-            stringBuilder.append(i + 1);
-            this.checkedText = stringBuilder.toString();
+    public void setChecked(int num, boolean checked, boolean animated) {
+        if (num >= 0) {
+            this.checkedText = TtmlNode.ANONYMOUS_REGION_ID + (num + 1);
             invalidate();
         }
-        if (z != this.isChecked) {
-            this.isChecked = z;
-            if (this.attachedToWindow == 0 || !z2) {
-                cancelCheckAnimator();
-                setProgress(z ? NUM : 0);
-            } else {
-                animateToCheckedState(z);
+        if (checked != this.isChecked) {
+            this.isChecked = checked;
+            if (this.attachedToWindow && animated) {
+                animateToCheckedState(checked);
+                return;
             }
+            cancelCheckAnimator();
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -246,46 +209,44 @@ Error: java.lang.NullPointerException
     }
 
     protected void onDraw(Canvas canvas) {
-        if (getVisibility() == 0 && this.drawBitmap != null) {
-            if (this.checkBitmap != null) {
-                if (this.drawBackground || this.progress != 0.0f) {
-                    eraser2.setStrokeWidth((float) AndroidUtilities.dp((float) (this.size + 6)));
-                    this.drawBitmap.eraseColor(0);
-                    float measuredWidth = (float) (getMeasuredWidth() / 2);
-                    float f = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
-                    float f2 = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
-                    float f3 = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
-                    if (f3 < progressBounceDiff) {
-                        measuredWidth -= (((float) AndroidUtilities.dp(2.0f)) * f3) / progressBounceDiff;
-                    } else if (f3 < 0.4f) {
-                        measuredWidth -= ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (f3 - progressBounceDiff)) / progressBounceDiff);
-                    }
-                    if (this.drawBackground) {
-                        paint.setColor(NUM);
-                        canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), measuredWidth - ((float) AndroidUtilities.dp(1.0f)), paint);
-                        canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), measuredWidth - ((float) AndroidUtilities.dp(1.0f)), backgroundPaint);
-                    }
-                    paint.setColor(this.color);
-                    if (this.hasBorder) {
-                        measuredWidth -= (float) AndroidUtilities.dp(2.0f);
-                    }
-                    this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), measuredWidth, paint);
-                    this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), measuredWidth * (1.0f - f), eraser);
-                    canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
-                    this.checkBitmap.eraseColor(0);
-                    if (this.checkedText != null) {
-                        this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) this.textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.dp(this.size == 40 ? 28.0f : 21.0f), this.textPaint);
-                    } else {
-                        int intrinsicWidth = this.checkDrawable.getIntrinsicWidth();
-                        int intrinsicHeight = this.checkDrawable.getIntrinsicHeight();
-                        int measuredWidth2 = (getMeasuredWidth() - intrinsicWidth) / 2;
-                        int measuredHeight = (getMeasuredHeight() - intrinsicHeight) / 2;
-                        this.checkDrawable.setBounds(measuredWidth2, this.checkOffset + measuredHeight, intrinsicWidth + measuredWidth2, (measuredHeight + intrinsicHeight) + this.checkOffset);
-                        this.checkDrawable.draw(this.checkCanvas);
-                    }
-                    this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.dp(6.0f)) / 2)) * (1.0f - f2), eraser2);
-                    canvas.drawBitmap(this.checkBitmap, 0.0f, 0.0f, null);
+        if (getVisibility() == 0 && this.drawBitmap != null && this.checkBitmap != null) {
+            if (this.drawBackground || this.progress != 0.0f) {
+                eraser2.setStrokeWidth((float) AndroidUtilities.dp((float) (this.size + 6)));
+                this.drawBitmap.eraseColor(0);
+                float rad = (float) (getMeasuredWidth() / 2);
+                float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
+                float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
+                float roundProgressCheckState = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
+                if (roundProgressCheckState < progressBounceDiff) {
+                    rad -= (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
+                } else if (roundProgressCheckState < 0.4f) {
+                    rad -= ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (roundProgressCheckState - progressBounceDiff)) / progressBounceDiff);
                 }
+                if (this.drawBackground) {
+                    paint.setColor(NUM);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), paint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), backgroundPaint);
+                }
+                paint.setColor(this.color);
+                if (this.hasBorder) {
+                    rad -= (float) AndroidUtilities.dp(2.0f);
+                }
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (1.0f - roundProgress) * rad, eraser);
+                canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
+                this.checkBitmap.eraseColor(0);
+                if (this.checkedText != null) {
+                    this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) this.textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.dp(this.size == 40 ? 28.0f : 21.0f), this.textPaint);
+                } else {
+                    int w = this.checkDrawable.getIntrinsicWidth();
+                    int h = this.checkDrawable.getIntrinsicHeight();
+                    int x = (getMeasuredWidth() - w) / 2;
+                    int y = (getMeasuredHeight() - h) / 2;
+                    this.checkDrawable.setBounds(x, this.checkOffset + y, x + w, (y + h) + this.checkOffset);
+                    this.checkDrawable.draw(this.checkCanvas);
+                }
+                this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.dp(6.0f)) / 2)) * (1.0f - checkProgress), eraser2);
+                canvas.drawBitmap(this.checkBitmap, 0.0f, 0.0f, null);
             }
         }
     }

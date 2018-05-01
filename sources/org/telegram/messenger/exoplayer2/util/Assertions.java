@@ -7,65 +7,63 @@ public final class Assertions {
     private Assertions() {
     }
 
-    public static void checkArgument(boolean z) {
-        if (!z) {
+    public static void checkArgument(boolean expression) {
+        if (!expression) {
             throw new IllegalArgumentException();
         }
     }
 
-    public static void checkArgument(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalArgumentException(String.valueOf(obj));
+    public static void checkArgument(boolean expression, Object errorMessage) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
     }
 
-    public static int checkIndex(int i, int i2, int i3) {
-        if (i >= i2) {
-            if (i < i3) {
-                return i;
-            }
+    public static int checkIndex(int index, int start, int limit) {
+        if (index >= start && index < limit) {
+            return index;
         }
         throw new IndexOutOfBoundsException();
     }
 
-    public static void checkState(boolean z) {
-        if (!z) {
+    public static void checkState(boolean expression) {
+        if (!expression) {
             throw new IllegalStateException();
         }
     }
 
-    public static void checkState(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalStateException(String.valueOf(obj));
+    public static void checkState(boolean expression, Object errorMessage) {
+        if (!expression) {
+            throw new IllegalStateException(String.valueOf(errorMessage));
         }
     }
 
-    public static <T> T checkNotNull(T t) {
-        if (t != null) {
-            return t;
+    public static <T> T checkNotNull(T reference) {
+        if (reference != null) {
+            return reference;
         }
         throw new NullPointerException();
     }
 
-    public static <T> T checkNotNull(T t, Object obj) {
-        if (t != null) {
-            return t;
+    public static <T> T checkNotNull(T reference, Object errorMessage) {
+        if (reference != null) {
+            return reference;
         }
-        throw new NullPointerException(String.valueOf(obj));
+        throw new NullPointerException(String.valueOf(errorMessage));
     }
 
-    public static String checkNotEmpty(String str) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
+    public static String checkNotEmpty(String string) {
+        if (!TextUtils.isEmpty(string)) {
+            return string;
         }
         throw new IllegalArgumentException();
     }
 
-    public static String checkNotEmpty(String str, Object obj) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
+    public static String checkNotEmpty(String string, Object errorMessage) {
+        if (!TextUtils.isEmpty(string)) {
+            return string;
         }
-        throw new IllegalArgumentException(String.valueOf(obj));
+        throw new IllegalArgumentException(String.valueOf(errorMessage));
     }
 
     public static void checkMainThread() {

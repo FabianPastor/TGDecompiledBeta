@@ -15,68 +15,66 @@ public final class RandomTrackSelection extends BaseTrackSelection {
             this.random = new Random();
         }
 
-        public Factory(int i) {
-            this.random = new Random((long) i);
+        public Factory(int seed) {
+            this.random = new Random((long) seed);
         }
 
-        public RandomTrackSelection createTrackSelection(TrackGroup trackGroup, int... iArr) {
-            return new RandomTrackSelection(trackGroup, iArr, this.random);
+        public RandomTrackSelection createTrackSelection(TrackGroup group, int... tracks) {
+            return new RandomTrackSelection(group, tracks, this.random);
         }
     }
 
-    public Object getSelectionData() {
-        return null;
-    }
-
-    public int getSelectionReason() {
-        return 3;
-    }
-
-    public RandomTrackSelection(TrackGroup trackGroup, int... iArr) {
-        super(trackGroup, iArr);
+    public RandomTrackSelection(TrackGroup group, int... tracks) {
+        super(group, tracks);
         this.random = new Random();
         this.selectedIndex = this.random.nextInt(this.length);
     }
 
-    public RandomTrackSelection(TrackGroup trackGroup, int[] iArr, long j) {
-        this(trackGroup, iArr, new Random(j));
+    public RandomTrackSelection(TrackGroup group, int[] tracks, long seed) {
+        this(group, tracks, new Random(seed));
     }
 
-    public RandomTrackSelection(TrackGroup trackGroup, int[] iArr, Random random) {
-        super(trackGroup, iArr);
+    public RandomTrackSelection(TrackGroup group, int[] tracks, Random random) {
+        super(group, tracks);
         this.random = random;
         this.selectedIndex = random.nextInt(this.length);
     }
 
-    public void updateSelectedTrack(long j, long j2, long j3) {
-        j = SystemClock.elapsedRealtime();
-        j2 = null;
-        int i = 0;
-        j3 = i;
-        while (i < this.length) {
-            if (!isBlacklisted(i, j)) {
-                j3++;
+    public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
+        int i;
+        long nowMs = SystemClock.elapsedRealtime();
+        int nonBlacklistedFormatCount = 0;
+        for (i = 0; i < this.length; i++) {
+            if (!isBlacklisted(i, nowMs)) {
+                nonBlacklistedFormatCount++;
             }
-            i++;
         }
-        this.selectedIndex = this.random.nextInt(j3);
-        if (j3 != this.length) {
-            i = 0;
-            while (j2 < this.length) {
-                if (isBlacklisted(j2, j) == null) {
-                    int i2 = i + 1;
-                    if (this.selectedIndex == i) {
-                        this.selectedIndex = j2;
+        this.selectedIndex = this.random.nextInt(nonBlacklistedFormatCount);
+        if (nonBlacklistedFormatCount != this.length) {
+            nonBlacklistedFormatCount = 0;
+            for (i = 0; i < this.length; i++) {
+                if (!isBlacklisted(i, nowMs)) {
+                    int nonBlacklistedFormatCount2 = nonBlacklistedFormatCount + 1;
+                    if (this.selectedIndex == nonBlacklistedFormatCount) {
+                        this.selectedIndex = i;
+                        nonBlacklistedFormatCount = nonBlacklistedFormatCount2;
                         return;
                     }
-                    i = i2;
+                    nonBlacklistedFormatCount = nonBlacklistedFormatCount2;
                 }
-                j2++;
             }
         }
     }
 
     public int getSelectedIndex() {
         return this.selectedIndex;
+    }
+
+    public int getSelectionReason() {
+        return 3;
+    }
+
+    public Object getSelectionData() {
+        return null;
     }
 }

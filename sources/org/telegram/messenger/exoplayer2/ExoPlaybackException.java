@@ -16,22 +16,22 @@ public final class ExoPlaybackException extends Exception {
     public @interface Type {
     }
 
-    public static ExoPlaybackException createForRenderer(Exception exception, int i) {
-        return new ExoPlaybackException(1, null, exception, i);
+    public static ExoPlaybackException createForRenderer(Exception cause, int rendererIndex) {
+        return new ExoPlaybackException(1, null, cause, rendererIndex);
     }
 
-    public static ExoPlaybackException createForSource(IOException iOException) {
-        return new ExoPlaybackException(0, null, iOException, -1);
+    public static ExoPlaybackException createForSource(IOException cause) {
+        return new ExoPlaybackException(0, null, cause, -1);
     }
 
-    static ExoPlaybackException createForUnexpected(RuntimeException runtimeException) {
-        return new ExoPlaybackException(2, null, runtimeException, -1);
+    static ExoPlaybackException createForUnexpected(RuntimeException cause) {
+        return new ExoPlaybackException(2, null, cause, -1);
     }
 
-    private ExoPlaybackException(int i, String str, Throwable th, int i2) {
-        super(str, th);
-        this.type = i;
-        this.rendererIndex = i2;
+    private ExoPlaybackException(int type, String message, Throwable cause, int rendererIndex) {
+        super(message, cause);
+        this.type = type;
+        this.rendererIndex = rendererIndex;
     }
 
     public IOException getSourceException() {

@@ -11,35 +11,38 @@ public final class SeekParameters {
     public final long toleranceAfterUs;
     public final long toleranceBeforeUs;
 
-    public SeekParameters(long j, long j2) {
-        boolean z = false;
-        Assertions.checkArgument(j >= 0);
-        if (j2 >= 0) {
+    public SeekParameters(long toleranceBeforeUs, long toleranceAfterUs) {
+        boolean z;
+        boolean z2 = true;
+        if (toleranceBeforeUs >= 0) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
-        this.toleranceBeforeUs = j;
-        this.toleranceAfterUs = j2;
+        if (toleranceAfterUs < 0) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
+        this.toleranceBeforeUs = toleranceBeforeUs;
+        this.toleranceAfterUs = toleranceAfterUs;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                SeekParameters seekParameters = (SeekParameters) obj;
-                if (this.toleranceBeforeUs != seekParameters.toleranceBeforeUs || this.toleranceAfterUs != seekParameters.toleranceAfterUs) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        SeekParameters other = (SeekParameters) obj;
+        if (this.toleranceBeforeUs == other.toleranceBeforeUs && this.toleranceAfterUs == other.toleranceAfterUs) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((int) this.toleranceBeforeUs)) + ((int) this.toleranceAfterUs);
+        return (((int) this.toleranceBeforeUs) * 31) + ((int) this.toleranceAfterUs);
     }
 }

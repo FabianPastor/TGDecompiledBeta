@@ -18,18 +18,18 @@ public interface MediaSource {
         public final int adIndexInAdGroup;
         public final int periodIndex;
 
-        public MediaPeriodId(int i) {
-            this(i, -1, -1);
+        public MediaPeriodId(int periodIndex) {
+            this(periodIndex, -1, -1);
         }
 
-        public MediaPeriodId(int i, int i2, int i3) {
-            this.periodIndex = i;
-            this.adGroupIndex = i2;
-            this.adIndexInAdGroup = i3;
+        public MediaPeriodId(int periodIndex, int adGroupIndex, int adIndexInAdGroup) {
+            this.periodIndex = periodIndex;
+            this.adGroupIndex = adGroupIndex;
+            this.adIndexInAdGroup = adIndexInAdGroup;
         }
 
-        public MediaPeriodId copyWithPeriodIndex(int i) {
-            return this.periodIndex == i ? this : new MediaPeriodId(i, this.adGroupIndex, this.adIndexInAdGroup);
+        public MediaPeriodId copyWithPeriodIndex(int newPeriodIndex) {
+            return this.periodIndex == newPeriodIndex ? this : new MediaPeriodId(newPeriodIndex, this.adGroupIndex, this.adIndexInAdGroup);
         }
 
         public boolean isAd() {
@@ -37,24 +37,21 @@ public interface MediaSource {
         }
 
         public boolean equals(Object obj) {
-            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj != null) {
-                if (getClass() == obj.getClass()) {
-                    MediaPeriodId mediaPeriodId = (MediaPeriodId) obj;
-                    if (this.periodIndex != mediaPeriodId.periodIndex || this.adGroupIndex != mediaPeriodId.adGroupIndex || this.adIndexInAdGroup != mediaPeriodId.adIndexInAdGroup) {
-                        z = false;
-                    }
-                    return z;
-                }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            MediaPeriodId periodId = (MediaPeriodId) obj;
+            if (this.periodIndex == periodId.periodIndex && this.adGroupIndex == periodId.adGroupIndex && this.adIndexInAdGroup == periodId.adIndexInAdGroup) {
+                return true;
             }
             return false;
         }
 
         public int hashCode() {
-            return (31 * (((527 + this.periodIndex) * 31) + this.adGroupIndex)) + this.adIndexInAdGroup;
+            return ((((this.periodIndex + 527) * 31) + this.adGroupIndex) * 31) + this.adIndexInAdGroup;
         }
     }
 

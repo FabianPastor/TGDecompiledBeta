@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class TextColorCell extends FrameLayout {
     private TextView textView;
 
     public TextColorCell(Context context) {
+        int i;
+        int i2 = 5;
         super(context);
         if (colorPaint == null) {
             colorPaint = new Paint(1);
@@ -34,17 +37,22 @@ public class TextColorCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        int i = 3;
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        context = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
+        } else {
+            i = 3;
         }
-        addView(context, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
-    public void setAlpha(float f) {
-        this.alpha = f;
+    public void setAlpha(float value) {
+        this.alpha = value;
         invalidate();
     }
 
@@ -52,39 +60,46 @@ public class TextColorCell extends FrameLayout {
         return this.alpha;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + this.needDivider, NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
     }
 
-    public void setTextAndColor(String str, int i, boolean z) {
-        this.textView.setText(str);
-        this.needDivider = z;
-        this.currentColor = i;
-        str = (this.needDivider == null && this.currentColor == null) ? true : null;
-        setWillNotDraw(str);
+    public void setTextAndColor(String text, int color, boolean divider) {
+        this.textView.setText(text);
+        this.needDivider = divider;
+        this.currentColor = color;
+        boolean z = !this.needDivider && this.currentColor == 0;
+        setWillNotDraw(z);
         invalidate();
     }
 
-    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
-        float f = 0.5f;
-        if (arrayList != null) {
+    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+        float f = 1.0f;
+        if (animators != null) {
             TextView textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            fArr[0] = value ? 1.0f : 0.5f;
+            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             String str2 = "alpha";
             float[] fArr2 = new float[1];
-            if (z) {
-                f = 1.0f;
+            if (!value) {
+                f = 0.5f;
             }
             fArr2[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(this, str2, fArr2));
+            animators.add(ObjectAnimator.ofFloat(this, str2, fArr2));
             return;
         }
-        this.textView.setAlpha(z ? 1.0f : 0.5f);
-        if (z) {
-            f = 1.0f;
+        float f2;
+        textView = this.textView;
+        if (value) {
+            f2 = 1.0f;
+        } else {
+            f2 = 0.5f;
+        }
+        textView.setAlpha(f2);
+        if (!value) {
+            f = 0.5f;
         }
         setAlpha(f);
     }
@@ -96,7 +111,7 @@ public class TextColorCell extends FrameLayout {
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);
             colorPaint.setAlpha((int) (255.0f * this.alpha));
-            canvas.drawCircle((float) (LocaleController.isRTL ? AndroidUtilities.dp(29.0f) : getMeasuredWidth() - AndroidUtilities.dp(29.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
+            canvas.drawCircle(LocaleController.isRTL ? (float) AndroidUtilities.dp(29.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(29.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
         }
     }
 }

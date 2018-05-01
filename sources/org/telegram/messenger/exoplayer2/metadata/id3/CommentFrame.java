@@ -16,58 +16,67 @@ public final class CommentFrame extends Id3Frame {
         C05831() {
         }
 
-        public CommentFrame createFromParcel(Parcel parcel) {
-            return new CommentFrame(parcel);
+        public CommentFrame createFromParcel(Parcel in) {
+            return new CommentFrame(in);
         }
 
-        public CommentFrame[] newArray(int i) {
-            return new CommentFrame[i];
+        public CommentFrame[] newArray(int size) {
+            return new CommentFrame[size];
         }
     }
 
-    public CommentFrame(String str, String str2, String str3) {
+    public CommentFrame(String language, String description, String text) {
         super(ID);
-        this.language = str;
-        this.description = str2;
-        this.text = str3;
+        this.language = language;
+        this.description = description;
+        this.text = text;
     }
 
-    CommentFrame(Parcel parcel) {
+    CommentFrame(Parcel in) {
         super(ID);
-        this.language = parcel.readString();
-        this.description = parcel.readString();
-        this.text = parcel.readString();
+        this.language = in.readString();
+        this.description = in.readString();
+        this.text = in.readString();
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                CommentFrame commentFrame = (CommentFrame) obj;
-                if (!Util.areEqual(this.description, commentFrame.description) || !Util.areEqual(this.language, commentFrame.language) || Util.areEqual(this.text, commentFrame.text) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        CommentFrame other = (CommentFrame) obj;
+        if (Util.areEqual(this.description, other.description) && Util.areEqual(this.language, other.language) && Util.areEqual(this.text, other.text)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int hashCode = 31 * (((527 + (this.language != null ? this.language.hashCode() : 0)) * 31) + (this.description != null ? this.description.hashCode() : 0));
+        if (this.language != null) {
+            hashCode = this.language.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        int i2 = (hashCode + 527) * 31;
+        if (this.description != null) {
+            hashCode = this.description.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (i2 + hashCode) * 31;
         if (this.text != null) {
             i = this.text.hashCode();
         }
         return hashCode + i;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.id);
-        parcel.writeString(this.language);
-        parcel.writeString(this.text);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.language);
+        dest.writeString(this.text);
     }
 }

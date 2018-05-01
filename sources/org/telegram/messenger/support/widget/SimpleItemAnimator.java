@@ -1,5 +1,6 @@
 package org.telegram.messenger.support.widget;
 
+import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView.ItemAnimator;
 import org.telegram.messenger.support.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -17,126 +18,118 @@ public abstract class SimpleItemAnimator extends ItemAnimator {
 
     public abstract boolean animateRemove(ViewHolder viewHolder);
 
-    public void onAddFinished(ViewHolder viewHolder) {
-    }
-
-    public void onAddStarting(ViewHolder viewHolder) {
-    }
-
-    public void onChangeFinished(ViewHolder viewHolder, boolean z) {
-    }
-
-    public void onChangeStarting(ViewHolder viewHolder, boolean z) {
-    }
-
-    public void onMoveFinished(ViewHolder viewHolder) {
-    }
-
-    public void onMoveStarting(ViewHolder viewHolder) {
-    }
-
-    public void onRemoveFinished(ViewHolder viewHolder) {
-    }
-
-    public void onRemoveStarting(ViewHolder viewHolder) {
-    }
-
     public boolean getSupportsChangeAnimations() {
         return this.mSupportsChangeAnimations;
     }
 
-    public void setSupportsChangeAnimations(boolean z) {
-        this.mSupportsChangeAnimations = z;
+    public void setSupportsChangeAnimations(boolean supportsChangeAnimations) {
+        this.mSupportsChangeAnimations = supportsChangeAnimations;
     }
 
     public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder) {
-        if (this.mSupportsChangeAnimations) {
-            if (viewHolder.isInvalid() == null) {
-                return null;
-            }
-        }
-        return true;
+        return !this.mSupportsChangeAnimations || viewHolder.isInvalid();
     }
 
-    public boolean animateDisappearance(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2) {
-        int i = itemHolderInfo.left;
-        int i2 = itemHolderInfo.top;
-        itemHolderInfo = viewHolder.itemView;
-        int left = itemHolderInfo2 == null ? itemHolderInfo.getLeft() : itemHolderInfo2.left;
-        int top = itemHolderInfo2 == null ? itemHolderInfo.getTop() : itemHolderInfo2.top;
-        if (viewHolder.isRemoved() != null || (i == left && i2 == top)) {
+    public boolean animateDisappearance(ViewHolder viewHolder, ItemHolderInfo preLayoutInfo, ItemHolderInfo postLayoutInfo) {
+        int oldLeft = preLayoutInfo.left;
+        int oldTop = preLayoutInfo.top;
+        View disappearingItemView = viewHolder.itemView;
+        int newLeft = postLayoutInfo == null ? disappearingItemView.getLeft() : postLayoutInfo.left;
+        int newTop = postLayoutInfo == null ? disappearingItemView.getTop() : postLayoutInfo.top;
+        if (viewHolder.isRemoved() || (oldLeft == newLeft && oldTop == newTop)) {
             return animateRemove(viewHolder);
         }
-        itemHolderInfo.layout(left, top, itemHolderInfo.getWidth() + left, itemHolderInfo.getHeight() + top);
-        return animateMove(viewHolder, i, i2, left, top);
+        disappearingItemView.layout(newLeft, newTop, disappearingItemView.getWidth() + newLeft, disappearingItemView.getHeight() + newTop);
+        return animateMove(viewHolder, oldLeft, oldTop, newLeft, newTop);
     }
 
-    public boolean animateAppearance(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2) {
-        if (itemHolderInfo == null || (itemHolderInfo.left == itemHolderInfo2.left && itemHolderInfo.top == itemHolderInfo2.top)) {
+    public boolean animateAppearance(ViewHolder viewHolder, ItemHolderInfo preLayoutInfo, ItemHolderInfo postLayoutInfo) {
+        if (preLayoutInfo == null || (preLayoutInfo.left == postLayoutInfo.left && preLayoutInfo.top == postLayoutInfo.top)) {
             return animateAdd(viewHolder);
         }
-        return animateMove(viewHolder, itemHolderInfo.left, itemHolderInfo.top, itemHolderInfo2.left, itemHolderInfo2.top);
+        return animateMove(viewHolder, preLayoutInfo.left, preLayoutInfo.top, postLayoutInfo.left, postLayoutInfo.top);
     }
 
-    public boolean animatePersistence(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2) {
-        if (itemHolderInfo.left == itemHolderInfo2.left) {
-            if (itemHolderInfo.top == itemHolderInfo2.top) {
-                dispatchMoveFinished(viewHolder);
-                return null;
-            }
+    public boolean animatePersistence(ViewHolder viewHolder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
+        if (preInfo.left == postInfo.left && preInfo.top == postInfo.top) {
+            dispatchMoveFinished(viewHolder);
+            return false;
         }
-        return animateMove(viewHolder, itemHolderInfo.left, itemHolderInfo.top, itemHolderInfo2.left, itemHolderInfo2.top);
+        return animateMove(viewHolder, preInfo.left, preInfo.top, postInfo.left, postInfo.top);
     }
 
-    public boolean animateChange(ViewHolder viewHolder, ViewHolder viewHolder2, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2) {
-        int i;
-        int i2;
-        int i3 = itemHolderInfo.left;
-        int i4 = itemHolderInfo.top;
-        if (viewHolder2.shouldIgnore()) {
-            itemHolderInfo2 = itemHolderInfo.left;
-            i = itemHolderInfo.top;
-            i2 = itemHolderInfo2;
+    public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
+        int toLeft;
+        int toTop;
+        int fromLeft = preInfo.left;
+        int fromTop = preInfo.top;
+        if (newHolder.shouldIgnore()) {
+            toLeft = preInfo.left;
+            toTop = preInfo.top;
         } else {
-            i2 = itemHolderInfo2.left;
-            i = itemHolderInfo2.top;
+            toLeft = postInfo.left;
+            toTop = postInfo.top;
         }
-        return animateChange(viewHolder, viewHolder2, i3, i4, i2, i);
+        return animateChange(oldHolder, newHolder, fromLeft, fromTop, toLeft, toTop);
     }
 
-    public final void dispatchRemoveFinished(ViewHolder viewHolder) {
-        onRemoveFinished(viewHolder);
-        dispatchAnimationFinished(viewHolder);
+    public final void dispatchRemoveFinished(ViewHolder item) {
+        onRemoveFinished(item);
+        dispatchAnimationFinished(item);
     }
 
-    public final void dispatchMoveFinished(ViewHolder viewHolder) {
-        onMoveFinished(viewHolder);
-        dispatchAnimationFinished(viewHolder);
+    public final void dispatchMoveFinished(ViewHolder item) {
+        onMoveFinished(item);
+        dispatchAnimationFinished(item);
     }
 
-    public final void dispatchAddFinished(ViewHolder viewHolder) {
-        onAddFinished(viewHolder);
-        dispatchAnimationFinished(viewHolder);
+    public final void dispatchAddFinished(ViewHolder item) {
+        onAddFinished(item);
+        dispatchAnimationFinished(item);
     }
 
-    public final void dispatchChangeFinished(ViewHolder viewHolder, boolean z) {
-        onChangeFinished(viewHolder, z);
-        dispatchAnimationFinished(viewHolder);
+    public final void dispatchChangeFinished(ViewHolder item, boolean oldItem) {
+        onChangeFinished(item, oldItem);
+        dispatchAnimationFinished(item);
     }
 
-    public final void dispatchRemoveStarting(ViewHolder viewHolder) {
-        onRemoveStarting(viewHolder);
+    public final void dispatchRemoveStarting(ViewHolder item) {
+        onRemoveStarting(item);
     }
 
-    public final void dispatchMoveStarting(ViewHolder viewHolder) {
-        onMoveStarting(viewHolder);
+    public final void dispatchMoveStarting(ViewHolder item) {
+        onMoveStarting(item);
     }
 
-    public final void dispatchAddStarting(ViewHolder viewHolder) {
-        onAddStarting(viewHolder);
+    public final void dispatchAddStarting(ViewHolder item) {
+        onAddStarting(item);
     }
 
-    public final void dispatchChangeStarting(ViewHolder viewHolder, boolean z) {
-        onChangeStarting(viewHolder, z);
+    public final void dispatchChangeStarting(ViewHolder item, boolean oldItem) {
+        onChangeStarting(item, oldItem);
+    }
+
+    public void onRemoveStarting(ViewHolder item) {
+    }
+
+    public void onRemoveFinished(ViewHolder item) {
+    }
+
+    public void onAddStarting(ViewHolder item) {
+    }
+
+    public void onAddFinished(ViewHolder item) {
+    }
+
+    public void onMoveStarting(ViewHolder item) {
+    }
+
+    public void onMoveFinished(ViewHolder item) {
+    }
+
+    public void onChangeStarting(ViewHolder item, boolean oldItem) {
+    }
+
+    public void onChangeFinished(ViewHolder item, boolean oldItem) {
     }
 }

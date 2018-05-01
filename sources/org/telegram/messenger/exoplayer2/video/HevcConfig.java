@@ -10,60 +10,49 @@ public final class HevcConfig {
     public final List<byte[]> initializationData;
     public final int nalUnitLengthFieldLength;
 
-    public static HevcConfig parse(ParsableByteArray parsableByteArray) throws ParserException {
+    public static HevcConfig parse(ParsableByteArray data) throws ParserException {
         try {
             int i;
-            int readUnsignedShort;
-            parsableByteArray.skipBytes(21);
-            int readUnsignedByte = parsableByteArray.readUnsignedByte() & 3;
-            int readUnsignedByte2 = parsableByteArray.readUnsignedByte();
-            int position = parsableByteArray.getPosition();
-            int i2 = 0;
-            int i3 = i2;
-            while (i2 < readUnsignedByte2) {
-                parsableByteArray.skipBytes(1);
-                int readUnsignedShort2 = parsableByteArray.readUnsignedShort();
-                i = i3;
-                for (i3 = 0; i3 < readUnsignedShort2; i3++) {
-                    readUnsignedShort = parsableByteArray.readUnsignedShort();
-                    i += 4 + readUnsignedShort;
-                    parsableByteArray.skipBytes(readUnsignedShort);
+            int numberOfNalUnits;
+            int j;
+            int nalUnitLength;
+            data.skipBytes(21);
+            int lengthSizeMinusOne = data.readUnsignedByte() & 3;
+            int numberOfArrays = data.readUnsignedByte();
+            int csdLength = 0;
+            int csdStartPosition = data.getPosition();
+            for (i = 0; i < numberOfArrays; i++) {
+                data.skipBytes(1);
+                numberOfNalUnits = data.readUnsignedShort();
+                for (j = 0; j < numberOfNalUnits; j++) {
+                    nalUnitLength = data.readUnsignedShort();
+                    csdLength += nalUnitLength + 4;
+                    data.skipBytes(nalUnitLength);
                 }
-                i2++;
-                i3 = i;
             }
-            parsableByteArray.setPosition(position);
-            Object obj = new byte[i3];
-            i2 = 0;
-            i = i2;
-            while (i2 < readUnsignedByte2) {
-                parsableByteArray.skipBytes(1);
-                readUnsignedShort = parsableByteArray.readUnsignedShort();
-                int i4 = i;
-                for (i = 0; i < readUnsignedShort; i++) {
-                    int readUnsignedShort3 = parsableByteArray.readUnsignedShort();
-                    System.arraycopy(NalUnitUtil.NAL_START_CODE, 0, obj, i4, NalUnitUtil.NAL_START_CODE.length);
-                    i4 += NalUnitUtil.NAL_START_CODE.length;
-                    System.arraycopy(parsableByteArray.data, parsableByteArray.getPosition(), obj, i4, readUnsignedShort3);
-                    i4 += readUnsignedShort3;
-                    parsableByteArray.skipBytes(readUnsignedShort3);
+            data.setPosition(csdStartPosition);
+            byte[] buffer = new byte[csdLength];
+            int bufferPosition = 0;
+            for (i = 0; i < numberOfArrays; i++) {
+                data.skipBytes(1);
+                numberOfNalUnits = data.readUnsignedShort();
+                for (j = 0; j < numberOfNalUnits; j++) {
+                    nalUnitLength = data.readUnsignedShort();
+                    System.arraycopy(NalUnitUtil.NAL_START_CODE, 0, buffer, bufferPosition, NalUnitUtil.NAL_START_CODE.length);
+                    bufferPosition += NalUnitUtil.NAL_START_CODE.length;
+                    System.arraycopy(data.data, data.getPosition(), buffer, bufferPosition, nalUnitLength);
+                    bufferPosition += nalUnitLength;
+                    data.skipBytes(nalUnitLength);
                 }
-                i2++;
-                i = i4;
             }
-            if (i3 == 0) {
-                parsableByteArray = null;
-            } else {
-                parsableByteArray = Collections.singletonList(obj);
-            }
-            return new HevcConfig(parsableByteArray, readUnsignedByte + 1);
-        } catch (ParsableByteArray parsableByteArray2) {
-            throw new ParserException("Error parsing HEVC config", parsableByteArray2);
+            return new HevcConfig(csdLength == 0 ? null : Collections.singletonList(buffer), lengthSizeMinusOne + 1);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ParserException("Error parsing HEVC config", e);
         }
     }
 
-    private HevcConfig(List<byte[]> list, int i) {
-        this.initializationData = list;
-        this.nalUnitLengthFieldLength = i;
+    private HevcConfig(List<byte[]> initializationData, int nalUnitLengthFieldLength) {
+        this.initializationData = initializationData;
+        this.nalUnitLengthFieldLength = nalUnitLengthFieldLength;
     }
 }

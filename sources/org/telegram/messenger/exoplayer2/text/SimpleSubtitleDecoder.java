@@ -8,17 +8,17 @@ public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputB
 
     protected abstract Subtitle decode(byte[] bArr, int i, boolean z) throws SubtitleDecoderException;
 
-    public void setPositionUs(long j) {
-    }
-
-    protected SimpleSubtitleDecoder(String str) {
+    protected SimpleSubtitleDecoder(String name) {
         super(new SubtitleInputBuffer[2], new SubtitleOutputBuffer[2]);
-        this.name = str;
+        this.name = name;
         setInitialInputBufferSize(1024);
     }
 
     public final String getName() {
         return this.name;
+    }
+
+    public void setPositionUs(long timeUs) {
     }
 
     protected final SubtitleInputBuffer createInputBuffer() {
@@ -29,23 +29,23 @@ public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputB
         return new SimpleSubtitleOutputBuffer(this);
     }
 
-    protected final SubtitleDecoderException createUnexpectedDecodeException(Throwable th) {
-        return new SubtitleDecoderException("Unexpected decode error", th);
+    protected final SubtitleDecoderException createUnexpectedDecodeException(Throwable error) {
+        return new SubtitleDecoderException("Unexpected decode error", error);
     }
 
-    protected final void releaseOutputBuffer(SubtitleOutputBuffer subtitleOutputBuffer) {
-        super.releaseOutputBuffer(subtitleOutputBuffer);
+    protected final void releaseOutputBuffer(SubtitleOutputBuffer buffer) {
+        super.releaseOutputBuffer(buffer);
     }
 
-    protected final SubtitleDecoderException decode(SubtitleInputBuffer subtitleInputBuffer, SubtitleOutputBuffer subtitleOutputBuffer, boolean z) {
+    protected final SubtitleDecoderException decode(SubtitleInputBuffer inputBuffer, SubtitleOutputBuffer outputBuffer, boolean reset) {
         try {
-            ByteBuffer byteBuffer = subtitleInputBuffer.data;
-            SubtitleOutputBuffer subtitleOutputBuffer2 = subtitleOutputBuffer;
-            subtitleOutputBuffer2.setContent(subtitleInputBuffer.timeUs, decode(byteBuffer.array(), byteBuffer.limit(), z), subtitleInputBuffer.subsampleOffsetUs);
-            subtitleOutputBuffer.clearFlag(Integer.MIN_VALUE);
+            ByteBuffer inputData = inputBuffer.data;
+            SubtitleOutputBuffer subtitleOutputBuffer = outputBuffer;
+            subtitleOutputBuffer.setContent(inputBuffer.timeUs, decode(inputData.array(), inputData.limit(), reset), inputBuffer.subsampleOffsetUs);
+            outputBuffer.clearFlag(Integer.MIN_VALUE);
             return null;
-        } catch (SubtitleInputBuffer subtitleInputBuffer2) {
-            return subtitleInputBuffer2;
+        } catch (SubtitleDecoderException e) {
+            return e;
         }
     }
 }

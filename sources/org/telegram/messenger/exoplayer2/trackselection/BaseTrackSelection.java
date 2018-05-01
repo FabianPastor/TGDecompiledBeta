@@ -21,36 +21,32 @@ public abstract class BaseTrackSelection implements TrackSelection {
         private DecreasingBandwidthComparator() {
         }
 
-        public int compare(Format format, Format format2) {
-            return format2.bitrate - format.bitrate;
+        public int compare(Format a, Format b) {
+            return b.bitrate - a.bitrate;
         }
     }
 
-    public void disable() {
+    public BaseTrackSelection(TrackGroup group, int... tracks) {
+        int i;
+        Assertions.checkState(tracks.length > 0);
+        this.group = (TrackGroup) Assertions.checkNotNull(group);
+        this.length = tracks.length;
+        this.formats = new Format[this.length];
+        for (i = 0; i < tracks.length; i++) {
+            this.formats[i] = group.getFormat(tracks[i]);
+        }
+        Arrays.sort(this.formats, new DecreasingBandwidthComparator());
+        this.tracks = new int[this.length];
+        for (i = 0; i < this.length; i++) {
+            this.tracks[i] = group.indexOf(this.formats[i]);
+        }
+        this.blacklistUntilTimes = new long[this.length];
     }
 
     public void enable() {
     }
 
-    public void onPlaybackSpeed(float f) {
-    }
-
-    public BaseTrackSelection(TrackGroup trackGroup, int... iArr) {
-        int i = 0;
-        Assertions.checkState(iArr.length > 0);
-        this.group = (TrackGroup) Assertions.checkNotNull(trackGroup);
-        this.length = iArr.length;
-        this.formats = new Format[this.length];
-        for (int i2 = 0; i2 < iArr.length; i2++) {
-            this.formats[i2] = trackGroup.getFormat(iArr[i2]);
-        }
-        Arrays.sort(this.formats, new DecreasingBandwidthComparator());
-        this.tracks = new int[this.length];
-        while (i < this.length) {
-            this.tracks[i] = trackGroup.indexOf(this.formats[i]);
-            i++;
-        }
-        this.blacklistUntilTimes = new long[this.length];
+    public void disable() {
     }
 
     public final TrackGroup getTrackGroup() {
@@ -61,12 +57,12 @@ public abstract class BaseTrackSelection implements TrackSelection {
         return this.tracks.length;
     }
 
-    public final Format getFormat(int i) {
-        return this.formats[i];
+    public final Format getFormat(int index) {
+        return this.formats[index];
     }
 
-    public final int getIndexInTrackGroup(int i) {
-        return this.tracks[i];
+    public final int getIndexInTrackGroup(int index) {
+        return this.tracks[index];
     }
 
     public final int indexOf(Format format) {
@@ -78,10 +74,10 @@ public abstract class BaseTrackSelection implements TrackSelection {
         return -1;
     }
 
-    public final int indexOf(int i) {
-        for (int i2 = 0; i2 < this.length; i2++) {
-            if (this.tracks[i2] == i) {
-                return i2;
+    public final int indexOf(int indexInTrackGroup) {
+        for (int i = 0; i < this.length; i++) {
+            if (this.tracks[i] == indexInTrackGroup) {
+                return i;
             }
         }
         return -1;
@@ -95,49 +91,53 @@ public abstract class BaseTrackSelection implements TrackSelection {
         return this.tracks[getSelectedIndex()];
     }
 
-    public int evaluateQueueSize(long j, List<? extends MediaChunk> list) {
-        return list.size();
+    public void onPlaybackSpeed(float playbackSpeed) {
     }
 
-    public final boolean blacklist(int i, long j) {
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean isBlacklisted = isBlacklisted(i, elapsedRealtime);
-        int i2 = 0;
-        while (i2 < this.length && !isBlacklisted) {
-            isBlacklisted = (i2 == i || isBlacklisted(i2, elapsedRealtime)) ? false : true;
-            i2++;
+    public int evaluateQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
+        return queue.size();
+    }
+
+    public final boolean blacklist(int index, long blacklistDurationMs) {
+        long nowMs = SystemClock.elapsedRealtime();
+        boolean canBlacklist = isBlacklisted(index, nowMs);
+        int i = 0;
+        while (i < this.length && !canBlacklist) {
+            if (i == index || isBlacklisted(i, nowMs)) {
+                canBlacklist = false;
+            } else {
+                canBlacklist = true;
+            }
+            i++;
         }
-        if (!isBlacklisted) {
+        if (!canBlacklist) {
             return false;
         }
-        this.blacklistUntilTimes[i] = Math.max(this.blacklistUntilTimes[i], elapsedRealtime + j);
+        this.blacklistUntilTimes[index] = Math.max(this.blacklistUntilTimes[index], nowMs + blacklistDurationMs);
         return true;
     }
 
-    protected final boolean isBlacklisted(int i, long j) {
-        return this.blacklistUntilTimes[i] > j;
+    protected final boolean isBlacklisted(int index, long nowMs) {
+        return this.blacklistUntilTimes[index] > nowMs;
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * System.identityHashCode(this.group)) + Arrays.hashCode(this.tracks);
+            this.hashCode = (System.identityHashCode(this.group) * 31) + Arrays.hashCode(this.tracks);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                BaseTrackSelection baseTrackSelection = (BaseTrackSelection) obj;
-                if (this.group != baseTrackSelection.group || Arrays.equals(this.tracks, baseTrackSelection.tracks) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BaseTrackSelection other = (BaseTrackSelection) obj;
+        if (this.group == other.group && Arrays.equals(this.tracks, other.tracks)) {
+            return true;
         }
         return false;
     }

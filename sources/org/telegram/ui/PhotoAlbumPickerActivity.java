@@ -14,6 +14,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.C0446R;
@@ -65,13 +66,34 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private boolean sendPressed;
     private boolean singlePhoto;
 
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$2 */
-    class C15792 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+    public interface PhotoAlbumPickerActivityDelegate {
+        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
+
+        void startPhotoSelectActivity();
+    }
+
+    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
+    class C22211 extends ActionBarMenuOnItemClick {
+        C22211() {
         }
 
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoAlbumPickerActivity.this.finishFragment();
+            } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
+                PhotoAlbumPickerActivity.this.finishFragment(false);
+                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$2 */
+    class C15792 implements OnTouchListener {
         C15792() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 
@@ -110,27 +132,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
     }
 
-    public interface PhotoAlbumPickerActivityDelegate {
-        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
-
-        void startPhotoSelectActivity();
-    }
-
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
-    class C22211 extends ActionBarMenuOnItemClick {
-        C22211() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                PhotoAlbumPickerActivity.this.finishFragment();
-            } else if (i == 1 && PhotoAlbumPickerActivity.this.delegate != 0) {
-                PhotoAlbumPickerActivity.this.finishFragment(false);
-                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$6 */
     class C22226 implements PhotoPickerActivityDelegate {
         C22226() {
@@ -142,31 +143,10 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
         }
 
-        public void actionButtonPressed(boolean z) {
+        public void actionButtonPressed(boolean canceled) {
             PhotoAlbumPickerActivity.this.removeSelfFromStack();
-            if (!z) {
+            if (!canceled) {
                 PhotoAlbumPickerActivity.this.sendSelectedPhotos(PhotoAlbumPickerActivity.this.selectedPhotos, PhotoAlbumPickerActivity.this.selectedPhotosOrder);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$7 */
-    class C22237 implements PhotoPickerActivityDelegate {
-        final /* synthetic */ ArrayList val$order;
-        final /* synthetic */ HashMap val$photos;
-
-        public void selectedPhotosChanged() {
-        }
-
-        C22237(HashMap hashMap, ArrayList arrayList) {
-            this.val$photos = hashMap;
-            this.val$order = arrayList;
-        }
-
-        public void actionButtonPressed(boolean z) {
-            PhotoAlbumPickerActivity.this.removeSelfFromStack();
-            if (!z) {
-                PhotoAlbumPickerActivity.this.sendSelectedPhotos(this.val$photos, this.val$order);
             }
         }
     }
@@ -189,59 +169,66 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             C22252() {
             }
 
-            public void didPressedSearchButton(int i) {
-                PhotoAlbumPickerActivity.this.openPhotoPicker(null, i);
+            public void didPressedSearchButton(int index) {
+                PhotoAlbumPickerActivity.this.openPhotoPicker(null, index);
             }
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return true;
         }
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
         public int getItemCount() {
             int i = 0;
-            if (PhotoAlbumPickerActivity.this.singlePhoto) {
+            if (!PhotoAlbumPickerActivity.this.singlePhoto) {
                 if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
                     i = (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
                 }
-                return i;
-            }
-            if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
-                i = (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
-            }
-            return 1 + i;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i != 0) {
-                viewGroup = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
-                viewGroup.setDelegate(new C22252());
+                return i + 1;
+            } else if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
+                return (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
             } else {
-                viewGroup = new PhotoPickerAlbumsCell(this.mContext);
-                viewGroup.setDelegate(new C22241());
+                return 0;
             }
-            return new Holder(viewGroup);
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            if (viewHolder.getItemViewType() == 0) {
-                PhotoPickerAlbumsCell photoPickerAlbumsCell = (PhotoPickerAlbumsCell) viewHolder.itemView;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            View cell;
+            switch (viewType) {
+                case 0:
+                    cell = new PhotoPickerAlbumsCell(this.mContext);
+                    cell.setDelegate(new C22241());
+                    view = cell;
+                    break;
+                default:
+                    cell = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
+                    cell.setDelegate(new C22252());
+                    view = cell;
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (holder.getItemViewType() == 0) {
+                PhotoPickerAlbumsCell photoPickerAlbumsCell = holder.itemView;
                 photoPickerAlbumsCell.setAlbumsCount(PhotoAlbumPickerActivity.this.columnsCount);
-                for (int i2 = 0; i2 < PhotoAlbumPickerActivity.this.columnsCount; i2++) {
-                    int access$900;
+                for (int a = 0; a < PhotoAlbumPickerActivity.this.columnsCount; a++) {
+                    int index;
                     if (PhotoAlbumPickerActivity.this.singlePhoto) {
-                        access$900 = (PhotoAlbumPickerActivity.this.columnsCount * i) + i2;
+                        index = (PhotoAlbumPickerActivity.this.columnsCount * position) + a;
                     } else {
-                        access$900 = ((i - 1) * PhotoAlbumPickerActivity.this.columnsCount) + i2;
+                        index = ((position - 1) * PhotoAlbumPickerActivity.this.columnsCount) + a;
                     }
-                    if (access$900 < PhotoAlbumPickerActivity.this.albumsSorted.size()) {
-                        photoPickerAlbumsCell.setAlbum(i2, (AlbumEntry) PhotoAlbumPickerActivity.this.albumsSorted.get(access$900));
+                    if (index < PhotoAlbumPickerActivity.this.albumsSorted.size()) {
+                        photoPickerAlbumsCell.setAlbum(a, (AlbumEntry) PhotoAlbumPickerActivity.this.albumsSorted.get(index));
                     } else {
-                        photoPickerAlbumsCell.setAlbum(i2, null);
+                        photoPickerAlbumsCell.setAlbum(a, null);
                     }
                 }
                 photoPickerAlbumsCell.requestLayout();
@@ -249,15 +236,18 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
 
         public int getItemViewType(int i) {
-            return (!PhotoAlbumPickerActivity.this.singlePhoto && i == 0) ? 1 : 0;
+            if (!PhotoAlbumPickerActivity.this.singlePhoto && i == 0) {
+                return 1;
+            }
+            return 0;
         }
     }
 
-    public PhotoAlbumPickerActivity(boolean z, boolean z2, boolean z3, ChatActivity chatActivity) {
+    public PhotoAlbumPickerActivity(boolean singlePhoto, boolean allowGifs, boolean allowCaption, ChatActivity chatActivity) {
         this.chatActivity = chatActivity;
-        this.singlePhoto = z;
-        this.allowGifs = z2;
-        this.allowCaption = z3;
+        this.singlePhoto = singlePhoto;
+        this.allowGifs = allowGifs;
+        this.allowCaption = allowCaption;
     }
 
     public boolean onFragmentCreate() {
@@ -284,7 +274,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.actionBar.setActionBarMenuOnItemClick(new C22211());
         this.actionBar.createMenu().addItem(1, (int) C0446R.drawable.ic_ab_other);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.actionBar.setTitle(LocaleController.getString("Gallery", C0446R.string.Gallery));
         this.listView = new RecyclerListView(context);
@@ -312,36 +302,36 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.emptyView.setVisibility(8);
         this.emptyView.setText(LocaleController.getString("NoPhotos", C0446R.string.NoPhotos));
         frameLayout.addView(this.emptyView);
-        LayoutParams layoutParams2 = (LayoutParams) this.emptyView.getLayoutParams();
-        layoutParams2.width = -1;
-        layoutParams2.height = -1;
-        layoutParams2.bottomMargin = AndroidUtilities.dp(48.0f);
-        this.emptyView.setLayoutParams(layoutParams2);
+        layoutParams = (LayoutParams) this.emptyView.getLayoutParams();
+        layoutParams.width = -1;
+        layoutParams.height = -1;
+        layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
+        this.emptyView.setLayoutParams(layoutParams);
         this.emptyView.setOnTouchListener(new C15792());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(8);
         frameLayout.addView(this.progressView);
-        layoutParams2 = (LayoutParams) this.progressView.getLayoutParams();
-        layoutParams2.width = -1;
-        layoutParams2.height = -1;
-        layoutParams2.bottomMargin = AndroidUtilities.dp(48.0f);
-        this.progressView.setLayoutParams(layoutParams2);
+        layoutParams = (LayoutParams) this.progressView.getLayoutParams();
+        layoutParams.width = -1;
+        layoutParams.height = -1;
+        layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
+        this.progressView.setLayoutParams(layoutParams);
         this.progressView.addView(new RadialProgressView(context));
-        layoutParams2 = (LayoutParams) this.progressView.getLayoutParams();
-        layoutParams2.width = -2;
-        layoutParams2.height = -2;
-        layoutParams2.gravity = 17;
-        this.progressView.setLayoutParams(layoutParams2);
+        layoutParams = (LayoutParams) this.progressView.getLayoutParams();
+        layoutParams.width = -2;
+        layoutParams.height = -2;
+        layoutParams.gravity = 17;
+        this.progressView.setLayoutParams(layoutParams);
         this.pickerBottomLayout = new PickerBottomLayout(context);
         frameLayout.addView(this.pickerBottomLayout);
-        LayoutParams layoutParams3 = (LayoutParams) this.pickerBottomLayout.getLayoutParams();
-        layoutParams3.width = -1;
-        layoutParams3.height = AndroidUtilities.dp(48.0f);
-        layoutParams3.gravity = 80;
-        this.pickerBottomLayout.setLayoutParams(layoutParams3);
+        layoutParams = (LayoutParams) this.pickerBottomLayout.getLayoutParams();
+        layoutParams.width = -1;
+        layoutParams.height = AndroidUtilities.dp(48.0f);
+        layoutParams.gravity = 80;
+        this.pickerBottomLayout.setLayoutParams(layoutParams);
         this.pickerBottomLayout.cancelButton.setOnClickListener(new C15803());
         this.pickerBottomLayout.doneButton.setOnClickListener(new C15814());
-        if (this.loading == null || (this.albumsSorted != null && (this.albumsSorted == null || this.albumsSorted.isEmpty() == null))) {
+        if (!this.loading || (this.albumsSorted != null && (this.albumsSorted == null || !this.albumsSorted.isEmpty()))) {
             this.progressView.setVisibility(8);
             this.listView.setEmptyView(this.emptyView);
         } else {
@@ -360,135 +350,126 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         fixLayout();
     }
 
-    public void onConfigurationChanged(Configuration configuration) {
-        super.onConfigurationChanged(configuration);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         fixLayout();
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.albumsDidLoaded) {
-            if (this.classGuid == ((Integer) objArr[0]).intValue()) {
-                if (this.singlePhoto != 0) {
-                    this.albumsSorted = (ArrayList) objArr[2];
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.albumsDidLoaded) {
+            if (this.classGuid == ((Integer) args[0]).intValue()) {
+                if (this.singlePhoto) {
+                    this.albumsSorted = (ArrayList) args[2];
                 } else {
-                    this.albumsSorted = (ArrayList) objArr[1];
+                    this.albumsSorted = (ArrayList) args[1];
                 }
-                if (this.progressView != 0) {
+                if (this.progressView != null) {
                     this.progressView.setVisibility(8);
                 }
-                if (this.listView != 0 && this.listView.getEmptyView() == 0) {
+                if (this.listView != null && this.listView.getEmptyView() == null) {
                     this.listView.setEmptyView(this.emptyView);
                 }
-                if (this.listAdapter != 0) {
+                if (this.listAdapter != null) {
                     this.listAdapter.notifyDataSetChanged();
                 }
                 this.loading = false;
             }
-        } else if (i == NotificationCenter.closeChats) {
+        } else if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
-        } else if (i == NotificationCenter.recentImagesDidLoaded) {
-            i = ((Integer) objArr[0]).intValue();
+        } else if (id == NotificationCenter.recentImagesDidLoaded) {
+            int type = ((Integer) args[0]).intValue();
+            Iterator it;
             SearchImage searchImage;
-            if (i == 0) {
-                this.recentWebImages = (ArrayList) objArr[1];
+            if (type == 0) {
+                this.recentWebImages = (ArrayList) args[1];
                 this.recentImagesWebKeys.clear();
-                i = this.recentWebImages.iterator();
-                while (i.hasNext() != 0) {
-                    searchImage = (SearchImage) i.next();
+                it = this.recentWebImages.iterator();
+                while (it.hasNext()) {
+                    searchImage = (SearchImage) it.next();
                     this.recentImagesWebKeys.put(searchImage.id, searchImage);
                 }
-            } else if (i == 1) {
-                this.recentGifImages = (ArrayList) objArr[1];
+            } else if (type == 1) {
+                this.recentGifImages = (ArrayList) args[1];
                 this.recentImagesGifKeys.clear();
-                i = this.recentGifImages.iterator();
-                while (i.hasNext() != 0) {
-                    searchImage = (SearchImage) i.next();
+                it = this.recentGifImages.iterator();
+                while (it.hasNext()) {
+                    searchImage = (SearchImage) it.next();
                     this.recentImagesGifKeys.put(searchImage.id, searchImage);
                 }
             }
         }
     }
 
-    public void setDelegate(PhotoAlbumPickerActivityDelegate photoAlbumPickerActivityDelegate) {
-        this.delegate = photoAlbumPickerActivityDelegate;
+    public void setDelegate(PhotoAlbumPickerActivityDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    private void sendSelectedPhotos(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList) {
-        if (!(hashMap.isEmpty() || this.delegate == null)) {
-            if (!this.sendPressed) {
-                this.sendPressed = true;
-                ArrayList arrayList2 = new ArrayList();
-                int i = 0;
-                int i2 = i;
-                int i3 = i2;
-                while (i < arrayList.size()) {
-                    Object obj = hashMap.get(arrayList.get(i));
-                    SendingMediaInfo sendingMediaInfo = new SendingMediaInfo();
-                    arrayList2.add(sendingMediaInfo);
-                    ArrayList arrayList3 = null;
-                    if (obj instanceof PhotoEntry) {
-                        PhotoEntry photoEntry = (PhotoEntry) obj;
-                        if (photoEntry.isVideo) {
-                            sendingMediaInfo.path = photoEntry.path;
-                            sendingMediaInfo.videoEditedInfo = photoEntry.editedInfo;
-                        } else if (photoEntry.imagePath != null) {
-                            sendingMediaInfo.path = photoEntry.imagePath;
-                        } else if (photoEntry.path != null) {
-                            sendingMediaInfo.path = photoEntry.path;
-                        }
-                        sendingMediaInfo.isVideo = photoEntry.isVideo;
-                        sendingMediaInfo.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
-                        sendingMediaInfo.entities = photoEntry.entities;
-                        if (!photoEntry.stickers.isEmpty()) {
-                            arrayList3 = new ArrayList(photoEntry.stickers);
-                        }
-                        sendingMediaInfo.masks = arrayList3;
-                        sendingMediaInfo.ttl = photoEntry.ttl;
-                    } else if (obj instanceof SearchImage) {
-                        SearchImage searchImage = (SearchImage) obj;
-                        if (searchImage.imagePath != null) {
-                            sendingMediaInfo.path = searchImage.imagePath;
+    private void sendSelectedPhotos(HashMap<Object, Object> photos, ArrayList<Object> order) {
+        if (!photos.isEmpty() && this.delegate != null && !this.sendPressed) {
+            this.sendPressed = true;
+            boolean gifChanged = false;
+            boolean webChange = false;
+            ArrayList<SendingMediaInfo> media = new ArrayList();
+            for (int a = 0; a < order.size(); a++) {
+                PhotoEntry object = photos.get(order.get(a));
+                SendingMediaInfo info = new SendingMediaInfo();
+                media.add(info);
+                if (object instanceof PhotoEntry) {
+                    PhotoEntry photoEntry = object;
+                    if (photoEntry.isVideo) {
+                        info.path = photoEntry.path;
+                        info.videoEditedInfo = photoEntry.editedInfo;
+                    } else if (photoEntry.imagePath != null) {
+                        info.path = photoEntry.imagePath;
+                    } else if (photoEntry.path != null) {
+                        info.path = photoEntry.path;
+                    }
+                    info.isVideo = photoEntry.isVideo;
+                    info.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
+                    info.entities = photoEntry.entities;
+                    info.masks = !photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null;
+                    info.ttl = photoEntry.ttl;
+                } else if (object instanceof SearchImage) {
+                    SearchImage searchImage = (SearchImage) object;
+                    if (searchImage.imagePath != null) {
+                        info.path = searchImage.imagePath;
+                    } else {
+                        info.searchImage = searchImage;
+                    }
+                    info.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
+                    info.entities = searchImage.entities;
+                    info.masks = !searchImage.stickers.isEmpty() ? new ArrayList(searchImage.stickers) : null;
+                    info.ttl = searchImage.ttl;
+                    searchImage.date = (int) (System.currentTimeMillis() / 1000);
+                    SearchImage recentImage;
+                    if (searchImage.type == 0) {
+                        webChange = true;
+                        recentImage = (SearchImage) this.recentImagesWebKeys.get(searchImage.id);
+                        if (recentImage != null) {
+                            this.recentWebImages.remove(recentImage);
+                            this.recentWebImages.add(0, recentImage);
                         } else {
-                            sendingMediaInfo.searchImage = searchImage;
+                            this.recentWebImages.add(0, searchImage);
                         }
-                        sendingMediaInfo.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
-                        sendingMediaInfo.entities = searchImage.entities;
-                        if (!searchImage.stickers.isEmpty()) {
-                            arrayList3 = new ArrayList(searchImage.stickers);
-                        }
-                        sendingMediaInfo.masks = arrayList3;
-                        sendingMediaInfo.ttl = searchImage.ttl;
-                        searchImage.date = (int) (System.currentTimeMillis() / 1000);
-                        if (searchImage.type == 0) {
-                            SearchImage searchImage2 = (SearchImage) this.recentImagesWebKeys.get(searchImage.id);
-                            if (searchImage2 != null) {
-                                this.recentWebImages.remove(searchImage2);
-                                this.recentWebImages.add(0, searchImage2);
-                            } else {
-                                this.recentWebImages.add(0, searchImage);
-                            }
-                            i2 = true;
-                        } else if (searchImage.type == 1) {
-                            SearchImage searchImage3 = (SearchImage) this.recentImagesGifKeys.get(searchImage.id);
-                            if (searchImage3 != null) {
-                                this.recentGifImages.remove(searchImage3);
-                                this.recentGifImages.add(0, searchImage3);
-                            } else {
-                                this.recentGifImages.add(0, searchImage);
-                            }
-                            i3 = true;
+                    } else if (searchImage.type == 1) {
+                        gifChanged = true;
+                        recentImage = (SearchImage) this.recentImagesGifKeys.get(searchImage.id);
+                        if (recentImage != null) {
+                            this.recentGifImages.remove(recentImage);
+                            this.recentGifImages.add(0, recentImage);
+                        } else {
+                            this.recentGifImages.add(0, searchImage);
                         }
                     }
-                    i++;
                 }
-                if (i2 != 0) {
-                    MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentWebImages);
-                }
-                if (i3 != 0) {
-                    MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentGifImages);
-                }
-                this.delegate.didSelectPhotos(arrayList2);
             }
+            if (webChange) {
+                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentWebImages);
+            }
+            if (gifChanged) {
+                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentGifImages);
+            }
+            this.delegate.didSelectPhotos(media);
         }
     }
 
@@ -509,80 +490,35 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
     }
 
-    private void openPhotoPicker(org.telegram.messenger.MediaController.AlbumEntry r13, int r14) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r11_1 org.telegram.ui.ActionBar.BaseFragment) in PHI: PHI: (r11_2 org.telegram.ui.ActionBar.BaseFragment) = (r11_0 org.telegram.ui.ActionBar.BaseFragment), (r11_1 org.telegram.ui.ActionBar.BaseFragment) binds: {(r11_0 org.telegram.ui.ActionBar.BaseFragment)=B:9:0x0011, (r11_1 org.telegram.ui.ActionBar.BaseFragment)=B:10:0x002d}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r12 = this;
-        if (r13 != 0) goto L_0x000d;
-    L_0x0002:
-        if (r14 != 0) goto L_0x0007;
-    L_0x0004:
-        r0 = r12.recentWebImages;
-        goto L_0x000e;
-    L_0x0007:
-        r0 = 1;
-        if (r14 != r0) goto L_0x000d;
-    L_0x000a:
-        r0 = r12.recentGifImages;
-        goto L_0x000e;
-    L_0x000d:
-        r0 = 0;
-    L_0x000e:
-        r6 = r0;
-        if (r13 == 0) goto L_0x002d;
-    L_0x0011:
-        r0 = new org.telegram.ui.PhotoPickerActivity;
-        r4 = r12.selectedPhotos;
-        r5 = r12.selectedPhotosOrder;
-        r7 = r12.singlePhoto;
-        r8 = r12.allowCaption;
-        r9 = r12.chatActivity;
-        r1 = r0;
-        r2 = r14;
-        r3 = r13;
-        r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9);
-        r13 = new org.telegram.ui.PhotoAlbumPickerActivity$6;
-        r13.<init>();
-        r0.setDelegate(r13);
-        r11 = r0;
-        goto L_0x004f;
-    L_0x002d:
-        r0 = new java.util.HashMap;
-        r0.<init>();
-        r10 = new java.util.ArrayList;
-        r10.<init>();
-        r11 = new org.telegram.ui.PhotoPickerActivity;
-        r7 = r12.singlePhoto;
-        r8 = r12.allowCaption;
-        r9 = r12.chatActivity;
-        r1 = r11;
-        r2 = r14;
-        r3 = r13;
-        r4 = r0;
-        r5 = r10;
-        r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9);
-        r13 = new org.telegram.ui.PhotoAlbumPickerActivity$7;
-        r13.<init>(r0, r10);
-        r11.setDelegate(r13);
-    L_0x004f:
-        r12.presentFragment(r11);
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoAlbumPickerActivity.openPhotoPicker(org.telegram.messenger.MediaController$AlbumEntry, int):void");
+    private void openPhotoPicker(AlbumEntry albumEntry, int type) {
+        PhotoPickerActivity fragment;
+        ArrayList<SearchImage> recentImages = null;
+        if (albumEntry == null) {
+            if (type == 0) {
+                recentImages = this.recentWebImages;
+            } else if (type == 1) {
+                recentImages = this.recentGifImages;
+            }
+        }
+        if (albumEntry != null) {
+            fragment = new PhotoPickerActivity(type, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, recentImages, this.singlePhoto, this.allowCaption, this.chatActivity);
+            fragment.setDelegate(new C22226());
+        } else {
+            final HashMap<Object, Object> photos = new HashMap();
+            final ArrayList<Object> order = new ArrayList();
+            fragment = new PhotoPickerActivity(type, albumEntry, photos, order, recentImages, this.singlePhoto, this.allowCaption, this.chatActivity);
+            fragment.setDelegate(new PhotoPickerActivityDelegate() {
+                public void selectedPhotosChanged() {
+                }
+
+                public void actionButtonPressed(boolean canceled) {
+                    PhotoAlbumPickerActivity.this.removeSelfFromStack();
+                    if (!canceled) {
+                        PhotoAlbumPickerActivity.this.sendSelectedPhotos(photos, order);
+                    }
+                }
+            });
+        }
+        presentFragment(fragment);
     }
 }

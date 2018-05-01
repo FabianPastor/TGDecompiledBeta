@@ -38,24 +38,23 @@ public class JoinSheetUserCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(NUM), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
     }
 
     public void setUser(User user) {
         this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
         this.avatarDrawable.setInfo(user);
-        TLObject tLObject = (user == null || user.photo == null) ? null : user.photo.photo_small;
-        this.imageView.setImage(tLObject, "50_50", this.avatarDrawable);
+        TLObject photo = null;
+        if (!(user == null || user.photo == null)) {
+            photo = user.photo.photo_small;
+        }
+        this.imageView.setImage(photo, "50_50", this.avatarDrawable);
     }
 
-    public void setCount(int i) {
+    public void setCount(int count) {
         this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
-        AvatarDrawable avatarDrawable = this.avatarDrawable;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("+");
-        stringBuilder.append(LocaleController.formatShortNumber(i, this.result));
-        avatarDrawable.setInfo(0, null, null, false, stringBuilder.toString());
+        this.avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, this.result));
         this.imageView.setImage((FileLocation) null, "50_50", this.avatarDrawable);
     }
 }

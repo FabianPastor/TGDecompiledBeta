@@ -30,52 +30,48 @@ public final class WavExtractor implements Extractor {
         }
     }
 
-    public void release() {
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        return WavHeaderReader.peek(input) != null;
     }
 
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        return WavHeaderReader.peek(extractorInput) != null ? true : null;
-    }
-
-    public void init(ExtractorOutput extractorOutput) {
-        this.extractorOutput = extractorOutput;
-        this.trackOutput = extractorOutput.track(0, 1);
+    public void init(ExtractorOutput output) {
+        this.extractorOutput = output;
+        this.trackOutput = output.track(0, 1);
         this.wavHeader = null;
-        extractorOutput.endTracks();
+        output.endTracks();
     }
 
-    public void seek(long j, long j2) {
+    public void seek(long position, long timeUs) {
         this.pendingBytes = 0;
     }
 
-    public int read(ExtractorInput extractorInput, PositionHolder positionHolder) throws IOException, InterruptedException {
-        ExtractorInput extractorInput2 = extractorInput;
+    public void release() {
+    }
+
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
         if (this.wavHeader == null) {
-            r0.wavHeader = WavHeaderReader.peek(extractorInput);
-            if (r0.wavHeader == null) {
+            this.wavHeader = WavHeaderReader.peek(input);
+            if (this.wavHeader == null) {
                 throw new ParserException("Unsupported or unrecognized wav header.");
             }
-            r0.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, r0.wavHeader.getBitrate(), 32768, r0.wavHeader.getNumChannels(), r0.wavHeader.getSampleRateHz(), r0.wavHeader.getEncoding(), null, null, 0, null));
-            r0.bytesPerFrame = r0.wavHeader.getBytesPerFrame();
+            this.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, this.wavHeader.getBitrate(), 32768, this.wavHeader.getNumChannels(), this.wavHeader.getSampleRateHz(), this.wavHeader.getEncoding(), null, null, 0, null));
+            this.bytesPerFrame = this.wavHeader.getBytesPerFrame();
         }
-        if (!r0.wavHeader.hasDataBounds()) {
-            WavHeaderReader.skipToData(extractorInput2, r0.wavHeader);
-            r0.extractorOutput.seekMap(r0.wavHeader);
+        if (!this.wavHeader.hasDataBounds()) {
+            WavHeaderReader.skipToData(input, this.wavHeader);
+            this.extractorOutput.seekMap(this.wavHeader);
         }
-        int sampleData = r0.trackOutput.sampleData(extractorInput2, 32768 - r0.pendingBytes, true);
-        if (sampleData != -1) {
-            r0.pendingBytes += sampleData;
+        int bytesAppended = this.trackOutput.sampleData(input, 32768 - this.pendingBytes, true);
+        if (bytesAppended != -1) {
+            this.pendingBytes += bytesAppended;
         }
-        int i = r0.pendingBytes / r0.bytesPerFrame;
-        if (i > 0) {
-            long timeUs = r0.wavHeader.getTimeUs(extractorInput.getPosition() - ((long) r0.pendingBytes));
-            int i2 = i * r0.bytesPerFrame;
-            r0.pendingBytes -= i2;
-            r0.trackOutput.sampleMetadata(timeUs, 1, i2, r0.pendingBytes, null);
+        int pendingFrames = this.pendingBytes / this.bytesPerFrame;
+        if (pendingFrames > 0) {
+            long timeUs = this.wavHeader.getTimeUs(input.getPosition() - ((long) this.pendingBytes));
+            int size = pendingFrames * this.bytesPerFrame;
+            this.pendingBytes -= size;
+            this.trackOutput.sampleMetadata(timeUs, 1, size, this.pendingBytes, null);
         }
-        if (sampleData == -1) {
-            return -1;
-        }
-        return 0;
+        return bytesAppended == -1 ? -1 : 0;
     }
 }

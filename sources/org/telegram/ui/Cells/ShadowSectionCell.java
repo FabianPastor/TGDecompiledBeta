@@ -15,11 +15,11 @@ public class ShadowSectionCell extends View {
         setBackgroundDrawable(Theme.getThemedDrawable(context, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
     }
 
-    public void setSize(int i) {
-        this.size = i;
+    public void setSize(int value) {
+        this.size = value;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
     }
 }

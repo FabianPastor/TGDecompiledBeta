@@ -23,9 +23,9 @@ public abstract class BaseCell extends ViewGroup {
                 BaseCell.this.checkingForLongPress = false;
                 BaseCell.this.performHapticFeedback(0);
                 BaseCell.this.onLongPress();
-                MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
-                BaseCell.this.onTouchEvent(obtain);
-                obtain.recycle();
+                MotionEvent event = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
+                BaseCell.this.onTouchEvent(event);
+                event.recycle();
             }
         }
     }
@@ -43,16 +43,9 @@ public abstract class BaseCell extends ViewGroup {
         }
     }
 
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
-    protected void onLongPress() {
-    }
-
-    static /* synthetic */ int access$104(BaseCell baseCell) {
-        int i = baseCell.pressCount + 1;
-        baseCell.pressCount = i;
+    static /* synthetic */ int access$104(BaseCell x0) {
+        int i = x0.pressCount + 1;
+        x0.pressCount = i;
         return i;
     }
 
@@ -61,17 +54,17 @@ public abstract class BaseCell extends ViewGroup {
         setWillNotDraw(false);
     }
 
-    public static void setDrawableBounds(Drawable drawable, int i, int i2) {
-        setDrawableBounds(drawable, i, i2, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+    public static void setDrawableBounds(Drawable drawable, int x, int y) {
+        setDrawableBounds(drawable, x, y, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
     }
 
-    public static void setDrawableBounds(Drawable drawable, float f, float f2) {
-        setDrawableBounds(drawable, (int) f, (int) f2, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+    public static void setDrawableBounds(Drawable drawable, float x, float y) {
+        setDrawableBounds(drawable, (int) x, (int) y, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
     }
 
-    public static void setDrawableBounds(Drawable drawable, int i, int i2, int i3, int i4) {
+    public static void setDrawableBounds(Drawable drawable, int x, int y, int w, int h) {
         if (drawable != null) {
-            drawable.setBounds(i, i2, i3 + i, i4 + i2);
+            drawable.setBounds(x, y, x + w, y + h);
         }
     }
 
@@ -93,5 +86,12 @@ public abstract class BaseCell extends ViewGroup {
         if (this.pendingCheckForTap != null) {
             removeCallbacks(this.pendingCheckForTap);
         }
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
+    protected void onLongPress() {
     }
 }

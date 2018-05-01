@@ -2,6 +2,7 @@ package org.telegram.messenger.exoplayer2.text.webvtt;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
@@ -21,40 +22,40 @@ public final class Mp4WebvttDecoder extends SimpleSubtitleDecoder {
         super("Mp4WebvttDecoder");
     }
 
-    protected Mp4WebvttSubtitle decode(byte[] bArr, int i, boolean z) throws SubtitleDecoderException {
-        this.sampleData.reset(bArr, i);
-        bArr = new ArrayList();
+    protected Mp4WebvttSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
+        this.sampleData.reset(bytes, length);
+        List<Cue> resultingCueList = new ArrayList();
         while (this.sampleData.bytesLeft() > 0) {
-            if (this.sampleData.bytesLeft() < true) {
+            if (this.sampleData.bytesLeft() < 8) {
                 throw new SubtitleDecoderException("Incomplete Mp4Webvtt Top Level box header found.");
             }
-            i = this.sampleData.readInt();
+            int boxSize = this.sampleData.readInt();
             if (this.sampleData.readInt() == TYPE_vttc) {
-                bArr.add(parseVttCueBox(this.sampleData, this.builder, i - 8));
+                resultingCueList.add(parseVttCueBox(this.sampleData, this.builder, boxSize - 8));
             } else {
-                this.sampleData.skipBytes(i - 8);
+                this.sampleData.skipBytes(boxSize - 8);
             }
         }
-        return new Mp4WebvttSubtitle(bArr);
+        return new Mp4WebvttSubtitle(resultingCueList);
     }
 
-    private static Cue parseVttCueBox(ParsableByteArray parsableByteArray, Builder builder, int i) throws SubtitleDecoderException {
+    private static Cue parseVttCueBox(ParsableByteArray sampleData, Builder builder, int remainingCueBoxBytes) throws SubtitleDecoderException {
         builder.reset();
-        while (i > 0) {
-            if (i < 8) {
+        while (remainingCueBoxBytes > 0) {
+            if (remainingCueBoxBytes < 8) {
                 throw new SubtitleDecoderException("Incomplete vtt cue box header found.");
             }
-            int readInt = parsableByteArray.readInt();
-            int readInt2 = parsableByteArray.readInt();
-            i -= 8;
-            readInt -= 8;
-            String str = new String(parsableByteArray.data, parsableByteArray.getPosition(), readInt);
-            parsableByteArray.skipBytes(readInt);
-            i -= readInt;
-            if (readInt2 == TYPE_sttg) {
-                WebvttCueParser.parseCueSettingsList(str, builder);
-            } else if (readInt2 == TYPE_payl) {
-                WebvttCueParser.parseCueText(null, str.trim(), builder, Collections.emptyList());
+            int boxSize = sampleData.readInt();
+            int boxType = sampleData.readInt();
+            remainingCueBoxBytes -= 8;
+            int payloadLength = boxSize - 8;
+            String boxPayload = new String(sampleData.data, sampleData.getPosition(), payloadLength);
+            sampleData.skipBytes(payloadLength);
+            remainingCueBoxBytes -= payloadLength;
+            if (boxType == TYPE_sttg) {
+                WebvttCueParser.parseCueSettingsList(boxPayload, builder);
+            } else if (boxType == TYPE_payl) {
+                WebvttCueParser.parseCueText(null, boxPayload.trim(), builder, Collections.emptyList());
             }
         }
         return builder.build();

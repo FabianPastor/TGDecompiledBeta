@@ -8,10 +8,10 @@ public class Rect {
     /* renamed from: y */
     public float f27y;
 
-    public Rect(float f, float f2, float f3, float f4) {
-        this.f26x = f;
-        this.f27y = f2;
-        this.width = f3;
-        this.height = f4;
+    public Rect(float x, float y, float width, float height) {
+        this.f26x = x;
+        this.f27y = y;
+        this.width = width;
+        this.height = height;
     }
 }

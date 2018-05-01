@@ -5,9 +5,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
     Class returnType;
 
-    MethodSignatureImpl(int i, String str, Class cls, Class[] clsArr, String[] strArr, Class[] clsArr2, Class cls2) {
-        super(i, str, cls, clsArr, strArr, clsArr2);
-        this.returnType = cls2;
+    MethodSignatureImpl(int modifiers, String name, Class declaringType, Class[] parameterTypes, String[] parameterNames, Class[] exceptionTypes, Class returnType) {
+        super(modifiers, name, declaringType, parameterTypes, parameterNames, exceptionTypes);
+        this.returnType = returnType;
     }
 
     public Class getReturnType() {
@@ -17,20 +17,20 @@ class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
         return this.returnType;
     }
 
-    protected String createToString(StringMaker stringMaker) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(stringMaker.makeModifiersString(getModifiers()));
-        if (stringMaker.includeArgs) {
-            stringBuffer.append(stringMaker.makeTypeName(getReturnType()));
+    protected String createToString(StringMaker sm) {
+        StringBuffer buf = new StringBuffer();
+        buf.append(sm.makeModifiersString(getModifiers()));
+        if (sm.includeArgs) {
+            buf.append(sm.makeTypeName(getReturnType()));
         }
-        if (stringMaker.includeArgs) {
-            stringBuffer.append(" ");
+        if (sm.includeArgs) {
+            buf.append(" ");
         }
-        stringBuffer.append(stringMaker.makePrimaryTypeName(getDeclaringType(), getDeclaringTypeName()));
-        stringBuffer.append(".");
-        stringBuffer.append(getName());
-        stringMaker.addSignature(stringBuffer, getParameterTypes());
-        stringMaker.addThrows(stringBuffer, getExceptionTypes());
-        return stringBuffer.toString();
+        buf.append(sm.makePrimaryTypeName(getDeclaringType(), getDeclaringTypeName()));
+        buf.append(".");
+        buf.append(getName());
+        sm.addSignature(buf, getParameterTypes());
+        sm.addThrows(buf, getExceptionTypes());
+        return buf.toString();
     }
 }

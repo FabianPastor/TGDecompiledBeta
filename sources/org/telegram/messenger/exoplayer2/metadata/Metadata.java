@@ -15,11 +15,11 @@ public final class Metadata implements Parcelable {
         C05771() {
         }
 
-        public Metadata createFromParcel(Parcel parcel) {
-            return new Metadata(parcel);
+        public Metadata createFromParcel(Parcel in) {
+            return new Metadata(in);
         }
 
-        public Metadata[] newArray(int i) {
+        public Metadata[] newArray(int size) {
             return new Metadata[0];
         }
     }
@@ -27,30 +27,26 @@ public final class Metadata implements Parcelable {
     public interface Entry extends Parcelable {
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-    public Metadata(Entry... entryArr) {
-        if (entryArr == null) {
-            entryArr = new Entry[null];
+    public Metadata(Entry... entries) {
+        if (entries == null) {
+            entries = new Entry[0];
         }
-        this.entries = entryArr;
+        this.entries = entries;
     }
 
-    public Metadata(List<? extends Entry> list) {
-        if (list != null) {
-            this.entries = new Entry[list.size()];
-            list.toArray(this.entries);
+    public Metadata(List<? extends Entry> entries) {
+        if (entries != null) {
+            this.entries = new Entry[entries.size()];
+            entries.toArray(this.entries);
             return;
         }
-        this.entries = new Entry[null];
+        this.entries = new Entry[0];
     }
 
-    Metadata(Parcel parcel) {
-        this.entries = new Entry[parcel.readInt()];
+    Metadata(Parcel in) {
+        this.entries = new Entry[in.readInt()];
         for (int i = 0; i < this.entries.length; i++) {
-            this.entries[i] = (Entry) parcel.readParcelable(Entry.class.getClassLoader());
+            this.entries[i] = (Entry) in.readParcelable(Entry.class.getClassLoader());
         }
     }
 
@@ -58,30 +54,32 @@ public final class Metadata implements Parcelable {
         return this.entries.length;
     }
 
-    public Entry get(int i) {
-        return this.entries[i];
+    public Entry get(int index) {
+        return this.entries[index];
     }
 
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                return Arrays.equals(this.entries, ((Metadata) obj).entries);
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
         }
-        return null;
+        return Arrays.equals(this.entries, ((Metadata) obj).entries);
     }
 
     public int hashCode() {
         return Arrays.hashCode(this.entries);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(this.entries.length);
-        for (Parcelable writeParcelable : this.entries) {
-            parcel.writeParcelable(writeParcelable, 0);
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.entries.length);
+        for (Entry entry : this.entries) {
+            dest.writeParcelable(entry, 0);
         }
     }
 }

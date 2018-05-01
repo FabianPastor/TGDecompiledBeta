@@ -28,23 +28,23 @@ public final class StandaloneMediaClock implements MediaClock {
         }
     }
 
-    public void resetPosition(long j) {
-        this.baseUs = j;
-        if (this.started != null) {
+    public void resetPosition(long positionUs) {
+        this.baseUs = positionUs;
+        if (this.started) {
             this.baseElapsedMs = this.clock.elapsedRealtime();
         }
     }
 
     public long getPositionUs() {
-        long j = this.baseUs;
+        long positionUs = this.baseUs;
         if (!this.started) {
-            return j;
+            return positionUs;
         }
-        long elapsedRealtime = this.clock.elapsedRealtime() - this.baseElapsedMs;
+        long elapsedSinceBaseMs = this.clock.elapsedRealtime() - this.baseElapsedMs;
         if (this.playbackParameters.speed == 1.0f) {
-            return j + C0542C.msToUs(elapsedRealtime);
+            return positionUs + C0542C.msToUs(elapsedSinceBaseMs);
         }
-        return j + this.playbackParameters.getMediaTimeUsForPlayoutTimeMs(elapsedRealtime);
+        return positionUs + this.playbackParameters.getMediaTimeUsForPlayoutTimeMs(elapsedSinceBaseMs);
     }
 
     public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {

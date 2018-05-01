@@ -14,91 +14,70 @@ final class VbriSeeker implements Seeker {
     private final long[] positions;
     private final long[] timesUs;
 
-    public boolean isSeekable() {
-        return true;
-    }
-
-    public static VbriSeeker create(long j, long j2, MpegAudioHeader mpegAudioHeader, ParsableByteArray parsableByteArray) {
-        long j3 = j;
-        MpegAudioHeader mpegAudioHeader2 = mpegAudioHeader;
-        ParsableByteArray parsableByteArray2 = parsableByteArray;
-        parsableByteArray2.skipBytes(10);
-        int readInt = parsableByteArray.readInt();
-        if (readInt <= 0) {
+    public static VbriSeeker create(long inputLength, long position, MpegAudioHeader mpegAudioHeader, ParsableByteArray frame) {
+        frame.skipBytes(10);
+        int numFrames = frame.readInt();
+        if (numFrames <= 0) {
             return null;
         }
-        long j4;
-        int i = mpegAudioHeader2.sampleRate;
-        long scaleLargeTimestamp = Util.scaleLargeTimestamp((long) readInt, C0542C.MICROS_PER_SECOND * ((long) (i >= 32000 ? 1152 : 576)), (long) i);
-        readInt = parsableByteArray.readUnsignedShort();
-        int readUnsignedShort = parsableByteArray.readUnsignedShort();
-        int readUnsignedShort2 = parsableByteArray.readUnsignedShort();
-        parsableByteArray2.skipBytes(2);
-        long j5 = j2 + ((long) mpegAudioHeader2.frameSize);
-        long[] jArr = new long[readInt];
-        long[] jArr2 = new long[readInt];
-        int i2 = 0;
-        long j6 = j2;
-        while (i2 < readInt) {
-            int readUnsignedByte;
-            j4 = scaleLargeTimestamp;
-            jArr[i2] = (((long) i2) * scaleLargeTimestamp) / ((long) readInt);
-            jArr2[i2] = Math.max(j6, j5);
-            switch (readUnsignedShort2) {
+        int sampleRate = mpegAudioHeader.sampleRate;
+        long durationUs = Util.scaleLargeTimestamp((long) numFrames, ((long) (sampleRate >= 32000 ? 1152 : 576)) * C0542C.MICROS_PER_SECOND, (long) sampleRate);
+        int entryCount = frame.readUnsignedShort();
+        int scale = frame.readUnsignedShort();
+        int entrySize = frame.readUnsignedShort();
+        frame.skipBytes(2);
+        long minPosition = position + ((long) mpegAudioHeader.frameSize);
+        long[] timesUs = new long[entryCount];
+        long[] positions = new long[entryCount];
+        for (int index = 0; index < entryCount; index++) {
+            int segmentSize;
+            timesUs[index] = (((long) index) * durationUs) / ((long) entryCount);
+            positions[index] = Math.max(position, minPosition);
+            switch (entrySize) {
                 case 1:
-                    readUnsignedByte = parsableByteArray.readUnsignedByte();
+                    segmentSize = frame.readUnsignedByte();
                     break;
                 case 2:
-                    readUnsignedByte = parsableByteArray.readUnsignedShort();
+                    segmentSize = frame.readUnsignedShort();
                     break;
                 case 3:
-                    readUnsignedByte = parsableByteArray.readUnsignedInt24();
+                    segmentSize = frame.readUnsignedInt24();
                     break;
                 case 4:
-                    readUnsignedByte = parsableByteArray.readUnsignedIntToInt();
+                    segmentSize = frame.readUnsignedIntToInt();
                     break;
                 default:
                     return null;
             }
-            i2++;
-            j6 += (long) (readUnsignedByte * readUnsignedShort);
-            scaleLargeTimestamp = j4;
-            j3 = j;
+            position += (long) (segmentSize * scale);
         }
-        j4 = scaleLargeTimestamp;
-        long j7 = j;
-        if (!(j7 == -1 || j7 == j6)) {
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("VBRI data size mismatch: ");
-            stringBuilder.append(j7);
-            stringBuilder.append(", ");
-            stringBuilder.append(j6);
-            Log.w(str, stringBuilder.toString());
+        if (!(inputLength == -1 || inputLength == position)) {
+            Log.w(TAG, "VBRI data size mismatch: " + inputLength + ", " + position);
         }
-        return new VbriSeeker(jArr, jArr2, j4);
+        return new VbriSeeker(timesUs, positions, durationUs);
     }
 
-    private VbriSeeker(long[] jArr, long[] jArr2, long j) {
-        this.timesUs = jArr;
-        this.positions = jArr2;
-        this.durationUs = j;
+    private VbriSeeker(long[] timesUs, long[] positions, long durationUs) {
+        this.timesUs = timesUs;
+        this.positions = positions;
+        this.durationUs = durationUs;
     }
 
-    public SeekPoints getSeekPoints(long j) {
-        int binarySearchFloor = Util.binarySearchFloor(this.timesUs, j, true, true);
-        SeekPoint seekPoint = new SeekPoint(this.timesUs[binarySearchFloor], this.positions[binarySearchFloor]);
-        if (seekPoint.timeUs < j) {
-            if (binarySearchFloor != this.timesUs.length - 1) {
-                binarySearchFloor++;
-                return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[binarySearchFloor], this.positions[binarySearchFloor]));
-            }
+    public boolean isSeekable() {
+        return true;
+    }
+
+    public SeekPoints getSeekPoints(long timeUs) {
+        int tableIndex = Util.binarySearchFloor(this.timesUs, timeUs, true, true);
+        SeekPoint seekPoint = new SeekPoint(this.timesUs[tableIndex], this.positions[tableIndex]);
+        if (seekPoint.timeUs >= timeUs || tableIndex == this.timesUs.length - 1) {
+            return new SeekPoints(seekPoint);
         }
-        return new SeekPoints(seekPoint);
+        return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[tableIndex + 1], this.positions[tableIndex + 1]));
     }
 
-    public long getTimeUs(long j) {
-        return this.timesUs[Util.binarySearchFloor(this.positions, j, true, true)];
+    public long getTimeUs(long position) {
+        return this.timesUs[Util.binarySearchFloor(this.positions, position, true, true)];
     }
 
     public long getDurationUs() {

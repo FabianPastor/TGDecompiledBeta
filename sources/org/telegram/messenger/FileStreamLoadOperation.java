@@ -31,8 +31,8 @@ public class FileStreamLoadOperation implements DataSource {
         this(null);
     }
 
-    public FileStreamLoadOperation(TransferListener<? super FileStreamLoadOperation> transferListener) {
-        this.listener = transferListener;
+    public FileStreamLoadOperation(TransferListener<? super FileStreamLoadOperation> listener) {
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
@@ -44,9 +44,9 @@ public class FileStreamLoadOperation implements DataSource {
         this.document.size = Utilities.parseInt(this.uri.getQueryParameter("size")).intValue();
         this.document.dc_id = Utilities.parseInt(this.uri.getQueryParameter("dc")).intValue();
         this.document.mime_type = this.uri.getQueryParameter("mime");
-        TL_documentAttributeFilename tL_documentAttributeFilename = new TL_documentAttributeFilename();
-        tL_documentAttributeFilename.file_name = this.uri.getQueryParameter("name");
-        this.document.attributes.add(tL_documentAttributeFilename);
+        TL_documentAttributeFilename filename = new TL_documentAttributeFilename();
+        filename.file_name = this.uri.getQueryParameter("name");
+        this.document.attributes.add(filename);
         if (this.document.mime_type.startsWith(MimeTypes.BASE_TYPE_VIDEO)) {
             this.document.attributes.add(new TL_documentAttributeVideo());
         } else if (this.document.mime_type.startsWith(MimeTypes.BASE_TYPE_AUDIO)) {
@@ -70,21 +70,21 @@ public class FileStreamLoadOperation implements DataSource {
         return this.bytesRemaining;
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        int i3 = 0;
-        if (i2 == 0) {
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
+        if (readLength == 0) {
             return 0;
         }
         if (this.bytesRemaining == 0) {
             return -1;
         }
+        int availableLength = 0;
         try {
-            if (this.bytesRemaining < ((long) i2)) {
-                i2 = (int) this.bytesRemaining;
+            if (this.bytesRemaining < ((long) readLength)) {
+                readLength = (int) this.bytesRemaining;
             }
-            while (i3 == 0) {
-                i3 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2);
-                if (i3 == 0) {
+            while (availableLength == 0) {
+                availableLength = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, readLength);
+                if (availableLength == 0) {
                     if (this.loadOperation.isPaused()) {
                         FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.currentOffset);
                     }
@@ -92,15 +92,16 @@ public class FileStreamLoadOperation implements DataSource {
                     this.countDownLatch.await();
                 }
             }
-            this.file.readFully(bArr, i, i3);
-            this.currentOffset += i3;
-            this.bytesRemaining -= (long) i3;
-            if (this.listener != null) {
-                this.listener.onBytesTransferred(this, i3);
+            this.file.readFully(buffer, offset, availableLength);
+            this.currentOffset += availableLength;
+            this.bytesRemaining -= (long) availableLength;
+            if (this.listener == null) {
+                return availableLength;
             }
-            return i3;
-        } catch (byte[] bArr2) {
-            throw new IOException(bArr2);
+            this.listener.onBytesTransferred(this, availableLength);
+            return availableLength;
+        } catch (Exception e) {
+            throw new IOException(e);
         }
     }
 

@@ -11,74 +11,78 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class WebvttSubtitle implements Subtitle {
-    private final long[] cueTimesUs = new long[(2 * this.numCues)];
+    private final long[] cueTimesUs = new long[(this.numCues * 2)];
     private final List<WebvttCue> cues;
     private final int numCues;
     private final long[] sortedCueTimesUs;
 
-    public WebvttSubtitle(List<WebvttCue> list) {
-        this.cues = list;
-        this.numCues = list.size();
-        for (int i = 0; i < this.numCues; i++) {
-            WebvttCue webvttCue = (WebvttCue) list.get(i);
-            int i2 = i * 2;
-            this.cueTimesUs[i2] = webvttCue.startTime;
-            this.cueTimesUs[i2 + 1] = webvttCue.endTime;
+    public WebvttSubtitle(List<WebvttCue> cues) {
+        this.cues = cues;
+        this.numCues = cues.size();
+        for (int cueIndex = 0; cueIndex < this.numCues; cueIndex++) {
+            WebvttCue cue = (WebvttCue) cues.get(cueIndex);
+            int arrayIndex = cueIndex * 2;
+            this.cueTimesUs[arrayIndex] = cue.startTime;
+            this.cueTimesUs[arrayIndex + 1] = cue.endTime;
         }
         this.sortedCueTimesUs = Arrays.copyOf(this.cueTimesUs, this.cueTimesUs.length);
         Arrays.sort(this.sortedCueTimesUs);
     }
 
-    public int getNextEventTimeIndex(long j) {
-        j = Util.binarySearchCeil(this.sortedCueTimesUs, j, false, false);
-        return j < this.sortedCueTimesUs.length ? j : -1;
+    public int getNextEventTimeIndex(long timeUs) {
+        int index = Util.binarySearchCeil(this.sortedCueTimesUs, timeUs, false, false);
+        return index < this.sortedCueTimesUs.length ? index : -1;
     }
 
     public int getEventTimeCount() {
         return this.sortedCueTimesUs.length;
     }
 
-    public long getEventTime(int i) {
-        boolean z = false;
-        Assertions.checkArgument(i >= 0);
-        if (i < this.sortedCueTimesUs.length) {
+    public long getEventTime(int index) {
+        boolean z;
+        boolean z2 = true;
+        if (index >= 0) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
-        return this.sortedCueTimesUs[i];
+        if (index >= this.sortedCueTimesUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
+        return this.sortedCueTimesUs[index];
     }
 
-    public List<Cue> getCues(long j) {
-        CharSequence charSequence = null;
-        List list = null;
-        WebvttCue webvttCue = list;
-        for (int i = 0; i < this.numCues; i++) {
-            int i2 = i * 2;
-            if (this.cueTimesUs[i2] <= j && j < this.cueTimesUs[i2 + 1]) {
+    public List<Cue> getCues(long timeUs) {
+        ArrayList<Cue> list = null;
+        WebvttCue firstNormalCue = null;
+        SpannableStringBuilder normalCueTextBuilder = null;
+        int i = 0;
+        while (i < this.numCues) {
+            if (this.cueTimesUs[i * 2] <= timeUs && timeUs < this.cueTimesUs[(i * 2) + 1]) {
                 if (list == null) {
                     list = new ArrayList();
                 }
-                WebvttCue webvttCue2 = (WebvttCue) this.cues.get(i);
-                if (!webvttCue2.isNormalCue()) {
-                    list.add(webvttCue2);
-                } else if (webvttCue == null) {
-                    webvttCue = webvttCue2;
-                } else if (charSequence == null) {
-                    charSequence = new SpannableStringBuilder();
-                    charSequence.append(webvttCue.text).append("\n").append(webvttCue2.text);
+                WebvttCue cue = (WebvttCue) this.cues.get(i);
+                if (!cue.isNormalCue()) {
+                    list.add(cue);
+                } else if (firstNormalCue == null) {
+                    firstNormalCue = cue;
+                } else if (normalCueTextBuilder == null) {
+                    normalCueTextBuilder = new SpannableStringBuilder();
+                    normalCueTextBuilder.append(firstNormalCue.text).append("\n").append(cue.text);
                 } else {
-                    charSequence.append("\n").append(webvttCue2.text);
+                    normalCueTextBuilder.append("\n").append(cue.text);
                 }
             }
+            i++;
         }
-        if (charSequence != null) {
-            list.add(new WebvttCue(charSequence));
-        } else if (webvttCue != null) {
-            list.add(webvttCue);
+        if (normalCueTextBuilder != null) {
+            list.add(new WebvttCue(normalCueTextBuilder));
+        } else if (firstNormalCue != null) {
+            list.add(firstNormalCue);
         }
-        if (list != null) {
-            return list;
-        }
-        return Collections.emptyList();
+        return list != null ? list : Collections.emptyList();
     }
 }

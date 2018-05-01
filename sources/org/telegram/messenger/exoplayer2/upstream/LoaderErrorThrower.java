@@ -8,7 +8,7 @@ public interface LoaderErrorThrower {
         public void maybeThrowError() throws IOException {
         }
 
-        public void maybeThrowError(int i) throws IOException {
+        public void maybeThrowError(int minRetryCount) throws IOException {
         }
     }
 

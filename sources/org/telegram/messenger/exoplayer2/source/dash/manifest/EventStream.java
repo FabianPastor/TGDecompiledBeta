@@ -9,19 +9,15 @@ public final class EventStream {
     public final long timescale;
     public final String value;
 
-    public EventStream(String str, String str2, long j, long[] jArr, EventMessage[] eventMessageArr) {
-        this.schemeIdUri = str;
-        this.value = str2;
-        this.timescale = j;
-        this.presentationTimesUs = jArr;
-        this.events = eventMessageArr;
+    public EventStream(String schemeIdUri, String value, long timescale, long[] presentationTimesUs, EventMessage[] events) {
+        this.schemeIdUri = schemeIdUri;
+        this.value = value;
+        this.timescale = timescale;
+        this.presentationTimesUs = presentationTimesUs;
+        this.events = events;
     }
 
     public String id() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.schemeIdUri);
-        stringBuilder.append("/");
-        stringBuilder.append(this.value);
-        return stringBuilder.toString();
+        return this.schemeIdUri + "/" + this.value;
     }
 }

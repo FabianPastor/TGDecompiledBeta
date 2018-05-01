@@ -18,64 +18,59 @@ public class CubicBezierInterpolator implements Interpolator {
     protected PointF end;
     protected PointF start;
 
-    public CubicBezierInterpolator(PointF pointF, PointF pointF2) throws IllegalArgumentException {
+    public CubicBezierInterpolator(PointF start, PointF end) throws IllegalArgumentException {
         this.f15a = new PointF();
         this.f16b = new PointF();
         this.f17c = new PointF();
-        if (pointF.x >= 0.0f) {
-            if (pointF.x <= 1.0f) {
-                if (pointF2.x >= 0.0f) {
-                    if (pointF2.x <= 1.0f) {
-                        this.start = pointF;
-                        this.end = pointF2;
-                        return;
-                    }
-                }
-                throw new IllegalArgumentException("endX value must be in the range [0, 1]");
-            }
+        if (start.x < 0.0f || start.x > 1.0f) {
+            throw new IllegalArgumentException("startX value must be in the range [0, 1]");
+        } else if (end.x < 0.0f || end.x > 1.0f) {
+            throw new IllegalArgumentException("endX value must be in the range [0, 1]");
+        } else {
+            this.start = start;
+            this.end = end;
         }
-        throw new IllegalArgumentException("startX value must be in the range [0, 1]");
     }
 
-    public CubicBezierInterpolator(float f, float f2, float f3, float f4) {
-        this(new PointF(f, f2), new PointF(f3, f4));
+    public CubicBezierInterpolator(float startX, float startY, float endX, float endY) {
+        this(new PointF(startX, startY), new PointF(endX, endY));
     }
 
-    public CubicBezierInterpolator(double d, double d2, double d3, double d4) {
-        this((float) d, (float) d2, (float) d3, (float) d4);
+    public CubicBezierInterpolator(double startX, double startY, double endX, double endY) {
+        this((float) startX, (float) startY, (float) endX, (float) endY);
     }
 
-    public float getInterpolation(float f) {
-        return getBezierCoordinateY(getXForTime(f));
+    public float getInterpolation(float time) {
+        return getBezierCoordinateY(getXForTime(time));
     }
 
-    protected float getBezierCoordinateY(float f) {
+    protected float getBezierCoordinateY(float time) {
         this.f17c.y = this.start.y * 3.0f;
-        this.f16b.y = (3.0f * (this.end.y - this.start.y)) - this.f17c.y;
+        this.f16b.y = ((this.end.y - this.start.y) * 3.0f) - this.f17c.y;
         this.f15a.y = (1.0f - this.f17c.y) - this.f16b.y;
-        return f * (this.f17c.y + ((this.f16b.y + (this.f15a.y * f)) * f));
+        return (this.f17c.y + ((this.f16b.y + (this.f15a.y * time)) * time)) * time;
     }
 
-    protected float getXForTime(float f) {
-        float f2 = f;
+    protected float getXForTime(float time) {
+        float x = time;
         for (int i = 1; i < 14; i++) {
-            float bezierCoordinateX = getBezierCoordinateX(f2) - f;
-            if (((double) Math.abs(bezierCoordinateX)) < 0.001d) {
+            float z = getBezierCoordinateX(x) - time;
+            if (((double) Math.abs(z)) < 0.001d) {
                 break;
             }
-            f2 -= bezierCoordinateX / getXDerivate(f2);
+            x -= z / getXDerivate(x);
         }
-        return f2;
+        return x;
     }
 
-    private float getXDerivate(float f) {
-        return this.f17c.x + (f * ((2.0f * this.f16b.x) + ((3.0f * this.f15a.x) * f)));
+    private float getXDerivate(float t) {
+        return this.f17c.x + (((2.0f * this.f16b.x) + ((3.0f * this.f15a.x) * t)) * t);
     }
 
-    private float getBezierCoordinateX(float f) {
+    private float getBezierCoordinateX(float time) {
         this.f17c.x = this.start.x * 3.0f;
-        this.f16b.x = (3.0f * (this.end.x - this.start.x)) - this.f17c.x;
+        this.f16b.x = ((this.end.x - this.start.x) * 3.0f) - this.f17c.x;
         this.f15a.x = (1.0f - this.f17c.x) - this.f16b.x;
-        return f * (this.f17c.x + ((this.f16b.x + (this.f15a.x * f)) * f));
+        return (this.f17c.x + ((this.f16b.x + (this.f15a.x * time)) * time)) * time;
     }
 }

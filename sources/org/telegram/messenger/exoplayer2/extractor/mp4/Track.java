@@ -23,21 +23,21 @@ public final class Track {
     public @interface Transformation {
     }
 
-    public Track(int i, int i2, long j, long j2, long j3, Format format, int i3, TrackEncryptionBox[] trackEncryptionBoxArr, int i4, long[] jArr, long[] jArr2) {
-        this.id = i;
-        this.type = i2;
-        this.timescale = j;
-        this.movieTimescale = j2;
-        this.durationUs = j3;
+    public Track(int id, int type, long timescale, long movieTimescale, long durationUs, Format format, int sampleTransformation, TrackEncryptionBox[] sampleDescriptionEncryptionBoxes, int nalUnitLengthFieldLength, long[] editListDurations, long[] editListMediaTimes) {
+        this.id = id;
+        this.type = type;
+        this.timescale = timescale;
+        this.movieTimescale = movieTimescale;
+        this.durationUs = durationUs;
         this.format = format;
-        this.sampleTransformation = i3;
-        this.sampleDescriptionEncryptionBoxes = trackEncryptionBoxArr;
-        this.nalUnitLengthFieldLength = i4;
-        this.editListDurations = jArr;
-        this.editListMediaTimes = jArr2;
+        this.sampleTransformation = sampleTransformation;
+        this.sampleDescriptionEncryptionBoxes = sampleDescriptionEncryptionBoxes;
+        this.nalUnitLengthFieldLength = nalUnitLengthFieldLength;
+        this.editListDurations = editListDurations;
+        this.editListMediaTimes = editListMediaTimes;
     }
 
-    public TrackEncryptionBox getSampleDescriptionEncryptionBox(int i) {
-        return this.sampleDescriptionEncryptionBoxes == null ? 0 : this.sampleDescriptionEncryptionBoxes[i];
+    public TrackEncryptionBox getSampleDescriptionEncryptionBox(int sampleDescriptionIndex) {
+        return this.sampleDescriptionEncryptionBoxes == null ? null : this.sampleDescriptionEncryptionBoxes[sampleDescriptionIndex];
     }
 }

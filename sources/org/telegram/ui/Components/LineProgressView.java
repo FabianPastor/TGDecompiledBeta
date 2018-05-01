@@ -9,8 +9,8 @@ import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 
 public class LineProgressView extends View {
-    private static DecelerateInterpolator decelerateInterpolator;
-    private static Paint progressPaint;
+    private static DecelerateInterpolator decelerateInterpolator = null;
+    private static Paint progressPaint = null;
     private float animatedAlphaValue = 1.0f;
     private float animatedProgressValue = 0.0f;
     private float animationProgressStart = 0.0f;
@@ -31,25 +31,25 @@ public class LineProgressView extends View {
     }
 
     private void updateAnimation() {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = currentTimeMillis - this.lastUpdateTime;
-        this.lastUpdateTime = currentTimeMillis;
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.lastUpdateTime;
+        this.lastUpdateTime = newTime;
         if (!(this.animatedProgressValue == 1.0f || this.animatedProgressValue == this.currentProgress)) {
-            float f = this.currentProgress - this.animationProgressStart;
-            if (f > 0.0f) {
-                this.currentProgressTime += j;
+            float progressDiff = this.currentProgress - this.animationProgressStart;
+            if (progressDiff > 0.0f) {
+                this.currentProgressTime += dt;
                 if (this.currentProgressTime >= 300) {
                     this.animatedProgressValue = this.currentProgress;
                     this.animationProgressStart = this.currentProgress;
                     this.currentProgressTime = 0;
                 } else {
-                    this.animatedProgressValue = this.animationProgressStart + (f * decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f));
+                    this.animatedProgressValue = this.animationProgressStart + (decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
                 }
             }
             invalidate();
         }
         if (this.animatedProgressValue >= 1.0f && this.animatedProgressValue == 1.0f && this.animatedAlphaValue != 0.0f) {
-            this.animatedAlphaValue -= ((float) j) / 200.0f;
+            this.animatedAlphaValue -= ((float) dt) / 200.0f;
             if (this.animatedAlphaValue <= 0.0f) {
                 this.animatedAlphaValue = 0.0f;
             }
@@ -57,26 +57,26 @@ public class LineProgressView extends View {
         }
     }
 
-    public void setProgressColor(int i) {
-        this.progressColor = i;
+    public void setProgressColor(int color) {
+        this.progressColor = color;
     }
 
-    public void setBackColor(int i) {
-        this.backColor = i;
+    public void setBackColor(int color) {
+        this.backColor = color;
     }
 
-    public void setProgress(float f, boolean z) {
-        if (z) {
+    public void setProgress(float value, boolean animated) {
+        if (animated) {
             this.animationProgressStart = this.animatedProgressValue;
         } else {
-            this.animatedProgressValue = f;
-            this.animationProgressStart = f;
+            this.animatedProgressValue = value;
+            this.animationProgressStart = value;
         }
-        if (f != 1.0f) {
+        if (value != 1.0f) {
             this.animatedAlphaValue = 1.0f;
         }
-        this.currentProgress = f;
-        this.currentProgressTime = 0.0f;
+        this.currentProgress = value;
+        this.currentProgressTime = 0;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -88,7 +88,7 @@ public class LineProgressView extends View {
             canvas.drawRect((float) ((int) (((float) getWidth()) * this.animatedProgressValue)), 0.0f, (float) getWidth(), (float) getHeight(), progressPaint);
         }
         progressPaint.setColor(this.progressColor);
-        progressPaint.setAlpha((int) (255.0f * this.animatedAlphaValue));
+        progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
         canvas.drawRect(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight(), progressPaint);
         updateAnimation();
     }

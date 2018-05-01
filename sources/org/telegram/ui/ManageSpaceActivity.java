@@ -40,37 +40,37 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         C15191() {
         }
 
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (ManageSpaceActivity.this.actionBarLayout.fragmentsStack.isEmpty() != null || motionEvent.getAction() != 1) {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (ManageSpaceActivity.this.actionBarLayout.fragmentsStack.isEmpty() || event.getAction() != 1) {
                 return false;
             }
-            view = motionEvent.getX();
-            motionEvent = motionEvent.getY();
-            int[] iArr = new int[2];
-            ManageSpaceActivity.this.layersActionBarLayout.getLocationOnScreen(iArr);
-            int i = iArr[0];
-            int i2 = iArr[1];
-            if (!ManageSpaceActivity.this.layersActionBarLayout.checkTransitionAnimation()) {
-                if (view <= ((float) i) || view >= ((float) (i + ManageSpaceActivity.this.layersActionBarLayout.getWidth())) || motionEvent <= ((float) i2) || motionEvent >= ((float) (i2 + ManageSpaceActivity.this.layersActionBarLayout.getHeight()))) {
-                    if (ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.isEmpty() == null) {
-                        while (ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.size() - 1 > null) {
-                            ManageSpaceActivity.this.layersActionBarLayout.removeFragmentFromStack((BaseFragment) ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.get(0));
-                        }
-                        ManageSpaceActivity.this.layersActionBarLayout.closeLastFragment(true);
-                    }
-                    return true;
-                }
+            float x = event.getX();
+            float y = event.getY();
+            int[] location = new int[2];
+            ManageSpaceActivity.this.layersActionBarLayout.getLocationOnScreen(location);
+            int viewX = location[0];
+            int viewY = location[1];
+            if (ManageSpaceActivity.this.layersActionBarLayout.checkTransitionAnimation() || (x > ((float) viewX) && x < ((float) (ManageSpaceActivity.this.layersActionBarLayout.getWidth() + viewX)) && y > ((float) viewY) && y < ((float) (ManageSpaceActivity.this.layersActionBarLayout.getHeight() + viewY)))) {
+                return false;
             }
-            return false;
+            if (!ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                int a = 0;
+                while (ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
+                    ManageSpaceActivity.this.layersActionBarLayout.removeFragmentFromStack((BaseFragment) ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.get(0));
+                    a = (a - 1) + 1;
+                }
+                ManageSpaceActivity.this.layersActionBarLayout.closeLastFragment(true);
+            }
+            return true;
         }
     }
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$2 */
     class C15202 implements OnClickListener {
-        public void onClick(View view) {
+        C15202() {
         }
 
-        C15202() {
+        public void onClick(View v) {
         }
     }
 
@@ -87,28 +87,16 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         }
     }
 
-    public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout) {
-        return true;
-    }
-
-    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, ActionBarLayout actionBarLayout) {
-        return true;
-    }
-
-    public boolean onPreIme() {
-        return false;
-    }
-
-    protected void onCreate(Bundle bundle) {
-        ApplicationLoader.postInitApplication();
+    protected void onCreate(Bundle savedInstanceState) {
         boolean z = true;
+        ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
         setTheme(C0446R.style.Theme.TMessages);
         getWindow().setBackgroundDrawableResource(C0446R.drawable.transparent);
-        super.onCreate(bundle);
-        int identifier = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (identifier > 0) {
-            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(identifier);
+        super.onCreate(savedInstanceState);
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
         Theme.createDialogsResources(this);
         this.actionBarLayout = new ActionBarLayout(this);
@@ -117,29 +105,29 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View relativeLayout = new RelativeLayout(this);
-            this.drawerLayoutContainer.addView(relativeLayout);
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) relativeLayout.getLayoutParams();
-            layoutParams.width = -1;
-            layoutParams.height = -1;
-            relativeLayout.setLayoutParams(layoutParams);
-            View view = new View(this);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(C0446R.drawable.catstile);
-            bitmapDrawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
-            view.setBackgroundDrawable(bitmapDrawable);
-            relativeLayout.addView(view, LayoutHelper.createRelative(-1, -1));
-            relativeLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
-            view = new FrameLayout(this);
-            view.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            relativeLayout.addView(view, LayoutHelper.createRelative(-1, -1));
-            view.setOnTouchListener(new C15191());
-            view.setOnClickListener(new C15202());
+            RelativeLayout launchLayout = new RelativeLayout(this);
+            this.drawerLayoutContainer.addView(launchLayout);
+            FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) launchLayout.getLayoutParams();
+            layoutParams1.width = -1;
+            layoutParams1.height = -1;
+            launchLayout.setLayoutParams(layoutParams1);
+            View backgroundTablet = new View(this);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0446R.drawable.catstile);
+            drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+            backgroundTablet.setBackgroundDrawable(drawable);
+            launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            launchLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
+            FrameLayout shadowTablet = new FrameLayout(this);
+            shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
+            shadowTablet.setOnTouchListener(new C15191());
+            shadowTablet.setOnClickListener(new C15202());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
-            this.layersActionBarLayout.setBackgroundView(view);
+            this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
             this.layersActionBarLayout.setBackgroundResource(C0446R.drawable.boxshadow);
-            relativeLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 528));
+            launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 528));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
@@ -152,14 +140,14 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         this.actionBarLayout.setDelegate(this);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
         Intent intent = getIntent();
-        if (bundle == null) {
+        if (savedInstanceState == null) {
             z = false;
         }
         handleIntent(intent, false, z, false);
         needLayout();
     }
 
-    private boolean handleIntent(Intent intent, boolean z, boolean z2, boolean z3) {
+    private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
         if (AndroidUtilities.isTablet()) {
             if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
                 this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
@@ -171,8 +159,12 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         if (AndroidUtilities.isTablet()) {
             this.layersActionBarLayout.showLastFragment();
         }
-        intent.setAction(false);
-        return null;
+        intent.setAction(null);
+        return false;
+    }
+
+    public boolean onPreIme() {
+        return false;
     }
 
     protected void onNewIntent(Intent intent) {
@@ -186,43 +178,42 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         }
     }
 
-    public void presentFragment(BaseFragment baseFragment) {
-        this.actionBarLayout.presentFragment(baseFragment);
+    public void presentFragment(BaseFragment fragment) {
+        this.actionBarLayout.presentFragment(fragment);
     }
 
-    public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
-        return this.actionBarLayout.presentFragment(baseFragment, z, z2, true);
+    public boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation) {
+        return this.actionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true);
     }
 
     public void needLayout() {
         if (AndroidUtilities.isTablet()) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.layersActionBarLayout.getLayoutParams();
-            layoutParams.leftMargin = (AndroidUtilities.displaySize.x - layoutParams.width) / 2;
-            int i = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
-            layoutParams.topMargin = i + (((AndroidUtilities.displaySize.y - layoutParams.height) - i) / 2);
-            this.layersActionBarLayout.setLayoutParams(layoutParams);
-            if (AndroidUtilities.isSmallTablet()) {
-                if (getResources().getConfiguration().orientation != 2) {
-                    layoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
-                    layoutParams.width = -1;
-                    layoutParams.height = -1;
-                    this.actionBarLayout.setLayoutParams(layoutParams);
+            RelativeLayout.LayoutParams relativeLayoutParams = (RelativeLayout.LayoutParams) this.layersActionBarLayout.getLayoutParams();
+            relativeLayoutParams.leftMargin = (AndroidUtilities.displaySize.x - relativeLayoutParams.width) / 2;
+            int y = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+            relativeLayoutParams.topMargin = (((AndroidUtilities.displaySize.y - relativeLayoutParams.height) - y) / 2) + y;
+            this.layersActionBarLayout.setLayoutParams(relativeLayoutParams);
+            if (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == 2) {
+                int leftWidth = (AndroidUtilities.displaySize.x / 100) * 35;
+                if (leftWidth < AndroidUtilities.dp(320.0f)) {
+                    leftWidth = AndroidUtilities.dp(320.0f);
+                }
+                relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
+                relativeLayoutParams.width = leftWidth;
+                relativeLayoutParams.height = -1;
+                this.actionBarLayout.setLayoutParams(relativeLayoutParams);
+                if (AndroidUtilities.isSmallTablet() && this.actionBarLayout.fragmentsStack.size() == 2) {
+                    ((BaseFragment) this.actionBarLayout.fragmentsStack.get(1)).onPause();
+                    this.actionBarLayout.fragmentsStack.remove(1);
+                    this.actionBarLayout.showLastFragment();
                     return;
                 }
+                return;
             }
-            int i2 = (AndroidUtilities.displaySize.x / 100) * 35;
-            if (i2 < AndroidUtilities.dp(320.0f)) {
-                i2 = AndroidUtilities.dp(320.0f);
-            }
-            RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
-            layoutParams2.width = i2;
-            layoutParams2.height = -1;
-            this.actionBarLayout.setLayoutParams(layoutParams2);
-            if (AndroidUtilities.isSmallTablet() && this.actionBarLayout.fragmentsStack.size() == 2) {
-                ((BaseFragment) this.actionBarLayout.fragmentsStack.get(1)).onPause();
-                this.actionBarLayout.fragmentsStack.remove(1);
-                this.actionBarLayout.showLastFragment();
-            }
+            relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
+            relativeLayoutParams.width = -1;
+            relativeLayoutParams.height = -1;
+            this.actionBarLayout.setLayoutParams(relativeLayoutParams);
         }
     }
 
@@ -253,9 +244,9 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         }
     }
 
-    public void onConfigurationChanged(Configuration configuration) {
-        AndroidUtilities.checkDisplaySize(this, configuration);
-        super.onConfigurationChanged(configuration);
+    public void onConfigurationChanged(Configuration newConfig) {
+        AndroidUtilities.checkDisplaySize(this, newConfig);
+        super.onConfigurationChanged(newConfig);
         fixLayout();
     }
 
@@ -281,18 +272,26 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         }
     }
 
-    public boolean needCloseLastFragment(ActionBarLayout actionBarLayout) {
+    public boolean needPresentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, ActionBarLayout layout) {
+        return true;
+    }
+
+    public boolean needAddFragmentToStack(BaseFragment fragment, ActionBarLayout layout) {
+        return true;
+    }
+
+    public boolean needCloseLastFragment(ActionBarLayout layout) {
         if (AndroidUtilities.isTablet()) {
-            if (actionBarLayout == this.actionBarLayout && actionBarLayout.fragmentsStack.size() <= 1) {
+            if (layout == this.actionBarLayout && layout.fragmentsStack.size() <= 1) {
                 onFinish();
                 finish();
                 return false;
-            } else if (actionBarLayout == this.layersActionBarLayout && this.actionBarLayout.fragmentsStack.isEmpty() != null && this.layersActionBarLayout.fragmentsStack.size() == 1) {
+            } else if (layout == this.layersActionBarLayout && this.actionBarLayout.fragmentsStack.isEmpty() && this.layersActionBarLayout.fragmentsStack.size() == 1) {
                 onFinish();
                 finish();
                 return false;
             }
-        } else if (actionBarLayout.fragmentsStack.size() <= 1) {
+        } else if (layout.fragmentsStack.size() <= 1) {
             onFinish();
             finish();
             return false;
@@ -300,9 +299,9 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         return true;
     }
 
-    public void onRebuildAllFragments(ActionBarLayout actionBarLayout, boolean z) {
-        if (AndroidUtilities.isTablet() && actionBarLayout == this.layersActionBarLayout) {
-            this.actionBarLayout.rebuildAllFragmentViews(z, z);
+    public void onRebuildAllFragments(ActionBarLayout layout, boolean last) {
+        if (AndroidUtilities.isTablet() && layout == this.layersActionBarLayout) {
+            this.actionBarLayout.rebuildAllFragmentViews(last, last);
         }
     }
 }

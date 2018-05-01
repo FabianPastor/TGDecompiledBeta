@@ -16,19 +16,15 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
     private int sampleRateHz = -1;
     private int sourceEncoding = 0;
 
-    public int getOutputEncoding() {
-        return 4;
-    }
-
-    public boolean configure(int i, int i2, int i3) throws UnhandledFormatException {
-        if (!Util.isEncodingHighResolutionIntegerPcm(i3)) {
-            throw new UnhandledFormatException(i, i2, i3);
-        } else if (this.sampleRateHz == i && this.channelCount == i2 && this.sourceEncoding == i3) {
+    public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
+        if (!Util.isEncodingHighResolutionIntegerPcm(encoding)) {
+            throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
+        } else if (this.sampleRateHz == sampleRateHz && this.channelCount == channelCount && this.sourceEncoding == encoding) {
             return false;
         } else {
-            this.sampleRateHz = i;
-            this.channelCount = i2;
-            this.sourceEncoding = i3;
+            this.sampleRateHz = sampleRateHz;
+            this.channelCount = channelCount;
+            this.sourceEncoding = encoding;
             return true;
         }
     }
@@ -41,36 +37,37 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
         return this.channelCount;
     }
 
+    public int getOutputEncoding() {
+        return 4;
+    }
+
     public int getOutputSampleRateHz() {
         return this.sampleRateHz;
     }
 
-    public void queueInput(ByteBuffer byteBuffer) {
+    public void queueInput(ByteBuffer inputBuffer) {
         Assertions.checkState(isActive());
-        Object obj = this.sourceEncoding == NUM ? 1 : null;
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        int i = limit - position;
-        if (obj == null) {
-            i = (i / 3) * 4;
-        }
-        if (this.buffer.capacity() < i) {
-            this.buffer = ByteBuffer.allocateDirect(i).order(ByteOrder.nativeOrder());
+        boolean isInput32Bit = this.sourceEncoding == NUM;
+        int position = inputBuffer.position();
+        int limit = inputBuffer.limit();
+        int size = limit - position;
+        int resampledSize = isInput32Bit ? size : (size / 3) * 4;
+        if (this.buffer.capacity() < resampledSize) {
+            this.buffer = ByteBuffer.allocateDirect(resampledSize).order(ByteOrder.nativeOrder());
         } else {
             this.buffer.clear();
         }
-        if (obj != null) {
-            while (position < limit) {
-                writePcm32BitFloat((((byteBuffer.get(position) & 255) | ((byteBuffer.get(position + 1) & 255) << 8)) | ((byteBuffer.get(position + 2) & 255) << 16)) | ((byteBuffer.get(position + 3) & 255) << 24), this.buffer);
-                position += 4;
+        int i;
+        if (isInput32Bit) {
+            for (i = position; i < limit; i += 4) {
+                writePcm32BitFloat((((inputBuffer.get(i) & 255) | ((inputBuffer.get(i + 1) & 255) << 8)) | ((inputBuffer.get(i + 2) & 255) << 16)) | ((inputBuffer.get(i + 3) & 255) << 24), this.buffer);
             }
         } else {
-            while (position < limit) {
-                writePcm32BitFloat((((byteBuffer.get(position) & 255) << 8) | ((byteBuffer.get(position + 1) & 255) << 16)) | ((byteBuffer.get(position + 2) & 255) << 24), this.buffer);
-                position += 3;
+            for (i = position; i < limit; i += 3) {
+                writePcm32BitFloat((((inputBuffer.get(i) & 255) << 8) | ((inputBuffer.get(i + 1) & 255) << 16)) | ((inputBuffer.get(i + 2) & 255) << 24), this.buffer);
             }
         }
-        byteBuffer.position(byteBuffer.limit());
+        inputBuffer.position(inputBuffer.limit());
         this.buffer.flip();
         this.outputBuffer = this.buffer;
     }
@@ -80,9 +77,9 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
     }
 
     public ByteBuffer getOutput() {
-        ByteBuffer byteBuffer = this.outputBuffer;
+        ByteBuffer outputBuffer = this.outputBuffer;
         this.outputBuffer = EMPTY_BUFFER;
-        return byteBuffer;
+        return outputBuffer;
     }
 
     public boolean isEnded() {
@@ -102,11 +99,11 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
         this.sourceEncoding = 0;
     }
 
-    private static void writePcm32BitFloat(int i, ByteBuffer byteBuffer) {
-        i = Float.floatToIntBits((float) (PCM_32_BIT_INT_TO_PCM_32_BIT_FLOAT_FACTOR * ((double) i)));
-        if (i == FLOAT_NAN_AS_INT) {
-            i = Float.floatToIntBits(0);
+    private static void writePcm32BitFloat(int pcm32BitInt, ByteBuffer buffer) {
+        int floatBits = Float.floatToIntBits((float) (PCM_32_BIT_INT_TO_PCM_32_BIT_FLOAT_FACTOR * ((double) pcm32BitInt)));
+        if (floatBits == FLOAT_NAN_AS_INT) {
+            floatBits = Float.floatToIntBits(0.0f);
         }
-        byteBuffer.putInt(i);
+        buffer.putInt(floatBits);
     }
 }

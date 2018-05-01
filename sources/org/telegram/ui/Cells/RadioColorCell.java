@@ -16,53 +16,54 @@ public class RadioColorCell extends FrameLayout {
     private TextView textView;
 
     public RadioColorCell(Context context) {
+        int i;
+        int i2 = 0;
+        int i3 = 5;
         super(context);
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
         View view = this.radioButton;
-        int i = 3;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        int i3 = 18;
+        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
         float f = (float) (LocaleController.isRTL ? 0 : 18);
-        if (!LocaleController.isRTL) {
-            i3 = 0;
+        if (LocaleController.isRTL) {
+            i2 = 18;
         }
-        addView(view, LayoutHelper.createFrame(22, 22.0f, i2, f, 13.0f, (float) i3, 0.0f));
+        addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        context = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
+        } else {
+            i = 3;
         }
-        i2 = i | 48;
-        int i4 = 51;
-        f = (float) (LocaleController.isRTL ? 17 : 51);
+        textView.setGravity(i | 16);
+        view = this.textView;
         if (!LocaleController.isRTL) {
-            i4 = 17;
+            i3 = 3;
         }
-        addView(context, LayoutHelper.createFrame(-2, -2.0f, i2, f, 12.0f, (float) i4, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, (float) (LocaleController.isRTL ? 17 : 51), 12.0f, (float) (LocaleController.isRTL ? 51 : 17), 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    public void setCheckColor(int i, int i2) {
-        this.radioButton.setColor(i, i2);
+    public void setCheckColor(int color1, int color2) {
+        this.radioButton.setColor(color1, color2);
     }
 
-    public void setTextAndValue(String str, boolean z) {
-        this.textView.setText(str);
-        this.radioButton.setChecked(z, false);
+    public void setTextAndValue(String text, boolean checked) {
+        this.textView.setText(text);
+        this.radioButton.setChecked(checked, false);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.radioButton.setChecked(z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        this.radioButton.setChecked(checked, animated);
     }
 }

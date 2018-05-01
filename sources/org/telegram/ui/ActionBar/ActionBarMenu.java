@@ -18,23 +18,23 @@ public class ActionBarMenu extends LinearLayout {
         }
 
         public void onClick(View view) {
-            ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) view;
-            if (actionBarMenuItem.hasSubMenu()) {
-                if (ActionBarMenu.this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu() != null) {
-                    actionBarMenuItem.toggleSubMenu();
+            ActionBarMenuItem item = (ActionBarMenuItem) view;
+            if (item.hasSubMenu()) {
+                if (ActionBarMenu.this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {
+                    item.toggleSubMenu();
                 }
-            } else if (actionBarMenuItem.isSearchField()) {
-                ActionBarMenu.this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(true));
+            } else if (item.isSearchField()) {
+                ActionBarMenu.this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(true));
             } else {
                 ActionBarMenu.this.onItemClick(((Integer) view.getTag()).intValue());
             }
         }
     }
 
-    public ActionBarMenu(Context context, ActionBar actionBar) {
+    public ActionBarMenu(Context context, ActionBar layer) {
         super(context);
-        setOrientation(null);
-        this.parentActionBar = actionBar;
+        setOrientation(0);
+        this.parentActionBar = layer;
     }
 
     public ActionBarMenu(Context context) {
@@ -42,87 +42,87 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     protected void updateItemsBackgroundColor() {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                childAt.setBackgroundDrawable(Theme.createSelectorDrawable(this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor));
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                view.setBackgroundDrawable(Theme.createSelectorDrawable(this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor));
             }
         }
     }
 
     protected void updateItemsColor() {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                ((ActionBarMenuItem) childAt).setIconColor(this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).setIconColor(this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
             }
         }
     }
 
-    public ActionBarMenuItem addItem(int i, Drawable drawable) {
-        return addItem(i, 0, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f));
+    public ActionBarMenuItem addItem(int id, Drawable drawable) {
+        return addItem(id, 0, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f));
     }
 
-    public ActionBarMenuItem addItem(int i, int i2) {
-        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor);
+    public ActionBarMenuItem addItem(int id, int icon) {
+        return addItem(id, icon, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor);
     }
 
-    public ActionBarMenuItem addItem(int i, int i2, int i3) {
-        return addItem(i, i2, i3, null, AndroidUtilities.dp(48.0f));
+    public ActionBarMenuItem addItem(int id, int icon, int backgroundColor) {
+        return addItem(id, icon, backgroundColor, null, AndroidUtilities.dp(48.0f));
     }
 
-    public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3) {
-        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3);
+    public ActionBarMenuItem addItemWithWidth(int id, int icon, int width) {
+        return addItem(id, icon, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, width);
     }
 
-    public ActionBarMenuItem addItem(int i, int i2, int i3, Drawable drawable, int i4) {
-        View actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
-        actionBarMenuItem.setTag(Integer.valueOf(i));
+    public ActionBarMenuItem addItem(int id, int icon, int backgroundColor, Drawable drawable, int width) {
+        ActionBarMenuItem menuItem = new ActionBarMenuItem(getContext(), this, backgroundColor, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
+        menuItem.setTag(Integer.valueOf(id));
         if (drawable != null) {
-            actionBarMenuItem.iconView.setImageDrawable(drawable);
-        } else if (i2 != 0) {
-            actionBarMenuItem.iconView.setImageResource(i2);
+            menuItem.iconView.setImageDrawable(drawable);
+        } else if (icon != 0) {
+            menuItem.iconView.setImageResource(icon);
         }
-        addView(actionBarMenuItem, new LayoutParams(i4, -1));
-        actionBarMenuItem.setOnClickListener(new C07211());
-        return actionBarMenuItem;
+        addView(menuItem, new LayoutParams(width, -1));
+        menuItem.setOnClickListener(new C07211());
+        return menuItem;
     }
 
     public void hideAllPopupMenus() {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                ((ActionBarMenuItem) childAt).closeSubMenu();
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).closeSubMenu();
             }
         }
     }
 
-    protected void setPopupItemsColor(int i) {
-        int childCount = getChildCount();
-        for (int i2 = 0; i2 < childCount; i2++) {
-            View childAt = getChildAt(i2);
-            if (childAt instanceof ActionBarMenuItem) {
-                ((ActionBarMenuItem) childAt).setPopupItemsColor(i);
+    protected void setPopupItemsColor(int color) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).setPopupItemsColor(color);
             }
         }
     }
 
-    protected void redrawPopup(int i) {
-        int childCount = getChildCount();
-        for (int i2 = 0; i2 < childCount; i2++) {
-            View childAt = getChildAt(i2);
-            if (childAt instanceof ActionBarMenuItem) {
-                ((ActionBarMenuItem) childAt).redrawPopup(i);
+    protected void redrawPopup(int color) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).redrawPopup(color);
             }
         }
     }
 
-    public void onItemClick(int i) {
+    public void onItemClick(int id) {
         if (this.parentActionBar.actionBarMenuOnItemClick != null) {
-            this.parentActionBar.actionBarMenuOnItemClick.onItemClick(i);
+            this.parentActionBar.actionBarMenuOnItemClick.onItemClick(id);
         }
     }
 
@@ -131,51 +131,51 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public void onMenuButtonPressed() {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
-                if (actionBarMenuItem.getVisibility() == 0) {
-                    if (actionBarMenuItem.hasSubMenu()) {
-                        actionBarMenuItem.toggleSubMenu();
-                        return;
-                    } else if (actionBarMenuItem.overrideMenuClick) {
-                        onItemClick(((Integer) actionBarMenuItem.getTag()).intValue());
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    public void closeSearchField(boolean z) {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
-                if (actionBarMenuItem.isSearchField()) {
-                    this.parentActionBar.onSearchFieldVisibilityChanged(false);
-                    actionBarMenuItem.toggleSearch(z);
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ActionBarMenuItem item = (ActionBarMenuItem) view;
+                if (item.getVisibility() != 0) {
+                    continue;
+                } else if (item.hasSubMenu()) {
+                    item.toggleSubMenu();
+                    return;
+                } else if (item.overrideMenuClick) {
+                    onItemClick(((Integer) item.getTag()).intValue());
                     return;
                 }
             }
         }
     }
 
-    public void setSearchTextColor(int i, boolean z) {
-        int childCount = getChildCount();
-        for (int i2 = 0; i2 < childCount; i2++) {
-            View childAt = getChildAt(i2);
-            if (childAt instanceof ActionBarMenuItem) {
-                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
-                if (actionBarMenuItem.isSearchField()) {
-                    if (z) {
-                        actionBarMenuItem.getSearchField().setHintTextColor(i);
+    public void closeSearchField(boolean closeKeyboard) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ActionBarMenuItem item = (ActionBarMenuItem) view;
+                if (item.isSearchField()) {
+                    this.parentActionBar.onSearchFieldVisibilityChanged(false);
+                    item.toggleSearch(closeKeyboard);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void setSearchTextColor(int color, boolean placeholder) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ActionBarMenuItem item = (ActionBarMenuItem) view;
+                if (item.isSearchField()) {
+                    if (placeholder) {
+                        item.getSearchField().setHintTextColor(color);
                         return;
                     } else {
-                        actionBarMenuItem.getSearchField().setTextColor(i);
+                        item.getSearchField().setTextColor(color);
                         return;
                     }
                 }
@@ -183,26 +183,29 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    public void openSearchField(boolean z, String str) {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof ActionBarMenuItem) {
-                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
-                if (actionBarMenuItem.isSearchField()) {
-                    if (z) {
-                        this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(true));
+    public void openSearchField(boolean toggle, String text) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ActionBarMenuItem item = (ActionBarMenuItem) view;
+                if (item.isSearchField()) {
+                    if (toggle) {
+                        this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(true));
                     }
-                    actionBarMenuItem.getSearchField().setText(str);
-                    actionBarMenuItem.getSearchField().setSelection(str.length());
+                    item.getSearchField().setText(text);
+                    item.getSearchField().setSelection(text.length());
                     return;
                 }
             }
         }
     }
 
-    public ActionBarMenuItem getItem(int i) {
-        i = findViewWithTag(Integer.valueOf(i));
-        return i instanceof ActionBarMenuItem ? (ActionBarMenuItem) i : 0;
+    public ActionBarMenuItem getItem(int id) {
+        View v = findViewWithTag(Integer.valueOf(id));
+        if (v instanceof ActionBarMenuItem) {
+            return (ActionBarMenuItem) v;
+        }
+        return null;
     }
 }

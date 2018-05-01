@@ -1,15 +1,20 @@
 package org.telegram.messenger.exoplayer2.source.dash;
 
-import android.net.Uri;
 import android.os.SystemClock;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
+import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
+import org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor;
+import org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
+import org.telegram.messenger.exoplayer2.extractor.rawcc.RawCcExtractor;
 import org.telegram.messenger.exoplayer2.source.BehindLiveWindowException;
 import org.telegram.messenger.exoplayer2.source.chunk.Chunk;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkExtractorWrapper;
@@ -48,6 +53,24 @@ public class DefaultDashChunkSource implements DashChunkSource {
     private final TrackSelection trackSelection;
     private final int trackType;
 
+    public static final class Factory implements org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory {
+        private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
+        private final int maxSegmentsPerLoad;
+
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this(dataSourceFactory, 1);
+        }
+
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, int maxSegmentsPerLoad) {
+            this.dataSourceFactory = dataSourceFactory;
+            this.maxSegmentsPerLoad = maxSegmentsPerLoad;
+        }
+
+        public DashChunkSource createDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int[] adaptationSetIndices, TrackSelection trackSelection, int trackType, long elapsedRealtimeOffsetMs, boolean enableEventMessageTrack, boolean enableCea608Track, PlayerTrackEmsgHandler playerEmsgHandler) {
+            return new DefaultDashChunkSource(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection, trackType, this.dataSourceFactory.createDataSource(), elapsedRealtimeOffsetMs, this.maxSegmentsPerLoad, enableEventMessageTrack, enableCea608Track, playerEmsgHandler);
+        }
+    }
+
     protected static final class RepresentationHolder {
         final ChunkExtractorWrapper extractorWrapper;
         private long periodDurationUs;
@@ -55,114 +78,56 @@ public class DefaultDashChunkSource implements DashChunkSource {
         public DashSegmentIndex segmentIndex;
         private int segmentNumShift;
 
-        RepresentationHolder(long r9, int r11, org.telegram.messenger.exoplayer2.source.dash.manifest.Representation r12, boolean r13, boolean r14, org.telegram.messenger.exoplayer2.extractor.TrackOutput r15) {
-            /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r9_10 long) in PHI: PHI: (r9_12 long) = (r9_3 long), (r9_5 long), (r9_10 long) binds: {(r9_3 long)=B:5:0x001d, (r9_5 long)=B:8:0x002b, (r9_10 long)=B:17:0x004c}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-            /*
-            r8 = this;
-            r8.<init>();
-            r8.periodDurationUs = r9;
-            r8.representation = r12;
-            r9 = r12.format;
-            r9 = r9.containerMimeType;
-            r10 = mimeTypeIsRawText(r9);
-            r0 = 0;
-            if (r10 == 0) goto L_0x0015;
-        L_0x0012:
-            r8.extractorWrapper = r0;
-            goto L_0x005f;
-        L_0x0015:
-            r10 = "application/x-rawcc";
-            r10 = r10.equals(r9);
-            if (r10 == 0) goto L_0x0025;
-        L_0x001d:
-            r9 = new org.telegram.messenger.exoplayer2.extractor.rawcc.RawCcExtractor;
-            r10 = r12.format;
-            r9.<init>(r10);
-            goto L_0x0056;
-        L_0x0025:
-            r9 = mimeTypeIsWebm(r9);
-            if (r9 == 0) goto L_0x0032;
-        L_0x002b:
-            r9 = new org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor;
-            r10 = 1;
-            r9.<init>(r10);
-            goto L_0x0056;
-        L_0x0032:
-            r9 = 0;
-            if (r13 == 0) goto L_0x0038;
-        L_0x0035:
-            r10 = 4;
-            r2 = r10;
-            goto L_0x0039;
-        L_0x0038:
-            r2 = r9;
-        L_0x0039:
-            if (r14 == 0) goto L_0x0047;
-        L_0x003b:
-            r10 = "application/cea-608";
-            r9 = org.telegram.messenger.exoplayer2.Format.createTextSampleFormat(r0, r10, r9, r0);
-            r9 = java.util.Collections.singletonList(r9);
-        L_0x0045:
-            r6 = r9;
-            goto L_0x004c;
-        L_0x0047:
-            r9 = java.util.Collections.emptyList();
-            goto L_0x0045;
-        L_0x004c:
-            r9 = new org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
-            r3 = 0;
-            r4 = 0;
-            r5 = 0;
-            r1 = r9;
-            r7 = r15;
-            r1.<init>(r2, r3, r4, r5, r6, r7);
-        L_0x0056:
-            r10 = new org.telegram.messenger.exoplayer2.source.chunk.ChunkExtractorWrapper;
-            r13 = r12.format;
-            r10.<init>(r9, r11, r13);
-            r8.extractorWrapper = r10;
-        L_0x005f:
-            r9 = r12.getIndex();
-            r8.segmentIndex = r9;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.dash.DefaultDashChunkSource.RepresentationHolder.<init>(long, int, org.telegram.messenger.exoplayer2.source.dash.manifest.Representation, boolean, boolean, org.telegram.messenger.exoplayer2.extractor.TrackOutput):void");
+        RepresentationHolder(long periodDurationUs, int trackType, Representation representation, boolean enableEventMessageTrack, boolean enableCea608Track, TrackOutput playerEmsgTrackOutput) {
+            this.periodDurationUs = periodDurationUs;
+            this.representation = representation;
+            String containerMimeType = representation.format.containerMimeType;
+            if (mimeTypeIsRawText(containerMimeType)) {
+                this.extractorWrapper = null;
+            } else {
+                Extractor extractor;
+                if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
+                    extractor = new RawCcExtractor(representation.format);
+                } else if (mimeTypeIsWebm(containerMimeType)) {
+                    extractor = new MatroskaExtractor(1);
+                } else {
+                    List<Format> closedCaptionFormats;
+                    int flags = 0;
+                    if (enableEventMessageTrack) {
+                        flags = 0 | 4;
+                    }
+                    if (enableCea608Track) {
+                        closedCaptionFormats = Collections.singletonList(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, 0, null));
+                    } else {
+                        closedCaptionFormats = Collections.emptyList();
+                    }
+                    extractor = new FragmentedMp4Extractor(flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
+                }
+                this.extractorWrapper = new ChunkExtractorWrapper(extractor, trackType, representation.format);
+            }
+            this.segmentIndex = representation.getIndex();
         }
 
-        void updateRepresentation(long j, Representation representation) throws BehindLiveWindowException {
-            DashSegmentIndex index = this.representation.getIndex();
-            DashSegmentIndex index2 = representation.getIndex();
-            this.periodDurationUs = j;
-            this.representation = representation;
-            if (index != null) {
-                this.segmentIndex = index2;
-                if (index.isExplicit() != null) {
-                    j = index.getSegmentCount(this.periodDurationUs);
-                    if (j != null) {
-                        int firstSegmentNum = (index.getFirstSegmentNum() + j) - 1;
-                        long timeUs = index.getTimeUs(firstSegmentNum) + index.getDurationUs(firstSegmentNum, this.periodDurationUs);
-                        j = index2.getFirstSegmentNum();
-                        long timeUs2 = index2.getTimeUs(j);
-                        if (timeUs == timeUs2) {
-                            this.segmentNumShift += (firstSegmentNum + 1) - j;
-                        } else if (timeUs < timeUs2) {
+        void updateRepresentation(long newPeriodDurationUs, Representation newRepresentation) throws BehindLiveWindowException {
+            DashSegmentIndex oldIndex = this.representation.getIndex();
+            DashSegmentIndex newIndex = newRepresentation.getIndex();
+            this.periodDurationUs = newPeriodDurationUs;
+            this.representation = newRepresentation;
+            if (oldIndex != null) {
+                this.segmentIndex = newIndex;
+                if (oldIndex.isExplicit()) {
+                    int oldIndexSegmentCount = oldIndex.getSegmentCount(this.periodDurationUs);
+                    if (oldIndexSegmentCount != 0) {
+                        int oldIndexLastSegmentNum = (oldIndex.getFirstSegmentNum() + oldIndexSegmentCount) - 1;
+                        long oldIndexEndTimeUs = oldIndex.getTimeUs(oldIndexLastSegmentNum) + oldIndex.getDurationUs(oldIndexLastSegmentNum, this.periodDurationUs);
+                        int newIndexFirstSegmentNum = newIndex.getFirstSegmentNum();
+                        long newIndexStartTimeUs = newIndex.getTimeUs(newIndexFirstSegmentNum);
+                        if (oldIndexEndTimeUs == newIndexStartTimeUs) {
+                            this.segmentNumShift += (oldIndexLastSegmentNum + 1) - newIndexFirstSegmentNum;
+                        } else if (oldIndexEndTimeUs < newIndexStartTimeUs) {
                             throw new BehindLiveWindowException();
                         } else {
-                            this.segmentNumShift += index.getSegmentNum(timeUs2, this.periodDurationUs) - j;
+                            this.segmentNumShift += oldIndex.getSegmentNum(newIndexStartTimeUs, this.periodDurationUs) - newIndexFirstSegmentNum;
                         }
                     }
                 }
@@ -177,104 +142,78 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             return this.segmentIndex.getSegmentCount(this.periodDurationUs);
         }
 
-        public long getSegmentStartTimeUs(int i) {
-            return this.segmentIndex.getTimeUs(i - this.segmentNumShift);
+        public long getSegmentStartTimeUs(int segmentNum) {
+            return this.segmentIndex.getTimeUs(segmentNum - this.segmentNumShift);
         }
 
-        public long getSegmentEndTimeUs(int i) {
-            return getSegmentStartTimeUs(i) + this.segmentIndex.getDurationUs(i - this.segmentNumShift, this.periodDurationUs);
+        public long getSegmentEndTimeUs(int segmentNum) {
+            return getSegmentStartTimeUs(segmentNum) + this.segmentIndex.getDurationUs(segmentNum - this.segmentNumShift, this.periodDurationUs);
         }
 
-        public int getSegmentNum(long j) {
-            return this.segmentIndex.getSegmentNum(j, this.periodDurationUs) + this.segmentNumShift;
+        public int getSegmentNum(long positionUs) {
+            return this.segmentIndex.getSegmentNum(positionUs, this.periodDurationUs) + this.segmentNumShift;
         }
 
-        public RangedUri getSegmentUrl(int i) {
-            return this.segmentIndex.getSegmentUrl(i - this.segmentNumShift);
+        public RangedUri getSegmentUrl(int segmentNum) {
+            return this.segmentIndex.getSegmentUrl(segmentNum - this.segmentNumShift);
         }
 
-        private static boolean mimeTypeIsWebm(String str) {
-            if (!(str.startsWith(MimeTypes.VIDEO_WEBM) || str.startsWith(MimeTypes.AUDIO_WEBM))) {
-                if (str.startsWith(MimeTypes.APPLICATION_WEBM) == null) {
-                    return null;
-                }
-            }
-            return true;
+        private static boolean mimeTypeIsWebm(String mimeType) {
+            return mimeType.startsWith(MimeTypes.VIDEO_WEBM) || mimeType.startsWith(MimeTypes.AUDIO_WEBM) || mimeType.startsWith(MimeTypes.APPLICATION_WEBM);
         }
 
-        private static boolean mimeTypeIsRawText(String str) {
-            if (!MimeTypes.isText(str)) {
-                if (MimeTypes.APPLICATION_TTML.equals(str) == null) {
-                    return null;
-                }
-            }
-            return true;
+        private static boolean mimeTypeIsRawText(String mimeType) {
+            return MimeTypes.isText(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType);
         }
     }
 
-    public static final class Factory implements org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory {
-        private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
-        private final int maxSegmentsPerLoad;
-
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory) {
-            this(factory, 1);
-        }
-
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, int i) {
-            this.dataSourceFactory = factory;
-            this.maxSegmentsPerLoad = i;
-        }
-
-        public DashChunkSource createDashChunkSource(LoaderErrorThrower loaderErrorThrower, DashManifest dashManifest, int i, int[] iArr, TrackSelection trackSelection, int i2, long j, boolean z, boolean z2, PlayerTrackEmsgHandler playerTrackEmsgHandler) {
-            return new DefaultDashChunkSource(loaderErrorThrower, dashManifest, i, iArr, trackSelection, i2, this.dataSourceFactory.createDataSource(), j, this.maxSegmentsPerLoad, z, z2, playerTrackEmsgHandler);
-        }
-    }
-
-    public DefaultDashChunkSource(LoaderErrorThrower loaderErrorThrower, DashManifest dashManifest, int i, int[] iArr, TrackSelection trackSelection, int i2, DataSource dataSource, long j, int i3, boolean z, boolean z2, PlayerTrackEmsgHandler playerTrackEmsgHandler) {
-        TrackSelection trackSelection2 = trackSelection;
-        this.manifestLoaderErrorThrower = loaderErrorThrower;
-        this.manifest = dashManifest;
-        this.adaptationSetIndices = iArr;
-        this.trackSelection = trackSelection2;
-        int i4 = i2;
-        this.trackType = i4;
+    public DefaultDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int[] adaptationSetIndices, TrackSelection trackSelection, int trackType, DataSource dataSource, long elapsedRealtimeOffsetMs, int maxSegmentsPerLoad, boolean enableEventMessageTrack, boolean enableCea608Track, PlayerTrackEmsgHandler playerTrackEmsgHandler) {
+        this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
+        this.manifest = manifest;
+        this.adaptationSetIndices = adaptationSetIndices;
+        this.trackSelection = trackSelection;
+        this.trackType = trackType;
         this.dataSource = dataSource;
-        this.periodIndex = i;
-        this.elapsedRealtimeOffsetMs = j;
-        this.maxSegmentsPerLoad = i3;
-        PlayerTrackEmsgHandler playerTrackEmsgHandler2 = playerTrackEmsgHandler;
-        this.playerTrackEmsgHandler = playerTrackEmsgHandler2;
-        long periodDurationUs = dashManifest.getPeriodDurationUs(i);
-        List representations = getRepresentations();
+        this.periodIndex = periodIndex;
+        this.elapsedRealtimeOffsetMs = elapsedRealtimeOffsetMs;
+        this.maxSegmentsPerLoad = maxSegmentsPerLoad;
+        this.playerTrackEmsgHandler = playerTrackEmsgHandler;
+        long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
+        List<Representation> representations = getRepresentations();
         this.representationHolders = new RepresentationHolder[trackSelection.length()];
-        for (int i5 = 0; i5 < r0.representationHolders.length; i5++) {
-            r0.representationHolders[i5] = new RepresentationHolder(periodDurationUs, i4, (Representation) representations.get(trackSelection2.getIndexInTrackGroup(i5)), z, z2, playerTrackEmsgHandler2);
+        for (int i = 0; i < this.representationHolders.length; i++) {
+            this.representationHolders[i] = new RepresentationHolder(periodDurationUs, trackType, (Representation) representations.get(trackSelection.getIndexInTrackGroup(i)), enableEventMessageTrack, enableCea608Track, playerTrackEmsgHandler);
         }
     }
 
-    public long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters) {
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
         for (RepresentationHolder representationHolder : this.representationHolders) {
             if (representationHolder.segmentIndex != null) {
-                int segmentNum = representationHolder.getSegmentNum(j);
-                long segmentStartTimeUs = representationHolder.getSegmentStartTimeUs(segmentNum);
-                long segmentStartTimeUs2 = (segmentStartTimeUs >= j || segmentNum >= representationHolder.getSegmentCount() - 1) ? segmentStartTimeUs : representationHolder.getSegmentStartTimeUs(segmentNum + 1);
-                return Util.resolveSeekPositionUs(j, seekParameters, segmentStartTimeUs, segmentStartTimeUs2);
+                long secondSyncUs;
+                int segmentNum = representationHolder.getSegmentNum(positionUs);
+                long firstSyncUs = representationHolder.getSegmentStartTimeUs(segmentNum);
+                if (firstSyncUs >= positionUs || segmentNum >= representationHolder.getSegmentCount() - 1) {
+                    secondSyncUs = firstSyncUs;
+                } else {
+                    secondSyncUs = representationHolder.getSegmentStartTimeUs(segmentNum + 1);
+                }
+                return Util.resolveSeekPositionUs(positionUs, seekParameters, firstSyncUs, secondSyncUs);
             }
         }
-        return j;
+        return positionUs;
     }
 
-    public void updateManifest(DashManifest dashManifest, int i) {
+    public void updateManifest(DashManifest newManifest, int newPeriodIndex) {
         try {
-            this.manifest = dashManifest;
-            this.periodIndex = i;
-            dashManifest = this.manifest.getPeriodDurationUs(this.periodIndex);
-            List representations = getRepresentations();
-            for (int i2 = 0; i2 < this.representationHolders.length; i2++) {
-                this.representationHolders[i2].updateRepresentation(dashManifest, (Representation) representations.get(this.trackSelection.getIndexInTrackGroup(i2)));
+            this.manifest = newManifest;
+            this.periodIndex = newPeriodIndex;
+            long periodDurationUs = this.manifest.getPeriodDurationUs(this.periodIndex);
+            List<Representation> representations = getRepresentations();
+            for (int i = 0; i < this.representationHolders.length; i++) {
+                this.representationHolders[i].updateRepresentation(periodDurationUs, (Representation) representations.get(this.trackSelection.getIndexInTrackGroup(i)));
             }
-        } catch (DashManifest dashManifest2) {
-            this.fatalError = dashManifest2;
+        } catch (BehindLiveWindowException e) {
+            this.fatalError = e;
         }
     }
 
@@ -285,75 +224,75 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.manifestLoaderErrorThrower.maybeThrowError();
     }
 
-    public int getPreferredQueueSize(long j, List<? extends MediaChunk> list) {
-        if (this.fatalError == null) {
-            if (this.trackSelection.length() >= 2) {
-                return this.trackSelection.evaluateQueueSize(j, list);
-            }
+    public int getPreferredQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
+        if (this.fatalError != null || this.trackSelection.length() < 2) {
+            return queue.size();
         }
-        return list.size();
+        return this.trackSelection.evaluateQueueSize(playbackPositionUs, queue);
     }
 
-    public void getNextChunk(MediaChunk mediaChunk, long j, long j2, ChunkHolder chunkHolder) {
-        long j3 = j;
-        long j4 = j2;
-        ChunkHolder chunkHolder2 = chunkHolder;
+    public void getNextChunk(MediaChunk previous, long playbackPositionUs, long loadPositionUs, ChunkHolder out) {
         if (this.fatalError == null) {
-            long j5 = j4 - j3;
-            long resolveTimeToLiveEdgeUs = resolveTimeToLiveEdgeUs(j3);
-            long msToUs = (C0542C.msToUs(r0.manifest.availabilityStartTimeMs) + C0542C.msToUs(r0.manifest.getPeriod(r0.periodIndex).startMs)) + j4;
-            if (r0.playerTrackEmsgHandler == null || !r0.playerTrackEmsgHandler.maybeRefreshManifestBeforeLoadingNextChunk(msToUs)) {
-                r0.trackSelection.updateSelectedTrack(j3, j5, resolveTimeToLiveEdgeUs);
-                RepresentationHolder representationHolder = r0.representationHolders[r0.trackSelection.getSelectedIndex()];
+            long bufferedDurationUs = loadPositionUs - playbackPositionUs;
+            long timeToLiveEdgeUs = resolveTimeToLiveEdgeUs(playbackPositionUs);
+            long presentationPositionUs = (C0542C.msToUs(this.manifest.availabilityStartTimeMs) + C0542C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs)) + loadPositionUs;
+            if (this.playerTrackEmsgHandler == null || !this.playerTrackEmsgHandler.maybeRefreshManifestBeforeLoadingNextChunk(presentationPositionUs)) {
+                this.trackSelection.updateSelectedTrack(playbackPositionUs, bufferedDurationUs, timeToLiveEdgeUs);
+                RepresentationHolder representationHolder = this.representationHolders[this.trackSelection.getSelectedIndex()];
                 if (representationHolder.extractorWrapper != null) {
-                    Representation representation = representationHolder.representation;
-                    RangedUri initializationUri = representationHolder.extractorWrapper.getSampleFormats() == null ? representation.getInitializationUri() : null;
-                    RangedUri indexUri = representationHolder.segmentIndex == null ? representation.getIndexUri() : null;
-                    if (!(initializationUri == null && indexUri == null)) {
-                        chunkHolder2.chunk = newInitializationChunk(representationHolder, r0.dataSource, r0.trackSelection.getSelectedFormat(), r0.trackSelection.getSelectionReason(), r0.trackSelection.getSelectionData(), initializationUri, indexUri);
+                    Representation selectedRepresentation = representationHolder.representation;
+                    RangedUri pendingInitializationUri = null;
+                    RangedUri pendingIndexUri = null;
+                    if (representationHolder.extractorWrapper.getSampleFormats() == null) {
+                        pendingInitializationUri = selectedRepresentation.getInitializationUri();
+                    }
+                    if (representationHolder.segmentIndex == null) {
+                        pendingIndexUri = selectedRepresentation.getIndexUri();
+                    }
+                    if (!(pendingInitializationUri == null && pendingIndexUri == null)) {
+                        out.chunk = newInitializationChunk(representationHolder, this.dataSource, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), pendingInitializationUri, pendingIndexUri);
                         return;
                     }
                 }
-                int segmentCount = representationHolder.getSegmentCount();
-                boolean z = false;
-                if (segmentCount == 0) {
-                    if (!r0.manifest.dynamic || r0.periodIndex < r0.manifest.getPeriodCount() - 1) {
-                        z = true;
-                    }
-                    chunkHolder2.endOfStream = z;
+                int availableSegmentCount = representationHolder.getSegmentCount();
+                boolean z;
+                if (availableSegmentCount == 0) {
+                    z = !this.manifest.dynamic || this.periodIndex < this.manifest.getPeriodCount() - 1;
+                    out.endOfStream = z;
                     return;
                 }
-                int firstSegmentNum = representationHolder.getFirstSegmentNum();
-                if (segmentCount == -1) {
-                    long nowUnixTimeUs = (getNowUnixTimeUs() - C0542C.msToUs(r0.manifest.availabilityStartTimeMs)) - C0542C.msToUs(r0.manifest.getPeriod(r0.periodIndex).startMs);
-                    if (r0.manifest.timeShiftBufferDepthMs != C0542C.TIME_UNSET) {
-                        firstSegmentNum = Math.max(firstSegmentNum, representationHolder.getSegmentNum(nowUnixTimeUs - C0542C.msToUs(r0.manifest.timeShiftBufferDepthMs)));
+                int lastAvailableSegmentNum;
+                int segmentNum;
+                int firstAvailableSegmentNum = representationHolder.getFirstSegmentNum();
+                if (availableSegmentCount == -1) {
+                    long liveEdgeTimeInPeriodUs = (getNowUnixTimeUs() - C0542C.msToUs(this.manifest.availabilityStartTimeMs)) - C0542C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs);
+                    if (this.manifest.timeShiftBufferDepthMs != C0542C.TIME_UNSET) {
+                        firstAvailableSegmentNum = Math.max(firstAvailableSegmentNum, representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs - C0542C.msToUs(this.manifest.timeShiftBufferDepthMs)));
                     }
-                    segmentCount = representationHolder.getSegmentNum(nowUnixTimeUs) - 1;
+                    lastAvailableSegmentNum = representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs) - 1;
                 } else {
-                    segmentCount = (segmentCount + firstSegmentNum) - 1;
+                    lastAvailableSegmentNum = (firstAvailableSegmentNum + availableSegmentCount) - 1;
                 }
-                updateLiveEdgeTimeUs(representationHolder, segmentCount);
-                if (mediaChunk == null) {
-                    firstSegmentNum = Util.constrainValue(representationHolder.getSegmentNum(j4), firstSegmentNum, segmentCount);
+                updateLiveEdgeTimeUs(representationHolder, lastAvailableSegmentNum);
+                if (previous == null) {
+                    segmentNum = Util.constrainValue(representationHolder.getSegmentNum(loadPositionUs), firstAvailableSegmentNum, lastAvailableSegmentNum);
                 } else {
-                    int nextChunkIndex = mediaChunk.getNextChunkIndex();
-                    if (nextChunkIndex < firstSegmentNum) {
-                        r0.fatalError = new BehindLiveWindowException();
-                        return;
-                    }
-                    firstSegmentNum = nextChunkIndex;
-                }
-                if (firstSegmentNum <= segmentCount) {
-                    if (!r0.missingLastSegment || firstSegmentNum < segmentCount) {
-                        chunkHolder2.chunk = newMediaChunk(representationHolder, r0.dataSource, r0.trackType, r0.trackSelection.getSelectedFormat(), r0.trackSelection.getSelectionReason(), r0.trackSelection.getSelectionData(), firstSegmentNum, Math.min(r0.maxSegmentsPerLoad, (segmentCount - firstSegmentNum) + 1));
+                    segmentNum = previous.getNextChunkIndex();
+                    if (segmentNum < firstAvailableSegmentNum) {
+                        this.fatalError = new BehindLiveWindowException();
                         return;
                     }
                 }
-                if (!r0.manifest.dynamic || r0.periodIndex < r0.manifest.getPeriodCount() - 1) {
-                    z = true;
+                if (segmentNum > lastAvailableSegmentNum || (this.missingLastSegment && segmentNum >= lastAvailableSegmentNum)) {
+                    if (!this.manifest.dynamic || this.periodIndex < this.manifest.getPeriodCount() - 1) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    out.endOfStream = z;
+                    return;
                 }
-                chunkHolder2.endOfStream = z;
+                out.chunk = newMediaChunk(representationHolder, this.dataSource, this.trackType, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), segmentNum, Math.min(this.maxSegmentsPerLoad, (lastAvailableSegmentNum - segmentNum) + 1));
             }
         }
     }
@@ -373,35 +312,35 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
-    public boolean onChunkLoadError(Chunk chunk, boolean z, Exception exception) {
-        if (!z) {
-            return null;
+    public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e) {
+        if (!cancelable) {
+            return false;
         }
-        if (this.playerTrackEmsgHandler && this.playerTrackEmsgHandler.maybeRefreshManifestOnLoadingError(chunk)) {
+        if (this.playerTrackEmsgHandler != null && this.playerTrackEmsgHandler.maybeRefreshManifestOnLoadingError(chunk)) {
             return true;
         }
-        if (!this.manifest.dynamic && (chunk instanceof MediaChunk) && (exception instanceof InvalidResponseCodeException) && ((InvalidResponseCodeException) exception).responseCode) {
-            z = this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)];
-            int segmentCount = z.getSegmentCount();
-            if (!(segmentCount == -1 || segmentCount == 0 || ((MediaChunk) chunk).getNextChunkIndex() <= (z.getFirstSegmentNum() + segmentCount) - true)) {
+        if (!this.manifest.dynamic && (chunk instanceof MediaChunk) && (e instanceof InvalidResponseCodeException) && ((InvalidResponseCodeException) e).responseCode == 404) {
+            RepresentationHolder representationHolder = this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)];
+            int segmentCount = representationHolder.getSegmentCount();
+            if (!(segmentCount == -1 || segmentCount == 0 || ((MediaChunk) chunk).getNextChunkIndex() <= (representationHolder.getFirstSegmentNum() + segmentCount) - 1)) {
                 this.missingLastSegment = true;
                 return true;
             }
         }
-        return ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), exception);
+        return ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), e);
     }
 
     private ArrayList<Representation> getRepresentations() {
-        List list = this.manifest.getPeriod(this.periodIndex).adaptationSets;
-        ArrayList<Representation> arrayList = new ArrayList();
-        for (int i : this.adaptationSetIndices) {
-            arrayList.addAll(((AdaptationSet) list.get(i)).representations);
+        List<AdaptationSet> manifestAdapationSets = this.manifest.getPeriod(this.periodIndex).adaptationSets;
+        ArrayList<Representation> representations = new ArrayList();
+        for (int adaptationSetIndex : this.adaptationSetIndices) {
+            representations.addAll(((AdaptationSet) manifestAdapationSets.get(adaptationSetIndex)).representations);
         }
-        return arrayList;
+        return representations;
     }
 
-    private void updateLiveEdgeTimeUs(RepresentationHolder representationHolder, int i) {
-        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(i) : 1;
+    private void updateLiveEdgeTimeUs(RepresentationHolder representationHolder, int lastAvailableSegmentNum) {
+        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C0542C.TIME_UNSET;
     }
 
     private long getNowUnixTimeUs() {
@@ -411,51 +350,46 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return System.currentTimeMillis() * 1000;
     }
 
-    private long resolveTimeToLiveEdgeUs(long j) {
-        Object obj = (!this.manifest.dynamic || this.liveEdgeTimeUs == C0542C.TIME_UNSET) ? null : 1;
-        if (obj != null) {
-            return this.liveEdgeTimeUs - j;
+    private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
+        boolean resolveTimeToLiveEdgePossible = this.manifest.dynamic && this.liveEdgeTimeUs != C0542C.TIME_UNSET;
+        if (resolveTimeToLiveEdgePossible) {
+            return this.liveEdgeTimeUs - playbackPositionUs;
         }
         return C0542C.TIME_UNSET;
     }
 
-    protected static Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format format, int i, Object obj, RangedUri rangedUri, RangedUri rangedUri2) {
-        String str = representationHolder.representation.baseUrl;
-        if (rangedUri != null) {
-            rangedUri2 = rangedUri.attemptMerge(rangedUri2, str);
-            if (rangedUri2 == null) {
-                rangedUri2 = rangedUri;
+    protected static Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, RangedUri initializationUri, RangedUri indexUri) {
+        RangedUri requestUri;
+        String baseUrl = representationHolder.representation.baseUrl;
+        if (initializationUri != null) {
+            requestUri = initializationUri.attemptMerge(indexUri, baseUrl);
+            if (requestUri == null) {
+                requestUri = initializationUri;
             }
+        } else {
+            requestUri = indexUri;
         }
-        return new InitializationChunk(dataSource, new DataSpec(rangedUri2.resolveUri(str), rangedUri2.start, rangedUri2.length, representationHolder.representation.getCacheKey()), format, i, obj, representationHolder.extractorWrapper);
+        return new InitializationChunk(dataSource, new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start, requestUri.length, representationHolder.representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
 
-    protected static Chunk newMediaChunk(RepresentationHolder representationHolder, DataSource dataSource, int i, Format format, int i2, Object obj, int i3, int i4) {
-        RepresentationHolder representationHolder2 = representationHolder;
-        int i5 = i3;
-        Representation representation = representationHolder2.representation;
-        long segmentStartTimeUs = representationHolder2.getSegmentStartTimeUs(i5);
-        RangedUri segmentUrl = representationHolder2.getSegmentUrl(i5);
-        String str = representation.baseUrl;
-        if (representationHolder2.extractorWrapper == null) {
-            return new SingleSampleMediaChunk(dataSource, new DataSpec(segmentUrl.resolveUri(str), segmentUrl.start, segmentUrl.length, representation.getCacheKey()), format, i2, obj, segmentStartTimeUs, representationHolder2.getSegmentEndTimeUs(i5), i5, i, format);
+    protected static Chunk newMediaChunk(RepresentationHolder representationHolder, DataSource dataSource, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, int firstSegmentNum, int maxSegmentCount) {
+        Representation representation = representationHolder.representation;
+        long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
+        RangedUri segmentUri = representationHolder.getSegmentUrl(firstSegmentNum);
+        String baseUrl = representation.baseUrl;
+        if (representationHolder.extractorWrapper == null) {
+            return new SingleSampleMediaChunk(dataSource, new DataSpec(segmentUri.resolveUri(baseUrl), segmentUri.start, segmentUri.length, representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, representationHolder.getSegmentEndTimeUs(firstSegmentNum), firstSegmentNum, trackType, trackFormat);
         }
-        RangedUri rangedUri = segmentUrl;
-        int i6 = 1;
-        int i7 = i6;
-        int i8 = i4;
-        while (i6 < i8) {
-            RangedUri attemptMerge = rangedUri.attemptMerge(representationHolder2.getSegmentUrl(i5 + i6), str);
-            if (attemptMerge == null) {
+        int segmentCount = 1;
+        for (int i = 1; i < maxSegmentCount; i++) {
+            RangedUri mergedSegmentUri = segmentUri.attemptMerge(representationHolder.getSegmentUrl(firstSegmentNum + i), baseUrl);
+            if (mergedSegmentUri == null) {
                 break;
             }
-            i7++;
-            i6++;
-            rangedUri = attemptMerge;
+            segmentUri = mergedSegmentUri;
+            segmentCount++;
         }
-        long segmentEndTimeUs = representationHolder2.getSegmentEndTimeUs((i5 + i7) - 1);
-        Uri resolveUri = rangedUri.resolveUri(str);
-        long j = rangedUri.start;
-        return new ContainerMediaChunk(dataSource, new DataSpec(resolveUri, j, rangedUri.length, representation.getCacheKey()), format, i2, obj, segmentStartTimeUs, segmentEndTimeUs, i5, i7, -representation.presentationTimeOffsetUs, representationHolder2.extractorWrapper);
+        long endTimeUs = representationHolder.getSegmentEndTimeUs((firstSegmentNum + segmentCount) - 1);
+        return new ContainerMediaChunk(dataSource, new DataSpec(segmentUri.resolveUri(baseUrl), segmentUri.start, segmentUri.length, representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, firstSegmentNum, segmentCount, -representation.presentationTimeOffsetUs, representationHolder.extractorWrapper);
     }
 }

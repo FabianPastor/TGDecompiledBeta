@@ -15,90 +15,6 @@ import org.telegram.messenger.exoplayer2.util.Util;
 public interface HttpDataSource extends DataSource {
     public static final Predicate<String> REJECT_PAYWALL_TYPES = new C18571();
 
-    public static class HttpDataSourceException extends IOException {
-        public static final int TYPE_CLOSE = 3;
-        public static final int TYPE_OPEN = 1;
-        public static final int TYPE_READ = 2;
-        public final DataSpec dataSpec;
-        public final int type;
-
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface Type {
-        }
-
-        public HttpDataSourceException(DataSpec dataSpec, int i) {
-            this.dataSpec = dataSpec;
-            this.type = i;
-        }
-
-        public HttpDataSourceException(String str, DataSpec dataSpec, int i) {
-            super(str);
-            this.dataSpec = dataSpec;
-            this.type = i;
-        }
-
-        public HttpDataSourceException(IOException iOException, DataSpec dataSpec, int i) {
-            super(iOException);
-            this.dataSpec = dataSpec;
-            this.type = i;
-        }
-
-        public HttpDataSourceException(String str, IOException iOException, DataSpec dataSpec, int i) {
-            super(str, iOException);
-            this.dataSpec = dataSpec;
-            this.type = i;
-        }
-    }
-
-    public static final class RequestProperties {
-        private final Map<String, String> requestProperties = new HashMap();
-        private Map<String, String> requestPropertiesSnapshot;
-
-        public synchronized void set(String str, String str2) {
-            this.requestPropertiesSnapshot = null;
-            this.requestProperties.put(str, str2);
-        }
-
-        public synchronized void set(Map<String, String> map) {
-            this.requestPropertiesSnapshot = null;
-            this.requestProperties.putAll(map);
-        }
-
-        public synchronized void clearAndSet(Map<String, String> map) {
-            this.requestPropertiesSnapshot = null;
-            this.requestProperties.clear();
-            this.requestProperties.putAll(map);
-        }
-
-        public synchronized void remove(String str) {
-            this.requestPropertiesSnapshot = null;
-            this.requestProperties.remove(str);
-        }
-
-        public synchronized void clear() {
-            this.requestPropertiesSnapshot = null;
-            this.requestProperties.clear();
-        }
-
-        public synchronized Map<String, String> getSnapshot() {
-            if (this.requestPropertiesSnapshot == null) {
-                this.requestPropertiesSnapshot = Collections.unmodifiableMap(new HashMap(this.requestProperties));
-            }
-            return this.requestPropertiesSnapshot;
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.exoplayer2.upstream.HttpDataSource$1 */
-    static class C18571 implements Predicate<String> {
-        C18571() {
-        }
-
-        public boolean evaluate(String str) {
-            str = Util.toLowerInvariant(str);
-            return (TextUtils.isEmpty(str) || ((str.contains(MimeTypes.BASE_TYPE_TEXT) && !str.contains(MimeTypes.TEXT_VTT)) || str.contains("html") || str.contains("xml") != null)) ? null : true;
-        }
-    }
-
     public interface Factory extends org.telegram.messenger.exoplayer2.upstream.DataSource.Factory {
         @Deprecated
         void clearAllDefaultRequestProperties();
@@ -112,32 +28,6 @@ public interface HttpDataSource extends DataSource {
 
         @Deprecated
         void setDefaultRequestProperty(String str, String str2);
-    }
-
-    public static final class InvalidContentTypeException extends HttpDataSourceException {
-        public final String contentType;
-
-        public InvalidContentTypeException(String str, DataSpec dataSpec) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Invalid content type: ");
-            stringBuilder.append(str);
-            super(stringBuilder.toString(), dataSpec, 1);
-            this.contentType = str;
-        }
-    }
-
-    public static final class InvalidResponseCodeException extends HttpDataSourceException {
-        public final Map<String, List<String>> headerFields;
-        public final int responseCode;
-
-        public InvalidResponseCodeException(int i, Map<String, List<String>> map, DataSpec dataSpec) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Response code: ");
-            stringBuilder.append(i);
-            super(stringBuilder.toString(), dataSpec, 1);
-            this.responseCode = i;
-            this.headerFields = map;
-        }
     }
 
     public static abstract class BaseFactory implements Factory {
@@ -154,18 +44,122 @@ public interface HttpDataSource extends DataSource {
         }
 
         @Deprecated
-        public final void setDefaultRequestProperty(String str, String str2) {
-            this.defaultRequestProperties.set(str, str2);
+        public final void setDefaultRequestProperty(String name, String value) {
+            this.defaultRequestProperties.set(name, value);
         }
 
         @Deprecated
-        public final void clearDefaultRequestProperty(String str) {
-            this.defaultRequestProperties.remove(str);
+        public final void clearDefaultRequestProperty(String name) {
+            this.defaultRequestProperties.remove(name);
         }
 
         @Deprecated
         public final void clearAllDefaultRequestProperties() {
             this.defaultRequestProperties.clear();
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.upstream.HttpDataSource$1 */
+    static class C18571 implements Predicate<String> {
+        C18571() {
+        }
+
+        public boolean evaluate(String contentType) {
+            contentType = Util.toLowerInvariant(contentType);
+            return (TextUtils.isEmpty(contentType) || ((contentType.contains(MimeTypes.BASE_TYPE_TEXT) && !contentType.contains(MimeTypes.TEXT_VTT)) || contentType.contains("html") || contentType.contains("xml"))) ? false : true;
+        }
+    }
+
+    public static class HttpDataSourceException extends IOException {
+        public static final int TYPE_CLOSE = 3;
+        public static final int TYPE_OPEN = 1;
+        public static final int TYPE_READ = 2;
+        public final DataSpec dataSpec;
+        public final int type;
+
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface Type {
+        }
+
+        public HttpDataSourceException(DataSpec dataSpec, int type) {
+            this.dataSpec = dataSpec;
+            this.type = type;
+        }
+
+        public HttpDataSourceException(String message, DataSpec dataSpec, int type) {
+            super(message);
+            this.dataSpec = dataSpec;
+            this.type = type;
+        }
+
+        public HttpDataSourceException(IOException cause, DataSpec dataSpec, int type) {
+            super(cause);
+            this.dataSpec = dataSpec;
+            this.type = type;
+        }
+
+        public HttpDataSourceException(String message, IOException cause, DataSpec dataSpec, int type) {
+            super(message, cause);
+            this.dataSpec = dataSpec;
+            this.type = type;
+        }
+    }
+
+    public static final class InvalidContentTypeException extends HttpDataSourceException {
+        public final String contentType;
+
+        public InvalidContentTypeException(String contentType, DataSpec dataSpec) {
+            super("Invalid content type: " + contentType, dataSpec, 1);
+            this.contentType = contentType;
+        }
+    }
+
+    public static final class InvalidResponseCodeException extends HttpDataSourceException {
+        public final Map<String, List<String>> headerFields;
+        public final int responseCode;
+
+        public InvalidResponseCodeException(int responseCode, Map<String, List<String>> headerFields, DataSpec dataSpec) {
+            super("Response code: " + responseCode, dataSpec, 1);
+            this.responseCode = responseCode;
+            this.headerFields = headerFields;
+        }
+    }
+
+    public static final class RequestProperties {
+        private final Map<String, String> requestProperties = new HashMap();
+        private Map<String, String> requestPropertiesSnapshot;
+
+        public synchronized void set(String name, String value) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.put(name, value);
+        }
+
+        public synchronized void set(Map<String, String> properties) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.putAll(properties);
+        }
+
+        public synchronized void clearAndSet(Map<String, String> properties) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.clear();
+            this.requestProperties.putAll(properties);
+        }
+
+        public synchronized void remove(String name) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.remove(name);
+        }
+
+        public synchronized void clear() {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.clear();
+        }
+
+        public synchronized Map<String, String> getSnapshot() {
+            if (this.requestPropertiesSnapshot == null) {
+                this.requestPropertiesSnapshot = Collections.unmodifiableMap(new HashMap(this.requestProperties));
+            }
+            return this.requestPropertiesSnapshot;
         }
     }
 

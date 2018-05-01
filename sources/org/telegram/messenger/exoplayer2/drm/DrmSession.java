@@ -14,8 +14,8 @@ public interface DrmSession<T extends ExoMediaCrypto> {
     public static final int STATE_RELEASED = 0;
 
     public static class DrmSessionException extends Exception {
-        public DrmSessionException(Throwable th) {
-            super(th);
+        public DrmSessionException(Throwable cause) {
+            super(cause);
         }
     }
 

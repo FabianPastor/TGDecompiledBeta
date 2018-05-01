@@ -5,9 +5,9 @@ public class Swatch {
     public int color;
     public float colorLocation;
 
-    public Swatch(int i, float f, float f2) {
-        this.color = i;
-        this.colorLocation = f;
-        this.brushWeight = f2;
+    public Swatch(int color, float colorLocation, float brushWeight) {
+        this.color = color;
+        this.colorLocation = colorLocation;
+        this.brushWeight = brushWeight;
     }
 }

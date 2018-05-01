@@ -37,11 +37,15 @@ public class FireworksEffect {
         }
 
         public void draw(Canvas canvas) {
-            if (this.type == 0) {
-                FireworksEffect.this.particlePaint.setColor(this.color);
-                FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.dp(1.5f)) * this.scale);
-                FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                canvas.drawPoint(this.f18x, this.f19y, FireworksEffect.this.particlePaint);
+            switch (this.type) {
+                case 0:
+                    FireworksEffect.this.particlePaint.setColor(this.color);
+                    FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.dp(1.5f)) * this.scale);
+                    FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
+                    canvas.drawPoint(this.f18x, this.f19y, FireworksEffect.this.particlePaint);
+                    return;
+                default:
+                    return;
             }
         }
     }
@@ -51,93 +55,92 @@ public class FireworksEffect {
         this.particlePaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & -1644826);
         this.particlePaint.setStrokeCap(Cap.ROUND);
         this.particlePaint.setStyle(Style.STROKE);
-        for (int i = 0; i < 20; i++) {
+        for (int a = 0; a < 20; a++) {
             this.freeParticles.add(new Particle());
         }
     }
 
-    private void updateParticles(long j) {
-        int size = this.particles.size();
-        int i = 0;
-        while (i < size) {
-            Particle particle = (Particle) this.particles.get(i);
+    private void updateParticles(long dt) {
+        int count = this.particles.size();
+        int a = 0;
+        while (a < count) {
+            Particle particle = (Particle) this.particles.get(a);
             if (particle.currentTime >= particle.lifeTime) {
                 if (this.freeParticles.size() < 40) {
                     this.freeParticles.add(particle);
                 }
-                this.particles.remove(i);
-                i--;
-                size--;
+                this.particles.remove(a);
+                a--;
+                count--;
             } else {
                 particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                float f = (float) j;
-                particle.f18x += ((particle.vx * particle.velocity) * f) / 500.0f;
-                particle.f19y += ((particle.vy * particle.velocity) * f) / 500.0f;
-                particle.vy += f / 100.0f;
-                particle.currentTime += f;
+                particle.f18x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f19y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.vy += ((float) dt) / 100.0f;
+                particle.currentTime += (float) dt;
             }
-            i++;
+            a++;
         }
     }
 
-    public void onDraw(View view, Canvas canvas) {
-        if (view != null) {
-            if (canvas != null) {
-                int size = this.particles.size();
-                for (int i = 0; i < size; i++) {
-                    ((Particle) this.particles.get(i)).draw(canvas);
-                }
-                if (Utilities.random.nextBoolean() != null && this.particles.size() + 8 < 150) {
-                    canvas = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : null;
-                    float nextFloat = Utilities.random.nextFloat() * ((float) view.getMeasuredWidth());
-                    float nextFloat2 = ((float) canvas) + (Utilities.random.nextFloat() * ((float) ((view.getMeasuredHeight() - AndroidUtilities.dp(20.0f)) - canvas)));
-                    switch (Utilities.random.nextInt(4)) {
-                        case null:
-                            canvas = -13357350;
-                            break;
-                        case 1:
-                            canvas = -843755;
-                            break;
-                        case 2:
-                            canvas = -207021;
-                            break;
-                        case 3:
-                            canvas = -15088582;
-                            break;
-                        default:
-                            canvas = -5752;
-                            break;
-                    }
-                    for (int i2 = 0; i2 < 8; i2++) {
-                        Particle particle;
-                        double nextInt = 0.017453292519943295d * ((double) (Utilities.random.nextInt(270) - 225));
-                        float cos = (float) Math.cos(nextInt);
-                        float sin = (float) Math.sin(nextInt);
-                        if (this.freeParticles.isEmpty()) {
-                            particle = new Particle();
-                        } else {
-                            particle = (Particle) this.freeParticles.get(0);
-                            this.freeParticles.remove(0);
-                        }
-                        particle.f18x = nextFloat;
-                        particle.f19y = nextFloat2;
-                        particle.vx = cos * 1.5f;
-                        particle.vy = sin;
-                        particle.color = canvas;
-                        particle.alpha = 1.0f;
-                        particle.currentTime = 0.0f;
-                        particle.scale = Math.max(1.0f, Utilities.random.nextFloat() * 1.5f);
-                        particle.type = 0;
-                        particle.lifeTime = (float) (1000 + Utilities.random.nextInt(1000));
-                        particle.velocity = (Utilities.random.nextFloat() * 4.0f) + 20.0f;
-                        this.particles.add(particle);
-                    }
-                }
-                long currentTimeMillis = System.currentTimeMillis();
-                updateParticles(Math.min(17, currentTimeMillis - this.lastAnimationTime));
-                this.lastAnimationTime = currentTimeMillis;
-                view.invalidate();
+    public void onDraw(View parent, Canvas canvas) {
+        if (parent != null && canvas != null) {
+            int a;
+            int count = this.particles.size();
+            for (a = 0; a < count; a++) {
+                ((Particle) this.particles.get(a)).draw(canvas);
             }
+            if (Utilities.random.nextBoolean() && this.particles.size() + 8 < 150) {
+                int color;
+                int statusBarHeight = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+                float cx = Utilities.random.nextFloat() * ((float) parent.getMeasuredWidth());
+                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.dp(20.0f)) - statusBarHeight)));
+                switch (Utilities.random.nextInt(4)) {
+                    case 0:
+                        color = -13357350;
+                        break;
+                    case 1:
+                        color = -843755;
+                        break;
+                    case 2:
+                        color = -207021;
+                        break;
+                    case 3:
+                        color = -15088582;
+                        break;
+                    default:
+                        color = -5752;
+                        break;
+                }
+                for (a = 0; a < 8; a++) {
+                    Particle newParticle;
+                    int angle = Utilities.random.nextInt(270) - 225;
+                    float vx = (float) Math.cos(0.017453292519943295d * ((double) angle));
+                    float vy = (float) Math.sin(0.017453292519943295d * ((double) angle));
+                    if (this.freeParticles.isEmpty()) {
+                        newParticle = new Particle();
+                    } else {
+                        newParticle = (Particle) this.freeParticles.get(0);
+                        this.freeParticles.remove(0);
+                    }
+                    newParticle.f18x = cx;
+                    newParticle.f19y = cy;
+                    newParticle.vx = 1.5f * vx;
+                    newParticle.vy = vy;
+                    newParticle.color = color;
+                    newParticle.alpha = 1.0f;
+                    newParticle.currentTime = 0.0f;
+                    newParticle.scale = Math.max(1.0f, Utilities.random.nextFloat() * 1.5f);
+                    newParticle.type = 0;
+                    newParticle.lifeTime = (float) (Utilities.random.nextInt(1000) + 1000);
+                    newParticle.velocity = 20.0f + (Utilities.random.nextFloat() * 4.0f);
+                    this.particles.add(newParticle);
+                }
+            }
+            long newTime = System.currentTimeMillis();
+            updateParticles(Math.min(17, newTime - this.lastAnimationTime));
+            this.lastAnimationTime = newTime;
+            parent.invalidate();
         }
     }
 }

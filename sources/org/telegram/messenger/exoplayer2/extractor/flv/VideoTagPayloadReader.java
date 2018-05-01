@@ -20,55 +20,52 @@ final class VideoTagPayloadReader extends TagPayloadReader {
     private final ParsableByteArray nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
     private int nalUnitLengthFieldLength;
 
+    public VideoTagPayloadReader(TrackOutput output) {
+        super(output);
+    }
+
     public void seek() {
     }
 
-    public VideoTagPayloadReader(TrackOutput trackOutput) {
-        super(trackOutput);
-    }
-
-    protected boolean parseHeader(ParsableByteArray parsableByteArray) throws UnsupportedFormatException {
-        parsableByteArray = parsableByteArray.readUnsignedByte();
-        int i = (parsableByteArray >> 4) & 15;
-        parsableByteArray &= 15;
-        if (parsableByteArray != 7) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Video format not supported: ");
-            stringBuilder.append(parsableByteArray);
-            throw new UnsupportedFormatException(stringBuilder.toString());
+    protected boolean parseHeader(ParsableByteArray data) throws UnsupportedFormatException {
+        int header = data.readUnsignedByte();
+        int frameType = (header >> 4) & 15;
+        int videoCodec = header & 15;
+        if (videoCodec != 7) {
+            throw new UnsupportedFormatException("Video format not supported: " + videoCodec);
         }
-        this.frameType = i;
-        return i != 5 ? true : null;
+        this.frameType = frameType;
+        return frameType != 5;
     }
 
-    protected void parsePayload(ParsableByteArray parsableByteArray, long j) throws ParserException {
-        int readUnsignedByte = parsableByteArray.readUnsignedByte();
-        long readInt24 = j + (((long) parsableByteArray.readInt24()) * 1000);
-        if (readUnsignedByte == 0 && !this.hasOutputFormat) {
-            ParsableByteArray parsableByteArray2 = new ParsableByteArray(new byte[parsableByteArray.bytesLeft()]);
-            parsableByteArray.readBytes(parsableByteArray2.data, 0, parsableByteArray.bytesLeft());
-            parsableByteArray = AvcConfig.parse(parsableByteArray2);
-            this.nalUnitLengthFieldLength = parsableByteArray.nalUnitLengthFieldLength;
-            this.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, parsableByteArray.width, parsableByteArray.height, -1.0f, parsableByteArray.initializationData, -1, parsableByteArray.pixelWidthAspectRatio, null));
+    protected void parsePayload(ParsableByteArray data, long timeUs) throws ParserException {
+        int packetType = data.readUnsignedByte();
+        timeUs += ((long) data.readInt24()) * 1000;
+        if (packetType == 0 && !this.hasOutputFormat) {
+            ParsableByteArray parsableByteArray = new ParsableByteArray(new byte[data.bytesLeft()]);
+            data.readBytes(parsableByteArray.data, 0, data.bytesLeft());
+            AvcConfig avcConfig = AvcConfig.parse(parsableByteArray);
+            this.nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
+            this.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, avcConfig.width, avcConfig.height, -1.0f, avcConfig.initializationData, -1, avcConfig.pixelWidthAspectRatio, null));
             this.hasOutputFormat = true;
-        } else if (readUnsignedByte == 1 && this.hasOutputFormat) {
-            byte[] bArr = this.nalLength.data;
-            bArr[0] = (byte) 0;
-            bArr[1] = (byte) 0;
-            bArr[2] = (byte) 0;
-            readUnsignedByte = 4 - this.nalUnitLengthFieldLength;
-            int i = 0;
-            while (parsableByteArray.bytesLeft() > 0) {
-                parsableByteArray.readBytes(this.nalLength.data, readUnsignedByte, this.nalUnitLengthFieldLength);
+        } else if (packetType == 1 && this.hasOutputFormat) {
+            byte[] nalLengthData = this.nalLength.data;
+            nalLengthData[0] = (byte) 0;
+            nalLengthData[1] = (byte) 0;
+            nalLengthData[2] = (byte) 0;
+            int nalUnitLengthFieldLengthDiff = 4 - this.nalUnitLengthFieldLength;
+            int bytesWritten = 0;
+            while (data.bytesLeft() > 0) {
+                data.readBytes(this.nalLength.data, nalUnitLengthFieldLengthDiff, this.nalUnitLengthFieldLength);
                 this.nalLength.setPosition(0);
-                int readUnsignedIntToInt = this.nalLength.readUnsignedIntToInt();
+                int bytesToWrite = this.nalLength.readUnsignedIntToInt();
                 this.nalStartCode.setPosition(0);
                 this.output.sampleData(this.nalStartCode, 4);
-                i += 4;
-                this.output.sampleData(parsableByteArray, readUnsignedIntToInt);
-                i += readUnsignedIntToInt;
+                bytesWritten += 4;
+                this.output.sampleData(data, bytesToWrite);
+                bytesWritten += bytesToWrite;
             }
-            this.output.sampleMetadata(readInt24, this.frameType == 1 ? 1 : 0, i, 0, null);
+            this.output.sampleMetadata(timeUs, this.frameType == 1 ? 1 : 0, bytesWritten, 0, null);
         }
     }
 }

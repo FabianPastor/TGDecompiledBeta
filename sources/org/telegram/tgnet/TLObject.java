@@ -15,23 +15,23 @@ public class TLObject {
         }
     }
 
-    public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+    public void readParams(AbstractSerializedData stream, boolean exception) {
+    }
+
+    public void serializeToStream(AbstractSerializedData stream) {
+    }
+
+    public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
         return null;
     }
 
     public void freeResources() {
     }
 
-    public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-    }
-
-    public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-    }
-
     public int getObjectSize() {
-        NativeByteBuffer nativeByteBuffer = (NativeByteBuffer) sizeCalculator.get();
-        nativeByteBuffer.rewind();
+        NativeByteBuffer byteBuffer = (NativeByteBuffer) sizeCalculator.get();
+        byteBuffer.rewind();
         serializeToStream((AbstractSerializedData) sizeCalculator.get());
-        return nativeByteBuffer.length();
+        return byteBuffer.length();
     }
 }

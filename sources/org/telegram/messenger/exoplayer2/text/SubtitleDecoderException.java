@@ -1,11 +1,11 @@
 package org.telegram.messenger.exoplayer2.text;
 
 public class SubtitleDecoderException extends Exception {
-    public SubtitleDecoderException(String str) {
-        super(str);
+    public SubtitleDecoderException(String message) {
+        super(message);
     }
 
-    public SubtitleDecoderException(String str, Throwable th) {
-        super(str, th);
+    public SubtitleDecoderException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

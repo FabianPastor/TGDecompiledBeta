@@ -16,16 +16,6 @@ public class CloseProgressDrawable extends Drawable {
     private long lastFrameTime;
     private Paint paint = new Paint(1);
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public CloseProgressDrawable() {
         this.paint.setColor(-9079435);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -33,9 +23,9 @@ public class CloseProgressDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        long currentTimeMillis = System.currentTimeMillis();
+        long newTime = System.currentTimeMillis();
         if (this.lastFrameTime != 0) {
-            this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (currentTimeMillis - this.lastFrameTime));
+            this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (newTime - this.lastFrameTime));
             if (this.currentAnimationTime > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                 this.currentAnimationTime = 0;
                 this.currentSegment++;
@@ -50,15 +40,24 @@ public class CloseProgressDrawable extends Drawable {
         this.paint.setAlpha(255 - ((this.currentSegment % 4) * 40));
         canvas.drawLine((float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 1) % 4) * 40));
-        Canvas canvas2 = canvas;
-        canvas2.drawLine(0.0f, (float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, this.paint);
+        canvas.drawLine(0.0f, (float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 2) % 4) * 40));
-        canvas2.drawLine(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        canvas.drawLine(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 3) % 4) * 40));
         canvas.drawLine(0.0f, 0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), this.paint);
         canvas.restore();
-        this.lastFrameTime = currentTimeMillis;
+        this.lastFrameTime = newTime;
         invalidateSelf();
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

@@ -34,7 +34,7 @@ final class SampleMetadataQueue {
         public int size;
     }
 
-    public void reset(boolean z) {
+    public void reset(boolean resetUpstreamFormat) {
         this.length = 0;
         this.absoluteFirstIndex = 0;
         this.relativeFirstIndex = 0;
@@ -42,8 +42,8 @@ final class SampleMetadataQueue {
         this.upstreamKeyframeRequired = true;
         this.largestDiscardedTimestampUs = Long.MIN_VALUE;
         this.largestQueuedTimestampUs = Long.MIN_VALUE;
-        if (z) {
-            this.upstreamFormat = false;
+        if (resetUpstreamFormat) {
+            this.upstreamFormat = null;
             this.upstreamFormatRequired = true;
         }
     }
@@ -52,21 +52,21 @@ final class SampleMetadataQueue {
         return this.absoluteFirstIndex + this.length;
     }
 
-    public long discardUpstreamSamples(int i) {
-        int writeIndex = getWriteIndex() - i;
-        boolean z = writeIndex >= 0 && writeIndex <= this.length - this.readPosition;
+    public long discardUpstreamSamples(int discardFromIndex) {
+        int discardCount = getWriteIndex() - discardFromIndex;
+        boolean z = discardCount >= 0 && discardCount <= this.length - this.readPosition;
         Assertions.checkArgument(z);
-        this.length -= writeIndex;
+        this.length -= discardCount;
         this.largestQueuedTimestampUs = Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(this.length));
         if (this.length == 0) {
             return 0;
         }
-        i = getRelativeIndex(this.length - 1);
-        return this.offsets[i] + ((long) this.sizes[i]);
+        int relativeLastWriteIndex = getRelativeIndex(this.length - 1);
+        return this.offsets[relativeLastWriteIndex] + ((long) this.sizes[relativeLastWriteIndex]);
     }
 
-    public void sourceId(int i) {
-        this.upstreamSourceId = i;
+    public void sourceId(int sourceId) {
+        this.upstreamSourceId = sourceId;
     }
 
     public int getFirstIndex() {
@@ -101,252 +101,274 @@ final class SampleMetadataQueue {
         this.readPosition = 0;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized int read(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z, boolean z2, Format format, SampleExtrasHolder sampleExtrasHolder) {
-        if (hasNextSample()) {
-            z2 = getRelativeIndex(this.readPosition);
-            if (!z) {
-                if (this.formats[z2] == format) {
-                    if (decoderInputBuffer.isFlagsOnly() != null) {
-                        return -3;
-                    }
-                    decoderInputBuffer.timeUs = this.timesUs[z2];
-                    decoderInputBuffer.setFlags(this.flags[z2]);
-                    sampleExtrasHolder.size = this.sizes[z2];
-                    sampleExtrasHolder.offset = this.offsets[z2];
-                    sampleExtrasHolder.cryptoData = this.cryptoDatas[z2];
+    public synchronized int read(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired, boolean loadingFinished, Format downstreamFormat, SampleExtrasHolder extrasHolder) {
+        int i = -4;
+        synchronized (this) {
+            if (hasNextSample()) {
+                int relativeReadIndex = getRelativeIndex(this.readPosition);
+                if (formatRequired || this.formats[relativeReadIndex] != downstreamFormat) {
+                    formatHolder.format = this.formats[relativeReadIndex];
+                    i = -5;
+                } else if (buffer.isFlagsOnly()) {
+                    i = -3;
+                } else {
+                    buffer.timeUs = this.timesUs[relativeReadIndex];
+                    buffer.setFlags(this.flags[relativeReadIndex]);
+                    extrasHolder.size = this.sizes[relativeReadIndex];
+                    extrasHolder.offset = this.offsets[relativeReadIndex];
+                    extrasHolder.cryptoData = this.cryptoDatas[relativeReadIndex];
                     this.readPosition++;
-                    return -4;
                 }
-            }
-            formatHolder.format = this.formats[z2];
-            return -5;
-        } else if (z2) {
-            decoderInputBuffer.setFlags(4);
-            return -4;
-        } else if (this.upstreamFormat != null && (z || this.upstreamFormat != format)) {
-            formatHolder.format = this.upstreamFormat;
-            return -5;
-        }
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized int advanceTo(long j, boolean z, boolean z2) {
-        int relativeIndex = getRelativeIndex(this.readPosition);
-        if (hasNextSample() && j >= this.timesUs[relativeIndex]) {
-            if (j <= this.largestQueuedTimestampUs || z2) {
-                j = findSampleBefore(relativeIndex, this.length - this.readPosition, j, z);
-                if (j == -1) {
-                    return -1;
-                }
-                this.readPosition += j;
-                return j;
+            } else if (loadingFinished) {
+                buffer.setFlags(4);
+            } else if (this.upstreamFormat == null || (!formatRequired && this.upstreamFormat == downstreamFormat)) {
+                i = -3;
+            } else {
+                formatHolder.format = this.upstreamFormat;
+                i = -5;
             }
         }
-    }
-
-    public synchronized int advanceToEnd() {
-        int i;
-        i = this.length - this.readPosition;
-        this.readPosition = this.length;
         return i;
     }
 
-    public synchronized boolean setReadPosition(int i) {
-        if (this.absoluteFirstIndex > i || i > this.absoluteFirstIndex + this.length) {
-            return false;
-        }
-        this.readPosition = i - this.absoluteFirstIndex;
-        return true;
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized long discardTo(long j, boolean z, boolean z2) {
-        if (this.length != 0) {
-            if (j >= this.timesUs[this.relativeFirstIndex]) {
-                z2 = (!z2 || this.readPosition == this.length) ? this.length : this.readPosition + 1;
-                j = findSampleBefore(this.relativeFirstIndex, z2, j, z);
-                if (j == -1) {
-                    return -1;
-                }
-                return discardSamples(j);
+    public synchronized int advanceTo(long timeUs, boolean toKeyframe, boolean allowTimeBeyondBuffer) {
+        int i;
+        int relativeReadIndex = getRelativeIndex(this.readPosition);
+        if (!hasNextSample() || timeUs < this.timesUs[relativeReadIndex] || (timeUs > this.largestQueuedTimestampUs && !allowTimeBeyondBuffer)) {
+            i = -1;
+        } else {
+            i = findSampleBefore(relativeReadIndex, this.length - this.readPosition, timeUs, toKeyframe);
+            if (i == -1) {
+                i = -1;
+            } else {
+                this.readPosition += i;
             }
         }
+        return i;
+    }
+
+    public synchronized int advanceToEnd() {
+        int skipCount;
+        skipCount = this.length - this.readPosition;
+        this.readPosition = this.length;
+        return skipCount;
+    }
+
+    public synchronized boolean setReadPosition(int sampleIndex) {
+        boolean z;
+        if (this.absoluteFirstIndex > sampleIndex || sampleIndex > this.absoluteFirstIndex + this.length) {
+            z = false;
+        } else {
+            this.readPosition = sampleIndex - this.absoluteFirstIndex;
+            z = true;
+        }
+        return z;
+    }
+
+    public synchronized long discardTo(long timeUs, boolean toKeyframe, boolean stopAtReadPosition) {
+        long j;
+        if (this.length == 0 || timeUs < this.timesUs[this.relativeFirstIndex]) {
+            j = -1;
+        } else {
+            int searchLength;
+            int discardCount;
+            if (stopAtReadPosition) {
+                if (this.readPosition != this.length) {
+                    searchLength = this.readPosition + 1;
+                    discardCount = findSampleBefore(this.relativeFirstIndex, searchLength, timeUs, toKeyframe);
+                    if (discardCount != -1) {
+                        j = -1;
+                    } else {
+                        j = discardSamples(discardCount);
+                    }
+                }
+            }
+            searchLength = this.length;
+            discardCount = findSampleBefore(this.relativeFirstIndex, searchLength, timeUs, toKeyframe);
+            if (discardCount != -1) {
+                j = discardSamples(discardCount);
+            } else {
+                j = -1;
+            }
+        }
+        return j;
     }
 
     public synchronized long discardToRead() {
+        long j;
         if (this.readPosition == 0) {
-            return -1;
+            j = -1;
+        } else {
+            j = discardSamples(this.readPosition);
         }
-        return discardSamples(this.readPosition);
+        return j;
     }
 
     public synchronized long discardToEnd() {
+        long j;
         if (this.length == 0) {
-            return -1;
+            j = -1;
+        } else {
+            j = discardSamples(this.length);
         }
-        return discardSamples(this.length);
+        return j;
     }
 
     public synchronized boolean format(Format format) {
-        if (format == null) {
-            this.upstreamFormatRequired = true;
-            return false;
-        }
-        this.upstreamFormatRequired = false;
-        if (Util.areEqual(format, this.upstreamFormat)) {
-            return false;
-        }
-        this.upstreamFormat = format;
-        return true;
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized void commitSample(long j, int i, long j2, int i2, CryptoData cryptoData) {
-        if (this.upstreamKeyframeRequired) {
-            if ((i & 1) != 0) {
-                this.upstreamKeyframeRequired = false;
-            } else {
-                return;
-            }
-        }
-        Assertions.checkState(this.upstreamFormatRequired ^ 1);
-        commitSampleTimestamp(j);
-        int relativeIndex = getRelativeIndex(this.length);
-        this.timesUs[relativeIndex] = j;
-        this.offsets[relativeIndex] = j2;
-        this.sizes[relativeIndex] = i2;
-        this.flags[relativeIndex] = i;
-        this.cryptoDatas[relativeIndex] = cryptoData;
-        this.formats[relativeIndex] = this.upstreamFormat;
-        this.sourceIds[relativeIndex] = this.upstreamSourceId;
-        this.length++;
-        if (this.length == this.capacity) {
-            j = this.capacity + SAMPLE_CAPACITY_INCREMENT;
-            Object obj = new int[j];
-            i = new long[j];
-            j2 = new long[j];
-            Object obj2 = new int[j];
-            i2 = new int[j];
-            cryptoData = new CryptoData[j];
-            Object obj3 = new Format[j];
-            int i3 = this.capacity - this.relativeFirstIndex;
-            System.arraycopy(this.offsets, this.relativeFirstIndex, i, 0, i3);
-            System.arraycopy(this.timesUs, this.relativeFirstIndex, j2, 0, i3);
-            System.arraycopy(this.flags, this.relativeFirstIndex, obj2, 0, i3);
-            System.arraycopy(this.sizes, this.relativeFirstIndex, i2, 0, i3);
-            System.arraycopy(this.cryptoDatas, this.relativeFirstIndex, cryptoData, 0, i3);
-            System.arraycopy(this.formats, this.relativeFirstIndex, obj3, 0, i3);
-            System.arraycopy(this.sourceIds, this.relativeFirstIndex, obj, 0, i3);
-            int i4 = this.relativeFirstIndex;
-            System.arraycopy(this.offsets, 0, i, i3, i4);
-            System.arraycopy(this.timesUs, 0, j2, i3, i4);
-            System.arraycopy(this.flags, 0, obj2, i3, i4);
-            System.arraycopy(this.sizes, 0, i2, i3, i4);
-            System.arraycopy(this.cryptoDatas, 0, cryptoData, i3, i4);
-            System.arraycopy(this.formats, 0, obj3, i3, i4);
-            System.arraycopy(this.sourceIds, 0, obj, i3, i4);
-            this.offsets = i;
-            this.timesUs = j2;
-            this.flags = obj2;
-            this.sizes = i2;
-            this.cryptoDatas = cryptoData;
-            this.formats = obj3;
-            this.sourceIds = obj;
-            this.relativeFirstIndex = 0;
-            this.length = this.capacity;
-            this.capacity = j;
-        }
-    }
-
-    public synchronized void commitSampleTimestamp(long j) {
-        this.largestQueuedTimestampUs = Math.max(this.largestQueuedTimestampUs, j);
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized boolean attemptSplice(long j) {
         boolean z = false;
-        if (this.length == 0) {
-            if (j > this.largestDiscardedTimestampUs) {
-                z = true;
-            }
-        } else if (Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(this.readPosition)) >= j) {
-            return false;
-        } else {
-            int i = this.length;
-            int relativeIndex = getRelativeIndex(this.length - 1);
-            while (i > this.readPosition && this.timesUs[relativeIndex] >= j) {
-                i--;
-                relativeIndex--;
-                if (relativeIndex == -1) {
-                    relativeIndex = this.capacity - 1;
+        synchronized (this) {
+            if (format == null) {
+                this.upstreamFormatRequired = true;
+            } else {
+                this.upstreamFormatRequired = false;
+                if (!Util.areEqual(format, this.upstreamFormat)) {
+                    this.upstreamFormat = format;
+                    z = true;
                 }
             }
-            discardUpstreamSamples(this.absoluteFirstIndex + i);
-            return true;
+        }
+        return z;
+    }
+
+    public synchronized void commitSample(long timeUs, int sampleFlags, long offset, int size, CryptoData cryptoData) {
+        if (this.upstreamKeyframeRequired) {
+            if ((sampleFlags & 1) != 0) {
+                this.upstreamKeyframeRequired = false;
+            }
+        }
+        Assertions.checkState(!this.upstreamFormatRequired);
+        commitSampleTimestamp(timeUs);
+        int relativeEndIndex = getRelativeIndex(this.length);
+        this.timesUs[relativeEndIndex] = timeUs;
+        this.offsets[relativeEndIndex] = offset;
+        this.sizes[relativeEndIndex] = size;
+        this.flags[relativeEndIndex] = sampleFlags;
+        this.cryptoDatas[relativeEndIndex] = cryptoData;
+        this.formats[relativeEndIndex] = this.upstreamFormat;
+        this.sourceIds[relativeEndIndex] = this.upstreamSourceId;
+        this.length++;
+        if (this.length == this.capacity) {
+            int newCapacity = this.capacity + SAMPLE_CAPACITY_INCREMENT;
+            int[] newSourceIds = new int[newCapacity];
+            long[] newOffsets = new long[newCapacity];
+            long[] newTimesUs = new long[newCapacity];
+            int[] newFlags = new int[newCapacity];
+            int[] newSizes = new int[newCapacity];
+            CryptoData[] newCryptoDatas = new CryptoData[newCapacity];
+            Format[] newFormats = new Format[newCapacity];
+            int beforeWrap = this.capacity - this.relativeFirstIndex;
+            System.arraycopy(this.offsets, this.relativeFirstIndex, newOffsets, 0, beforeWrap);
+            System.arraycopy(this.timesUs, this.relativeFirstIndex, newTimesUs, 0, beforeWrap);
+            System.arraycopy(this.flags, this.relativeFirstIndex, newFlags, 0, beforeWrap);
+            System.arraycopy(this.sizes, this.relativeFirstIndex, newSizes, 0, beforeWrap);
+            System.arraycopy(this.cryptoDatas, this.relativeFirstIndex, newCryptoDatas, 0, beforeWrap);
+            System.arraycopy(this.formats, this.relativeFirstIndex, newFormats, 0, beforeWrap);
+            System.arraycopy(this.sourceIds, this.relativeFirstIndex, newSourceIds, 0, beforeWrap);
+            int afterWrap = this.relativeFirstIndex;
+            System.arraycopy(this.offsets, 0, newOffsets, beforeWrap, afterWrap);
+            System.arraycopy(this.timesUs, 0, newTimesUs, beforeWrap, afterWrap);
+            System.arraycopy(this.flags, 0, newFlags, beforeWrap, afterWrap);
+            System.arraycopy(this.sizes, 0, newSizes, beforeWrap, afterWrap);
+            System.arraycopy(this.cryptoDatas, 0, newCryptoDatas, beforeWrap, afterWrap);
+            System.arraycopy(this.formats, 0, newFormats, beforeWrap, afterWrap);
+            System.arraycopy(this.sourceIds, 0, newSourceIds, beforeWrap, afterWrap);
+            this.offsets = newOffsets;
+            this.timesUs = newTimesUs;
+            this.flags = newFlags;
+            this.sizes = newSizes;
+            this.cryptoDatas = newCryptoDatas;
+            this.formats = newFormats;
+            this.sourceIds = newSourceIds;
+            this.relativeFirstIndex = 0;
+            this.length = this.capacity;
+            this.capacity = newCapacity;
         }
     }
 
-    private int findSampleBefore(int i, int i2, long j, boolean z) {
-        int i3 = -1;
-        int i4 = i;
-        for (i = 0; i < i2 && this.timesUs[i4] <= j; i++) {
-            if (!(z && (this.flags[i4] & 1) == 0)) {
-                i3 = i;
-            }
-            i4++;
-            if (i4 == this.capacity) {
-                i4 = 0;
-            }
-        }
-        return i3;
+    public synchronized void commitSampleTimestamp(long timeUs) {
+        this.largestQueuedTimestampUs = Math.max(this.largestQueuedTimestampUs, timeUs);
     }
 
-    private long discardSamples(int i) {
-        this.largestDiscardedTimestampUs = Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(i));
-        this.length -= i;
-        this.absoluteFirstIndex += i;
-        this.relativeFirstIndex += i;
+    public synchronized boolean attemptSplice(long timeUs) {
+        boolean z = true;
+        synchronized (this) {
+            if (this.length == 0) {
+                if (timeUs <= this.largestDiscardedTimestampUs) {
+                    z = false;
+                }
+            } else if (Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(this.readPosition)) >= timeUs) {
+                z = false;
+            } else {
+                int retainCount = this.length;
+                int relativeSampleIndex = getRelativeIndex(this.length - 1);
+                while (retainCount > this.readPosition && this.timesUs[relativeSampleIndex] >= timeUs) {
+                    retainCount--;
+                    relativeSampleIndex--;
+                    if (relativeSampleIndex == -1) {
+                        relativeSampleIndex = this.capacity - 1;
+                    }
+                }
+                discardUpstreamSamples(this.absoluteFirstIndex + retainCount);
+            }
+        }
+        return z;
+    }
+
+    private int findSampleBefore(int relativeStartIndex, int length, long timeUs, boolean keyframe) {
+        int sampleCountToTarget = -1;
+        int searchIndex = relativeStartIndex;
+        for (int i = 0; i < length && this.timesUs[searchIndex] <= timeUs; i++) {
+            if (!(keyframe && (this.flags[searchIndex] & 1) == 0)) {
+                sampleCountToTarget = i;
+            }
+            searchIndex++;
+            if (searchIndex == this.capacity) {
+                searchIndex = 0;
+            }
+        }
+        return sampleCountToTarget;
+    }
+
+    private long discardSamples(int discardCount) {
+        this.largestDiscardedTimestampUs = Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(discardCount));
+        this.length -= discardCount;
+        this.absoluteFirstIndex += discardCount;
+        this.relativeFirstIndex += discardCount;
         if (this.relativeFirstIndex >= this.capacity) {
             this.relativeFirstIndex -= this.capacity;
         }
-        this.readPosition -= i;
+        this.readPosition -= discardCount;
         if (this.readPosition < 0) {
             this.readPosition = 0;
         }
         if (this.length != 0) {
             return this.offsets[this.relativeFirstIndex];
         }
-        i = (this.relativeFirstIndex == 0 ? this.capacity : this.relativeFirstIndex) - 1;
-        return this.offsets[i] + ((long) this.sizes[i]);
+        int relativeLastDiscardIndex = (this.relativeFirstIndex == 0 ? this.capacity : this.relativeFirstIndex) - 1;
+        return this.offsets[relativeLastDiscardIndex] + ((long) this.sizes[relativeLastDiscardIndex]);
     }
 
-    private long getLargestTimestamp(int i) {
-        long j = Long.MIN_VALUE;
-        if (i == 0) {
+    private long getLargestTimestamp(int length) {
+        if (length == 0) {
             return Long.MIN_VALUE;
         }
-        int relativeIndex = getRelativeIndex(i - 1);
-        for (int i2 = 0; i2 < i; i2++) {
-            j = Math.max(j, this.timesUs[relativeIndex]);
-            if ((this.flags[relativeIndex] & 1) != 0) {
-                break;
+        long largestTimestampUs = Long.MIN_VALUE;
+        int relativeSampleIndex = getRelativeIndex(length - 1);
+        for (int i = 0; i < length; i++) {
+            largestTimestampUs = Math.max(largestTimestampUs, this.timesUs[relativeSampleIndex]);
+            if ((this.flags[relativeSampleIndex] & 1) != 0) {
+                return largestTimestampUs;
             }
-            relativeIndex--;
-            if (relativeIndex == -1) {
-                relativeIndex = this.capacity - 1;
+            relativeSampleIndex--;
+            if (relativeSampleIndex == -1) {
+                relativeSampleIndex = this.capacity - 1;
             }
         }
-        return j;
+        return largestTimestampUs;
     }
 
-    private int getRelativeIndex(int i) {
-        int i2 = this.relativeFirstIndex + i;
-        return i2 < this.capacity ? i2 : i2 - this.capacity;
+    private int getRelativeIndex(int offset) {
+        int relativeIndex = this.relativeFirstIndex + offset;
+        return relativeIndex < this.capacity ? relativeIndex : relativeIndex - this.capacity;
     }
 }

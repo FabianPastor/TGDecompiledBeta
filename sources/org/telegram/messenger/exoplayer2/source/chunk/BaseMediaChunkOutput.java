@@ -11,39 +11,35 @@ final class BaseMediaChunkOutput implements TrackOutputProvider {
     private final SampleQueue[] sampleQueues;
     private final int[] trackTypes;
 
-    public BaseMediaChunkOutput(int[] iArr, SampleQueue[] sampleQueueArr) {
-        this.trackTypes = iArr;
-        this.sampleQueues = sampleQueueArr;
+    public BaseMediaChunkOutput(int[] trackTypes, SampleQueue[] sampleQueues) {
+        this.trackTypes = trackTypes;
+        this.sampleQueues = sampleQueues;
     }
 
-    public TrackOutput track(int i, int i2) {
-        for (i = 0; i < this.trackTypes.length; i++) {
-            if (i2 == this.trackTypes[i]) {
+    public TrackOutput track(int id, int type) {
+        for (int i = 0; i < this.trackTypes.length; i++) {
+            if (type == this.trackTypes[i]) {
                 return this.sampleQueues[i];
             }
         }
-        i = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Unmatched track of type: ");
-        stringBuilder.append(i2);
-        Log.e(i, stringBuilder.toString());
+        Log.e(TAG, "Unmatched track of type: " + type);
         return new DummyTrackOutput();
     }
 
     public int[] getWriteIndices() {
-        int[] iArr = new int[this.sampleQueues.length];
+        int[] writeIndices = new int[this.sampleQueues.length];
         for (int i = 0; i < this.sampleQueues.length; i++) {
             if (this.sampleQueues[i] != null) {
-                iArr[i] = this.sampleQueues[i].getWriteIndex();
+                writeIndices[i] = this.sampleQueues[i].getWriteIndex();
             }
         }
-        return iArr;
+        return writeIndices;
     }
 
-    public void setSampleOffsetUs(long j) {
+    public void setSampleOffsetUs(long sampleOffsetUs) {
         for (SampleQueue sampleQueue : this.sampleQueues) {
             if (sampleQueue != null) {
-                sampleQueue.setSampleOffsetUs(j);
+                sampleQueue.setSampleOffsetUs(sampleOffsetUs);
             }
         }
     }

@@ -16,36 +16,36 @@ public final class FixedTrackSelection extends BaseTrackSelection {
             this.data = null;
         }
 
-        public Factory(int i, Object obj) {
-            this.reason = i;
-            this.data = obj;
+        public Factory(int reason, Object data) {
+            this.reason = reason;
+            this.data = data;
         }
 
-        public FixedTrackSelection createTrackSelection(TrackGroup trackGroup, int... iArr) {
+        public FixedTrackSelection createTrackSelection(TrackGroup group, int... tracks) {
             boolean z = true;
-            if (iArr.length != 1) {
+            if (tracks.length != 1) {
                 z = false;
             }
             Assertions.checkArgument(z);
-            return new FixedTrackSelection(trackGroup, iArr[0], this.reason, this.data);
+            return new FixedTrackSelection(group, tracks[0], this.reason, this.data);
         }
+    }
+
+    public FixedTrackSelection(TrackGroup group, int track) {
+        this(group, track, 0, null);
+    }
+
+    public FixedTrackSelection(TrackGroup group, int track, int reason, Object data) {
+        super(group, track);
+        this.reason = reason;
+        this.data = data;
+    }
+
+    public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
     }
 
     public int getSelectedIndex() {
         return 0;
-    }
-
-    public void updateSelectedTrack(long j, long j2, long j3) {
-    }
-
-    public FixedTrackSelection(TrackGroup trackGroup, int i) {
-        this(trackGroup, i, 0, null);
-    }
-
-    public FixedTrackSelection(TrackGroup trackGroup, int i, int i2, Object obj) {
-        super(trackGroup, i);
-        this.reason = i2;
-        this.data = obj;
     }
 
     public int getSelectionReason() {

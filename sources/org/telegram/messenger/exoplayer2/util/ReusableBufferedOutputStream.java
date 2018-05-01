@@ -7,38 +7,37 @@ import java.io.OutputStream;
 public final class ReusableBufferedOutputStream extends BufferedOutputStream {
     private boolean closed;
 
-    public ReusableBufferedOutputStream(OutputStream outputStream) {
-        super(outputStream);
+    public ReusableBufferedOutputStream(OutputStream out) {
+        super(out);
     }
 
-    public ReusableBufferedOutputStream(OutputStream outputStream, int i) {
-        super(outputStream, i);
+    public ReusableBufferedOutputStream(OutputStream out, int size) {
+        super(out, size);
     }
 
     public void close() throws IOException {
-        Throwable th;
         this.closed = true;
+        Throwable thrown = null;
         try {
             flush();
-            th = null;
-        } catch (Throwable th2) {
-            th = th2;
+        } catch (Throwable e) {
+            thrown = e;
         }
         try {
             this.out.close();
-        } catch (Throwable th3) {
-            if (th == null) {
-                th = th3;
+        } catch (Throwable e2) {
+            if (thrown == null) {
+                thrown = e2;
             }
         }
-        if (th != null) {
-            Util.sneakyThrow(th);
+        if (thrown != null) {
+            Util.sneakyThrow(thrown);
         }
     }
 
-    public void reset(OutputStream outputStream) {
+    public void reset(OutputStream out) {
         Assertions.checkState(this.closed);
-        this.out = outputStream;
+        this.out = out;
         this.count = 0;
         this.closed = false;
     }

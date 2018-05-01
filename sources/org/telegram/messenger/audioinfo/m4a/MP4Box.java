@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import org.telegram.messenger.audioinfo.util.PositionInputStream;
+import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class MP4Box<I extends PositionInputStream> {
     protected static final String ASCII = "ISO8859_1";
@@ -13,11 +14,11 @@ public class MP4Box<I extends PositionInputStream> {
     private final MP4Box<?> parent;
     private final String type;
 
-    public MP4Box(I i, MP4Box<?> mP4Box, String str) {
-        this.input = i;
-        this.parent = mP4Box;
-        this.type = str;
-        this.data = new DataInputStream(i);
+    public MP4Box(I input, MP4Box<?> parent, String type) {
+        this.input = input;
+        this.parent = parent;
+        this.type = type;
+        this.data = new DataInputStream(input);
     }
 
     public String getType() {
@@ -40,82 +41,30 @@ public class MP4Box<I extends PositionInputStream> {
         return this.child;
     }
 
-    public org.telegram.messenger.audioinfo.m4a.MP4Atom nextChild() throws java.io.IOException {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r1_4 org.telegram.messenger.audioinfo.util.RangeInputStream) in PHI: PHI: (r1_7 org.telegram.messenger.audioinfo.util.RangeInputStream) = (r1_4 org.telegram.messenger.audioinfo.util.RangeInputStream), (r1_6 org.telegram.messenger.audioinfo.util.RangeInputStream) binds: {(r1_4 org.telegram.messenger.audioinfo.util.RangeInputStream)=B:5:0x0023, (r1_6 org.telegram.messenger.audioinfo.util.RangeInputStream)=B:6:0x0039}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r20 = this;
-        r0 = r20;
-        r1 = r0.child;
-        if (r1 == 0) goto L_0x000b;
-    L_0x0006:
-        r1 = r0.child;
-        r1.skip();
-    L_0x000b:
-        r1 = r0.data;
-        r1 = r1.readInt();
-        r2 = 4;
-        r2 = new byte[r2];
-        r3 = r0.data;
-        r3.readFully(r2);
-        r3 = new java.lang.String;
-        r4 = "ISO8859_1";
-        r3.<init>(r2, r4);
-        r2 = 1;
-        if (r1 != r2) goto L_0x0039;
-    L_0x0023:
-        r1 = new org.telegram.messenger.audioinfo.util.RangeInputStream;
-        r5 = r0.input;
-        r6 = 16;
-        r2 = r0.data;
-        r8 = r2.readLong();
-        r10 = 16;
-        r12 = r8 - r10;
-        r4 = r1;
-        r8 = r12;
-        r4.<init>(r5, r6, r8);
-        goto L_0x0049;
-    L_0x0039:
-        r2 = new org.telegram.messenger.audioinfo.util.RangeInputStream;
-        r15 = r0.input;
-        r16 = 8;
-        r1 = r1 + -8;
-        r4 = (long) r1;
-        r14 = r2;
-        r18 = r4;
-        r14.<init>(r15, r16, r18);
-        r1 = r2;
-    L_0x0049:
-        r2 = new org.telegram.messenger.audioinfo.m4a.MP4Atom;
-        r2.<init>(r1, r0, r3);
-        r0.child = r2;
-        return r2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.m4a.MP4Box.nextChild():org.telegram.messenger.audioinfo.m4a.MP4Atom");
+    public MP4Atom nextChild() throws IOException {
+        RangeInputStream atomInput;
+        if (this.child != null) {
+            this.child.skip();
+        }
+        int atomLength = this.data.readInt();
+        byte[] typeBytes = new byte[4];
+        this.data.readFully(typeBytes);
+        String atomType = new String(typeBytes, ASCII);
+        if (atomLength == 1) {
+            atomInput = new RangeInputStream(this.input, 16, this.data.readLong() - 16);
+        } else {
+            atomInput = new RangeInputStream(this.input, 8, (long) (atomLength - 8));
+        }
+        MP4Atom mP4Atom = new MP4Atom(atomInput, this, atomType);
+        this.child = mP4Atom;
+        return mP4Atom;
     }
 
-    public MP4Atom nextChild(String str) throws IOException {
-        MP4Atom nextChild = nextChild();
-        if (nextChild.getType().matches(str)) {
-            return nextChild;
+    public MP4Atom nextChild(String expectedTypeExpression) throws IOException {
+        MP4Atom atom = nextChild();
+        if (atom.getType().matches(expectedTypeExpression)) {
+            return atom;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("atom type mismatch, expected ");
-        stringBuilder.append(str);
-        stringBuilder.append(", got ");
-        stringBuilder.append(nextChild.getType());
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("atom type mismatch, expected " + expectedTypeExpression + ", got " + atom.getType());
     }
 }

@@ -16,50 +16,47 @@ public final class PrivFrame extends Id3Frame {
         C05851() {
         }
 
-        public PrivFrame createFromParcel(Parcel parcel) {
-            return new PrivFrame(parcel);
+        public PrivFrame createFromParcel(Parcel in) {
+            return new PrivFrame(in);
         }
 
-        public PrivFrame[] newArray(int i) {
-            return new PrivFrame[i];
+        public PrivFrame[] newArray(int size) {
+            return new PrivFrame[size];
         }
     }
 
-    public PrivFrame(String str, byte[] bArr) {
+    public PrivFrame(String owner, byte[] privateData) {
         super(ID);
-        this.owner = str;
-        this.privateData = bArr;
+        this.owner = owner;
+        this.privateData = privateData;
     }
 
-    PrivFrame(Parcel parcel) {
+    PrivFrame(Parcel in) {
         super(ID);
-        this.owner = parcel.readString();
-        this.privateData = parcel.createByteArray();
+        this.owner = in.readString();
+        this.privateData = in.createByteArray();
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                PrivFrame privFrame = (PrivFrame) obj;
-                if (!Util.areEqual(this.owner, privFrame.owner) || Arrays.equals(this.privateData, privFrame.privateData) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        PrivFrame other = (PrivFrame) obj;
+        if (Util.areEqual(this.owner, other.owner) && Arrays.equals(this.privateData, other.privateData)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (527 + (this.owner != null ? this.owner.hashCode() : 0))) + Arrays.hashCode(this.privateData);
+        return (((this.owner != null ? this.owner.hashCode() : 0) + 527) * 31) + Arrays.hashCode(this.privateData);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.owner);
-        parcel.writeByteArray(this.privateData);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.owner);
+        dest.writeByteArray(this.privateData);
     }
 }

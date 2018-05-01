@@ -36,45 +36,39 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     private final TrackEncryptionBox[] trackEncryptionBoxes;
     private final TrackGroupArray trackGroups;
 
-    public long readDiscontinuity() {
-        return C0542C.TIME_UNSET;
-    }
-
-    public SsMediaPeriod(SsManifest ssManifest, Factory factory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int i, EventDispatcher eventDispatcher, LoaderErrorThrower loaderErrorThrower, Allocator allocator) {
-        this.chunkSourceFactory = factory;
-        this.manifestLoaderErrorThrower = loaderErrorThrower;
-        this.minLoadableRetryCount = i;
+    public SsMediaPeriod(SsManifest manifest, Factory chunkSourceFactory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int minLoadableRetryCount, EventDispatcher eventDispatcher, LoaderErrorThrower manifestLoaderErrorThrower, Allocator allocator) {
+        this.chunkSourceFactory = chunkSourceFactory;
+        this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
+        this.minLoadableRetryCount = minLoadableRetryCount;
         this.eventDispatcher = eventDispatcher;
         this.allocator = allocator;
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
-        this.trackGroups = buildTrackGroups(ssManifest);
-        factory = ssManifest.protectionElement;
-        if (factory != null) {
-            byte[] protectionElementKeyId = getProtectionElementKeyId(factory.data);
-            this.trackEncryptionBoxes = new TrackEncryptionBox[]{new TrackEncryptionBox(true, null, 8, protectionElementKeyId, 0, 0, null)};
+        this.trackGroups = buildTrackGroups(manifest);
+        if (manifest.protectionElement != null) {
+            this.trackEncryptionBoxes = new TrackEncryptionBox[]{new TrackEncryptionBox(true, null, 8, getProtectionElementKeyId(manifest.protectionElement.data), 0, 0, null)};
         } else {
             this.trackEncryptionBoxes = null;
         }
-        this.manifest = ssManifest;
+        this.manifest = manifest;
         this.sampleStreams = newSampleStreamArray(0);
         this.compositeSequenceableLoader = compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.sampleStreams);
     }
 
-    public void updateManifest(SsManifest ssManifest) {
-        this.manifest = ssManifest;
-        for (ChunkSampleStream chunkSource : this.sampleStreams) {
-            ((SsChunkSource) chunkSource.getChunkSource()).updateManifest(ssManifest);
+    public void updateManifest(SsManifest manifest) {
+        this.manifest = manifest;
+        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
+            ((SsChunkSource) sampleStream.getChunkSource()).updateManifest(manifest);
         }
         this.callback.onContinueLoadingRequested(this);
     }
 
     public void release() {
-        for (ChunkSampleStream release : this.sampleStreams) {
-            release.release();
+        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
+            sampleStream.release();
         }
     }
 
-    public void prepare(MediaPeriod.Callback callback, long j) {
+    public void prepare(MediaPeriod.Callback callback, long positionUs) {
         this.callback = callback;
         callback.onPrepared(this);
     }
@@ -87,111 +81,114 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         return this.trackGroups;
     }
 
-    public long selectTracks(TrackSelection[] trackSelectionArr, boolean[] zArr, SampleStream[] sampleStreamArr, boolean[] zArr2, long j) {
-        ArrayList arrayList = new ArrayList();
+    public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
+        ArrayList<ChunkSampleStream<SsChunkSource>> sampleStreamsList = new ArrayList();
         int i = 0;
-        while (i < trackSelectionArr.length) {
-            ChunkSampleStream chunkSampleStream;
-            if (sampleStreamArr[i] != null) {
-                chunkSampleStream = (ChunkSampleStream) sampleStreamArr[i];
-                if (trackSelectionArr[i] != null) {
-                    if (zArr[i]) {
-                        arrayList.add(chunkSampleStream);
-                    }
+        while (i < selections.length) {
+            ChunkSampleStream<SsChunkSource> stream;
+            if (streams[i] != null) {
+                stream = streams[i];
+                if (selections[i] == null || !mayRetainStreamFlags[i]) {
+                    stream.release();
+                    streams[i] = null;
+                } else {
+                    sampleStreamsList.add(stream);
                 }
-                chunkSampleStream.release();
-                sampleStreamArr[i] = null;
             }
-            if (sampleStreamArr[i] == null && trackSelectionArr[i] != null) {
-                chunkSampleStream = buildSampleStream(trackSelectionArr[i], j);
-                arrayList.add(chunkSampleStream);
-                sampleStreamArr[i] = chunkSampleStream;
-                zArr2[i] = true;
+            if (streams[i] == null && selections[i] != null) {
+                stream = buildSampleStream(selections[i], positionUs);
+                sampleStreamsList.add(stream);
+                streams[i] = stream;
+                streamResetFlags[i] = true;
             }
             i++;
         }
-        this.sampleStreams = newSampleStreamArray(arrayList.size());
-        arrayList.toArray(this.sampleStreams);
+        this.sampleStreams = newSampleStreamArray(sampleStreamsList.size());
+        sampleStreamsList.toArray(this.sampleStreams);
         this.compositeSequenceableLoader = this.compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.sampleStreams);
-        return j;
+        return positionUs;
     }
 
-    public void discardBuffer(long j, boolean z) {
-        for (ChunkSampleStream discardBuffer : this.sampleStreams) {
-            discardBuffer.discardBuffer(j, z);
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
+        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
+            sampleStream.discardBuffer(positionUs, toKeyframe);
         }
     }
 
-    public void reevaluateBuffer(long j) {
-        this.compositeSequenceableLoader.reevaluateBuffer(j);
+    public void reevaluateBuffer(long positionUs) {
+        this.compositeSequenceableLoader.reevaluateBuffer(positionUs);
     }
 
-    public boolean continueLoading(long j) {
-        return this.compositeSequenceableLoader.continueLoading(j);
+    public boolean continueLoading(long positionUs) {
+        return this.compositeSequenceableLoader.continueLoading(positionUs);
     }
 
     public long getNextLoadPositionUs() {
         return this.compositeSequenceableLoader.getNextLoadPositionUs();
     }
 
+    public long readDiscontinuity() {
+        return C0542C.TIME_UNSET;
+    }
+
     public long getBufferedPositionUs() {
         return this.compositeSequenceableLoader.getBufferedPositionUs();
     }
 
-    public long seekToUs(long j) {
-        for (ChunkSampleStream seekToUs : this.sampleStreams) {
-            seekToUs.seekToUs(j);
+    public long seekToUs(long positionUs) {
+        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
+            sampleStream.seekToUs(positionUs);
         }
-        return j;
+        return positionUs;
     }
 
-    public long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters) {
-        for (ChunkSampleStream chunkSampleStream : this.sampleStreams) {
-            if (chunkSampleStream.primaryTrackType == 2) {
-                return chunkSampleStream.getAdjustedSeekPositionUs(j, seekParameters);
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
+            if (sampleStream.primaryTrackType == 2) {
+                return sampleStream.getAdjustedSeekPositionUs(positionUs, seekParameters);
             }
         }
-        return j;
+        return positionUs;
     }
 
     public void onContinueLoadingRequested(ChunkSampleStream<SsChunkSource> chunkSampleStream) {
         this.callback.onContinueLoadingRequested(this);
     }
 
-    private ChunkSampleStream<SsChunkSource> buildSampleStream(TrackSelection trackSelection, long j) {
-        int indexOf = this.trackGroups.indexOf(trackSelection.getTrackGroup());
-        return new ChunkSampleStream(this.manifest.streamElements[indexOf].type, null, null, this.chunkSourceFactory.createChunkSource(this.manifestLoaderErrorThrower, this.manifest, indexOf, trackSelection, this.trackEncryptionBoxes), this, this.allocator, j, this.minLoadableRetryCount, this.eventDispatcher);
+    private ChunkSampleStream<SsChunkSource> buildSampleStream(TrackSelection selection, long positionUs) {
+        int streamElementIndex = this.trackGroups.indexOf(selection.getTrackGroup());
+        return new ChunkSampleStream(this.manifest.streamElements[streamElementIndex].type, null, null, this.chunkSourceFactory.createChunkSource(this.manifestLoaderErrorThrower, this.manifest, streamElementIndex, selection, this.trackEncryptionBoxes), this, this.allocator, positionUs, this.minLoadableRetryCount, this.eventDispatcher);
     }
 
-    private static TrackGroupArray buildTrackGroups(SsManifest ssManifest) {
-        TrackGroup[] trackGroupArr = new TrackGroup[ssManifest.streamElements.length];
-        for (int i = 0; i < ssManifest.streamElements.length; i++) {
-            trackGroupArr[i] = new TrackGroup(ssManifest.streamElements[i].formats);
+    private static TrackGroupArray buildTrackGroups(SsManifest manifest) {
+        TrackGroup[] trackGroups = new TrackGroup[manifest.streamElements.length];
+        for (int i = 0; i < manifest.streamElements.length; i++) {
+            trackGroups[i] = new TrackGroup(manifest.streamElements[i].formats);
         }
-        return new TrackGroupArray(trackGroupArr);
+        return new TrackGroupArray(trackGroups);
     }
 
-    private static ChunkSampleStream<SsChunkSource>[] newSampleStreamArray(int i) {
-        return new ChunkSampleStream[i];
+    private static ChunkSampleStream<SsChunkSource>[] newSampleStreamArray(int length) {
+        return new ChunkSampleStream[length];
     }
 
-    private static byte[] getProtectionElementKeyId(byte[] bArr) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < bArr.length; i += 2) {
-            stringBuilder.append((char) bArr[i]);
+    private static byte[] getProtectionElementKeyId(byte[] initData) {
+        StringBuilder initDataStringBuilder = new StringBuilder();
+        for (int i = 0; i < initData.length; i += 2) {
+            initDataStringBuilder.append((char) initData[i]);
         }
-        bArr = stringBuilder.toString();
-        bArr = Base64.decode(bArr.substring(bArr.indexOf("<KID>") + 5, bArr.indexOf("</KID>")), 0);
-        swap(bArr, 0, 3);
-        swap(bArr, 1, 2);
-        swap(bArr, 4, 5);
-        swap(bArr, 6, 7);
-        return bArr;
+        String initDataString = initDataStringBuilder.toString();
+        byte[] keyId = Base64.decode(initDataString.substring(initDataString.indexOf("<KID>") + 5, initDataString.indexOf("</KID>")), 0);
+        swap(keyId, 0, 3);
+        swap(keyId, 1, 2);
+        swap(keyId, 4, 5);
+        swap(keyId, 6, 7);
+        return keyId;
     }
 
-    private static void swap(byte[] bArr, int i, int i2) {
-        byte b = bArr[i];
-        bArr[i] = bArr[i2];
-        bArr[i2] = b;
+    private static void swap(byte[] data, int firstPosition, int secondPosition) {
+        byte temp = data[firstPosition];
+        data[firstPosition] = data[secondPosition];
+        data[secondPosition] = temp;
     }
 }

@@ -1,23 +1,23 @@
 package org.telegram.messenger.exoplayer2;
 
 public class DefaultControlDispatcher implements ControlDispatcher {
-    public boolean dispatchSetPlayWhenReady(Player player, boolean z) {
-        player.setPlayWhenReady(z);
+    public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
+        player.setPlayWhenReady(playWhenReady);
         return true;
     }
 
-    public boolean dispatchSeekTo(Player player, int i, long j) {
-        player.seekTo(i, j);
+    public boolean dispatchSeekTo(Player player, int windowIndex, long positionMs) {
+        player.seekTo(windowIndex, positionMs);
         return true;
     }
 
-    public boolean dispatchSetRepeatMode(Player player, int i) {
-        player.setRepeatMode(i);
+    public boolean dispatchSetRepeatMode(Player player, int repeatMode) {
+        player.setRepeatMode(repeatMode);
         return true;
     }
 
-    public boolean dispatchSetShuffleModeEnabled(Player player, boolean z) {
-        player.setShuffleModeEnabled(z);
+    public boolean dispatchSetShuffleModeEnabled(Player player, boolean shuffleModeEnabled) {
+        player.setShuffleModeEnabled(shuffleModeEnabled);
         return true;
     }
 }

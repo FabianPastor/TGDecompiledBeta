@@ -22,21 +22,28 @@ public class AudioTrackJNI {
 
         public void run() {
             try {
+                ByteBuffer tmp48;
+                ByteBuffer tmp44;
                 AudioTrackJNI.this.audioTrack.play();
-                ByteBuffer byteBuffer = null;
-                ByteBuffer allocateDirect = AudioTrackJNI.this.needResampling ? ByteBuffer.allocateDirect(1920) : null;
                 if (AudioTrackJNI.this.needResampling) {
-                    byteBuffer = ByteBuffer.allocateDirect(1764);
+                    tmp48 = ByteBuffer.allocateDirect(1920);
+                } else {
+                    tmp48 = null;
+                }
+                if (AudioTrackJNI.this.needResampling) {
+                    tmp44 = ByteBuffer.allocateDirect(1764);
+                } else {
+                    tmp44 = null;
                 }
                 while (AudioTrackJNI.this.running) {
                     try {
                         if (AudioTrackJNI.this.needResampling) {
                             AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
-                            allocateDirect.rewind();
-                            allocateDirect.put(AudioTrackJNI.this.buffer);
-                            Resampler.convert48to44(allocateDirect, byteBuffer);
-                            byteBuffer.rewind();
-                            byteBuffer.get(AudioTrackJNI.this.buffer, 0, 1764);
+                            tmp48.rewind();
+                            tmp48.put(AudioTrackJNI.this.buffer);
+                            Resampler.convert48to44(tmp48, tmp44);
+                            tmp44.rewind();
+                            tmp44.get(AudioTrackJNI.this.buffer, 0, 1764);
                             AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1764);
                         } else {
                             AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
@@ -51,9 +58,9 @@ public class AudioTrackJNI {
                     }
                 }
                 Log.i("tg-voip", "audiotrack thread exits");
-            } catch (Throwable e2) {
+            } catch (Exception x) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m2e("error starting AudioTrack", e2);
+                    FileLog.m2e("error starting AudioTrack", x);
                 }
             }
         }
@@ -61,129 +68,48 @@ public class AudioTrackJNI {
 
     private native void nativeCallback(byte[] bArr);
 
-    public AudioTrackJNI(long j) {
-        this.nativeInst = j;
+    public AudioTrackJNI(long nativeInst) {
+        this.nativeInst = nativeInst;
     }
 
-    private int getBufferSize(int i, int i2) {
-        return Math.max(AudioTrack.getMinBufferSize(i2, 4, 2), i);
+    private int getBufferSize(int min, int sampleRate) {
+        return Math.max(AudioTrack.getMinBufferSize(sampleRate, 4, 2), min);
     }
 
-    public void init(int r10, int r11, int r12, int r13) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r9 = this;
-        r10 = r9.audioTrack;
-        if (r10 == 0) goto L_0x000c;
-    L_0x0004:
-        r10 = new java.lang.IllegalStateException;
-        r11 = "already inited";
-        r10.<init>(r11);
-        throw r10;
-    L_0x000c:
-        r10 = 48000; // 0xbb80 float:6.7262E-41 double:2.3715E-319;
-        r5 = r9.getBufferSize(r13, r10);
-        r9.bufferSize = r13;
-        r10 = new android.media.AudioTrack;
-        r1 = 0;
-        r2 = 48000; // 0xbb80 float:6.7262E-41 double:2.3715E-319;
-        r11 = 12;
-        r7 = 4;
-        r8 = 1;
-        if (r12 != r8) goto L_0x0023;
-    L_0x0021:
-        r3 = r7;
-        goto L_0x0024;
-    L_0x0023:
-        r3 = r11;
-    L_0x0024:
-        r4 = 2;
-        r6 = 1;
-        r0 = r10;
-        r0.<init>(r1, r2, r3, r4, r5, r6);
-        r9.audioTrack = r10;
-        r10 = r9.audioTrack;
-        r10 = r10.getState();
-        if (r10 == r8) goto L_0x006f;
-    L_0x0034:
-        r10 = r9.audioTrack;	 Catch:{ Throwable -> 0x0039 }
-        r10.release();	 Catch:{ Throwable -> 0x0039 }
-    L_0x0039:
-        r13 = r13 * 6;
-        r10 = 44100; // 0xac44 float:6.1797E-41 double:2.17883E-319;
-        r5 = r9.getBufferSize(r13, r10);
-        r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r10 == 0) goto L_0x005a;
-    L_0x0046:
-        r10 = new java.lang.StringBuilder;
-        r10.<init>();
-        r13 = "buffer size: ";
-        r10.append(r13);
-        r10.append(r5);
-        r10 = r10.toString();
-        org.telegram.messenger.FileLog.m0d(r10);
-    L_0x005a:
-        r10 = new android.media.AudioTrack;
-        r1 = 0;
-        r2 = 44100; // 0xac44 float:6.1797E-41 double:2.17883E-319;
-        if (r12 != r8) goto L_0x0064;
-    L_0x0062:
-        r3 = r7;
-        goto L_0x0065;
-    L_0x0064:
-        r3 = r11;
-    L_0x0065:
-        r4 = 2;
-        r6 = 1;
-        r0 = r10;
-        r0.<init>(r1, r2, r3, r4, r5, r6);
-        r9.audioTrack = r10;
-        r9.needResampling = r8;
-    L_0x006f:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.AudioTrackJNI.init(int, int, int, int):void");
+    public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
+        if (this.audioTrack != null) {
+            throw new IllegalStateException("already inited");
+        }
+        int size = getBufferSize(bufferSize, 48000);
+        this.bufferSize = bufferSize;
+        this.audioTrack = new AudioTrack(0, 48000, channels == 1 ? 4 : 12, 2, size, 1);
+        if (this.audioTrack.getState() != 1) {
+            int i;
+            try {
+                this.audioTrack.release();
+            } catch (Throwable th) {
+            }
+            size = getBufferSize(bufferSize * 6, 44100);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("buffer size: " + size);
+            }
+            if (channels == 1) {
+                i = 4;
+            } else {
+                i = 12;
+            }
+            this.audioTrack = new AudioTrack(0, 44100, i, 2, size, 1);
+            this.needResampling = true;
+        }
     }
 
     public void stop() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r1 = this;
-        r0 = r1.audioTrack;
-        if (r0 == 0) goto L_0x0009;
-    L_0x0004:
-        r0 = r1.audioTrack;	 Catch:{ Exception -> 0x0009 }
-        r0.stop();	 Catch:{ Exception -> 0x0009 }
-    L_0x0009:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.AudioTrackJNI.stop():void");
+        if (this.audioTrack != null) {
+            try {
+                this.audioTrack.stop();
+            } catch (Exception e) {
+            }
+        }
     }
 
     public void release() {

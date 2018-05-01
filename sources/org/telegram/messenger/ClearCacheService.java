@@ -12,19 +12,26 @@ public class ClearCacheService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         ApplicationLoader.postInitApplication();
-        intent = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
-        if (intent != 2) {
+        final int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+        if (keepMedia != 2) {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
-                    int i = intent == 0 ? 7 : intent == 1 ? 30 : 3;
-                    long currentTimeMillis = (System.currentTimeMillis() / 1000) - ((long) (86400 * i));
-                    SparseArray createMediaPaths = ImageLoader.getInstance().createMediaPaths();
-                    for (int i2 = 0; i2 < createMediaPaths.size(); i2++) {
-                        if (createMediaPaths.keyAt(i2) != 4) {
+                    int days;
+                    if (keepMedia == 0) {
+                        days = 7;
+                    } else if (keepMedia == 1) {
+                        days = 30;
+                    } else {
+                        days = 3;
+                    }
+                    long currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
+                    SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
+                    for (int a = 0; a < paths.size(); a++) {
+                        if (paths.keyAt(a) != 4) {
                             try {
-                                Utilities.clearDir(((File) createMediaPaths.valueAt(i2)).getAbsolutePath(), 0, currentTimeMillis);
-                            } catch (Throwable th) {
-                                FileLog.m3e(th);
+                                Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
                             }
                         }
                     }

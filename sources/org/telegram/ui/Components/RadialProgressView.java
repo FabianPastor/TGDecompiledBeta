@@ -38,39 +38,38 @@ public class RadialProgressView extends View {
         this.progressPaint.setColor(this.progressColor);
     }
 
-    public void setUseSelfAlpha(boolean z) {
-        this.useSelfAlpha = z;
+    public void setUseSelfAlpha(boolean value) {
+        this.useSelfAlpha = value;
     }
 
     @Keep
-    public void setAlpha(float f) {
-        super.setAlpha(f);
+    public void setAlpha(float alpha) {
+        super.setAlpha(alpha);
         if (this.useSelfAlpha) {
             Drawable background = getBackground();
-            f = (int) (f * 255.0f);
+            int a = (int) (255.0f * alpha);
             if (background != null) {
-                background.setAlpha(f);
+                background.setAlpha(a);
             }
-            this.progressPaint.setAlpha(f);
+            this.progressPaint.setAlpha(a);
         }
     }
 
     private void updateAnimation() {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = currentTimeMillis - this.lastUpdateTime;
-        long j2 = 17;
-        if (j <= 17) {
-            j2 = j;
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.lastUpdateTime;
+        if (dt > 17) {
+            dt = 17;
         }
-        this.lastUpdateTime = currentTimeMillis;
-        this.radOffset += ((float) (360 * j2)) / 2000.0f;
+        this.lastUpdateTime = newTime;
+        this.radOffset += ((float) (360 * dt)) / 2000.0f;
         this.radOffset -= (float) (((int) (this.radOffset / 360.0f)) * 360);
-        this.currentProgressTime += (float) j2;
+        this.currentProgressTime += (float) dt;
         if (this.currentProgressTime >= 500.0f) {
             this.currentProgressTime = 500.0f;
         }
         if (this.risingCircleLength) {
-            this.currentCircleLength = 4.0f + (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f));
+            this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) + 4.0f;
         } else {
             this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * 270.0f);
         }
@@ -79,26 +78,26 @@ public class RadialProgressView extends View {
                 this.radOffset += 270.0f;
                 this.currentCircleLength = -266.0f;
             }
-            this.risingCircleLength ^= 1;
+            this.risingCircleLength = !this.risingCircleLength;
             this.currentProgressTime = 0.0f;
         }
         invalidate();
     }
 
-    public void setSize(int i) {
-        this.size = i;
+    public void setSize(int value) {
+        this.size = value;
         invalidate();
     }
 
-    public void setProgressColor(int i) {
-        this.progressColor = i;
+    public void setProgressColor(int color) {
+        this.progressColor = color;
         this.progressPaint.setColor(this.progressColor);
     }
 
     protected void onDraw(Canvas canvas) {
-        int measuredWidth = (getMeasuredWidth() - this.size) / 2;
-        int measuredHeight = (getMeasuredHeight() - this.size) / 2;
-        this.cicleRect.set((float) measuredWidth, (float) measuredHeight, (float) (measuredWidth + this.size), (float) (measuredHeight + this.size));
+        int x = (getMeasuredWidth() - this.size) / 2;
+        int y = (getMeasuredHeight() - this.size) / 2;
+        this.cicleRect.set((float) x, (float) y, (float) (this.size + x), (float) (this.size + y));
         canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
         updateAnimation();
     }

@@ -18,41 +18,32 @@ final class TrimmingAudioProcessor implements AudioProcessor {
     private int trimEndSamples;
     private int trimStartSamples;
 
-    public int getOutputEncoding() {
-        return 2;
+    public void setTrimSampleCount(int trimStartSamples, int trimEndSamples) {
+        this.trimStartSamples = trimStartSamples;
+        this.trimEndSamples = trimEndSamples;
     }
 
-    public void setTrimSampleCount(int i, int i2) {
-        this.trimStartSamples = i;
-        this.trimEndSamples = i2;
-    }
-
-    public boolean configure(int i, int i2, int i3) throws UnhandledFormatException {
-        if (i3 != 2) {
-            throw new UnhandledFormatException(i, i2, i3);
+    public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
+        if (encoding != 2) {
+            throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
         }
-        this.channelCount = i2;
-        this.sampleRateHz = i;
-        this.endBuffer = new byte[((this.trimEndSamples * i2) * 2)];
+        boolean z;
+        this.channelCount = channelCount;
+        this.sampleRateHz = sampleRateHz;
+        this.endBuffer = new byte[((this.trimEndSamples * channelCount) * 2)];
         this.endBufferSize = 0;
-        this.pendingTrimStartBytes = (this.trimStartSamples * i2) * 2;
-        i2 = this.isActive;
-        if (this.trimStartSamples == 0) {
-            if (this.trimEndSamples == 0) {
-                i3 = 0;
-                this.isActive = i3;
-                if (i2 == this.isActive) {
-                    return 1;
-                }
-                return false;
-            }
+        this.pendingTrimStartBytes = (this.trimStartSamples * channelCount) * 2;
+        boolean wasActive = this.isActive;
+        if (this.trimStartSamples == 0 && this.trimEndSamples == 0) {
+            z = false;
+        } else {
+            z = true;
         }
-        i3 = 1;
-        this.isActive = i3;
-        if (i2 == this.isActive) {
-            return false;
+        this.isActive = z;
+        if (wasActive != this.isActive) {
+            return true;
         }
-        return 1;
+        return false;
     }
 
     public boolean isActive() {
@@ -63,36 +54,40 @@ final class TrimmingAudioProcessor implements AudioProcessor {
         return this.channelCount;
     }
 
+    public int getOutputEncoding() {
+        return 2;
+    }
+
     public int getOutputSampleRateHz() {
         return this.sampleRateHz;
     }
 
-    public void queueInput(ByteBuffer byteBuffer) {
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        int i = limit - position;
-        int min = Math.min(i, this.pendingTrimStartBytes);
-        this.pendingTrimStartBytes -= min;
-        byteBuffer.position(position + min);
+    public void queueInput(ByteBuffer inputBuffer) {
+        int position = inputBuffer.position();
+        int limit = inputBuffer.limit();
+        int remaining = limit - position;
+        int trimBytes = Math.min(remaining, this.pendingTrimStartBytes);
+        this.pendingTrimStartBytes -= trimBytes;
+        inputBuffer.position(position + trimBytes);
         if (this.pendingTrimStartBytes <= 0) {
-            i -= min;
-            position = (this.endBufferSize + i) - this.endBuffer.length;
-            if (this.buffer.capacity() < position) {
-                this.buffer = ByteBuffer.allocateDirect(position).order(ByteOrder.nativeOrder());
+            remaining -= trimBytes;
+            int remainingBytesToOutput = (this.endBufferSize + remaining) - this.endBuffer.length;
+            if (this.buffer.capacity() < remainingBytesToOutput) {
+                this.buffer = ByteBuffer.allocateDirect(remainingBytesToOutput).order(ByteOrder.nativeOrder());
             } else {
                 this.buffer.clear();
             }
-            min = Util.constrainValue(position, 0, this.endBufferSize);
-            this.buffer.put(this.endBuffer, 0, min);
-            position = Util.constrainValue(position - min, 0, i);
-            byteBuffer.limit(byteBuffer.position() + position);
-            this.buffer.put(byteBuffer);
-            byteBuffer.limit(limit);
-            i -= position;
-            this.endBufferSize -= min;
-            System.arraycopy(this.endBuffer, min, this.endBuffer, 0, this.endBufferSize);
-            byteBuffer.get(this.endBuffer, this.endBufferSize, i);
-            this.endBufferSize += i;
+            int endBufferBytesToOutput = Util.constrainValue(remainingBytesToOutput, 0, this.endBufferSize);
+            this.buffer.put(this.endBuffer, 0, endBufferBytesToOutput);
+            int inputBufferBytesToOutput = Util.constrainValue(remainingBytesToOutput - endBufferBytesToOutput, 0, remaining);
+            inputBuffer.limit(inputBuffer.position() + inputBufferBytesToOutput);
+            this.buffer.put(inputBuffer);
+            inputBuffer.limit(limit);
+            remaining -= inputBufferBytesToOutput;
+            this.endBufferSize -= endBufferBytesToOutput;
+            System.arraycopy(this.endBuffer, endBufferBytesToOutput, this.endBuffer, 0, this.endBufferSize);
+            inputBuffer.get(this.endBuffer, this.endBufferSize, remaining);
+            this.endBufferSize += remaining;
             this.buffer.flip();
             this.outputBuffer = this.buffer;
         }
@@ -103,9 +98,9 @@ final class TrimmingAudioProcessor implements AudioProcessor {
     }
 
     public ByteBuffer getOutput() {
-        ByteBuffer byteBuffer = this.outputBuffer;
+        ByteBuffer outputBuffer = this.outputBuffer;
         this.outputBuffer = EMPTY_BUFFER;
-        return byteBuffer;
+        return outputBuffer;
     }
 
     public boolean isEnded() {

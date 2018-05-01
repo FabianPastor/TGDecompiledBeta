@@ -13,25 +13,99 @@ public final class FingerprintManagerCompat {
     static final FingerprintManagerCompatImpl IMPL;
     private Context mContext;
 
+    private interface FingerprintManagerCompatImpl {
+        void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler);
+
+        boolean hasEnrolledFingerprints(Context context);
+
+        boolean isHardwareDetected(Context context);
+    }
+
+    private static class Api23FingerprintManagerCompatImpl implements FingerprintManagerCompatImpl {
+        public boolean hasEnrolledFingerprints(Context context) {
+            return FingerprintManagerCompatApi23.hasEnrolledFingerprints(context);
+        }
+
+        public boolean isHardwareDetected(Context context) {
+            return FingerprintManagerCompatApi23.isHardwareDetected(context);
+        }
+
+        public void authenticate(Context context, CryptoObject crypto, int flags, CancellationSignal cancel, AuthenticationCallback callback, Handler handler) {
+            FingerprintManagerCompatApi23.authenticate(context, wrapCryptoObject(crypto), flags, cancel != null ? cancel.getCancellationSignalObject() : null, wrapCallback(callback), handler);
+        }
+
+        private static org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject wrapCryptoObject(CryptoObject cryptoObject) {
+            if (cryptoObject == null) {
+                return null;
+            }
+            if (cryptoObject.getCipher() != null) {
+                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getCipher());
+            }
+            if (cryptoObject.getSignature() != null) {
+                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getSignature());
+            }
+            if (cryptoObject.getMac() != null) {
+                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getMac());
+            }
+            return null;
+        }
+
+        static CryptoObject unwrapCryptoObject(org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject cryptoObject) {
+            if (cryptoObject == null) {
+                return null;
+            }
+            if (cryptoObject.getCipher() != null) {
+                return new CryptoObject(cryptoObject.getCipher());
+            }
+            if (cryptoObject.getSignature() != null) {
+                return new CryptoObject(cryptoObject.getSignature());
+            }
+            if (cryptoObject.getMac() != null) {
+                return new CryptoObject(cryptoObject.getMac());
+            }
+            return null;
+        }
+
+        private static org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback wrapCallback(final AuthenticationCallback callback) {
+            return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback() {
+                public void onAuthenticationError(int errMsgId, CharSequence errString) {
+                    callback.onAuthenticationError(errMsgId, errString);
+                }
+
+                public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+                    callback.onAuthenticationHelp(helpMsgId, helpString);
+                }
+
+                public void onAuthenticationSucceeded(AuthenticationResultInternal result) {
+                    callback.onAuthenticationSucceeded(new AuthenticationResult(Api23FingerprintManagerCompatImpl.unwrapCryptoObject(result.getCryptoObject())));
+                }
+
+                public void onAuthenticationFailed() {
+                    callback.onAuthenticationFailed();
+                }
+            };
+        }
+    }
+
     public static abstract class AuthenticationCallback {
-        public void onAuthenticationError(int i, CharSequence charSequence) {
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+        }
+
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+        }
+
+        public void onAuthenticationSucceeded(AuthenticationResult result) {
         }
 
         public void onAuthenticationFailed() {
-        }
-
-        public void onAuthenticationHelp(int i, CharSequence charSequence) {
-        }
-
-        public void onAuthenticationSucceeded(AuthenticationResult authenticationResult) {
         }
     }
 
     public static final class AuthenticationResult {
         private CryptoObject mCryptoObject;
 
-        public AuthenticationResult(CryptoObject cryptoObject) {
-            this.mCryptoObject = cryptoObject;
+        public AuthenticationResult(CryptoObject crypto) {
+            this.mCryptoObject = crypto;
         }
 
         public CryptoObject getCryptoObject() {
@@ -75,90 +149,16 @@ public final class FingerprintManagerCompat {
         }
     }
 
-    private interface FingerprintManagerCompatImpl {
-        void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler);
-
-        boolean hasEnrolledFingerprints(Context context);
-
-        boolean isHardwareDetected(Context context);
-    }
-
-    private static class Api23FingerprintManagerCompatImpl implements FingerprintManagerCompatImpl {
-        public boolean hasEnrolledFingerprints(Context context) {
-            return FingerprintManagerCompatApi23.hasEnrolledFingerprints(context);
-        }
-
-        public boolean isHardwareDetected(Context context) {
-            return FingerprintManagerCompatApi23.isHardwareDetected(context);
-        }
-
-        public void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler) {
-            FingerprintManagerCompatApi23.authenticate(context, wrapCryptoObject(cryptoObject), i, cancellationSignal != null ? cancellationSignal.getCancellationSignalObject() : null, wrapCallback(authenticationCallback), handler);
-        }
-
-        private static org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject wrapCryptoObject(CryptoObject cryptoObject) {
-            if (cryptoObject == null) {
-                return null;
-            }
-            if (cryptoObject.getCipher() != null) {
-                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getCipher());
-            }
-            if (cryptoObject.getSignature() != null) {
-                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getSignature());
-            }
-            if (cryptoObject.getMac() != null) {
-                return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getMac());
-            }
-            return null;
-        }
-
-        static CryptoObject unwrapCryptoObject(org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.CryptoObject cryptoObject) {
-            if (cryptoObject == null) {
-                return null;
-            }
-            if (cryptoObject.getCipher() != null) {
-                return new CryptoObject(cryptoObject.getCipher());
-            }
-            if (cryptoObject.getSignature() != null) {
-                return new CryptoObject(cryptoObject.getSignature());
-            }
-            if (cryptoObject.getMac() != null) {
-                return new CryptoObject(cryptoObject.getMac());
-            }
-            return null;
-        }
-
-        private static org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback wrapCallback(final AuthenticationCallback authenticationCallback) {
-            return new org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback() {
-                public void onAuthenticationError(int i, CharSequence charSequence) {
-                    authenticationCallback.onAuthenticationError(i, charSequence);
-                }
-
-                public void onAuthenticationHelp(int i, CharSequence charSequence) {
-                    authenticationCallback.onAuthenticationHelp(i, charSequence);
-                }
-
-                public void onAuthenticationSucceeded(AuthenticationResultInternal authenticationResultInternal) {
-                    authenticationCallback.onAuthenticationSucceeded(new AuthenticationResult(Api23FingerprintManagerCompatImpl.unwrapCryptoObject(authenticationResultInternal.getCryptoObject())));
-                }
-
-                public void onAuthenticationFailed() {
-                    authenticationCallback.onAuthenticationFailed();
-                }
-            };
-        }
-    }
-
     private static class LegacyFingerprintManagerCompatImpl implements FingerprintManagerCompatImpl {
-        public void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler) {
-        }
-
         public boolean hasEnrolledFingerprints(Context context) {
             return false;
         }
 
         public boolean isHardwareDetected(Context context) {
             return false;
+        }
+
+        public void authenticate(Context context, CryptoObject crypto, int flags, CancellationSignal cancel, AuthenticationCallback callback, Handler handler) {
         }
     }
 
@@ -186,7 +186,7 @@ public final class FingerprintManagerCompat {
         return IMPL.isHardwareDetected(this.mContext);
     }
 
-    public void authenticate(CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler) {
-        IMPL.authenticate(this.mContext, cryptoObject, i, cancellationSignal, authenticationCallback, handler);
+    public void authenticate(CryptoObject crypto, int flags, CancellationSignal cancel, AuthenticationCallback callback, Handler handler) {
+        IMPL.authenticate(this.mContext, crypto, flags, cancel, callback, handler);
     }
 }

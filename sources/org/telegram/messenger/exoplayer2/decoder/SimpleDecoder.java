@@ -36,31 +36,36 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
 
     protected abstract E decode(I i, O o, boolean z);
 
-    protected SimpleDecoder(I[] iArr, O[] oArr) {
-        this.availableInputBuffers = iArr;
-        int i = 0;
-        this.availableInputBufferCount = iArr.length;
-        for (iArr = null; iArr < this.availableInputBufferCount; iArr++) {
-            this.availableInputBuffers[iArr] = createInputBuffer();
+    protected SimpleDecoder(I[] inputBuffers, O[] outputBuffers) {
+        int i;
+        this.availableInputBuffers = inputBuffers;
+        this.availableInputBufferCount = inputBuffers.length;
+        for (i = 0; i < this.availableInputBufferCount; i++) {
+            this.availableInputBuffers[i] = createInputBuffer();
         }
-        this.availableOutputBuffers = oArr;
-        this.availableOutputBufferCount = oArr.length;
-        while (i < this.availableOutputBufferCount) {
+        this.availableOutputBuffers = outputBuffers;
+        this.availableOutputBufferCount = outputBuffers.length;
+        for (i = 0; i < this.availableOutputBufferCount; i++) {
             this.availableOutputBuffers[i] = createOutputBuffer();
-            i++;
         }
         this.decodeThread = new C05611();
         this.decodeThread.start();
     }
 
-    protected final void setInitialInputBufferSize(int i) {
-        int i2 = 0;
-        Assertions.checkState(this.availableInputBufferCount == this.availableInputBuffers.length);
+    protected final void setInitialInputBufferSize(int size) {
+        boolean z;
+        int i = 0;
+        if (this.availableInputBufferCount == this.availableInputBuffers.length) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
         DecoderInputBuffer[] decoderInputBufferArr = this.availableInputBuffers;
         int length = decoderInputBufferArr.length;
-        while (i2 < length) {
-            decoderInputBufferArr[i2].ensureSpaceForWrite(i);
-            i2++;
+        while (i < length) {
+            decoderInputBufferArr[i].ensureSpaceForWrite(size);
+            i++;
         }
     }
 
@@ -84,30 +89,32 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
         return i;
     }
 
-    public final void queueInputBuffer(I i) throws Exception {
+    public final void queueInputBuffer(I inputBuffer) throws Exception {
         synchronized (this.lock) {
             maybeThrowException();
-            Assertions.checkArgument(i == this.dequeuedInputBuffer);
-            this.queuedInputBuffers.addLast(i);
+            Assertions.checkArgument(inputBuffer == this.dequeuedInputBuffer);
+            this.queuedInputBuffers.addLast(inputBuffer);
             maybeNotifyDecodeLoop();
             this.dequeuedInputBuffer = null;
         }
     }
 
     public final O dequeueOutputBuffer() throws Exception {
+        O o;
         synchronized (this.lock) {
             maybeThrowException();
             if (this.queuedOutputBuffers.isEmpty()) {
-                return null;
+                o = null;
+            } else {
+                OutputBuffer outputBuffer = (OutputBuffer) this.queuedOutputBuffers.removeFirst();
             }
-            OutputBuffer outputBuffer = (OutputBuffer) this.queuedOutputBuffers.removeFirst();
-            return outputBuffer;
         }
+        return o;
     }
 
-    protected void releaseOutputBuffer(O o) {
+    protected void releaseOutputBuffer(O outputBuffer) {
         synchronized (this.lock) {
-            releaseOutputBufferInternal(o);
+            releaseOutputBufferInternal(outputBuffer);
             maybeNotifyDecodeLoop();
         }
     }
@@ -130,33 +137,15 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
     }
 
     public void release() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        r0 = r2.lock;
-        monitor-enter(r0);
-        r1 = 1;
-        r2.released = r1;	 Catch:{ all -> 0x001a }
-        r1 = r2.lock;	 Catch:{ all -> 0x001a }
-        r1.notify();	 Catch:{ all -> 0x001a }
-        monitor-exit(r0);	 Catch:{ all -> 0x001a }
-        r0 = r2.decodeThread;	 Catch:{ InterruptedException -> 0x0012 }
-        r0.join();	 Catch:{ InterruptedException -> 0x0012 }
-        goto L_0x0019;
-    L_0x0012:
-        r0 = java.lang.Thread.currentThread();
-        r0.interrupt();
-    L_0x0019:
-        return;
-    L_0x001a:
-        r1 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x001a }
-        throw r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.decoder.SimpleDecoder.release():void");
+        synchronized (this.lock) {
+            this.released = true;
+            this.lock.notify();
+        }
+        try {
+            this.decodeThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void maybeThrowException() throws Exception {
@@ -172,12 +161,12 @@ Error: java.lang.NullPointerException
     }
 
     private void run() {
-        while (decode()) {
+        do {
             try {
-            } catch (Throwable e) {
+            } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }
-        }
+        } while (decode());
     }
 
     /* JADX WARNING: inconsistent code. */
@@ -190,12 +179,12 @@ Error: java.lang.NullPointerException
             if (this.released) {
                 return false;
             }
-            DecoderInputBuffer decoderInputBuffer = (DecoderInputBuffer) this.queuedInputBuffers.removeFirst();
+            DecoderInputBuffer inputBuffer = (DecoderInputBuffer) this.queuedInputBuffers.removeFirst();
             OutputBuffer[] outputBufferArr = this.availableOutputBuffers;
             int i = this.availableOutputBufferCount - 1;
             this.availableOutputBufferCount = i;
-            OutputBuffer outputBuffer = outputBufferArr[i];
-            boolean z = this.flushed;
+            O outputBuffer = outputBufferArr[i];
+            boolean resetDecoder = this.flushed;
             this.flushed = false;
         }
         if (this.exception != null) {
@@ -214,7 +203,7 @@ Error: java.lang.NullPointerException
                 this.skippedOutputBufferCount = 0;
                 this.queuedOutputBuffers.addLast(outputBuffer);
             }
-            releaseInputBufferInternal(decoderInputBuffer);
+            releaseInputBufferInternal(inputBuffer);
         }
         return true;
     }
@@ -223,19 +212,19 @@ Error: java.lang.NullPointerException
         return !this.queuedInputBuffers.isEmpty() && this.availableOutputBufferCount > 0;
     }
 
-    private void releaseInputBufferInternal(I i) {
-        i.clear();
+    private void releaseInputBufferInternal(I inputBuffer) {
+        inputBuffer.clear();
         DecoderInputBuffer[] decoderInputBufferArr = this.availableInputBuffers;
-        int i2 = this.availableInputBufferCount;
-        this.availableInputBufferCount = i2 + 1;
-        decoderInputBufferArr[i2] = i;
+        int i = this.availableInputBufferCount;
+        this.availableInputBufferCount = i + 1;
+        decoderInputBufferArr[i] = inputBuffer;
     }
 
-    private void releaseOutputBufferInternal(O o) {
-        o.clear();
+    private void releaseOutputBufferInternal(O outputBuffer) {
+        outputBuffer.clear();
         OutputBuffer[] outputBufferArr = this.availableOutputBuffers;
         int i = this.availableOutputBufferCount;
         this.availableOutputBufferCount = i + 1;
-        outputBufferArr[i] = o;
+        outputBufferArr[i] = outputBuffer;
     }
 }

@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -21,7 +22,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -76,6 +76,12 @@ public class DocumentSelectActivity extends BaseFragment {
     private NumberTextView selectedMessagesCountTextView;
     private long sizeLimit = NUM;
 
+    public interface DocumentSelectActivityDelegate {
+        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
+
+        void startDocumentSelectActivity();
+    }
+
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
     class C13871 extends BroadcastReceiver {
 
@@ -100,23 +106,187 @@ public class DocumentSelectActivity extends BaseFragment {
         C13871() {
         }
 
-        public void onReceive(Context context, Intent intent) {
-            context = new C13861();
-            if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction()) != null) {
-                DocumentSelectActivity.this.listView.postDelayed(context, 1000);
+        public void onReceive(Context arg0, Intent intent) {
+            Runnable r = new C13861();
+            if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
+                DocumentSelectActivity.this.listView.postDelayed(r, 1000);
             } else {
-                context.run();
+                r.run();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
+    class C21322 extends ActionBarMenuOnItemClick {
+        C21322() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                    DocumentSelectActivity.this.selectedFiles.clear();
+                    DocumentSelectActivity.this.actionBar.hideActionMode();
+                    int count = DocumentSelectActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = DocumentSelectActivity.this.listView.getChildAt(a);
+                        if (child instanceof SharedDocumentCell) {
+                            ((SharedDocumentCell) child).setChecked(false, true);
+                        }
+                    }
+                    return;
+                }
+                DocumentSelectActivity.this.finishFragment();
+            } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
+                ArrayList<String> files = new ArrayList();
+                files.addAll(DocumentSelectActivity.this.selectedFiles.keySet());
+                DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
+                for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
+                    item.date = System.currentTimeMillis();
+                }
             }
         }
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
     class C13883 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+        C13883() {
         }
 
-        C13883() {
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
+    class C21334 extends OnScrollListener {
+        C21334() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            DocumentSelectActivity.this.scrolling = newState != 0;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$5 */
+    class C21345 implements OnItemLongClickListener {
+        C21345() {
+        }
+
+        public boolean onItemClick(View view, int position) {
+            if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                return false;
+            }
+            ListItem item = DocumentSelectActivity.this.listAdapter.getItem(position);
+            if (item == null) {
+                return false;
+            }
+            File file = item.file;
+            if (!(file == null || file.isDirectory())) {
+                if (!file.canRead()) {
+                    DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", C0446R.string.AccessError));
+                    return false;
+                } else if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
+                    DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", C0446R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
+                    return false;
+                } else if (file.length() == 0) {
+                    return false;
+                } else {
+                    DocumentSelectActivity.this.selectedFiles.put(file.toString(), item);
+                    DocumentSelectActivity.this.selectedMessagesCountTextView.setNumber(1, false);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    ArrayList<Animator> animators = new ArrayList();
+                    for (int a = 0; a < DocumentSelectActivity.this.actionModeViews.size(); a++) {
+                        View view2 = (View) DocumentSelectActivity.this.actionModeViews.get(a);
+                        AndroidUtilities.clearDrawableAnimation(view2);
+                        animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
+                    }
+                    animatorSet.playTogether(animators);
+                    animatorSet.setDuration(250);
+                    animatorSet.start();
+                    DocumentSelectActivity.this.scrolling = false;
+                    if (view instanceof SharedDocumentCell) {
+                        ((SharedDocumentCell) view).setChecked(true, true);
+                    }
+                    DocumentSelectActivity.this.actionBar.showActionMode();
+                }
+            }
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$6 */
+    class C21356 implements OnItemClickListener {
+        C21356() {
+        }
+
+        public void onItemClick(View view, int position) {
+            ListItem item = DocumentSelectActivity.this.listAdapter.getItem(position);
+            if (item != null) {
+                File file = item.file;
+                HistoryEntry he;
+                if (file == null) {
+                    if (item.icon == C0446R.drawable.ic_storage_gallery) {
+                        if (DocumentSelectActivity.this.delegate != null) {
+                            DocumentSelectActivity.this.delegate.startDocumentSelectActivity();
+                        }
+                        DocumentSelectActivity.this.finishFragment(false);
+                        return;
+                    }
+                    he = (HistoryEntry) DocumentSelectActivity.this.history.remove(DocumentSelectActivity.this.history.size() - 1);
+                    DocumentSelectActivity.this.actionBar.setTitle(he.title);
+                    if (he.dir != null) {
+                        DocumentSelectActivity.this.listFiles(he.dir);
+                    } else {
+                        DocumentSelectActivity.this.listRoots();
+                    }
+                    DocumentSelectActivity.this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
+                } else if (file.isDirectory()) {
+                    he = new HistoryEntry();
+                    he.scrollItem = DocumentSelectActivity.this.layoutManager.findLastVisibleItemPosition();
+                    View topView = DocumentSelectActivity.this.layoutManager.findViewByPosition(he.scrollItem);
+                    if (topView != null) {
+                        he.scrollOffset = topView.getTop();
+                    }
+                    he.dir = DocumentSelectActivity.this.currentDir;
+                    he.title = DocumentSelectActivity.this.actionBar.getTitle();
+                    DocumentSelectActivity.this.history.add(he);
+                    if (DocumentSelectActivity.this.listFiles(file)) {
+                        DocumentSelectActivity.this.actionBar.setTitle(item.title);
+                    } else {
+                        DocumentSelectActivity.this.history.remove(he);
+                    }
+                } else {
+                    if (!file.canRead()) {
+                        DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", C0446R.string.AccessError));
+                        file = new File("/mnt/sdcard");
+                    }
+                    if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
+                        DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", C0446R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
+                    } else if (file.length() == 0) {
+                    } else {
+                        if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                            if (DocumentSelectActivity.this.selectedFiles.containsKey(file.toString())) {
+                                DocumentSelectActivity.this.selectedFiles.remove(file.toString());
+                            } else {
+                                DocumentSelectActivity.this.selectedFiles.put(file.toString(), item);
+                            }
+                            if (DocumentSelectActivity.this.selectedFiles.isEmpty()) {
+                                DocumentSelectActivity.this.actionBar.hideActionMode();
+                            } else {
+                                DocumentSelectActivity.this.selectedMessagesCountTextView.setNumber(DocumentSelectActivity.this.selectedFiles.size(), true);
+                            }
+                            DocumentSelectActivity.this.scrolling = false;
+                            if (view instanceof SharedDocumentCell) {
+                                ((SharedDocumentCell) view).setChecked(DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString()), true);
+                            }
+                        } else if (DocumentSelectActivity.this.delegate != null) {
+                            ArrayList<String> files = new ArrayList();
+                            files.add(file.getAbsolutePath());
+                            DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -125,13 +295,16 @@ public class DocumentSelectActivity extends BaseFragment {
         C13897() {
         }
 
-        public int compare(ListItem listItem, ListItem listItem2) {
-            long lastModified = listItem.file.lastModified();
-            listItem = listItem2.file.lastModified();
-            if (lastModified == listItem) {
-                return null;
+        public int compare(ListItem o1, ListItem o2) {
+            long lm = o1.file.lastModified();
+            long rm = o2.file.lastModified();
+            if (lm == rm) {
+                return 0;
             }
-            return lastModified > listItem ? -1 : 1;
+            if (lm > rm) {
+                return -1;
+            }
+            return 1;
         }
     }
 
@@ -152,18 +325,13 @@ public class DocumentSelectActivity extends BaseFragment {
         C13919() {
         }
 
-        public int compare(File file, File file2) {
-            if (file.isDirectory() == file2.isDirectory()) {
-                return file.getName().compareToIgnoreCase(file2.getName());
+        public int compare(File lhs, File rhs) {
+            if (lhs.isDirectory() != rhs.isDirectory()) {
+                return lhs.isDirectory() ? -1 : 1;
+            } else {
+                return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
-            return file.isDirectory() != null ? -1 : true;
         }
-    }
-
-    public interface DocumentSelectActivityDelegate {
-        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
-
-        void startDocumentSelectActivity();
     }
 
     private class HistoryEntry {
@@ -173,6 +341,85 @@ public class DocumentSelectActivity extends BaseFragment {
         String title;
 
         private HistoryEntry() {
+        }
+    }
+
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() != 0;
+        }
+
+        public int getItemCount() {
+            int count = DocumentSelectActivity.this.items.size();
+            if (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) {
+                return count;
+            }
+            return count + (DocumentSelectActivity.this.recentItems.size() + 1);
+        }
+
+        public ListItem getItem(int position) {
+            if (position < DocumentSelectActivity.this.items.size()) {
+                return (ListItem) DocumentSelectActivity.this.items.get(position);
+            }
+            if (!(!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty() || position == DocumentSelectActivity.this.items.size())) {
+                position -= DocumentSelectActivity.this.items.size() + 1;
+                if (position < DocumentSelectActivity.this.recentItems.size()) {
+                    return (ListItem) DocumentSelectActivity.this.recentItems.get(position);
+                }
+            }
+            return null;
+        }
+
+        public int getItemViewType(int position) {
+            return getItem(position) != null ? 1 : 0;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new GraySectionCell(this.mContext);
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", C0446R.string.Recent).toUpperCase());
+                    break;
+                default:
+                    view = new SharedDocumentCell(this.mContext);
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z = true;
+            if (holder.getItemViewType() == 1) {
+                ListItem item = getItem(position);
+                SharedDocumentCell documentCell = holder.itemView;
+                if (item.icon != 0) {
+                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, item.icon);
+                } else {
+                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0);
+                }
+                if (item.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                    if (DocumentSelectActivity.this.scrolling) {
+                        z = false;
+                    }
+                    documentCell.setChecked(false, z);
+                    return;
+                }
+                boolean z2;
+                boolean containsKey = DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString());
+                if (DocumentSelectActivity.this.scrolling) {
+                    z2 = false;
+                } else {
+                    z2 = true;
+                }
+                documentCell.setChecked(containsKey, z2);
+            }
         }
     }
 
@@ -188,230 +435,6 @@ public class DocumentSelectActivity extends BaseFragment {
         private ListItem() {
             this.subtitle = TtmlNode.ANONYMOUS_REGION_ID;
             this.ext = TtmlNode.ANONYMOUS_REGION_ID;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C21322 extends ActionBarMenuOnItemClick {
-        C21322() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                if (DocumentSelectActivity.this.actionBar.isActionModeShowed() != 0) {
-                    DocumentSelectActivity.this.selectedFiles.clear();
-                    DocumentSelectActivity.this.actionBar.hideActionMode();
-                    i = DocumentSelectActivity.this.listView.getChildCount();
-                    for (int i2 = 0; i2 < i; i2++) {
-                        View childAt = DocumentSelectActivity.this.listView.getChildAt(i2);
-                        if (childAt instanceof SharedDocumentCell) {
-                            ((SharedDocumentCell) childAt).setChecked(false, true);
-                        }
-                    }
-                    return;
-                }
-                DocumentSelectActivity.this.finishFragment();
-            } else if (i == 3 && DocumentSelectActivity.this.delegate != 0) {
-                i = new ArrayList();
-                i.addAll(DocumentSelectActivity.this.selectedFiles.keySet());
-                DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, i);
-                for (ListItem listItem : DocumentSelectActivity.this.selectedFiles.values()) {
-                    listItem.date = System.currentTimeMillis();
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C21334 extends OnScrollListener {
-        C21334() {
-        }
-
-        public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-            DocumentSelectActivity.this.scrolling = i != 0 ? 1 : 0;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$5 */
-    class C21345 implements OnItemLongClickListener {
-        C21345() {
-        }
-
-        public boolean onItemClick(View view, int i) {
-            if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
-                return false;
-            }
-            i = DocumentSelectActivity.this.listAdapter.getItem(i);
-            if (i == 0) {
-                return false;
-            }
-            File file = i.file;
-            if (!(file == null || file.isDirectory())) {
-                if (!file.canRead()) {
-                    DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", C0446R.string.AccessError));
-                    return false;
-                } else if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
-                    DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", C0446R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
-                    return false;
-                } else if (file.length() == 0) {
-                    return false;
-                } else {
-                    DocumentSelectActivity.this.selectedFiles.put(file.toString(), i);
-                    DocumentSelectActivity.this.selectedMessagesCountTextView.setNumber(1, false);
-                    i = new AnimatorSet();
-                    Collection arrayList = new ArrayList();
-                    for (int i2 = 0; i2 < DocumentSelectActivity.this.actionModeViews.size(); i2++) {
-                        View view2 = (View) DocumentSelectActivity.this.actionModeViews.get(i2);
-                        AndroidUtilities.clearDrawableAnimation(view2);
-                        arrayList.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
-                    }
-                    i.playTogether(arrayList);
-                    i.setDuration(250);
-                    i.start();
-                    DocumentSelectActivity.this.scrolling = false;
-                    if ((view instanceof SharedDocumentCell) != 0) {
-                        ((SharedDocumentCell) view).setChecked(true, true);
-                    }
-                    DocumentSelectActivity.this.actionBar.showActionMode();
-                }
-            }
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$6 */
-    class C21356 implements OnItemClickListener {
-        C21356() {
-        }
-
-        public void onItemClick(View view, int i) {
-            i = DocumentSelectActivity.this.listAdapter.getItem(i);
-            if (i != 0) {
-                File file = i.file;
-                if (file == null) {
-                    if (i.icon == C0446R.drawable.ic_storage_gallery) {
-                        if (DocumentSelectActivity.this.delegate != null) {
-                            DocumentSelectActivity.this.delegate.startDocumentSelectActivity();
-                        }
-                        DocumentSelectActivity.this.finishFragment(false);
-                    } else {
-                        HistoryEntry historyEntry = (HistoryEntry) DocumentSelectActivity.this.history.remove(DocumentSelectActivity.this.history.size() - 1);
-                        DocumentSelectActivity.this.actionBar.setTitle(historyEntry.title);
-                        if (historyEntry.dir != 0) {
-                            DocumentSelectActivity.this.listFiles(historyEntry.dir);
-                        } else {
-                            DocumentSelectActivity.this.listRoots();
-                        }
-                        DocumentSelectActivity.this.layoutManager.scrollToPositionWithOffset(historyEntry.scrollItem, historyEntry.scrollOffset);
-                    }
-                } else if (file.isDirectory()) {
-                    view = new HistoryEntry();
-                    view.scrollItem = DocumentSelectActivity.this.layoutManager.findLastVisibleItemPosition();
-                    View findViewByPosition = DocumentSelectActivity.this.layoutManager.findViewByPosition(view.scrollItem);
-                    if (findViewByPosition != null) {
-                        view.scrollOffset = findViewByPosition.getTop();
-                    }
-                    view.dir = DocumentSelectActivity.this.currentDir;
-                    view.title = DocumentSelectActivity.this.actionBar.getTitle();
-                    DocumentSelectActivity.this.history.add(view);
-                    if (DocumentSelectActivity.this.listFiles(file)) {
-                        DocumentSelectActivity.this.actionBar.setTitle(i.title);
-                    } else {
-                        DocumentSelectActivity.this.history.remove(view);
-                    }
-                } else {
-                    if (!file.canRead()) {
-                        DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", C0446R.string.AccessError));
-                        file = new File("/mnt/sdcard");
-                    }
-                    if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
-                        DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", C0446R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
-                    } else if (file.length() != 0) {
-                        if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
-                            if (DocumentSelectActivity.this.selectedFiles.containsKey(file.toString())) {
-                                DocumentSelectActivity.this.selectedFiles.remove(file.toString());
-                            } else {
-                                DocumentSelectActivity.this.selectedFiles.put(file.toString(), i);
-                            }
-                            if (DocumentSelectActivity.this.selectedFiles.isEmpty()) {
-                                DocumentSelectActivity.this.actionBar.hideActionMode();
-                            } else {
-                                DocumentSelectActivity.this.selectedMessagesCountTextView.setNumber(DocumentSelectActivity.this.selectedFiles.size(), true);
-                            }
-                            DocumentSelectActivity.this.scrolling = false;
-                            if (view instanceof SharedDocumentCell) {
-                                ((SharedDocumentCell) view).setChecked(DocumentSelectActivity.this.selectedFiles.containsKey(i.file.toString()), true);
-                            }
-                        } else if (DocumentSelectActivity.this.delegate != null) {
-                            view = new ArrayList();
-                            view.add(file.getAbsolutePath());
-                            DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, view);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() != null ? true : null;
-        }
-
-        public int getItemCount() {
-            int size = DocumentSelectActivity.this.items.size();
-            return (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) ? size : size + (DocumentSelectActivity.this.recentItems.size() + 1);
-        }
-
-        public ListItem getItem(int i) {
-            if (i < DocumentSelectActivity.this.items.size()) {
-                return (ListItem) DocumentSelectActivity.this.items.get(i);
-            }
-            if (!(!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty() || i == DocumentSelectActivity.this.items.size())) {
-                i -= DocumentSelectActivity.this.items.size() + 1;
-                if (i < DocumentSelectActivity.this.recentItems.size()) {
-                    return (ListItem) DocumentSelectActivity.this.recentItems.get(i);
-                }
-            }
-            return 0;
-        }
-
-        public int getItemViewType(int i) {
-            return getItem(i) != 0 ? 1 : 0;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i != 0) {
-                viewGroup = new SharedDocumentCell(this.mContext);
-            } else {
-                viewGroup = new GraySectionCell(this.mContext);
-                ((GraySectionCell) viewGroup).setText(LocaleController.getString("Recent", C0446R.string.Recent).toUpperCase());
-            }
-            return new Holder(viewGroup);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            if (viewHolder.getItemViewType() == 1) {
-                i = getItem(i);
-                SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
-                if (i.icon != 0) {
-                    sharedDocumentCell.setTextAndValueAndTypeAndThumb(i.title, i.subtitle, null, null, i.icon);
-                } else {
-                    SharedDocumentCell sharedDocumentCell2 = sharedDocumentCell;
-                    sharedDocumentCell2.setTextAndValueAndTypeAndThumb(i.title, i.subtitle, i.ext.toUpperCase().substring(0, Math.min(i.ext.length(), 4)), i.thumb, 0);
-                }
-                if (i.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
-                    sharedDocumentCell.setChecked(false, DocumentSelectActivity.this.scrolling ^ 1);
-                } else {
-                    sharedDocumentCell.setChecked(DocumentSelectActivity.this.selectedFiles.containsKey(i.file.toString()), DocumentSelectActivity.this.scrolling ^ true);
-                }
-            }
         }
     }
 
@@ -434,18 +457,18 @@ public class DocumentSelectActivity extends BaseFragment {
     public View createView(Context context) {
         if (!this.receiverRegistered) {
             this.receiverRegistered = true;
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
-            intentFilter.addAction("android.intent.action.MEDIA_CHECKING");
-            intentFilter.addAction("android.intent.action.MEDIA_EJECT");
-            intentFilter.addAction("android.intent.action.MEDIA_MOUNTED");
-            intentFilter.addAction("android.intent.action.MEDIA_NOFS");
-            intentFilter.addAction("android.intent.action.MEDIA_REMOVED");
-            intentFilter.addAction("android.intent.action.MEDIA_SHARED");
-            intentFilter.addAction("android.intent.action.MEDIA_UNMOUNTABLE");
-            intentFilter.addAction("android.intent.action.MEDIA_UNMOUNTED");
-            intentFilter.addDataScheme("file");
-            ApplicationLoader.applicationContext.registerReceiver(this.receiver, intentFilter);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
+            filter.addAction("android.intent.action.MEDIA_CHECKING");
+            filter.addAction("android.intent.action.MEDIA_EJECT");
+            filter.addAction("android.intent.action.MEDIA_MOUNTED");
+            filter.addAction("android.intent.action.MEDIA_NOFS");
+            filter.addAction("android.intent.action.MEDIA_REMOVED");
+            filter.addAction("android.intent.action.MEDIA_SHARED");
+            filter.addAction("android.intent.action.MEDIA_UNMOUNTABLE");
+            filter.addAction("android.intent.action.MEDIA_UNMOUNTED");
+            filter.addDataScheme("file");
+            ApplicationLoader.applicationContext.registerReceiver(this.receiver, filter);
         }
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
@@ -453,16 +476,16 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new C21322());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
-        ActionBarMenu createActionMode = this.actionBar.createActionMode();
-        this.selectedMessagesCountTextView = new NumberTextView(createActionMode.getContext());
+        ActionBarMenu actionMode = this.actionBar.createActionMode();
+        this.selectedMessagesCountTextView = new NumberTextView(actionMode.getContext());
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         this.selectedMessagesCountTextView.setOnTouchListener(new C13883());
-        createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(createActionMode.addItemWithWidth(3, C0446R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
+        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, C0446R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -487,21 +510,21 @@ public class DocumentSelectActivity extends BaseFragment {
 
     public void loadRecentFiles() {
         try {
-            File[] listFiles = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-            for (File file : listFiles) {
+            File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
+            for (File file : files) {
                 if (!file.isDirectory()) {
-                    ListItem listItem = new ListItem();
-                    listItem.title = file.getName();
-                    listItem.file = file;
-                    String name = file.getName();
-                    String[] split = name.split("\\.");
-                    listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
-                    listItem.subtitle = AndroidUtilities.formatFileSize(file.length());
-                    name = name.toLowerCase();
-                    if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpeg")) {
-                        listItem.thumb = file.getAbsolutePath();
+                    ListItem item = new ListItem();
+                    item.title = file.getName();
+                    item.file = file;
+                    String fname = file.getName();
+                    String[] sp = fname.split("\\.");
+                    item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
+                    item.subtitle = AndroidUtilities.formatFileSize(file.length());
+                    fname = fname.toLowerCase();
+                    if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
+                        item.thumb = file.getAbsolutePath();
                     }
-                    this.recentItems.add(listItem);
+                    this.recentItems.add(item);
                 }
             }
             Collections.sort(this.recentItems, new C13897());
@@ -518,8 +541,8 @@ public class DocumentSelectActivity extends BaseFragment {
         fixLayoutInternal();
     }
 
-    public void onConfigurationChanged(Configuration configuration) {
-        super.onConfigurationChanged(configuration);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
             this.listView.getViewTreeObserver().addOnPreDrawListener(new C13908());
         }
@@ -539,83 +562,84 @@ public class DocumentSelectActivity extends BaseFragment {
         if (this.history.size() <= 0) {
             return super.onBackPressed();
         }
-        HistoryEntry historyEntry = (HistoryEntry) this.history.remove(this.history.size() - 1);
-        this.actionBar.setTitle(historyEntry.title);
-        if (historyEntry.dir != null) {
-            listFiles(historyEntry.dir);
+        HistoryEntry he = (HistoryEntry) this.history.remove(this.history.size() - 1);
+        this.actionBar.setTitle(he.title);
+        if (he.dir != null) {
+            listFiles(he.dir);
         } else {
             listRoots();
         }
-        this.layoutManager.scrollToPositionWithOffset(historyEntry.scrollItem, historyEntry.scrollOffset);
+        this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
         return false;
     }
 
-    public void setDelegate(DocumentSelectActivityDelegate documentSelectActivityDelegate) {
-        this.delegate = documentSelectActivityDelegate;
+    public void setDelegate(DocumentSelectActivityDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    private boolean listFiles(File file) {
-        if (file.canRead()) {
+    private boolean listFiles(File dir) {
+        if (dir.canRead()) {
             try {
-                File[] listFiles = file.listFiles();
-                if (listFiles == null) {
+                File[] files = dir.listFiles();
+                if (files == null) {
                     showErrorBox(LocaleController.getString("UnknownError", C0446R.string.UnknownError));
                     return false;
                 }
-                this.currentDir = file;
+                ListItem item;
+                this.currentDir = dir;
                 this.items.clear();
-                Arrays.sort(listFiles, new C13919());
-                for (File file2 : listFiles) {
-                    if (file2.getName().indexOf(46) != 0) {
-                        ListItem listItem = new ListItem();
-                        listItem.title = file2.getName();
-                        listItem.file = file2;
-                        if (file2.isDirectory()) {
-                            listItem.icon = C0446R.drawable.ic_directory;
-                            listItem.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
+                Arrays.sort(files, new C13919());
+                for (File file : files) {
+                    if (file.getName().indexOf(46) != 0) {
+                        item = new ListItem();
+                        item.title = file.getName();
+                        item.file = file;
+                        if (file.isDirectory()) {
+                            item.icon = C0446R.drawable.ic_directory;
+                            item.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
                         } else {
-                            String name = file2.getName();
-                            String[] split = name.split("\\.");
-                            listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
-                            listItem.subtitle = AndroidUtilities.formatFileSize(file2.length());
-                            name = name.toLowerCase();
-                            if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpeg")) {
-                                listItem.thumb = file2.getAbsolutePath();
+                            String fname = file.getName();
+                            String[] sp = fname.split("\\.");
+                            item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
+                            item.subtitle = AndroidUtilities.formatFileSize(file.length());
+                            fname = fname.toLowerCase();
+                            if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
+                                item.thumb = file.getAbsolutePath();
                             }
                         }
-                        this.items.add(listItem);
+                        this.items.add(item);
                     }
                 }
-                file = new ListItem();
-                file.title = "..";
+                item = new ListItem();
+                item.title = "..";
                 if (this.history.size() > 0) {
-                    HistoryEntry historyEntry = (HistoryEntry) this.history.get(this.history.size() - 1);
-                    if (historyEntry.dir == null) {
-                        file.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
+                    HistoryEntry entry = (HistoryEntry) this.history.get(this.history.size() - 1);
+                    if (entry.dir == null) {
+                        item.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
                     } else {
-                        file.subtitle = historyEntry.dir.toString();
+                        item.subtitle = entry.dir.toString();
                     }
                 } else {
-                    file.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
+                    item.subtitle = LocaleController.getString("Folder", C0446R.string.Folder);
                 }
-                file.icon = C0446R.drawable.ic_directory;
-                file.file = null;
-                this.items.add(0, file);
+                item.icon = C0446R.drawable.ic_directory;
+                item.file = null;
+                this.items.add(0, item);
                 AndroidUtilities.clearDrawableAnimation(this.listView);
                 this.scrolling = true;
                 this.listAdapter.notifyDataSetChanged();
                 return true;
-            } catch (File file3) {
-                showErrorBox(file3.getLocalizedMessage());
+            } catch (Exception e) {
+                showErrorBox(e.getLocalizedMessage());
                 return false;
             }
-        } else if ((!file3.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !file3.getAbsolutePath().startsWith("/sdcard") && !file3.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
+        } else if ((!dir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !dir.getAbsolutePath().startsWith("/sdcard") && !dir.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
             showErrorBox(LocaleController.getString("AccessError", C0446R.string.AccessError));
             return false;
         } else {
-            this.currentDir = file3;
+            this.currentDir = dir;
             this.items.clear();
-            if ("shared".equals(Environment.getExternalStorageState()) != null) {
+            if ("shared".equals(Environment.getExternalStorageState())) {
                 this.emptyView.setText(LocaleController.getString("UsbActive", C0446R.string.UsbActive));
             } else {
                 this.emptyView.setText(LocaleController.getString("NotMounted", C0446R.string.NotMounted));
@@ -627,201 +651,211 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    private void showErrorBox(String str) {
+    private void showErrorBox(String error) {
         if (getParentActivity() != null) {
-            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", C0446R.string.AppName)).setMessage(str).setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null).show();
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", C0446R.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null).show();
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"NewApi"})
     private void listRoots() {
-        ListItem listItem;
         Throwable e;
-        ListItem listItem2;
-        File file;
         Throwable th;
+        ListItem fs;
+        File file;
+        ListItem fs2;
         this.currentDir = null;
         this.items.clear();
-        HashSet hashSet = new HashSet();
-        String path = Environment.getExternalStorageDirectory().getPath();
-        Environment.isExternalStorageRemovable();
-        String externalStorageState = Environment.getExternalStorageState();
-        if (externalStorageState.equals("mounted") || externalStorageState.equals("mounted_ro")) {
-            listItem = new ListItem();
+        HashSet<String> paths = new HashSet();
+        String defaultPath = Environment.getExternalStorageDirectory().getPath();
+        boolean isDefaultPathRemovable = Environment.isExternalStorageRemovable();
+        String defaultPathState = Environment.getExternalStorageState();
+        if (defaultPathState.equals("mounted") || defaultPathState.equals("mounted_ro")) {
+            ListItem ext = new ListItem();
             if (Environment.isExternalStorageRemovable()) {
-                listItem.title = LocaleController.getString("SdCard", C0446R.string.SdCard);
-                listItem.icon = C0446R.drawable.ic_external_storage;
+                ext.title = LocaleController.getString("SdCard", C0446R.string.SdCard);
+                ext.icon = C0446R.drawable.ic_external_storage;
             } else {
-                listItem.title = LocaleController.getString("InternalStorage", C0446R.string.InternalStorage);
-                listItem.icon = C0446R.drawable.ic_storage;
+                ext.title = LocaleController.getString("InternalStorage", C0446R.string.InternalStorage);
+                ext.icon = C0446R.drawable.ic_storage;
             }
-            listItem.subtitle = getRootSubtitle(path);
-            listItem.file = Environment.getExternalStorageDirectory();
-            this.items.add(listItem);
-            hashSet.add(path);
+            ext.subtitle = getRootSubtitle(defaultPath);
+            ext.file = Environment.getExternalStorageDirectory();
+            this.items.add(ext);
+            paths.add(defaultPath);
         }
-        BufferedReader bufferedReader;
+        BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("/proc/mounts"));
+            BufferedReader bufferedReader2 = new BufferedReader(new FileReader("/proc/mounts"));
             while (true) {
-                externalStorageState = bufferedReader.readLine();
-                if (externalStorageState == null) {
-                    break;
-                } else if (externalStorageState.contains("vfat") || externalStorageState.contains("/mnt")) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d(externalStorageState);
-                    }
-                    StringTokenizer stringTokenizer = new StringTokenizer(externalStorageState, " ");
-                    stringTokenizer.nextToken();
-                    String nextToken = stringTokenizer.nextToken();
-                    if (!hashSet.contains(nextToken)) {
-                        if (!(!externalStorageState.contains("/dev/block/vold") || externalStorageState.contains("/mnt/secure") || externalStorageState.contains("/mnt/asec") || externalStorageState.contains("/mnt/obb") || externalStorageState.contains("/dev/mapper") || externalStorageState.contains("tmpfs"))) {
-                            ListItem listItem3;
-                            if (!new File(nextToken).isDirectory()) {
-                                int lastIndexOf = nextToken.lastIndexOf(47);
-                                if (lastIndexOf != -1) {
-                                    StringBuilder stringBuilder = new StringBuilder();
-                                    stringBuilder.append("/storage/");
-                                    stringBuilder.append(nextToken.substring(lastIndexOf + 1));
-                                    externalStorageState = stringBuilder.toString();
-                                    if (new File(externalStorageState).isDirectory()) {
-                                        hashSet.add(externalStorageState);
-                                        listItem3 = new ListItem();
-                                        if (externalStorageState.toLowerCase().contains("sd")) {
-                                            listItem3.title = LocaleController.getString("ExternalStorage", C0446R.string.ExternalStorage);
-                                        } else {
-                                            listItem3.title = LocaleController.getString("SdCard", C0446R.string.SdCard);
-                                        }
-                                        listItem3.icon = C0446R.drawable.ic_external_storage;
-                                        listItem3.subtitle = getRootSubtitle(externalStorageState);
-                                        listItem3.file = new File(externalStorageState);
-                                        this.items.add(listItem3);
+                try {
+                    String line = bufferedReader2.readLine();
+                    if (line == null) {
+                        break;
+                    } else if (line.contains("vfat") || line.contains("/mnt")) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d(line);
+                        }
+                        StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
+                        String unused = stringTokenizer.nextToken();
+                        String path = stringTokenizer.nextToken();
+                        if (!(paths.contains(path) || !line.contains("/dev/block/vold") || line.contains("/mnt/secure") || line.contains("/mnt/asec") || line.contains("/mnt/obb") || line.contains("/dev/mapper") || line.contains("tmpfs"))) {
+                            if (!new File(path).isDirectory()) {
+                                int index = path.lastIndexOf(47);
+                                if (index != -1) {
+                                    String newPath = "/storage/" + path.substring(index + 1);
+                                    if (new File(newPath).isDirectory()) {
+                                        path = newPath;
                                     }
                                 }
                             }
-                            externalStorageState = nextToken;
-                            hashSet.add(externalStorageState);
-                            try {
-                                listItem3 = new ListItem();
-                                if (externalStorageState.toLowerCase().contains("sd")) {
-                                    listItem3.title = LocaleController.getString("ExternalStorage", C0446R.string.ExternalStorage);
-                                } else {
-                                    listItem3.title = LocaleController.getString("SdCard", C0446R.string.SdCard);
-                                }
-                                listItem3.icon = C0446R.drawable.ic_external_storage;
-                                listItem3.subtitle = getRootSubtitle(externalStorageState);
-                                listItem3.file = new File(externalStorageState);
-                                this.items.add(listItem3);
-                            } catch (Throwable e2) {
-                                try {
-                                    FileLog.m3e(e2);
-                                } catch (Exception e3) {
-                                    e = e3;
-                                }
+                            paths.add(path);
+                            ListItem item = new ListItem();
+                            if (path.toLowerCase().contains("sd")) {
+                                item.title = LocaleController.getString("SdCard", C0446R.string.SdCard);
+                            } else {
+                                item.title = LocaleController.getString("ExternalStorage", C0446R.string.ExternalStorage);
                             }
+                            item.icon = C0446R.drawable.ic_external_storage;
+                            item.subtitle = getRootSubtitle(path);
+                            item.file = new File(path);
+                            this.items.add(item);
                         }
                     }
+                } catch (Exception e2) {
+                    e = e2;
+                    bufferedReader = bufferedReader2;
+                } catch (Throwable th2) {
+                    th = th2;
+                    bufferedReader = bufferedReader2;
                 }
             }
-            if (bufferedReader != null) {
+            if (bufferedReader2 != null) {
                 try {
-                    bufferedReader.close();
-                } catch (Throwable e4) {
-                    FileLog.m3e(e4);
+                    bufferedReader2.close();
+                    bufferedReader = bufferedReader2;
+                } catch (Throwable e3) {
+                    FileLog.m3e(e3);
+                    bufferedReader = bufferedReader2;
                 }
             }
-        } catch (Exception e5) {
-            e4 = e5;
-            bufferedReader = null;
+        } catch (Exception e4) {
+            e3 = e4;
             try {
-                FileLog.m3e(e4);
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-                listItem2 = new ListItem();
-                listItem2.title = "/";
-                listItem2.subtitle = LocaleController.getString("SystemRoot", C0446R.string.SystemRoot);
-                listItem2.icon = C0446R.drawable.ic_directory;
-                listItem2.file = new File("/");
-                this.items.add(listItem2);
-                file = new File(Environment.getExternalStorageDirectory(), "Telegram");
-                if (file.exists()) {
-                    listItem = new ListItem();
-                    listItem.title = "Telegram";
-                    listItem.subtitle = file.toString();
-                    listItem.icon = C0446R.drawable.ic_directory;
-                    listItem.file = file;
-                    this.items.add(listItem);
-                }
-                listItem2 = new ListItem();
-                listItem2.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
-                listItem2.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
-                listItem2.icon = C0446R.drawable.ic_storage_gallery;
-                listItem2.file = null;
-                this.items.add(listItem2);
-                AndroidUtilities.clearDrawableAnimation(this.listView);
-                this.scrolling = true;
-                this.listAdapter.notifyDataSetChanged();
-            } catch (Throwable th2) {
-                th = th2;
+                FileLog.m3e(e3);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e42) {
-                        FileLog.m3e(e42);
+                    } catch (Throwable e32) {
+                        FileLog.m3e(e32);
+                    }
+                }
+                fs = new ListItem();
+                fs.title = "/";
+                fs.subtitle = LocaleController.getString("SystemRoot", C0446R.string.SystemRoot);
+                fs.icon = C0446R.drawable.ic_directory;
+                fs.file = new File("/");
+                this.items.add(fs);
+                file = new File(Environment.getExternalStorageDirectory(), "Telegram");
+                if (file.exists()) {
+                    fs2 = new ListItem();
+                    try {
+                        fs2.title = "Telegram";
+                        fs2.subtitle = file.toString();
+                        fs2.icon = C0446R.drawable.ic_directory;
+                        fs2.file = file;
+                        this.items.add(fs2);
+                        fs = fs2;
+                    } catch (Exception e5) {
+                        e32 = e5;
+                        fs = fs2;
+                        FileLog.m3e(e32);
+                        fs = new ListItem();
+                        fs.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
+                        fs.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
+                        fs.icon = C0446R.drawable.ic_storage_gallery;
+                        fs.file = null;
+                        this.items.add(fs);
+                        AndroidUtilities.clearDrawableAnimation(this.listView);
+                        this.scrolling = true;
+                        this.listAdapter.notifyDataSetChanged();
+                    }
+                }
+                fs = new ListItem();
+                fs.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
+                fs.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
+                fs.icon = C0446R.drawable.ic_storage_gallery;
+                fs.file = null;
+                this.items.add(fs);
+                AndroidUtilities.clearDrawableAnimation(this.listView);
+                this.scrolling = true;
+                this.listAdapter.notifyDataSetChanged();
+            } catch (Throwable th3) {
+                th = th3;
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (Throwable e322) {
+                        FileLog.m3e(e322);
                     }
                 }
                 throw th;
             }
-        } catch (Throwable e422) {
-            bufferedReader = null;
-            th = e422;
-            if (bufferedReader != null) {
-                bufferedReader.close();
-            }
-            throw th;
         }
-        listItem2 = new ListItem();
-        listItem2.title = "/";
-        listItem2.subtitle = LocaleController.getString("SystemRoot", C0446R.string.SystemRoot);
-        listItem2.icon = C0446R.drawable.ic_directory;
-        listItem2.file = new File("/");
-        this.items.add(listItem2);
+        fs = new ListItem();
+        fs.title = "/";
+        fs.subtitle = LocaleController.getString("SystemRoot", C0446R.string.SystemRoot);
+        fs.icon = C0446R.drawable.ic_directory;
+        fs.file = new File("/");
+        this.items.add(fs);
         try {
             file = new File(Environment.getExternalStorageDirectory(), "Telegram");
             if (file.exists()) {
-                listItem = new ListItem();
-                listItem.title = "Telegram";
-                listItem.subtitle = file.toString();
-                listItem.icon = C0446R.drawable.ic_directory;
-                listItem.file = file;
-                this.items.add(listItem);
+                fs2 = new ListItem();
+                fs2.title = "Telegram";
+                fs2.subtitle = file.toString();
+                fs2.icon = C0446R.drawable.ic_directory;
+                fs2.file = file;
+                this.items.add(fs2);
+                fs = fs2;
             }
-        } catch (Throwable e4222) {
-            FileLog.m3e(e4222);
+        } catch (Exception e6) {
+            e322 = e6;
+            FileLog.m3e(e322);
+            fs = new ListItem();
+            fs.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
+            fs.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
+            fs.icon = C0446R.drawable.ic_storage_gallery;
+            fs.file = null;
+            this.items.add(fs);
+            AndroidUtilities.clearDrawableAnimation(this.listView);
+            this.scrolling = true;
+            this.listAdapter.notifyDataSetChanged();
         }
-        listItem2 = new ListItem();
-        listItem2.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
-        listItem2.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
-        listItem2.icon = C0446R.drawable.ic_storage_gallery;
-        listItem2.file = null;
-        this.items.add(listItem2);
+        fs = new ListItem();
+        fs.title = LocaleController.getString("Gallery", C0446R.string.Gallery);
+        fs.subtitle = LocaleController.getString("GalleryInfo", C0446R.string.GalleryInfo);
+        fs.icon = C0446R.drawable.ic_storage_gallery;
+        fs.file = null;
+        this.items.add(fs);
         AndroidUtilities.clearDrawableAnimation(this.listView);
         this.scrolling = true;
         this.listAdapter.notifyDataSetChanged();
     }
 
-    private String getRootSubtitle(String str) {
+    private String getRootSubtitle(String path) {
         try {
-            StatFs statFs = new StatFs(str);
-            long availableBlocks = ((long) statFs.getAvailableBlocks()) * ((long) statFs.getBlockSize());
-            if (((long) statFs.getBlockCount()) * ((long) statFs.getBlockSize()) == 0) {
+            StatFs stat = new StatFs(path);
+            long free = ((long) stat.getAvailableBlocks()) * ((long) stat.getBlockSize());
+            if (((long) stat.getBlockCount()) * ((long) stat.getBlockSize()) == 0) {
                 return TtmlNode.ANONYMOUS_REGION_ID;
             }
-            return LocaleController.formatString("FreeOfTotal", C0446R.string.FreeOfTotal, AndroidUtilities.formatFileSize(availableBlocks), AndroidUtilities.formatFileSize(((long) statFs.getBlockCount()) * ((long) statFs.getBlockSize())));
+            return LocaleController.formatString("FreeOfTotal", C0446R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {
             FileLog.m3e(e);
-            return str;
+            return path;
         }
     }
 

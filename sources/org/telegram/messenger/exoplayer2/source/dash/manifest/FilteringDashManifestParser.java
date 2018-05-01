@@ -10,8 +10,8 @@ public final class FilteringDashManifestParser implements Parser<DashManifest> {
     private final DashManifestParser dashManifestParser = new DashManifestParser();
     private final ArrayList<RepresentationKey> filter;
 
-    public FilteringDashManifestParser(ArrayList<RepresentationKey> arrayList) {
-        this.filter = arrayList;
+    public FilteringDashManifestParser(ArrayList<RepresentationKey> filter) {
+        this.filter = filter;
     }
 
     public DashManifest parse(Uri uri, InputStream inputStream) throws IOException {

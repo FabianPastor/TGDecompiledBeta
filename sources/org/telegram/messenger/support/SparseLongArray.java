@@ -9,95 +9,63 @@ public class SparseLongArray implements Cloneable {
         this(10);
     }
 
-    public SparseLongArray(int i) {
-        i = ArrayUtils.idealLongArraySize(i);
-        this.mKeys = new int[i];
-        this.mValues = new long[i];
+    public SparseLongArray(int initialCapacity) {
+        initialCapacity = ArrayUtils.idealLongArraySize(initialCapacity);
+        this.mKeys = new int[initialCapacity];
+        this.mValues = new long[initialCapacity];
         this.mSize = 0;
     }
 
-    public org.telegram.messenger.support.SparseLongArray clone() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r2 = this;
-        r0 = 0;
-        r1 = super.clone();	 Catch:{ CloneNotSupportedException -> 0x001c }
-        r1 = (org.telegram.messenger.support.SparseLongArray) r1;	 Catch:{ CloneNotSupportedException -> 0x001c }
-        r0 = r2.mKeys;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r0.clone();	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = (int[]) r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r1.mKeys = r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r2.mValues;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = r0.clone();	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r0 = (long[]) r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        r1.mValues = r0;	 Catch:{ CloneNotSupportedException -> 0x001d }
-        goto L_0x001d;
-    L_0x001c:
-        r1 = r0;
-    L_0x001d:
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.SparseLongArray.clone():org.telegram.messenger.support.SparseLongArray");
-    }
-
-    public long get(int i) {
-        return get(i, 0);
-    }
-
-    public long get(int i, long j) {
-        i = binarySearch(this.mKeys, 0, this.mSize, (long) i);
-        if (i < 0) {
-            return j;
+    public SparseLongArray clone() {
+        SparseLongArray clone = null;
+        try {
+            clone = (SparseLongArray) super.clone();
+            clone.mKeys = (int[]) this.mKeys.clone();
+            clone.mValues = (long[]) this.mValues.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            return clone;
         }
-        return this.mValues[i];
     }
 
-    public void delete(int i) {
-        i = binarySearch(this.mKeys, 0, this.mSize, (long) i);
+    public long get(int key) {
+        return get(key, 0);
+    }
+
+    public long get(int key, long valueIfKeyNotFound) {
+        int i = binarySearch(this.mKeys, 0, this.mSize, (long) key);
+        return i < 0 ? valueIfKeyNotFound : this.mValues[i];
+    }
+
+    public void delete(int key) {
+        int i = binarySearch(this.mKeys, 0, this.mSize, (long) key);
         if (i >= 0) {
             removeAt(i);
         }
     }
 
-    public void removeAt(int i) {
-        int i2 = i + 1;
-        System.arraycopy(this.mKeys, i2, this.mKeys, i, this.mSize - i2);
-        System.arraycopy(this.mValues, i2, this.mValues, i, this.mSize - i2);
+    public void removeAt(int index) {
+        System.arraycopy(this.mKeys, index + 1, this.mKeys, index, this.mSize - (index + 1));
+        System.arraycopy(this.mValues, index + 1, this.mValues, index, this.mSize - (index + 1));
         this.mSize--;
     }
 
-    public void put(int i, long j) {
-        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
-        if (binarySearch >= 0) {
-            this.mValues[binarySearch] = j;
+    public void put(int key, long value) {
+        int i = binarySearch(this.mKeys, 0, this.mSize, (long) key);
+        if (i >= 0) {
+            this.mValues[i] = value;
             return;
         }
-        binarySearch ^= -1;
+        i ^= -1;
         if (this.mSize >= this.mKeys.length) {
             growKeyAndValueArrays(this.mSize + 1);
         }
-        if (this.mSize - binarySearch != 0) {
-            int i2 = binarySearch + 1;
-            System.arraycopy(this.mKeys, binarySearch, this.mKeys, i2, this.mSize - binarySearch);
-            System.arraycopy(this.mValues, binarySearch, this.mValues, i2, this.mSize - binarySearch);
+        if (this.mSize - i != 0) {
+            System.arraycopy(this.mKeys, i, this.mKeys, i + 1, this.mSize - i);
+            System.arraycopy(this.mValues, i, this.mValues, i + 1, this.mSize - i);
         }
-        this.mKeys[binarySearch] = i;
-        this.mValues[binarySearch] = j;
+        this.mKeys[i] = key;
+        this.mValues[i] = value;
         this.mSize++;
     }
 
@@ -105,21 +73,21 @@ Error: java.lang.NullPointerException
         return this.mSize;
     }
 
-    public int keyAt(int i) {
-        return this.mKeys[i];
+    public int keyAt(int index) {
+        return this.mKeys[index];
     }
 
-    public long valueAt(int i) {
-        return this.mValues[i];
+    public long valueAt(int index) {
+        return this.mValues[index];
     }
 
-    public int indexOfKey(int i) {
-        return binarySearch(this.mKeys, 0, this.mSize, (long) i);
+    public int indexOfKey(int key) {
+        return binarySearch(this.mKeys, 0, this.mSize, (long) key);
     }
 
-    public int indexOfValue(long j) {
+    public int indexOfValue(long value) {
         for (int i = 0; i < this.mSize; i++) {
-            if (this.mValues[i] == j) {
+            if (this.mValues[i] == value) {
                 return i;
             }
         }
@@ -130,45 +98,44 @@ Error: java.lang.NullPointerException
         this.mSize = 0;
     }
 
-    public void append(int i, long j) {
-        if (this.mSize == 0 || i > this.mKeys[this.mSize - 1]) {
-            int i2 = this.mSize;
-            if (i2 >= this.mKeys.length) {
-                growKeyAndValueArrays(i2 + 1);
+    public void append(int key, long value) {
+        if (this.mSize == 0 || key > this.mKeys[this.mSize - 1]) {
+            int pos = this.mSize;
+            if (pos >= this.mKeys.length) {
+                growKeyAndValueArrays(pos + 1);
             }
-            this.mKeys[i2] = i;
-            this.mValues[i2] = j;
-            this.mSize = i2 + 1;
+            this.mKeys[pos] = key;
+            this.mValues[pos] = value;
+            this.mSize = pos + 1;
             return;
         }
-        put(i, j);
+        put(key, value);
     }
 
-    private void growKeyAndValueArrays(int i) {
-        i = ArrayUtils.idealLongArraySize(i);
-        Object obj = new int[i];
-        i = new long[i];
-        System.arraycopy(this.mKeys, 0, obj, 0, this.mKeys.length);
-        System.arraycopy(this.mValues, 0, i, 0, this.mValues.length);
-        this.mKeys = obj;
-        this.mValues = i;
+    private void growKeyAndValueArrays(int minNeededSize) {
+        int n = ArrayUtils.idealLongArraySize(minNeededSize);
+        int[] nkeys = new int[n];
+        long[] nvalues = new long[n];
+        System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
+        System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
+        this.mKeys = nkeys;
+        this.mValues = nvalues;
     }
 
-    private static int binarySearch(int[] iArr, int i, int i2, long j) {
-        i2 += i;
-        int i3 = i - 1;
-        i = i2;
-        while (i - i3 > 1) {
-            int i4 = (i + i3) / 2;
-            if (((long) iArr[i4]) < j) {
-                i3 = i4;
+    private static int binarySearch(int[] a, int start, int len, long key) {
+        int high = start + len;
+        int low = start - 1;
+        while (high - low > 1) {
+            int guess = (high + low) / 2;
+            if (((long) a[guess]) < key) {
+                low = guess;
             } else {
-                i = i4;
+                high = guess;
             }
         }
-        if (i == i2) {
-            return i2 ^ -1;
+        if (high == start + len) {
+            return (start + len) ^ -1;
         }
-        return ((long) iArr[i]) == j ? i : i ^ -1;
+        return ((long) a[high]) != key ? high ^ -1 : high;
     }
 }

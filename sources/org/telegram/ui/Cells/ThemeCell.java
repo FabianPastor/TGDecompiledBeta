@@ -2,19 +2,26 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import java.io.File;
+import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.C0446R;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.Utilities;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -29,10 +36,12 @@ public class ThemeCell extends FrameLayout {
     private Paint paint = new Paint(1);
     private TextView textView;
 
-    public ThemeCell(Context context, boolean z) {
+    public ThemeCell(Context context, boolean nightTheme) {
+        int i;
+        int i2 = 3;
         super(context);
         setWillNotDraw(false);
-        this.isNightTheme = z;
+        this.isNightTheme = nightTheme;
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
@@ -40,32 +49,43 @@ public class ThemeCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setEllipsize(TruncateAt.END);
-        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(C0446R.drawable.sticker_added);
         if (this.isNightTheme) {
-            context = this.checkImage;
+            view = this.checkImage;
             if (!LocaleController.isRTL) {
-                i = 5;
+                i2 = 5;
             }
-            addView(context, LayoutHelper.createFrame(19, 14.0f, i | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
             return;
         }
-        addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : 5) | 16, 55.0f, 0.0f, 55.0f, 0.0f));
+        view = this.checkImage;
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 55.0f, 0.0f, 55.0f, 0.0f));
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
         this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-        this.optionsButton.setImageResource(true);
+        this.optionsButton.setImageResource(C0446R.drawable.ic_ab_other);
         this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
         this.optionsButton.setScaleType(ScaleType.CENTER);
-        context = this.optionsButton;
+        View view2 = this.optionsButton;
         if (!LocaleController.isRTL) {
-            i = 5;
+            i2 = 5;
         }
-        addView(context, LayoutHelper.createFrame(48, 48, i | 48));
+        addView(view2, LayoutHelper.createFrame(48, 48, i2 | 48));
     }
 
     protected void onAttachedToWindow() {
@@ -74,258 +94,145 @@ public class ThemeCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + this.needDivider, NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
     }
 
-    public void setOnOptionsClick(OnClickListener onClickListener) {
-        this.optionsButton.setOnClickListener(onClickListener);
+    public void setOnOptionsClick(OnClickListener listener) {
+        this.optionsButton.setOnClickListener(listener);
     }
 
     public TextView getTextView() {
         return this.textView;
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
     public ThemeInfo getCurrentThemeInfo() {
         return this.currentThemeInfo;
     }
 
-    public void setTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r18, boolean r19) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r17 = this;
-        r1 = r17;
-        r2 = r18;
-        r1.currentThemeInfo = r2;
-        r3 = r18.getName();
-        r4 = ".attheme";
-        r4 = r3.endsWith(r4);
-        r5 = 0;
-        if (r4 == 0) goto L_0x001d;
-    L_0x0013:
-        r4 = 46;
-        r4 = r3.lastIndexOf(r4);
-        r3 = r3.substring(r5, r4);
-    L_0x001d:
-        r4 = r1.textView;
-        r4.setText(r3);
-        r3 = r19;
-        r1.needDivider = r3;
-        r17.updateCurrentThemeCheck();
-        r3 = r2.pathToFile;
-        if (r3 != 0) goto L_0x0031;
-    L_0x002d:
-        r3 = r2.assetName;
-        if (r3 == 0) goto L_0x0117;
-    L_0x0031:
-        r3 = 0;
-        r4 = 1;
-        r6 = r2.assetName;	 Catch:{ Throwable -> 0x010c }
-        if (r6 == 0) goto L_0x0041;
-    L_0x0037:
-        r2 = r2.assetName;	 Catch:{ Throwable -> 0x003e }
-        r2 = org.telegram.ui.ActionBar.Theme.getAssetFile(r2);	 Catch:{ Throwable -> 0x003e }
-        goto L_0x0049;
-    L_0x003e:
-        r0 = move-exception;
-        goto L_0x010e;
-    L_0x0041:
-        r6 = new java.io.File;	 Catch:{ Throwable -> 0x010c }
-        r2 = r2.pathToFile;	 Catch:{ Throwable -> 0x010c }
-        r6.<init>(r2);	 Catch:{ Throwable -> 0x010c }
-        r2 = r6;	 Catch:{ Throwable -> 0x010c }
-    L_0x0049:
-        r6 = new java.io.FileInputStream;	 Catch:{ Throwable -> 0x010c }
-        r6.<init>(r2);	 Catch:{ Throwable -> 0x010c }
-        r2 = r5;
-        r3 = r2;
-        r7 = r3;
-    L_0x0051:
-        r8 = bytes;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r8 = r6.read(r8);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r9 = -1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r8 == r9) goto L_0x00f4;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x005a:
-        r12 = r2;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r10 = r3;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r3 = r5;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r11 = r3;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x005e:
-        if (r3 >= r8) goto L_0x00db;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x0060:
-        r13 = bytes;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r13 = r13[r3];	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r14 = 10;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r13 != r14) goto L_0x00d5;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x0068:
-        r10 = r10 + 1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r13 = r3 - r11;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r13 = r13 + r4;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r14 = new java.lang.String;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r15 = bytes;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = r13 + -1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = "UTF-8";	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r14.<init>(r15, r11, r4, r5);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = "WPS";	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = r14.startsWith(r4);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r4 == 0) goto L_0x0083;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x0080:
-        r3 = r10;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = 0;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        goto L_0x00dd;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x0083:
-        r4 = 61;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = r14.indexOf(r4);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r4 == r9) goto L_0x00d1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x008b:
-        r5 = 0;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r15 = r14.substring(r5, r4);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = "actionBarDefault";	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = r15.equals(r5);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r5 == 0) goto L_0x00d1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x0098:
-        r4 = r4 + 1;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r3 = r14.substring(r4);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r4 = r3.length();	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r4 <= 0) goto L_0x00bb;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x00a4:
-        r4 = 0;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = r3.charAt(r4);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r8 = 35;
-        if (r5 != r8) goto L_0x00bc;
-    L_0x00ad:
-        r5 = android.graphics.Color.parseColor(r3);	 Catch:{ Exception -> 0x00b2 }
-        goto L_0x00c4;
-    L_0x00b2:
-        r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = r3.intValue();	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        goto L_0x00c4;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x00bb:
-        r4 = 0;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x00bc:
-        r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r5 = r3.intValue();	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-    L_0x00c4:
-        r3 = r1.paint;	 Catch:{ Throwable -> 0x00cc, all -> 0x0100 }
-        r3.setColor(r5);	 Catch:{ Throwable -> 0x00cc, all -> 0x0100 }
-        r3 = r10;
-        r7 = 1;
-        goto L_0x00dd;
-    L_0x00cc:
-        r0 = move-exception;
-        r2 = r0;
-        r3 = r6;
-        r5 = 1;
-        goto L_0x010f;
-    L_0x00d1:
-        r4 = 0;
-        r11 = r11 + r13;
-        r12 = r12 + r13;
-        goto L_0x00d6;
-    L_0x00d5:
-        r4 = r5;
-    L_0x00d6:
-        r3 = r3 + 1;
-        r5 = r4;
-        r4 = 1;
-        goto L_0x005e;
-    L_0x00db:
-        r4 = r5;
-        r3 = r10;
-    L_0x00dd:
-        if (r2 == r12) goto L_0x00f4;
-    L_0x00df:
-        r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-        if (r3 < r2) goto L_0x00e4;
-    L_0x00e3:
-        goto L_0x00f4;
-    L_0x00e4:
-        r2 = r6.getChannel();	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r8 = (long) r12;	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        r2.position(r8);	 Catch:{ Throwable -> 0x0103, all -> 0x0100 }
-        if (r7 == 0) goto L_0x00ef;
-    L_0x00ee:
-        goto L_0x00f4;
-    L_0x00ef:
-        r5 = r4;
-        r2 = r12;
-        r4 = 1;
-        goto L_0x0051;
-    L_0x00f4:
-        r5 = r7;
-        if (r6 == 0) goto L_0x0117;
-    L_0x00f7:
-        r6.close();	 Catch:{ Exception -> 0x00fb }
-        goto L_0x0117;
-    L_0x00fb:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r0);
-        goto L_0x0117;
-    L_0x0100:
-        r0 = move-exception;
-        r2 = r0;
-        goto L_0x0125;
-    L_0x0103:
-        r0 = move-exception;
-        r2 = r0;
-        r3 = r6;
-        r5 = r7;
-        goto L_0x010f;
-    L_0x0108:
-        r0 = move-exception;
-        r2 = r0;
-        r6 = r3;
-        goto L_0x0125;
-    L_0x010c:
-        r0 = move-exception;
-        r4 = r5;
-    L_0x010e:
-        r2 = r0;
-    L_0x010f:
-        org.telegram.messenger.FileLog.m3e(r2);	 Catch:{ all -> 0x0108 }
-        if (r3 == 0) goto L_0x0117;
-    L_0x0114:
-        r3.close();	 Catch:{ Exception -> 0x00fb }
-    L_0x0117:
-        if (r5 != 0) goto L_0x0124;
-    L_0x0119:
-        r2 = r1.paint;
-        r3 = "actionBarDefault";
-        r3 = org.telegram.ui.ActionBar.Theme.getDefaultColor(r3);
-        r2.setColor(r3);
-    L_0x0124:
-        return;
-    L_0x0125:
-        if (r6 == 0) goto L_0x012f;
-    L_0x0127:
-        r6.close();	 Catch:{ Exception -> 0x012b }
-        goto L_0x012f;
-    L_0x012b:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r0);
-    L_0x012f:
-        throw r2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemeCell.setTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean):void");
+    public void setTheme(ThemeInfo themeInfo, boolean divider) {
+        Throwable e;
+        Throwable th;
+        this.currentThemeInfo = themeInfo;
+        String text = themeInfo.getName();
+        if (text.endsWith(".attheme")) {
+            text = text.substring(0, text.lastIndexOf(46));
+        }
+        this.textView.setText(text);
+        this.needDivider = divider;
+        updateCurrentThemeCheck();
+        boolean finished = false;
+        if (!(themeInfo.pathToFile == null && themeInfo.assetName == null)) {
+            FileInputStream fileInputStream = null;
+            int currentPosition = 0;
+            try {
+                File file;
+                if (themeInfo.assetName != null) {
+                    file = Theme.getAssetFile(themeInfo.assetName);
+                } else {
+                    file = new File(themeInfo.pathToFile);
+                }
+                FileInputStream fileInputStream2 = new FileInputStream(file);
+                int linesRead = 0;
+                do {
+                    try {
+                        int read = fileInputStream2.read(bytes);
+                        if (read == -1) {
+                            break;
+                        }
+                        int previousPosition = currentPosition;
+                        int start = 0;
+                        for (int a = 0; a < read; a++) {
+                            if (bytes[a] == (byte) 10) {
+                                linesRead++;
+                                int len = (a - start) + 1;
+                                String line = new String(bytes, start, len - 1, C0542C.UTF8_NAME);
+                                if (line.startsWith("WPS")) {
+                                    break;
+                                }
+                                int idx = line.indexOf(61);
+                                if (idx == -1 || !line.substring(0, idx).equals(Theme.key_actionBarDefault)) {
+                                    start += len;
+                                    currentPosition += len;
+                                } else {
+                                    int value;
+                                    String param = line.substring(idx + 1);
+                                    if (param.length() <= 0 || param.charAt(0) != '#') {
+                                        value = Utilities.parseInt(param).intValue();
+                                    } else {
+                                        try {
+                                            value = Color.parseColor(param);
+                                        } catch (Exception e2) {
+                                            value = Utilities.parseInt(param).intValue();
+                                        }
+                                    }
+                                    finished = true;
+                                    this.paint.setColor(value);
+                                }
+                            }
+                        }
+                        if (previousPosition == currentPosition || linesRead >= 500) {
+                            break;
+                        }
+                        fileInputStream2.getChannel().position((long) currentPosition);
+                    } catch (Throwable th2) {
+                        th = th2;
+                        fileInputStream = fileInputStream2;
+                    }
+                } while (!finished);
+                if (fileInputStream2 != null) {
+                    try {
+                        fileInputStream2.close();
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
+                    }
+                }
+            } catch (Throwable th3) {
+                e3 = th3;
+                try {
+                    FileLog.m3e(e3);
+                    if (fileInputStream != null) {
+                        try {
+                            fileInputStream.close();
+                        } catch (Throwable e32) {
+                            FileLog.m3e(e32);
+                        }
+                    }
+                    if (!finished) {
+                        this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+                    }
+                } catch (Throwable th4) {
+                    th = th4;
+                    if (fileInputStream != null) {
+                        try {
+                            fileInputStream.close();
+                        } catch (Throwable e322) {
+                            FileLog.m3e(e322);
+                        }
+                    }
+                    throw th;
+                }
+            }
+        }
+        if (!finished) {
+            this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+        }
     }
 
     public void updateCurrentThemeCheck() {
-        ThemeInfo currentNightTheme;
+        ThemeInfo currentTheme;
         if (this.isNightTheme) {
-            currentNightTheme = Theme.getCurrentNightTheme();
+            currentTheme = Theme.getCurrentNightTheme();
         } else {
-            currentNightTheme = Theme.getCurrentTheme();
+            currentTheme = Theme.getCurrentTheme();
         }
-        int i = this.currentThemeInfo == currentNightTheme ? 0 : 4;
-        if (this.checkImage.getVisibility() != i) {
-            this.checkImage.setVisibility(i);
+        int newVisibility = this.currentThemeInfo == currentTheme ? 0 : 4;
+        if (this.checkImage.getVisibility() != newVisibility) {
+            this.checkImage.setVisibility(newVisibility);
         }
     }
 
@@ -333,10 +240,10 @@ Error: java.lang.NullPointerException
         if (this.needDivider) {
             canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
-        int dp = AndroidUtilities.dp(27.0f);
+        int x = AndroidUtilities.dp(27.0f);
         if (LocaleController.isRTL) {
-            dp = getWidth() - dp;
+            x = getWidth() - x;
         }
-        canvas.drawCircle((float) dp, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
+        canvas.drawCircle((float) x, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
     }
 }

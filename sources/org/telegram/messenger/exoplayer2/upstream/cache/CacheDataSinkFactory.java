@@ -8,14 +8,14 @@ public final class CacheDataSinkFactory implements Factory {
     private final Cache cache;
     private final long maxCacheFileSize;
 
-    public CacheDataSinkFactory(Cache cache, long j) {
-        this(cache, j, CacheDataSink.DEFAULT_BUFFER_SIZE);
+    public CacheDataSinkFactory(Cache cache, long maxCacheFileSize) {
+        this(cache, maxCacheFileSize, CacheDataSink.DEFAULT_BUFFER_SIZE);
     }
 
-    public CacheDataSinkFactory(Cache cache, long j, int i) {
+    public CacheDataSinkFactory(Cache cache, long maxCacheFileSize, int bufferSize) {
         this.cache = cache;
-        this.maxCacheFileSize = j;
-        this.bufferSize = i;
+        this.maxCacheFileSize = maxCacheFileSize;
+        this.bufferSize = bufferSize;
     }
 
     public DataSink createDataSink() {

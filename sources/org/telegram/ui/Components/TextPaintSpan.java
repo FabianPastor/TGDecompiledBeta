@@ -8,19 +8,19 @@ public class TextPaintSpan extends MetricAffectingSpan {
     private TextPaint textPaint;
     private int textSize;
 
-    public TextPaintSpan(TextPaint textPaint) {
-        this.textPaint = textPaint;
+    public TextPaintSpan(TextPaint paint) {
+        this.textPaint = paint;
     }
 
-    public void updateMeasureState(TextPaint textPaint) {
-        textPaint.setColor(this.textPaint.getColor());
-        textPaint.setTypeface(this.textPaint.getTypeface());
-        textPaint.setFlags(this.textPaint.getFlags());
+    public void updateMeasureState(TextPaint p) {
+        p.setColor(this.textPaint.getColor());
+        p.setTypeface(this.textPaint.getTypeface());
+        p.setFlags(this.textPaint.getFlags());
     }
 
-    public void updateDrawState(TextPaint textPaint) {
-        textPaint.setColor(this.textPaint.getColor());
-        textPaint.setTypeface(this.textPaint.getTypeface());
-        textPaint.setFlags(this.textPaint.getFlags());
+    public void updateDrawState(TextPaint p) {
+        p.setColor(this.textPaint.getColor());
+        p.setTypeface(this.textPaint.getTypeface());
+        p.setFlags(this.textPaint.getFlags());
     }
 }

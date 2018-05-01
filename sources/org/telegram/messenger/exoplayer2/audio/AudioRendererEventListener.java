@@ -11,9 +11,9 @@ public interface AudioRendererEventListener {
         private final Handler handler;
         private final AudioRendererEventListener listener;
 
-        public EventDispatcher(Handler handler, AudioRendererEventListener audioRendererEventListener) {
-            this.handler = audioRendererEventListener != null ? (Handler) Assertions.checkNotNull(handler) : null;
-            this.listener = audioRendererEventListener;
+        public EventDispatcher(Handler handler, AudioRendererEventListener listener) {
+            this.handler = listener != null ? (Handler) Assertions.checkNotNull(handler) : null;
+            this.listener = listener;
         }
 
         public void enabled(final DecoderCounters decoderCounters) {
@@ -26,14 +26,14 @@ public interface AudioRendererEventListener {
             }
         }
 
-        public void decoderInitialized(String str, long j, long j2) {
+        public void decoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
             if (this.listener != null) {
-                final String str2 = str;
-                final long j3 = j;
-                final long j4 = j2;
+                final String str = decoderName;
+                final long j = initializedTimestampMs;
+                final long j2 = initializationDurationMs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onAudioDecoderInitialized(str2, j3, j4);
+                        EventDispatcher.this.listener.onAudioDecoderInitialized(str, j, j2);
                     }
                 });
             }
@@ -49,35 +49,35 @@ public interface AudioRendererEventListener {
             }
         }
 
-        public void audioTrackUnderrun(int i, long j, long j2) {
+        public void audioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
             if (this.listener != null) {
-                final int i2 = i;
-                final long j3 = j;
-                final long j4 = j2;
+                final int i = bufferSize;
+                final long j = bufferSizeMs;
+                final long j2 = elapsedSinceLastFeedMs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onAudioSinkUnderrun(i2, j3, j4);
+                        EventDispatcher.this.listener.onAudioSinkUnderrun(i, j, j2);
                     }
                 });
             }
         }
 
-        public void disabled(final DecoderCounters decoderCounters) {
+        public void disabled(final DecoderCounters counters) {
             if (this.listener != null) {
                 this.handler.post(new Runnable() {
                     public void run() {
-                        decoderCounters.ensureUpdated();
-                        EventDispatcher.this.listener.onAudioDisabled(decoderCounters);
+                        counters.ensureUpdated();
+                        EventDispatcher.this.listener.onAudioDisabled(counters);
                     }
                 });
             }
         }
 
-        public void audioSessionId(final int i) {
+        public void audioSessionId(final int audioSessionId) {
             if (this.listener != null) {
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onAudioSessionId(i);
+                        EventDispatcher.this.listener.onAudioSessionId(audioSessionId);
                     }
                 });
             }

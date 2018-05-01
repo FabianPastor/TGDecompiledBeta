@@ -16,9 +16,9 @@ public final class InitializationChunk extends Chunk {
     private final ChunkExtractorWrapper extractorWrapper;
     private volatile boolean loadCanceled;
 
-    public InitializationChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, ChunkExtractorWrapper chunkExtractorWrapper) {
-        super(dataSource, dataSpec, 2, format, i, obj, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
-        this.extractorWrapper = chunkExtractorWrapper;
+    public InitializationChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, ChunkExtractorWrapper extractorWrapper) {
+        super(dataSource, dataSpec, 2, trackFormat, trackSelectionReason, trackSelectionData, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
+        this.extractorWrapper = extractorWrapper;
     }
 
     public long bytesLoaded() {
@@ -34,24 +34,20 @@ public final class InitializationChunk extends Chunk {
     }
 
     public void load() throws IOException, InterruptedException {
-        DataSpec subrange = this.dataSpec.subrange((long) this.bytesLoaded);
-        ExtractorInput defaultExtractorInput;
+        DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
+        ExtractorInput input;
         try {
-            defaultExtractorInput = new DefaultExtractorInput(this.dataSource, subrange.absoluteStreamPosition, this.dataSource.open(subrange));
+            input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
                 this.extractorWrapper.init(null);
             }
             Extractor extractor = this.extractorWrapper.extractor;
-            int i = 0;
-            while (i == 0 && !this.loadCanceled) {
-                i = extractor.read(defaultExtractorInput, null);
+            int result = 0;
+            while (result == 0 && !this.loadCanceled) {
+                result = extractor.read(input, null);
             }
-            boolean z = true;
-            if (i == 1) {
-                z = false;
-            }
-            Assertions.checkState(z);
-            this.bytesLoaded = (int) (defaultExtractorInput.getPosition() - this.dataSpec.absoluteStreamPosition);
+            Assertions.checkState(result != 1);
+            this.bytesLoaded = (int) (input.getPosition() - this.dataSpec.absoluteStreamPosition);
             Util.closeQuietly(this.dataSource);
         } catch (Throwable th) {
             Util.closeQuietly(this.dataSource);

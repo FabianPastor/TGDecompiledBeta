@@ -11,32 +11,25 @@ public final class LongArray {
         this(32);
     }
 
-    public LongArray(int i) {
-        this.values = new long[i];
+    public LongArray(int initialCapacity) {
+        this.values = new long[initialCapacity];
     }
 
-    public void add(long j) {
+    public void add(long value) {
         if (this.size == this.values.length) {
             this.values = Arrays.copyOf(this.values, this.size * 2);
         }
         long[] jArr = this.values;
         int i = this.size;
         this.size = i + 1;
-        jArr[i] = j;
+        jArr[i] = value;
     }
 
-    public long get(int i) {
-        if (i >= 0) {
-            if (i < this.size) {
-                return this.values[i];
-            }
+    public long get(int index) {
+        if (index >= 0 && index < this.size) {
+            return this.values[index];
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid index ");
-        stringBuilder.append(i);
-        stringBuilder.append(", size is ");
-        stringBuilder.append(this.size);
-        throw new IndexOutOfBoundsException(stringBuilder.toString());
+        throw new IndexOutOfBoundsException("Invalid index " + index + ", size is " + this.size);
     }
 
     public int size() {

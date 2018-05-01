@@ -10,6 +10,7 @@ import android.text.style.UnderlineSpan;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.Subtitle;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
@@ -83,20 +84,20 @@ public final class Cea608Decoder extends CeaDecoder {
             public final int start;
             public final CharacterStyle style;
 
-            public CueStyle(CharacterStyle characterStyle, int i, int i2) {
-                this.style = characterStyle;
-                this.start = i;
-                this.nextStyleIncrement = i2;
+            public CueStyle(CharacterStyle style, int start, int nextStyleIncrement) {
+                this.style = style;
+                this.start = start;
+                this.nextStyleIncrement = nextStyleIncrement;
             }
         }
 
-        public CueBuilder(int i, int i2) {
-            reset(i);
-            setCaptionRowCount(i2);
+        public CueBuilder(int captionMode, int captionRowCount) {
+            reset(captionMode);
+            setCaptionRowCount(captionRowCount);
         }
 
-        public void reset(int i) {
-            this.captionMode = i;
+        public void reset(int captionMode) {
+            this.captionMode = captionMode;
             this.preambleStyles.clear();
             this.midrowStyles.clear();
             this.rolledUpCaptions.clear();
@@ -107,8 +108,8 @@ public final class Cea608Decoder extends CeaDecoder {
             this.underlineStartPosition = -1;
         }
 
-        public void setCaptionRowCount(int i) {
-            this.captionRowCount = i;
+        public void setCaptionRowCount(int captionRowCount) {
+            this.captionRowCount = captionRowCount;
         }
 
         public boolean isEmpty() {
@@ -126,8 +127,8 @@ public final class Cea608Decoder extends CeaDecoder {
             return this.row;
         }
 
-        public void setRow(int i) {
-            this.row = i;
+        public void setRow(int row) {
+            this.row = row;
         }
 
         public void rollUp() {
@@ -136,51 +137,56 @@ public final class Cea608Decoder extends CeaDecoder {
             this.preambleStyles.clear();
             this.midrowStyles.clear();
             this.underlineStartPosition = -1;
-            int min = Math.min(this.captionRowCount, this.row);
-            while (this.rolledUpCaptions.size() >= min) {
+            int numRows = Math.min(this.captionRowCount, this.row);
+            while (this.rolledUpCaptions.size() >= numRows) {
                 this.rolledUpCaptions.remove(0);
             }
         }
 
-        public void setIndent(int i) {
-            this.indent = i;
+        public void setIndent(int indent) {
+            this.indent = indent;
         }
 
-        public void setTab(int i) {
-            this.tabOffset = i;
+        public void setTab(int tabs) {
+            this.tabOffset = tabs;
         }
 
-        public void setPreambleStyle(CharacterStyle characterStyle) {
-            this.preambleStyles.add(characterStyle);
+        public void setPreambleStyle(CharacterStyle style) {
+            this.preambleStyles.add(style);
         }
 
-        public void setMidrowStyle(CharacterStyle characterStyle, int i) {
-            this.midrowStyles.add(new CueStyle(characterStyle, this.captionStringBuilder.length(), i));
+        public void setMidrowStyle(CharacterStyle style, int nextStyleIncrement) {
+            this.midrowStyles.add(new CueStyle(style, this.captionStringBuilder.length(), nextStyleIncrement));
         }
 
-        public void setUnderline(boolean z) {
-            if (z) {
+        public void setUnderline(boolean enabled) {
+            if (enabled) {
                 this.underlineStartPosition = this.captionStringBuilder.length();
-            } else if (!this.underlineStartPosition) {
+            } else if (this.underlineStartPosition != -1) {
                 this.captionStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, this.captionStringBuilder.length(), 33);
                 this.underlineStartPosition = -1;
             }
         }
 
-        public void append(char c) {
-            this.captionStringBuilder.append(c);
+        public void append(char text) {
+            this.captionStringBuilder.append(text);
         }
 
         public SpannableString buildSpannableString() {
+            int i;
             int length = this.captionStringBuilder.length();
-            int i = 0;
-            for (int i2 = 0; i2 < this.preambleStyles.size(); i2++) {
-                this.captionStringBuilder.setSpan(this.preambleStyles.get(i2), 0, length, 33);
+            for (i = 0; i < this.preambleStyles.size(); i++) {
+                this.captionStringBuilder.setSpan(this.preambleStyles.get(i), 0, length, 33);
             }
-            while (i < this.midrowStyles.size()) {
+            for (i = 0; i < this.midrowStyles.size(); i++) {
+                int end;
                 CueStyle cueStyle = (CueStyle) this.midrowStyles.get(i);
-                this.captionStringBuilder.setSpan(cueStyle.style, cueStyle.start, i < this.midrowStyles.size() - cueStyle.nextStyleIncrement ? ((CueStyle) this.midrowStyles.get(cueStyle.nextStyleIncrement + i)).start : length, 33);
-                i++;
+                if (i < this.midrowStyles.size() - cueStyle.nextStyleIncrement) {
+                    end = ((CueStyle) this.midrowStyles.get(cueStyle.nextStyleIncrement + i)).start;
+                } else {
+                    end = length;
+                }
+                this.captionStringBuilder.setSpan(cueStyle.style, cueStyle.start, end, 33);
             }
             if (this.underlineStartPosition != -1) {
                 this.captionStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, length, 33);
@@ -189,74 +195,45 @@ public final class Cea608Decoder extends CeaDecoder {
         }
 
         public Cue build() {
-            int i;
-            CharSequence spannableStringBuilder = new SpannableStringBuilder();
-            for (i = 0; i < this.rolledUpCaptions.size(); i++) {
-                spannableStringBuilder.append((CharSequence) this.rolledUpCaptions.get(i));
-                spannableStringBuilder.append('\n');
+            SpannableStringBuilder cueString = new SpannableStringBuilder();
+            for (int i = 0; i < this.rolledUpCaptions.size(); i++) {
+                cueString.append((CharSequence) this.rolledUpCaptions.get(i));
+                cueString.append('\n');
             }
-            spannableStringBuilder.append(buildSpannableString());
-            if (spannableStringBuilder.length() == 0) {
+            cueString.append(buildSpannableString());
+            if (cueString.length() == 0) {
                 return null;
             }
-            float f;
-            int i2;
-            int i3;
-            i = this.indent + this.tabOffset;
-            int length = (32 - i) - spannableStringBuilder.length();
-            int i4 = i - length;
-            if (this.captionMode == 2 && (Math.abs(i4) < 3 || length < 0)) {
-                f = 0.5f;
-                i2 = 1;
-            } else if (this.captionMode != 2 || i4 <= 0) {
-                i2 = 0;
-                f = ((((float) i) / 32.0f) * 0.8f) + 0.1f;
+            float position;
+            int positionAnchor;
+            int lineAnchor;
+            int line;
+            int startPadding = this.indent + this.tabOffset;
+            int endPadding = (32 - startPadding) - cueString.length();
+            int startEndPaddingDelta = startPadding - endPadding;
+            if (this.captionMode == 2 && (Math.abs(startEndPaddingDelta) < 3 || endPadding < 0)) {
+                position = 0.5f;
+                positionAnchor = 1;
+            } else if (this.captionMode != 2 || startEndPaddingDelta <= 0) {
+                position = (0.8f * (((float) startPadding) / 32.0f)) + 0.1f;
+                positionAnchor = 0;
             } else {
-                f = ((((float) (32 - length)) / 32.0f) * 0.8f) + 0.1f;
-                i2 = 2;
+                position = (0.8f * (((float) (32 - endPadding)) / 32.0f)) + 0.1f;
+                positionAnchor = 2;
             }
-            if (this.captionMode != 1) {
-                if (this.row <= 7) {
-                    i = this.row;
-                    i3 = 0;
-                    return new Cue(spannableStringBuilder, Alignment.ALIGN_NORMAL, (float) i, 1, i3, f, i2, Float.MIN_VALUE);
-                }
+            if (this.captionMode == 1 || this.row > 7) {
+                lineAnchor = 2;
+                line = (this.row - 15) - 2;
+            } else {
+                lineAnchor = 0;
+                line = this.row;
             }
-            i = (this.row - 15) - 2;
-            i3 = 2;
-            return new Cue(spannableStringBuilder, Alignment.ALIGN_NORMAL, (float) i, 1, i3, f, i2, Float.MIN_VALUE);
+            return new Cue(cueString, Alignment.ALIGN_NORMAL, (float) line, 1, lineAnchor, position, positionAnchor, Float.MIN_VALUE);
         }
 
         public String toString() {
             return this.captionStringBuilder.toString();
         }
-    }
-
-    private static boolean isMidrowCtrlCode(byte b, byte b2) {
-        return (b & 247) == 17 && (b2 & PsExtractor.VIDEO_STREAM_MASK) == 32;
-    }
-
-    private static boolean isMiscCode(byte b, byte b2) {
-        return (b & 247) == 20 && (b2 & PsExtractor.VIDEO_STREAM_MASK) == 32;
-    }
-
-    private static boolean isPreambleAddressCode(byte b, byte b2) {
-        return (b & PsExtractor.VIDEO_STREAM_MASK) == 16 && (b2 & PsExtractor.AUDIO_STREAM) == 64;
-    }
-
-    private static boolean isRepeatable(byte b) {
-        return (b & PsExtractor.VIDEO_STREAM_MASK) == 16;
-    }
-
-    private static boolean isTabCtrlCode(byte b, byte b2) {
-        return (b & 247) == 23 && b2 >= CTRL_BACKSPACE && b2 <= (byte) 35;
-    }
-
-    public String getName() {
-        return "Cea608Decoder";
-    }
-
-    public void release() {
     }
 
     public /* bridge */ /* synthetic */ SubtitleInputBuffer dequeueInputBuffer() throws SubtitleDecoderException {
@@ -275,9 +252,9 @@ public final class Cea608Decoder extends CeaDecoder {
         super.setPositionUs(j);
     }
 
-    public Cea608Decoder(String str, int i) {
-        this.packetLength = MimeTypes.APPLICATION_MP4CEA608.equals(str) != null ? 2 : 3;
-        switch (i) {
+    public Cea608Decoder(String mimeType, int accessibilityChannel) {
+        this.packetLength = MimeTypes.APPLICATION_MP4CEA608.equals(mimeType) ? 2 : 3;
+        switch (accessibilityChannel) {
             case 3:
             case 4:
                 this.selectedField = 2;
@@ -288,6 +265,10 @@ public final class Cea608Decoder extends CeaDecoder {
         }
         setCaptionMode(0);
         resetCueBuilders();
+    }
+
+    public String getName() {
+        return "Cea608Decoder";
     }
 
     public void flush() {
@@ -302,6 +283,9 @@ public final class Cea608Decoder extends CeaDecoder {
         this.repeatableControlCc2 = (byte) 0;
     }
 
+    public void release() {
+    }
+
     protected boolean isNewSubtitleDataAvailable() {
         return this.cues != this.lastCues;
     }
@@ -311,48 +295,42 @@ public final class Cea608Decoder extends CeaDecoder {
         return new CeaSubtitle(this.cues);
     }
 
-    protected void decode(SubtitleInputBuffer subtitleInputBuffer) {
-        this.ccData.reset(subtitleInputBuffer.data.array(), subtitleInputBuffer.data.limit());
-        SubtitleInputBuffer subtitleInputBuffer2 = null;
-        boolean z = subtitleInputBuffer2;
+    protected void decode(SubtitleInputBuffer inputBuffer) {
+        this.ccData.reset(inputBuffer.data.array(), inputBuffer.data.limit());
+        boolean captionDataProcessed = false;
+        boolean isRepeatableControl = false;
         while (this.ccData.bytesLeft() >= this.packetLength) {
-            int i;
+            byte ccDataHeader;
             if (this.packetLength == 2) {
-                i = -4;
+                ccDataHeader = CC_IMPLICIT_DATA_HEADER;
             } else {
-                i = (byte) this.ccData.readUnsignedByte();
+                ccDataHeader = (byte) this.ccData.readUnsignedByte();
             }
-            byte readUnsignedByte = (byte) (this.ccData.readUnsignedByte() & 127);
-            byte readUnsignedByte2 = (byte) (this.ccData.readUnsignedByte() & 127);
-            if ((i & 6) == 4) {
-                if (this.selectedField != 1 || (i & 1) == 0) {
-                    if (this.selectedField != 2 || (i & 1) == 1) {
-                        if (readUnsignedByte != (byte) 0 || readUnsignedByte2 != (byte) 0) {
-                            if ((readUnsignedByte & 247) == 17 && (readUnsignedByte2 & PsExtractor.VIDEO_STREAM_MASK) == 48) {
-                                this.currentCueBuilder.append(getSpecialChar(readUnsignedByte2));
-                            } else if ((readUnsignedByte & 246) == 18 && (readUnsignedByte2 & 224) == 32) {
-                                this.currentCueBuilder.backspace();
-                                if ((readUnsignedByte & 1) == 0) {
-                                    this.currentCueBuilder.append(getExtendedEsFrChar(readUnsignedByte2));
-                                } else {
-                                    this.currentCueBuilder.append(getExtendedPtDeChar(readUnsignedByte2));
-                                }
-                            } else if ((readUnsignedByte & 224) == 0) {
-                                z = handleCtrl(readUnsignedByte, readUnsignedByte2);
-                            } else {
-                                this.currentCueBuilder.append(getChar(readUnsignedByte));
-                                if ((readUnsignedByte2 & 224) != 0) {
-                                    this.currentCueBuilder.append(getChar(readUnsignedByte2));
-                                }
-                            }
-                            subtitleInputBuffer2 = 1;
-                        }
+            byte ccData1 = (byte) (this.ccData.readUnsignedByte() & 127);
+            byte ccData2 = (byte) (this.ccData.readUnsignedByte() & 127);
+            if ((ccDataHeader & 6) == 4 && ((this.selectedField != 1 || (ccDataHeader & 1) == 0) && ((this.selectedField != 2 || (ccDataHeader & 1) == 1) && !(ccData1 == (byte) 0 && ccData2 == (byte) 0)))) {
+                captionDataProcessed = true;
+                if ((ccData1 & 247) == 17 && (ccData2 & PsExtractor.VIDEO_STREAM_MASK) == 48) {
+                    this.currentCueBuilder.append(getSpecialChar(ccData2));
+                } else if ((ccData1 & 246) == 18 && (ccData2 & 224) == 32) {
+                    this.currentCueBuilder.backspace();
+                    if ((ccData1 & 1) == 0) {
+                        this.currentCueBuilder.append(getExtendedEsFrChar(ccData2));
+                    } else {
+                        this.currentCueBuilder.append(getExtendedPtDeChar(ccData2));
+                    }
+                } else if ((ccData1 & 224) == 0) {
+                    isRepeatableControl = handleCtrl(ccData1, ccData2);
+                } else {
+                    this.currentCueBuilder.append(getChar(ccData1));
+                    if ((ccData2 & 224) != 0) {
+                        this.currentCueBuilder.append(getChar(ccData2));
                     }
                 }
             }
         }
-        if (subtitleInputBuffer2 != null) {
-            if (!z) {
+        if (captionDataProcessed) {
+            if (!isRepeatableControl) {
                 this.repeatableControlSet = false;
             }
             if (this.captionMode == 1 || this.captionMode == 3) {
@@ -361,146 +339,152 @@ public final class Cea608Decoder extends CeaDecoder {
         }
     }
 
-    private boolean handleCtrl(byte b, byte b2) {
-        boolean isRepeatable = isRepeatable(b);
-        if (isRepeatable) {
-            if (this.repeatableControlSet && this.repeatableControlCc1 == b && this.repeatableControlCc2 == b2) {
+    private boolean handleCtrl(byte cc1, byte cc2) {
+        boolean isRepeatableControl = isRepeatable(cc1);
+        if (isRepeatableControl) {
+            if (this.repeatableControlSet && this.repeatableControlCc1 == cc1 && this.repeatableControlCc2 == cc2) {
                 this.repeatableControlSet = false;
                 return true;
             }
             this.repeatableControlSet = true;
-            this.repeatableControlCc1 = b;
-            this.repeatableControlCc2 = b2;
+            this.repeatableControlCc1 = cc1;
+            this.repeatableControlCc2 = cc2;
         }
-        if (isMidrowCtrlCode(b, b2)) {
-            handleMidrowCtrl(b2);
-        } else if (isPreambleAddressCode(b, b2)) {
-            handlePreambleAddressCode(b, b2);
-        } else if (isTabCtrlCode(b, b2)) {
-            this.currentCueBuilder.setTab(b2 - 32);
-        } else if (isMiscCode(b, b2) != (byte) 0) {
-            handleMiscCode(b2);
+        if (isMidrowCtrlCode(cc1, cc2)) {
+            handleMidrowCtrl(cc2);
+            return isRepeatableControl;
+        } else if (isPreambleAddressCode(cc1, cc2)) {
+            handlePreambleAddressCode(cc1, cc2);
+            return isRepeatableControl;
+        } else if (isTabCtrlCode(cc1, cc2)) {
+            this.currentCueBuilder.setTab(cc2 - 32);
+            return isRepeatableControl;
+        } else if (!isMiscCode(cc1, cc2)) {
+            return isRepeatableControl;
+        } else {
+            handleMiscCode(cc2);
+            return isRepeatableControl;
         }
-        return isRepeatable;
     }
 
-    private void handleMidrowCtrl(byte b) {
-        this.currentCueBuilder.setUnderline((b & 1) == 1);
-        b = (b >> (byte) 1) & 15;
-        if (b == (byte) 7) {
+    private void handleMidrowCtrl(byte cc2) {
+        this.currentCueBuilder.setUnderline((cc2 & 1) == 1);
+        int attribute = (cc2 >> 1) & 15;
+        if (attribute == 7) {
             this.currentCueBuilder.setMidrowStyle(new StyleSpan(2), 2);
             this.currentCueBuilder.setMidrowStyle(new ForegroundColorSpan(-1), 1);
             return;
         }
-        this.currentCueBuilder.setMidrowStyle(new ForegroundColorSpan(COLORS[b]), 1);
+        this.currentCueBuilder.setMidrowStyle(new ForegroundColorSpan(COLORS[attribute]), 1);
     }
 
-    private void handlePreambleAddressCode(byte b, byte b2) {
-        b = ROW_INDICES[b & (byte) 7];
-        if (((b2 & 32) != 0 ? 1 : null) != null) {
-            b++;
+    private void handlePreambleAddressCode(byte cc1, byte cc2) {
+        int row = ROW_INDICES[cc1 & 7];
+        if ((cc2 & 32) != 0) {
+            row++;
         }
-        if (b != this.currentCueBuilder.getRow()) {
+        if (row != this.currentCueBuilder.getRow()) {
             if (!(this.captionMode == 1 || this.currentCueBuilder.isEmpty())) {
                 this.currentCueBuilder = new CueBuilder(this.captionMode, this.captionRowCount);
                 this.cueBuilders.add(this.currentCueBuilder);
             }
-            this.currentCueBuilder.setRow(b);
+            this.currentCueBuilder.setRow(row);
         }
-        if ((b2 & 1) == (byte) 1) {
+        if ((cc2 & 1) == 1) {
             this.currentCueBuilder.setPreambleStyle(new UnderlineSpan());
         }
-        b = (b2 >> 1) & 15;
-        if (b > (byte) 7) {
-            this.currentCueBuilder.setIndent(COLUMN_INDICES[b & (byte) 7]);
-        } else if (b == (byte) 7) {
+        int attribute = (cc2 >> 1) & 15;
+        if (attribute > 7) {
+            this.currentCueBuilder.setIndent(COLUMN_INDICES[attribute & 7]);
+        } else if (attribute == 7) {
             this.currentCueBuilder.setPreambleStyle(new StyleSpan(2));
             this.currentCueBuilder.setPreambleStyle(new ForegroundColorSpan(-1));
         } else {
-            this.currentCueBuilder.setPreambleStyle(new ForegroundColorSpan(COLORS[b]));
+            this.currentCueBuilder.setPreambleStyle(new ForegroundColorSpan(COLORS[attribute]));
         }
     }
 
-    private void handleMiscCode(byte b) {
-        if (b == CTRL_RESUME_CAPTION_LOADING) {
-            setCaptionMode(2);
-        } else if (b != CTRL_RESUME_DIRECT_CAPTIONING) {
-            switch (b) {
-                case (byte) 37:
-                    setCaptionMode(1);
-                    setCaptionRowCount(2);
-                    return;
-                case (byte) 38:
-                    setCaptionMode(1);
-                    setCaptionRowCount(3);
-                    return;
-                case (byte) 39:
-                    setCaptionMode(1);
-                    setCaptionRowCount((byte) 4);
-                    return;
-                default:
-                    if (this.captionMode != 0) {
-                        if (b != CTRL_BACKSPACE) {
-                            if (b != CTRL_DELETE_TO_END_OF_ROW) {
-                                switch (b) {
-                                    case (byte) 44:
-                                        this.cues = (byte) 0;
-                                        if (this.captionMode == (byte) 1 || this.captionMode == (byte) 3) {
-                                            resetCueBuilders();
-                                            break;
-                                        }
-                                    case (byte) 45:
-                                        if (this.captionMode == (byte) 1 && this.currentCueBuilder.isEmpty() == (byte) 0) {
-                                            this.currentCueBuilder.rollUp();
-                                            break;
-                                        }
-                                    case (byte) 46:
-                                        resetCueBuilders();
-                                        break;
-                                    case (byte) 47:
-                                        this.cues = getDisplayCues();
-                                        resetCueBuilders();
-                                        break;
-                                    default:
-                                        break;
-                                }
+    private void handleMiscCode(byte cc2) {
+        switch (cc2) {
+            case (byte) 32:
+                setCaptionMode(2);
+                return;
+            case (byte) 37:
+                setCaptionMode(1);
+                setCaptionRowCount(2);
+                return;
+            case (byte) 38:
+                setCaptionMode(1);
+                setCaptionRowCount(3);
+                return;
+            case (byte) 39:
+                setCaptionMode(1);
+                setCaptionRowCount(4);
+                return;
+            case (byte) 41:
+                setCaptionMode(3);
+                return;
+            default:
+                if (this.captionMode != 0) {
+                    switch (cc2) {
+                        case (byte) 33:
+                            this.currentCueBuilder.backspace();
+                            return;
+                        case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
+                            return;
+                        case (byte) 44:
+                            this.cues = null;
+                            if (this.captionMode == 1 || this.captionMode == 3) {
+                                resetCueBuilders();
+                                return;
                             }
-                        }
-                        this.currentCueBuilder.backspace();
-                        return;
+                            return;
+                        case (byte) 45:
+                            if (this.captionMode == 1 && !this.currentCueBuilder.isEmpty()) {
+                                this.currentCueBuilder.rollUp();
+                                return;
+                            }
+                            return;
+                        case (byte) 46:
+                            resetCueBuilders();
+                            return;
+                        case (byte) 47:
+                            this.cues = getDisplayCues();
+                            resetCueBuilders();
+                            return;
+                        default:
+                            return;
                     }
-                    return;
-            }
-        } else {
-            setCaptionMode(3);
+                }
+                return;
         }
     }
 
     private List<Cue> getDisplayCues() {
-        List<Cue> arrayList = new ArrayList();
+        List<Cue> displayCues = new ArrayList();
         for (int i = 0; i < this.cueBuilders.size(); i++) {
-            Cue build = ((CueBuilder) this.cueBuilders.get(i)).build();
-            if (build != null) {
-                arrayList.add(build);
+            Cue cue = ((CueBuilder) this.cueBuilders.get(i)).build();
+            if (cue != null) {
+                displayCues.add(cue);
             }
         }
-        return arrayList;
+        return displayCues;
     }
 
-    private void setCaptionMode(int i) {
-        if (this.captionMode != i) {
-            int i2 = this.captionMode;
-            this.captionMode = i;
+    private void setCaptionMode(int captionMode) {
+        if (this.captionMode != captionMode) {
+            int oldCaptionMode = this.captionMode;
+            this.captionMode = captionMode;
             resetCueBuilders();
-            if (i2 == 3 || i == 1 || i == 0) {
-                this.cues = 0;
+            if (oldCaptionMode == 3 || captionMode == 1 || captionMode == 0) {
+                this.cues = null;
             }
         }
     }
 
-    private void setCaptionRowCount(int i) {
-        this.captionRowCount = i;
-        this.currentCueBuilder.setCaptionRowCount(i);
+    private void setCaptionRowCount(int captionRowCount) {
+        this.captionRowCount = captionRowCount;
+        this.currentCueBuilder.setCaptionRowCount(captionRowCount);
     }
 
     private void resetCueBuilders() {
@@ -509,19 +493,39 @@ public final class Cea608Decoder extends CeaDecoder {
         this.cueBuilders.add(this.currentCueBuilder);
     }
 
-    private static char getChar(byte b) {
-        return (char) BASIC_CHARACTER_SET[(b & 127) - 32];
+    private static char getChar(byte ccData) {
+        return (char) BASIC_CHARACTER_SET[(ccData & 127) - 32];
     }
 
-    private static char getSpecialChar(byte b) {
-        return (char) SPECIAL_CHARACTER_SET[b & 15];
+    private static char getSpecialChar(byte ccData) {
+        return (char) SPECIAL_CHARACTER_SET[ccData & 15];
     }
 
-    private static char getExtendedEsFrChar(byte b) {
-        return (char) SPECIAL_ES_FR_CHARACTER_SET[b & 31];
+    private static char getExtendedEsFrChar(byte ccData) {
+        return (char) SPECIAL_ES_FR_CHARACTER_SET[ccData & 31];
     }
 
-    private static char getExtendedPtDeChar(byte b) {
-        return (char) SPECIAL_PT_DE_CHARACTER_SET[b & 31];
+    private static char getExtendedPtDeChar(byte ccData) {
+        return (char) SPECIAL_PT_DE_CHARACTER_SET[ccData & 31];
+    }
+
+    private static boolean isMidrowCtrlCode(byte cc1, byte cc2) {
+        return (cc1 & 247) == 17 && (cc2 & PsExtractor.VIDEO_STREAM_MASK) == 32;
+    }
+
+    private static boolean isPreambleAddressCode(byte cc1, byte cc2) {
+        return (cc1 & PsExtractor.VIDEO_STREAM_MASK) == 16 && (cc2 & PsExtractor.AUDIO_STREAM) == 64;
+    }
+
+    private static boolean isTabCtrlCode(byte cc1, byte cc2) {
+        return (cc1 & 247) == 23 && cc2 >= CTRL_BACKSPACE && cc2 <= (byte) 35;
+    }
+
+    private static boolean isMiscCode(byte cc1, byte cc2) {
+        return (cc1 & 247) == 20 && (cc2 & PsExtractor.VIDEO_STREAM_MASK) == 32;
+    }
+
+    private static boolean isRepeatable(byte cc1) {
+        return (cc1 & PsExtractor.VIDEO_STREAM_MASK) == 16;
     }
 }

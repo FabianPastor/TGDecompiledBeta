@@ -7,8 +7,8 @@ public abstract class HlsPlaylist {
     public final String baseUri;
     public final List<String> tags;
 
-    protected HlsPlaylist(String str, List<String> list) {
-        this.baseUri = str;
-        this.tags = Collections.unmodifiableList(list);
+    protected HlsPlaylist(String baseUri, List<String> tags) {
+        this.baseUri = baseUri;
+        this.tags = Collections.unmodifiableList(tags);
     }
 }

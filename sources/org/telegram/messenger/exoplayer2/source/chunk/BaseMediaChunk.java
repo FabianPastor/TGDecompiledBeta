@@ -8,17 +8,17 @@ public abstract class BaseMediaChunk extends MediaChunk {
     private int[] firstSampleIndices;
     private BaseMediaChunkOutput output;
 
-    public BaseMediaChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, long j, long j2, int i2) {
-        super(dataSource, dataSpec, format, i, obj, j, j2, i2);
+    public BaseMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex) {
+        super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
     }
 
-    public void init(BaseMediaChunkOutput baseMediaChunkOutput) {
-        this.output = baseMediaChunkOutput;
-        this.firstSampleIndices = baseMediaChunkOutput.getWriteIndices();
+    public void init(BaseMediaChunkOutput output) {
+        this.output = output;
+        this.firstSampleIndices = output.getWriteIndices();
     }
 
-    public final int getFirstSampleIndex(int i) {
-        return this.firstSampleIndices[i];
+    public final int getFirstSampleIndex(int trackIndex) {
+        return this.firstSampleIndices[trackIndex];
     }
 
     protected final BaseMediaChunkOutput getOutput() {

@@ -16,8 +16,8 @@ public final class AssetDataSource implements DataSource {
     private Uri uri;
 
     public static final class AssetDataSourceException extends IOException {
-        public AssetDataSourceException(IOException iOException) {
-            super(iOException);
+        public AssetDataSourceException(IOException cause) {
+            super(cause);
         }
     }
 
@@ -25,9 +25,9 @@ public final class AssetDataSource implements DataSource {
         this(context, null);
     }
 
-    public AssetDataSource(Context context, TransferListener<? super AssetDataSource> transferListener) {
+    public AssetDataSource(Context context, TransferListener<? super AssetDataSource> listener) {
         this.assetManager = context.getAssets();
-        this.listener = transferListener;
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws AssetDataSourceException {
@@ -56,38 +56,42 @@ public final class AssetDataSource implements DataSource {
                 this.listener.onTransferStart(this, dataSpec);
             }
             return this.bytesRemaining;
-        } catch (DataSpec dataSpec2) {
-            throw new AssetDataSourceException(dataSpec2);
+        } catch (IOException e) {
+            throw new AssetDataSourceException(e);
         }
     }
 
-    public int read(byte[] bArr, int i, int i2) throws AssetDataSourceException {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] buffer, int offset, int readLength) throws AssetDataSourceException {
+        if (readLength == 0) {
+            return 0;
         }
         if (this.bytesRemaining == 0) {
             return -1;
         }
         try {
-            if (this.bytesRemaining != -1) {
-                i2 = (int) Math.min(this.bytesRemaining, (long) i2);
+            int bytesToRead;
+            if (this.bytesRemaining == -1) {
+                bytesToRead = readLength;
+            } else {
+                bytesToRead = (int) Math.min(this.bytesRemaining, (long) readLength);
             }
-            bArr = this.inputStream.read(bArr, i, i2);
-            if (bArr != -1) {
+            int bytesRead = this.inputStream.read(buffer, offset, bytesToRead);
+            if (bytesRead != -1) {
                 if (this.bytesRemaining != -1) {
-                    this.bytesRemaining -= (long) bArr;
+                    this.bytesRemaining -= (long) bytesRead;
                 }
-                if (this.listener != 0) {
-                    this.listener.onBytesTransferred(this, bArr);
+                if (this.listener == null) {
+                    return bytesRead;
                 }
-                return bArr;
+                this.listener.onBytesTransferred(this, bytesRead);
+                return bytesRead;
             } else if (this.bytesRemaining == -1) {
                 return -1;
             } else {
                 throw new AssetDataSourceException(new EOFException());
             }
-        } catch (byte[] bArr2) {
-            throw new AssetDataSourceException(bArr2);
+        } catch (IOException e) {
+            throw new AssetDataSourceException(e);
         }
     }
 

@@ -14,8 +14,8 @@ final class DefaultMediaClock implements MediaClock {
         void onPlaybackParametersChanged(PlaybackParameters playbackParameters);
     }
 
-    public DefaultMediaClock(PlaybackParameterListener playbackParameterListener, Clock clock) {
-        this.listener = playbackParameterListener;
+    public DefaultMediaClock(PlaybackParameterListener listener, Clock clock) {
+        this.listener = listener;
         this.standaloneMediaClock = new StandaloneMediaClock(clock);
     }
 
@@ -27,17 +27,17 @@ final class DefaultMediaClock implements MediaClock {
         this.standaloneMediaClock.stop();
     }
 
-    public void resetPosition(long j) {
-        this.standaloneMediaClock.resetPosition(j);
+    public void resetPosition(long positionUs) {
+        this.standaloneMediaClock.resetPosition(positionUs);
     }
 
     public void onRendererEnabled(Renderer renderer) throws ExoPlaybackException {
-        MediaClock mediaClock = renderer.getMediaClock();
-        if (mediaClock != null && mediaClock != this.rendererClock) {
+        MediaClock rendererMediaClock = renderer.getMediaClock();
+        if (rendererMediaClock != null && rendererMediaClock != this.rendererClock) {
             if (this.rendererClock != null) {
                 throw ExoPlaybackException.createForUnexpected(new IllegalStateException("Multiple renderer media clocks enabled."));
             }
-            this.rendererClock = mediaClock;
+            this.rendererClock = rendererMediaClock;
             this.rendererClockSource = renderer;
             this.rendererClock.setPlaybackParameters(this.standaloneMediaClock.getPlaybackParameters());
             ensureSynced();

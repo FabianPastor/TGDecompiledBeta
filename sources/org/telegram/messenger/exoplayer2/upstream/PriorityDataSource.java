@@ -10,10 +10,10 @@ public final class PriorityDataSource implements DataSource {
     private final PriorityTaskManager priorityTaskManager;
     private final DataSource upstream;
 
-    public PriorityDataSource(DataSource dataSource, PriorityTaskManager priorityTaskManager, int i) {
-        this.upstream = (DataSource) Assertions.checkNotNull(dataSource);
+    public PriorityDataSource(DataSource upstream, PriorityTaskManager priorityTaskManager, int priority) {
+        this.upstream = (DataSource) Assertions.checkNotNull(upstream);
         this.priorityTaskManager = (PriorityTaskManager) Assertions.checkNotNull(priorityTaskManager);
-        this.priority = i;
+        this.priority = priority;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
@@ -21,9 +21,9 @@ public final class PriorityDataSource implements DataSource {
         return this.upstream.open(dataSpec);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
+    public int read(byte[] buffer, int offset, int max) throws IOException {
         this.priorityTaskManager.proceedOrThrow(this.priority);
-        return this.upstream.read(bArr, i, i2);
+        return this.upstream.read(buffer, offset, max);
     }
 
     public Uri getUri() {

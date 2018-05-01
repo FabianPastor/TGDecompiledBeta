@@ -14,26 +14,23 @@ public class DispatchQueue extends Thread {
         C01441() {
         }
 
-        public void handleMessage(Message message) {
-            DispatchQueue.this.handleMessage(message);
+        public void handleMessage(Message msg) {
+            DispatchQueue.this.handleMessage(msg);
         }
     }
 
-    public void handleMessage(Message message) {
-    }
-
-    public DispatchQueue(String str) {
-        setName(str);
+    public DispatchQueue(String threadName) {
+        setName(threadName);
         start();
     }
 
-    public void sendMessage(Message message, int i) {
+    public void sendMessage(Message msg, int delay) {
         try {
             this.syncLatch.await();
-            if (i <= 0) {
-                this.handler.sendMessage(message);
+            if (delay <= 0) {
+                this.handler.sendMessage(msg);
             } else {
-                this.handler.sendMessageDelayed(message, (long) i);
+                this.handler.sendMessageDelayed(msg, (long) delay);
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
@@ -53,13 +50,13 @@ public class DispatchQueue extends Thread {
         postRunnable(runnable, 0);
     }
 
-    public void postRunnable(Runnable runnable, long j) {
+    public void postRunnable(Runnable runnable, long delay) {
         try {
             this.syncLatch.await();
-            if (j <= 0) {
+            if (delay <= 0) {
                 this.handler.post(runnable);
             } else {
-                this.handler.postDelayed(runnable, j);
+                this.handler.postDelayed(runnable, delay);
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
@@ -73,6 +70,9 @@ public class DispatchQueue extends Thread {
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
+    }
+
+    public void handleMessage(Message inputMessage) {
     }
 
     public void run() {

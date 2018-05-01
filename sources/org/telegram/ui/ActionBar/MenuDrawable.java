@@ -17,19 +17,12 @@ public class MenuDrawable extends Drawable {
     private Paint paint = new Paint(1);
     private boolean reverseAngle = false;
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
     public MenuDrawable() {
         this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
 
-    public void setRotation(float f, boolean z) {
+    public void setRotation(float rotation, boolean animated) {
         this.lastFrameTime = 0;
         if (this.currentRotation == 1.0f) {
             this.reverseAngle = true;
@@ -37,17 +30,17 @@ public class MenuDrawable extends Drawable {
             this.reverseAngle = false;
         }
         this.lastFrameTime = 0;
-        if (z) {
-            if (this.currentRotation < f) {
-                this.currentAnimationTime = (int) (this.currentRotation * true);
+        if (animated) {
+            if (this.currentRotation < rotation) {
+                this.currentAnimationTime = (int) (this.currentRotation * 300.0f);
             } else {
                 this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * 300.0f);
             }
             this.lastFrameTime = System.currentTimeMillis();
-            this.finalRotation = f;
+            this.finalRotation = rotation;
         } else {
-            this.currentRotation = f;
-            this.finalRotation = f;
+            this.currentRotation = rotation;
+            this.finalRotation = rotation;
         }
         invalidateSelf();
     }
@@ -69,20 +62,26 @@ public class MenuDrawable extends Drawable {
         }
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -180 : 180)));
+        canvas.rotate(((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation);
         canvas.drawLine((float) (-AndroidUtilities.dp(9.0f)), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
-        float dp = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
-        float dp2 = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
-        Canvas canvas2 = canvas;
-        float dp3 = ((float) (-AndroidUtilities.dp(9.0f))) + (((float) AndroidUtilities.dp(7.5f)) * Math.abs(this.currentRotation));
-        float dp4 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
-        canvas2.drawLine(dp3, -dp2, dp4, -dp, this.paint);
-        canvas2.drawLine(dp3, dp2, dp4, dp, this.paint);
+        float endYDiff = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
+        float endXDiff = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
+        float startYDiff = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
+        float startXDiff = ((float) (-AndroidUtilities.dp(9.0f))) + (((float) AndroidUtilities.dp(7.5f)) * Math.abs(this.currentRotation));
+        canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, this.paint);
+        canvas.drawLine(startXDiff, startYDiff, endXDiff, endYDiff, this.paint);
         canvas.restore();
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-        this.paint.setColorFilter(colorFilter);
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+        this.paint.setColorFilter(cf);
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

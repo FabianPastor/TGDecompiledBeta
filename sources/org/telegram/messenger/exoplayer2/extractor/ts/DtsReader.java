@@ -27,16 +27,13 @@ public final class DtsReader implements ElementaryStreamReader {
     private int syncBytes;
     private long timeUs;
 
-    public void packetFinished() {
-    }
-
-    public DtsReader(String str) {
+    public DtsReader(String language) {
         this.headerScratchBytes.data[0] = Byte.MAX_VALUE;
         this.headerScratchBytes.data[1] = (byte) -2;
         this.headerScratchBytes.data[2] = Byte.MIN_VALUE;
         this.headerScratchBytes.data[3] = (byte) 1;
         this.state = 0;
-        this.language = str;
+        this.language = language;
     }
 
     public void seek() {
@@ -45,28 +42,28 @@ public final class DtsReader implements ElementaryStreamReader {
         this.syncBytes = 0;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.formatId = trackIdGenerator.getFormatId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 1);
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
     }
 
-    public void packetStarted(long j, boolean z) {
-        this.timeUs = j;
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        this.timeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
-        while (parsableByteArray.bytesLeft() > 0) {
+    public void consume(ParsableByteArray data) {
+        while (data.bytesLeft() > 0) {
             switch (this.state) {
                 case 0:
-                    if (!skipToNextSync(parsableByteArray)) {
+                    if (!skipToNextSync(data)) {
                         break;
                     }
                     this.bytesRead = 4;
                     this.state = 1;
                     break;
                 case 1:
-                    if (!continueRead(parsableByteArray, this.headerScratchBytes.data, 15)) {
+                    if (!continueRead(data, this.headerScratchBytes.data, 15)) {
                         break;
                     }
                     parseHeader();
@@ -75,9 +72,9 @@ public final class DtsReader implements ElementaryStreamReader {
                     this.state = 2;
                     break;
                 case 2:
-                    int min = Math.min(parsableByteArray.bytesLeft(), this.sampleSize - this.bytesRead);
-                    this.output.sampleData(parsableByteArray, min);
-                    this.bytesRead += min;
+                    int bytesToRead = Math.min(data.bytesLeft(), this.sampleSize - this.bytesRead);
+                    this.output.sampleData(data, bytesToRead);
+                    this.bytesRead += bytesToRead;
                     if (this.bytesRead != this.sampleSize) {
                         break;
                     }
@@ -91,17 +88,20 @@ public final class DtsReader implements ElementaryStreamReader {
         }
     }
 
-    private boolean continueRead(ParsableByteArray parsableByteArray, byte[] bArr, int i) {
-        int min = Math.min(parsableByteArray.bytesLeft(), i - this.bytesRead);
-        parsableByteArray.readBytes(bArr, this.bytesRead, min);
-        this.bytesRead += min;
-        return this.bytesRead == i ? true : null;
+    public void packetFinished() {
     }
 
-    private boolean skipToNextSync(ParsableByteArray parsableByteArray) {
-        while (parsableByteArray.bytesLeft() > 0) {
+    private boolean continueRead(ParsableByteArray source, byte[] target, int targetLength) {
+        int bytesToRead = Math.min(source.bytesLeft(), targetLength - this.bytesRead);
+        source.readBytes(target, this.bytesRead, bytesToRead);
+        this.bytesRead += bytesToRead;
+        return this.bytesRead == targetLength;
+    }
+
+    private boolean skipToNextSync(ParsableByteArray pesBuffer) {
+        while (pesBuffer.bytesLeft() > 0) {
             this.syncBytes <<= 8;
-            this.syncBytes |= parsableByteArray.readUnsignedByte();
+            this.syncBytes |= pesBuffer.readUnsignedByte();
             if (this.syncBytes == SYNC_VALUE) {
                 this.syncBytes = 0;
                 return true;
@@ -111,12 +111,12 @@ public final class DtsReader implements ElementaryStreamReader {
     }
 
     private void parseHeader() {
-        byte[] bArr = this.headerScratchBytes.data;
+        byte[] frameData = this.headerScratchBytes.data;
         if (this.format == null) {
-            this.format = DtsUtil.parseDtsFormat(bArr, this.formatId, this.language, null);
+            this.format = DtsUtil.parseDtsFormat(frameData, this.formatId, this.language, null);
             this.output.format(this.format);
         }
-        this.sampleSize = DtsUtil.getDtsFrameSize(bArr);
-        this.sampleDurationUs = (long) ((int) ((C0542C.MICROS_PER_SECOND * ((long) DtsUtil.parseDtsAudioSampleCount(bArr))) / ((long) this.format.sampleRate)));
+        this.sampleSize = DtsUtil.getDtsFrameSize(frameData);
+        this.sampleDurationUs = (long) ((int) ((C0542C.MICROS_PER_SECOND * ((long) DtsUtil.parseDtsAudioSampleCount(frameData))) / ((long) this.format.sampleRate)));
     }
 }

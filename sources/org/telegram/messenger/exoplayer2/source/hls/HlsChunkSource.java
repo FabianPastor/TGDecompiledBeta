@@ -21,7 +21,6 @@ import org.telegram.messenger.exoplayer2.trackselection.BaseTrackSelection;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
-import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 import org.telegram.messenger.exoplayer2.util.UriUtil;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -36,7 +35,7 @@ class HlsChunkSource {
     private IOException fatalError;
     private boolean independentSegments;
     private boolean isTimestampMaster;
-    private long liveEdgeTimeUs = 1;
+    private long liveEdgeTimeUs = C0542C.TIME_UNSET;
     private final DataSource mediaDataSource;
     private final List<Format> muxedCaptionFormats;
     private final HlsPlaylistTracker playlistTracker;
@@ -45,6 +44,24 @@ class HlsChunkSource {
     private final TrackGroup trackGroup;
     private TrackSelection trackSelection;
     private final HlsUrl[] variants;
+
+    private static final class EncryptionKeyChunk extends DataChunk {
+        public final String iv;
+        private byte[] result;
+
+        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] scratchSpace, String iv) {
+            super(dataSource, dataSpec, 3, trackFormat, trackSelectionReason, trackSelectionData, scratchSpace);
+            this.iv = iv;
+        }
+
+        protected void consume(byte[] data, int limit) throws IOException {
+            this.result = Arrays.copyOf(data, limit);
+        }
+
+        public byte[] getResult() {
+            return this.result;
+        }
+    }
 
     public static final class HlsChunkHolder {
         public Chunk chunk;
@@ -65,28 +82,20 @@ class HlsChunkSource {
     private static final class InitializationTrackSelection extends BaseTrackSelection {
         private int selectedIndex;
 
-        public Object getSelectionData() {
-            return null;
+        public InitializationTrackSelection(TrackGroup group, int[] tracks) {
+            super(group, tracks);
+            this.selectedIndex = indexOf(group.getFormat(0));
         }
 
-        public int getSelectionReason() {
-            return 0;
-        }
-
-        public InitializationTrackSelection(TrackGroup trackGroup, int[] iArr) {
-            super(trackGroup, iArr);
-            this.selectedIndex = indexOf((Format) trackGroup.getFormat(null));
-        }
-
-        public void updateSelectedTrack(long j, long j2, long j3) {
-            j = SystemClock.elapsedRealtime();
-            if (isBlacklisted(this.selectedIndex, j) != null) {
-                j2 = this.length - 1;
-                while (j2 >= null) {
-                    if (isBlacklisted(j2, j)) {
-                        j2--;
+        public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
+            long nowMs = SystemClock.elapsedRealtime();
+            if (isBlacklisted(this.selectedIndex, nowMs)) {
+                int i = this.length - 1;
+                while (i >= 0) {
+                    if (isBlacklisted(i, nowMs)) {
+                        i--;
                     } else {
-                        this.selectedIndex = j2;
+                        this.selectedIndex = i;
                         return;
                     }
                 }
@@ -97,42 +106,32 @@ class HlsChunkSource {
         public int getSelectedIndex() {
             return this.selectedIndex;
         }
-    }
 
-    private static final class EncryptionKeyChunk extends DataChunk {
-        public final String iv;
-        private byte[] result;
-
-        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, byte[] bArr, String str) {
-            super(dataSource, dataSpec, 3, format, i, obj, bArr);
-            this.iv = str;
+        public int getSelectionReason() {
+            return 0;
         }
 
-        protected void consume(byte[] bArr, int i) throws IOException {
-            this.result = Arrays.copyOf(bArr, i);
-        }
-
-        public byte[] getResult() {
-            return this.result;
+        public Object getSelectionData() {
+            return null;
         }
     }
 
-    public HlsChunkSource(HlsExtractorFactory hlsExtractorFactory, HlsPlaylistTracker hlsPlaylistTracker, HlsUrl[] hlsUrlArr, HlsDataSourceFactory hlsDataSourceFactory, TimestampAdjusterProvider timestampAdjusterProvider, List<Format> list) {
-        this.extractorFactory = hlsExtractorFactory;
-        this.playlistTracker = hlsPlaylistTracker;
-        this.variants = hlsUrlArr;
+    public HlsChunkSource(HlsExtractorFactory extractorFactory, HlsPlaylistTracker playlistTracker, HlsUrl[] variants, HlsDataSourceFactory dataSourceFactory, TimestampAdjusterProvider timestampAdjusterProvider, List<Format> muxedCaptionFormats) {
+        this.extractorFactory = extractorFactory;
+        this.playlistTracker = playlistTracker;
+        this.variants = variants;
         this.timestampAdjusterProvider = timestampAdjusterProvider;
-        this.muxedCaptionFormats = list;
-        hlsPlaylistTracker = new Format[hlsUrlArr.length];
-        timestampAdjusterProvider = new int[hlsUrlArr.length];
-        for (hlsExtractorFactory = null; hlsExtractorFactory < hlsUrlArr.length; hlsExtractorFactory++) {
-            hlsPlaylistTracker[hlsExtractorFactory] = hlsUrlArr[hlsExtractorFactory].format;
-            timestampAdjusterProvider[hlsExtractorFactory] = hlsExtractorFactory;
+        this.muxedCaptionFormats = muxedCaptionFormats;
+        Format[] variantFormats = new Format[variants.length];
+        int[] initialTrackSelection = new int[variants.length];
+        for (int i = 0; i < variants.length; i++) {
+            variantFormats[i] = variants[i].format;
+            initialTrackSelection[i] = i;
         }
-        this.mediaDataSource = hlsDataSourceFactory.createDataSource(1);
-        this.encryptionDataSource = hlsDataSourceFactory.createDataSource(3);
-        this.trackGroup = new TrackGroup(hlsPlaylistTracker);
-        this.trackSelection = new InitializationTrackSelection(this.trackGroup, timestampAdjusterProvider);
+        this.mediaDataSource = dataSourceFactory.createDataSource(1);
+        this.encryptionDataSource = dataSourceFactory.createDataSource(3);
+        this.trackGroup = new TrackGroup(variantFormats);
+        this.trackSelection = new InitializationTrackSelection(this.trackGroup, initialTrackSelection);
     }
 
     public void maybeThrowError() throws IOException {
@@ -159,249 +158,93 @@ class HlsChunkSource {
         this.fatalError = null;
     }
 
-    public void setIsTimestampMaster(boolean z) {
-        this.isTimestampMaster = z;
+    public void setIsTimestampMaster(boolean isTimestampMaster) {
+        this.isTimestampMaster = isTimestampMaster;
     }
 
-    public void getNextChunk(HlsMediaChunk hlsMediaChunk, long j, long j2, HlsChunkHolder hlsChunkHolder) {
-        int i;
-        long j3;
-        long j4;
-        HlsChunkSource hlsChunkSource = this;
-        HlsMediaChunk hlsMediaChunk2 = hlsMediaChunk;
-        long j5 = j;
-        HlsChunkHolder hlsChunkHolder2 = hlsChunkHolder;
-        if (hlsMediaChunk2 == null) {
-            i = -1;
+    public void getNextChunk(HlsMediaChunk previous, long playbackPositionUs, long loadPositionUs, HlsChunkHolder out) {
+        int oldVariantIndex;
+        if (previous == null) {
+            oldVariantIndex = -1;
         } else {
-            i = hlsChunkSource.trackGroup.indexOf(hlsMediaChunk2.trackFormat);
+            oldVariantIndex = this.trackGroup.indexOf(previous.trackFormat);
         }
-        hlsChunkSource.expectedPlaylistUrl = null;
-        long j6 = j2 - j5;
-        long resolveTimeToLiveEdgeUs = resolveTimeToLiveEdgeUs(j5);
-        if (hlsMediaChunk2 == null || hlsChunkSource.independentSegments) {
-            j3 = resolveTimeToLiveEdgeUs;
-            j4 = j6;
-        } else {
-            long durationUs = hlsMediaChunk.getDurationUs();
-            long max = Math.max(0, j6 - durationUs);
-            if (resolveTimeToLiveEdgeUs != C0542C.TIME_UNSET) {
-                j4 = max;
-                j3 = Math.max(0, resolveTimeToLiveEdgeUs - durationUs);
-            } else {
-                j4 = max;
-                j3 = resolveTimeToLiveEdgeUs;
+        this.expectedPlaylistUrl = null;
+        long bufferedDurationUs = loadPositionUs - playbackPositionUs;
+        long timeToLiveEdgeUs = resolveTimeToLiveEdgeUs(playbackPositionUs);
+        if (!(previous == null || this.independentSegments)) {
+            long subtractedDurationUs = previous.getDurationUs();
+            bufferedDurationUs = Math.max(0, bufferedDurationUs - subtractedDurationUs);
+            if (timeToLiveEdgeUs != C0542C.TIME_UNSET) {
+                timeToLiveEdgeUs = Math.max(0, timeToLiveEdgeUs - subtractedDurationUs);
             }
         }
-        hlsChunkSource.trackSelection.updateSelectedTrack(j5, j4, j3);
-        int selectedIndexInTrackGroup = hlsChunkSource.trackSelection.getSelectedIndexInTrackGroup();
-        boolean z = false;
-        boolean z2 = i != selectedIndexInTrackGroup;
-        HlsUrl hlsUrl = hlsChunkSource.variants[selectedIndexInTrackGroup];
-        if (hlsChunkSource.playlistTracker.isSnapshotValid(hlsUrl)) {
-            int nextChunkIndex;
-            HlsUrl hlsUrl2;
-            Segment segment;
-            Uri resolveToUri;
-            Segment segment2;
-            DataSpec dataSpec;
-            long j7;
-            TimestampAdjuster adjuster;
-            HlsChunkHolder hlsChunkHolder3;
-            List list;
-            Object valueOf;
-            HlsMediaPlaylist playlistSnapshot;
-            HlsMediaPlaylist playlistSnapshot2 = hlsChunkSource.playlistTracker.getPlaylistSnapshot(hlsUrl);
-            hlsChunkSource.independentSegments = playlistSnapshot2.hasIndependentSegmentsTag;
-            updateLiveEdgeTimeUs(playlistSnapshot2);
-            if (hlsMediaChunk2 != null) {
-                if (!z2) {
-                    nextChunkIndex = hlsMediaChunk.getNextChunkIndex();
-                    i = selectedIndexInTrackGroup;
-                    hlsUrl2 = hlsUrl;
-                    if (nextChunkIndex >= playlistSnapshot2.mediaSequence) {
-                        hlsChunkSource.fatalError = new BehindLiveWindowException();
-                        return;
+        this.trackSelection.updateSelectedTrack(playbackPositionUs, bufferedDurationUs, timeToLiveEdgeUs);
+        int selectedVariantIndex = this.trackSelection.getSelectedIndexInTrackGroup();
+        boolean switchingVariant = oldVariantIndex != selectedVariantIndex;
+        HlsUrl selectedUrl = this.variants[selectedVariantIndex];
+        if (this.playlistTracker.isSnapshotValid(selectedUrl)) {
+            int chunkMediaSequence;
+            HlsMediaPlaylist mediaPlaylist = this.playlistTracker.getPlaylistSnapshot(selectedUrl);
+            this.independentSegments = mediaPlaylist.hasIndependentSegmentsTag;
+            updateLiveEdgeTimeUs(mediaPlaylist);
+            if (previous == null || switchingVariant) {
+                long targetPositionUs = (previous == null || this.independentSegments) ? loadPositionUs : previous.startTimeUs;
+                if (mediaPlaylist.hasEndTag || targetPositionUs < mediaPlaylist.getEndTimeUs()) {
+                    List list = mediaPlaylist.segments;
+                    Object valueOf = Long.valueOf(targetPositionUs - mediaPlaylist.startTimeUs);
+                    boolean z = !this.playlistTracker.isLive() || previous == null;
+                    chunkMediaSequence = Util.binarySearchFloor(list, valueOf, true, z) + mediaPlaylist.mediaSequence;
+                    if (chunkMediaSequence < mediaPlaylist.mediaSequence && previous != null) {
+                        selectedVariantIndex = oldVariantIndex;
+                        selectedUrl = this.variants[selectedVariantIndex];
+                        mediaPlaylist = this.playlistTracker.getPlaylistSnapshot(selectedUrl);
+                        chunkMediaSequence = previous.getNextChunkIndex();
                     }
-                    selectedIndexInTrackGroup = nextChunkIndex - playlistSnapshot2.mediaSequence;
-                    if (selectedIndexInTrackGroup < playlistSnapshot2.segments.size()) {
-                        if (playlistSnapshot2.hasEndTag) {
-                            hlsChunkHolder2.playlist = hlsUrl2;
-                            hlsChunkSource.expectedPlaylistUrl = hlsUrl2;
-                        } else {
-                            hlsChunkHolder2.endOfStream = true;
-                        }
-                        return;
-                    }
-                    segment = (Segment) playlistSnapshot2.segments.get(selectedIndexInTrackGroup);
-                    if (segment.fullSegmentEncryptionKeyUri == null) {
-                        resolveToUri = UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.fullSegmentEncryptionKeyUri);
-                        if (resolveToUri.equals(hlsChunkSource.encryptionKeyUri)) {
-                            hlsChunkHolder2.chunk = newEncryptionKeyChunk(resolveToUri, segment.encryptionIV, i, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData());
-                            return;
-                        } else if (!Util.areEqual(segment.encryptionIV, hlsChunkSource.encryptionIvString)) {
-                            setEncryptionData(resolveToUri, segment.encryptionIV, hlsChunkSource.encryptionKey);
-                        }
-                    } else {
-                        clearEncryptionData();
-                    }
-                    segment2 = playlistSnapshot2.initializationSegment;
-                    dataSpec = segment2 == null ? new DataSpec(UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment2.url), segment2.byterangeOffset, segment2.byterangeLength, null) : null;
-                    j7 = playlistSnapshot2.startTimeUs + segment.relativeStartTimeUs;
-                    i = playlistSnapshot2.discontinuitySequence + segment.relativeDiscontinuitySequence;
-                    adjuster = hlsChunkSource.timestampAdjusterProvider.getAdjuster(i);
-                    hlsChunkHolder3 = hlsChunkHolder2;
-                    hlsChunkHolder3.chunk = new HlsMediaChunk(hlsChunkSource.extractorFactory, hlsChunkSource.mediaDataSource, new DataSpec(UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null), dataSpec, hlsUrl2, hlsChunkSource.muxedCaptionFormats, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData(), j7, j7 + segment.durationUs, nextChunkIndex, i, hlsChunkSource.isTimestampMaster, adjuster, hlsMediaChunk, playlistSnapshot2.drmInitData, hlsChunkSource.encryptionKey, hlsChunkSource.encryptionIv);
-                    return;
-                }
-            }
-            if (hlsMediaChunk2 != null) {
-                if (!hlsChunkSource.independentSegments) {
-                    resolveTimeToLiveEdgeUs = hlsMediaChunk2.startTimeUs;
-                    if (!playlistSnapshot2.hasEndTag || resolveTimeToLiveEdgeUs < playlistSnapshot2.getEndTimeUs()) {
-                        list = playlistSnapshot2.segments;
-                        valueOf = Long.valueOf(resolveTimeToLiveEdgeUs - playlistSnapshot2.startTimeUs);
-                        if (!hlsChunkSource.playlistTracker.isLive() || hlsMediaChunk2 == null) {
-                            z = true;
-                        }
-                        nextChunkIndex = Util.binarySearchFloor(list, valueOf, true, z) + playlistSnapshot2.mediaSequence;
-                        if (nextChunkIndex < playlistSnapshot2.mediaSequence && hlsMediaChunk2 != null) {
-                            hlsUrl = hlsChunkSource.variants[i];
-                            playlistSnapshot = hlsChunkSource.playlistTracker.getPlaylistSnapshot(hlsUrl);
-                            nextChunkIndex = hlsMediaChunk.getNextChunkIndex();
-                            playlistSnapshot2 = playlistSnapshot;
-                            selectedIndexInTrackGroup = i;
-                        }
-                        i = selectedIndexInTrackGroup;
-                        hlsUrl2 = hlsUrl;
-                        if (nextChunkIndex >= playlistSnapshot2.mediaSequence) {
-                            selectedIndexInTrackGroup = nextChunkIndex - playlistSnapshot2.mediaSequence;
-                            if (selectedIndexInTrackGroup < playlistSnapshot2.segments.size()) {
-                                segment = (Segment) playlistSnapshot2.segments.get(selectedIndexInTrackGroup);
-                                if (segment.fullSegmentEncryptionKeyUri == null) {
-                                    clearEncryptionData();
-                                } else {
-                                    resolveToUri = UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.fullSegmentEncryptionKeyUri);
-                                    if (resolveToUri.equals(hlsChunkSource.encryptionKeyUri)) {
-                                        hlsChunkHolder2.chunk = newEncryptionKeyChunk(resolveToUri, segment.encryptionIV, i, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData());
-                                        return;
-                                    } else if (Util.areEqual(segment.encryptionIV, hlsChunkSource.encryptionIvString)) {
-                                        setEncryptionData(resolveToUri, segment.encryptionIV, hlsChunkSource.encryptionKey);
-                                    }
-                                }
-                                segment2 = playlistSnapshot2.initializationSegment;
-                                if (segment2 == null) {
-                                }
-                                j7 = playlistSnapshot2.startTimeUs + segment.relativeStartTimeUs;
-                                i = playlistSnapshot2.discontinuitySequence + segment.relativeDiscontinuitySequence;
-                                adjuster = hlsChunkSource.timestampAdjusterProvider.getAdjuster(i);
-                                hlsChunkHolder3 = hlsChunkHolder2;
-                                hlsChunkHolder3.chunk = new HlsMediaChunk(hlsChunkSource.extractorFactory, hlsChunkSource.mediaDataSource, new DataSpec(UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null), dataSpec, hlsUrl2, hlsChunkSource.muxedCaptionFormats, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData(), j7, j7 + segment.durationUs, nextChunkIndex, i, hlsChunkSource.isTimestampMaster, adjuster, hlsMediaChunk, playlistSnapshot2.drmInitData, hlsChunkSource.encryptionKey, hlsChunkSource.encryptionIv);
-                                return;
-                            }
-                            if (playlistSnapshot2.hasEndTag) {
-                                hlsChunkHolder2.playlist = hlsUrl2;
-                                hlsChunkSource.expectedPlaylistUrl = hlsUrl2;
-                            } else {
-                                hlsChunkHolder2.endOfStream = true;
-                            }
-                            return;
-                        }
-                        hlsChunkSource.fatalError = new BehindLiveWindowException();
-                        return;
-                    }
-                    nextChunkIndex = playlistSnapshot2.mediaSequence + playlistSnapshot2.segments.size();
-                    i = selectedIndexInTrackGroup;
-                    hlsUrl2 = hlsUrl;
-                    if (nextChunkIndex >= playlistSnapshot2.mediaSequence) {
-                        hlsChunkSource.fatalError = new BehindLiveWindowException();
-                        return;
-                    }
-                    selectedIndexInTrackGroup = nextChunkIndex - playlistSnapshot2.mediaSequence;
-                    if (selectedIndexInTrackGroup < playlistSnapshot2.segments.size()) {
-                        if (playlistSnapshot2.hasEndTag) {
-                            hlsChunkHolder2.endOfStream = true;
-                        } else {
-                            hlsChunkHolder2.playlist = hlsUrl2;
-                            hlsChunkSource.expectedPlaylistUrl = hlsUrl2;
-                        }
-                        return;
-                    }
-                    segment = (Segment) playlistSnapshot2.segments.get(selectedIndexInTrackGroup);
-                    if (segment.fullSegmentEncryptionKeyUri == null) {
-                        resolveToUri = UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.fullSegmentEncryptionKeyUri);
-                        if (resolveToUri.equals(hlsChunkSource.encryptionKeyUri)) {
-                            hlsChunkHolder2.chunk = newEncryptionKeyChunk(resolveToUri, segment.encryptionIV, i, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData());
-                            return;
-                        } else if (Util.areEqual(segment.encryptionIV, hlsChunkSource.encryptionIvString)) {
-                            setEncryptionData(resolveToUri, segment.encryptionIV, hlsChunkSource.encryptionKey);
-                        }
-                    } else {
-                        clearEncryptionData();
-                    }
-                    segment2 = playlistSnapshot2.initializationSegment;
-                    if (segment2 == null) {
-                    }
-                    j7 = playlistSnapshot2.startTimeUs + segment.relativeStartTimeUs;
-                    i = playlistSnapshot2.discontinuitySequence + segment.relativeDiscontinuitySequence;
-                    adjuster = hlsChunkSource.timestampAdjusterProvider.getAdjuster(i);
-                    hlsChunkHolder3 = hlsChunkHolder2;
-                    hlsChunkHolder3.chunk = new HlsMediaChunk(hlsChunkSource.extractorFactory, hlsChunkSource.mediaDataSource, new DataSpec(UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null), dataSpec, hlsUrl2, hlsChunkSource.muxedCaptionFormats, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData(), j7, j7 + segment.durationUs, nextChunkIndex, i, hlsChunkSource.isTimestampMaster, adjuster, hlsMediaChunk, playlistSnapshot2.drmInitData, hlsChunkSource.encryptionKey, hlsChunkSource.encryptionIv);
-                    return;
-                }
-            }
-            resolveTimeToLiveEdgeUs = j2;
-            if (playlistSnapshot2.hasEndTag) {
-            }
-            list = playlistSnapshot2.segments;
-            valueOf = Long.valueOf(resolveTimeToLiveEdgeUs - playlistSnapshot2.startTimeUs);
-            z = true;
-            nextChunkIndex = Util.binarySearchFloor(list, valueOf, true, z) + playlistSnapshot2.mediaSequence;
-            hlsUrl = hlsChunkSource.variants[i];
-            playlistSnapshot = hlsChunkSource.playlistTracker.getPlaylistSnapshot(hlsUrl);
-            nextChunkIndex = hlsMediaChunk.getNextChunkIndex();
-            playlistSnapshot2 = playlistSnapshot;
-            selectedIndexInTrackGroup = i;
-            i = selectedIndexInTrackGroup;
-            hlsUrl2 = hlsUrl;
-            if (nextChunkIndex >= playlistSnapshot2.mediaSequence) {
-                selectedIndexInTrackGroup = nextChunkIndex - playlistSnapshot2.mediaSequence;
-                if (selectedIndexInTrackGroup < playlistSnapshot2.segments.size()) {
-                    segment = (Segment) playlistSnapshot2.segments.get(selectedIndexInTrackGroup);
-                    if (segment.fullSegmentEncryptionKeyUri == null) {
-                        clearEncryptionData();
-                    } else {
-                        resolveToUri = UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.fullSegmentEncryptionKeyUri);
-                        if (resolveToUri.equals(hlsChunkSource.encryptionKeyUri)) {
-                            hlsChunkHolder2.chunk = newEncryptionKeyChunk(resolveToUri, segment.encryptionIV, i, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData());
-                            return;
-                        } else if (Util.areEqual(segment.encryptionIV, hlsChunkSource.encryptionIvString)) {
-                            setEncryptionData(resolveToUri, segment.encryptionIV, hlsChunkSource.encryptionKey);
-                        }
-                    }
-                    segment2 = playlistSnapshot2.initializationSegment;
-                    if (segment2 == null) {
-                    }
-                    j7 = playlistSnapshot2.startTimeUs + segment.relativeStartTimeUs;
-                    i = playlistSnapshot2.discontinuitySequence + segment.relativeDiscontinuitySequence;
-                    adjuster = hlsChunkSource.timestampAdjusterProvider.getAdjuster(i);
-                    hlsChunkHolder3 = hlsChunkHolder2;
-                    hlsChunkHolder3.chunk = new HlsMediaChunk(hlsChunkSource.extractorFactory, hlsChunkSource.mediaDataSource, new DataSpec(UriUtil.resolveToUri(playlistSnapshot2.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null), dataSpec, hlsUrl2, hlsChunkSource.muxedCaptionFormats, hlsChunkSource.trackSelection.getSelectionReason(), hlsChunkSource.trackSelection.getSelectionData(), j7, j7 + segment.durationUs, nextChunkIndex, i, hlsChunkSource.isTimestampMaster, adjuster, hlsMediaChunk, playlistSnapshot2.drmInitData, hlsChunkSource.encryptionKey, hlsChunkSource.encryptionIv);
-                    return;
-                }
-                if (playlistSnapshot2.hasEndTag) {
-                    hlsChunkHolder2.playlist = hlsUrl2;
-                    hlsChunkSource.expectedPlaylistUrl = hlsUrl2;
                 } else {
-                    hlsChunkHolder2.endOfStream = true;
+                    chunkMediaSequence = mediaPlaylist.mediaSequence + mediaPlaylist.segments.size();
                 }
+            } else {
+                chunkMediaSequence = previous.getNextChunkIndex();
+            }
+            if (chunkMediaSequence < mediaPlaylist.mediaSequence) {
+                this.fatalError = new BehindLiveWindowException();
                 return;
             }
-            hlsChunkSource.fatalError = new BehindLiveWindowException();
-            return;
+            int chunkIndex = chunkMediaSequence - mediaPlaylist.mediaSequence;
+            if (chunkIndex < mediaPlaylist.segments.size()) {
+                Segment segment = (Segment) mediaPlaylist.segments.get(chunkIndex);
+                if (segment.fullSegmentEncryptionKeyUri != null) {
+                    Uri keyUri = UriUtil.resolveToUri(mediaPlaylist.baseUri, segment.fullSegmentEncryptionKeyUri);
+                    if (!keyUri.equals(this.encryptionKeyUri)) {
+                        out.chunk = newEncryptionKeyChunk(keyUri, segment.encryptionIV, selectedVariantIndex, this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData());
+                        return;
+                    } else if (!Util.areEqual(segment.encryptionIV, this.encryptionIvString)) {
+                        setEncryptionData(keyUri, segment.encryptionIV, this.encryptionKey);
+                    }
+                } else {
+                    clearEncryptionData();
+                }
+                DataSpec initDataSpec = null;
+                Segment initSegment = mediaPlaylist.initializationSegment;
+                if (initSegment != null) {
+                    initDataSpec = new DataSpec(UriUtil.resolveToUri(mediaPlaylist.baseUri, initSegment.url), initSegment.byterangeOffset, initSegment.byterangeLength, null);
+                }
+                long startTimeUs = mediaPlaylist.startTimeUs + segment.relativeStartTimeUs;
+                int discontinuitySequence = mediaPlaylist.discontinuitySequence + segment.relativeDiscontinuitySequence;
+                out.chunk = new HlsMediaChunk(this.extractorFactory, this.mediaDataSource, new DataSpec(UriUtil.resolveToUri(mediaPlaylist.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null), initDataSpec, selectedUrl, this.muxedCaptionFormats, this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), startTimeUs, startTimeUs + segment.durationUs, chunkMediaSequence, discontinuitySequence, this.isTimestampMaster, this.timestampAdjusterProvider.getAdjuster(discontinuitySequence), previous, mediaPlaylist.drmInitData, this.encryptionKey, this.encryptionIv);
+                return;
+            } else if (mediaPlaylist.hasEndTag) {
+                out.endOfStream = true;
+                return;
+            } else {
+                out.playlist = selectedUrl;
+                this.expectedPlaylistUrl = selectedUrl;
+                return;
+            }
         }
-        hlsChunkHolder2.playlist = hlsUrl;
-        hlsChunkSource.expectedPlaylistUrl = hlsUrl;
+        out.playlist = selectedUrl;
+        this.expectedPlaylistUrl = selectedUrl;
     }
 
     public void onChunkLoadCompleted(Chunk chunk) {
@@ -412,44 +255,50 @@ class HlsChunkSource {
         }
     }
 
-    public boolean onChunkLoadError(Chunk chunk, boolean z, IOException iOException) {
-        return (!z || ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(this.trackGroup.indexOf(chunk.trackFormat)), iOException) == null) ? null : true;
+    public boolean onChunkLoadError(Chunk chunk, boolean cancelable, IOException error) {
+        return cancelable && ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(this.trackGroup.indexOf(chunk.trackFormat)), error);
     }
 
-    public void onPlaylistBlacklisted(HlsUrl hlsUrl, long j) {
-        int indexOf = this.trackGroup.indexOf(hlsUrl.format);
-        if (indexOf != -1) {
-            hlsUrl = this.trackSelection.indexOf(indexOf);
-            if (hlsUrl != -1) {
-                this.trackSelection.blacklist(hlsUrl, j);
+    public void onPlaylistBlacklisted(HlsUrl url, long blacklistMs) {
+        int trackGroupIndex = this.trackGroup.indexOf(url.format);
+        if (trackGroupIndex != -1) {
+            int trackSelectionIndex = this.trackSelection.indexOf(trackGroupIndex);
+            if (trackSelectionIndex != -1) {
+                this.trackSelection.blacklist(trackSelectionIndex, blacklistMs);
             }
         }
     }
 
-    private long resolveTimeToLiveEdgeUs(long j) {
-        if ((this.liveEdgeTimeUs != C0542C.TIME_UNSET ? 1 : null) != null) {
-            return this.liveEdgeTimeUs - j;
+    private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
+        if (this.liveEdgeTimeUs != C0542C.TIME_UNSET) {
+            return this.liveEdgeTimeUs - playbackPositionUs;
         }
         return C0542C.TIME_UNSET;
     }
 
-    private void updateLiveEdgeTimeUs(HlsMediaPlaylist hlsMediaPlaylist) {
-        this.liveEdgeTimeUs = hlsMediaPlaylist.hasEndTag ? C0542C.TIME_UNSET : hlsMediaPlaylist.getEndTimeUs();
+    private void updateLiveEdgeTimeUs(HlsMediaPlaylist mediaPlaylist) {
+        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0542C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
     }
 
-    private EncryptionKeyChunk newEncryptionKeyChunk(Uri uri, String str, int i, int i2, Object obj) {
-        return new EncryptionKeyChunk(this.encryptionDataSource, new DataSpec(uri, 0, -1, null, 1), this.variants[i].format, i2, obj, this.scratchSpace, str);
+    private EncryptionKeyChunk newEncryptionKeyChunk(Uri keyUri, String iv, int variantIndex, int trackSelectionReason, Object trackSelectionData) {
+        return new EncryptionKeyChunk(this.encryptionDataSource, new DataSpec(keyUri, 0, -1, null, 1), this.variants[variantIndex].format, trackSelectionReason, trackSelectionData, this.scratchSpace, iv);
     }
 
-    private void setEncryptionData(Uri uri, String str, byte[] bArr) {
-        Object toByteArray = new BigInteger(Util.toLowerInvariant(str).startsWith("0x") ? str.substring(2) : str, 16).toByteArray();
-        Object obj = new byte[16];
-        int length = toByteArray.length > 16 ? toByteArray.length - 16 : 0;
-        System.arraycopy(toByteArray, length, obj, (obj.length - toByteArray.length) + length, toByteArray.length - length);
-        this.encryptionKeyUri = uri;
-        this.encryptionKey = bArr;
-        this.encryptionIvString = str;
-        this.encryptionIv = obj;
+    private void setEncryptionData(Uri keyUri, String iv, byte[] secretKey) {
+        String trimmedIv;
+        if (Util.toLowerInvariant(iv).startsWith("0x")) {
+            trimmedIv = iv.substring(2);
+        } else {
+            trimmedIv = iv;
+        }
+        byte[] ivData = new BigInteger(trimmedIv, 16).toByteArray();
+        byte[] ivDataWithPadding = new byte[16];
+        int offset = ivData.length > 16 ? ivData.length - 16 : 0;
+        System.arraycopy(ivData, offset, ivDataWithPadding, (ivDataWithPadding.length - ivData.length) + offset, ivData.length - offset);
+        this.encryptionKeyUri = keyUri;
+        this.encryptionKey = secretKey;
+        this.encryptionIvString = iv;
+        this.encryptionIv = ivDataWithPadding;
     }
 
     private void clearEncryptionData() {

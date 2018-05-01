@@ -1,17 +1,26 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
+import android.util.Log;
 import android.util.SparseArray;
+import java.io.BufferedInputStream;
 import java.io.Closeable;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
@@ -34,39 +43,47 @@ class CachedContentIndex {
     private final HashMap<String, CachedContent> keyToContent;
     private final SecretKeySpec secretKeySpec;
 
-    public CachedContentIndex(File file) {
-        this(file, null);
+    public CachedContentIndex(File cacheDir) {
+        this(cacheDir, null);
     }
 
-    public CachedContentIndex(File file, byte[] bArr) {
-        this(file, bArr, bArr != null);
+    public CachedContentIndex(File cacheDir, byte[] secretKey) {
+        this(cacheDir, secretKey, secretKey != null);
     }
 
-    public CachedContentIndex(File file, byte[] bArr, boolean z) {
-        this.encrypt = z;
-        boolean z2 = true;
-        if (bArr != null) {
-            if (!bArr.length) {
-                z2 = false;
+    public CachedContentIndex(File cacheDir, byte[] secretKey, boolean encrypt) {
+        GeneralSecurityException e;
+        boolean z = true;
+        this.encrypt = encrypt;
+        if (secretKey != null) {
+            if (secretKey.length != 16) {
+                z = false;
             }
-            Assertions.checkArgument(z2);
+            Assertions.checkArgument(z);
             try {
                 this.cipher = getCipher();
-                this.secretKeySpec = new SecretKeySpec(bArr, "AES");
-            } catch (File file2) {
-                throw new IllegalStateException(file2);
+                this.secretKeySpec = new SecretKeySpec(secretKey, "AES");
+            } catch (NoSuchAlgorithmException e2) {
+                e = e2;
+                throw new IllegalStateException(e);
+            } catch (NoSuchPaddingException e3) {
+                e = e3;
+                throw new IllegalStateException(e);
             }
         }
-        Assertions.checkState(z ^ 1);
+        if (encrypt) {
+            z = false;
+        }
+        Assertions.checkState(z);
         this.cipher = null;
         this.secretKeySpec = null;
         this.keyToContent = new HashMap();
         this.idToKey = new SparseArray();
-        this.atomicFile = new AtomicFile(new File(file2, FILE_NAME));
+        this.atomicFile = new AtomicFile(new File(cacheDir, FILE_NAME));
     }
 
     public void load() {
-        Assertions.checkState(this.changed ^ 1);
+        Assertions.checkState(!this.changed);
         if (!readFile()) {
             this.atomicFile.delete();
             this.keyToContent.clear();
@@ -81,41 +98,44 @@ class CachedContentIndex {
         }
     }
 
-    public CachedContent getOrAdd(String str) {
-        CachedContent cachedContent = (CachedContent) this.keyToContent.get(str);
-        return cachedContent == null ? addNew(str, -1) : cachedContent;
+    public CachedContent getOrAdd(String key) {
+        CachedContent cachedContent = (CachedContent) this.keyToContent.get(key);
+        if (cachedContent == null) {
+            return addNew(key, -1);
+        }
+        return cachedContent;
     }
 
-    public CachedContent get(String str) {
-        return (CachedContent) this.keyToContent.get(str);
+    public CachedContent get(String key) {
+        return (CachedContent) this.keyToContent.get(key);
     }
 
     public Collection<CachedContent> getAll() {
         return this.keyToContent.values();
     }
 
-    public int assignIdForKey(String str) {
-        return getOrAdd(str).id;
+    public int assignIdForKey(String key) {
+        return getOrAdd(key).id;
     }
 
-    public String getKeyForId(int i) {
-        return (String) this.idToKey.get(i);
+    public String getKeyForId(int id) {
+        return (String) this.idToKey.get(id);
     }
 
-    public void maybeRemove(String str) {
-        CachedContent cachedContent = (CachedContent) this.keyToContent.get(str);
+    public void maybeRemove(String key) {
+        CachedContent cachedContent = (CachedContent) this.keyToContent.get(key);
         if (cachedContent != null && cachedContent.isEmpty() && !cachedContent.isLocked()) {
-            this.keyToContent.remove(str);
+            this.keyToContent.remove(key);
             this.idToKey.remove(cachedContent.id);
             this.changed = true;
         }
     }
 
     public void removeEmpty() {
-        String[] strArr = new String[this.keyToContent.size()];
-        this.keyToContent.keySet().toArray(strArr);
-        for (String maybeRemove : strArr) {
-            maybeRemove(maybeRemove);
+        String[] keys = new String[this.keyToContent.size()];
+        this.keyToContent.keySet().toArray(keys);
+        for (String key : keys) {
+            maybeRemove(key);
         }
     }
 
@@ -123,223 +143,195 @@ class CachedContentIndex {
         return this.keyToContent.keySet();
     }
 
-    public void setContentLength(String str, long j) {
-        CachedContent cachedContent = get(str);
+    public void setContentLength(String key, long length) {
+        CachedContent cachedContent = get(key);
         if (cachedContent == null) {
-            addNew(str, j);
-        } else if (cachedContent.getLength() != j) {
-            cachedContent.setLength(j);
+            addNew(key, length);
+        } else if (cachedContent.getLength() != length) {
+            cachedContent.setLength(length);
             this.changed = true;
         }
     }
 
-    public long getContentLength(String str) {
-        str = get(str);
-        if (str == null) {
-            return -1;
-        }
-        return str.getLength();
+    public long getContentLength(String key) {
+        CachedContent cachedContent = get(key);
+        return cachedContent == null ? -1 : cachedContent.getLength();
     }
 
     private boolean readFile() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r8 = this;
-        r0 = 0;
-        r1 = 0;
-        r2 = new java.io.BufferedInputStream;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3 = r8.atomicFile;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3 = r3.openRead();	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r2.<init>(r3);	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3 = new java.io.DataInputStream;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3.<init>(r2);	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r1 = r3.readInt();	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r4 = 1;
-        if (r1 == r4) goto L_0x001f;
-    L_0x0019:
-        if (r3 == 0) goto L_0x001e;
-    L_0x001b:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r3);
-    L_0x001e:
-        return r0;
-    L_0x001f:
-        r1 = r3.readInt();	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r1 = r1 & r4;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        if (r1 == 0) goto L_0x0058;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-    L_0x0026:
-        r1 = r8.cipher;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        if (r1 != 0) goto L_0x0030;
-    L_0x002a:
-        if (r3 == 0) goto L_0x002f;
-    L_0x002c:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r3);
-    L_0x002f:
-        return r0;
-    L_0x0030:
-        r1 = 16;
-        r1 = new byte[r1];	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r3.readFully(r1);	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r5 = new javax.crypto.spec.IvParameterSpec;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r5.<init>(r1);	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r1 = r8.cipher;	 Catch:{ InvalidKeyException -> 0x0051, InvalidKeyException -> 0x0051 }
-        r6 = 2;	 Catch:{ InvalidKeyException -> 0x0051, InvalidKeyException -> 0x0051 }
-        r7 = r8.secretKeySpec;	 Catch:{ InvalidKeyException -> 0x0051, InvalidKeyException -> 0x0051 }
-        r1.init(r6, r7, r5);	 Catch:{ InvalidKeyException -> 0x0051, InvalidKeyException -> 0x0051 }
-        r1 = new java.io.DataInputStream;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r5 = new javax.crypto.CipherInputStream;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r6 = r8.cipher;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r5.<init>(r2, r6);	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r1.<init>(r5);	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        goto L_0x005f;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-    L_0x0051:
-        r1 = move-exception;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r2 = new java.lang.IllegalStateException;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        r2.<init>(r1);	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        throw r2;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-    L_0x0058:
-        r1 = r8.encrypt;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-        if (r1 == 0) goto L_0x005e;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-    L_0x005c:
-        r8.changed = r4;	 Catch:{ FileNotFoundException -> 0x00a6, IOException -> 0x0089 }
-    L_0x005e:
-        r1 = r3;
-    L_0x005f:
-        r2 = r1.readInt();	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3 = r0;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r5 = r3;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-    L_0x0065:
-        if (r3 >= r2) goto L_0x0077;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-    L_0x0067:
-        r6 = new org.telegram.messenger.exoplayer2.upstream.cache.CachedContent;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r6.<init>(r1);	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r8.add(r6);	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r6 = r6.headerHashCode();	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r5 = r5 + r6;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        r3 = r3 + 1;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        goto L_0x0065;	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-    L_0x0077:
-        r2 = r1.readInt();	 Catch:{ FileNotFoundException -> 0x00a5, IOException -> 0x008e, all -> 0x008b }
-        if (r2 == r5) goto L_0x0083;
-    L_0x007d:
-        if (r1 == 0) goto L_0x0082;
-    L_0x007f:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r1);
-    L_0x0082:
-        return r0;
-    L_0x0083:
-        if (r1 == 0) goto L_0x0088;
-    L_0x0085:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r1);
-    L_0x0088:
-        return r4;
-    L_0x0089:
-        r1 = move-exception;
-        goto L_0x0091;
-    L_0x008b:
-        r0 = move-exception;
-        r3 = r1;
-        goto L_0x009f;
-    L_0x008e:
-        r2 = move-exception;
-        r3 = r1;
-        r1 = r2;
-    L_0x0091:
-        r2 = "CachedContentIndex";	 Catch:{ all -> 0x009e }
-        r4 = "Error reading cache content index file.";	 Catch:{ all -> 0x009e }
-        android.util.Log.e(r2, r4, r1);	 Catch:{ all -> 0x009e }
-        if (r3 == 0) goto L_0x009d;
-    L_0x009a:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r3);
-    L_0x009d:
-        return r0;
-    L_0x009e:
-        r0 = move-exception;
-    L_0x009f:
-        if (r3 == 0) goto L_0x00a4;
-    L_0x00a1:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r3);
-    L_0x00a4:
-        throw r0;
-    L_0x00a5:
-        r3 = r1;
-    L_0x00a6:
-        if (r3 == 0) goto L_0x00ab;
-    L_0x00a8:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r3);
-    L_0x00ab:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CachedContentIndex.readFile():boolean");
+        GeneralSecurityException e;
+        IOException e2;
+        Throwable th;
+        Closeable closeable = null;
+        try {
+            InputStream inputStream = new BufferedInputStream(this.atomicFile.openRead());
+            Closeable input = new DataInputStream(inputStream);
+            try {
+                if (input.readInt() != 1) {
+                    if (input != null) {
+                        Util.closeQuietly(input);
+                    }
+                    closeable = input;
+                    return false;
+                }
+                if ((input.readInt() & 1) == 0) {
+                    if (this.encrypt) {
+                        this.changed = true;
+                    }
+                    closeable = input;
+                } else if (this.cipher == null) {
+                    if (input != null) {
+                        Util.closeQuietly(input);
+                    }
+                    closeable = input;
+                    return false;
+                } else {
+                    byte[] initializationVector = new byte[16];
+                    input.readFully(initializationVector);
+                    try {
+                        this.cipher.init(2, this.secretKeySpec, new IvParameterSpec(initializationVector));
+                        closeable = new DataInputStream(new CipherInputStream(inputStream, this.cipher));
+                    } catch (GeneralSecurityException e3) {
+                        e = e3;
+                        throw new IllegalStateException(e);
+                    } catch (GeneralSecurityException e32) {
+                        e = e32;
+                        throw new IllegalStateException(e);
+                    }
+                }
+                int count = closeable.readInt();
+                int hashCode = 0;
+                for (int i = 0; i < count; i++) {
+                    CachedContent cachedContent = new CachedContent(closeable);
+                    add(cachedContent);
+                    hashCode += cachedContent.headerHashCode();
+                }
+                if (closeable.readInt() == hashCode) {
+                    if (closeable != null) {
+                        Util.closeQuietly(closeable);
+                    }
+                    return true;
+                } else if (closeable == null) {
+                    return false;
+                } else {
+                    Util.closeQuietly(closeable);
+                    return false;
+                }
+            } catch (FileNotFoundException e4) {
+                closeable = input;
+                if (closeable != null) {
+                    return false;
+                }
+                Util.closeQuietly(closeable);
+                return false;
+            } catch (IOException e5) {
+                e2 = e5;
+                closeable = input;
+                try {
+                    Log.e(TAG, "Error reading cache content index file.", e2);
+                    if (closeable != null) {
+                        return false;
+                    }
+                    Util.closeQuietly(closeable);
+                    return false;
+                } catch (Throwable th2) {
+                    th = th2;
+                    if (closeable != null) {
+                        Util.closeQuietly(closeable);
+                    }
+                    throw th;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                closeable = input;
+                if (closeable != null) {
+                    Util.closeQuietly(closeable);
+                }
+                throw th;
+            }
+        } catch (FileNotFoundException e6) {
+            if (closeable != null) {
+                return false;
+            }
+            Util.closeQuietly(closeable);
+            return false;
+        } catch (IOException e7) {
+            e2 = e7;
+            Log.e(TAG, "Error reading cache content index file.", e2);
+            if (closeable != null) {
+                return false;
+            }
+            Util.closeQuietly(closeable);
+            return false;
+        }
     }
 
     private void writeFile() throws CacheException {
-        Throwable e;
+        GeneralSecurityException e;
+        Throwable e2;
         Throwable th;
-        Closeable dataOutputStream;
+        int flags = 1;
+        Closeable closeable = null;
         try {
-            OutputStream startWrite = this.atomicFile.startWrite();
+            OutputStream outputStream = this.atomicFile.startWrite();
             if (this.bufferedOutputStream == null) {
-                this.bufferedOutputStream = new ReusableBufferedOutputStream(startWrite);
+                this.bufferedOutputStream = new ReusableBufferedOutputStream(outputStream);
             } else {
-                this.bufferedOutputStream.reset(startWrite);
+                this.bufferedOutputStream.reset(outputStream);
             }
-            dataOutputStream = new DataOutputStream(this.bufferedOutputStream);
+            DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
+            Object output2;
             try {
-                dataOutputStream.writeInt(1);
-                dataOutputStream.writeInt(this.encrypt);
+                output.writeInt(1);
+                if (!this.encrypt) {
+                    flags = 0;
+                }
+                output.writeInt(flags);
                 if (this.encrypt) {
-                    byte[] bArr = new byte[16];
-                    new Random().nextBytes(bArr);
-                    dataOutputStream.write(bArr);
-                    this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(bArr));
-                    dataOutputStream.flush();
-                    startWrite = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
+                    byte[] initializationVector = new byte[16];
+                    new Random().nextBytes(initializationVector);
+                    output.write(initializationVector);
+                    try {
+                        this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(initializationVector));
+                        output.flush();
+                        closeable = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
+                    } catch (GeneralSecurityException e3) {
+                        e = e3;
+                        throw new IllegalStateException(e);
+                    } catch (GeneralSecurityException e32) {
+                        e = e32;
+                        throw new IllegalStateException(e);
+                    }
                 }
-                startWrite.writeInt(this.keyToContent.size());
-                int i = 0;
+                output2 = output;
+                closeable.writeInt(this.keyToContent.size());
+                int hashCode = 0;
                 for (CachedContent cachedContent : this.keyToContent.values()) {
-                    cachedContent.writeToStream(startWrite);
-                    i += cachedContent.headerHashCode();
+                    cachedContent.writeToStream(closeable);
+                    hashCode += cachedContent.headerHashCode();
                 }
-                startWrite.writeInt(i);
-                this.atomicFile.endWrite(startWrite);
-                Util.closeQuietly(null);
-            } catch (Throwable e2) {
-                throw new IllegalStateException(e2);
-            } catch (IOException e3) {
-                e2 = e3;
+                closeable.writeInt(hashCode);
+                this.atomicFile.endWrite(closeable);
+                Util.closeQuietly((Closeable) null);
+            } catch (IOException e4) {
+                e2 = e4;
+                output2 = output;
                 try {
                     throw new CacheException(e2);
                 } catch (Throwable th2) {
-                    e2 = th2;
-                    Util.closeQuietly(dataOutputStream);
-                    throw e2;
+                    th = th2;
+                    Util.closeQuietly(closeable);
+                    throw th;
                 }
+            } catch (Throwable th3) {
+                th = th3;
+                output2 = output;
+                Util.closeQuietly(closeable);
+                throw th;
             }
-        } catch (Throwable e4) {
-            th = e4;
-            dataOutputStream = null;
-            e2 = th;
+        } catch (IOException e5) {
+            e2 = e5;
             throw new CacheException(e2);
-        } catch (Throwable e42) {
-            th = e42;
-            dataOutputStream = null;
-            e2 = th;
-            Util.closeQuietly(dataOutputStream);
-            throw e2;
         }
     }
 
@@ -353,61 +345,31 @@ Error: java.lang.NullPointerException
         this.changed = true;
     }
 
-    private CachedContent addNew(String str, long j) {
-        CachedContent cachedContent = new CachedContent(getNewId(this.idToKey), str, j);
+    private CachedContent addNew(String key, long length) {
+        CachedContent cachedContent = new CachedContent(getNewId(this.idToKey), key, length);
         addNew(cachedContent);
         return cachedContent;
     }
 
-    private static javax.crypto.Cipher getCipher() throws javax.crypto.NoSuchPaddingException, java.security.NoSuchAlgorithmException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r0 = org.telegram.messenger.exoplayer2.util.Util.SDK_INT;
-        r1 = 18;
-        if (r0 != r1) goto L_0x000f;
-    L_0x0006:
-        r0 = "AES/CBC/PKCS5PADDING";	 Catch:{ Throwable -> 0x000f }
-        r1 = "BC";	 Catch:{ Throwable -> 0x000f }
-        r0 = javax.crypto.Cipher.getInstance(r0, r1);	 Catch:{ Throwable -> 0x000f }
-        return r0;
-    L_0x000f:
-        r0 = "AES/CBC/PKCS5PADDING";
-        r0 = javax.crypto.Cipher.getInstance(r0);
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CachedContentIndex.getCipher():javax.crypto.Cipher");
-    }
-
-    public static int getNewId(SparseArray<String> sparseArray) {
-        int i;
-        int size = sparseArray.size();
-        if (size == 0) {
-            i = 0;
-        } else {
-            i = sparseArray.keyAt(size - 1) + 1;
-        }
-        if (i < 0) {
-            i = 0;
-            while (i < size) {
-                if (i != sparseArray.keyAt(i)) {
-                    break;
-                }
-                i++;
+    private static Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        if (Util.SDK_INT == 18) {
+            try {
+                return Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
+            } catch (Throwable th) {
             }
         }
-        return i;
+        return Cipher.getInstance("AES/CBC/PKCS5PADDING");
+    }
+
+    public static int getNewId(SparseArray<String> idToKey) {
+        int size = idToKey.size();
+        int id = size == 0 ? 0 : idToKey.keyAt(size - 1) + 1;
+        if (id < 0) {
+            id = 0;
+            while (id < size && id == idToKey.keyAt(id)) {
+                id++;
+            }
+        }
+        return id;
     }
 }

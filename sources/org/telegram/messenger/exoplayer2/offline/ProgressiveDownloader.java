@@ -19,23 +19,23 @@ public final class ProgressiveDownloader implements Downloader {
     private final DataSpec dataSpec;
     private final PriorityTaskManager priorityTaskManager;
 
-    public ProgressiveDownloader(String str, String str2, DownloaderConstructorHelper downloaderConstructorHelper) {
-        this.dataSpec = new DataSpec(Uri.parse(str), 0, -1, str2, 0);
-        this.cache = downloaderConstructorHelper.getCache();
-        this.dataSource = downloaderConstructorHelper.buildCacheDataSource(null);
-        this.priorityTaskManager = downloaderConstructorHelper.getPriorityTaskManager();
+    public ProgressiveDownloader(String uri, String customCacheKey, DownloaderConstructorHelper constructorHelper) {
+        this.dataSpec = new DataSpec(Uri.parse(uri), 0, -1, customCacheKey, 0);
+        this.cache = constructorHelper.getCache();
+        this.dataSource = constructorHelper.buildCacheDataSource(false);
+        this.priorityTaskManager = constructorHelper.getPriorityTaskManager();
     }
 
     public void init() {
         CacheUtil.getCached(this.dataSpec, this.cache, this.cachingCounters);
     }
 
-    public void download(ProgressListener progressListener) throws InterruptedException, IOException {
+    public void download(ProgressListener listener) throws InterruptedException, IOException {
         this.priorityTaskManager.add(C0542C.PRIORITY_DOWNLOAD);
         try {
             CacheUtil.cache(this.dataSpec, this.cache, this.dataSource, new byte[131072], this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, this.cachingCounters, true);
-            if (progressListener != null) {
-                progressListener.onDownloadProgress(this, 100.0f, this.cachingCounters.contentLength);
+            if (listener != null) {
+                listener.onDownloadProgress(this, 100.0f, this.cachingCounters.contentLength);
             }
             this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
         } catch (Throwable th) {
@@ -52,10 +52,10 @@ public final class ProgressiveDownloader implements Downloader {
     }
 
     public float getDownloadPercentage() {
-        long j = this.cachingCounters.contentLength;
-        if (j == -1) {
+        long contentLength = this.cachingCounters.contentLength;
+        if (contentLength == -1) {
             return Float.NaN;
         }
-        return (((float) this.cachingCounters.totalCachedBytes()) * 100.0f) / ((float) j);
+        return (((float) this.cachingCounters.totalCachedBytes()) * 100.0f) / ((float) contentLength);
     }
 }

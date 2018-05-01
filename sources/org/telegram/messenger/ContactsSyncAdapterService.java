@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 public class ContactsSyncAdapterService extends Service {
-    private static SyncAdapterImpl sSyncAdapter;
+    private static SyncAdapterImpl sSyncAdapter = null;
 
     private static class SyncAdapterImpl extends AbstractThreadedSyncAdapter {
         private Context mContext;
@@ -22,9 +22,9 @@ public class ContactsSyncAdapterService extends Service {
             this.mContext = context;
         }
 
-        public void onPerformSync(Account account, Bundle bundle, String str, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+        public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             try {
-                ContactsSyncAdapterService.performSync(this.mContext, account, bundle, str, contentProviderClient, syncResult);
+                ContactsSyncAdapterService.performSync(this.mContext, account, extras, authority, provider, syncResult);
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
@@ -42,12 +42,9 @@ public class ContactsSyncAdapterService extends Service {
         return sSyncAdapter;
     }
 
-    private static void performSync(Context context, Account account, Bundle bundle, String str, ContentProviderClient contentProviderClient, SyncResult syncResult) throws OperationCanceledException {
-        if (BuildVars.LOGS_ENABLED != null) {
-            context = new StringBuilder();
-            context.append("performSync: ");
-            context.append(account.toString());
-            FileLog.m0d(context.toString());
+    private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) throws OperationCanceledException {
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m0d("performSync: " + account.toString());
         }
     }
 }

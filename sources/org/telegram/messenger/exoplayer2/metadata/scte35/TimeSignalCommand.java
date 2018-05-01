@@ -16,32 +16,35 @@ public final class TimeSignalCommand extends SpliceCommand {
         C05921() {
         }
 
-        public TimeSignalCommand createFromParcel(Parcel parcel) {
-            return new TimeSignalCommand(parcel.readLong(), parcel.readLong());
+        public TimeSignalCommand createFromParcel(Parcel in) {
+            return new TimeSignalCommand(in.readLong(), in.readLong());
         }
 
-        public TimeSignalCommand[] newArray(int i) {
-            return new TimeSignalCommand[i];
+        public TimeSignalCommand[] newArray(int size) {
+            return new TimeSignalCommand[size];
         }
     }
 
-    private TimeSignalCommand(long j, long j2) {
-        this.ptsTime = j;
-        this.playbackPositionUs = j2;
+    private TimeSignalCommand(long ptsTime, long playbackPositionUs) {
+        this.ptsTime = ptsTime;
+        this.playbackPositionUs = playbackPositionUs;
     }
 
-    static TimeSignalCommand parseFromSection(ParsableByteArray parsableByteArray, long j, TimestampAdjuster timestampAdjuster) {
-        parsableByteArray = parseSpliceTime(parsableByteArray, j);
-        return new TimeSignalCommand(parsableByteArray, timestampAdjuster.adjustTsTimestamp(parsableByteArray));
+    static TimeSignalCommand parseFromSection(ParsableByteArray sectionData, long ptsAdjustment, TimestampAdjuster timestampAdjuster) {
+        long ptsTime = parseSpliceTime(sectionData, ptsAdjustment);
+        return new TimeSignalCommand(ptsTime, timestampAdjuster.adjustTsTimestamp(ptsTime));
     }
 
-    static long parseSpliceTime(ParsableByteArray parsableByteArray, long j) {
-        long readUnsignedByte = (long) parsableByteArray.readUnsignedByte();
-        return (readUnsignedByte & 128) != 0 ? ((((readUnsignedByte & 1) << 32) | parsableByteArray.readUnsignedInt()) + j) & -1 : C0542C.TIME_UNSET;
+    static long parseSpliceTime(ParsableByteArray sectionData, long ptsAdjustment) {
+        long firstByte = (long) sectionData.readUnsignedByte();
+        if ((128 & firstByte) != 0) {
+            return ((((1 & firstByte) << 32) | sectionData.readUnsignedInt()) + ptsAdjustment) & 8589934591L;
+        }
+        return C0542C.TIME_UNSET;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(this.ptsTime);
-        parcel.writeLong(this.playbackPositionUs);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.ptsTime);
+        dest.writeLong(this.playbackPositionUs);
     }
 }

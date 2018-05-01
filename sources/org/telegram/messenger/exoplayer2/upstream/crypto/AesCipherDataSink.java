@@ -10,14 +10,14 @@ public final class AesCipherDataSink implements DataSink {
     private final byte[] secretKey;
     private final DataSink wrappedDataSink;
 
-    public AesCipherDataSink(byte[] bArr, DataSink dataSink) {
-        this(bArr, dataSink, null);
+    public AesCipherDataSink(byte[] secretKey, DataSink wrappedDataSink) {
+        this(secretKey, wrappedDataSink, null);
     }
 
-    public AesCipherDataSink(byte[] bArr, DataSink dataSink, byte[] bArr2) {
-        this.wrappedDataSink = dataSink;
-        this.secretKey = bArr;
-        this.scratch = bArr2;
+    public AesCipherDataSink(byte[] secretKey, DataSink wrappedDataSink, byte[] scratch) {
+        this.wrappedDataSink = wrappedDataSink;
+        this.secretKey = secretKey;
+        this.scratch = scratch;
     }
 
     public void open(DataSpec dataSpec) throws IOException {
@@ -25,18 +25,18 @@ public final class AesCipherDataSink implements DataSink {
         this.cipher = new AesFlushingCipher(1, this.secretKey, CryptoUtil.getFNV64Hash(dataSpec.key), dataSpec.absoluteStreamPosition);
     }
 
-    public void write(byte[] bArr, int i, int i2) throws IOException {
+    public void write(byte[] data, int offset, int length) throws IOException {
         if (this.scratch == null) {
-            this.cipher.updateInPlace(bArr, i, i2);
-            this.wrappedDataSink.write(bArr, i, i2);
+            this.cipher.updateInPlace(data, offset, length);
+            this.wrappedDataSink.write(data, offset, length);
             return;
         }
-        int i3 = 0;
-        while (i3 < i2) {
-            int min = Math.min(i2 - i3, this.scratch.length);
-            this.cipher.update(bArr, i + i3, min, this.scratch, 0);
-            this.wrappedDataSink.write(this.scratch, 0, min);
-            i3 += min;
+        int bytesProcessed = 0;
+        while (bytesProcessed < length) {
+            int bytesToProcess = Math.min(length - bytesProcessed, this.scratch.length);
+            this.cipher.update(data, offset + bytesProcessed, bytesToProcess, this.scratch, 0);
+            this.wrappedDataSink.write(this.scratch, 0, bytesToProcess);
+            bytesProcessed += bytesToProcess;
         }
     }
 

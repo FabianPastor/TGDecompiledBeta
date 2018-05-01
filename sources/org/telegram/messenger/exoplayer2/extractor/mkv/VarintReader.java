@@ -16,49 +16,49 @@ final class VarintReader {
         this.length = 0;
     }
 
-    public long readUnsignedVarint(ExtractorInput extractorInput, boolean z, boolean z2, int i) throws IOException, InterruptedException {
+    public long readUnsignedVarint(ExtractorInput input, boolean allowEndOfInput, boolean removeLengthMask, int maximumAllowedLength) throws IOException, InterruptedException {
         if (this.state == 0) {
-            if (!extractorInput.readFully(this.scratch, 0, 1, z)) {
+            if (!input.readFully(this.scratch, 0, 1, allowEndOfInput)) {
                 return -1;
             }
             this.length = parseUnsignedVarintLength(this.scratch[0] & 255);
-            if (this.length) {
+            if (this.length == -1) {
                 throw new IllegalStateException("No valid varint length mask found");
             }
             this.state = 1;
         }
-        if (this.length > i) {
+        if (this.length > maximumAllowedLength) {
             this.state = 0;
             return -2;
         }
-        if (!this.length) {
-            extractorInput.readFully(this.scratch, 1, this.length - 1);
+        if (this.length != 1) {
+            input.readFully(this.scratch, 1, this.length - 1);
         }
         this.state = 0;
-        return assembleVarint(this.scratch, this.length, z2);
+        return assembleVarint(this.scratch, this.length, removeLengthMask);
     }
 
     public int getLastLength() {
         return this.length;
     }
 
-    public static int parseUnsignedVarintLength(int i) {
-        for (int i2 = 0; i2 < VARINT_LENGTH_MASKS.length; i2++) {
-            if ((VARINT_LENGTH_MASKS[i2] & ((long) i)) != 0) {
-                return i2 + 1;
+    public static int parseUnsignedVarintLength(int firstByte) {
+        for (int i = 0; i < VARINT_LENGTH_MASKS.length; i++) {
+            if ((VARINT_LENGTH_MASKS[i] & ((long) firstByte)) != 0) {
+                return i + 1;
             }
         }
         return -1;
     }
 
-    public static long assembleVarint(byte[] bArr, int i, boolean z) {
-        long j = ((long) bArr[0]) & 255;
-        long j2 = z ? j & (VARINT_LENGTH_MASKS[i - 1] ^ -1) : j;
-        z = true;
-        while (z < i) {
-            z++;
-            j2 = (j2 << 8) | (((long) bArr[z]) & 255);
+    public static long assembleVarint(byte[] varintBytes, int varintLength, boolean removeLengthMask) {
+        long varint = ((long) varintBytes[0]) & 255;
+        if (removeLengthMask) {
+            varint &= VARINT_LENGTH_MASKS[varintLength - 1] ^ -1;
         }
-        return j2;
+        for (int i = 1; i < varintLength; i++) {
+            varint = (varint << 8) | (((long) varintBytes[i]) & 255);
+        }
+        return varint;
     }
 }

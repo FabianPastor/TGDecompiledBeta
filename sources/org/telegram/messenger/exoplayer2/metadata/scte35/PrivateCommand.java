@@ -15,39 +15,39 @@ public final class PrivateCommand extends SpliceCommand {
         C05881() {
         }
 
-        public PrivateCommand createFromParcel(Parcel parcel) {
-            return new PrivateCommand(parcel);
+        public PrivateCommand createFromParcel(Parcel in) {
+            return new PrivateCommand(in);
         }
 
-        public PrivateCommand[] newArray(int i) {
-            return new PrivateCommand[i];
+        public PrivateCommand[] newArray(int size) {
+            return new PrivateCommand[size];
         }
     }
 
-    private PrivateCommand(long j, byte[] bArr, long j2) {
-        this.ptsAdjustment = j2;
-        this.identifier = j;
-        this.commandBytes = bArr;
+    private PrivateCommand(long identifier, byte[] commandBytes, long ptsAdjustment) {
+        this.ptsAdjustment = ptsAdjustment;
+        this.identifier = identifier;
+        this.commandBytes = commandBytes;
     }
 
-    private PrivateCommand(Parcel parcel) {
-        this.ptsAdjustment = parcel.readLong();
-        this.identifier = parcel.readLong();
-        this.commandBytes = new byte[parcel.readInt()];
-        parcel.readByteArray(this.commandBytes);
+    private PrivateCommand(Parcel in) {
+        this.ptsAdjustment = in.readLong();
+        this.identifier = in.readLong();
+        this.commandBytes = new byte[in.readInt()];
+        in.readByteArray(this.commandBytes);
     }
 
-    static PrivateCommand parseFromSection(ParsableByteArray parsableByteArray, int i, long j) {
-        long readUnsignedInt = parsableByteArray.readUnsignedInt();
-        byte[] bArr = new byte[(i - 4)];
-        parsableByteArray.readBytes(bArr, 0, bArr.length);
-        return new PrivateCommand(readUnsignedInt, bArr, j);
+    static PrivateCommand parseFromSection(ParsableByteArray sectionData, int commandLength, long ptsAdjustment) {
+        long identifier = sectionData.readUnsignedInt();
+        byte[] privateBytes = new byte[(commandLength - 4)];
+        sectionData.readBytes(privateBytes, 0, privateBytes.length);
+        return new PrivateCommand(identifier, privateBytes, ptsAdjustment);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(this.ptsAdjustment);
-        parcel.writeLong(this.identifier);
-        parcel.writeInt(this.commandBytes.length);
-        parcel.writeByteArray(this.commandBytes);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.ptsAdjustment);
+        dest.writeLong(this.identifier);
+        dest.writeInt(this.commandBytes.length);
+        dest.writeByteArray(this.commandBytes);
     }
 }

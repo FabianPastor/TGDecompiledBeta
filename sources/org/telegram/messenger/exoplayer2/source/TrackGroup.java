@@ -9,14 +9,14 @@ public final class TrackGroup {
     private int hashCode;
     public final int length;
 
-    public TrackGroup(Format... formatArr) {
-        Assertions.checkState(formatArr.length > 0);
-        this.formats = formatArr;
-        this.length = formatArr.length;
+    public TrackGroup(Format... formats) {
+        Assertions.checkState(formats.length > 0);
+        this.formats = formats;
+        this.length = formats.length;
     }
 
-    public Format getFormat(int i) {
-        return this.formats[i];
+    public Format getFormat(int index) {
+        return this.formats[index];
     }
 
     public int indexOf(Format format) {
@@ -30,24 +30,21 @@ public final class TrackGroup {
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = 527 + Arrays.hashCode(this.formats);
+            this.hashCode = Arrays.hashCode(this.formats) + 527;
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                TrackGroup trackGroup = (TrackGroup) obj;
-                if (this.length != trackGroup.length || Arrays.equals(this.formats, trackGroup.formats) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TrackGroup other = (TrackGroup) obj;
+        if (this.length == other.length && Arrays.equals(this.formats, other.formats)) {
+            return true;
         }
         return false;
     }

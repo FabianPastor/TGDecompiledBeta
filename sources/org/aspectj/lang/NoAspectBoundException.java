@@ -3,17 +3,12 @@ package org.aspectj.lang;
 public class NoAspectBoundException extends RuntimeException {
     Throwable cause;
 
-    public NoAspectBoundException(String str, Throwable th) {
-        if (th != null) {
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append("Exception while initializing ");
-            stringBuffer.append(str);
-            stringBuffer.append(": ");
-            stringBuffer.append(th);
-            str = stringBuffer.toString();
+    public NoAspectBoundException(String aspectName, Throwable inner) {
+        if (inner != null) {
+            aspectName = new StringBuffer().append("Exception while initializing ").append(aspectName).append(": ").append(inner).toString();
         }
-        super(str);
-        this.cause = th;
+        super(aspectName);
+        this.cause = inner;
     }
 
     public Throwable getCause() {

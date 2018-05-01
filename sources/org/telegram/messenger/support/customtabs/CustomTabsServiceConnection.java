@@ -8,8 +8,8 @@ import org.telegram.messenger.support.customtabs.ICustomTabsService.Stub;
 public abstract class CustomTabsServiceConnection implements ServiceConnection {
     public abstract void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient);
 
-    public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        onCustomTabsServiceConnected(componentName, new CustomTabsClient(Stub.asInterface(iBinder), componentName) {
+    public final void onServiceConnected(ComponentName name, IBinder service) {
+        onCustomTabsServiceConnected(name, new CustomTabsClient(Stub.asInterface(service), name) {
         });
     }
 }

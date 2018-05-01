@@ -25,7 +25,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
@@ -33,6 +32,8 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_messages_reorderStickerSets;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
@@ -76,8 +77,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         C22921() {
         }
 
-        public void onItemClick(int i) {
-            if (i == -1) {
+        public void onItemClick(int id) {
+            if (id == -1) {
                 StickersActivity.this.finishFragment();
             }
         }
@@ -91,8 +92,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             C17091() {
             }
 
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedConfig.setSuggestStickers(i);
+            public void onClick(DialogInterface dialog, int which) {
+                SharedConfig.setSuggestStickers(which);
                 StickersActivity.this.listAdapter.notifyItemChanged(StickersActivity.this.suggestRow);
             }
         }
@@ -100,80 +101,37 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         C22932() {
         }
 
-        public void onItemClick(View view, int i) {
-            if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow && StickersActivity.this.getParentActivity() != null) {
+        public void onItemClick(View view, int position) {
+            if (position >= StickersActivity.this.stickersStartRow && position < StickersActivity.this.stickersEndRow && StickersActivity.this.getParentActivity() != null) {
                 StickersActivity.this.sendReorder();
-                TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow);
-                view = tL_messages_stickerSet.documents;
-                if (view != null) {
-                    if (view.isEmpty() == null) {
-                        StickersActivity.this.showDialog(new StickersAlert(StickersActivity.this.getParentActivity(), StickersActivity.this, null, tL_messages_stickerSet, null));
-                    }
+                TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(position - StickersActivity.this.stickersStartRow);
+                ArrayList<Document> stickers = stickerSet.documents;
+                if (stickers != null && !stickers.isEmpty()) {
+                    StickersActivity.this.showDialog(new StickersAlert(StickersActivity.this.getParentActivity(), StickersActivity.this, null, stickerSet, null));
                 }
-            } else if (i == StickersActivity.this.featuredRow) {
+            } else if (position == StickersActivity.this.featuredRow) {
                 StickersActivity.this.sendReorder();
                 StickersActivity.this.presentFragment(new FeaturedStickersActivity());
-            } else if (i == StickersActivity.this.archivedRow) {
+            } else if (position == StickersActivity.this.archivedRow) {
                 StickersActivity.this.sendReorder();
                 StickersActivity.this.presentFragment(new ArchivedStickersActivity(StickersActivity.this.currentType));
-            } else if (i == StickersActivity.this.masksRow) {
+            } else if (position == StickersActivity.this.masksRow) {
                 StickersActivity.this.presentFragment(new StickersActivity(1));
-            } else if (i == StickersActivity.this.suggestRow) {
-                view = new Builder(StickersActivity.this.getParentActivity());
-                view.setTitle(LocaleController.getString("SuggestStickers", C0446R.string.SuggestStickers));
-                view.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", C0446R.string.SuggestStickersAll), LocaleController.getString("SuggestStickersInstalled", C0446R.string.SuggestStickersInstalled), LocaleController.getString("SuggestStickersNone", C0446R.string.SuggestStickersNone)}, new C17091());
-                StickersActivity.this.showDialog(view.create());
+            } else if (position == StickersActivity.this.suggestRow) {
+                Builder builder = new Builder(StickersActivity.this.getParentActivity());
+                builder.setTitle(LocaleController.getString("SuggestStickers", C0446R.string.SuggestStickers));
+                builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", C0446R.string.SuggestStickersAll), LocaleController.getString("SuggestStickersInstalled", C0446R.string.SuggestStickersInstalled), LocaleController.getString("SuggestStickersNone", C0446R.string.SuggestStickersNone)}, new C17091());
+                StickersActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.StickersActivity$3 */
     class C22943 implements RequestDelegate {
-        public void run(TLObject tLObject, TL_error tL_error) {
-        }
-
         C22943() {
         }
-    }
 
-    public class TouchHelperCallback extends Callback {
-        public boolean isLongPressDragEnabled() {
-            return true;
-        }
-
-        public void onSwiped(ViewHolder viewHolder, int i) {
-        }
-
-        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() != null) {
-                return Callback.makeMovementFlags(0, 0);
-            }
-            return Callback.makeMovementFlags(3, 0);
-        }
-
-        public boolean onMove(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder viewHolder2) {
-            if (viewHolder.getItemViewType() != viewHolder2.getItemViewType()) {
-                return null;
-            }
-            StickersActivity.this.listAdapter.swapElements(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
-            return true;
-        }
-
-        public void onChildDraw(Canvas canvas, RecyclerView recyclerView, ViewHolder viewHolder, float f, float f2, int i, boolean z) {
-            super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, z);
-        }
-
-        public void onSelectedChanged(ViewHolder viewHolder, int i) {
-            if (i != 0) {
-                StickersActivity.this.listView.cancelClickRunnables(false);
-                viewHolder.itemView.setPressed(true);
-            }
-            super.onSelectedChanged(viewHolder, i);
-        }
-
-        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setPressed(null);
+        public void run(TLObject response, TL_error error) {
         }
     }
 
@@ -185,38 +143,33 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             C17112() {
             }
 
-            public void onClick(View view) {
-                int[] iArr;
-                CharSequence[] charSequenceArr;
-                CharSequence[] charSequenceArr2;
+            public void onClick(View v) {
+                int[] options;
+                CharSequence[] items;
                 StickersActivity.this.sendReorder();
-                view = ((StickerSetCell) view.getParent()).getStickersSet();
+                final TL_messages_stickerSet stickerSet = ((StickerSetCell) v.getParent()).getStickersSet();
                 Builder builder = new Builder(StickersActivity.this.getParentActivity());
-                builder.setTitle(view.set.title);
+                builder.setTitle(stickerSet.set.title);
                 if (StickersActivity.this.currentType == 0) {
-                    if (view.set.official) {
-                        iArr = new int[]{0};
-                        charSequenceArr = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide)};
-                        builder.setItems(charSequenceArr, new OnClickListener() {
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ListAdapter.this.processSelectionOption(iArr[i], view);
-                            }
-                        });
-                        StickersActivity.this.showDialog(builder.create());
+                    if (stickerSet.set.official) {
+                        options = new int[]{0};
+                        items = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide)};
+                    } else {
+                        options = new int[]{0, 1, 2, 3};
+                        items = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide), LocaleController.getString("StickersRemove", C0446R.string.StickersRemove), LocaleController.getString("StickersShare", C0446R.string.StickersShare), LocaleController.getString("StickersCopy", C0446R.string.StickersCopy)};
                     }
-                    iArr = new int[]{0, 1, 2, 3};
-                    charSequenceArr2 = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide), LocaleController.getString("StickersRemove", C0446R.string.StickersRemove), LocaleController.getString("StickersShare", C0446R.string.StickersShare), LocaleController.getString("StickersCopy", C0446R.string.StickersCopy)};
-                } else if (view.set.official) {
-                    iArr = new int[]{0};
-                    charSequenceArr = new CharSequence[]{LocaleController.getString("StickersRemove", C0446R.string.StickersHide)};
-                    builder.setItems(charSequenceArr, /* anonymous class already generated */);
-                    StickersActivity.this.showDialog(builder.create());
+                } else if (stickerSet.set.official) {
+                    options = new int[]{0};
+                    items = new CharSequence[]{LocaleController.getString("StickersRemove", C0446R.string.StickersHide)};
                 } else {
-                    iArr = new int[]{0, 1, 2, 3};
-                    charSequenceArr2 = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide), LocaleController.getString("StickersRemove", C0446R.string.StickersRemove), LocaleController.getString("StickersShare", C0446R.string.StickersShare), LocaleController.getString("StickersCopy", C0446R.string.StickersCopy)};
+                    options = new int[]{0, 1, 2, 3};
+                    items = new CharSequence[]{LocaleController.getString("StickersHide", C0446R.string.StickersHide), LocaleController.getString("StickersRemove", C0446R.string.StickersRemove), LocaleController.getString("StickersShare", C0446R.string.StickersShare), LocaleController.getString("StickersCopy", C0446R.string.StickersCopy)};
                 }
-                charSequenceArr = charSequenceArr2;
-                builder.setItems(charSequenceArr, /* anonymous class already generated */);
+                builder.setItems(items, new OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ListAdapter.this.processSelectionOption(options[which], stickerSet);
+                    }
+                });
                 StickersActivity.this.showDialog(builder.create());
             }
         }
@@ -233,42 +186,38 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow) {
                 return ((TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.id;
             }
-            if (!(i == StickersActivity.this.suggestRow || i == StickersActivity.this.suggestInfoRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow)) {
-                if (i != StickersActivity.this.masksInfoRow) {
-                    return (long) i;
-                }
+            if (i == StickersActivity.this.suggestRow || i == StickersActivity.this.suggestInfoRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.masksInfoRow) {
+                return -2147483648L;
             }
-            return -2147483648L;
+            return (long) i;
         }
 
-        private void processSelectionOption(int i, TL_messages_stickerSet tL_messages_stickerSet) {
-            if (i == 0) {
-                DataQuery.getInstance(StickersActivity.this.currentAccount).removeStickersSet(StickersActivity.this.getParentActivity(), tL_messages_stickerSet.set, tL_messages_stickerSet.set.archived == 0 ? 1 : 2, StickersActivity.this, true);
-            } else if (i == 1) {
-                DataQuery.getInstance(StickersActivity.this.currentAccount).removeStickersSet(StickersActivity.this.getParentActivity(), tL_messages_stickerSet.set, 0, StickersActivity.this, true);
-            } else if (i == 2) {
+        private void processSelectionOption(int which, TL_messages_stickerSet stickerSet) {
+            if (which == 0) {
+                int i;
+                DataQuery instance = DataQuery.getInstance(StickersActivity.this.currentAccount);
+                Context parentActivity = StickersActivity.this.getParentActivity();
+                StickerSet stickerSet2 = stickerSet.set;
+                if (stickerSet.set.archived) {
+                    i = 2;
+                } else {
+                    i = 1;
+                }
+                instance.removeStickersSet(parentActivity, stickerSet2, i, StickersActivity.this, true);
+            } else if (which == 1) {
+                DataQuery.getInstance(StickersActivity.this.currentAccount).removeStickersSet(StickersActivity.this.getParentActivity(), stickerSet.set, 0, StickersActivity.this, true);
+            } else if (which == 2) {
                 try {
-                    i = new Intent("android.intent.action.SEND");
-                    i.setType("text/plain");
-                    r3 = Locale.US;
-                    r4 = new StringBuilder();
-                    r4.append("https://");
-                    r4.append(MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix);
-                    r4.append("/addstickers/%s");
-                    i.putExtra("android.intent.extra.TEXT", String.format(r3, r4.toString(), new Object[]{tL_messages_stickerSet.set.short_name}));
-                    StickersActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(i, LocaleController.getString("StickersShare", C0446R.string.StickersShare)), 500);
+                    Intent intent = new Intent("android.intent.action.SEND");
+                    intent.setType("text/plain");
+                    intent.putExtra("android.intent.extra.TEXT", String.format(Locale.US, "https://" + MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name}));
+                    StickersActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", C0446R.string.StickersShare)), 500);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-            } else if (i == 3) {
+            } else if (which == 3) {
                 try {
-                    ClipboardManager clipboardManager = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard");
-                    r3 = Locale.US;
-                    r4 = new StringBuilder();
-                    r4.append("https://");
-                    r4.append(MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix);
-                    r4.append("/addstickers/%s");
-                    clipboardManager.setPrimaryClip(ClipData.newPlainText("label", String.format(r3, r4.toString(), new Object[]{tL_messages_stickerSet.set.short_name})));
+                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(Locale.US, "https://" + MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name})));
                     Toast.makeText(StickersActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", C0446R.string.LinkCopied), 0).show();
                 } catch (Throwable e2) {
                     FileLog.m3e(e2);
@@ -276,103 +225,89 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            boolean z = true;
-            String str;
-            switch (viewHolder.getItemViewType()) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
                 case 0:
-                    ArrayList stickerSets = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
-                    i -= StickersActivity.this.stickersStartRow;
-                    StickerSetCell stickerSetCell = (StickerSetCell) viewHolder.itemView;
-                    TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i);
-                    if (i == stickerSets.size() - 1) {
-                        z = false;
-                    }
-                    stickerSetCell.setStickersSet(tL_messages_stickerSet, z);
+                    ArrayList<TL_messages_stickerSet> arrayList = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
+                    int row = position - StickersActivity.this.stickersStartRow;
+                    ((StickerSetCell) holder.itemView).setStickersSet((TL_messages_stickerSet) arrayList.get(row), row != arrayList.size() + -1);
                     return;
                 case 1:
-                    if (i == StickersActivity.this.featuredInfoRow) {
-                        i = LocaleController.getString("FeaturedStickersInfo", C0446R.string.FeaturedStickersInfo);
-                        str = "@stickers";
-                        int indexOf = i.indexOf(str);
-                        if (indexOf != -1) {
+                    if (position == StickersActivity.this.featuredInfoRow) {
+                        String text = LocaleController.getString("FeaturedStickersInfo", C0446R.string.FeaturedStickersInfo);
+                        String botName = "@stickers";
+                        int index = text.indexOf(botName);
+                        if (index != -1) {
                             try {
-                                CharSequence spannableStringBuilder = new SpannableStringBuilder(i);
-                                spannableStringBuilder.setSpan(new URLSpanNoUnderline("@stickers") {
-                                    public void onClick(View view) {
+                                SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
+                                stringBuilder.setSpan(new URLSpanNoUnderline("@stickers") {
+                                    public void onClick(View widget) {
                                         MessagesController.getInstance(StickersActivity.this.currentAccount).openByUserName("stickers", StickersActivity.this, 1);
                                     }
-                                }, indexOf, str.length() + indexOf, 18);
-                                ((TextInfoPrivacyCell) viewHolder.itemView).setText(spannableStringBuilder);
+                                }, index, botName.length() + index, 18);
+                                ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
                                 return;
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
-                                ((TextInfoPrivacyCell) viewHolder.itemView).setText(i);
+                                ((TextInfoPrivacyCell) holder.itemView).setText(text);
                                 return;
                             }
                         }
-                        ((TextInfoPrivacyCell) viewHolder.itemView).setText(i);
+                        ((TextInfoPrivacyCell) holder.itemView).setText(text);
                         return;
-                    } else if (i == StickersActivity.this.archivedInfoRow) {
+                    } else if (position == StickersActivity.this.archivedInfoRow) {
                         if (StickersActivity.this.currentType == 0) {
-                            ((TextInfoPrivacyCell) viewHolder.itemView).setText(LocaleController.getString("ArchivedStickersInfo", C0446R.string.ArchivedStickersInfo));
+                            ((TextInfoPrivacyCell) holder.itemView).setText(LocaleController.getString("ArchivedStickersInfo", C0446R.string.ArchivedStickersInfo));
                             return;
                         } else {
-                            ((TextInfoPrivacyCell) viewHolder.itemView).setText(LocaleController.getString("ArchivedMasksInfo", C0446R.string.ArchivedMasksInfo));
+                            ((TextInfoPrivacyCell) holder.itemView).setText(LocaleController.getString("ArchivedMasksInfo", C0446R.string.ArchivedMasksInfo));
                             return;
                         }
-                    } else if (i == StickersActivity.this.masksInfoRow) {
-                        ((TextInfoPrivacyCell) viewHolder.itemView).setText(LocaleController.getString("MasksInfo", C0446R.string.MasksInfo));
+                    } else if (position == StickersActivity.this.masksInfoRow) {
+                        ((TextInfoPrivacyCell) holder.itemView).setText(LocaleController.getString("MasksInfo", C0446R.string.MasksInfo));
                         return;
                     } else {
                         return;
                     }
                 case 2:
-                    if (i == StickersActivity.this.featuredRow) {
-                        i = DataQuery.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size();
-                        TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                        str = LocaleController.getString("FeaturedStickers", C0446R.string.FeaturedStickers);
-                        if (i != 0) {
-                            i = String.format("%d", new Object[]{Integer.valueOf(i)});
-                        } else {
-                            i = TtmlNode.ANONYMOUS_REGION_ID;
-                        }
-                        textSettingsCell.setTextAndValue(str, i, false);
+                    if (position == StickersActivity.this.featuredRow) {
+                        ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("FeaturedStickers", C0446R.string.FeaturedStickers), DataQuery.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(DataQuery.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size())}) : TtmlNode.ANONYMOUS_REGION_ID, false);
                         return;
-                    } else if (i == StickersActivity.this.archivedRow) {
+                    } else if (position == StickersActivity.this.archivedRow) {
                         if (StickersActivity.this.currentType == 0) {
-                            ((TextSettingsCell) viewHolder.itemView).setText(LocaleController.getString("ArchivedStickers", C0446R.string.ArchivedStickers), false);
+                            ((TextSettingsCell) holder.itemView).setText(LocaleController.getString("ArchivedStickers", C0446R.string.ArchivedStickers), false);
                             return;
                         } else {
-                            ((TextSettingsCell) viewHolder.itemView).setText(LocaleController.getString("ArchivedMasks", C0446R.string.ArchivedMasks), false);
+                            ((TextSettingsCell) holder.itemView).setText(LocaleController.getString("ArchivedMasks", C0446R.string.ArchivedMasks), false);
                             return;
                         }
-                    } else if (i == StickersActivity.this.masksRow) {
-                        ((TextSettingsCell) viewHolder.itemView).setText(LocaleController.getString("Masks", C0446R.string.Masks), false);
+                    } else if (position == StickersActivity.this.masksRow) {
+                        ((TextSettingsCell) holder.itemView).setText(LocaleController.getString("Masks", C0446R.string.Masks), false);
                         return;
-                    } else if (i == StickersActivity.this.suggestRow) {
+                    } else if (position == StickersActivity.this.suggestRow) {
+                        String value;
                         switch (SharedConfig.suggestStickers) {
                             case 0:
-                                i = LocaleController.getString("SuggestStickersAll", C0446R.string.SuggestStickersAll);
+                                value = LocaleController.getString("SuggestStickersAll", C0446R.string.SuggestStickersAll);
                                 break;
                             case 1:
-                                i = LocaleController.getString("SuggestStickersInstalled", C0446R.string.SuggestStickersInstalled);
+                                value = LocaleController.getString("SuggestStickersInstalled", C0446R.string.SuggestStickersInstalled);
                                 break;
                             default:
-                                i = LocaleController.getString("SuggestStickersNone", C0446R.string.SuggestStickersNone);
+                                value = LocaleController.getString("SuggestStickersNone", C0446R.string.SuggestStickersNone);
                                 break;
                         }
-                        ((TextSettingsCell) viewHolder.itemView).setTextAndValue(LocaleController.getString("SuggestStickers", C0446R.string.SuggestStickers), i, true);
+                        ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("SuggestStickers", C0446R.string.SuggestStickers), value, true);
                         return;
                     } else {
                         return;
                     }
                 case 3:
-                    if (i == StickersActivity.this.stickersShadowRow) {
-                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    if (position == StickersActivity.this.stickersShadowRow) {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
-                    } else if (i == StickersActivity.this.suggestInfoRow) {
-                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    } else if (position == StickersActivity.this.suggestInfoRow) {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -382,78 +317,106 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            viewHolder = viewHolder.getItemViewType();
-            if (viewHolder != null) {
-                if (viewHolder != 2) {
-                    return null;
-                }
-            }
-            return true;
+        public boolean isEnabled(ViewHolder holder) {
+            int type = holder.getItemViewType();
+            return type == 0 || type == 2;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            switch (i) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            switch (viewType) {
                 case 0:
-                    viewGroup = new StickerSetCell(this.mContext, 1);
-                    viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((StickerSetCell) viewGroup).setOnOptionsClick(new C17112());
+                    view = new StickerSetCell(this.mContext, 1);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ((StickerSetCell) view).setOnOptionsClick(new C17112());
                     break;
                 case 1:
-                    viewGroup = new TextInfoPrivacyCell(this.mContext);
-                    viewGroup.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
-                    viewGroup = new TextSettingsCell(this.mContext);
-                    viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
-                    viewGroup = new ShadowSectionCell(this.mContext);
-                    break;
-                default:
-                    viewGroup = null;
+                    view = new ShadowSectionCell(this.mContext);
                     break;
             }
-            viewGroup.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(viewGroup);
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
         }
 
         public int getItemViewType(int i) {
             if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow) {
                 return 0;
             }
-            if (!(i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.archivedInfoRow)) {
-                if (i != StickersActivity.this.masksInfoRow) {
-                    if (!(i == StickersActivity.this.featuredRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.masksRow)) {
-                        if (i != StickersActivity.this.suggestRow) {
-                            if (i != StickersActivity.this.stickersShadowRow) {
-                                if (i != StickersActivity.this.suggestInfoRow) {
-                                    return 0;
-                                }
-                            }
-                            return 3;
-                        }
-                    }
-                    return 2;
-                }
+            if (i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.masksInfoRow) {
+                return 1;
             }
-            return 1;
+            if (i == StickersActivity.this.featuredRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.suggestRow) {
+                return 2;
+            }
+            if (i == StickersActivity.this.stickersShadowRow || i == StickersActivity.this.suggestInfoRow) {
+                return 3;
+            }
+            return 0;
         }
 
-        public void swapElements(int i, int i2) {
-            if (i != i2) {
+        public void swapElements(int fromIndex, int toIndex) {
+            if (fromIndex != toIndex) {
                 StickersActivity.this.needReorder = true;
             }
-            ArrayList stickerSets = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
-            TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i - StickersActivity.this.stickersStartRow);
-            stickerSets.set(i - StickersActivity.this.stickersStartRow, stickerSets.get(i2 - StickersActivity.this.stickersStartRow));
-            stickerSets.set(i2 - StickersActivity.this.stickersStartRow, tL_messages_stickerSet);
-            notifyItemMoved(i, i2);
+            ArrayList<TL_messages_stickerSet> arrayList = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
+            TL_messages_stickerSet from = (TL_messages_stickerSet) arrayList.get(fromIndex - StickersActivity.this.stickersStartRow);
+            arrayList.set(fromIndex - StickersActivity.this.stickersStartRow, arrayList.get(toIndex - StickersActivity.this.stickersStartRow));
+            arrayList.set(toIndex - StickersActivity.this.stickersStartRow, from);
+            notifyItemMoved(fromIndex, toIndex);
         }
     }
 
-    public StickersActivity(int i) {
-        this.currentType = i;
+    public class TouchHelperCallback extends Callback {
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+
+        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() != 0) {
+                return Callback.makeMovementFlags(0, 0);
+            }
+            return Callback.makeMovementFlags(3, 0);
+        }
+
+        public boolean onMove(RecyclerView recyclerView, ViewHolder source, ViewHolder target) {
+            if (source.getItemViewType() != target.getItemViewType()) {
+                return false;
+            }
+            StickersActivity.this.listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        public void onChildDraw(Canvas c, RecyclerView recyclerView, ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+        public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
+            if (actionState != 0) {
+                StickersActivity.this.listView.cancelClickRunnables(false);
+                viewHolder.itemView.setPressed(true);
+            }
+            super.onSelectedChanged(viewHolder, actionState);
+        }
+
+        public void onSwiped(ViewHolder viewHolder, int direction) {
+        }
+
+        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            viewHolder.itemView.setPressed(false);
+        }
+    }
+
+    public StickersActivity(int type) {
+        this.currentType = type;
     }
 
     public boolean onFragmentCreate() {
@@ -488,14 +451,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.actionBar.setActionBarMenuOnItemClick(new C22921());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
         this.listView.setFocusable(true);
         this.listView.setTag(Integer.valueOf(7));
-        LayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(1);
-        this.listView.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(1);
+        this.listView.setLayoutManager(layoutManager);
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
@@ -503,31 +466,37 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.stickersDidLoaded) {
-            if (((Integer) objArr[0]).intValue() == this.currentType) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.stickersDidLoaded) {
+            if (((Integer) args[0]).intValue() == this.currentType) {
                 updateRows();
             }
-        } else if (i == NotificationCenter.featuredStickersDidLoaded) {
-            if (this.listAdapter != 0) {
+        } else if (id == NotificationCenter.featuredStickersDidLoaded) {
+            if (this.listAdapter != null) {
                 this.listAdapter.notifyItemChanged(0);
             }
-        } else if (i == NotificationCenter.archivedStickersCountDidLoaded && ((Integer) objArr[0]).intValue() == this.currentType) {
+        } else if (id == NotificationCenter.archivedStickersCountDidLoaded && ((Integer) args[0]).intValue() == this.currentType) {
             updateRows();
         }
     }
 
     private void sendReorder() {
         if (this.needReorder) {
+            boolean z;
             DataQuery.getInstance(this.currentAccount).calcNewHash(this.currentType);
             this.needReorder = false;
-            TLObject tL_messages_reorderStickerSets = new TL_messages_reorderStickerSets();
-            tL_messages_reorderStickerSets.masks = this.currentType == 1;
-            ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
-            for (int i = 0; i < stickerSets.size(); i++) {
-                tL_messages_reorderStickerSets.order.add(Long.valueOf(((TL_messages_stickerSet) stickerSets.get(i)).set.id));
+            TL_messages_reorderStickerSets req = new TL_messages_reorderStickerSets();
+            if (this.currentType == 1) {
+                z = true;
+            } else {
+                z = false;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_reorderStickerSets, new C22943());
+            req.masks = z;
+            ArrayList<TL_messages_stickerSet> arrayList = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
+            for (int a = 0; a < arrayList.size(); a++) {
+                req.order.add(Long.valueOf(((TL_messages_stickerSet) arrayList.get(a)).set.id));
+            }
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22943());
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(this.currentType));
         }
     }
@@ -567,7 +536,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.archivedRow = -1;
             this.archivedInfoRow = -1;
         }
-        ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
+        ArrayList<TL_messages_stickerSet> stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
         if (stickerSets.isEmpty()) {
             this.stickersStartRow = -1;
             this.stickersEndRow = -1;

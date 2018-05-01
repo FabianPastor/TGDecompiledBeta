@@ -19,111 +19,137 @@ public class CheckBoxCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
 
-    public CheckBoxCell(Context context, int i) {
-        Context context2 = context;
-        int i2 = i;
-        super(context);
-        this.textView = new TextView(context2);
-        boolean z = true;
-        this.textView.setTextColor(Theme.getColor(i2 == 1 ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
-        r0.textView.setTextSize(1, 16.0f);
-        r0.textView.setLines(1);
-        r0.textView.setMaxLines(1);
-        r0.textView.setSingleLine(true);
-        r0.textView.setEllipsize(TruncateAt.END);
-        int i3 = 3;
-        r0.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        int i4 = 17;
+    public CheckBoxCell(Context context, int type) {
+        int i;
         View view;
-        int i5;
-        int i6;
-        float f;
-        if (i2 == 2) {
-            view = r0.textView;
-            i5 = (LocaleController.isRTL ? 5 : 3) | 48;
-            i6 = 29;
-            f = (float) (LocaleController.isRTL ? 0 : 29);
-            if (!LocaleController.isRTL) {
-                i6 = 0;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i5, f, 0.0f, (float) i6, 0.0f));
+        int i2;
+        boolean z;
+        int i3 = 0;
+        int i4 = 5;
+        super(context);
+        this.textView = new TextView(context);
+        this.textView.setTextColor(Theme.getColor(type == 1 ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
+        this.textView.setTextSize(1, 16.0f);
+        this.textView.setLines(1);
+        this.textView.setMaxLines(1);
+        this.textView.setSingleLine(true);
+        this.textView.setEllipsize(TruncateAt.END);
+        TextView textView = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
         } else {
-            view = r0.textView;
-            i5 = (LocaleController.isRTL ? 5 : 3) | 48;
-            i6 = 46;
-            f = (float) (LocaleController.isRTL ? 17 : 46);
-            if (!LocaleController.isRTL) {
-                i6 = 17;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i5, f, 0.0f, (float) i6, 0.0f));
+            i = 3;
         }
-        r0.valueTextView = new TextView(context2);
-        r0.valueTextView.setTextColor(Theme.getColor(i2 == 1 ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText));
-        r0.valueTextView.setTextSize(1, 16.0f);
-        r0.valueTextView.setLines(1);
-        r0.valueTextView.setMaxLines(1);
-        r0.valueTextView.setSingleLine(true);
-        r0.valueTextView.setEllipsize(TruncateAt.END);
-        r0.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-        addView(r0.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 17.0f, 0.0f, 17.0f, 0.0f));
-        if (i2 != 1) {
+        textView.setGravity(i | 16);
+        if (type == 2) {
+            view = this.textView;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            } else {
+                i2 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 0 : 29), 0.0f, (float) (LocaleController.isRTL ? 29 : 0), 0.0f));
+        } else {
+            addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
+        }
+        this.valueTextView = new TextView(context);
+        this.valueTextView.setTextColor(Theme.getColor(type == 1 ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText));
+        this.valueTextView.setTextSize(1, 16.0f);
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        this.valueTextView.setEllipsize(TruncateAt.END);
+        textView = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        textView.setGravity(i | 16);
+        view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i2 = 3;
+        } else {
+            i2 = 5;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        if (type == 1) {
+            z = true;
+        } else {
             z = false;
         }
-        r0.checkBox = new CheckBoxSquare(context2, z);
-        if (i2 == 2) {
-            View view2 = r0.checkBox;
-            if (LocaleController.isRTL) {
-                i3 = 5;
+        this.checkBox = new CheckBoxSquare(context, z);
+        if (type == 2) {
+            View view2 = this.checkBox;
+            if (!LocaleController.isRTL) {
+                i4 = 3;
             }
-            addView(view2, LayoutHelper.createFrame(18, 18.0f, i3 | 48, 0.0f, 15.0f, 0.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(18, 18.0f, i4 | 48, 0.0f, 15.0f, 0.0f, 0.0f));
             return;
         }
-        view2 = r0.checkBox;
-        if (LocaleController.isRTL) {
-            i3 = 5;
-        }
-        int i7 = i3 | 48;
-        float f2 = (float) (LocaleController.isRTL ? 0 : 17);
+        View view3 = this.checkBox;
         if (!LocaleController.isRTL) {
-            i4 = 0;
+            i4 = 3;
         }
-        addView(view2, LayoutHelper.createFrame(18, 18.0f, i7, f2, 15.0f, (float) i4, 0.0f));
+        i4 |= 48;
+        float f = (float) (LocaleController.isRTL ? 0 : 17);
+        if (LocaleController.isRTL) {
+            i3 = 17;
+        }
+        addView(view3, LayoutHelper.createFrame(18, 18.0f, i4, f, 15.0f, (float) i3, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(NUM) + this.needDivider);
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(NUM);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec((i - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
         this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(18.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(18.0f), NUM));
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setText(String str, String str2, boolean z, boolean z2) {
-        this.textView.setText(str);
-        this.checkBox.setChecked(z, false);
-        this.valueTextView.setText(str2);
-        this.needDivider = z2;
-        setWillNotDraw(z2 ^ 1);
-    }
-
-    public void setEnabled(boolean z) {
-        super.setEnabled(z);
-        float f = 0.5f;
-        this.textView.setAlpha(z ? 1.0f : 0.5f);
-        this.valueTextView.setAlpha(z ? 1.0f : 0.5f);
-        CheckBoxSquare checkBoxSquare = this.checkBox;
-        if (z) {
-            f = 1.0f;
+    public void setText(String text, String value, boolean checked, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
+        this.checkBox.setChecked(checked, false);
+        this.valueTextView.setText(value);
+        this.needDivider = divider;
+        if (!divider) {
+            z = true;
         }
-        checkBoxSquare.setAlpha(f);
+        setWillNotDraw(z);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checkBox.setChecked(z, z2);
+    public void setEnabled(boolean enabled) {
+        float f;
+        float f2 = 1.0f;
+        super.setEnabled(enabled);
+        TextView textView = this.textView;
+        if (enabled) {
+            f = 1.0f;
+        } else {
+            f = 0.5f;
+        }
+        textView.setAlpha(f);
+        textView = this.valueTextView;
+        if (enabled) {
+            f = 1.0f;
+        } else {
+            f = 0.5f;
+        }
+        textView.setAlpha(f);
+        CheckBoxSquare checkBoxSquare = this.checkBox;
+        if (!enabled) {
+            f2 = 0.5f;
+        }
+        checkBoxSquare.setAlpha(f2);
+    }
+
+    public void setChecked(boolean checked, boolean animated) {
+        this.checkBox.setChecked(checked, animated);
     }
 
     public boolean isChecked() {

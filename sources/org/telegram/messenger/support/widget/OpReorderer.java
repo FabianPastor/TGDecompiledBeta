@@ -15,194 +15,174 @@ class OpReorderer {
         this.mCallback = callback;
     }
 
-    void reorderOps(List<UpdateOp> list) {
+    void reorderOps(List<UpdateOp> ops) {
         while (true) {
-            int lastMoveOutOfOrder = getLastMoveOutOfOrder(list);
-            if (lastMoveOutOfOrder != -1) {
-                swapMoveOp(list, lastMoveOutOfOrder, lastMoveOutOfOrder + 1);
+            int badMove = getLastMoveOutOfOrder(ops);
+            if (badMove != -1) {
+                swapMoveOp(ops, badMove, badMove + 1);
             } else {
                 return;
             }
         }
     }
 
-    private void swapMoveOp(List<UpdateOp> list, int i, int i2) {
-        UpdateOp updateOp = (UpdateOp) list.get(i);
-        UpdateOp updateOp2 = (UpdateOp) list.get(i2);
-        int i3 = updateOp2.cmd;
-        if (i3 != 4) {
-            switch (i3) {
-                case 1:
-                    swapMoveAdd(list, i, updateOp, i2, updateOp2);
-                    return;
-                case 2:
-                    swapMoveRemove(list, i, updateOp, i2, updateOp2);
-                    return;
-                default:
-                    return;
-            }
+    private void swapMoveOp(List<UpdateOp> list, int badMove, int next) {
+        UpdateOp moveOp = (UpdateOp) list.get(badMove);
+        UpdateOp nextOp = (UpdateOp) list.get(next);
+        switch (nextOp.cmd) {
+            case 1:
+                swapMoveAdd(list, badMove, moveOp, next, nextOp);
+                return;
+            case 2:
+                swapMoveRemove(list, badMove, moveOp, next, nextOp);
+                return;
+            case 4:
+                swapMoveUpdate(list, badMove, moveOp, next, nextOp);
+                return;
+            default:
+                return;
         }
-        swapMoveUpdate(list, i, updateOp, i2, updateOp2);
     }
 
-    void swapMoveRemove(List<UpdateOp> list, int i, UpdateOp updateOp, int i2, UpdateOp updateOp2) {
-        int i3;
-        int i4 = 0;
-        if (updateOp.positionStart < updateOp.itemCount) {
-            if (updateOp2.positionStart == updateOp.positionStart && updateOp2.itemCount == updateOp.itemCount - updateOp.positionStart) {
-                i3 = 0;
-                i4 = 1;
-            } else {
-                i3 = 0;
+    void swapMoveRemove(List<UpdateOp> list, int movePos, UpdateOp moveOp, int removePos, UpdateOp removeOp) {
+        boolean moveIsBackwards;
+        UpdateOp extraRm = null;
+        boolean revertedMove = false;
+        if (moveOp.positionStart < moveOp.itemCount) {
+            moveIsBackwards = false;
+            if (removeOp.positionStart == moveOp.positionStart && removeOp.itemCount == moveOp.itemCount - moveOp.positionStart) {
+                revertedMove = true;
             }
-        } else if (updateOp2.positionStart == updateOp.itemCount + 1 && updateOp2.itemCount == updateOp.positionStart - updateOp.itemCount) {
-            i3 = 1;
-            i4 = i3;
         } else {
-            i3 = 1;
+            moveIsBackwards = true;
+            if (removeOp.positionStart == moveOp.itemCount + 1 && removeOp.itemCount == moveOp.positionStart - moveOp.itemCount) {
+                revertedMove = true;
+            }
         }
-        if (updateOp.itemCount < updateOp2.positionStart) {
-            updateOp2.positionStart--;
-        } else if (updateOp.itemCount < updateOp2.positionStart + updateOp2.itemCount) {
-            updateOp2.itemCount--;
-            updateOp.cmd = 2;
-            updateOp.itemCount = 1;
-            if (updateOp2.itemCount == 0) {
-                list.remove(i2);
-                this.mCallback.recycleUpdateOp(updateOp2);
+        if (moveOp.itemCount < removeOp.positionStart) {
+            removeOp.positionStart--;
+        } else if (moveOp.itemCount < removeOp.positionStart + removeOp.itemCount) {
+            removeOp.itemCount--;
+            moveOp.cmd = 2;
+            moveOp.itemCount = 1;
+            if (removeOp.itemCount == 0) {
+                list.remove(removePos);
+                this.mCallback.recycleUpdateOp(removeOp);
+                return;
             }
             return;
         }
-        UpdateOp updateOp3 = null;
-        if (updateOp.positionStart <= updateOp2.positionStart) {
-            updateOp2.positionStart++;
-        } else if (updateOp.positionStart < updateOp2.positionStart + updateOp2.itemCount) {
-            updateOp3 = this.mCallback.obtainUpdateOp(2, updateOp.positionStart + 1, (updateOp2.positionStart + updateOp2.itemCount) - updateOp.positionStart, null);
-            updateOp2.itemCount = updateOp.positionStart - updateOp2.positionStart;
+        if (moveOp.positionStart <= removeOp.positionStart) {
+            removeOp.positionStart++;
+        } else if (moveOp.positionStart < removeOp.positionStart + removeOp.itemCount) {
+            extraRm = this.mCallback.obtainUpdateOp(2, moveOp.positionStart + 1, (removeOp.positionStart + removeOp.itemCount) - moveOp.positionStart, null);
+            removeOp.itemCount = moveOp.positionStart - removeOp.positionStart;
         }
-        if (i4 != 0) {
-            list.set(i, updateOp2);
-            list.remove(i2);
+        if (revertedMove) {
+            list.set(movePos, removeOp);
+            list.remove(removePos);
+            this.mCallback.recycleUpdateOp(moveOp);
+            return;
+        }
+        if (moveIsBackwards) {
+            if (extraRm != null) {
+                if (moveOp.positionStart > extraRm.positionStart) {
+                    moveOp.positionStart -= extraRm.itemCount;
+                }
+                if (moveOp.itemCount > extraRm.positionStart) {
+                    moveOp.itemCount -= extraRm.itemCount;
+                }
+            }
+            if (moveOp.positionStart > removeOp.positionStart) {
+                moveOp.positionStart -= removeOp.itemCount;
+            }
+            if (moveOp.itemCount > removeOp.positionStart) {
+                moveOp.itemCount -= removeOp.itemCount;
+            }
+        } else {
+            if (extraRm != null) {
+                if (moveOp.positionStart >= extraRm.positionStart) {
+                    moveOp.positionStart -= extraRm.itemCount;
+                }
+                if (moveOp.itemCount >= extraRm.positionStart) {
+                    moveOp.itemCount -= extraRm.itemCount;
+                }
+            }
+            if (moveOp.positionStart >= removeOp.positionStart) {
+                moveOp.positionStart -= removeOp.itemCount;
+            }
+            if (moveOp.itemCount >= removeOp.positionStart) {
+                moveOp.itemCount -= removeOp.itemCount;
+            }
+        }
+        list.set(movePos, removeOp);
+        if (moveOp.positionStart != moveOp.itemCount) {
+            list.set(removePos, moveOp);
+        } else {
+            list.remove(removePos);
+        }
+        if (extraRm != null) {
+            list.add(movePos, extraRm);
+        }
+    }
+
+    private void swapMoveAdd(List<UpdateOp> list, int move, UpdateOp moveOp, int add, UpdateOp addOp) {
+        int offset = 0;
+        if (moveOp.itemCount < addOp.positionStart) {
+            offset = 0 - 1;
+        }
+        if (moveOp.positionStart < addOp.positionStart) {
+            offset++;
+        }
+        if (addOp.positionStart <= moveOp.positionStart) {
+            moveOp.positionStart += addOp.itemCount;
+        }
+        if (addOp.positionStart <= moveOp.itemCount) {
+            moveOp.itemCount += addOp.itemCount;
+        }
+        addOp.positionStart += offset;
+        list.set(move, addOp);
+        list.set(add, moveOp);
+    }
+
+    void swapMoveUpdate(List<UpdateOp> list, int move, UpdateOp moveOp, int update, UpdateOp updateOp) {
+        UpdateOp extraUp1 = null;
+        UpdateOp extraUp2 = null;
+        if (moveOp.itemCount < updateOp.positionStart) {
+            updateOp.positionStart--;
+        } else if (moveOp.itemCount < updateOp.positionStart + updateOp.itemCount) {
+            updateOp.itemCount--;
+            extraUp1 = this.mCallback.obtainUpdateOp(4, moveOp.positionStart, 1, updateOp.payload);
+        }
+        if (moveOp.positionStart <= updateOp.positionStart) {
+            updateOp.positionStart++;
+        } else if (moveOp.positionStart < updateOp.positionStart + updateOp.itemCount) {
+            int remaining = (updateOp.positionStart + updateOp.itemCount) - moveOp.positionStart;
+            extraUp2 = this.mCallback.obtainUpdateOp(4, moveOp.positionStart + 1, remaining, updateOp.payload);
+            updateOp.itemCount -= remaining;
+        }
+        list.set(update, moveOp);
+        if (updateOp.itemCount > 0) {
+            list.set(move, updateOp);
+        } else {
+            list.remove(move);
             this.mCallback.recycleUpdateOp(updateOp);
-            return;
         }
-        if (i3 != 0) {
-            if (updateOp3 != null) {
-                if (updateOp.positionStart > updateOp3.positionStart) {
-                    updateOp.positionStart -= updateOp3.itemCount;
-                }
-                if (updateOp.itemCount > updateOp3.positionStart) {
-                    updateOp.itemCount -= updateOp3.itemCount;
-                }
-            }
-            if (updateOp.positionStart > updateOp2.positionStart) {
-                updateOp.positionStart -= updateOp2.itemCount;
-            }
-            if (updateOp.itemCount > updateOp2.positionStart) {
-                updateOp.itemCount -= updateOp2.itemCount;
-            }
-        } else {
-            if (updateOp3 != null) {
-                if (updateOp.positionStart >= updateOp3.positionStart) {
-                    updateOp.positionStart -= updateOp3.itemCount;
-                }
-                if (updateOp.itemCount >= updateOp3.positionStart) {
-                    updateOp.itemCount -= updateOp3.itemCount;
-                }
-            }
-            if (updateOp.positionStart >= updateOp2.positionStart) {
-                updateOp.positionStart -= updateOp2.itemCount;
-            }
-            if (updateOp.itemCount >= updateOp2.positionStart) {
-                updateOp.itemCount -= updateOp2.itemCount;
-            }
+        if (extraUp1 != null) {
+            list.add(move, extraUp1);
         }
-        list.set(i, updateOp2);
-        if (updateOp.positionStart != updateOp.itemCount) {
-            list.set(i2, updateOp);
-        } else {
-            list.remove(i2);
-        }
-        if (updateOp3 != null) {
-            list.add(i, updateOp3);
-        }
-    }
-
-    private void swapMoveAdd(List<UpdateOp> list, int i, UpdateOp updateOp, int i2, UpdateOp updateOp2) {
-        int i3 = updateOp.itemCount < updateOp2.positionStart ? -1 : 0;
-        if (updateOp.positionStart < updateOp2.positionStart) {
-            i3++;
-        }
-        if (updateOp2.positionStart <= updateOp.positionStart) {
-            updateOp.positionStart += updateOp2.itemCount;
-        }
-        if (updateOp2.positionStart <= updateOp.itemCount) {
-            updateOp.itemCount += updateOp2.itemCount;
-        }
-        updateOp2.positionStart += i3;
-        list.set(i, updateOp2);
-        list.set(i2, updateOp);
-    }
-
-    void swapMoveUpdate(List<UpdateOp> list, int i, UpdateOp updateOp, int i2, UpdateOp updateOp2) {
-        Object obtainUpdateOp;
-        Object obj = null;
-        if (updateOp.itemCount < updateOp2.positionStart) {
-            updateOp2.positionStart--;
-        } else if (updateOp.itemCount < updateOp2.positionStart + updateOp2.itemCount) {
-            updateOp2.itemCount--;
-            obtainUpdateOp = this.mCallback.obtainUpdateOp(4, updateOp.positionStart, 1, updateOp2.payload);
-            if (updateOp.positionStart <= updateOp2.positionStart) {
-                updateOp2.positionStart++;
-            } else if (updateOp.positionStart < updateOp2.positionStart + updateOp2.itemCount) {
-                int i3 = (updateOp2.positionStart + updateOp2.itemCount) - updateOp.positionStart;
-                obj = this.mCallback.obtainUpdateOp(4, updateOp.positionStart + 1, i3, updateOp2.payload);
-                updateOp2.itemCount -= i3;
-            }
-            list.set(i2, updateOp);
-            if (updateOp2.itemCount <= null) {
-                list.set(i, updateOp2);
-            } else {
-                list.remove(i);
-                this.mCallback.recycleUpdateOp(updateOp2);
-            }
-            if (obtainUpdateOp != null) {
-                list.add(i, obtainUpdateOp);
-            }
-            if (obj != null) {
-                list.add(i, obj);
-            }
-        }
-        obtainUpdateOp = null;
-        if (updateOp.positionStart <= updateOp2.positionStart) {
-            updateOp2.positionStart++;
-        } else if (updateOp.positionStart < updateOp2.positionStart + updateOp2.itemCount) {
-            int i32 = (updateOp2.positionStart + updateOp2.itemCount) - updateOp.positionStart;
-            obj = this.mCallback.obtainUpdateOp(4, updateOp.positionStart + 1, i32, updateOp2.payload);
-            updateOp2.itemCount -= i32;
-        }
-        list.set(i2, updateOp);
-        if (updateOp2.itemCount <= null) {
-            list.remove(i);
-            this.mCallback.recycleUpdateOp(updateOp2);
-        } else {
-            list.set(i, updateOp2);
-        }
-        if (obtainUpdateOp != null) {
-            list.add(i, obtainUpdateOp);
-        }
-        if (obj != null) {
-            list.add(i, obj);
+        if (extraUp2 != null) {
+            list.add(move, extraUp2);
         }
     }
 
     private int getLastMoveOutOfOrder(List<UpdateOp> list) {
-        int i = 0;
-        for (int size = list.size() - 1; size >= 0; size--) {
-            if (((UpdateOp) list.get(size)).cmd != 8) {
-                i = 1;
-            } else if (i != 0) {
-                return size;
+        boolean foundNonMove = false;
+        for (int i = list.size() - 1; i >= 0; i--) {
+            if (((UpdateOp) list.get(i)).cmd != 8) {
+                foundNonMove = true;
+            } else if (foundNonMove) {
+                return i;
             }
         }
         return -1;

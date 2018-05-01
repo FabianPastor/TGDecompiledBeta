@@ -9,22 +9,22 @@ public class Period {
     public final String id;
     public final long startMs;
 
-    public Period(String str, long j, List<AdaptationSet> list) {
-        this(str, j, list, Collections.emptyList());
+    public Period(String id, long startMs, List<AdaptationSet> adaptationSets) {
+        this(id, startMs, adaptationSets, Collections.emptyList());
     }
 
-    public Period(String str, long j, List<AdaptationSet> list, List<EventStream> list2) {
-        this.id = str;
-        this.startMs = j;
-        this.adaptationSets = Collections.unmodifiableList(list);
-        this.eventStreams = Collections.unmodifiableList(list2);
+    public Period(String id, long startMs, List<AdaptationSet> adaptationSets, List<EventStream> eventStreams) {
+        this.id = id;
+        this.startMs = startMs;
+        this.adaptationSets = Collections.unmodifiableList(adaptationSets);
+        this.eventStreams = Collections.unmodifiableList(eventStreams);
     }
 
-    public int getAdaptationSetIndex(int i) {
-        int size = this.adaptationSets.size();
-        for (int i2 = 0; i2 < size; i2++) {
-            if (((AdaptationSet) this.adaptationSets.get(i2)).type == i) {
-                return i2;
+    public int getAdaptationSetIndex(int type) {
+        int adaptationCount = this.adaptationSets.size();
+        for (int i = 0; i < adaptationCount; i++) {
+            if (((AdaptationSet) this.adaptationSets.get(i)).type == type) {
+                return i;
             }
         }
         return -1;

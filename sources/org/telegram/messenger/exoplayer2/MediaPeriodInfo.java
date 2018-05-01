@@ -11,21 +11,21 @@ final class MediaPeriodInfo {
     public final boolean isLastInTimelinePeriod;
     public final long startPositionUs;
 
-    MediaPeriodInfo(MediaPeriodId mediaPeriodId, long j, long j2, long j3, long j4, boolean z, boolean z2) {
-        this.id = mediaPeriodId;
-        this.startPositionUs = j;
-        this.endPositionUs = j2;
-        this.contentPositionUs = j3;
-        this.durationUs = j4;
-        this.isLastInTimelinePeriod = z;
-        this.isFinal = z2;
+    MediaPeriodInfo(MediaPeriodId id, long startPositionUs, long endPositionUs, long contentPositionUs, long durationUs, boolean isLastInTimelinePeriod, boolean isFinal) {
+        this.id = id;
+        this.startPositionUs = startPositionUs;
+        this.endPositionUs = endPositionUs;
+        this.contentPositionUs = contentPositionUs;
+        this.durationUs = durationUs;
+        this.isLastInTimelinePeriod = isLastInTimelinePeriod;
+        this.isFinal = isFinal;
     }
 
-    public MediaPeriodInfo copyWithPeriodIndex(int i) {
-        return new MediaPeriodInfo(this.id.copyWithPeriodIndex(i), this.startPositionUs, this.endPositionUs, this.contentPositionUs, this.durationUs, this.isLastInTimelinePeriod, this.isFinal);
+    public MediaPeriodInfo copyWithPeriodIndex(int periodIndex) {
+        return new MediaPeriodInfo(this.id.copyWithPeriodIndex(periodIndex), this.startPositionUs, this.endPositionUs, this.contentPositionUs, this.durationUs, this.isLastInTimelinePeriod, this.isFinal);
     }
 
-    public MediaPeriodInfo copyWithStartPositionUs(long j) {
-        return new MediaPeriodInfo(this.id, j, this.endPositionUs, this.contentPositionUs, this.durationUs, this.isLastInTimelinePeriod, this.isFinal);
+    public MediaPeriodInfo copyWithStartPositionUs(long startPositionUs) {
+        return new MediaPeriodInfo(this.id, startPositionUs, this.endPositionUs, this.contentPositionUs, this.durationUs, this.isLastInTimelinePeriod, this.isFinal);
     }
 }

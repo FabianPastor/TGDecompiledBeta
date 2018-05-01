@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
@@ -19,6 +20,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -29,11 +31,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import java.util.ArrayList;
-import java.util.Collection;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
@@ -77,8 +80,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         C12705() {
         }
 
-        public void onAnimationEnd(Animator animator) {
-            if (animator.equals(PipRoundVideoView.this.hideShowAnimation) != null) {
+        public void onAnimationEnd(Animator animation) {
+            if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
                 PipRoundVideoView.this.hideShowAnimation = null;
             }
         }
@@ -89,7 +92,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         C12727() {
         }
 
-        public void onAnimationEnd(Animator animator) {
+        public void onAnimationEnd(Animator animation) {
             PipRoundVideoView.this.close(false);
             if (PipRoundVideoView.this.onCloseRunnable != null) {
                 PipRoundVideoView.this.onCloseRunnable.run();
@@ -97,81 +100,80 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         }
     }
 
-    public void show(Activity activity, Runnable runnable) {
+    public void show(Activity activity, Runnable closeRunnable) {
         if (activity != null) {
             instance = this;
-            this.onCloseRunnable = runnable;
+            this.onCloseRunnable = closeRunnable;
             this.windowView = new FrameLayout(activity) {
                 private boolean dragging;
                 private boolean startDragging;
                 private float startX;
                 private float startY;
 
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == 0) {
-                        this.startX = motionEvent.getRawX();
-                        this.startY = motionEvent.getRawY();
+                public boolean onInterceptTouchEvent(MotionEvent event) {
+                    if (event.getAction() == 0) {
+                        this.startX = event.getRawX();
+                        this.startY = event.getRawY();
                         this.startDragging = true;
                     }
                     return true;
                 }
 
-                public void requestDisallowInterceptTouchEvent(boolean z) {
-                    super.requestDisallowInterceptTouchEvent(z);
+                public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                    super.requestDisallowInterceptTouchEvent(disallowIntercept);
                 }
 
-                public boolean onTouchEvent(MotionEvent motionEvent) {
+                public boolean onTouchEvent(MotionEvent event) {
                     if (!this.startDragging && !this.dragging) {
                         return false;
                     }
-                    float rawX = motionEvent.getRawX();
-                    float rawY = motionEvent.getRawY();
-                    if (motionEvent.getAction() == 2) {
-                        motionEvent = rawX - this.startX;
-                        float f = rawY - this.startY;
+                    float x = event.getRawX();
+                    float y = event.getRawY();
+                    if (event.getAction() == 2) {
+                        float dx = x - this.startX;
+                        float dy = y - this.startY;
                         if (this.startDragging) {
-                            if (Math.abs(motionEvent) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(f) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
+                            if (Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(dy) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
                                 this.dragging = true;
                                 this.startDragging = false;
                             }
                         } else if (this.dragging) {
                             LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
-                            access$000.x = (int) (((float) access$000.x) + motionEvent);
-                            motionEvent = PipRoundVideoView.this.windowLayoutParams;
-                            motionEvent.y = (int) (((float) motionEvent.y) + f);
-                            motionEvent = PipRoundVideoView.this.videoWidth / 2;
-                            int i = -motionEvent;
-                            if (PipRoundVideoView.this.windowLayoutParams.x < i) {
-                                PipRoundVideoView.this.windowLayoutParams.x = i;
-                            } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + motionEvent) {
-                                PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + motionEvent;
+                            access$000.x = (int) (((float) access$000.x) + dx);
+                            access$000 = PipRoundVideoView.this.windowLayoutParams;
+                            access$000.y = (int) (((float) access$000.y) + dy);
+                            int maxDiff = PipRoundVideoView.this.videoWidth / 2;
+                            if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
+                                PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
+                            } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
+                                PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
                             }
-                            float f2 = 1.0f;
+                            float alpha = 1.0f;
                             if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
-                                f2 = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) motionEvent)) * 0.5f);
+                                alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
                             } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
-                                f2 = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) motionEvent)) * 0.5f);
+                                alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
                             }
-                            if (PipRoundVideoView.this.windowView.getAlpha() != f2) {
-                                PipRoundVideoView.this.windowView.setAlpha(f2);
+                            if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
+                                PipRoundVideoView.this.windowView.setAlpha(alpha);
                             }
-                            if (PipRoundVideoView.this.windowLayoutParams.y < null) {
-                                PipRoundVideoView.this.windowLayoutParams.y = 0;
+                            if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
+                                PipRoundVideoView.this.windowLayoutParams.y = -null;
                             } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
                                 PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
                             }
                             PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
-                            this.startX = rawX;
-                            this.startY = rawY;
+                            this.startX = x;
+                            this.startY = y;
                         }
-                    } else if (motionEvent.getAction() == 1) {
-                        if (this.startDragging != null && this.dragging == null) {
-                            motionEvent = MediaController.getInstance().getPlayingMessageObject();
-                            if (motionEvent != null) {
+                    } else if (event.getAction() == 1) {
+                        if (this.startDragging && !this.dragging) {
+                            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (messageObject != null) {
                                 if (MediaController.getInstance().isMessagePaused()) {
-                                    MediaController.getInstance().playMessage(motionEvent);
+                                    MediaController.getInstance().playMessage(messageObject);
                                 } else {
-                                    MediaController.getInstance().pauseMessage(motionEvent);
+                                    MediaController.getInstance().pauseMessage(messageObject);
                                 }
                             }
                         }
@@ -195,88 +197,54 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             this.videoHeight = AndroidUtilities.dp(126.0f);
             if (VERSION.SDK_INT >= 21) {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
-                    protected boolean drawChild(Canvas canvas, View view, long j) {
-                        j = super.drawChild(canvas, view, j);
-                        if (view == PipRoundVideoView.this.textureView) {
-                            view = MediaController.getInstance().getPlayingMessageObject();
-                            if (view != null) {
+                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                        boolean result = super.drawChild(canvas, child, drawingTime);
+                        if (child == PipRoundVideoView.this.textureView) {
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (currentMessageObject != null) {
                                 PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
-                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, 360.0f * view.audioProgress, false, Theme.chat_radialProgressPaint);
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
                             }
                         }
-                        return j;
+                        return result;
                     }
                 };
                 this.aspectRatioFrameLayout.setOutlineProvider(new C12693());
                 this.aspectRatioFrameLayout.setClipToOutline(true);
             } else {
-                runnable = new Paint(1);
-                runnable.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-                runnable.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                final Paint aspectPaint = new Paint(1);
+                aspectPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+                aspectPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
                     private Path aspectPath = new Path();
 
-                    protected void onSizeChanged(int i, int i2, int i3, int i4) {
-                        super.onSizeChanged(i, i2, i3, i4);
+                    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+                        super.onSizeChanged(w, h, oldw, oldh);
                         this.aspectPath.reset();
-                        i = (float) (i / 2);
-                        this.aspectPath.addCircle(i, (float) (i2 / 2), i, Direction.CW);
+                        this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
                         this.aspectPath.toggleInverseFillType();
                     }
 
                     protected void dispatchDraw(Canvas canvas) {
                         super.dispatchDraw(canvas);
-                        canvas.drawPath(this.aspectPath, runnable);
+                        canvas.drawPath(this.aspectPath, aspectPaint);
                     }
 
-                    protected boolean drawChild(android.graphics.Canvas r7, android.view.View r8, long r9) {
-                        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-                        /*
-                        r6 = this;
-                        r9 = super.drawChild(r7, r8, r9);	 Catch:{ Throwable -> 0x0005 }
-                        goto L_0x0006;
-                    L_0x0005:
-                        r9 = 0;
-                    L_0x0006:
-                        r10 = org.telegram.ui.Components.PipRoundVideoView.this;
-                        r10 = r10.textureView;
-                        if (r8 != r10) goto L_0x0054;
-                    L_0x000e:
-                        r8 = org.telegram.messenger.MediaController.getInstance();
-                        r8 = r8.getPlayingMessageObject();
-                        if (r8 == 0) goto L_0x0054;
-                    L_0x0018:
-                        r10 = org.telegram.ui.Components.PipRoundVideoView.this;
-                        r10 = r10.rect;
-                        r0 = NUM; // 0x3fc00000 float:1.5 double:5.28426686E-315;
-                        r1 = org.telegram.messenger.AndroidUtilities.dpf2(r0);
-                        r2 = org.telegram.messenger.AndroidUtilities.dpf2(r0);
-                        r3 = r6.getMeasuredWidth();
-                        r3 = (float) r3;
-                        r4 = org.telegram.messenger.AndroidUtilities.dpf2(r0);
-                        r3 = r3 - r4;
-                        r4 = r6.getMeasuredHeight();
-                        r4 = (float) r4;
-                        r0 = org.telegram.messenger.AndroidUtilities.dpf2(r0);
-                        r4 = r4 - r0;
-                        r10.set(r1, r2, r3, r4);
-                        r10 = org.telegram.ui.Components.PipRoundVideoView.this;
-                        r1 = r10.rect;
-                        r2 = -NUM; // 0xffffffffc2b40000 float:-90.0 double:NaN;
-                        r10 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
-                        r8 = r8.audioProgress;
-                        r3 = r10 * r8;
-                        r4 = 0;
-                        r5 = org.telegram.ui.ActionBar.Theme.chat_radialProgressPaint;
-                        r0 = r7;
-                        r0.drawArc(r1, r2, r3, r4, r5);
-                    L_0x0054:
-                        return r9;
-                        */
-                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.4.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
+                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                        boolean result;
+                        try {
+                            result = super.drawChild(canvas, child, drawingTime);
+                        } catch (Throwable th) {
+                            result = false;
+                        }
+                        if (child == PipRoundVideoView.this.textureView) {
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (currentMessageObject != null) {
+                                PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                            }
+                        }
+                        return result;
                     }
                 };
                 this.aspectRatioFrameLayout.setLayerType(2, null);
@@ -293,16 +261,16 @@ Error: java.lang.NullPointerException
             this.imageView.setVisibility(4);
             this.windowManager = (WindowManager) activity.getSystemService("window");
             this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-            runnable = this.preferences.getInt("sidex", 1);
-            int i = this.preferences.getInt("sidey", 0);
-            float f = this.preferences.getFloat("px", 0.0f);
-            float f2 = this.preferences.getFloat("py", 0.0f);
+            int sidex = this.preferences.getInt("sidex", 1);
+            int sidey = this.preferences.getInt("sidey", 0);
+            float px = this.preferences.getFloat("px", 0.0f);
+            float py = this.preferences.getFloat("py", 0.0f);
             try {
                 this.windowLayoutParams = new LayoutParams();
                 this.windowLayoutParams.width = this.videoWidth;
                 this.windowLayoutParams.height = this.videoHeight;
-                this.windowLayoutParams.x = getSideCoord(true, runnable, f, this.videoWidth);
-                this.windowLayoutParams.y = getSideCoord(false, i, f2, this.videoHeight);
+                this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
+                this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
                 this.windowLayoutParams.format = -3;
                 this.windowLayoutParams.gravity = 51;
                 this.windowLayoutParams.type = 99;
@@ -318,25 +286,29 @@ Error: java.lang.NullPointerException
         }
     }
 
-    private static int getSideCoord(boolean z, int i, float f, int i2) {
-        int i3;
-        if (z) {
-            i3 = AndroidUtilities.displaySize.x - i2;
+    private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
+        int total;
+        int result;
+        if (isX) {
+            total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            i3 = (AndroidUtilities.displaySize.y - i2) - ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - ActionBar.getCurrentActionBarHeight();
         }
-        if (i == 0) {
-            i = AndroidUtilities.dp(10.0f);
-        } else if (i == 1) {
-            i = i3 - AndroidUtilities.dp(10.0f);
+        if (side == 0) {
+            result = AndroidUtilities.dp(10.0f);
+        } else if (side == 1) {
+            result = total - AndroidUtilities.dp(10.0f);
         } else {
-            i = Math.round(((float) (i3 - AndroidUtilities.dp(NUM))) * f) + AndroidUtilities.dp(10.0f);
+            result = Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p) + AndroidUtilities.dp(10.0f);
         }
-        return !z ? i + ActionBar.getCurrentActionBarHeight() : i;
+        if (isX) {
+            return result;
+        }
+        return result + ActionBar.getCurrentActionBarHeight();
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.messagePlayingProgressDidChanged && this.aspectRatioFrameLayout != 0) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.messagePlayingProgressDidChanged && this.aspectRatioFrameLayout != null) {
             this.aspectRatioFrameLayout.invalidate();
         }
     }
@@ -345,99 +317,54 @@ Error: java.lang.NullPointerException
         return this.textureView;
     }
 
-    public void close(boolean r4) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r3 = this;
-        r0 = 0;
-        if (r4 == 0) goto L_0x0055;
-    L_0x0003:
-        r4 = r3.textureView;
-        if (r4 == 0) goto L_0x007f;
-    L_0x0007:
-        r4 = r3.textureView;
-        r4 = r4.getParent();
-        if (r4 == 0) goto L_0x007f;
-    L_0x000f:
-        r4 = r3.textureView;
-        r4 = r4.getWidth();
-        if (r4 <= 0) goto L_0x0033;
-    L_0x0017:
-        r4 = r3.textureView;
-        r4 = r4.getHeight();
-        if (r4 <= 0) goto L_0x0033;
-    L_0x001f:
-        r4 = r3.textureView;
-        r4 = r4.getWidth();
-        r1 = r3.textureView;
-        r1 = r1.getHeight();
-        r2 = android.graphics.Bitmap.Config.ARGB_8888;
-        r4 = org.telegram.messenger.Bitmaps.createBitmap(r4, r1, r2);
-        r3.bitmap = r4;
-    L_0x0033:
-        r4 = r3.textureView;	 Catch:{ Throwable -> 0x003b }
-        r1 = r3.bitmap;	 Catch:{ Throwable -> 0x003b }
-        r4.getBitmap(r1);	 Catch:{ Throwable -> 0x003b }
-        goto L_0x003d;
-    L_0x003b:
-        r3.bitmap = r0;
-    L_0x003d:
-        r4 = r3.imageView;
-        r0 = r3.bitmap;
-        r4.setImageBitmap(r0);
-        r4 = r3.aspectRatioFrameLayout;	 Catch:{ Exception -> 0x004b }
-        r0 = r3.textureView;	 Catch:{ Exception -> 0x004b }
-        r4.removeView(r0);	 Catch:{ Exception -> 0x004b }
-    L_0x004b:
-        r4 = r3.imageView;
-        r0 = 0;
-        r4.setVisibility(r0);
-        r3.runShowHideAnimation(r0);
-        goto L_0x007f;
-    L_0x0055:
-        r4 = r3.bitmap;
-        if (r4 == 0) goto L_0x0065;
-    L_0x0059:
-        r4 = r3.imageView;
-        r4.setImageDrawable(r0);
-        r4 = r3.bitmap;
-        r4.recycle();
-        r3.bitmap = r0;
-    L_0x0065:
-        r4 = r3.windowManager;	 Catch:{ Exception -> 0x006c }
-        r1 = r3.windowView;	 Catch:{ Exception -> 0x006c }
-        r4.removeView(r1);	 Catch:{ Exception -> 0x006c }
-    L_0x006c:
-        r4 = instance;
-        if (r4 != r3) goto L_0x0072;
-    L_0x0070:
-        instance = r0;
-    L_0x0072:
-        r3.parentActivity = r0;
-        r4 = r3.currentAccount;
-        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
-        r0 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged;
-        r4.removeObserver(r3, r0);
-    L_0x007f:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.close(boolean):void");
+    public void close(boolean animated) {
+        if (!animated) {
+            if (this.bitmap != null) {
+                this.imageView.setImageDrawable(null);
+                this.bitmap.recycle();
+                this.bitmap = null;
+            }
+            try {
+                this.windowManager.removeView(this.windowView);
+            } catch (Exception e) {
+            }
+            if (instance == this) {
+                instance = null;
+            }
+            this.parentActivity = null;
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        } else if (this.textureView != null && this.textureView.getParent() != null) {
+            if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
+                this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
+            }
+            try {
+                this.textureView.getBitmap(this.bitmap);
+            } catch (Throwable th) {
+                this.bitmap = null;
+            }
+            this.imageView.setImageBitmap(this.bitmap);
+            try {
+                this.aspectRatioFrameLayout.removeView(this.textureView);
+            } catch (Exception e2) {
+            }
+            this.imageView.setVisibility(0);
+            runShowHideAnimation(false);
+        }
     }
 
     public void onConfigurationChanged() {
-        int i = this.preferences.getInt("sidex", 1);
-        int i2 = this.preferences.getInt("sidey", 0);
-        float f = this.preferences.getFloat("px", 0.0f);
-        float f2 = this.preferences.getFloat("py", 0.0f);
-        this.windowLayoutParams.x = getSideCoord(true, i, f, this.videoWidth);
-        this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.videoHeight);
+        int sidex = this.preferences.getInt("sidex", 1);
+        int sidey = this.preferences.getInt("sidey", 0);
+        float px = this.preferences.getFloat("px", 0.0f);
+        float py = this.preferences.getFloat("py", 0.0f);
+        this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
+        this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
-    public void showTemporary(boolean z) {
+    public void showTemporary(boolean show) {
+        float f;
+        float f2 = 1.0f;
         if (this.hideShowAnimation != null) {
             this.hideShowAnimation.cancel();
         }
@@ -447,25 +374,29 @@ Error: java.lang.NullPointerException
         FrameLayout frameLayout = this.windowView;
         String str = "alpha";
         float[] fArr = new float[1];
-        float f = 1.0f;
-        fArr[0] = z ? 1.0f : 0.0f;
+        fArr[0] = show ? 1.0f : 0.0f;
         animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
         frameLayout = this.windowView;
         str = "scaleX";
         fArr = new float[1];
-        fArr[0] = z ? 1.0f : 0.8f;
-        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-        FrameLayout frameLayout2 = this.windowView;
-        String str2 = "scaleY";
-        float[] fArr2 = new float[1];
-        if (!z) {
+        if (show) {
+            f = 1.0f;
+        } else {
             f = 0.8f;
         }
-        fArr2[0] = f;
-        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
+        fArr[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        frameLayout = this.windowView;
+        str = "scaleY";
+        fArr = new float[1];
+        if (!show) {
+            f2 = 0.8f;
+        }
+        fArr[0] = f2;
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
         animatorSet.playTogether(animatorArr);
         this.hideShowAnimation.setDuration(150);
-        if (!this.decelerateInterpolator) {
+        if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
         this.hideShowAnimation.addListener(new C12705());
@@ -473,7 +404,9 @@ Error: java.lang.NullPointerException
         this.hideShowAnimation.start();
     }
 
-    private void runShowHideAnimation(final boolean z) {
+    private void runShowHideAnimation(final boolean show) {
+        float f;
+        float f2 = 1.0f;
         if (this.hideShowAnimation != null) {
             this.hideShowAnimation.cancel();
         }
@@ -483,39 +416,43 @@ Error: java.lang.NullPointerException
         FrameLayout frameLayout = this.windowView;
         String str = "alpha";
         float[] fArr = new float[1];
-        float f = 1.0f;
-        fArr[0] = z ? 1.0f : 0.0f;
+        fArr[0] = show ? 1.0f : 0.0f;
         animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
         frameLayout = this.windowView;
         str = "scaleX";
         fArr = new float[1];
-        fArr[0] = z ? 1.0f : 0.8f;
-        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-        FrameLayout frameLayout2 = this.windowView;
-        String str2 = "scaleY";
-        float[] fArr2 = new float[1];
-        if (!z) {
+        if (show) {
+            f = 1.0f;
+        } else {
             f = 0.8f;
         }
-        fArr2[0] = f;
-        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
+        fArr[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        frameLayout = this.windowView;
+        str = "scaleY";
+        fArr = new float[1];
+        if (!show) {
+            f2 = 0.8f;
+        }
+        fArr[0] = f2;
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
         animatorSet.playTogether(animatorArr);
         this.hideShowAnimation.setDuration(150);
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
         this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (animator.equals(PipRoundVideoView.this.hideShowAnimation) != null) {
-                    if (z == null) {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+                    if (!show) {
                         PipRoundVideoView.this.close(false);
                     }
                     PipRoundVideoView.this.hideShowAnimation = null;
                 }
             }
 
-            public void onAnimationCancel(Animator animator) {
-                if (animator.equals(PipRoundVideoView.this.hideShowAnimation) != null) {
+            public void onAnimationCancel(Animator animation) {
+                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
                     PipRoundVideoView.this.hideShowAnimation = null;
                 }
             }
@@ -525,200 +462,77 @@ Error: java.lang.NullPointerException
     }
 
     private void animateToBoundsMaybe() {
-        Collection collection;
-        boolean z;
-        AnimatorSet animatorSet;
-        int sideCoord = getSideCoord(true, 0, 0.0f, this.videoWidth);
-        int sideCoord2 = getSideCoord(true, 1, 0.0f, this.videoWidth);
-        int sideCoord3 = getSideCoord(false, 0, 0.0f, this.videoHeight);
-        int sideCoord4 = getSideCoord(false, 1, 0.0f, this.videoHeight);
-        Editor edit = this.preferences.edit();
-        int dp = AndroidUtilities.dp(20.0f);
-        if (Math.abs(sideCoord - this.windowLayoutParams.x) > dp) {
-            if (this.windowLayoutParams.x >= 0 || this.windowLayoutParams.x <= (-this.videoWidth) / 4) {
-                ArrayList arrayList;
-                if (Math.abs(sideCoord2 - this.windowLayoutParams.x) > dp) {
-                    if (this.windowLayoutParams.x <= AndroidUtilities.displaySize.x - this.videoWidth || this.windowLayoutParams.x >= AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3)) {
-                        if (this.windowView.getAlpha() != 1.0f) {
-                            arrayList = new ArrayList();
-                            if (this.windowLayoutParams.x < 0) {
-                                arrayList.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
-                            } else {
-                                arrayList.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
-                            }
-                            collection = arrayList;
-                            z = true;
-                            if (!z) {
-                                if (Math.abs(sideCoord3 - this.windowLayoutParams.y) > dp) {
-                                    if (this.windowLayoutParams.y > ActionBar.getCurrentActionBarHeight()) {
-                                        if (Math.abs(sideCoord4 - this.windowLayoutParams.y) > dp) {
-                                            if (collection == null) {
-                                                collection = new ArrayList();
-                                            }
-                                            edit.putInt("sidey", 1);
-                                            collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord4}));
-                                        } else {
-                                            edit.putFloat("py", ((float) (this.windowLayoutParams.y - sideCoord3)) / ((float) (sideCoord4 - sideCoord3)));
-                                            edit.putInt("sidey", 2);
-                                        }
-                                        edit.commit();
-                                    }
-                                }
-                                if (collection == null) {
-                                    collection = new ArrayList();
-                                }
-                                edit.putInt("sidey", 0);
-                                collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord3}));
-                                edit.commit();
-                            }
-                            if (collection == null) {
-                                if (this.decelerateInterpolator == null) {
-                                    this.decelerateInterpolator = new DecelerateInterpolator();
-                                }
-                                animatorSet = new AnimatorSet();
-                                animatorSet.setInterpolator(this.decelerateInterpolator);
-                                animatorSet.setDuration(150);
-                                if (z) {
-                                    collection.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                                    animatorSet.addListener(new C12727());
-                                }
-                                animatorSet.playTogether(collection);
-                                animatorSet.start();
-                            }
-                        }
-                        edit.putFloat("px", ((float) (this.windowLayoutParams.x - sideCoord)) / ((float) (sideCoord2 - sideCoord)));
-                        edit.putInt("sidex", 2);
-                        arrayList = null;
-                        collection = arrayList;
-                        z = false;
-                        if (z) {
-                            if (Math.abs(sideCoord3 - this.windowLayoutParams.y) > dp) {
-                                if (this.windowLayoutParams.y > ActionBar.getCurrentActionBarHeight()) {
-                                    if (Math.abs(sideCoord4 - this.windowLayoutParams.y) > dp) {
-                                        edit.putFloat("py", ((float) (this.windowLayoutParams.y - sideCoord3)) / ((float) (sideCoord4 - sideCoord3)));
-                                        edit.putInt("sidey", 2);
-                                    } else {
-                                        if (collection == null) {
-                                            collection = new ArrayList();
-                                        }
-                                        edit.putInt("sidey", 1);
-                                        collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord4}));
-                                    }
-                                    edit.commit();
-                                }
-                            }
-                            if (collection == null) {
-                                collection = new ArrayList();
-                            }
-                            edit.putInt("sidey", 0);
-                            collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord3}));
-                            edit.commit();
-                        }
-                        if (collection == null) {
-                            if (this.decelerateInterpolator == null) {
-                                this.decelerateInterpolator = new DecelerateInterpolator();
-                            }
-                            animatorSet = new AnimatorSet();
-                            animatorSet.setInterpolator(this.decelerateInterpolator);
-                            animatorSet.setDuration(150);
-                            if (z) {
-                                collection.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                                animatorSet.addListener(new C12727());
-                            }
-                            animatorSet.playTogether(collection);
-                            animatorSet.start();
-                        }
-                    }
-                }
-                arrayList = new ArrayList();
-                edit.putInt("sidex", 1);
-                if (this.windowView.getAlpha() != 1.0f) {
-                    arrayList.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-                }
-                arrayList.add(ObjectAnimator.ofInt(this, "x", new int[]{sideCoord2}));
-                collection = arrayList;
-                z = false;
-                if (z) {
-                    if (Math.abs(sideCoord3 - this.windowLayoutParams.y) > dp) {
-                        if (this.windowLayoutParams.y > ActionBar.getCurrentActionBarHeight()) {
-                            if (Math.abs(sideCoord4 - this.windowLayoutParams.y) > dp) {
-                                if (collection == null) {
-                                    collection = new ArrayList();
-                                }
-                                edit.putInt("sidey", 1);
-                                collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord4}));
-                            } else {
-                                edit.putFloat("py", ((float) (this.windowLayoutParams.y - sideCoord3)) / ((float) (sideCoord4 - sideCoord3)));
-                                edit.putInt("sidey", 2);
-                            }
-                            edit.commit();
-                        }
-                    }
-                    if (collection == null) {
-                        collection = new ArrayList();
-                    }
-                    edit.putInt("sidey", 0);
-                    collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord3}));
-                    edit.commit();
-                }
-                if (collection == null) {
-                    if (this.decelerateInterpolator == null) {
-                        this.decelerateInterpolator = new DecelerateInterpolator();
-                    }
-                    animatorSet = new AnimatorSet();
-                    animatorSet.setInterpolator(this.decelerateInterpolator);
-                    animatorSet.setDuration(150);
-                    if (z) {
-                        collection.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                        animatorSet.addListener(new C12727());
-                    }
-                    animatorSet.playTogether(collection);
-                    animatorSet.start();
-                }
+        int startX = getSideCoord(true, 0, 0.0f, this.videoWidth);
+        int endX = getSideCoord(true, 1, 0.0f, this.videoWidth);
+        int startY = getSideCoord(false, 0, 0.0f, this.videoHeight);
+        int endY = getSideCoord(false, 1, 0.0f, this.videoHeight);
+        ArrayList<Animator> animators = null;
+        Editor editor = this.preferences.edit();
+        int maxDiff = AndroidUtilities.dp(20.0f);
+        boolean slideOut = false;
+        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
+            if (null == null) {
+                animators = new ArrayList();
             }
+            editor.putInt("sidex", 0);
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
+            }
+            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
+        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
+            if (null == null) {
+                animators = new ArrayList();
+            }
+            editor.putInt("sidex", 1);
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
+            }
+            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
+        } else if (this.windowView.getAlpha() != 1.0f) {
+            if (null == null) {
+                animators = new ArrayList();
+            }
+            if (this.windowLayoutParams.x < 0) {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
+            } else {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
+            }
+            slideOut = true;
+        } else {
+            editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
+            editor.putInt("sidex", 2);
         }
-        collection = new ArrayList();
-        edit.putInt("sidex", 0);
-        if (this.windowView.getAlpha() != 1.0f) {
-            collection.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-        }
-        collection.add(ObjectAnimator.ofInt(this, "x", new int[]{sideCoord}));
-        z = false;
-        if (z) {
-            if (Math.abs(sideCoord3 - this.windowLayoutParams.y) > dp) {
-                if (this.windowLayoutParams.y > ActionBar.getCurrentActionBarHeight()) {
-                    if (Math.abs(sideCoord4 - this.windowLayoutParams.y) > dp) {
-                        edit.putFloat("py", ((float) (this.windowLayoutParams.y - sideCoord3)) / ((float) (sideCoord4 - sideCoord3)));
-                        edit.putInt("sidey", 2);
-                    } else {
-                        if (collection == null) {
-                            collection = new ArrayList();
-                        }
-                        edit.putInt("sidey", 1);
-                        collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord4}));
-                    }
-                    edit.commit();
+        if (!slideOut) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                if (animators == null) {
+                    animators = new ArrayList();
                 }
+                editor.putInt("sidey", 0);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
+            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
+                if (animators == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidey", 1);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
+            } else {
+                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                editor.putInt("sidey", 2);
             }
-            if (collection == null) {
-                collection = new ArrayList();
-            }
-            edit.putInt("sidey", 0);
-            collection.add(ObjectAnimator.ofInt(this, "y", new int[]{sideCoord3}));
-            edit.commit();
+            editor.commit();
         }
-        if (collection == null) {
+        if (animators != null) {
             if (this.decelerateInterpolator == null) {
                 this.decelerateInterpolator = new DecelerateInterpolator();
             }
-            animatorSet = new AnimatorSet();
+            AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.setInterpolator(this.decelerateInterpolator);
             animatorSet.setDuration(150);
-            if (z) {
-                collection.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
+            if (slideOut) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
                 animatorSet.addListener(new C12727());
             }
-            animatorSet.playTogether(collection);
+            animatorSet.playTogether(animators);
             animatorSet.start();
         }
     }
@@ -731,44 +545,22 @@ Error: java.lang.NullPointerException
         return this.windowLayoutParams.y;
     }
 
-    @android.support.annotation.Keep
-    public void setX(int r3) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        r0 = r2.windowLayoutParams;
-        r0.x = r3;
-        r3 = r2.windowManager;	 Catch:{ Exception -> 0x000d }
-        r0 = r2.windowView;	 Catch:{ Exception -> 0x000d }
-        r1 = r2.windowLayoutParams;	 Catch:{ Exception -> 0x000d }
-        r3.updateViewLayout(r0, r1);	 Catch:{ Exception -> 0x000d }
-    L_0x000d:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.setX(int):void");
+    @Keep
+    public void setX(int value) {
+        this.windowLayoutParams.x = value;
+        try {
+            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        } catch (Exception e) {
+        }
     }
 
-    @android.support.annotation.Keep
-    public void setY(int r3) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        r0 = r2.windowLayoutParams;
-        r0.y = r3;
-        r3 = r2.windowManager;	 Catch:{ Exception -> 0x000d }
-        r0 = r2.windowView;	 Catch:{ Exception -> 0x000d }
-        r1 = r2.windowLayoutParams;	 Catch:{ Exception -> 0x000d }
-        r3.updateViewLayout(r0, r1);	 Catch:{ Exception -> 0x000d }
-    L_0x000d:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.setY(int):void");
+    @Keep
+    public void setY(int value) {
+        this.windowLayoutParams.y = value;
+        try {
+            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        } catch (Exception e) {
+        }
     }
 
     public static PipRoundVideoView getInstance() {

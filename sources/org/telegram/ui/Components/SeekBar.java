@@ -40,57 +40,56 @@ public class SeekBar {
         this.delegate = seekBarDelegate;
     }
 
-    public boolean onTouch(int i, float f, float f2) {
-        if (i == 0) {
-            i = (this.height - thumbWidth) / 2;
-            if (((float) (this.thumbX - i)) <= f && f <= ((float) ((this.thumbX + thumbWidth) + i)) && f2 >= 0 && f2 <= ((float) this.height)) {
+    public boolean onTouch(int action, float x, float y) {
+        if (action == 0) {
+            int additionWidth = (this.height - thumbWidth) / 2;
+            if (((float) (this.thumbX - additionWidth)) <= x && x <= ((float) ((this.thumbX + thumbWidth) + additionWidth)) && y >= 0.0f && y <= ((float) this.height)) {
                 this.pressed = true;
-                this.thumbDX = (int) (f - ((float) this.thumbX));
+                this.thumbDX = (int) (x - ((float) this.thumbX));
                 return true;
             }
-        }
-        if (i != 1) {
-            if (i != 3) {
-                if (i == 2 && this.pressed != 0) {
-                    this.thumbX = (int) (f - ((float) this.thumbDX));
-                    if (this.thumbX < 0) {
-                        this.thumbX = 0;
-                    } else if (this.thumbX > this.width - thumbWidth) {
-                        this.thumbX = this.width - thumbWidth;
-                    }
-                    return true;
+        } else if (action == 1 || action == 3) {
+            if (this.pressed) {
+                if (action == 1 && this.delegate != null) {
+                    this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
                 }
+                this.pressed = false;
+                return true;
             }
-        }
-        if (this.pressed != null) {
-            if (i == 1 && this.delegate != 0) {
-                this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
+        } else if (action == 2 && this.pressed) {
+            this.thumbX = (int) (x - ((float) this.thumbDX));
+            if (this.thumbX < 0) {
+                this.thumbX = 0;
+                return true;
+            } else if (this.thumbX <= this.width - thumbWidth) {
+                return true;
+            } else {
+                this.thumbX = this.width - thumbWidth;
+                return true;
             }
-            this.pressed = false;
-            return true;
         }
         return false;
     }
 
-    public void setColors(int i, int i2, int i3, int i4, int i5) {
-        this.backgroundColor = i;
-        this.cacheColor = i2;
-        this.circleColor = i4;
-        this.progressColor = i3;
-        this.backgroundSelectedColor = i5;
+    public void setColors(int background, int cache, int progress, int circle, int selected) {
+        this.backgroundColor = background;
+        this.cacheColor = cache;
+        this.circleColor = circle;
+        this.progressColor = progress;
+        this.backgroundSelectedColor = selected;
     }
 
-    public void setProgress(float f) {
-        this.thumbX = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * f));
-        if (this.thumbX < null) {
+    public void setProgress(float progress) {
+        this.thumbX = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * progress));
+        if (this.thumbX < 0) {
             this.thumbX = 0;
         } else if (this.thumbX > this.width - thumbWidth) {
             this.thumbX = this.width - thumbWidth;
         }
     }
 
-    public void setBufferedProgress(float f) {
-        this.bufferedProgress = f;
+    public void setBufferedProgress(float value) {
+        this.bufferedProgress = value;
     }
 
     public float getProgress() {
@@ -101,17 +100,17 @@ public class SeekBar {
         return this.pressed;
     }
 
-    public void setSelected(boolean z) {
-        this.selected = z;
+    public void setSelected(boolean value) {
+        this.selected = value;
     }
 
-    public void setSize(int i, int i2) {
-        this.width = i;
-        this.height = i2;
+    public void setSize(int w, int h) {
+        this.width = w;
+        this.height = h;
     }
 
-    public void setLineHeight(int i) {
-        this.lineHeight = i;
+    public void setLineHeight(int value) {
+        this.lineHeight = value;
     }
 
     public void draw(Canvas canvas) {

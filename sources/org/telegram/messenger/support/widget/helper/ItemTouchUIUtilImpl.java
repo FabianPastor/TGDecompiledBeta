@@ -8,12 +8,6 @@ import org.telegram.messenger.support.widget.RecyclerView;
 class ItemTouchUIUtilImpl {
 
     static class BaseImpl implements ItemTouchUIUtil {
-        public void onDrawOver(Canvas canvas, RecyclerView recyclerView, View view, float f, float f2, int i, boolean z) {
-        }
-
-        public void onSelected(View view) {
-        }
-
         BaseImpl() {
         }
 
@@ -22,9 +16,15 @@ class ItemTouchUIUtilImpl {
             view.setTranslationY(0.0f);
         }
 
-        public void onDraw(Canvas canvas, RecyclerView recyclerView, View view, float f, float f2, int i, boolean z) {
-            view.setTranslationX(f);
-            view.setTranslationY(f2);
+        public void onSelected(View view) {
+        }
+
+        public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            view.setTranslationX(dX);
+            view.setTranslationY(dY);
+        }
+
+        public void onDrawOver(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         }
     }
 
@@ -32,28 +32,28 @@ class ItemTouchUIUtilImpl {
         Api21Impl() {
         }
 
-        public void onDraw(Canvas canvas, RecyclerView recyclerView, View view, float f, float f2, int i, boolean z) {
-            if (z && view.getTag() == null) {
-                Float valueOf = Float.valueOf(ViewCompat.getElevation(view));
+        public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            if (isCurrentlyActive && view.getTag() == null) {
+                Float originalElevation = Float.valueOf(ViewCompat.getElevation(view));
                 ViewCompat.setElevation(view, 1.0f + findMaxElevation(recyclerView, view));
-                view.setTag(valueOf);
+                view.setTag(originalElevation);
             }
-            super.onDraw(canvas, recyclerView, view, f, f2, i, z);
+            super.onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
         }
 
-        private float findMaxElevation(RecyclerView recyclerView, View view) {
+        private float findMaxElevation(RecyclerView recyclerView, View itemView) {
             int childCount = recyclerView.getChildCount();
-            float f = 0.0f;
+            float max = 0.0f;
             for (int i = 0; i < childCount; i++) {
-                View childAt = recyclerView.getChildAt(i);
-                if (childAt != view) {
-                    float elevation = ViewCompat.getElevation(childAt);
-                    if (elevation > f) {
-                        f = elevation;
+                View child = recyclerView.getChildAt(i);
+                if (child != itemView) {
+                    float elevation = ViewCompat.getElevation(child);
+                    if (elevation > max) {
+                        max = elevation;
                     }
                 }
             }
-            return f;
+            return max;
         }
 
         public void clearView(View view) {

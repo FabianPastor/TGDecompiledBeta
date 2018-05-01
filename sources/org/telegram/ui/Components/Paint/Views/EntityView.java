@@ -36,14 +36,12 @@ public class EntityView extends FrameLayout {
         C12221() {
         }
 
-        public void onLongPress(MotionEvent motionEvent) {
-            if (EntityView.this.hasPanned == null && EntityView.this.hasTransformed == null) {
-                if (EntityView.this.hasReleased == null) {
-                    EntityView.this.recognizedLongPress = true;
-                    if (EntityView.this.delegate != null) {
-                        EntityView.this.performHapticFeedback(0);
-                        EntityView.this.delegate.onEntityLongClicked(EntityView.this);
-                    }
+        public void onLongPress(MotionEvent e) {
+            if (!EntityView.this.hasPanned && !EntityView.this.hasTransformed && !EntityView.this.hasReleased) {
+                EntityView.this.recognizedLongPress = true;
+                if (EntityView.this.delegate != null) {
+                    EntityView.this.performHapticFeedback(0);
+                    EntityView.this.delegate.onEntityLongClicked(EntityView.this);
                 }
             }
         }
@@ -66,13 +64,9 @@ public class EntityView extends FrameLayout {
         protected Paint dotStrokePaint = new Paint(1);
         protected Paint paint = new Paint(1);
 
-        protected int pointInsideHandle(float f, float f2) {
-            return 0;
-        }
-
         public SelectionView(Context context) {
             super(context);
-            setWillNotDraw(null);
+            setWillNotDraw(false);
             this.paint.setColor(-1);
             this.dotPaint.setColor(-12793105);
             this.dotStrokePaint.setColor(-1);
@@ -81,29 +75,33 @@ public class EntityView extends FrameLayout {
         }
 
         protected void updatePosition() {
-            Rect selectionBounds = EntityView.this.getSelectionBounds();
+            Rect bounds = EntityView.this.getSelectionBounds();
             LayoutParams layoutParams = (LayoutParams) getLayoutParams();
-            layoutParams.leftMargin = ((int) selectionBounds.f26x) + EntityView.this.offsetX;
-            layoutParams.topMargin = ((int) selectionBounds.f27y) + EntityView.this.offsetY;
-            layoutParams.width = (int) selectionBounds.width;
-            layoutParams.height = (int) selectionBounds.height;
+            layoutParams.leftMargin = ((int) bounds.f26x) + EntityView.this.offsetX;
+            layoutParams.topMargin = ((int) bounds.f27y) + EntityView.this.offsetY;
+            layoutParams.width = (int) bounds.width;
+            layoutParams.height = (int) bounds.height;
             setLayoutParams(layoutParams);
             setRotation(EntityView.this.getRotation());
         }
 
-        /* JADX WARNING: inconsistent code. */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            boolean z = false;
-            switch (motionEvent.getActionMasked()) {
+        protected int pointInsideHandle(float x, float y) {
+            return 0;
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            boolean handled = false;
+            switch (event.getActionMasked()) {
                 case 0:
                 case 5:
-                    int pointInsideHandle = pointInsideHandle(motionEvent.getX(), motionEvent.getY());
-                    if (pointInsideHandle != 0) {
-                        this.currentHandle = pointInsideHandle;
-                        EntityView.this.previousLocationX = motionEvent.getRawX();
-                        EntityView.this.previousLocationY = motionEvent.getRawY();
+                    int handle = pointInsideHandle(event.getX(), event.getY());
+                    if (handle != 0) {
+                        this.currentHandle = handle;
+                        EntityView.this.previousLocationX = event.getRawX();
+                        EntityView.this.previousLocationY = event.getRawY();
                         EntityView.this.hasReleased = false;
+                        handled = true;
+                        break;
                     }
                     break;
                 case 1:
@@ -111,54 +109,50 @@ public class EntityView extends FrameLayout {
                 case 6:
                     EntityView.this.onTouchUp();
                     this.currentHandle = 0;
-                    z = true;
+                    handled = true;
                     break;
                 case 2:
-                    if (this.currentHandle == 3) {
-                        z = EntityView.this.onTouchMove(motionEvent.getRawX(), motionEvent.getRawY());
-                        break;
-                    } else if (this.currentHandle != 0) {
-                        EntityView.this.hasTransformed = true;
-                        Point point = new Point(motionEvent.getRawX() - EntityView.this.previousLocationX, motionEvent.getRawY() - EntityView.this.previousLocationY);
-                        double toRadians = (double) ((float) Math.toRadians((double) getRotation()));
-                        float cos = (float) ((((double) point.f24x) * Math.cos(toRadians)) + (((double) point.f25y) * Math.sin(toRadians)));
-                        if (this.currentHandle == 1) {
-                            cos *= -1.0f;
+                    if (this.currentHandle != 3) {
+                        if (this.currentHandle != 0) {
+                            EntityView.this.hasTransformed = true;
+                            Point translation = new Point(event.getRawX() - EntityView.this.previousLocationX, event.getRawY() - EntityView.this.previousLocationY);
+                            float radAngle = (float) Math.toRadians((double) getRotation());
+                            float delta = (float) ((((double) translation.f24x) * Math.cos((double) radAngle)) + (((double) translation.f25y) * Math.sin((double) radAngle)));
+                            if (this.currentHandle == 1) {
+                                delta *= -1.0f;
+                            }
+                            EntityView.this.scale(1.0f + ((2.0f * delta) / ((float) getWidth())));
+                            float centerX = (float) (getLeft() + (getWidth() / 2));
+                            float centerY = (float) (getTop() + (getHeight() / 2));
+                            float parentX = event.getRawX() - ((float) ((View) getParent()).getLeft());
+                            float parentY = (event.getRawY() - ((float) ((View) getParent()).getTop())) - ((float) AndroidUtilities.statusBarHeight);
+                            float angle = 0.0f;
+                            if (this.currentHandle == 1) {
+                                angle = (float) Math.atan2((double) (centerY - parentY), (double) (centerX - parentX));
+                            } else if (this.currentHandle == 2) {
+                                angle = (float) Math.atan2((double) (parentY - centerY), (double) (parentX - centerX));
+                            }
+                            EntityView.this.rotate((float) Math.toDegrees((double) angle));
+                            EntityView.this.previousLocationX = event.getRawX();
+                            EntityView.this.previousLocationY = event.getRawY();
+                            handled = true;
+                            break;
                         }
-                        EntityView.this.scale(1.0f + ((cos * 2.0f) / ((float) getWidth())));
-                        cos = (float) (getLeft() + (getWidth() / 2));
-                        float top = (float) (getTop() + (getHeight() / 2));
-                        float rawX = motionEvent.getRawX() - ((float) ((View) getParent()).getLeft());
-                        float rawY = (motionEvent.getRawY() - ((float) ((View) getParent()).getTop())) - ((float) AndroidUtilities.statusBarHeight);
-                        float f = 0.0f;
-                        if (this.currentHandle == 1) {
-                            f = (float) Math.atan2((double) (top - rawY), (double) (cos - rawX));
-                        } else if (this.currentHandle == 2) {
-                            f = (float) Math.atan2((double) (rawY - top), (double) (rawX - cos));
-                        }
-                        EntityView.this.rotate((float) Math.toDegrees((double) f));
-                        EntityView.this.previousLocationX = motionEvent.getRawX();
-                        EntityView.this.previousLocationY = motionEvent.getRawY();
                     }
+                    handled = EntityView.this.onTouchMove(event.getRawX(), event.getRawY());
                     break;
-                default:
                     break;
             }
-            z = true;
             if (this.currentHandle == 3) {
-                EntityView.this.gestureDetector.onTouchEvent(motionEvent);
+                EntityView.this.gestureDetector.onTouchEvent(event);
             }
-            return z;
+            return handled;
         }
     }
 
-    protected SelectionView createSelectionView() {
-        return null;
-    }
-
-    public EntityView(Context context, Point point) {
+    public EntityView(Context context, Point pos) {
         super(context);
-        this.position = point;
+        this.position = pos;
         this.gestureDetector = new GestureDetector(context, new C12221());
     }
 
@@ -170,8 +164,8 @@ public class EntityView extends FrameLayout {
         return this.position;
     }
 
-    public void setPosition(Point point) {
-        this.position = point;
+    public void setPosition(Point value) {
+        this.position = value;
         updatePosition();
     }
 
@@ -179,33 +173,33 @@ public class EntityView extends FrameLayout {
         return getScaleX();
     }
 
-    public void setScale(float f) {
-        setScaleX(f);
-        setScaleY(f);
+    public void setScale(float scale) {
+        setScaleX(scale);
+        setScaleY(scale);
     }
 
     public void setDelegate(EntityViewDelegate entityViewDelegate) {
         this.delegate = entityViewDelegate;
     }
 
-    public void setOffset(int i, int i2) {
-        this.offsetX = i;
-        this.offsetY = i2;
+    public void setOffset(int x, int y) {
+        this.offsetX = x;
+        this.offsetY = y;
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
         return this.delegate.allowInteraction(this);
     }
 
-    private boolean onTouchMove(float f, float f2) {
-        float scaleX = ((View) getParent()).getScaleX();
-        Point point = new Point((f - this.previousLocationX) / scaleX, (f2 - this.previousLocationY) / scaleX);
-        if (((float) Math.hypot((double) point.f24x, (double) point.f25y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
+    private boolean onTouchMove(float x, float y) {
+        float scale = ((View) getParent()).getScaleX();
+        Point translation = new Point((x - this.previousLocationX) / scale, (y - this.previousLocationY) / scale);
+        if (((float) Math.hypot((double) translation.f24x, (double) translation.f25y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
             return false;
         }
-        pan(point);
-        this.previousLocationX = f;
-        this.previousLocationY = f2;
+        pan(translation);
+        this.previousLocationX = x;
+        this.previousLocationY = y;
         this.hasPanned = true;
         return true;
     }
@@ -221,64 +215,61 @@ public class EntityView extends FrameLayout {
         this.announcedSelection = false;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        boolean z = false;
-        if (motionEvent.getPointerCount() <= 1) {
-            if (this.delegate.allowInteraction(this)) {
-                float rawX = motionEvent.getRawX();
-                float rawY = motionEvent.getRawY();
-                switch (motionEvent.getActionMasked()) {
-                    case 0:
-                    case 5:
-                        if (!(isSelected() || this.delegate == null)) {
-                            this.delegate.onEntitySelected(this);
-                            this.announcedSelection = true;
-                        }
-                        this.previousLocationX = rawX;
-                        this.previousLocationY = rawY;
-                        this.hasReleased = false;
-                        break;
-                    case 1:
-                    case 3:
-                    case 6:
-                        onTouchUp();
-                        break;
-                    case 2:
-                        z = onTouchMove(rawX, rawY);
-                        break;
-                    default:
-                        break;
-                }
-                z = true;
-                this.gestureDetector.onTouchEvent(motionEvent);
-                return z;
-            }
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() > 1 || !this.delegate.allowInteraction(this)) {
+            return false;
         }
-        return false;
+        float x = event.getRawX();
+        float y = event.getRawY();
+        boolean handled = false;
+        switch (event.getActionMasked()) {
+            case 0:
+            case 5:
+                if (!(isSelected() || this.delegate == null)) {
+                    this.delegate.onEntitySelected(this);
+                    this.announcedSelection = true;
+                }
+                this.previousLocationX = x;
+                this.previousLocationY = y;
+                handled = true;
+                this.hasReleased = false;
+                break;
+            case 1:
+            case 3:
+            case 6:
+                onTouchUp();
+                handled = true;
+                break;
+            case 2:
+                handled = onTouchMove(x, y);
+                break;
+        }
+        this.gestureDetector.onTouchEvent(event);
+        return handled;
     }
 
-    public void pan(Point point) {
-        Point point2 = this.position;
-        point2.f24x += point.f24x;
-        point2 = this.position;
-        point2.f25y += point.f25y;
+    public void pan(Point translation) {
+        Point point = this.position;
+        point.f24x += translation.f24x;
+        point = this.position;
+        point.f25y += translation.f25y;
         updatePosition();
     }
 
     protected void updatePosition() {
-        float height = ((float) getHeight()) / 2.0f;
+        float halfHeight = ((float) getHeight()) / 2.0f;
         setX(this.position.f24x - (((float) getWidth()) / 2.0f));
-        setY(this.position.f25y - height);
+        setY(this.position.f25y - halfHeight);
         updateSelectionView();
     }
 
-    public void scale(float f) {
-        setScale(Math.max(getScale() * f, 0.1f));
+    public void scale(float scale) {
+        setScale(Math.max(getScale() * scale, 0.1f));
         updateSelectionView();
     }
 
-    public void rotate(float f) {
-        setRotation(f);
+    public void rotate(float angle) {
+        setRotation(angle);
         updateSelectionView();
     }
 
@@ -290,17 +281,21 @@ public class EntityView extends FrameLayout {
         return this.selectionView != null;
     }
 
+    protected SelectionView createSelectionView() {
+        return null;
+    }
+
     public void updateSelectionView() {
         if (this.selectionView != null) {
             this.selectionView.updatePosition();
         }
     }
 
-    public void select(ViewGroup viewGroup) {
-        View createSelectionView = createSelectionView();
-        this.selectionView = createSelectionView;
-        viewGroup.addView(createSelectionView);
-        createSelectionView.updatePosition();
+    public void select(ViewGroup selectionContainer) {
+        SelectionView selectionView = createSelectionView();
+        this.selectionView = selectionView;
+        selectionContainer.addView(selectionView);
+        selectionView.updatePosition();
     }
 
     public void deselect() {
@@ -312,9 +307,9 @@ public class EntityView extends FrameLayout {
         }
     }
 
-    public void setSelectionVisibility(boolean z) {
+    public void setSelectionVisibility(boolean visible) {
         if (this.selectionView != null) {
-            this.selectionView.setVisibility(z ? false : true);
+            this.selectionView.setVisibility(visible ? 0 : 8);
         }
     }
 }

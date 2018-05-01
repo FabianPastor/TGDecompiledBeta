@@ -7,24 +7,21 @@ import android.view.View;
 import org.telegram.messenger.browser.Browser;
 
 public class URLSpanNoUnderline extends URLSpan {
-    public URLSpanNoUnderline(String str) {
-        super(str);
+    public URLSpanNoUnderline(String url) {
+        super(url);
     }
 
-    public void onClick(View view) {
+    public void onClick(View widget) {
         String url = getURL();
         if (url.startsWith("@")) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("https://t.me/");
-            stringBuilder.append(url.substring(1));
-            Browser.openUrl(view.getContext(), Uri.parse(stringBuilder.toString()));
+            Browser.openUrl(widget.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
             return;
         }
-        Browser.openUrl(view.getContext(), url);
+        Browser.openUrl(widget.getContext(), url);
     }
 
-    public void updateDrawState(TextPaint textPaint) {
-        super.updateDrawState(textPaint);
-        textPaint.setUnderlineText(false);
+    public void updateDrawState(TextPaint ds) {
+        super.updateDrawState(ds);
+        ds.setUnderlineText(false);
     }
 }

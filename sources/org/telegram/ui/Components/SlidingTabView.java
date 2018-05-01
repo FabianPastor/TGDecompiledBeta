@@ -39,69 +39,69 @@ public class SlidingTabView extends LinearLayout {
         this.interpolator = new DecelerateInterpolator();
     }
 
-    public void addTextTab(final int i, String str) {
-        View textView = new TextView(getContext());
-        textView.setText(str);
-        textView.setFocusable(true);
-        textView.setGravity(17);
-        textView.setSingleLine();
-        textView.setTextColor(-1);
-        textView.setTextSize(1, 14.0f);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
-        textView.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                SlidingTabView.this.didSelectTab(i);
+    public void addTextTab(final int position, String title) {
+        TextView tab = new TextView(getContext());
+        tab.setText(title);
+        tab.setFocusable(true);
+        tab.setGravity(17);
+        tab.setSingleLine();
+        tab.setTextColor(-1);
+        tab.setTextSize(1, 14.0f);
+        tab.setTypeface(Typeface.DEFAULT_BOLD);
+        tab.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                SlidingTabView.this.didSelectTab(position);
             }
         });
-        addView(textView);
-        LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
+        addView(tab);
+        LayoutParams layoutParams = (LayoutParams) tab.getLayoutParams();
         layoutParams.height = -1;
         layoutParams.width = 0;
         layoutParams.weight = 50.0f;
-        textView.setLayoutParams(layoutParams);
+        tab.setLayoutParams(layoutParams);
         this.tabCount++;
     }
 
-    public void setDelegate(SlidingTabViewDelegate slidingTabViewDelegate) {
-        this.delegate = slidingTabViewDelegate;
+    public void setDelegate(SlidingTabViewDelegate delegate) {
+        this.delegate = delegate;
     }
 
     public int getSeletedTab() {
         return this.selectedTab;
     }
 
-    private void didSelectTab(int i) {
-        if (this.selectedTab != i) {
-            this.selectedTab = i;
-            animateToTab(i);
+    private void didSelectTab(int tab) {
+        if (this.selectedTab != tab) {
+            this.selectedTab = tab;
+            animateToTab(tab);
             if (this.delegate != null) {
-                this.delegate.didSelectTab(i);
+                this.delegate.didSelectTab(tab);
             }
         }
     }
 
-    private void animateToTab(int i) {
-        this.animateTabXTo = ((float) i) * this.tabWidth;
+    private void animateToTab(int tab) {
+        this.animateTabXTo = ((float) tab) * this.tabWidth;
         this.startAnimationX = this.tabX;
         this.totalAnimationDiff = 0;
         this.startAnimationTime = System.currentTimeMillis();
         invalidate();
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
-        this.tabWidth = ((float) (i3 - i)) / ((float) this.tabCount);
-        z = this.tabWidth * ((float) this.selectedTab);
-        this.tabX = z;
-        this.animateTabXTo = z;
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        this.tabWidth = ((float) (r - l)) / ((float) this.tabCount);
+        float f = this.tabWidth * ((float) this.selectedTab);
+        this.tabX = f;
+        this.animateTabXTo = f;
     }
 
     protected void onDraw(Canvas canvas) {
         if (this.tabX != this.animateTabXTo) {
-            long currentTimeMillis = System.currentTimeMillis() - this.startAnimationTime;
+            long dt = System.currentTimeMillis() - this.startAnimationTime;
             this.startAnimationTime = System.currentTimeMillis();
-            this.totalAnimationDiff += currentTimeMillis;
+            this.totalAnimationDiff += dt;
             if (this.totalAnimationDiff > 200) {
                 this.totalAnimationDiff = 200;
                 this.tabX = this.animateTabXTo;
@@ -110,6 +110,7 @@ public class SlidingTabView extends LinearLayout {
                 invalidate();
             }
         }
-        canvas.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.dp(2.0f)), this.tabX + this.tabWidth, (float) getHeight(), this.paint);
+        Canvas canvas2 = canvas;
+        canvas2.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.dp(2.0f)), this.tabWidth + this.tabX, (float) getHeight(), this.paint);
     }
 }

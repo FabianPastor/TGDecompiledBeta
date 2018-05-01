@@ -15,34 +15,34 @@ import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable;
 
 public final class SsDownloader extends SegmentDownloader<SsManifest, TrackKey> {
-    public SsDownloader(Uri uri, DownloaderConstructorHelper downloaderConstructorHelper) {
-        super(uri, downloaderConstructorHelper);
+    public SsDownloader(Uri manifestUri, DownloaderConstructorHelper constructorHelper) {
+        super(manifestUri, constructorHelper);
     }
 
     public SsManifest getManifest(DataSource dataSource, Uri uri) throws IOException {
-        uri = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new SsManifestParser());
-        uri.load();
-        return (SsManifest) uri.getResult();
+        ParsingLoadable<SsManifest> loadable = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new SsManifestParser());
+        loadable.load();
+        return (SsManifest) loadable.getResult();
     }
 
-    protected List<Segment> getAllSegments(DataSource dataSource, SsManifest ssManifest, boolean z) throws InterruptedException, IOException {
-        List arrayList = new ArrayList();
-        for (StreamElement streamElement : ssManifest.streamElements) {
-            for (int i = 0; i < streamElement.formats.length; i++) {
-                arrayList.addAll(getSegments(dataSource, ssManifest, new TrackKey[]{new TrackKey(r2, i)}, z));
+    protected List<Segment> getAllSegments(DataSource dataSource, SsManifest manifest, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
+        ArrayList<Segment> segments = new ArrayList();
+        for (StreamElement streamElement : manifest.streamElements) {
+            for (int j = 0; j < streamElement.formats.length; j++) {
+                segments.addAll(getSegments(dataSource, manifest, new TrackKey[]{new TrackKey(i, j)}, allowIndexLoadErrors));
             }
         }
-        return arrayList;
+        return segments;
     }
 
-    protected List<Segment> getSegments(DataSource dataSource, SsManifest ssManifest, TrackKey[] trackKeyArr, boolean z) throws InterruptedException, IOException {
-        dataSource = new ArrayList();
-        for (TrackKey trackKey : trackKeyArr) {
-            StreamElement streamElement = ssManifest.streamElements[trackKey.streamElementIndex];
+    protected List<Segment> getSegments(DataSource dataSource, SsManifest manifest, TrackKey[] keys, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
+        ArrayList<Segment> segments = new ArrayList();
+        for (TrackKey key : keys) {
+            StreamElement streamElement = manifest.streamElements[key.streamElementIndex];
             for (int i = 0; i < streamElement.chunkCount; i++) {
-                dataSource.add(new Segment(streamElement.getStartTimeUs(i), new DataSpec(streamElement.buildRequestUri(trackKey.trackIndex, i))));
+                segments.add(new Segment(streamElement.getStartTimeUs(i), new DataSpec(streamElement.buildRequestUri(key.trackIndex, i))));
             }
         }
-        return dataSource;
+        return segments;
     }
 }

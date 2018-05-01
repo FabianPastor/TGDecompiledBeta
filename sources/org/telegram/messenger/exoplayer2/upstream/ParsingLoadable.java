@@ -20,14 +20,14 @@ public final class ParsingLoadable<T> implements Loadable {
         T parse(Uri uri, InputStream inputStream) throws IOException;
     }
 
-    public ParsingLoadable(DataSource dataSource, Uri uri, int i, Parser<? extends T> parser) {
-        this(dataSource, new DataSpec(uri, 1), i, (Parser) parser);
+    public ParsingLoadable(DataSource dataSource, Uri uri, int type, Parser<? extends T> parser) {
+        this(dataSource, new DataSpec(uri, 1), type, (Parser) parser);
     }
 
-    public ParsingLoadable(DataSource dataSource, DataSpec dataSpec, int i, Parser<? extends T> parser) {
+    public ParsingLoadable(DataSource dataSource, DataSpec dataSpec, int type, Parser<? extends T> parser) {
         this.dataSource = dataSource;
         this.dataSpec = dataSpec;
-        this.type = i;
+        this.type = type;
         this.parser = parser;
     }
 
@@ -48,13 +48,13 @@ public final class ParsingLoadable<T> implements Loadable {
     }
 
     public final void load() throws IOException {
-        Closeable dataSourceInputStream = new DataSourceInputStream(this.dataSource, this.dataSpec);
+        Closeable inputStream = new DataSourceInputStream(this.dataSource, this.dataSpec);
         try {
-            dataSourceInputStream.open();
-            this.result = this.parser.parse(this.dataSource.getUri(), dataSourceInputStream);
+            inputStream.open();
+            this.result = this.parser.parse(this.dataSource.getUri(), inputStream);
         } finally {
-            this.bytesLoaded = dataSourceInputStream.bytesRead();
-            Util.closeQuietly(dataSourceInputStream);
+            this.bytesLoaded = inputStream.bytesRead();
+            Util.closeQuietly(inputStream);
         }
     }
 }

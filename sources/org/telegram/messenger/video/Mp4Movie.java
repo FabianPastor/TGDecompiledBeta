@@ -29,21 +29,21 @@ public class Mp4Movie {
         this.cacheFile = file;
     }
 
-    public void setRotation(int i) {
-        if (i == 0) {
+    public void setRotation(int angle) {
+        if (angle == 0) {
             this.matrix = Matrix.ROTATE_0;
-        } else if (i == 90) {
+        } else if (angle == 90) {
             this.matrix = Matrix.ROTATE_90;
-        } else if (i == 180) {
+        } else if (angle == 180) {
             this.matrix = Matrix.ROTATE_180;
-        } else if (i == 270) {
+        } else if (angle == 270) {
             this.matrix = Matrix.ROTATE_270;
         }
     }
 
-    public void setSize(int i, int i2) {
-        this.width = i;
-        this.height = i2;
+    public void setSize(int w, int h) {
+        this.width = w;
+        this.height = h;
     }
 
     public ArrayList<Track> getTracks() {
@@ -54,16 +54,14 @@ public class Mp4Movie {
         return this.cacheFile;
     }
 
-    public void addSample(int i, long j, BufferInfo bufferInfo) {
-        if (i >= 0) {
-            if (i < this.tracks.size()) {
-                ((Track) this.tracks.get(i)).addSample(j, bufferInfo);
-            }
+    public void addSample(int trackIndex, long offset, BufferInfo bufferInfo) {
+        if (trackIndex >= 0 && trackIndex < this.tracks.size()) {
+            ((Track) this.tracks.get(trackIndex)).addSample(offset, bufferInfo);
         }
     }
 
-    public int addTrack(MediaFormat mediaFormat, boolean z) {
-        this.tracks.add(new Track(this.tracks.size(), mediaFormat, z));
+    public int addTrack(MediaFormat mediaFormat, boolean isAudio) {
+        this.tracks.add(new Track(this.tracks.size(), mediaFormat, isAudio));
         return this.tracks.size() - 1;
     }
 }

@@ -12,8 +12,8 @@ public class DividerCell extends View {
         super(context);
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(NUM) + 1);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(16.0f) + 1);
     }
 
     protected void onDraw(Canvas canvas) {

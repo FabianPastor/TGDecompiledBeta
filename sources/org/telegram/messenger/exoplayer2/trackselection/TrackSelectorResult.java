@@ -11,36 +11,30 @@ public final class TrackSelectorResult {
     public final boolean[] renderersEnabled;
     public final TrackSelectionArray selections;
 
-    public TrackSelectorResult(TrackGroupArray trackGroupArray, boolean[] zArr, TrackSelectionArray trackSelectionArray, Object obj, RendererConfiguration[] rendererConfigurationArr) {
-        this.groups = trackGroupArray;
-        this.renderersEnabled = zArr;
-        this.selections = trackSelectionArray;
-        this.info = obj;
-        this.rendererConfigurations = rendererConfigurationArr;
+    public TrackSelectorResult(TrackGroupArray groups, boolean[] renderersEnabled, TrackSelectionArray selections, Object info, RendererConfiguration[] rendererConfigurations) {
+        this.groups = groups;
+        this.renderersEnabled = renderersEnabled;
+        this.selections = selections;
+        this.info = info;
+        this.rendererConfigurations = rendererConfigurations;
     }
 
-    public boolean isEquivalent(TrackSelectorResult trackSelectorResult) {
-        if (trackSelectorResult != null) {
-            if (trackSelectorResult.selections.length == this.selections.length) {
-                for (int i = 0; i < this.selections.length; i++) {
-                    if (!isEquivalent(trackSelectorResult, i)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isEquivalent(TrackSelectorResult trackSelectorResult, int i) {
-        boolean z = false;
-        if (trackSelectorResult == null) {
+    public boolean isEquivalent(TrackSelectorResult other) {
+        if (other == null || other.selections.length != this.selections.length) {
             return false;
         }
-        if (this.renderersEnabled[i] == trackSelectorResult.renderersEnabled[i] && Util.areEqual(this.selections.get(i), trackSelectorResult.selections.get(i)) && Util.areEqual(this.rendererConfigurations[i], trackSelectorResult.rendererConfigurations[i]) != null) {
-            z = true;
+        for (int i = 0; i < this.selections.length; i++) {
+            if (!isEquivalent(other, i)) {
+                return false;
+            }
         }
-        return z;
+        return true;
+    }
+
+    public boolean isEquivalent(TrackSelectorResult other, int index) {
+        if (other != null && this.renderersEnabled[index] == other.renderersEnabled[index] && Util.areEqual(this.selections.get(index), other.selections.get(index)) && Util.areEqual(this.rendererConfigurations[index], other.rendererConfigurations[index])) {
+            return true;
+        }
+        return false;
     }
 }

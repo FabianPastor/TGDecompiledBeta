@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -31,13 +30,13 @@ import java.util.Map.Entry;
 
 public class Emoji {
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
-    private static final int[][] cols;
+    private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{9, 9, 9, 9}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
     private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
     public static HashMap<String, String> emojiColor = new HashMap();
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
     private static boolean inited = false;
-    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(boolean.class, new int[]{5, 4}));
+    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(Boolean.TYPE, new int[]{5, 4}));
     private static Paint placeholderPaint = new Paint();
     public static ArrayList<String> recentEmoji = new ArrayList();
     private static boolean recentEmojiLoaded = false;
@@ -49,19 +48,19 @@ public class Emoji {
         C01482() {
         }
 
-        public int compare(String str, String str2) {
-            str = (Integer) Emoji.emojiUseHistory.get(str);
-            str2 = (Integer) Emoji.emojiUseHistory.get(str2);
-            if (str == null) {
-                str = Integer.valueOf(0);
+        public int compare(String lhs, String rhs) {
+            Integer count1 = (Integer) Emoji.emojiUseHistory.get(lhs);
+            Integer count2 = (Integer) Emoji.emojiUseHistory.get(rhs);
+            if (count1 == null) {
+                count1 = Integer.valueOf(0);
             }
-            if (str2 == null) {
-                str2 = Integer.valueOf(0);
+            if (count2 == null) {
+                count2 = Integer.valueOf(0);
             }
-            if (str.intValue() > str2.intValue()) {
+            if (count1.intValue() > count2.intValue()) {
                 return -1;
             }
-            if (str.intValue() < str2.intValue()) {
+            if (count1.intValue() < count2.intValue()) {
                 return 1;
             }
             return 0;
@@ -74,11 +73,11 @@ public class Emoji {
         public byte page2;
         public Rect rect;
 
-        public DrawableInfo(Rect rect, byte b, byte b2, int i) {
-            this.rect = rect;
-            this.page = b;
-            this.page2 = b2;
-            this.emojiIndex = i;
+        public DrawableInfo(Rect r, byte p, byte p2, int index) {
+            this.rect = r;
+            this.page = p;
+            this.page2 = p2;
+            this.emojiIndex = index;
         }
     }
 
@@ -100,18 +99,8 @@ public class Emoji {
             }
         }
 
-        public int getOpacity() {
-            return -2;
-        }
-
-        public void setAlpha(int i) {
-        }
-
-        public void setColorFilter(ColorFilter colorFilter) {
-        }
-
-        public EmojiDrawable(DrawableInfo drawableInfo) {
-            this.info = drawableInfo;
+        public EmojiDrawable(DrawableInfo i) {
+            this.info = i;
         }
 
         public DrawableInfo getDrawableInfo() {
@@ -119,30 +108,40 @@ public class Emoji {
         }
 
         public Rect getDrawRect() {
-            Rect bounds = getBounds();
-            int centerX = bounds.centerX();
-            int centerY = bounds.centerY();
-            rect.left = centerX - ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
-            rect.right = centerX + ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
-            rect.top = centerY - ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
-            rect.bottom = centerY + ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
+            Rect original = getBounds();
+            int cX = original.centerX();
+            int cY = original.centerY();
+            rect.left = cX - ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
+            rect.right = ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2) + cX;
+            rect.top = cY - ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2);
+            rect.bottom = ((this.fullSize ? Emoji.bigImgSize : Emoji.drawImgSize) / 2) + cY;
             return rect;
         }
 
         public void draw(Canvas canvas) {
             if (Emoji.emojiBmp[this.info.page][this.info.page2] != null) {
-                Rect drawRect;
+                Rect b;
                 if (this.fullSize) {
-                    drawRect = getDrawRect();
+                    b = getDrawRect();
                 } else {
-                    drawRect = getBounds();
+                    b = getBounds();
                 }
-                canvas.drawBitmap(Emoji.emojiBmp[this.info.page][this.info.page2], this.info.rect, drawRect, paint);
+                canvas.drawBitmap(Emoji.emojiBmp[this.info.page][this.info.page2], this.info.rect, b, paint);
             } else if (!Emoji.loadingEmoji[this.info.page][this.info.page2]) {
                 Emoji.loadingEmoji[this.info.page][this.info.page2] = true;
                 Utilities.globalQueue.postRunnable(new C01491());
                 canvas.drawRect(getBounds(), Emoji.placeholderPaint);
             }
+        }
+
+        public int getOpacity() {
+            return -2;
+        }
+
+        public void setAlpha(int alpha) {
+        }
+
+        public void setColorFilter(ColorFilter cf) {
         }
     }
 
@@ -150,10 +149,10 @@ public class Emoji {
         private FontMetricsInt fontMetrics = null;
         private int size = AndroidUtilities.dp(20.0f);
 
-        public EmojiSpan(EmojiDrawable emojiDrawable, int i, int i2, FontMetricsInt fontMetricsInt) {
-            super(emojiDrawable, i);
-            this.fontMetrics = fontMetricsInt;
-            if (fontMetricsInt != null) {
+        public EmojiSpan(EmojiDrawable d, int verticalAlignment, int s, FontMetricsInt original) {
+            super(d, verticalAlignment);
+            this.fontMetrics = original;
+            if (original != null) {
                 this.size = Math.abs(this.fontMetrics.descent) + Math.abs(this.fontMetrics.ascent);
                 if (this.size == 0) {
                     this.size = AndroidUtilities.dp(20.0f);
@@ -161,33 +160,31 @@ public class Emoji {
             }
         }
 
-        public void replaceFontMetrics(FontMetricsInt fontMetricsInt, int i) {
-            this.fontMetrics = fontMetricsInt;
-            this.size = i;
+        public void replaceFontMetrics(FontMetricsInt newMetrics, int newSize) {
+            this.fontMetrics = newMetrics;
+            this.size = newSize;
         }
 
-        public int getSize(Paint paint, CharSequence charSequence, int i, int i2, FontMetricsInt fontMetricsInt) {
-            if (fontMetricsInt == null) {
-                fontMetricsInt = new FontMetricsInt();
+        public int getSize(Paint paint, CharSequence text, int start, int end, FontMetricsInt fm) {
+            if (fm == null) {
+                fm = new FontMetricsInt();
             }
             if (this.fontMetrics == null) {
-                paint = super.getSize(paint, charSequence, i, i2, fontMetricsInt);
-                charSequence = AndroidUtilities.dp(8.0f);
-                i = AndroidUtilities.dp(NUM);
-                i2 = (-i) - charSequence;
-                fontMetricsInt.top = i2;
-                i -= charSequence;
-                fontMetricsInt.bottom = i;
-                fontMetricsInt.ascent = i2;
-                fontMetricsInt.leading = 0;
-                fontMetricsInt.descent = i;
-                return paint;
+                int sz = super.getSize(paint, text, start, end, fm);
+                int offset = AndroidUtilities.dp(8.0f);
+                int w = AndroidUtilities.dp(10.0f);
+                fm.top = (-w) - offset;
+                fm.bottom = w - offset;
+                fm.ascent = (-w) - offset;
+                fm.leading = 0;
+                fm.descent = w - offset;
+                return sz;
             }
-            if (fontMetricsInt != null) {
-                fontMetricsInt.ascent = this.fontMetrics.ascent;
-                fontMetricsInt.descent = this.fontMetrics.descent;
-                fontMetricsInt.top = this.fontMetrics.top;
-                fontMetricsInt.bottom = this.fontMetrics.bottom;
+            if (fm != null) {
+                fm.ascent = this.fontMetrics.ascent;
+                fm.descent = this.fontMetrics.descent;
+                fm.top = this.fontMetrics.top;
+                fm.bottom = this.fontMetrics.bottom;
             }
             if (getDrawable() != null) {
                 getDrawable().setBounds(0, 0, this.size, this.size);
@@ -199,2425 +196,356 @@ public class Emoji {
     public static native Object[] getSuggestion(String str);
 
     static {
-        r0 = new int[5][];
-        int i = 2;
-        r0[2] = new int[]{9, 9, 9, 9};
-        r0[3] = new int[]{9, 9, 9, 9};
-        r0[4] = new int[]{10, 10, 10, 10};
-        cols = r0;
-        int i2 = 64;
+        int emojiFullSize;
+        int add = 2;
         if (AndroidUtilities.density <= 1.0f) {
-            i2 = 32;
-            i = 1;
-        } else if (AndroidUtilities.density > 1.5f) {
-            int i3 = (AndroidUtilities.density > 2.0f ? 1 : (AndroidUtilities.density == 2.0f ? 0 : -1));
+            emojiFullSize = 32;
+            add = 1;
+        } else if (AndroidUtilities.density <= 1.5f) {
+            emojiFullSize = 64;
+        } else if (AndroidUtilities.density <= 2.0f) {
+            emojiFullSize = 64;
+        } else {
+            emojiFullSize = 64;
         }
-        for (i3 = 0; i3 < EmojiData.data.length; i3++) {
-            int ceil = (int) Math.ceil((double) (((float) EmojiData.data[i3].length) / 4.0f));
-            for (int i4 = 0; i4 < EmojiData.data[i3].length; i4++) {
-                int i5 = i4 / ceil;
-                int i6 = i4 - (i5 * ceil);
-                int i7 = i6 % cols[i3][i5];
-                i6 /= cols[i3][i5];
-                int i8 = i7 * i;
-                int i9 = i6 * i;
-                rects.put(EmojiData.data[i3][i4], new DrawableInfo(new Rect((i7 * i2) + i8, (i6 * i2) + i9, ((i7 + 1) * i2) + i8, ((i6 + 1) * i2) + i9), (byte) i3, (byte) i5, i4));
+        for (int j = 0; j < EmojiData.data.length; j++) {
+            int count2 = (int) Math.ceil((double) (((float) EmojiData.data[j].length) / 4.0f));
+            for (int i = 0; i < EmojiData.data[j].length; i++) {
+                int page = i / count2;
+                int position = i - (page * count2);
+                int row = position % cols[j][page];
+                int col = position / cols[j][page];
+                rects.put(EmojiData.data[j][i], new DrawableInfo(new Rect((row * emojiFullSize) + (row * add), (col * emojiFullSize) + (col * add), ((row + 1) * emojiFullSize) + (row * add), ((col + 1) * emojiFullSize) + (col * add)), (byte) j, (byte) page, i));
             }
         }
         placeholderPaint.setColor(0);
     }
 
-    private static void loadEmoji(final int i, final int i2) {
-        int i3;
-        Bitmap decodeStream;
-        Throwable th;
+    private static void loadEmoji(int page, int page2) {
+        float scale;
+        int imageResize = 1;
         try {
-            int i4;
-            File fileStreamPath;
+            int a;
+            File imageFile;
             if (AndroidUtilities.density <= 1.0f) {
-                i3 = 2;
+                scale = 2.0f;
+                imageResize = 2;
+            } else if (AndroidUtilities.density <= 1.5f) {
+                scale = 2.0f;
+            } else if (AndroidUtilities.density <= 2.0f) {
+                scale = 2.0f;
             } else {
-                if (AndroidUtilities.density > 1.5f) {
-                    i3 = (AndroidUtilities.density > 2.0f ? 1 : (AndroidUtilities.density == 2.0f ? 0 : -1));
-                }
-                i3 = 1;
+                scale = 2.0f;
             }
-            for (i4 = 4; i4 < 7; i4++) {
-                fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.jpg", new Object[]{Integer.valueOf(i4), Float.valueOf(2.0f), Integer.valueOf(i)}));
-                if (fileStreamPath.exists()) {
-                    fileStreamPath.delete();
+            for (a = 4; a < 7; a++) {
+                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.jpg", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
+                if (imageFile.exists()) {
+                    imageFile.delete();
                 }
-                fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_a_%d.jpg", new Object[]{Integer.valueOf(i4), Float.valueOf(2.0f), Integer.valueOf(i)}));
-                if (fileStreamPath.exists()) {
-                    fileStreamPath.delete();
+                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_a_%d.jpg", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
+                if (imageFile.exists()) {
+                    imageFile.delete();
                 }
             }
-            for (i4 = 8; i4 < 12; i4++) {
-                fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(i4), Float.valueOf(2.0f), Integer.valueOf(i)}));
-                if (fileStreamPath.exists()) {
-                    fileStreamPath.delete();
+            for (a = 8; a < 12; a++) {
+                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
+                if (imageFile.exists()) {
+                    imageFile.delete();
                 }
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
-        } catch (int i5) {
-            if (BuildVars.LOGS_ENABLED != 0) {
-                FileLog.m2e("Error loading emoji", i5);
+        } catch (Throwable x) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m2e("Error loading emoji", x);
                 return;
             }
             return;
         }
+        Bitmap bitmap = null;
         try {
-            AssetManager assets = ApplicationLoader.applicationContext.getAssets();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("emoji/");
-            stringBuilder.append(String.format(Locale.US, "v12_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(2.0f), Integer.valueOf(i5), Integer.valueOf(i2)}));
-            InputStream open = assets.open(stringBuilder.toString());
-            Options options = new Options();
-            options.inJustDecodeBounds = false;
-            options.inSampleSize = i3;
-            decodeStream = BitmapFactory.decodeStream(open, null, options);
-            try {
-                open.close();
-            } catch (Throwable th2) {
-                th = th2;
-                FileLog.m3e(th);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        Emoji.emojiBmp[i5][i2] = decodeStream;
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
-                    }
-                });
-            }
-        } catch (Throwable th3) {
-            th = th3;
-            decodeStream = null;
-            FileLog.m3e(th);
-            AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v12_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
+            Options opts = new Options();
+            opts.inJustDecodeBounds = false;
+            opts.inSampleSize = imageResize;
+            bitmap = BitmapFactory.decodeStream(is, null, opts);
+            is.close();
+        } catch (Throwable e2) {
+            FileLog.m3e(e2);
         }
-        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+        final Bitmap finalBitmap = bitmap;
+        final int i = page;
+        final int i2 = page2;
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                Emoji.emojiBmp[i][i2] = finalBitmap;
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
+            }
+        });
     }
 
     public static void invalidateAll(View view) {
         if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                invalidateAll(viewGroup.getChildAt(i));
+            ViewGroup g = (ViewGroup) view;
+            for (int i = 0; i < g.getChildCount(); i++) {
+                invalidateAll(g.getChildAt(i));
             }
         } else if (view instanceof TextView) {
             view.invalidate();
         }
     }
 
-    public static String fixEmoji(String str) {
-        int length = str.length();
-        String str2 = str;
-        str = null;
-        while (str < length) {
-            char charAt = str2.charAt(str);
-            StringBuilder stringBuilder;
-            if (charAt < '\ud83c' || charAt > '\ud83e') {
-                if (charAt == '\u20e3') {
-                    return str2;
+    public static String fixEmoji(String emoji) {
+        int lenght = emoji.length();
+        int a = 0;
+        while (a < lenght) {
+            char ch = emoji.charAt(a);
+            if (ch < '\ud83c' || ch > '\ud83e') {
+                if (ch == '\u20e3') {
+                    break;
+                } else if (ch >= '\u203c' && ch <= '\u3299' && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(ch))) {
+                    emoji = emoji.substring(0, a + 1) + "\ufe0f" + emoji.substring(a + 1);
+                    lenght++;
+                    a++;
                 }
-                if (charAt >= '\u203c' && charAt <= '\u3299' && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(charAt))) {
-                    stringBuilder = new StringBuilder();
-                    str++;
-                    stringBuilder.append(str2.substring(0, str));
-                    stringBuilder.append("\ufe0f");
-                    stringBuilder.append(str2.substring(str));
-                    str2 = stringBuilder.toString();
-                    length++;
-                }
-            } else if (charAt != '\ud83c' || str >= length - 1) {
-                str++;
+            } else if (ch != '\ud83c' || a >= lenght - 1) {
+                a++;
             } else {
-                int i = str + 1;
-                char charAt2 = str2.charAt(i);
-                if (!(charAt2 == '\ude2f' || charAt2 == '\udc04' || charAt2 == '\ude1a')) {
-                    if (charAt2 != '\udd7f') {
-                        str = i;
-                    }
+                ch = emoji.charAt(a + 1);
+                if (ch == '\ude2f' || ch == '\udc04' || ch == '\ude1a' || ch == '\udd7f') {
+                    emoji = emoji.substring(0, a + 2) + "\ufe0f" + emoji.substring(a + 2);
+                    lenght++;
+                    a += 2;
+                } else {
+                    a++;
                 }
-                stringBuilder = new StringBuilder();
-                str += 2;
-                stringBuilder.append(str2.substring(0, str));
-                stringBuilder.append("\ufe0f");
-                stringBuilder.append(str2.substring(str));
-                str2 = stringBuilder.toString();
-                length++;
             }
-            str++;
+            a++;
         }
-        return str2;
+        return emoji;
     }
 
-    public static EmojiDrawable getEmojiDrawable(CharSequence charSequence) {
-        DrawableInfo drawableInfo = (DrawableInfo) rects.get(charSequence);
-        if (drawableInfo == null) {
-            CharSequence charSequence2 = (CharSequence) EmojiData.emojiAliasMap.get(charSequence);
-            if (charSequence2 != null) {
-                drawableInfo = (DrawableInfo) rects.get(charSequence2);
+    public static EmojiDrawable getEmojiDrawable(CharSequence code) {
+        DrawableInfo info = (DrawableInfo) rects.get(code);
+        if (info == null) {
+            CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
+            if (newCode != null) {
+                info = (DrawableInfo) rects.get(newCode);
             }
         }
-        if (drawableInfo == null) {
+        if (info == null) {
             if (BuildVars.LOGS_ENABLED) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("No drawable for emoji ");
-                stringBuilder.append(charSequence);
-                FileLog.m0d(stringBuilder.toString());
+                FileLog.m0d("No drawable for emoji " + code);
             }
             return null;
         }
-        charSequence = new EmojiDrawable(drawableInfo);
-        charSequence.setBounds(0, 0, drawImgSize, drawImgSize);
-        return charSequence;
+        EmojiDrawable ed = new EmojiDrawable(info);
+        ed.setBounds(0, 0, drawImgSize, drawImgSize);
+        return ed;
     }
 
-    public static boolean isValidEmoji(String str) {
-        DrawableInfo drawableInfo = (DrawableInfo) rects.get(str);
-        if (drawableInfo == null) {
-            CharSequence charSequence = (CharSequence) EmojiData.emojiAliasMap.get(str);
-            if (charSequence != null) {
-                drawableInfo = (DrawableInfo) rects.get(charSequence);
+    public static boolean isValidEmoji(String code) {
+        DrawableInfo info = (DrawableInfo) rects.get(code);
+        if (info == null) {
+            CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
+            if (newCode != null) {
+                info = (DrawableInfo) rects.get(newCode);
             }
         }
-        return drawableInfo != null ? true : null;
+        return info != null;
     }
 
-    public static Drawable getEmojiBigDrawable(String str) {
-        Drawable emojiDrawable = getEmojiDrawable(str);
-        if (emojiDrawable == null) {
-            CharSequence charSequence = (CharSequence) EmojiData.emojiAliasMap.get(str);
-            if (charSequence != null) {
-                emojiDrawable = getEmojiDrawable(charSequence);
+    public static Drawable getEmojiBigDrawable(String code) {
+        EmojiDrawable ed = getEmojiDrawable(code);
+        if (ed == null) {
+            CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
+            if (newCode != null) {
+                ed = getEmojiDrawable(newCode);
             }
         }
-        if (emojiDrawable == null) {
+        if (ed == null) {
             return null;
         }
-        emojiDrawable.setBounds(0, 0, bigImgSize, bigImgSize);
-        emojiDrawable.fullSize = true;
-        return emojiDrawable;
+        ed.setBounds(0, 0, bigImgSize, bigImgSize);
+        ed.fullSize = true;
+        return ed;
     }
 
-    private static boolean inArray(char c, char[] cArr) {
-        for (char c2 : cArr) {
-            if (c2 == c) {
+    private static boolean inArray(char c, char[] a) {
+        for (char cc : a) {
+            if (cc == c) {
                 return true;
             }
         }
         return false;
     }
 
-    public static CharSequence replaceEmoji(CharSequence charSequence, FontMetricsInt fontMetricsInt, int i, boolean z) {
-        return replaceEmoji(charSequence, fontMetricsInt, i, z, null);
+    public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew) {
+        return replaceEmoji(cs, fontMetrics, size, createNew, null);
     }
 
-    public static CharSequence replaceEmoji(CharSequence charSequence, FontMetricsInt fontMetricsInt, int i, boolean z, int[] iArr) {
-        CharSequence charSequence2 = charSequence;
-        if (!(SharedConfig.useSystemEmoji || charSequence2 == null)) {
-            if (charSequence.length() != 0) {
-                CharSequence newSpannable;
-                if (z || !(charSequence2 instanceof Spannable)) {
-                    newSpannable = Factory.getInstance().newSpannable(charSequence.toString());
-                } else {
-                    newSpannable = (Spannable) charSequence2;
+    public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
+        if (SharedConfig.useSystemEmoji || cs == null || cs.length() == 0) {
+            return cs;
+        }
+        Spannable s;
+        if (createNew || !(cs instanceof Spannable)) {
+            s = Factory.getInstance().newSpannable(cs.toString());
+        } else {
+            s = (Spannable) cs;
+        }
+        long buf = 0;
+        int emojiCount = 0;
+        int startIndex = -1;
+        int startLength = 0;
+        int previousGoodIndex = 0;
+        StringBuilder stringBuilder = new StringBuilder(16);
+        StringBuilder addionalCode = new StringBuilder(2);
+        int length = cs.length();
+        boolean doneEmoji = false;
+        int i = 0;
+        while (i < length) {
+            try {
+                char next;
+                char c = cs.charAt(i);
+                if ((c >= '\ud83c' && c <= '\ud83e') || (buf != 0 && (-4294967296L & buf) == 0 && (65535 & buf) == 55356 && c >= '\udde6' && c <= '\uddff')) {
+                    if (startIndex == -1) {
+                        startIndex = i;
+                    }
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = (buf << 16) | ((long) c);
+                } else if (stringBuilder.length() > 0 && (c == '\u2640' || c == '\u2642' || c == '\u2695')) {
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = 0;
+                    doneEmoji = true;
+                } else if (buf > 0 && (61440 & c) == 53248) {
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = 0;
+                    doneEmoji = true;
+                } else if (c == '\u20e3') {
+                    if (i > 0) {
+                        char c2 = cs.charAt(previousGoodIndex);
+                        if ((c2 >= '0' && c2 <= '9') || c2 == '#' || c2 == '*') {
+                            startIndex = previousGoodIndex;
+                            startLength = (i - previousGoodIndex) + 1;
+                            stringBuilder.append(c2);
+                            stringBuilder.append(c);
+                            doneEmoji = true;
+                        }
+                    }
+                } else if ((c == '\u00a9' || c == '\u00ae' || (c >= '\u203c' && c <= '\u3299')) && EmojiData.dataCharsMap.containsKey(Character.valueOf(c))) {
+                    if (startIndex == -1) {
+                        startIndex = i;
+                    }
+                    startLength++;
+                    stringBuilder.append(c);
+                    doneEmoji = true;
+                } else if (startIndex != -1) {
+                    stringBuilder.setLength(0);
+                    startIndex = -1;
+                    startLength = 0;
+                    doneEmoji = false;
+                } else if (!(c == '\ufe0f' || emojiOnly == null)) {
+                    emojiOnly[0] = 0;
+                    emojiOnly = null;
                 }
-                StringBuilder stringBuilder = new StringBuilder(16);
-                StringBuilder stringBuilder2 = new StringBuilder(2);
-                int length = charSequence.length();
-                long j = 0;
-                int[] iArr2 = iArr;
-                long j2 = 0;
-                int i2 = 0;
-                int i3 = 0;
-                int i4 = -1;
-                int i5 = 0;
-                int i6 = 0;
-                int i7 = 0;
-                while (i3 < length) {
-                    try {
-                        Object obj;
-                        int i8;
-                        int i9;
-                        char charAt;
-                        int i10;
-                        int i11;
-                        char charAt2;
-                        EmojiDrawable emojiDrawable;
-                        FontMetricsInt fontMetricsInt2;
-                        Object obj2;
-                        char charAt3 = charSequence2.charAt(i3);
-                        if (charAt3 >= '\ud83c') {
-                            if (charAt3 > '\ud83e') {
-                            }
-                            if (i4 == -1) {
-                                i4 = i3;
-                            }
-                            stringBuilder.append(charAt3);
-                            obj = 16;
-                            i8 = i5 + 1;
-                            j2 = (j2 << 16) | ((long) charAt3);
-                            if (i6 != 0) {
-                                i5 = i3 + 2;
-                                if (i5 < length) {
-                                    i9 = i3 + 1;
-                                    charAt = charSequence2.charAt(i9);
-                                    if (charAt == '\ud83c') {
-                                        charAt = charSequence2.charAt(i5);
-                                        if (charAt >= '\udffb' && charAt <= '\udfff') {
-                                            stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                            i8 += 2;
-                                            i3 = i5;
-                                        }
-                                    } else {
-                                        if (stringBuilder.length() < 2) {
-                                            i9 = 2;
-                                        } else if (stringBuilder.charAt(0) == '\ud83c' && stringBuilder.charAt(1) == '\udff4' && charAt == '\udb40') {
-                                            while (true) {
-                                                i10 = i9 + 2;
-                                                stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                i8 += 2;
-                                                if (i10 >= charSequence.length()) {
-                                                    break;
-                                                } else if (charSequence2.charAt(i10) != '\udb40') {
-                                                    break;
-                                                } else {
-                                                    i9 = i10;
-                                                }
-                                            }
-                                            i3 = i10 - 1;
-                                        }
-                                        i5 = i8;
-                                        i11 = i3;
-                                        i8 = i6;
-                                        for (i10 = 0; i10 < 3; i10++) {
-                                            i9 = i11 + 1;
-                                            if (i9 < length) {
-                                                charAt2 = charSequence2.charAt(i9);
-                                                if (i10 == 1) {
-                                                    if (charAt2 == '\u200d' && stringBuilder.length() > 0) {
-                                                        stringBuilder.append(charAt2);
-                                                        i5++;
-                                                        i11 = i9;
-                                                        i8 = 0;
-                                                    }
-                                                } else if (charAt2 >= '\ufe00') {
-                                                    if (charAt2 <= '\ufe0f') {
-                                                        i5++;
-                                                        i11 = i9;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (i8 != 0) {
-                                            i9 = i11 + 2;
-                                            if (i9 < length) {
-                                                i2 = i11 + 1;
-                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i9);
-                                                    if (charAt >= '\udffb' && charAt <= '\udfff') {
-                                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                        i5 += 2;
-                                                        if (i8 == 0) {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            } else {
-                                                                i2 = 0;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            } else {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23 && i10 >= 50) {
-                                                            break;
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        i9 = i11;
-                                        if (i8 == 0) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        } else {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                            } else {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            } else {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                }
-                            }
-                            i5 = i8;
-                            i11 = i3;
-                            i8 = i6;
-                            for (i10 = 0; i10 < 3; i10++) {
-                                i9 = i11 + 1;
-                                if (i9 < length) {
-                                    charAt2 = charSequence2.charAt(i9);
-                                    if (i10 == 1) {
-                                        stringBuilder.append(charAt2);
-                                        i5++;
-                                        i11 = i9;
-                                        i8 = 0;
-                                    } else if (charAt2 >= '\ufe00') {
-                                        if (charAt2 <= '\ufe0f') {
-                                            i5++;
-                                            i11 = i9;
-                                        }
-                                    }
-                                }
-                            }
-                            if (i8 != 0) {
-                                i9 = i11 + 2;
-                                if (i9 < length) {
-                                    i2 = i11 + 1;
-                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                        charAt = charSequence2.charAt(i9);
-                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                        i5 += 2;
-                                        if (i8 == 0) {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            } else {
-                                                i2 = 0;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            } else {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        } else {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                }
-                            }
-                            i9 = i11;
-                            if (i8 == 0) {
-                                fontMetricsInt2 = fontMetricsInt;
-                                i6 = i8;
-                                i10 = i7;
-                            } else {
-                                if (iArr2 == null) {
-                                    i2 = 0;
-                                } else {
-                                    i2 = 0;
-                                    iArr2[0] = iArr2[0] + 1;
-                                }
-                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                if (emojiDrawable == null) {
-                                    fontMetricsInt2 = fontMetricsInt;
-                                    i8 = i;
-                                } else {
-                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                    i7++;
-                                    i2 = 0;
-                                }
-                                stringBuilder.setLength(i2);
-                                i5 = i2;
-                                i6 = i5;
-                                i10 = i7;
-                                i4 = -1;
-                            }
-                            if (VERSION.SDK_INT >= 23) {
-                            }
-                            i7 = i10;
-                            i2 = i3;
-                            j = 0;
-                            i3 = i9 + 1;
-                            obj2 = obj;
+                if (doneEmoji && i + 2 < length) {
+                    next = cs.charAt(i + 1);
+                    if (next == '\ud83c') {
+                        next = cs.charAt(i + 2);
+                        if (next >= '\udffb' && next <= '\udfff') {
+                            stringBuilder.append(cs.subSequence(i + 1, i + 3));
+                            startLength += 2;
+                            i += 2;
                         }
-                        if (j2 == j || (j2 & -4294967296L) != j || (j2 & 65535) != 55356 || charAt3 < '\udde6' || charAt3 > '\uddff') {
-                            obj = 16;
-                            if (stringBuilder.length() > 0 && (charAt3 == '\u2640' || charAt3 == '\u2642' || charAt3 == '\u2695')) {
-                                stringBuilder.append(charAt3);
-                                i8 = i5 + 1;
-                            } else if (j2 <= j || (61440 & charAt3) != 53248) {
-                                int i12;
-                                if (charAt3 != '\u20e3') {
-                                    if (!(charAt3 == '\u00a9' || charAt3 == '\u00ae')) {
-                                        if (charAt3 >= '\u203c' && charAt3 <= '\u3299') {
-                                        }
-                                        if (i4 == -1) {
-                                            stringBuilder.setLength(0);
-                                            i4 = -1;
-                                            i8 = 0;
-                                            i6 = i8;
-                                            if (i6 != 0) {
-                                                i5 = i3 + 2;
-                                                if (i5 < length) {
-                                                    i9 = i3 + 1;
-                                                    charAt = charSequence2.charAt(i9);
-                                                    if (charAt == '\ud83c') {
-                                                        if (stringBuilder.length() < 2) {
-                                                            i9 = 2;
-                                                        } else {
-                                                            while (true) {
-                                                                i10 = i9 + 2;
-                                                                stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                                i8 += 2;
-                                                                if (i10 >= charSequence.length()) {
-                                                                    if (charSequence2.charAt(i10) != '\udb40') {
-                                                                        break;
-                                                                    }
-                                                                    i9 = i10;
-                                                                } else {
-                                                                    break;
-                                                                }
-                                                            }
-                                                            i3 = i10 - 1;
-                                                        }
-                                                        i5 = i8;
-                                                        i11 = i3;
-                                                        i8 = i6;
-                                                        for (i10 = 0; i10 < 3; i10++) {
-                                                            i9 = i11 + 1;
-                                                            if (i9 < length) {
-                                                                charAt2 = charSequence2.charAt(i9);
-                                                                if (i10 == 1) {
-                                                                    stringBuilder.append(charAt2);
-                                                                    i5++;
-                                                                    i11 = i9;
-                                                                    i8 = 0;
-                                                                } else if (charAt2 >= '\ufe00') {
-                                                                    if (charAt2 <= '\ufe0f') {
-                                                                        i5++;
-                                                                        i11 = i9;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        if (i8 != 0) {
-                                                            i9 = i11 + 2;
-                                                            if (i9 < length) {
-                                                                i2 = i11 + 1;
-                                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                                    charAt = charSequence2.charAt(i9);
-                                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                                    i5 += 2;
-                                                                    if (i8 == 0) {
-                                                                        if (iArr2 == null) {
-                                                                            i2 = 0;
-                                                                            iArr2[0] = iArr2[0] + 1;
-                                                                        } else {
-                                                                            i2 = 0;
-                                                                        }
-                                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                                        if (emojiDrawable == null) {
-                                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                            i7++;
-                                                                            i2 = 0;
-                                                                        } else {
-                                                                            fontMetricsInt2 = fontMetricsInt;
-                                                                            i8 = i;
-                                                                        }
-                                                                        stringBuilder.setLength(i2);
-                                                                        i5 = i2;
-                                                                        i6 = i5;
-                                                                        i10 = i7;
-                                                                        i4 = -1;
-                                                                    } else {
-                                                                        fontMetricsInt2 = fontMetricsInt;
-                                                                        i6 = i8;
-                                                                        i10 = i7;
-                                                                    }
-                                                                    if (VERSION.SDK_INT >= 23) {
-                                                                    }
-                                                                    i7 = i10;
-                                                                    i2 = i3;
-                                                                    j = 0;
-                                                                    i3 = i9 + 1;
-                                                                    obj2 = obj;
-                                                                }
-                                                            }
-                                                        }
-                                                        i9 = i11;
-                                                        if (i8 == 0) {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        } else {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                            } else {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            } else {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23) {
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    } else {
-                                                        charAt = charSequence2.charAt(i5);
-                                                        stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                                        i8 += 2;
-                                                        i3 = i5;
-                                                    }
-                                                }
-                                            }
-                                            i5 = i8;
-                                            i11 = i3;
-                                            i8 = i6;
-                                            for (i10 = 0; i10 < 3; i10++) {
-                                                i9 = i11 + 1;
-                                                if (i9 < length) {
-                                                    charAt2 = charSequence2.charAt(i9);
-                                                    if (i10 == 1) {
-                                                        stringBuilder.append(charAt2);
-                                                        i5++;
-                                                        i11 = i9;
-                                                        i8 = 0;
-                                                    } else if (charAt2 >= '\ufe00') {
-                                                        if (charAt2 <= '\ufe0f') {
-                                                            i5++;
-                                                            i11 = i9;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            if (i8 != 0) {
-                                                i9 = i11 + 2;
-                                                if (i9 < length) {
-                                                    i2 = i11 + 1;
-                                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                                        charAt = charSequence2.charAt(i9);
-                                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                        i5 += 2;
-                                                        if (i8 == 0) {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            } else {
-                                                                i2 = 0;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            } else {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23) {
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    }
-                                                }
-                                            }
-                                            i9 = i11;
-                                            if (i8 == 0) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i6 = i8;
-                                                i10 = i7;
-                                            } else {
-                                                if (iArr2 == null) {
-                                                    i2 = 0;
-                                                } else {
-                                                    i2 = 0;
-                                                    iArr2[0] = iArr2[0] + 1;
-                                                }
-                                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                if (emojiDrawable == null) {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i8 = i;
-                                                } else {
-                                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                    i7++;
-                                                    i2 = 0;
-                                                }
-                                                stringBuilder.setLength(i2);
-                                                i5 = i2;
-                                                i6 = i5;
-                                                i10 = i7;
-                                                i4 = -1;
-                                            }
-                                            if (VERSION.SDK_INT >= 23) {
-                                            }
-                                            i7 = i10;
-                                            i2 = i3;
-                                            j = 0;
-                                            i3 = i9 + 1;
-                                            obj2 = obj;
-                                        } else if (!(charAt3 == '\ufe0f' || iArr2 == null)) {
-                                            iArr2[0] = 0;
-                                            iArr2 = null;
-                                        }
-                                    }
-                                    if (EmojiData.dataCharsMap.containsKey(Character.valueOf(charAt3))) {
-                                        i12 = i4 == -1 ? i3 : i4;
-                                        i2 = i5 + 1;
-                                        stringBuilder.append(charAt3);
-                                        i8 = i2;
-                                        i4 = i12;
-                                        i6 = 1;
-                                        if (i6 != 0) {
-                                            i5 = i3 + 2;
-                                            if (i5 < length) {
-                                                i9 = i3 + 1;
-                                                charAt = charSequence2.charAt(i9);
-                                                if (charAt == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i5);
-                                                    stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                                    i8 += 2;
-                                                    i3 = i5;
-                                                } else {
-                                                    if (stringBuilder.length() < 2) {
-                                                        while (true) {
-                                                            i10 = i9 + 2;
-                                                            stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                            i8 += 2;
-                                                            if (i10 >= charSequence.length()) {
-                                                                break;
-                                                            } else if (charSequence2.charAt(i10) != '\udb40') {
-                                                                break;
-                                                            } else {
-                                                                i9 = i10;
-                                                            }
-                                                        }
-                                                        i3 = i10 - 1;
-                                                    } else {
-                                                        i9 = 2;
-                                                    }
-                                                    i5 = i8;
-                                                    i11 = i3;
-                                                    i8 = i6;
-                                                    for (i10 = 0; i10 < 3; i10++) {
-                                                        i9 = i11 + 1;
-                                                        if (i9 < length) {
-                                                            charAt2 = charSequence2.charAt(i9);
-                                                            if (i10 == 1) {
-                                                                stringBuilder.append(charAt2);
-                                                                i5++;
-                                                                i11 = i9;
-                                                                i8 = 0;
-                                                            } else if (charAt2 >= '\ufe00') {
-                                                                if (charAt2 <= '\ufe0f') {
-                                                                    i5++;
-                                                                    i11 = i9;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if (i8 != 0) {
-                                                        i9 = i11 + 2;
-                                                        if (i9 < length) {
-                                                            i2 = i11 + 1;
-                                                            if (charSequence2.charAt(i2) == '\ud83c') {
-                                                                charAt = charSequence2.charAt(i9);
-                                                                stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                                i5 += 2;
-                                                                if (i8 == 0) {
-                                                                    if (iArr2 == null) {
-                                                                        i2 = 0;
-                                                                        iArr2[0] = iArr2[0] + 1;
-                                                                    } else {
-                                                                        i2 = 0;
-                                                                    }
-                                                                    emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                                    if (emojiDrawable == null) {
-                                                                        newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                        i7++;
-                                                                        i2 = 0;
-                                                                    } else {
-                                                                        fontMetricsInt2 = fontMetricsInt;
-                                                                        i8 = i;
-                                                                    }
-                                                                    stringBuilder.setLength(i2);
-                                                                    i5 = i2;
-                                                                    i6 = i5;
-                                                                    i10 = i7;
-                                                                    i4 = -1;
-                                                                } else {
-                                                                    fontMetricsInt2 = fontMetricsInt;
-                                                                    i6 = i8;
-                                                                    i10 = i7;
-                                                                }
-                                                                if (VERSION.SDK_INT >= 23) {
-                                                                }
-                                                                i7 = i10;
-                                                                i2 = i3;
-                                                                j = 0;
-                                                                i3 = i9 + 1;
-                                                                obj2 = obj;
-                                                            }
-                                                        }
-                                                    }
-                                                    i9 = i11;
-                                                    if (i8 == 0) {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    } else {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                        } else {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        } else {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                }
-                                            }
-                                        }
-                                        i5 = i8;
-                                        i11 = i3;
-                                        i8 = i6;
-                                        for (i10 = 0; i10 < 3; i10++) {
-                                            i9 = i11 + 1;
-                                            if (i9 < length) {
-                                                charAt2 = charSequence2.charAt(i9);
-                                                if (i10 == 1) {
-                                                    stringBuilder.append(charAt2);
-                                                    i5++;
-                                                    i11 = i9;
-                                                    i8 = 0;
-                                                } else if (charAt2 >= '\ufe00') {
-                                                    if (charAt2 <= '\ufe0f') {
-                                                        i5++;
-                                                        i11 = i9;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (i8 != 0) {
-                                            i9 = i11 + 2;
-                                            if (i9 < length) {
-                                                i2 = i11 + 1;
-                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i9);
-                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                    i5 += 2;
-                                                    if (i8 == 0) {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        } else {
-                                                            i2 = 0;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    } else {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                }
-                                            }
-                                        }
-                                        i9 = i11;
-                                        if (i8 == 0) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        } else {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                            } else {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            } else {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                    if (i4 == -1) {
-                                        iArr2[0] = 0;
-                                        iArr2 = null;
-                                    } else {
-                                        stringBuilder.setLength(0);
-                                        i4 = -1;
-                                        i8 = 0;
-                                        i6 = i8;
-                                        if (i6 != 0) {
-                                            i5 = i3 + 2;
-                                            if (i5 < length) {
-                                                i9 = i3 + 1;
-                                                charAt = charSequence2.charAt(i9);
-                                                if (charAt == '\ud83c') {
-                                                    if (stringBuilder.length() < 2) {
-                                                        i9 = 2;
-                                                    } else {
-                                                        while (true) {
-                                                            i10 = i9 + 2;
-                                                            stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                            i8 += 2;
-                                                            if (i10 >= charSequence.length()) {
-                                                                if (charSequence2.charAt(i10) != '\udb40') {
-                                                                    break;
-                                                                }
-                                                                i9 = i10;
-                                                            } else {
-                                                                break;
-                                                            }
-                                                        }
-                                                        i3 = i10 - 1;
-                                                    }
-                                                    i5 = i8;
-                                                    i11 = i3;
-                                                    i8 = i6;
-                                                    for (i10 = 0; i10 < 3; i10++) {
-                                                        i9 = i11 + 1;
-                                                        if (i9 < length) {
-                                                            charAt2 = charSequence2.charAt(i9);
-                                                            if (i10 == 1) {
-                                                                stringBuilder.append(charAt2);
-                                                                i5++;
-                                                                i11 = i9;
-                                                                i8 = 0;
-                                                            } else if (charAt2 >= '\ufe00') {
-                                                                if (charAt2 <= '\ufe0f') {
-                                                                    i5++;
-                                                                    i11 = i9;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if (i8 != 0) {
-                                                        i9 = i11 + 2;
-                                                        if (i9 < length) {
-                                                            i2 = i11 + 1;
-                                                            if (charSequence2.charAt(i2) == '\ud83c') {
-                                                                charAt = charSequence2.charAt(i9);
-                                                                stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                                i5 += 2;
-                                                                if (i8 == 0) {
-                                                                    if (iArr2 == null) {
-                                                                        i2 = 0;
-                                                                        iArr2[0] = iArr2[0] + 1;
-                                                                    } else {
-                                                                        i2 = 0;
-                                                                    }
-                                                                    emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                                    if (emojiDrawable == null) {
-                                                                        newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                        i7++;
-                                                                        i2 = 0;
-                                                                    } else {
-                                                                        fontMetricsInt2 = fontMetricsInt;
-                                                                        i8 = i;
-                                                                    }
-                                                                    stringBuilder.setLength(i2);
-                                                                    i5 = i2;
-                                                                    i6 = i5;
-                                                                    i10 = i7;
-                                                                    i4 = -1;
-                                                                } else {
-                                                                    fontMetricsInt2 = fontMetricsInt;
-                                                                    i6 = i8;
-                                                                    i10 = i7;
-                                                                }
-                                                                if (VERSION.SDK_INT >= 23) {
-                                                                }
-                                                                i7 = i10;
-                                                                i2 = i3;
-                                                                j = 0;
-                                                                i3 = i9 + 1;
-                                                                obj2 = obj;
-                                                            }
-                                                        }
-                                                    }
-                                                    i9 = i11;
-                                                    if (i8 == 0) {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    } else {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                        } else {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        } else {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                } else {
-                                                    charAt = charSequence2.charAt(i5);
-                                                    stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                                    i8 += 2;
-                                                    i3 = i5;
-                                                }
-                                            }
-                                        }
-                                        i5 = i8;
-                                        i11 = i3;
-                                        i8 = i6;
-                                        for (i10 = 0; i10 < 3; i10++) {
-                                            i9 = i11 + 1;
-                                            if (i9 < length) {
-                                                charAt2 = charSequence2.charAt(i9);
-                                                if (i10 == 1) {
-                                                    stringBuilder.append(charAt2);
-                                                    i5++;
-                                                    i11 = i9;
-                                                    i8 = 0;
-                                                } else if (charAt2 >= '\ufe00') {
-                                                    if (charAt2 <= '\ufe0f') {
-                                                        i5++;
-                                                        i11 = i9;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (i8 != 0) {
-                                            i9 = i11 + 2;
-                                            if (i9 < length) {
-                                                i2 = i11 + 1;
-                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i9);
-                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                    i5 += 2;
-                                                    if (i8 == 0) {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        } else {
-                                                            i2 = 0;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    } else {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                }
-                                            }
-                                        }
-                                        i9 = i11;
-                                        if (i8 == 0) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        } else {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                            } else {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            } else {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                } else if (i3 > 0) {
-                                    char charAt4 = charSequence2.charAt(i2);
-                                    if ((charAt4 < '0' || charAt4 > '9') && charAt4 != '#') {
-                                        if (charAt4 != '*') {
-                                            i12 = i5;
-                                            i8 = i6;
-                                            i6 = i8;
-                                            i8 = i12;
-                                            if (i6 != 0) {
-                                                i5 = i3 + 2;
-                                                if (i5 < length) {
-                                                    i9 = i3 + 1;
-                                                    charAt = charSequence2.charAt(i9);
-                                                    if (charAt == '\ud83c') {
-                                                        if (stringBuilder.length() < 2) {
-                                                            i9 = 2;
-                                                        } else {
-                                                            while (true) {
-                                                                i10 = i9 + 2;
-                                                                stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                                i8 += 2;
-                                                                if (i10 >= charSequence.length()) {
-                                                                    if (charSequence2.charAt(i10) != '\udb40') {
-                                                                        break;
-                                                                    }
-                                                                    i9 = i10;
-                                                                } else {
-                                                                    break;
-                                                                }
-                                                            }
-                                                            i3 = i10 - 1;
-                                                        }
-                                                        i5 = i8;
-                                                        i11 = i3;
-                                                        i8 = i6;
-                                                        for (i10 = 0; i10 < 3; i10++) {
-                                                            i9 = i11 + 1;
-                                                            if (i9 < length) {
-                                                                charAt2 = charSequence2.charAt(i9);
-                                                                if (i10 == 1) {
-                                                                    stringBuilder.append(charAt2);
-                                                                    i5++;
-                                                                    i11 = i9;
-                                                                    i8 = 0;
-                                                                } else if (charAt2 >= '\ufe00') {
-                                                                    if (charAt2 <= '\ufe0f') {
-                                                                        i5++;
-                                                                        i11 = i9;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        if (i8 != 0) {
-                                                            i9 = i11 + 2;
-                                                            if (i9 < length) {
-                                                                i2 = i11 + 1;
-                                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                                    charAt = charSequence2.charAt(i9);
-                                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                                    i5 += 2;
-                                                                    if (i8 == 0) {
-                                                                        if (iArr2 == null) {
-                                                                            i2 = 0;
-                                                                            iArr2[0] = iArr2[0] + 1;
-                                                                        } else {
-                                                                            i2 = 0;
-                                                                        }
-                                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                                        if (emojiDrawable == null) {
-                                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                            i7++;
-                                                                            i2 = 0;
-                                                                        } else {
-                                                                            fontMetricsInt2 = fontMetricsInt;
-                                                                            i8 = i;
-                                                                        }
-                                                                        stringBuilder.setLength(i2);
-                                                                        i5 = i2;
-                                                                        i6 = i5;
-                                                                        i10 = i7;
-                                                                        i4 = -1;
-                                                                    } else {
-                                                                        fontMetricsInt2 = fontMetricsInt;
-                                                                        i6 = i8;
-                                                                        i10 = i7;
-                                                                    }
-                                                                    if (VERSION.SDK_INT >= 23) {
-                                                                    }
-                                                                    i7 = i10;
-                                                                    i2 = i3;
-                                                                    j = 0;
-                                                                    i3 = i9 + 1;
-                                                                    obj2 = obj;
-                                                                }
-                                                            }
-                                                        }
-                                                        i9 = i11;
-                                                        if (i8 == 0) {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        } else {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                            } else {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            } else {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23) {
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    } else {
-                                                        charAt = charSequence2.charAt(i5);
-                                                        stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                                        i8 += 2;
-                                                        i3 = i5;
-                                                    }
-                                                }
-                                            }
-                                            i5 = i8;
-                                            i11 = i3;
-                                            i8 = i6;
-                                            for (i10 = 0; i10 < 3; i10++) {
-                                                i9 = i11 + 1;
-                                                if (i9 < length) {
-                                                    charAt2 = charSequence2.charAt(i9);
-                                                    if (i10 == 1) {
-                                                        stringBuilder.append(charAt2);
-                                                        i5++;
-                                                        i11 = i9;
-                                                        i8 = 0;
-                                                    } else if (charAt2 >= '\ufe00') {
-                                                        if (charAt2 <= '\ufe0f') {
-                                                            i5++;
-                                                            i11 = i9;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            if (i8 != 0) {
-                                                i9 = i11 + 2;
-                                                if (i9 < length) {
-                                                    i2 = i11 + 1;
-                                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                                        charAt = charSequence2.charAt(i9);
-                                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                        i5 += 2;
-                                                        if (i8 == 0) {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            } else {
-                                                                i2 = 0;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            } else {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23) {
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    }
-                                                }
-                                            }
-                                            i9 = i11;
-                                            if (i8 == 0) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i6 = i8;
-                                                i10 = i7;
-                                            } else {
-                                                if (iArr2 == null) {
-                                                    i2 = 0;
-                                                } else {
-                                                    i2 = 0;
-                                                    iArr2[0] = iArr2[0] + 1;
-                                                }
-                                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                if (emojiDrawable == null) {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i8 = i;
-                                                } else {
-                                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                    i7++;
-                                                    i2 = 0;
-                                                }
-                                                stringBuilder.setLength(i2);
-                                                i5 = i2;
-                                                i6 = i5;
-                                                i10 = i7;
-                                                i4 = -1;
-                                            }
-                                            if (VERSION.SDK_INT >= 23) {
-                                            }
-                                            i7 = i10;
-                                            i2 = i3;
-                                            j = 0;
-                                            i3 = i9 + 1;
-                                            obj2 = obj;
-                                        }
-                                    }
-                                    i12 = (i3 - i2) + 1;
-                                    stringBuilder.append(charAt4);
-                                    stringBuilder.append(charAt3);
-                                    i4 = i2;
-                                    i8 = 1;
-                                    i6 = i8;
-                                    i8 = i12;
-                                    if (i6 != 0) {
-                                        i5 = i3 + 2;
-                                        if (i5 < length) {
-                                            i9 = i3 + 1;
-                                            charAt = charSequence2.charAt(i9);
-                                            if (charAt == '\ud83c') {
-                                                charAt = charSequence2.charAt(i5);
-                                                stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                                i8 += 2;
-                                                i3 = i5;
-                                            } else {
-                                                if (stringBuilder.length() < 2) {
-                                                    while (true) {
-                                                        i10 = i9 + 2;
-                                                        stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                        i8 += 2;
-                                                        if (i10 >= charSequence.length()) {
-                                                            break;
-                                                        } else if (charSequence2.charAt(i10) != '\udb40') {
-                                                            break;
-                                                        } else {
-                                                            i9 = i10;
-                                                        }
-                                                    }
-                                                    i3 = i10 - 1;
-                                                } else {
-                                                    i9 = 2;
-                                                }
-                                                i5 = i8;
-                                                i11 = i3;
-                                                i8 = i6;
-                                                for (i10 = 0; i10 < 3; i10++) {
-                                                    i9 = i11 + 1;
-                                                    if (i9 < length) {
-                                                        charAt2 = charSequence2.charAt(i9);
-                                                        if (i10 == 1) {
-                                                            stringBuilder.append(charAt2);
-                                                            i5++;
-                                                            i11 = i9;
-                                                            i8 = 0;
-                                                        } else if (charAt2 >= '\ufe00') {
-                                                            if (charAt2 <= '\ufe0f') {
-                                                                i5++;
-                                                                i11 = i9;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                if (i8 != 0) {
-                                                    i9 = i11 + 2;
-                                                    if (i9 < length) {
-                                                        i2 = i11 + 1;
-                                                        if (charSequence2.charAt(i2) == '\ud83c') {
-                                                            charAt = charSequence2.charAt(i9);
-                                                            stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                            i5 += 2;
-                                                            if (i8 == 0) {
-                                                                if (iArr2 == null) {
-                                                                    i2 = 0;
-                                                                    iArr2[0] = iArr2[0] + 1;
-                                                                } else {
-                                                                    i2 = 0;
-                                                                }
-                                                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                                if (emojiDrawable == null) {
-                                                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                    i7++;
-                                                                    i2 = 0;
-                                                                } else {
-                                                                    fontMetricsInt2 = fontMetricsInt;
-                                                                    i8 = i;
-                                                                }
-                                                                stringBuilder.setLength(i2);
-                                                                i5 = i2;
-                                                                i6 = i5;
-                                                                i10 = i7;
-                                                                i4 = -1;
-                                                            } else {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i6 = i8;
-                                                                i10 = i7;
-                                                            }
-                                                            if (VERSION.SDK_INT >= 23) {
-                                                            }
-                                                            i7 = i10;
-                                                            i2 = i3;
-                                                            j = 0;
-                                                            i3 = i9 + 1;
-                                                            obj2 = obj;
-                                                        }
-                                                    }
-                                                }
-                                                i9 = i11;
-                                                if (i8 == 0) {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i6 = i8;
-                                                    i10 = i7;
-                                                } else {
-                                                    if (iArr2 == null) {
-                                                        i2 = 0;
-                                                    } else {
-                                                        i2 = 0;
-                                                        iArr2[0] = iArr2[0] + 1;
-                                                    }
-                                                    emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                    if (emojiDrawable == null) {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i8 = i;
-                                                    } else {
-                                                        newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                        i7++;
-                                                        i2 = 0;
-                                                    }
-                                                    stringBuilder.setLength(i2);
-                                                    i5 = i2;
-                                                    i6 = i5;
-                                                    i10 = i7;
-                                                    i4 = -1;
-                                                }
-                                                if (VERSION.SDK_INT >= 23) {
-                                                }
-                                                i7 = i10;
-                                                i2 = i3;
-                                                j = 0;
-                                                i3 = i9 + 1;
-                                                obj2 = obj;
-                                            }
-                                        }
-                                    }
-                                    i5 = i8;
-                                    i11 = i3;
-                                    i8 = i6;
-                                    for (i10 = 0; i10 < 3; i10++) {
-                                        i9 = i11 + 1;
-                                        if (i9 < length) {
-                                            charAt2 = charSequence2.charAt(i9);
-                                            if (i10 == 1) {
-                                                stringBuilder.append(charAt2);
-                                                i5++;
-                                                i11 = i9;
-                                                i8 = 0;
-                                            } else if (charAt2 >= '\ufe00') {
-                                                if (charAt2 <= '\ufe0f') {
-                                                    i5++;
-                                                    i11 = i9;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (i8 != 0) {
-                                        i9 = i11 + 2;
-                                        if (i9 < length) {
-                                            i2 = i11 + 1;
-                                            if (charSequence2.charAt(i2) == '\ud83c') {
-                                                charAt = charSequence2.charAt(i9);
-                                                stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                i5 += 2;
-                                                if (i8 == 0) {
-                                                    if (iArr2 == null) {
-                                                        i2 = 0;
-                                                        iArr2[0] = iArr2[0] + 1;
-                                                    } else {
-                                                        i2 = 0;
-                                                    }
-                                                    emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                    if (emojiDrawable == null) {
-                                                        newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                        i7++;
-                                                        i2 = 0;
-                                                    } else {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i8 = i;
-                                                    }
-                                                    stringBuilder.setLength(i2);
-                                                    i5 = i2;
-                                                    i6 = i5;
-                                                    i10 = i7;
-                                                    i4 = -1;
-                                                } else {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i6 = i8;
-                                                    i10 = i7;
-                                                }
-                                                if (VERSION.SDK_INT >= 23) {
-                                                }
-                                                i7 = i10;
-                                                i2 = i3;
-                                                j = 0;
-                                                i3 = i9 + 1;
-                                                obj2 = obj;
-                                            }
-                                        }
-                                    }
-                                    i9 = i11;
-                                    if (i8 == 0) {
-                                        fontMetricsInt2 = fontMetricsInt;
-                                        i6 = i8;
-                                        i10 = i7;
-                                    } else {
-                                        if (iArr2 == null) {
-                                            i2 = 0;
-                                        } else {
-                                            i2 = 0;
-                                            iArr2[0] = iArr2[0] + 1;
-                                        }
-                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                        if (emojiDrawable == null) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i8 = i;
-                                        } else {
-                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                            i7++;
-                                            i2 = 0;
-                                        }
-                                        stringBuilder.setLength(i2);
-                                        i5 = i2;
-                                        i6 = i5;
-                                        i10 = i7;
-                                        i4 = -1;
-                                    }
-                                    if (VERSION.SDK_INT >= 23) {
-                                    }
-                                    i7 = i10;
-                                    i2 = i3;
-                                    j = 0;
-                                    i3 = i9 + 1;
-                                    obj2 = obj;
-                                }
-                                i8 = i5;
-                                if (i6 != 0) {
-                                    i5 = i3 + 2;
-                                    if (i5 < length) {
-                                        i9 = i3 + 1;
-                                        charAt = charSequence2.charAt(i9);
-                                        if (charAt == '\ud83c') {
-                                            charAt = charSequence2.charAt(i5);
-                                            stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                            i8 += 2;
-                                            i3 = i5;
-                                        } else {
-                                            if (stringBuilder.length() < 2) {
-                                                while (true) {
-                                                    i10 = i9 + 2;
-                                                    stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                    i8 += 2;
-                                                    if (i10 >= charSequence.length()) {
-                                                        break;
-                                                    } else if (charSequence2.charAt(i10) != '\udb40') {
-                                                        break;
-                                                    } else {
-                                                        i9 = i10;
-                                                    }
-                                                }
-                                                i3 = i10 - 1;
-                                            } else {
-                                                i9 = 2;
-                                            }
-                                            i5 = i8;
-                                            i11 = i3;
-                                            i8 = i6;
-                                            for (i10 = 0; i10 < 3; i10++) {
-                                                i9 = i11 + 1;
-                                                if (i9 < length) {
-                                                    charAt2 = charSequence2.charAt(i9);
-                                                    if (i10 == 1) {
-                                                        stringBuilder.append(charAt2);
-                                                        i5++;
-                                                        i11 = i9;
-                                                        i8 = 0;
-                                                    } else if (charAt2 >= '\ufe00') {
-                                                        if (charAt2 <= '\ufe0f') {
-                                                            i5++;
-                                                            i11 = i9;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            if (i8 != 0) {
-                                                i9 = i11 + 2;
-                                                if (i9 < length) {
-                                                    i2 = i11 + 1;
-                                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                                        charAt = charSequence2.charAt(i9);
-                                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                        i5 += 2;
-                                                        if (i8 == 0) {
-                                                            if (iArr2 == null) {
-                                                                i2 = 0;
-                                                                iArr2[0] = iArr2[0] + 1;
-                                                            } else {
-                                                                i2 = 0;
-                                                            }
-                                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                            if (emojiDrawable == null) {
-                                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                                i7++;
-                                                                i2 = 0;
-                                                            } else {
-                                                                fontMetricsInt2 = fontMetricsInt;
-                                                                i8 = i;
-                                                            }
-                                                            stringBuilder.setLength(i2);
-                                                            i5 = i2;
-                                                            i6 = i5;
-                                                            i10 = i7;
-                                                            i4 = -1;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i6 = i8;
-                                                            i10 = i7;
-                                                        }
-                                                        if (VERSION.SDK_INT >= 23) {
-                                                        }
-                                                        i7 = i10;
-                                                        i2 = i3;
-                                                        j = 0;
-                                                        i3 = i9 + 1;
-                                                        obj2 = obj;
-                                                    }
-                                                }
-                                            }
-                                            i9 = i11;
-                                            if (i8 == 0) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i6 = i8;
-                                                i10 = i7;
-                                            } else {
-                                                if (iArr2 == null) {
-                                                    i2 = 0;
-                                                } else {
-                                                    i2 = 0;
-                                                    iArr2[0] = iArr2[0] + 1;
-                                                }
-                                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                if (emojiDrawable == null) {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i8 = i;
-                                                } else {
-                                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                    i7++;
-                                                    i2 = 0;
-                                                }
-                                                stringBuilder.setLength(i2);
-                                                i5 = i2;
-                                                i6 = i5;
-                                                i10 = i7;
-                                                i4 = -1;
-                                            }
-                                            if (VERSION.SDK_INT >= 23) {
-                                            }
-                                            i7 = i10;
-                                            i2 = i3;
-                                            j = 0;
-                                            i3 = i9 + 1;
-                                            obj2 = obj;
-                                        }
-                                    }
-                                }
-                                i5 = i8;
-                                i11 = i3;
-                                i8 = i6;
-                                for (i10 = 0; i10 < 3; i10++) {
-                                    i9 = i11 + 1;
-                                    if (i9 < length) {
-                                        charAt2 = charSequence2.charAt(i9);
-                                        if (i10 == 1) {
-                                            stringBuilder.append(charAt2);
-                                            i5++;
-                                            i11 = i9;
-                                            i8 = 0;
-                                        } else if (charAt2 >= '\ufe00') {
-                                            if (charAt2 <= '\ufe0f') {
-                                                i5++;
-                                                i11 = i9;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (i8 != 0) {
-                                    i9 = i11 + 2;
-                                    if (i9 < length) {
-                                        i2 = i11 + 1;
-                                        if (charSequence2.charAt(i2) == '\ud83c') {
-                                            charAt = charSequence2.charAt(i9);
-                                            stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                            i5 += 2;
-                                            if (i8 == 0) {
-                                                if (iArr2 == null) {
-                                                    i2 = 0;
-                                                    iArr2[0] = iArr2[0] + 1;
-                                                } else {
-                                                    i2 = 0;
-                                                }
-                                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                if (emojiDrawable == null) {
-                                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                    i7++;
-                                                    i2 = 0;
-                                                } else {
-                                                    fontMetricsInt2 = fontMetricsInt;
-                                                    i8 = i;
-                                                }
-                                                stringBuilder.setLength(i2);
-                                                i5 = i2;
-                                                i6 = i5;
-                                                i10 = i7;
-                                                i4 = -1;
-                                            } else {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i6 = i8;
-                                                i10 = i7;
-                                            }
-                                            if (VERSION.SDK_INT >= 23) {
-                                            }
-                                            i7 = i10;
-                                            i2 = i3;
-                                            j = 0;
-                                            i3 = i9 + 1;
-                                            obj2 = obj;
-                                        }
-                                    }
-                                }
-                                i9 = i11;
-                                if (i8 == 0) {
-                                    fontMetricsInt2 = fontMetricsInt;
-                                    i6 = i8;
-                                    i10 = i7;
-                                } else {
-                                    if (iArr2 == null) {
-                                        i2 = 0;
-                                    } else {
-                                        i2 = 0;
-                                        iArr2[0] = iArr2[0] + 1;
-                                    }
-                                    emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                    if (emojiDrawable == null) {
-                                        fontMetricsInt2 = fontMetricsInt;
-                                        i8 = i;
-                                    } else {
-                                        newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                        i7++;
-                                        i2 = 0;
-                                    }
-                                    stringBuilder.setLength(i2);
-                                    i5 = i2;
-                                    i6 = i5;
-                                    i10 = i7;
-                                    i4 = -1;
-                                }
-                                if (VERSION.SDK_INT >= 23) {
-                                }
-                                i7 = i10;
-                                i2 = i3;
-                                j = 0;
-                                i3 = i9 + 1;
-                                obj2 = obj;
-                            } else {
-                                stringBuilder.append(charAt3);
-                                i8 = i5 + 1;
+                    } else if (stringBuilder.length() >= 2 && stringBuilder.charAt(0) == '\ud83c' && stringBuilder.charAt(1) == '\udff4' && next == '\udb40') {
+                        i++;
+                        do {
+                            stringBuilder.append(cs.subSequence(i, i + 2));
+                            startLength += 2;
+                            i += 2;
+                            if (i >= cs.length()) {
+                                break;
                             }
-                            j2 = j;
-                            i6 = 1;
-                            if (i6 != 0) {
-                                i5 = i3 + 2;
-                                if (i5 < length) {
-                                    i9 = i3 + 1;
-                                    charAt = charSequence2.charAt(i9);
-                                    if (charAt == '\ud83c') {
-                                        if (stringBuilder.length() < 2) {
-                                            i9 = 2;
-                                        } else {
-                                            while (true) {
-                                                i10 = i9 + 2;
-                                                stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                i8 += 2;
-                                                if (i10 >= charSequence.length()) {
-                                                    if (charSequence2.charAt(i10) != '\udb40') {
-                                                        break;
-                                                    }
-                                                    i9 = i10;
-                                                } else {
-                                                    break;
-                                                }
-                                            }
-                                            i3 = i10 - 1;
-                                        }
-                                        i5 = i8;
-                                        i11 = i3;
-                                        i8 = i6;
-                                        for (i10 = 0; i10 < 3; i10++) {
-                                            i9 = i11 + 1;
-                                            if (i9 < length) {
-                                                charAt2 = charSequence2.charAt(i9);
-                                                if (i10 == 1) {
-                                                    stringBuilder.append(charAt2);
-                                                    i5++;
-                                                    i11 = i9;
-                                                    i8 = 0;
-                                                } else if (charAt2 >= '\ufe00') {
-                                                    if (charAt2 <= '\ufe0f') {
-                                                        i5++;
-                                                        i11 = i9;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (i8 != 0) {
-                                            i9 = i11 + 2;
-                                            if (i9 < length) {
-                                                i2 = i11 + 1;
-                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i9);
-                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                    i5 += 2;
-                                                    if (i8 == 0) {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        } else {
-                                                            i2 = 0;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    } else {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                }
-                                            }
-                                        }
-                                        i9 = i11;
-                                        if (i8 == 0) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        } else {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                            } else {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            } else {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    } else {
-                                        charAt = charSequence2.charAt(i5);
-                                        stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                        i8 += 2;
-                                        i3 = i5;
-                                    }
-                                }
-                            }
-                            i5 = i8;
-                            i11 = i3;
-                            i8 = i6;
-                            for (i10 = 0; i10 < 3; i10++) {
-                                i9 = i11 + 1;
-                                if (i9 < length) {
-                                    charAt2 = charSequence2.charAt(i9);
-                                    if (i10 == 1) {
-                                        stringBuilder.append(charAt2);
-                                        i5++;
-                                        i11 = i9;
-                                        i8 = 0;
-                                    } else if (charAt2 >= '\ufe00') {
-                                        if (charAt2 <= '\ufe0f') {
-                                            i5++;
-                                            i11 = i9;
-                                        }
-                                    }
-                                }
-                            }
-                            if (i8 != 0) {
-                                i9 = i11 + 2;
-                                if (i9 < length) {
-                                    i2 = i11 + 1;
-                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                        charAt = charSequence2.charAt(i9);
-                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                        i5 += 2;
-                                        if (i8 == 0) {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            } else {
-                                                i2 = 0;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            } else {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        } else {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                }
-                            }
-                            i9 = i11;
-                            if (i8 == 0) {
-                                fontMetricsInt2 = fontMetricsInt;
-                                i6 = i8;
-                                i10 = i7;
-                            } else {
-                                if (iArr2 == null) {
-                                    i2 = 0;
-                                } else {
-                                    i2 = 0;
-                                    iArr2[0] = iArr2[0] + 1;
-                                }
-                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                if (emojiDrawable == null) {
-                                    fontMetricsInt2 = fontMetricsInt;
-                                    i8 = i;
-                                } else {
-                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                    i7++;
-                                    i2 = 0;
-                                }
-                                stringBuilder.setLength(i2);
-                                i5 = i2;
-                                i6 = i5;
-                                i10 = i7;
-                                i4 = -1;
-                            }
-                            if (VERSION.SDK_INT >= 23) {
-                            }
-                            i7 = i10;
-                            i2 = i3;
-                            j = 0;
-                            i3 = i9 + 1;
-                            obj2 = obj;
-                        } else {
-                            if (i4 == -1) {
-                                i4 = i3;
-                            }
-                            stringBuilder.append(charAt3);
-                            obj = 16;
-                            i8 = i5 + 1;
-                            j2 = (j2 << 16) | ((long) charAt3);
-                            if (i6 != 0) {
-                                i5 = i3 + 2;
-                                if (i5 < length) {
-                                    i9 = i3 + 1;
-                                    charAt = charSequence2.charAt(i9);
-                                    if (charAt == '\ud83c') {
-                                        charAt = charSequence2.charAt(i5);
-                                        stringBuilder.append(charSequence2.subSequence(i9, i3 + 3));
-                                        i8 += 2;
-                                        i3 = i5;
-                                    } else {
-                                        if (stringBuilder.length() < 2) {
-                                            while (true) {
-                                                i10 = i9 + 2;
-                                                stringBuilder.append(charSequence2.subSequence(i9, i10));
-                                                i8 += 2;
-                                                if (i10 >= charSequence.length()) {
-                                                    break;
-                                                } else if (charSequence2.charAt(i10) != '\udb40') {
-                                                    break;
-                                                } else {
-                                                    i9 = i10;
-                                                }
-                                            }
-                                            i3 = i10 - 1;
-                                        } else {
-                                            i9 = 2;
-                                        }
-                                        i5 = i8;
-                                        i11 = i3;
-                                        i8 = i6;
-                                        for (i10 = 0; i10 < 3; i10++) {
-                                            i9 = i11 + 1;
-                                            if (i9 < length) {
-                                                charAt2 = charSequence2.charAt(i9);
-                                                if (i10 == 1) {
-                                                    stringBuilder.append(charAt2);
-                                                    i5++;
-                                                    i11 = i9;
-                                                    i8 = 0;
-                                                } else if (charAt2 >= '\ufe00') {
-                                                    if (charAt2 <= '\ufe0f') {
-                                                        i5++;
-                                                        i11 = i9;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (i8 != 0) {
-                                            i9 = i11 + 2;
-                                            if (i9 < length) {
-                                                i2 = i11 + 1;
-                                                if (charSequence2.charAt(i2) == '\ud83c') {
-                                                    charAt = charSequence2.charAt(i9);
-                                                    stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                                    i5 += 2;
-                                                    if (i8 == 0) {
-                                                        if (iArr2 == null) {
-                                                            i2 = 0;
-                                                            iArr2[0] = iArr2[0] + 1;
-                                                        } else {
-                                                            i2 = 0;
-                                                        }
-                                                        emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                                        if (emojiDrawable == null) {
-                                                            newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                            i7++;
-                                                            i2 = 0;
-                                                        } else {
-                                                            fontMetricsInt2 = fontMetricsInt;
-                                                            i8 = i;
-                                                        }
-                                                        stringBuilder.setLength(i2);
-                                                        i5 = i2;
-                                                        i6 = i5;
-                                                        i10 = i7;
-                                                        i4 = -1;
-                                                    } else {
-                                                        fontMetricsInt2 = fontMetricsInt;
-                                                        i6 = i8;
-                                                        i10 = i7;
-                                                    }
-                                                    if (VERSION.SDK_INT >= 23) {
-                                                    }
-                                                    i7 = i10;
-                                                    i2 = i3;
-                                                    j = 0;
-                                                    i3 = i9 + 1;
-                                                    obj2 = obj;
-                                                }
-                                            }
-                                        }
-                                        i9 = i11;
-                                        if (i8 == 0) {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        } else {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                            } else {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            } else {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                }
-                            }
-                            i5 = i8;
-                            i11 = i3;
-                            i8 = i6;
-                            for (i10 = 0; i10 < 3; i10++) {
-                                i9 = i11 + 1;
-                                if (i9 < length) {
-                                    charAt2 = charSequence2.charAt(i9);
-                                    if (i10 == 1) {
-                                        stringBuilder.append(charAt2);
-                                        i5++;
-                                        i11 = i9;
-                                        i8 = 0;
-                                    } else if (charAt2 >= '\ufe00') {
-                                        if (charAt2 <= '\ufe0f') {
-                                            i5++;
-                                            i11 = i9;
-                                        }
-                                    }
-                                }
-                            }
-                            if (i8 != 0) {
-                                i9 = i11 + 2;
-                                if (i9 < length) {
-                                    i2 = i11 + 1;
-                                    if (charSequence2.charAt(i2) == '\ud83c') {
-                                        charAt = charSequence2.charAt(i9);
-                                        stringBuilder.append(charSequence2.subSequence(i2, i11 + 3));
-                                        i5 += 2;
-                                        if (i8 == 0) {
-                                            if (iArr2 == null) {
-                                                i2 = 0;
-                                                iArr2[0] = iArr2[0] + 1;
-                                            } else {
-                                                i2 = 0;
-                                            }
-                                            emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                            if (emojiDrawable == null) {
-                                                newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                                i7++;
-                                                i2 = 0;
-                                            } else {
-                                                fontMetricsInt2 = fontMetricsInt;
-                                                i8 = i;
-                                            }
-                                            stringBuilder.setLength(i2);
-                                            i5 = i2;
-                                            i6 = i5;
-                                            i10 = i7;
-                                            i4 = -1;
-                                        } else {
-                                            fontMetricsInt2 = fontMetricsInt;
-                                            i6 = i8;
-                                            i10 = i7;
-                                        }
-                                        if (VERSION.SDK_INT >= 23) {
-                                        }
-                                        i7 = i10;
-                                        i2 = i3;
-                                        j = 0;
-                                        i3 = i9 + 1;
-                                        obj2 = obj;
-                                    }
-                                }
-                            }
-                            i9 = i11;
-                            if (i8 == 0) {
-                                fontMetricsInt2 = fontMetricsInt;
-                                i6 = i8;
-                                i10 = i7;
-                            } else {
-                                if (iArr2 == null) {
-                                    i2 = 0;
-                                } else {
-                                    i2 = 0;
-                                    iArr2[0] = iArr2[0] + 1;
-                                }
-                                emojiDrawable = getEmojiDrawable(stringBuilder.subSequence(i2, stringBuilder.length()));
-                                if (emojiDrawable == null) {
-                                    fontMetricsInt2 = fontMetricsInt;
-                                    i8 = i;
-                                } else {
-                                    newSpannable.setSpan(new EmojiSpan(emojiDrawable, i2, i, fontMetricsInt), i4, i5 + i4, 33);
-                                    i7++;
-                                    i2 = 0;
-                                }
-                                stringBuilder.setLength(i2);
-                                i5 = i2;
-                                i6 = i5;
-                                i10 = i7;
-                                i4 = -1;
-                            }
-                            if (VERSION.SDK_INT >= 23) {
-                            }
-                            i7 = i10;
-                            i2 = i3;
-                            j = 0;
-                            i3 = i9 + 1;
-                            obj2 = obj;
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                        return charSequence2;
+                        } while (cs.charAt(i) == '\udb40');
+                        i--;
                     }
                 }
-                return newSpannable;
+                previousGoodIndex = i;
+                for (int a = 0; a < 3; a++) {
+                    if (i + 1 < length) {
+                        c = cs.charAt(i + 1);
+                        if (a == 1) {
+                            if (c == '\u200d' && stringBuilder.length() > 0) {
+                                stringBuilder.append(c);
+                                i++;
+                                startLength++;
+                                doneEmoji = false;
+                            }
+                        } else if (c >= '\ufe00' && c <= '\ufe0f') {
+                            i++;
+                            startLength++;
+                        }
+                    }
+                }
+                if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '\ud83c') {
+                    next = cs.charAt(i + 2);
+                    if (next >= '\udffb' && next <= '\udfff') {
+                        stringBuilder.append(cs.subSequence(i + 1, i + 3));
+                        startLength += 2;
+                        i += 2;
+                    }
+                }
+                if (doneEmoji) {
+                    if (emojiOnly != null) {
+                        emojiOnly[0] = emojiOnly[0] + 1;
+                    }
+                    EmojiDrawable drawable = getEmojiDrawable(stringBuilder.subSequence(0, stringBuilder.length()));
+                    if (drawable != null) {
+                        s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
+                        emojiCount++;
+                    }
+                    startLength = 0;
+                    startIndex = -1;
+                    stringBuilder.setLength(0);
+                    doneEmoji = false;
+                }
+                if (VERSION.SDK_INT < 23 && emojiCount >= 50) {
+                    break;
+                }
+                i++;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+                return cs;
             }
         }
-        return charSequence2;
+        return s;
     }
 
-    public static void addRecentEmoji(String str) {
-        Integer num = (Integer) emojiUseHistory.get(str);
-        if (num == null) {
-            num = Integer.valueOf(0);
+    public static void addRecentEmoji(String code) {
+        Integer count = (Integer) emojiUseHistory.get(code);
+        if (count == null) {
+            count = Integer.valueOf(0);
         }
-        if (num.intValue() == 0 && emojiUseHistory.size() > 50) {
-            for (int size = recentEmoji.size() - 1; size >= 0; size--) {
-                emojiUseHistory.remove((String) recentEmoji.get(size));
-                recentEmoji.remove(size);
+        if (count.intValue() == 0 && emojiUseHistory.size() > 50) {
+            for (int a = recentEmoji.size() - 1; a >= 0; a--) {
+                emojiUseHistory.remove((String) recentEmoji.get(a));
+                recentEmoji.remove(a);
                 if (emojiUseHistory.size() <= 50) {
                     break;
                 }
             }
         }
-        emojiUseHistory.put(str, Integer.valueOf(num.intValue() + 1));
+        emojiUseHistory.put(code, Integer.valueOf(count.intValue() + 1));
     }
 
     public static void sortEmoji() {
         recentEmoji.clear();
-        for (Entry key : emojiUseHistory.entrySet()) {
-            recentEmoji.add(key.getKey());
+        for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
+            recentEmoji.add(entry.getKey());
         }
         Collections.sort(recentEmoji, new C01482());
         while (recentEmoji.size() > 50) {
@@ -2626,9 +554,9 @@ public class Emoji {
     }
 
     public static void saveRecentEmoji() {
-        SharedPreferences globalEmojiSettings = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Entry entry : emojiUseHistory.entrySet()) {
+        for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             if (stringBuilder.length() != 0) {
                 stringBuilder.append(",");
             }
@@ -2636,7 +564,7 @@ public class Emoji {
             stringBuilder.append("=");
             stringBuilder.append(entry.getValue());
         }
-        globalEmojiSettings.edit().putString("emojis2", stringBuilder.toString()).commit();
+        preferences.edit().putString("emojis2", stringBuilder.toString()).commit();
     }
 
     public static void clearRecentEmoji() {
@@ -2648,49 +576,49 @@ public class Emoji {
 
     public static void loadRecentEmoji() {
         if (!recentEmojiLoaded) {
+            String str;
+            String[] args2;
+            int a;
             recentEmojiLoaded = true;
-            SharedPreferences globalEmojiSettings = MessagesController.getGlobalEmojiSettings();
+            SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
             try {
                 emojiUseHistory.clear();
-                String string;
-                String[] split;
-                if (globalEmojiSettings.contains("emojis")) {
-                    string = globalEmojiSettings.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
-                    if (string != null && string.length() > 0) {
-                        for (String split2 : string.split(",")) {
-                            split = split2.split("=");
-                            long longValue = Utilities.parseLong(split[0]).longValue();
-                            StringBuilder stringBuilder = new StringBuilder();
-                            long j = longValue;
-                            for (int i = 0; i < 4; i++) {
-                                stringBuilder.insert(0, String.valueOf((char) ((int) j)));
-                                j >>= 16;
-                                if (j == 0) {
+                if (preferences.contains("emojis")) {
+                    str = preferences.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
+                    if (str != null && str.length() > 0) {
+                        for (String arg : str.split(",")) {
+                            args2 = arg.split("=");
+                            long value = Utilities.parseLong(args2[0]).longValue();
+                            StringBuilder string = new StringBuilder();
+                            for (a = 0; a < 4; a++) {
+                                string.insert(0, String.valueOf((char) ((int) value)));
+                                value >>= 16;
+                                if (value == 0) {
                                     break;
                                 }
                             }
-                            if (stringBuilder.length() > 0) {
-                                emojiUseHistory.put(stringBuilder.toString(), Utilities.parseInt(split[1]));
+                            if (string.length() > 0) {
+                                emojiUseHistory.put(string.toString(), Utilities.parseInt(args2[1]));
                             }
                         }
                     }
-                    globalEmojiSettings.edit().remove("emojis").commit();
+                    preferences.edit().remove("emojis").commit();
                     saveRecentEmoji();
                 } else {
-                    string = globalEmojiSettings.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
-                    if (string != null && string.length() > 0) {
-                        for (String split22 : string.split(",")) {
-                            split = split22.split("=");
-                            emojiUseHistory.put(split[0], Utilities.parseInt(split[1]));
+                    str = preferences.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
+                    if (str != null && str.length() > 0) {
+                        for (String arg2 : str.split(",")) {
+                            args2 = arg2.split("=");
+                            emojiUseHistory.put(args2[0], Utilities.parseInt(args2[1]));
                         }
                     }
                 }
-                if (emojiUseHistory.isEmpty() && !globalEmojiSettings.getBoolean("filled_default", false)) {
-                    String[] strArr = new String[]{"\ud83d\ude02", "\ud83d\ude18", "\u2764", "\ud83d\ude0d", "\ud83d\ude0a", "\ud83d\ude01", "\ud83d\udc4d", "\u263a", "\ud83d\ude14", "\ud83d\ude04", "\ud83d\ude2d", "\ud83d\udc8b", "\ud83d\ude12", "\ud83d\ude33", "\ud83d\ude1c", "\ud83d\ude48", "\ud83d\ude09", "\ud83d\ude03", "\ud83d\ude22", "\ud83d\ude1d", "\ud83d\ude31", "\ud83d\ude21", "\ud83d\ude0f", "\ud83d\ude1e", "\ud83d\ude05", "\ud83d\ude1a", "\ud83d\ude4a", "\ud83d\ude0c", "\ud83d\ude00", "\ud83d\ude0b", "\ud83d\ude06", "\ud83d\udc4c", "\ud83d\ude10", "\ud83d\ude15"};
-                    for (int i2 = 0; i2 < strArr.length; i2++) {
-                        emojiUseHistory.put(strArr[i2], Integer.valueOf(strArr.length - i2));
+                if (emojiUseHistory.isEmpty() && !preferences.getBoolean("filled_default", false)) {
+                    String[] newRecent = new String[]{"\ud83d\ude02", "\ud83d\ude18", "\u2764", "\ud83d\ude0d", "\ud83d\ude0a", "\ud83d\ude01", "\ud83d\udc4d", "\u263a", "\ud83d\ude14", "\ud83d\ude04", "\ud83d\ude2d", "\ud83d\udc8b", "\ud83d\ude12", "\ud83d\ude33", "\ud83d\ude1c", "\ud83d\ude48", "\ud83d\ude09", "\ud83d\ude03", "\ud83d\ude22", "\ud83d\ude1d", "\ud83d\ude31", "\ud83d\ude21", "\ud83d\ude0f", "\ud83d\ude1e", "\ud83d\ude05", "\ud83d\ude1a", "\ud83d\ude4a", "\ud83d\ude0c", "\ud83d\ude00", "\ud83d\ude0b", "\ud83d\ude06", "\ud83d\udc4c", "\ud83d\ude10", "\ud83d\ude15"};
+                    for (int i = 0; i < newRecent.length; i++) {
+                        emojiUseHistory.put(newRecent[i], Integer.valueOf(newRecent.length - i));
                     }
-                    globalEmojiSettings.edit().putBoolean("filled_default", true).commit();
+                    preferences.edit().putBoolean("filled_default", true).commit();
                     saveRecentEmoji();
                 }
                 sortEmoji();
@@ -2698,12 +626,12 @@ public class Emoji {
                 FileLog.m3e(e);
             }
             try {
-                String string2 = globalEmojiSettings.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
-                if (string2 != null && string2.length() > 0) {
-                    String[] split3 = string2.split(",");
-                    for (String split4 : split3) {
-                        String[] split5 = split4.split("=");
-                        emojiColor.put(split5[0], split5[1]);
+                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
+                if (str != null && str.length() > 0) {
+                    String[] args = str.split(",");
+                    for (String arg22 : args) {
+                        args2 = arg22.split("=");
+                        emojiColor.put(args2[0], args2[1]);
                     }
                 }
             } catch (Throwable e2) {
@@ -2713,9 +641,9 @@ public class Emoji {
     }
 
     public static void saveEmojiColors() {
-        SharedPreferences globalEmojiSettings = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Entry entry : emojiColor.entrySet()) {
+        for (Entry<String, String> entry : emojiColor.entrySet()) {
             if (stringBuilder.length() != 0) {
                 stringBuilder.append(",");
             }
@@ -2723,6 +651,6 @@ public class Emoji {
             stringBuilder.append("=");
             stringBuilder.append((String) entry.getValue());
         }
-        globalEmojiSettings.edit().putString(TtmlNode.ATTR_TTS_COLOR, stringBuilder.toString()).commit();
+        preferences.edit().putString(TtmlNode.ATTR_TTS_COLOR, stringBuilder.toString()).commit();
     }
 }

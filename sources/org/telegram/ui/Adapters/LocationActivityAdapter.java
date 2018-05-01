@@ -2,6 +2,7 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.location.Location;
+import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -47,20 +48,20 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         }
     }
 
-    public LocationActivityAdapter(Context context, int i, long j) {
+    public LocationActivityAdapter(Context context, int live, long did) {
         this.mContext = context;
-        this.liveLocationType = i;
-        this.dialogId = j;
+        this.liveLocationType = live;
+        this.dialogId = did;
     }
 
-    public void setOverScrollHeight(int i) {
-        this.overScrollHeight = i;
+    public void setOverScrollHeight(int value) {
+        this.overScrollHeight = value;
     }
 
     public void setGpsLocation(Location location) {
-        int i = this.gpsLocation == null ? 1 : 0;
+        boolean notSet = this.gpsLocation == null;
         this.gpsLocation = location;
-        if (i != 0 && this.shareLiveLocationPotistion > null) {
+        if (notSet && this.shareLiveLocationPotistion > 0) {
             notifyItemChanged(this.shareLiveLocationPotistion);
         }
         if (this.currentMessageObject != null) {
@@ -84,12 +85,12 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         updateCell();
     }
 
-    public void setLiveLocations(ArrayList<LiveLocation> arrayList) {
-        this.currentLiveLocations = new ArrayList(arrayList);
-        arrayList = UserConfig.getInstance(this.currentAccount).getClientUserId();
-        for (int i = 0; i < this.currentLiveLocations.size(); i++) {
-            if (((LiveLocation) this.currentLiveLocations.get(i)).id == arrayList) {
-                this.currentLiveLocations.remove(i);
+    public void setLiveLocations(ArrayList<LiveLocation> liveLocations) {
+        this.currentLiveLocations = new ArrayList(liveLocations);
+        int uid = UserConfig.getInstance(this.currentAccount).getClientUserId();
+        for (int a = 0; a < this.currentLiveLocations.size(); a++) {
+            if (((LiveLocation) this.currentLiveLocations.get(a)).id == uid) {
+                this.currentLiveLocations.remove(a);
                 break;
             }
         }
@@ -115,56 +116,66 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     }
 
     public int getItemCount() {
+        int i = 0;
         if (this.currentMessageObject != null) {
-            return 2 + (this.currentLiveLocations.isEmpty() ? 0 : this.currentLiveLocations.size() + 2);
+            if (!this.currentLiveLocations.isEmpty()) {
+                i = this.currentLiveLocations.size() + 2;
+            }
+            return i + 2;
         } else if (this.liveLocationType == 2) {
-            return 2 + this.currentLiveLocations.size();
+            return this.currentLiveLocations.size() + 2;
         } else {
-            int i = 4;
-            if (!this.searching) {
-                if (this.searching || !this.places.isEmpty()) {
-                    if (this.liveLocationType == 1) {
-                        return (4 + this.places.size()) + (this.places.isEmpty() ^ 1);
+            if (this.searching || (!this.searching && this.places.isEmpty())) {
+                return this.liveLocationType != 0 ? 5 : 4;
+            } else {
+                int size;
+                if (this.liveLocationType == 1) {
+                    size = this.places.size() + 4;
+                    if (!this.places.isEmpty()) {
+                        i = 1;
                     }
-                    return (3 + this.places.size()) + (this.places.isEmpty() ^ 1);
+                    return i + size;
                 }
+                size = this.places.size() + 3;
+                if (!this.places.isEmpty()) {
+                    i = 1;
+                }
+                return i + size;
             }
-            if (this.liveLocationType != 0) {
-                i = 5;
-            }
-            return i;
         }
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        switch (i) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
             case 0:
-                i = new EmptyCell(this.mContext);
+                view = new EmptyCell(this.mContext);
                 break;
             case 1:
-                i = new SendLocationCell(this.mContext, false);
+                view = new SendLocationCell(this.mContext, false);
                 break;
             case 2:
-                i = new GraySectionCell(this.mContext);
+                view = new GraySectionCell(this.mContext);
                 break;
             case 3:
-                i = new LocationCell(this.mContext);
+                view = new LocationCell(this.mContext);
                 break;
             case 4:
-                i = new LocationLoadingCell(this.mContext);
+                view = new LocationLoadingCell(this.mContext);
                 break;
             case 5:
-                i = new LocationPoweredCell(this.mContext);
+                view = new LocationPoweredCell(this.mContext);
                 break;
             case 6:
-                i = new SendLocationCell(this.mContext, true);
-                i.setDialogId(this.dialogId);
+                View cell = new SendLocationCell(this.mContext, true);
+                cell.setDialogId(this.dialogId);
+                view = cell;
                 break;
             default:
-                i = new SharingLiveLocationCell(this.mContext, true);
+                view = new SharingLiveLocationCell(this.mContext, true);
                 break;
         }
-        return new Holder(i);
+        return new Holder(view);
     }
 
     public void setPulledUp() {
@@ -178,59 +189,48 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         return this.pulledUp;
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        int i2 = 4;
-        boolean z = true;
-        switch (viewHolder.getItemViewType()) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        switch (holder.getItemViewType()) {
             case 0:
-                ((EmptyCell) viewHolder.itemView).setHeight(this.overScrollHeight);
+                ((EmptyCell) holder.itemView).setHeight(this.overScrollHeight);
                 return;
             case 1:
-                this.sendLocationCell = (SendLocationCell) viewHolder.itemView;
+                this.sendLocationCell = (SendLocationCell) holder.itemView;
                 updateCell();
                 return;
             case 2:
-                if (this.currentMessageObject != 0) {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("LiveLocations", C0446R.string.LiveLocations));
+                if (this.currentMessageObject != null) {
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("LiveLocations", C0446R.string.LiveLocations));
                     return;
-                } else if (this.pulledUp != 0) {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("NearbyPlaces", C0446R.string.NearbyPlaces));
+                } else if (this.pulledUp) {
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("NearbyPlaces", C0446R.string.NearbyPlaces));
                     return;
                 } else {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("ShowNearbyPlaces", C0446R.string.ShowNearbyPlaces));
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("ShowNearbyPlaces", C0446R.string.ShowNearbyPlaces));
                     return;
                 }
             case 3:
                 if (this.liveLocationType == 0) {
-                    i -= 3;
-                    ((LocationCell) viewHolder.itemView).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), true);
+                    ((LocationCell) holder.itemView).setLocation((TL_messageMediaVenue) this.places.get(position - 3), (String) this.iconUrls.get(position - 3), true);
+                    return;
+                } else {
+                    ((LocationCell) holder.itemView).setLocation((TL_messageMediaVenue) this.places.get(position - 4), (String) this.iconUrls.get(position - 4), true);
                     return;
                 }
-                i -= 4;
-                ((LocationCell) viewHolder.itemView).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), true);
-                return;
             case 4:
-                ((LocationLoadingCell) viewHolder.itemView).setLoading(this.searching);
+                ((LocationLoadingCell) holder.itemView).setLoading(this.searching);
                 return;
             case 6:
-                SendLocationCell sendLocationCell = (SendLocationCell) viewHolder.itemView;
-                if (this.gpsLocation == 0) {
-                    z = false;
-                }
-                sendLocationCell.setHasLocation(z);
+                ((SendLocationCell) holder.itemView).setHasLocation(this.gpsLocation != null);
                 return;
             case 7:
-                if (this.currentMessageObject == null || i != 1) {
-                    SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
-                    ArrayList arrayList = this.currentLiveLocations;
-                    if (this.currentMessageObject == null) {
-                        i2 = 2;
-                    }
-                    sharingLiveLocationCell.setDialog((LiveLocation) arrayList.get(i - i2), this.gpsLocation);
+                if (this.currentMessageObject == null || position != 1) {
+                    ((SharingLiveLocationCell) holder.itemView).setDialog((LiveLocation) this.currentLiveLocations.get(position - (this.currentMessageObject != null ? 4 : 2)), this.gpsLocation);
+                    return;
+                } else {
+                    ((SharingLiveLocationCell) holder.itemView).setDialog(this.currentMessageObject, this.gpsLocation);
                     return;
                 }
-                ((SharingLiveLocationCell) viewHolder.itemView).setDialog(this.currentMessageObject, this.gpsLocation);
-                return;
             default:
                 return;
         }
@@ -241,93 +241,91 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
             if (i == 1) {
                 return this.currentMessageObject;
             }
-            if (i > 3 && i < this.places.size() + 3) {
-                return this.currentLiveLocations.get(i - 4);
+            if (i <= 3 || i >= this.places.size() + 3) {
+                return null;
             }
+            return this.currentLiveLocations.get(i - 4);
         } else if (this.liveLocationType == 2) {
             if (i >= 2) {
                 return this.currentLiveLocations.get(i - 2);
             }
             return null;
         } else if (this.liveLocationType == 1) {
-            if (i > 3 && i < this.places.size() + 3) {
-                return this.places.get(i - 4);
+            if (i <= 3 || i >= this.places.size() + 3) {
+                return null;
             }
-        } else if (i > 2 && i < this.places.size() + 2) {
+            return this.places.get(i - 4);
+        } else if (i <= 2 || i >= this.places.size() + 2) {
+            return null;
+        } else {
             return this.places.get(i - 3);
         }
-        return null;
     }
 
-    public int getItemViewType(int i) {
-        if (i == 0) {
+    public int getItemViewType(int position) {
+        if (position == 0) {
             return 0;
         }
         if (this.currentMessageObject != null) {
-            if (i == 2) {
+            if (position == 2) {
                 return 2;
             }
-            if (i != 3) {
+            if (position != 3) {
                 return 7;
             }
-            this.shareLiveLocationPotistion = i;
+            this.shareLiveLocationPotistion = position;
             return 6;
         } else if (this.liveLocationType != 2) {
             if (this.liveLocationType == 1) {
-                if (i == 1) {
+                if (position == 1) {
                     return 1;
                 }
-                if (i == 2) {
-                    this.shareLiveLocationPotistion = i;
+                if (position == 2) {
+                    this.shareLiveLocationPotistion = position;
                     return 6;
-                } else if (i == 3) {
+                } else if (position == 3) {
                     return 2;
                 } else {
-                    if (!this.searching) {
-                        if (this.searching || !this.places.isEmpty()) {
-                            if (i == this.places.size() + 4) {
-                                return 5;
-                            }
-                        }
+                    if (this.searching || (!this.searching && this.places.isEmpty())) {
+                        return 4;
                     }
-                    return 4;
+                    if (position == this.places.size() + 4) {
+                        return 5;
+                    }
                 }
-            } else if (i == 1) {
+            } else if (position == 1) {
                 return 1;
             } else {
-                if (i == 2) {
+                if (position == 2) {
                     return 2;
                 }
-                if (!this.searching) {
-                    if (this.searching || !this.places.isEmpty()) {
-                        if (i == this.places.size() + 3) {
-                            return 5;
-                        }
-                    }
+                if (this.searching || (!this.searching && this.places.isEmpty())) {
+                    return 4;
                 }
-                return 4;
+                if (position == this.places.size() + 3) {
+                    return 5;
+                }
             }
             return 3;
-        } else if (i != 1) {
+        } else if (position != 1) {
             return 7;
         } else {
-            this.shareLiveLocationPotistion = i;
+            this.shareLiveLocationPotistion = position;
             return 6;
         }
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
-        viewHolder = viewHolder.getItemViewType();
-        boolean z = false;
-        if (viewHolder == 6) {
-            if (!(LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null)) {
-                z = true;
+    public boolean isEnabled(ViewHolder holder) {
+        int viewType = holder.getItemViewType();
+        if (viewType == 6) {
+            if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null) {
+                return false;
             }
-            return z;
+            return true;
+        } else if (viewType == 1 || viewType == 3 || viewType == 7) {
+            return true;
+        } else {
+            return false;
         }
-        if (viewHolder == 1 || viewHolder == 3 || viewHolder == 7) {
-            z = true;
-        }
-        return z;
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,7 +55,8 @@ public class SharingLiveLocationCell extends FrameLayout {
         }
     }
 
-    public SharingLiveLocationCell(Context context, boolean z) {
+    public SharingLiveLocationCell(Context context, boolean distance) {
+        int i = 5;
         super(context);
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
@@ -63,33 +65,59 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.nameTextView.setTextSize(16);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        int i = 3;
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        if (z) {
-            addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 54.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+        View view;
+        int i2;
+        if (distance) {
+            int i3;
+            view = this.avatarImageView;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            } else {
+                i2 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            View view2 = this.nameTextView;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            } else {
+                i2 = 3;
+            }
+            addView(view2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 54.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
             this.distanceTextView = new SimpleTextView(context);
-            this.distanceTextView.setTextSize(true);
+            this.distanceTextView.setTextSize(14);
             this.distanceTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-            this.distanceTextView.setGravity(LocaleController.isRTL ? true : true);
-            context = this.distanceTextView;
+            SimpleTextView simpleTextView = this.distanceTextView;
             if (LocaleController.isRTL) {
-                i = 5;
+                i3 = 5;
+            } else {
+                i3 = 3;
             }
-            addView(context, LayoutHelper.createFrame(-1, 20.0f, 48 | i, LocaleController.isRTL ? 54.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+            simpleTextView.setGravity(i3);
+            view2 = this.distanceTextView;
+            if (!LocaleController.isRTL) {
+                i = 3;
+            }
+            addView(view2, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 54.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
         } else {
-            addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, 48 | (LocaleController.isRTL ? true : true), LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-            context = this.nameTextView;
+            view = this.avatarImageView;
             if (LocaleController.isRTL) {
-                i = 5;
+                i2 = 5;
+            } else {
+                i2 = 3;
             }
-            addView(context, LayoutHelper.createFrame(-2, -2.0f, 48 | i, LocaleController.isRTL ? 54.0f : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : 54.0f, 0.0f));
+            addView(view, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            view = this.nameTextView;
+            if (!LocaleController.isRTL) {
+                i = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 54.0f : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : 54.0f, 0.0f));
         }
-        setWillNotDraw(null);
+        setWillNotDraw(false);
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.distanceTextView != null ? 66.0f : 54.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.distanceTextView != null ? 66.0f : 54.0f), NUM));
     }
 
     protected void onDetachedFromWindow() {
@@ -102,229 +130,180 @@ public class SharingLiveLocationCell extends FrameLayout {
         AndroidUtilities.runOnUIThread(this.invalidateRunnable);
     }
 
-    public void setDialog(MessageObject messageObject, Location location) {
-        CharSequence userName;
-        int i = messageObject.messageOwner.from_id;
+    public void setDialog(MessageObject messageObject, Location userLocation) {
+        String name;
+        int fromId = messageObject.messageOwner.from_id;
         if (messageObject.isForwarded()) {
             if (messageObject.messageOwner.fwd_from.channel_id != 0) {
-                i = -messageObject.messageOwner.fwd_from.channel_id;
+                fromId = -messageObject.messageOwner.fwd_from.channel_id;
             } else {
-                i = messageObject.messageOwner.fwd_from.from_id;
+                fromId = messageObject.messageOwner.fwd_from.from_id;
             }
         }
         this.currentAccount = messageObject.currentAccount;
-        CharSequence charSequence = !TextUtils.isEmpty(messageObject.messageOwner.media.address) ? messageObject.messageOwner.media.address : null;
+        String address = null;
+        TLObject photo = null;
+        if (!TextUtils.isEmpty(messageObject.messageOwner.media.address)) {
+            address = messageObject.messageOwner.media.address;
+        }
         if (TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
-            TLObject tLObject;
-            String str = TtmlNode.ANONYMOUS_REGION_ID;
+            name = TtmlNode.ANONYMOUS_REGION_ID;
             this.avatarDrawable = null;
-            if (i > 0) {
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            if (fromId > 0) {
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(fromId));
                 if (user != null) {
-                    tLObject = user.photo != null ? user.photo.photo_small : null;
+                    if (user.photo != null) {
+                        photo = user.photo.photo_small;
+                    }
                     this.avatarDrawable = new AvatarDrawable(user);
-                    userName = UserObject.getUserName(user);
-                    this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+                    name = UserObject.getUserName(user);
                 }
             } else {
-                Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+                Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-fromId));
                 if (chat != null) {
-                    tLObject = chat.photo != null ? chat.photo.photo_small : null;
+                    if (chat.photo != null) {
+                        photo = chat.photo.photo_small;
+                    }
                     this.avatarDrawable = new AvatarDrawable(chat);
-                    userName = chat.title;
-                    this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+                    name = chat.title;
                 }
             }
-            userName = str;
-            tLObject = null;
-            this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+            this.avatarImageView.setImage(photo, null, this.avatarDrawable);
         } else {
-            userName = messageObject.messageOwner.media.title;
+            name = messageObject.messageOwner.media.title;
             Drawable drawable = getResources().getDrawable(C0446R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
             int color = Theme.getColor(Theme.key_location_placeLocationBackground);
-            Drawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), color, color), drawable);
+            CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), color, color), drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.avatarImageView.setImageDrawable(combinedDrawable);
         }
-        this.nameTextView.setText(userName);
+        this.nameTextView.setText(name);
         this.location.setLatitude(messageObject.messageOwner.media.geo.lat);
         this.location.setLongitude(messageObject.messageOwner.media.geo._long);
-        if (location != null) {
-            messageObject = this.location.distanceTo(location);
-            if (charSequence != null) {
-                if (messageObject < NUM) {
-                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{charSequence, Integer.valueOf((int) messageObject), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
-                } else {
-                    this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{charSequence, Float.valueOf(messageObject / NUM), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
+        if (userLocation != null) {
+            float distance = this.location.distanceTo(userLocation);
+            if (address != null) {
+                if (distance < 1000.0f) {
+                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{address, Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
+                    return;
                 }
-            } else if (messageObject < NUM) {
-                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) messageObject), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{address, Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
+            } else if (distance < 1000.0f) {
+                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
             } else {
-                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(messageObject / NUM), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
             }
-        } else if (charSequence != null) {
-            this.distanceTextView.setText(charSequence);
+        } else if (address != null) {
+            this.distanceTextView.setText(address);
         } else {
             this.distanceTextView.setText(LocaleController.getString("Loading", C0446R.string.Loading));
         }
     }
 
-    public void setDialog(LiveLocation liveLocation, Location location) {
-        TLObject tLObject;
-        LatLng position;
-        this.liveLocation = liveLocation;
-        int i = liveLocation.id;
-        if (i > 0) {
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+    public void setDialog(LiveLocation info, Location userLocation) {
+        this.liveLocation = info;
+        int lower_id = info.id;
+        TLObject photo = null;
+        if (lower_id > 0) {
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
             this.avatarDrawable.setInfo(user);
             if (user != null) {
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                 if (!(user.photo == null || user.photo.photo_small == null)) {
-                    tLObject = user.photo.photo_small;
-                    position = liveLocation.marker.getPosition();
-                    this.location.setLatitude(position.latitude);
-                    this.location.setLongitude(position.longitude);
-                    liveLocation = LocaleController.formatLocationUpdateDate((long) (liveLocation.object.edit_date != 0 ? liveLocation.object.edit_date : liveLocation.object.date));
-                    if (location != null) {
-                        if (this.location.distanceTo(location) < NUM) {
-                            this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{liveLocation, Integer.valueOf((int) this.location.distanceTo(location)), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
-                        } else {
-                            this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{liveLocation, Float.valueOf(this.location.distanceTo(location) / NUM), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
-                        }
-                    } else {
-                        this.distanceTextView.setText(liveLocation);
-                    }
-                    this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+                    photo = user.photo.photo_small;
                 }
-            }
-        }
-        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
-        if (chat != null) {
-            this.avatarDrawable.setInfo(chat);
-            this.nameTextView.setText(chat.title);
-            if (!(chat.photo == null || chat.photo.photo_small == null)) {
-                tLObject = chat.photo.photo_small;
-                position = liveLocation.marker.getPosition();
-                this.location.setLatitude(position.latitude);
-                this.location.setLongitude(position.longitude);
-                if (liveLocation.object.edit_date != 0) {
-                }
-                liveLocation = LocaleController.formatLocationUpdateDate((long) (liveLocation.object.edit_date != 0 ? liveLocation.object.edit_date : liveLocation.object.date));
-                if (location != null) {
-                    this.distanceTextView.setText(liveLocation);
-                } else {
-                    if (this.location.distanceTo(location) < NUM) {
-                        this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{liveLocation, Float.valueOf(this.location.distanceTo(location) / NUM), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
-                    } else {
-                        this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{liveLocation, Integer.valueOf((int) this.location.distanceTo(location)), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
-                    }
-                }
-                this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
-            }
-        }
-        tLObject = null;
-        position = liveLocation.marker.getPosition();
-        this.location.setLatitude(position.latitude);
-        this.location.setLongitude(position.longitude);
-        if (liveLocation.object.edit_date != 0) {
-        }
-        liveLocation = LocaleController.formatLocationUpdateDate((long) (liveLocation.object.edit_date != 0 ? liveLocation.object.edit_date : liveLocation.object.date));
-        if (location != null) {
-            if (this.location.distanceTo(location) < NUM) {
-                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{liveLocation, Integer.valueOf((int) this.location.distanceTo(location)), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
-            } else {
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{liveLocation, Float.valueOf(this.location.distanceTo(location) / NUM), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
             }
         } else {
-            this.distanceTextView.setText(liveLocation);
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
+            if (chat != null) {
+                this.avatarDrawable.setInfo(chat);
+                this.nameTextView.setText(chat.title);
+                if (!(chat.photo == null || chat.photo.photo_small == null)) {
+                    photo = chat.photo.photo_small;
+                }
+            }
         }
-        this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+        LatLng position = info.marker.getPosition();
+        this.location.setLatitude(position.latitude);
+        this.location.setLongitude(position.longitude);
+        String time = LocaleController.formatLocationUpdateDate(info.object.edit_date != 0 ? (long) info.object.edit_date : (long) info.object.date);
+        if (userLocation != null) {
+            if (this.location.distanceTo(userLocation) < 1000.0f) {
+                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{time, Integer.valueOf((int) this.location.distanceTo(userLocation)), LocaleController.getString("MetersAway", C0446R.string.MetersAway)}));
+            } else {
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{time, Float.valueOf(this.location.distanceTo(userLocation) / 1000.0f), LocaleController.getString("KMetersAway", C0446R.string.KMetersAway)}));
+            }
+        } else {
+            this.distanceTextView.setText(time);
+        }
+        this.avatarImageView.setImage(photo, null, this.avatarDrawable);
     }
 
-    public void setDialog(SharingLocationInfo sharingLocationInfo) {
-        TLObject tLObject;
-        this.currentInfo = sharingLocationInfo;
-        sharingLocationInfo = (int) sharingLocationInfo.did;
-        if (sharingLocationInfo > null) {
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(sharingLocationInfo));
+    public void setDialog(SharingLocationInfo info) {
+        this.currentInfo = info;
+        int lower_id = (int) info.did;
+        TLObject photo = null;
+        if (lower_id > 0) {
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                 if (!(user.photo == null || user.photo.photo_small == null)) {
-                    tLObject = user.photo.photo_small;
-                    this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+                    photo = user.photo.photo_small;
+                }
+            }
+        } else {
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
+            if (chat != null) {
+                this.avatarDrawable.setInfo(chat);
+                this.nameTextView.setText(chat.title);
+                if (!(chat.photo == null || chat.photo.photo_small == null)) {
+                    photo = chat.photo.photo_small;
                 }
             }
         }
-        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-sharingLocationInfo));
-        if (chat != null) {
-            this.avatarDrawable.setInfo(chat);
-            this.nameTextView.setText(chat.title);
-            if (!(chat.photo == null || chat.photo.photo_small == null)) {
-                tLObject = chat.photo.photo_small;
-                this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
-            }
-        }
-        tLObject = null;
-        this.avatarImageView.setImage(tLObject, null, this.avatarDrawable);
+        this.avatarImageView.setImage(photo, null, this.avatarDrawable);
     }
 
     protected void onDraw(Canvas canvas) {
         if (this.currentInfo != null || this.liveLocation != null) {
-            int i;
-            int i2;
+            int stopTime;
+            int period;
             if (this.currentInfo != null) {
-                i = this.currentInfo.stopTime;
-                i2 = this.currentInfo.period;
+                stopTime = this.currentInfo.stopTime;
+                period = this.currentInfo.period;
             } else {
-                i = this.liveLocation.object.date + this.liveLocation.object.media.period;
-                i2 = this.liveLocation.object.media.period;
+                stopTime = this.liveLocation.object.date + this.liveLocation.object.media.period;
+                period = this.liveLocation.object.media.period;
             }
             int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            if (i >= currentTime) {
-                i -= currentTime;
-                float abs = ((float) Math.abs(i)) / ((float) i2);
-                float f = 42.0f;
-                float f2 = 12.0f;
-                RectF rectF;
-                float dp;
+            if (stopTime >= currentTime) {
+                int color;
+                float f;
+                float progress = ((float) Math.abs(stopTime - currentTime)) / ((float) period);
                 if (LocaleController.isRTL) {
-                    rectF = this.rect;
-                    float dp2 = (float) AndroidUtilities.dp(13.0f);
-                    if (this.distanceTextView != null) {
-                        f2 = 18.0f;
-                    }
-                    f2 = (float) AndroidUtilities.dp(f2);
-                    dp = (float) AndroidUtilities.dp(43.0f);
-                    if (this.distanceTextView != null) {
-                        f = 48.0f;
-                    }
-                    rectF.set(dp2, f2, dp, (float) AndroidUtilities.dp(f));
+                    this.rect.set((float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(this.distanceTextView != null ? 18.0f : 12.0f), (float) AndroidUtilities.dp(43.0f), (float) AndroidUtilities.dp(this.distanceTextView != null ? 48.0f : 42.0f));
                 } else {
-                    rectF = this.rect;
-                    dp = (float) (getMeasuredWidth() - AndroidUtilities.dp(43.0f));
-                    if (this.distanceTextView != null) {
-                        f2 = 18.0f;
-                    }
-                    f2 = (float) AndroidUtilities.dp(f2);
-                    float measuredWidth = (float) (getMeasuredWidth() - AndroidUtilities.dp(13.0f));
-                    if (this.distanceTextView != null) {
-                        f = 48.0f;
-                    }
-                    rectF.set(dp, f2, measuredWidth, (float) AndroidUtilities.dp(f));
+                    this.rect.set((float) (getMeasuredWidth() - AndroidUtilities.dp(43.0f)), (float) AndroidUtilities.dp(this.distanceTextView != null ? 18.0f : 12.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(13.0f)), (float) AndroidUtilities.dp(this.distanceTextView != null ? 48.0f : 42.0f));
                 }
                 if (this.distanceTextView == null) {
-                    i2 = Theme.getColor("location_liveLocationProgress");
+                    color = Theme.getColor("location_liveLocationProgress");
                 } else {
-                    i2 = Theme.getColor("location_liveLocationProgress");
+                    color = Theme.getColor("location_liveLocationProgress");
                 }
-                Theme.chat_radialProgress2Paint.setColor(i2);
-                Theme.chat_livePaint.setColor(i2);
-                canvas.drawArc(this.rect, -90.0f, -360.0f * abs, false, Theme.chat_radialProgress2Paint);
-                String formatLocationLeftTime = LocaleController.formatLocationLeftTime(i);
-                canvas.drawText(formatLocationLeftTime, this.rect.centerX() - (Theme.chat_livePaint.measureText(formatLocationLeftTime) / 2.0f), (float) AndroidUtilities.dp(this.distanceTextView != null ? 37.0f : 31.0f), Theme.chat_livePaint);
+                Theme.chat_radialProgress2Paint.setColor(color);
+                Theme.chat_livePaint.setColor(color);
+                canvas.drawArc(this.rect, -90.0f, -360.0f * progress, false, Theme.chat_radialProgress2Paint);
+                String text = LocaleController.formatLocationLeftTime(stopTime - currentTime);
+                float centerX = this.rect.centerX() - (Theme.chat_livePaint.measureText(text) / 2.0f);
+                if (this.distanceTextView != null) {
+                    f = 37.0f;
+                } else {
+                    f = 31.0f;
+                }
+                canvas.drawText(text, centerX, (float) AndroidUtilities.dp(f), Theme.chat_livePaint);
             }
         }
     }

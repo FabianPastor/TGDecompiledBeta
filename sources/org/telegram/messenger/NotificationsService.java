@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class NotificationsService extends Service {
-    public IBinder onBind(Intent intent) {
-        return null;
+    public void onCreate() {
+        ApplicationLoader.postInitApplication();
     }
 
-    public int onStartCommand(Intent intent, int i, int i2) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         return 1;
     }
 
-    public void onCreate() {
-        ApplicationLoader.postInitApplication();
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public void onDestroy() {

@@ -11,21 +11,22 @@ public class AdaptationSet {
     public final List<Descriptor> supplementalProperties;
     public final int type;
 
-    public AdaptationSet(int i, int i2, List<Representation> list, List<Descriptor> list2, List<Descriptor> list3) {
-        this.id = i;
-        this.type = i2;
-        this.representations = Collections.unmodifiableList(list);
-        if (list2 == null) {
-            i = Collections.emptyList();
+    public AdaptationSet(int id, int type, List<Representation> representations, List<Descriptor> accessibilityDescriptors, List<Descriptor> supplementalProperties) {
+        List emptyList;
+        this.id = id;
+        this.type = type;
+        this.representations = Collections.unmodifiableList(representations);
+        if (accessibilityDescriptors == null) {
+            emptyList = Collections.emptyList();
         } else {
-            i = Collections.unmodifiableList(list2);
+            emptyList = Collections.unmodifiableList(accessibilityDescriptors);
         }
-        this.accessibilityDescriptors = i;
-        if (list3 == null) {
-            i = Collections.emptyList();
+        this.accessibilityDescriptors = emptyList;
+        if (supplementalProperties == null) {
+            emptyList = Collections.emptyList();
         } else {
-            i = Collections.unmodifiableList(list3);
+            emptyList = Collections.unmodifiableList(supplementalProperties);
         }
-        this.supplementalProperties = i;
+        this.supplementalProperties = emptyList;
     }
 }

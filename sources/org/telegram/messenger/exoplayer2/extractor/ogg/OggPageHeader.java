@@ -40,88 +40,47 @@ final class OggPageHeader {
         this.bodySize = 0;
     }
 
-    public boolean populate(ExtractorInput extractorInput, boolean z) throws IOException, InterruptedException {
-        int i;
+    public boolean populate(ExtractorInput input, boolean quiet) throws IOException, InterruptedException {
+        boolean hasEnoughBytes;
         this.scratch.reset();
         reset();
-        int i2 = 0;
-        if (extractorInput.getLength() != -1) {
-            if (extractorInput.getLength() - extractorInput.getPeekPosition() < 27) {
-                i = 0;
-                if (i != 0) {
-                    if (!extractorInput.peekFully(this.scratch.data, 0, 27, true)) {
-                        if (this.scratch.readUnsignedInt() != ((long) TYPE_OGGS)) {
-                            this.revision = this.scratch.readUnsignedByte();
-                            if (this.revision != 0) {
-                                this.type = this.scratch.readUnsignedByte();
-                                this.granulePosition = this.scratch.readLittleEndianLong();
-                                this.streamSerialNumber = this.scratch.readLittleEndianUnsignedInt();
-                                this.pageSequenceNumber = this.scratch.readLittleEndianUnsignedInt();
-                                this.pageChecksum = this.scratch.readLittleEndianUnsignedInt();
-                                this.pageSegmentCount = this.scratch.readUnsignedByte();
-                                this.headerSize = 27 + this.pageSegmentCount;
-                                this.scratch.reset();
-                                extractorInput.peekFully(this.scratch.data, 0, this.pageSegmentCount);
-                                while (i2 < this.pageSegmentCount) {
-                                    this.laces[i2] = this.scratch.readUnsignedByte();
-                                    this.bodySize += this.laces[i2];
-                                    i2++;
-                                }
-                                return true;
-                            } else if (z) {
-                                return false;
-                            } else {
-                                throw new ParserException("unsupported bit stream revision");
-                            }
-                        } else if (z) {
-                            return false;
-                        } else {
-                            throw new ParserException("expected OggS capture pattern at begin of page");
-                        }
-                    }
-                }
-                if (z) {
-                    return false;
-                }
-                throw new EOFException();
-            }
+        if (input.getLength() == -1 || input.getLength() - input.getPeekPosition() >= 27) {
+            hasEnoughBytes = true;
+        } else {
+            hasEnoughBytes = false;
         }
-        i = true;
-        if (i != 0) {
-            if (!extractorInput.peekFully(this.scratch.data, 0, 27, true)) {
-                if (this.scratch.readUnsignedInt() != ((long) TYPE_OGGS)) {
-                    this.revision = this.scratch.readUnsignedByte();
-                    if (this.revision != 0) {
-                        this.type = this.scratch.readUnsignedByte();
-                        this.granulePosition = this.scratch.readLittleEndianLong();
-                        this.streamSerialNumber = this.scratch.readLittleEndianUnsignedInt();
-                        this.pageSequenceNumber = this.scratch.readLittleEndianUnsignedInt();
-                        this.pageChecksum = this.scratch.readLittleEndianUnsignedInt();
-                        this.pageSegmentCount = this.scratch.readUnsignedByte();
-                        this.headerSize = 27 + this.pageSegmentCount;
-                        this.scratch.reset();
-                        extractorInput.peekFully(this.scratch.data, 0, this.pageSegmentCount);
-                        while (i2 < this.pageSegmentCount) {
-                            this.laces[i2] = this.scratch.readUnsignedByte();
-                            this.bodySize += this.laces[i2];
-                            i2++;
-                        }
-                        return true;
-                    } else if (z) {
-                        return false;
-                    } else {
-                        throw new ParserException("unsupported bit stream revision");
+        if (hasEnoughBytes && input.peekFully(this.scratch.data, 0, 27, true)) {
+            if (this.scratch.readUnsignedInt() == ((long) TYPE_OGGS)) {
+                this.revision = this.scratch.readUnsignedByte();
+                if (this.revision == 0) {
+                    this.type = this.scratch.readUnsignedByte();
+                    this.granulePosition = this.scratch.readLittleEndianLong();
+                    this.streamSerialNumber = this.scratch.readLittleEndianUnsignedInt();
+                    this.pageSequenceNumber = this.scratch.readLittleEndianUnsignedInt();
+                    this.pageChecksum = this.scratch.readLittleEndianUnsignedInt();
+                    this.pageSegmentCount = this.scratch.readUnsignedByte();
+                    this.headerSize = this.pageSegmentCount + 27;
+                    this.scratch.reset();
+                    input.peekFully(this.scratch.data, 0, this.pageSegmentCount);
+                    for (int i = 0; i < this.pageSegmentCount; i++) {
+                        this.laces[i] = this.scratch.readUnsignedByte();
+                        this.bodySize += this.laces[i];
                     }
-                } else if (z) {
+                    return true;
+                } else if (quiet) {
                     return false;
                 } else {
-                    throw new ParserException("expected OggS capture pattern at begin of page");
+                    throw new ParserException("unsupported bit stream revision");
                 }
+            } else if (quiet) {
+                return false;
+            } else {
+                throw new ParserException("expected OggS capture pattern at begin of page");
             }
-        }
-        if (z) {
+        } else if (quiet) {
             return false;
+        } else {
+            throw new EOFException();
         }
-        throw new EOFException();
     }
 }

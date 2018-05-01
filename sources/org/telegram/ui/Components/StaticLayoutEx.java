@@ -25,69 +25,59 @@ public class StaticLayoutEx {
     public static void init() {
         if (!initialized) {
             try {
-                Class cls;
+                Class<?> textDirClass;
                 if (VERSION.SDK_INT >= 18) {
-                    cls = TextDirectionHeuristic.class;
+                    textDirClass = TextDirectionHeuristic.class;
                     sTextDirection = TextDirectionHeuristics.FIRSTSTRONG_LTR;
                 } else {
-                    ClassLoader classLoader = StaticLayoutEx.class.getClassLoader();
-                    Class loadClass = classLoader.loadClass(TEXT_DIR_CLASS);
-                    cls = classLoader.loadClass(TEXT_DIRS_CLASS);
-                    sTextDirection = cls.getField(TEXT_DIR_FIRSTSTRONG_LTR).get(cls);
-                    cls = loadClass;
+                    ClassLoader loader = StaticLayoutEx.class.getClassLoader();
+                    textDirClass = loader.loadClass(TEXT_DIR_CLASS);
+                    Class<?> textDirsClass = loader.loadClass(TEXT_DIRS_CLASS);
+                    sTextDirection = textDirsClass.getField(TEXT_DIR_FIRSTSTRONG_LTR).get(textDirsClass);
                 }
-                Class[] clsArr = new Class[]{CharSequence.class, Integer.TYPE, Integer.TYPE, TextPaint.class, Integer.TYPE, Alignment.class, cls, Float.TYPE, Float.TYPE, Boolean.TYPE, TruncateAt.class, Integer.TYPE, Integer.TYPE};
-                sConstructor = StaticLayout.class.getDeclaredConstructor(clsArr);
+                Class<?>[] signature = new Class[]{CharSequence.class, Integer.TYPE, Integer.TYPE, TextPaint.class, Integer.TYPE, Alignment.class, textDirClass, Float.TYPE, Float.TYPE, Boolean.TYPE, TruncateAt.class, Integer.TYPE, Integer.TYPE};
+                sConstructor = StaticLayout.class.getDeclaredConstructor(signature);
                 sConstructor.setAccessible(true);
-                sConstructorArgs = new Object[clsArr.length];
+                sConstructorArgs = new Object[signature.length];
                 initialized = true;
-            } catch (Throwable th) {
-                FileLog.m3e(th);
+            } catch (Throwable e) {
+                FileLog.m3e(e);
             }
         }
     }
 
-    public static StaticLayout createStaticLayout(CharSequence charSequence, TextPaint textPaint, int i, Alignment alignment, float f, float f2, boolean z, TruncateAt truncateAt, int i2, int i3) {
-        return createStaticLayout(charSequence, 0, charSequence.length(), textPaint, i, alignment, f, f2, z, truncateAt, i2, i3);
+    public static StaticLayout createStaticLayout(CharSequence source, TextPaint paint, int width, Alignment align, float spacingmult, float spacingadd, boolean includepad, TruncateAt ellipsize, int ellipsisWidth, int maxLines) {
+        return createStaticLayout(source, 0, source.length(), paint, width, align, spacingmult, spacingadd, includepad, ellipsize, ellipsisWidth, maxLines);
     }
 
-    public static StaticLayout createStaticLayout(CharSequence charSequence, int i, int i2, TextPaint textPaint, int i3, Alignment alignment, float f, float f2, boolean z, TruncateAt truncateAt, int i4, int i5) {
-        CharSequence charSequence2 = charSequence;
-        TextPaint textPaint2 = textPaint;
-        int i6 = i4;
-        int i7 = i5;
-        if (i7 == 1) {
+    public static StaticLayout createStaticLayout(CharSequence source, int bufstart, int bufend, TextPaint paint, int outerWidth, Alignment align, float spacingMult, float spacingAdd, boolean includePad, TruncateAt ellipsize, int ellipsisWidth, int maxLines) {
+        if (maxLines == 1) {
             try {
-                CharSequence ellipsize = TextUtils.ellipsize(charSequence2, textPaint2, (float) i6, TruncateAt.END);
-                return new StaticLayout(ellipsize, 0, ellipsize.length(), textPaint2, i3, alignment, f, f2, z);
+                CharSequence text = TextUtils.ellipsize(source, paint, (float) ellipsisWidth, TruncateAt.END);
+                return new StaticLayout(text, 0, text.length(), paint, outerWidth, align, spacingMult, spacingAdd, includePad);
             } catch (Throwable e) {
                 FileLog.m3e(e);
                 return null;
             }
         }
-        int i8;
-        StaticLayout build;
+        StaticLayout layout;
         if (VERSION.SDK_INT >= 23) {
-            i8 = i3;
-            build = Builder.obtain(charSequence2, 0, charSequence.length(), textPaint2, i8).setAlignment(alignment).setLineSpacing(f2, f).setIncludePad(z).setEllipsize(null).setEllipsizedWidth(i6).setBreakStrategy(1).setHyphenationFrequency(1).build();
+            layout = Builder.obtain(source, 0, source.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(1).build();
         } else {
-            i8 = i3;
-            float f3 = f2;
-            boolean z2 = z;
-            build = new StaticLayout(charSequence2, textPaint2, i8, alignment, f, f2, z);
+            layout = new StaticLayout(source, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
         }
-        if (build.getLineCount() <= i7) {
-            return build;
+        if (layout.getLineCount() <= maxLines) {
+            return layout;
         }
-        int i9 = i7 - 1;
-        float lineLeft = build.getLineLeft(i9);
-        if (lineLeft != 0.0f) {
-            i6 = build.getOffsetForHorizontal(i9, lineLeft);
+        int off;
+        float left = layout.getLineLeft(maxLines - 1);
+        if (left != 0.0f) {
+            off = layout.getOffsetForHorizontal(maxLines - 1, left);
         } else {
-            i6 = build.getOffsetForHorizontal(i9, build.getLineWidth(i9));
+            off = layout.getOffsetForHorizontal(maxLines - 1, layout.getLineWidth(maxLines - 1));
         }
-        ellipsize = new SpannableStringBuilder(charSequence2.subSequence(0, Math.max(0, i6 - 1)));
-        ellipsize.append("\u2026");
-        return new StaticLayout(ellipsize, textPaint2, i8, alignment, f, f2, z);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(source.subSequence(0, Math.max(0, off - 1)));
+        stringBuilder.append("\u2026");
+        return new StaticLayout(stringBuilder, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
     }
 }

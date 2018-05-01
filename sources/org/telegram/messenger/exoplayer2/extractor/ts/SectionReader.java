@@ -17,12 +17,12 @@ public final class SectionReader implements TsPayloadReader {
     private int totalSectionLength;
     private boolean waitingForPayloadStart;
 
-    public SectionReader(SectionPayloadReader sectionPayloadReader) {
-        this.reader = sectionPayloadReader;
+    public SectionReader(SectionPayloadReader reader) {
+        this.reader = reader;
     }
 
-    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        this.reader.init(timestampAdjuster, extractorOutput, trackIdGenerator);
+    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        this.reader.init(timestampAdjuster, extractorOutput, idGenerator);
         this.waitingForPayloadStart = true;
     }
 
@@ -30,57 +30,56 @@ public final class SectionReader implements TsPayloadReader {
         this.waitingForPayloadStart = true;
     }
 
-    public void consume(ParsableByteArray parsableByteArray, boolean z) {
-        int readUnsignedByte = z ? parsableByteArray.readUnsignedByte() + parsableByteArray.getPosition() : -1;
+    public void consume(ParsableByteArray data, boolean payloadUnitStartIndicator) {
+        int payloadStartPosition = -1;
+        if (payloadUnitStartIndicator) {
+            payloadStartPosition = data.getPosition() + data.readUnsignedByte();
+        }
         if (this.waitingForPayloadStart) {
-            if (z) {
+            if (payloadUnitStartIndicator) {
                 this.waitingForPayloadStart = false;
-                parsableByteArray.setPosition(readUnsignedByte);
+                data.setPosition(payloadStartPosition);
                 this.bytesRead = 0;
             } else {
                 return;
             }
         }
-        while (parsableByteArray.bytesLeft() <= false) {
-            boolean z2 = true;
-            if (this.bytesRead < true) {
-                if (!this.bytesRead) {
-                    z = parsableByteArray.readUnsignedByte();
-                    parsableByteArray.setPosition(parsableByteArray.getPosition() - 1);
-                    if (z) {
+        while (data.bytesLeft() > 0) {
+            if (this.bytesRead < 3) {
+                if (this.bytesRead == 0) {
+                    int tableId = data.readUnsignedByte();
+                    data.setPosition(data.getPosition() - 1);
+                    if (tableId == 255) {
                         this.waitingForPayloadStart = true;
                         return;
                     }
                 }
-                z = Math.min(parsableByteArray.bytesLeft(), 3 - this.bytesRead);
-                parsableByteArray.readBytes(this.sectionData.data, this.bytesRead, z);
-                this.bytesRead += z;
-                if (this.bytesRead) {
+                int headerBytesToRead = Math.min(data.bytesLeft(), 3 - this.bytesRead);
+                data.readBytes(this.sectionData.data, this.bytesRead, headerBytesToRead);
+                this.bytesRead += headerBytesToRead;
+                if (this.bytesRead == 3) {
                     this.sectionData.reset(3);
                     this.sectionData.skipBytes(1);
-                    z = this.sectionData.readUnsignedByte();
-                    int readUnsignedByte2 = this.sectionData.readUnsignedByte();
-                    if ((z & 128) == 0) {
-                        z2 = false;
-                    }
-                    this.sectionSyntaxIndicator = z2;
-                    this.totalSectionLength = (((z & 15) << 8) | readUnsignedByte2) + true;
+                    int secondHeaderByte = this.sectionData.readUnsignedByte();
+                    int thirdHeaderByte = this.sectionData.readUnsignedByte();
+                    this.sectionSyntaxIndicator = (secondHeaderByte & 128) != 0;
+                    this.totalSectionLength = (((secondHeaderByte & 15) << 8) | thirdHeaderByte) + 3;
                     if (this.sectionData.capacity() < this.totalSectionLength) {
-                        z = this.sectionData.data;
-                        this.sectionData.reset(Math.min(MAX_SECTION_LENGTH, Math.max(this.totalSectionLength, z.length * 2)));
-                        System.arraycopy(z, 0, this.sectionData.data, 0, 3);
+                        byte[] bytes = this.sectionData.data;
+                        this.sectionData.reset(Math.min(MAX_SECTION_LENGTH, Math.max(this.totalSectionLength, bytes.length * 2)));
+                        System.arraycopy(bytes, 0, this.sectionData.data, 0, 3);
                     }
                 }
             } else {
-                z = Math.min(parsableByteArray.bytesLeft(), this.totalSectionLength - this.bytesRead);
-                parsableByteArray.readBytes(this.sectionData.data, this.bytesRead, z);
-                this.bytesRead += z;
+                int bodyBytesToRead = Math.min(data.bytesLeft(), this.totalSectionLength - this.bytesRead);
+                data.readBytes(this.sectionData.data, this.bytesRead, bodyBytesToRead);
+                this.bytesRead += bodyBytesToRead;
                 if (this.bytesRead != this.totalSectionLength) {
                     continue;
                 } else {
                     if (!this.sectionSyntaxIndicator) {
                         this.sectionData.reset(this.totalSectionLength);
-                    } else if (Util.crc(this.sectionData.data, 0, this.totalSectionLength, -1)) {
+                    } else if (Util.crc(this.sectionData.data, 0, this.totalSectionLength, -1) != 0) {
                         this.waitingForPayloadStart = true;
                         return;
                     } else {

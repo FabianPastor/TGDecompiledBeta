@@ -24,53 +24,72 @@ public class LocationCell extends FrameLayout {
     private boolean needDivider;
 
     public LocationCell(Context context) {
-        Context context2 = context;
+        int i;
+        int i2;
+        int i3 = 16;
+        int i4 = 5;
         super(context);
-        this.imageView = new BackupImageView(context2);
+        this.imageView = new BackupImageView(context);
         this.imageView.setBackgroundResource(C0446R.drawable.round_grey);
         this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
-        int i = 3;
-        addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-        r0.nameTextView = new TextView(context2);
-        r0.nameTextView.setTextSize(1, 16.0f);
-        r0.nameTextView.setMaxLines(1);
-        r0.nameTextView.setEllipsize(TruncateAt.END);
-        r0.nameTextView.setSingleLine(true);
-        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        r0.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        int i2 = 72;
-        addView(r0.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 48 | (LocaleController.isRTL ? 5 : 3), (float) (LocaleController.isRTL ? 16 : 72), 5.0f, (float) (LocaleController.isRTL ? 72 : 16), 0.0f));
-        r0.addressTextView = new TextView(context2);
-        r0.addressTextView.setTextSize(1, 14.0f);
-        r0.addressTextView.setMaxLines(1);
-        r0.addressTextView.setEllipsize(TruncateAt.END);
-        r0.addressTextView.setSingleLine(true);
-        r0.addressTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        r0.addressTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view = r0.addressTextView;
+        addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+        this.nameTextView = new TextView(context);
+        this.nameTextView.setTextSize(1, 16.0f);
+        this.nameTextView.setMaxLines(1);
+        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setSingleLine(true);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        TextView textView = this.nameTextView;
         if (LocaleController.isRTL) {
             i = 5;
+        } else {
+            i = 3;
         }
-        int i3 = 48 | i;
-        float f = (float) (LocaleController.isRTL ? 16 : 72);
+        textView.setGravity(i);
+        View view = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, (float) (LocaleController.isRTL ? 16 : 72), 5.0f, (float) (LocaleController.isRTL ? 72 : 16), 0.0f));
+        this.addressTextView = new TextView(context);
+        this.addressTextView.setTextSize(1, 14.0f);
+        this.addressTextView.setMaxLines(1);
+        this.addressTextView.setEllipsize(TruncateAt.END);
+        this.addressTextView.setSingleLine(true);
+        this.addressTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        textView = this.addressTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        textView.setGravity(i);
+        view = this.addressTextView;
         if (!LocaleController.isRTL) {
-            i2 = 16;
+            i4 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3, f, 30.0f, (float) i2, 0.0f));
+        i2 = i4 | 48;
+        float f = (float) (LocaleController.isRTL ? 16 : 72);
+        if (LocaleController.isRTL) {
+            i3 = 72;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2, f, 30.0f, (float) i3, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f) + this.needDivider, NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f), NUM));
     }
 
-    public void setLocation(TL_messageMediaVenue tL_messageMediaVenue, String str, boolean z) {
-        this.needDivider = z;
-        this.nameTextView.setText(tL_messageMediaVenue.title);
-        this.addressTextView.setText(tL_messageMediaVenue.address);
-        this.imageView.setImage(str, null, null);
-        setWillNotDraw(z ^ 1);
+    public void setLocation(TL_messageMediaVenue location, String icon, boolean divider) {
+        this.needDivider = divider;
+        this.nameTextView.setText(location.title);
+        this.addressTextView.setText(location.address);
+        this.imageView.setImage(icon, null, null);
+        setWillNotDraw(!divider);
     }
 
     protected void onDraw(Canvas canvas) {

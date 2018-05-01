@@ -30,18 +30,18 @@ final class DefaultOggSeeker implements OggSeeker {
     private long totalGranules;
 
     private class OggSeekMap implements SeekMap {
+        private OggSeekMap() {
+        }
+
         public boolean isSeekable() {
             return true;
         }
 
-        private OggSeekMap() {
-        }
-
-        public SeekPoints getSeekPoints(long j) {
-            if (j == 0) {
+        public SeekPoints getSeekPoints(long timeUs) {
+            if (timeUs == 0) {
                 return new SeekPoints(new SeekPoint(0, DefaultOggSeeker.this.startPosition));
             }
-            return new SeekPoints(new SeekPoint(j, DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.streamReader.convertTimeToGranule(j), 30000)));
+            return new SeekPoints(new SeekPoint(timeUs, DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.streamReader.convertTimeToGranule(timeUs), 30000)));
         }
 
         public long getDurationUs() {
@@ -49,78 +49,60 @@ final class DefaultOggSeeker implements OggSeeker {
         }
     }
 
-    public DefaultOggSeeker(long j, long j2, StreamReader streamReader, int i, long j3) {
-        boolean z = j >= 0 && j2 > j;
+    public DefaultOggSeeker(long startPosition, long endPosition, StreamReader streamReader, int firstPayloadPageSize, long firstPayloadPageGranulePosition) {
+        boolean z = startPosition >= 0 && endPosition > startPosition;
         Assertions.checkArgument(z);
         this.streamReader = streamReader;
-        this.startPosition = j;
-        this.endPosition = j2;
-        if (((long) i) == j2 - j) {
-            this.totalGranules = j3;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        if (((long) firstPayloadPageSize) == endPosition - startPosition) {
+            this.totalGranules = firstPayloadPageGranulePosition;
             this.state = 3;
             return;
         }
         this.state = 0;
     }
 
-    public long read(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        long j;
+    public long read(ExtractorInput input) throws IOException, InterruptedException {
         switch (this.state) {
             case 0:
-                this.positionBeforeSeekToEnd = extractorInput.getPosition();
+                this.positionBeforeSeekToEnd = input.getPosition();
                 this.state = 1;
-                j = this.endPosition - 65307;
-                if (j > this.positionBeforeSeekToEnd) {
-                    return j;
+                long lastPageSearchPosition = this.endPosition - 65307;
+                if (lastPageSearchPosition > this.positionBeforeSeekToEnd) {
+                    return lastPageSearchPosition;
                 }
                 break;
             case 1:
                 break;
             case 2:
-                long j2 = 0;
-                if (this.targetGranule != 0) {
-                    j = getNextSeekPosition(this.targetGranule, extractorInput);
-                    if (j >= 0) {
-                        return j;
+                long currentGranule;
+                if (this.targetGranule == 0) {
+                    currentGranule = 0;
+                } else {
+                    long position = getNextSeekPosition(this.targetGranule, input);
+                    if (position >= 0) {
+                        return position;
                     }
-                    j2 = skipToPageOfGranule(extractorInput, this.targetGranule, -(j + 2));
+                    ExtractorInput extractorInput = input;
+                    currentGranule = skipToPageOfGranule(extractorInput, this.targetGranule, -(2 + position));
                 }
                 this.state = 3;
-                return -(j2 + 2);
+                return -(2 + currentGranule);
             case 3:
                 return -1;
             default:
                 throw new IllegalStateException();
         }
-        this.totalGranules = readGranuleOfLastPage(extractorInput);
+        this.totalGranules = readGranuleOfLastPage(input);
         this.state = 3;
         return this.positionBeforeSeekToEnd;
     }
 
-    public long startSeek(long j) {
-        boolean z;
-        long j2;
-        if (this.state != 3) {
-            if (this.state != 2) {
-                z = false;
-                Assertions.checkArgument(z);
-                j2 = 0;
-                if (j == 0) {
-                    j2 = this.streamReader.convertTimeToGranule(j);
-                }
-                this.targetGranule = j2;
-                this.state = 2;
-                resetSeeking();
-                return this.targetGranule;
-            }
-        }
-        z = true;
+    public long startSeek(long timeUs) {
+        boolean z = this.state == 3 || this.state == 2;
         Assertions.checkArgument(z);
-        j2 = 0;
-        if (j == 0) {
-            j2 = this.streamReader.convertTimeToGranule(j);
-        }
-        this.targetGranule = j2;
+        this.targetGranule = timeUs == 0 ? 0 : this.streamReader.convertTimeToGranule(timeUs);
         this.state = 2;
         resetSeeking();
         return this.targetGranule;
@@ -137,113 +119,102 @@ final class DefaultOggSeeker implements OggSeeker {
         this.endGranule = this.totalGranules;
     }
 
-    public long getNextSeekPosition(long j, ExtractorInput extractorInput) throws IOException, InterruptedException {
-        ExtractorInput extractorInput2 = extractorInput;
-        long j2 = 2;
+    public long getNextSeekPosition(long targetGranule, ExtractorInput input) throws IOException, InterruptedException {
         if (this.start == this.end) {
-            return -(r0.startGranule + 2);
+            return -(this.startGranule + 2);
         }
-        long position = extractorInput.getPosition();
-        if (skipToNextPage(extractorInput2, r0.end)) {
-            r0.pageHeader.populate(extractorInput2, false);
-            extractorInput.resetPeekPosition();
-            long j3 = j - r0.pageHeader.granulePosition;
-            int i = r0.pageHeader.headerSize + r0.pageHeader.bodySize;
-            if (j3 >= 0) {
-                if (j3 <= 72000) {
-                    extractorInput2.skipFully(i);
-                    return -(r0.pageHeader.granulePosition + 2);
+        long initialPosition = input.getPosition();
+        if (skipToNextPage(input, this.end)) {
+            this.pageHeader.populate(input, false);
+            input.resetPeekPosition();
+            long granuleDistance = targetGranule - this.pageHeader.granulePosition;
+            int pageSize = this.pageHeader.headerSize + this.pageHeader.bodySize;
+            if (granuleDistance < 0 || granuleDistance > 72000) {
+                if (granuleDistance < 0) {
+                    this.end = initialPosition;
+                    this.endGranule = this.pageHeader.granulePosition;
+                } else {
+                    this.start = input.getPosition() + ((long) pageSize);
+                    this.startGranule = this.pageHeader.granulePosition;
+                    if ((this.end - this.start) + ((long) pageSize) < 100000) {
+                        input.skipFully(pageSize);
+                        return -(this.startGranule + 2);
+                    }
                 }
-            }
-            if (j3 < 0) {
-                r0.end = position;
-                r0.endGranule = r0.pageHeader.granulePosition;
-            } else {
-                long j4 = (long) i;
-                r0.start = extractorInput.getPosition() + j4;
-                r0.startGranule = r0.pageHeader.granulePosition;
-                if ((r0.end - r0.start) + j4 < 100000) {
-                    extractorInput2.skipFully(i);
-                    return -(r0.startGranule + 2);
+                if (this.end - this.start < 100000) {
+                    this.end = this.start;
+                    return this.start;
                 }
+                return Math.min(Math.max((input.getPosition() - (((long) pageSize) * (granuleDistance <= 0 ? 2 : 1))) + (((this.end - this.start) * granuleDistance) / (this.endGranule - this.startGranule)), this.start), this.end - 1);
             }
-            if (r0.end - r0.start < 100000) {
-                r0.end = r0.start;
-                return r0.start;
-            }
-            position = (long) i;
-            if (j3 > 0) {
-                j2 = 1;
-            }
-            return Math.min(Math.max((extractorInput.getPosition() - (position * j2)) + ((j3 * (r0.end - r0.start)) / (r0.endGranule - r0.startGranule)), r0.start), r0.end - 1);
-        } else if (r0.start != position) {
-            return r0.start;
+            input.skipFully(pageSize);
+            return -(this.pageHeader.granulePosition + 2);
+        } else if (this.start != initialPosition) {
+            return this.start;
         } else {
             throw new IOException("No ogg page can be found.");
         }
     }
 
-    private long getEstimatedPosition(long j, long j2, long j3) {
-        j2 = j + (((j2 * (this.endPosition - this.startPosition)) / this.totalGranules) - j3);
-        if (j2 < this.startPosition) {
-            j2 = this.startPosition;
+    private long getEstimatedPosition(long position, long granuleDistance, long offset) {
+        position += (((this.endPosition - this.startPosition) * granuleDistance) / this.totalGranules) - offset;
+        if (position < this.startPosition) {
+            position = this.startPosition;
         }
-        return j2 >= this.endPosition ? this.endPosition - 1 : j2;
+        if (position >= this.endPosition) {
+            return this.endPosition - 1;
+        }
+        return position;
     }
 
-    void skipToNextPage(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        if (skipToNextPage(extractorInput, this.endPosition) == null) {
+    void skipToNextPage(ExtractorInput input) throws IOException, InterruptedException {
+        if (!skipToNextPage(input, this.endPosition)) {
             throw new EOFException();
         }
     }
 
-    boolean skipToNextPage(ExtractorInput extractorInput, long j) throws IOException, InterruptedException {
-        j = Math.min(j + 3, this.endPosition);
-        byte[] bArr = new byte[2048];
-        int length = bArr.length;
+    boolean skipToNextPage(ExtractorInput input, long until) throws IOException, InterruptedException {
+        until = Math.min(3 + until, this.endPosition);
+        byte[] buffer = new byte[2048];
+        int peekLength = buffer.length;
         while (true) {
-            int i;
-            int i2 = 0;
-            if (extractorInput.getPosition() + ((long) length) > j) {
-                length = (int) (j - extractorInput.getPosition());
-                if (length < 4) {
+            if (input.getPosition() + ((long) peekLength) > until) {
+                peekLength = (int) (until - input.getPosition());
+                if (peekLength < 4) {
                     return false;
                 }
             }
-            extractorInput.peekFully(bArr, 0, length, false);
-            while (true) {
-                i = length - 3;
-                if (i2 >= i) {
-                    break;
-                } else if (bArr[i2] == (byte) 79 && bArr[i2 + 1] == (byte) 103 && bArr[i2 + 2] == (byte) 103 && bArr[i2 + 3] == (byte) 83) {
-                    extractorInput.skipFully(i2);
+            input.peekFully(buffer, 0, peekLength, false);
+            int i = 0;
+            while (i < peekLength - 3) {
+                if (buffer[i] == (byte) 79 && buffer[i + 1] == (byte) 103 && buffer[i + 2] == (byte) 103 && buffer[i + 3] == (byte) 83) {
+                    input.skipFully(i);
                     return true;
-                } else {
-                    i2++;
                 }
+                i++;
             }
-            extractorInput.skipFully(i);
+            input.skipFully(peekLength - 3);
         }
     }
 
-    long readGranuleOfLastPage(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        skipToNextPage(extractorInput);
+    long readGranuleOfLastPage(ExtractorInput input) throws IOException, InterruptedException {
+        skipToNextPage(input);
         this.pageHeader.reset();
-        while ((this.pageHeader.type & 4) != 4 && extractorInput.getPosition() < this.endPosition) {
-            this.pageHeader.populate(extractorInput, false);
-            extractorInput.skipFully(this.pageHeader.headerSize + this.pageHeader.bodySize);
+        while ((this.pageHeader.type & 4) != 4 && input.getPosition() < this.endPosition) {
+            this.pageHeader.populate(input, false);
+            input.skipFully(this.pageHeader.headerSize + this.pageHeader.bodySize);
         }
         return this.pageHeader.granulePosition;
     }
 
-    long skipToPageOfGranule(ExtractorInput extractorInput, long j, long j2) throws IOException, InterruptedException {
-        this.pageHeader.populate(extractorInput, false);
-        while (this.pageHeader.granulePosition < j) {
-            extractorInput.skipFully(this.pageHeader.headerSize + this.pageHeader.bodySize);
-            j2 = this.pageHeader.granulePosition;
-            this.pageHeader.populate(extractorInput, false);
+    long skipToPageOfGranule(ExtractorInput input, long targetGranule, long currentGranule) throws IOException, InterruptedException {
+        this.pageHeader.populate(input, false);
+        while (this.pageHeader.granulePosition < targetGranule) {
+            input.skipFully(this.pageHeader.headerSize + this.pageHeader.bodySize);
+            currentGranule = this.pageHeader.granulePosition;
+            this.pageHeader.populate(input, false);
         }
-        extractorInput.resetPeekPosition();
-        return j2;
+        input.resetPeekPosition();
+        return currentGranule;
     }
 }

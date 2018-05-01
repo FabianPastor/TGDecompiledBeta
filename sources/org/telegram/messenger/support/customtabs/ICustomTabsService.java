@@ -24,293 +24,313 @@ public interface ICustomTabsService extends IInterface {
         private static class Proxy implements ICustomTabsService {
             private IBinder mRemote;
 
-            public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
-            }
-
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder remote) {
+                this.mRemote = remote;
             }
 
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            public boolean warmup(long j) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public String getInterfaceDescriptor() {
+                return Stub.DESCRIPTOR;
+            }
+
+            public boolean warmup(long flags) throws RemoteException {
+                boolean _result = false;
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeLong(j);
-                    boolean z = false;
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() != null) {
-                        z = true;
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeLong(flags);
+                    this.mRemote.transact(2, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() != 0) {
+                        _result = true;
                     }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return z;
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
                 } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
 
-            public boolean newSession(ICustomTabsCallback iCustomTabsCallback) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public boolean newSession(ICustomTabsCallback callback) throws RemoteException {
+                boolean _result = false;
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    boolean z = false;
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() != null) {
-                        z = true;
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    this.mRemote.transact(3, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() != 0) {
+                        _result = true;
                     }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return z;
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
                 } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
 
-            public boolean mayLaunchUrl(ICustomTabsCallback iCustomTabsCallback, Uri uri, Bundle bundle, List<Bundle> list) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public boolean mayLaunchUrl(ICustomTabsCallback callback, Uri url, Bundle extras, List<Bundle> otherLikelyBundles) throws RemoteException {
+                boolean _result = true;
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    iCustomTabsCallback = true;
-                    if (uri != null) {
-                        obtain.writeInt(1);
-                        uri.writeToParcel(obtain, 0);
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    if (url != null) {
+                        _data.writeInt(1);
+                        url.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
+                    if (extras != null) {
+                        _data.writeInt(1);
+                        extras.writeToParcel(_data, 0);
+                    } else {
+                        _data.writeInt(0);
+                    }
+                    _data.writeTypedList(otherLikelyBundles);
+                    this.mRemote.transact(4, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() == 0) {
+                        _result = false;
+                    }
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
+                } catch (Throwable th) {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+
+            public Bundle extraCommand(String commandName, Bundle args) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
+                try {
+                    Bundle _result;
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeString(commandName);
+                    if (args != null) {
+                        _data.writeInt(1);
+                        args.writeToParcel(_data, 0);
+                    } else {
+                        _data.writeInt(0);
+                    }
+                    this.mRemote.transact(5, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() != 0) {
+                        _result = (Bundle) Bundle.CREATOR.createFromParcel(_reply);
+                    } else {
+                        _result = null;
+                    }
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
+                } catch (Throwable th) {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+
+            public boolean updateVisuals(ICustomTabsCallback callback, Bundle bundle) throws RemoteException {
+                boolean _result = true;
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
+                        _data.writeInt(1);
+                        bundle.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
-                    obtain.writeTypedList(list);
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() == null) {
-                        iCustomTabsCallback = null;
+                    this.mRemote.transact(6, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() == 0) {
+                        _result = false;
                     }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return iCustomTabsCallback;
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
                 } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
 
-            public Bundle extraCommand(String str, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public boolean requestPostMessageChannel(ICustomTabsCallback callback, Uri postMessageOrigin) throws RemoteException {
+                boolean _result = true;
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeString(str);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    if (postMessageOrigin != null) {
+                        _data.writeInt(1);
+                        postMessageOrigin.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
-                    this.mRemote.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                    str = obtain2.readInt() != null ? (Bundle) Bundle.CREATOR.createFromParcel(obtain2) : null;
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return str;
+                    this.mRemote.transact(7, _data, _reply, 0);
+                    _reply.readException();
+                    if (_reply.readInt() == 0) {
+                        _result = false;
+                    }
+                    _reply.recycle();
+                    _data.recycle();
+                    return _result;
                 } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
 
-            public boolean updateVisuals(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    iCustomTabsCallback = true;
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    _data.writeString(message);
+                    if (extras != null) {
+                        _data.writeInt(1);
+                        extras.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
-                    this.mRemote.transact(6, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() == null) {
-                        iCustomTabsCallback = null;
-                    }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return iCustomTabsCallback;
-                } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public boolean requestPostMessageChannel(ICustomTabsCallback iCustomTabsCallback, Uri uri) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    iCustomTabsCallback = true;
-                    if (uri != null) {
-                        obtain.writeInt(1);
-                        uri.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(7, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() == null) {
-                        iCustomTabsCallback = null;
-                    }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return iCustomTabsCallback;
-                } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public int postMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    obtain.writeString(str);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(8, obtain, obtain2, 0);
-                    obtain2.readException();
-                    iCustomTabsCallback = obtain2.readInt();
-                    return iCustomTabsCallback;
+                    this.mRemote.transact(8, _data, _reply, 0);
+                    _reply.readException();
+                    int _result = _reply.readInt();
+                    return _result;
                 } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
-        }
-
-        public IBinder asBinder() {
-            return this;
         }
 
         public Stub() {
             attachInterface(this, DESCRIPTOR);
         }
 
-        public static ICustomTabsService asInterface(IBinder iBinder) {
-            if (iBinder == null) {
+        public static ICustomTabsService asInterface(IBinder obj) {
+            if (obj == null) {
                 return null;
             }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface(DESCRIPTOR);
-            ICustomTabsService proxy = (queryLocalInterface == null || !(queryLocalInterface instanceof ICustomTabsService)) ? new Proxy(iBinder) : (ICustomTabsService) queryLocalInterface;
-            return proxy;
+            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            return (iin == null || !(iin instanceof ICustomTabsService)) ? new Proxy(obj) : (ICustomTabsService) iin;
         }
 
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            if (i != NUM) {
-                Bundle bundle = null;
-                switch (i) {
-                    case 2:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = warmup(parcel.readLong());
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    case 3:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder()));
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    case 4:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        i2 = parcel.readInt() != 0 ? (Uri) Uri.CREATOR.createFromParcel(parcel) : 0;
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        i = mayLaunchUrl(i, i2, bundle, parcel.createTypedArrayList(Bundle.CREATOR));
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    case 5:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = parcel.readString();
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        i = extraCommand(i, bundle);
-                        parcel2.writeNoException();
-                        if (i != 0) {
-                            parcel2.writeInt(1);
-                            i.writeToParcel(parcel2, 1);
-                        } else {
-                            parcel2.writeInt(0);
-                        }
-                        return true;
-                    case 6:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        i = updateVisuals(i, bundle);
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    case 7:
-                        Uri uri;
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        if (parcel.readInt() != 0) {
-                            uri = (Uri) Uri.CREATOR.createFromParcel(parcel);
-                        }
-                        i = requestPostMessageChannel(i, uri);
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    case 8:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        i2 = parcel.readString();
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        i = postMessage(i, i2, bundle);
-                        parcel2.writeNoException();
-                        parcel2.writeInt(i);
-                        return true;
-                    default:
-                        return super.onTransact(i, parcel, parcel2, i2);
-                }
+        public IBinder asBinder() {
+            return this;
+        }
+
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+            boolean _arg21;
+            ICustomTabsCallback _arg0;
+            Uri _arg11;
+            Bundle _arg2;
+            Bundle _arg12;
+            switch (code) {
+                case 2:
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg21 = warmup(data.readLong());
+                    reply.writeNoException();
+                    reply.writeInt(_arg21 ? 1 : 0);
+                    return true;
+                case 3:
+                    data.enforceInterface(DESCRIPTOR);
+                    boolean _arg13 = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder()));
+                    reply.writeNoException();
+                    reply.writeInt(_arg13 ? 1 : 0);
+                    return true;
+                case 4:
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    if (data.readInt() != 0) {
+                        _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg11 = null;
+                    }
+                    if (data.readInt() != 0) {
+                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg2 = null;
+                    }
+                    boolean _result1 = mayLaunchUrl(_arg0, _arg11, _arg2, data.createTypedArrayList(Bundle.CREATOR));
+                    reply.writeNoException();
+                    reply.writeInt(_result1 ? 1 : 0);
+                    return true;
+                case 5:
+                    data.enforceInterface(DESCRIPTOR);
+                    String _arg01 = data.readString();
+                    if (data.readInt() != 0) {
+                        _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg12 = null;
+                    }
+                    _arg2 = extraCommand(_arg01, _arg12);
+                    reply.writeNoException();
+                    if (_arg2 != null) {
+                        reply.writeInt(1);
+                        _arg2.writeToParcel(reply, 1);
+                    } else {
+                        reply.writeInt(0);
+                    }
+                    return true;
+                case 6:
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    if (data.readInt() != 0) {
+                        _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg12 = null;
+                    }
+                    _arg21 = updateVisuals(_arg0, _arg12);
+                    reply.writeNoException();
+                    reply.writeInt(_arg21 ? 1 : 0);
+                    return true;
+                case 7:
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    if (data.readInt() != 0) {
+                        _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg11 = null;
+                    }
+                    _arg21 = requestPostMessageChannel(_arg0, _arg11);
+                    reply.writeNoException();
+                    reply.writeInt(_arg21 ? 1 : 0);
+                    return true;
+                case 8:
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    String _arg1 = data.readString();
+                    if (data.readInt() != 0) {
+                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg2 = null;
+                    }
+                    int _result = postMessage(_arg0, _arg1, _arg2);
+                    reply.writeNoException();
+                    reply.writeInt(_result);
+                    return true;
+                case 1598968902:
+                    reply.writeString(DESCRIPTOR);
+                    return true;
+                default:
+                    return super.onTransact(code, data, reply, flags);
             }
-            parcel2.writeString(DESCRIPTOR);
-            return true;
         }
     }
 

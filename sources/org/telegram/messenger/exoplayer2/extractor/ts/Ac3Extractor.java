@@ -34,82 +34,81 @@ public final class Ac3Extractor implements Extractor {
         }
     }
 
-    public void release() {
-    }
-
     public Ac3Extractor() {
         this(0);
     }
 
-    public Ac3Extractor(long j) {
-        this.firstSampleTimestampUs = j;
+    public Ac3Extractor(long firstSampleTimestampUs) {
+        this.firstSampleTimestampUs = firstSampleTimestampUs;
         this.reader = new Ac3Reader();
         this.sampleData = new ParsableByteArray((int) MAX_SYNC_FRAME_SIZE);
     }
 
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        int readSynchSafeInt;
-        ParsableByteArray parsableByteArray = new ParsableByteArray(10);
-        int i = 0;
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        ParsableByteArray scratch = new ParsableByteArray(10);
+        int startPosition = 0;
         while (true) {
-            extractorInput.peekFully(parsableByteArray.data, 0, 10);
-            parsableByteArray.setPosition(0);
-            if (parsableByteArray.readUnsignedInt24() != ID3_TAG) {
+            input.peekFully(scratch.data, 0, 10);
+            scratch.setPosition(0);
+            if (scratch.readUnsignedInt24() != ID3_TAG) {
                 break;
             }
-            parsableByteArray.skipBytes(3);
-            readSynchSafeInt = parsableByteArray.readSynchSafeInt();
-            i += 10 + readSynchSafeInt;
-            extractorInput.advancePeekPosition(readSynchSafeInt);
+            scratch.skipBytes(3);
+            int length = scratch.readSynchSafeInt();
+            startPosition += length + 10;
+            input.advancePeekPosition(length);
         }
-        extractorInput.resetPeekPosition();
-        extractorInput.advancePeekPosition(i);
-        readSynchSafeInt = 0;
-        int i2 = i;
+        input.resetPeekPosition();
+        input.advancePeekPosition(startPosition);
+        int headerPosition = startPosition;
+        int validFramesCount = 0;
         while (true) {
-            extractorInput.peekFully(parsableByteArray.data, 0, 5);
-            parsableByteArray.setPosition(0);
-            if (parsableByteArray.readUnsignedShort() != AC3_SYNC_WORD) {
-                extractorInput.resetPeekPosition();
-                i2++;
-                if (i2 - i >= 8192) {
+            input.peekFully(scratch.data, 0, 5);
+            scratch.setPosition(0);
+            if (scratch.readUnsignedShort() != AC3_SYNC_WORD) {
+                validFramesCount = 0;
+                input.resetPeekPosition();
+                headerPosition++;
+                if (headerPosition - startPosition >= 8192) {
                     return false;
                 }
-                extractorInput.advancePeekPosition(i2);
-                readSynchSafeInt = 0;
+                input.advancePeekPosition(headerPosition);
             } else {
-                readSynchSafeInt++;
-                if (readSynchSafeInt >= 4) {
+                validFramesCount++;
+                if (validFramesCount >= 4) {
                     return true;
                 }
-                int parseAc3SyncframeSize = Ac3Util.parseAc3SyncframeSize(parsableByteArray.data);
-                if (parseAc3SyncframeSize == -1) {
+                int frameSize = Ac3Util.parseAc3SyncframeSize(scratch.data);
+                if (frameSize == -1) {
                     return false;
                 }
-                extractorInput.advancePeekPosition(parseAc3SyncframeSize - 5);
+                input.advancePeekPosition(frameSize - 5);
             }
         }
     }
 
-    public void init(ExtractorOutput extractorOutput) {
-        this.reader.createTracks(extractorOutput, new TrackIdGenerator(0, 1));
-        extractorOutput.endTracks();
-        extractorOutput.seekMap(new Unseekable(C0542C.TIME_UNSET));
+    public void init(ExtractorOutput output) {
+        this.reader.createTracks(output, new TrackIdGenerator(0, 1));
+        output.endTracks();
+        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
     }
 
-    public void seek(long j, long j2) {
-        this.startedPacket = 0;
+    public void seek(long position, long timeUs) {
+        this.startedPacket = false;
         this.reader.seek();
     }
 
-    public int read(ExtractorInput extractorInput, PositionHolder positionHolder) throws IOException, InterruptedException {
-        extractorInput = extractorInput.read(this.sampleData.data, 0, MAX_SYNC_FRAME_SIZE);
-        if (extractorInput == -1) {
+    public void release() {
+    }
+
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
+        int bytesRead = input.read(this.sampleData.data, 0, MAX_SYNC_FRAME_SIZE);
+        if (bytesRead == -1) {
             return -1;
         }
         this.sampleData.setPosition(0);
-        this.sampleData.setLimit(extractorInput);
-        if (this.startedPacket == null) {
+        this.sampleData.setLimit(bytesRead);
+        if (!this.startedPacket) {
             this.reader.packetStarted(this.firstSampleTimestampUs, true);
             this.startedPacket = true;
         }

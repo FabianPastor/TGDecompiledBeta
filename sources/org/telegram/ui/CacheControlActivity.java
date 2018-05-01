@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -30,7 +31,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.tgnet.AbstractSerializedData;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -116,8 +117,8 @@ public class CacheControlActivity extends BaseFragment {
         C19283() {
         }
 
-        public void onItemClick(int i) {
-            if (i == -1) {
+        public void onItemClick(int id) {
+            if (id == -1) {
                 CacheControlActivity.this.finishFragment();
             }
         }
@@ -131,26 +132,26 @@ public class CacheControlActivity extends BaseFragment {
             C08431() {
             }
 
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = MessagesController.getGlobalMainSettings().edit();
-                if (i == 0) {
-                    dialogInterface.putInt("keep_media", 3).commit();
-                } else if (i == 1) {
-                    dialogInterface.putInt("keep_media", 0).commit();
-                } else if (i == 2) {
-                    dialogInterface.putInt("keep_media", 1).commit();
-                } else if (i == 3) {
-                    dialogInterface.putInt("keep_media", 2).commit();
+            public void onClick(DialogInterface dialog, int which) {
+                Editor editor = MessagesController.getGlobalMainSettings().edit();
+                if (which == 0) {
+                    editor.putInt("keep_media", 3).commit();
+                } else if (which == 1) {
+                    editor.putInt("keep_media", 0).commit();
+                } else if (which == 2) {
+                    editor.putInt("keep_media", 1).commit();
+                } else if (which == 3) {
+                    editor.putInt("keep_media", 2).commit();
                 }
                 if (CacheControlActivity.this.listAdapter != null) {
                     CacheControlActivity.this.listAdapter.notifyDataSetChanged();
                 }
-                PendingIntent service = PendingIntent.getService(ApplicationLoader.applicationContext, 1, new Intent(ApplicationLoader.applicationContext, ClearCacheService.class), 0);
+                PendingIntent pintent = PendingIntent.getService(ApplicationLoader.applicationContext, 1, new Intent(ApplicationLoader.applicationContext, ClearCacheService.class), 0);
                 AlarmManager alarmManager = (AlarmManager) ApplicationLoader.applicationContext.getSystemService("alarm");
-                if (i == 2) {
-                    alarmManager.cancel(service);
+                if (which == 2) {
+                    alarmManager.cancel(pintent);
                 } else {
-                    alarmManager.setInexactRepeating(2, 86400000, 86400000, service);
+                    alarmManager.setInexactRepeating(2, 86400000, 86400000, pintent);
                 }
             }
         }
@@ -161,11 +162,11 @@ public class CacheControlActivity extends BaseFragment {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface = new AlertDialog(CacheControlActivity.this.getParentActivity(), 1);
-                dialogInterface.setMessage(LocaleController.getString("Loading", C0446R.string.Loading));
-                dialogInterface.setCanceledOnTouchOutside(false);
-                dialogInterface.setCancelable(false);
-                dialogInterface.show();
+                final AlertDialog progressDialog = new AlertDialog(CacheControlActivity.this.getParentActivity(), 1);
+                progressDialog.setMessage(LocaleController.getString("Loading", C0446R.string.Loading));
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.ui.CacheControlActivity$4$2$1$1 */
@@ -175,7 +176,7 @@ public class CacheControlActivity extends BaseFragment {
 
                         public void run() {
                             try {
-                                dialogInterface.dismiss();
+                                progressDialog.dismiss();
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
                             }
@@ -187,269 +188,84 @@ public class CacheControlActivity extends BaseFragment {
                     }
 
                     public void run() {
-                        SQLiteDatabase database;
-                        ArrayList arrayList;
-                        boolean z;
-                        int i;
-                        SQLitePreparedStatement executeFast;
-                        SQLitePreparedStatement executeFast2;
-                        int i2;
-                        Long l;
-                        SQLiteCursor queryFinalized;
-                        ArrayList arrayList2;
-                        int i3;
-                        SQLiteCursor queryFinalized2;
-                        int i4;
-                        Throwable e;
-                        StringBuilder stringBuilder;
-                        Runnable c08441;
                         try {
-                            database = MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getDatabase();
-                            arrayList = new ArrayList();
-                            z = false;
-                            SQLiteCursor queryFinalized3 = database.queryFinalized("SELECT did FROM dialogs WHERE 1", new Object[0]);
-                            StringBuilder stringBuilder2 = new StringBuilder();
-                            while (true) {
-                                i = 1;
-                                if (!queryFinalized3.next()) {
-                                    break;
-                                }
-                                long longValue = queryFinalized3.longValue(0);
-                                int i5 = (int) (longValue >> 32);
-                                if (!(((int) longValue) == 0 || i5 == 1)) {
-                                    arrayList.add(Long.valueOf(longValue));
+                            SQLiteDatabase database = MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getDatabase();
+                            ArrayList<Long> dialogsToCleanup = new ArrayList();
+                            SQLiteCursor cursor = database.queryFinalized("SELECT did FROM dialogs WHERE 1", new Object[0]);
+                            StringBuilder ids = new StringBuilder();
+                            while (cursor.next()) {
+                                long did = cursor.longValue(0);
+                                int high_id = (int) (did >> 32);
+                                if (!(((int) did) == 0 || high_id == 1)) {
+                                    dialogsToCleanup.add(Long.valueOf(did));
                                 }
                             }
-                            queryFinalized3.dispose();
-                            executeFast = database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
-                            executeFast2 = database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                            cursor.dispose();
+                            SQLitePreparedStatement state5 = database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
+                            SQLitePreparedStatement state6 = database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
                             database.beginTransaction();
-                            i2 = 0;
-                            while (i2 < arrayList.size()) {
-                                l = (Long) arrayList.get(i2);
-                                StringBuilder stringBuilder3 = new StringBuilder();
-                                stringBuilder3.append("SELECT COUNT(mid) FROM messages WHERE uid = ");
-                                stringBuilder3.append(l);
-                                queryFinalized = database.queryFinalized(stringBuilder3.toString(), new Object[z]);
-                                int intValue = queryFinalized.next() ? queryFinalized.intValue(z) : z;
-                                queryFinalized.dispose();
-                                if (intValue <= 2) {
-                                    arrayList2 = arrayList;
-                                    i3 = i2;
-                                } else {
-                                    stringBuilder3 = new StringBuilder();
-                                    stringBuilder3.append("SELECT last_mid_i, last_mid FROM dialogs WHERE did = ");
-                                    stringBuilder3.append(l);
-                                    queryFinalized = database.queryFinalized(stringBuilder3.toString(), new Object[z]);
-                                    if (queryFinalized.next()) {
-                                        long longValue2 = queryFinalized.longValue(z);
-                                        long longValue3 = queryFinalized.longValue(i);
-                                        StringBuilder stringBuilder4 = new StringBuilder();
-                                        stringBuilder4.append("SELECT data FROM messages WHERE uid = ");
-                                        stringBuilder4.append(l);
-                                        stringBuilder4.append(" AND mid IN (");
-                                        stringBuilder4.append(longValue2);
-                                        stringBuilder4.append(",");
-                                        stringBuilder4.append(longValue3);
-                                        stringBuilder4.append(")");
-                                        queryFinalized2 = database.queryFinalized(stringBuilder4.toString(), new Object[z]);
-                                        i4 = -1;
-                                        while (queryFinalized2.next()) {
+                            for (int a = 0; a < dialogsToCleanup.size(); a++) {
+                                Long did2 = (Long) dialogsToCleanup.get(a);
+                                int messagesCount = 0;
+                                cursor = database.queryFinalized("SELECT COUNT(mid) FROM messages WHERE uid = " + did2, new Object[0]);
+                                if (cursor.next()) {
+                                    messagesCount = cursor.intValue(0);
+                                }
+                                cursor.dispose();
+                                if (messagesCount > 2) {
+                                    cursor = database.queryFinalized("SELECT last_mid_i, last_mid FROM dialogs WHERE did = " + did2, new Object[0]);
+                                    int messageId = -1;
+                                    if (cursor.next()) {
+                                        long last_mid_i = cursor.longValue(0);
+                                        long last_mid = cursor.longValue(1);
+                                        SQLiteCursor cursor2 = database.queryFinalized("SELECT data FROM messages WHERE uid = " + did2 + " AND mid IN (" + last_mid_i + "," + last_mid + ")", new Object[0]);
+                                        while (cursor2.next()) {
                                             try {
-                                                arrayList2 = arrayList;
-                                                try {
-                                                    AbstractSerializedData byteBufferValue = queryFinalized2.byteBufferValue(z);
-                                                    if (byteBufferValue != null) {
-                                                        i3 = i2;
-                                                        try {
-                                                            Message TLdeserialize = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(z), z);
-                                                            TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(CacheControlActivity.this.currentAccount).clientUserId);
-                                                            byteBufferValue.reuse();
-                                                            if (TLdeserialize != null) {
-                                                                i4 = TLdeserialize.id;
-                                                            }
-                                                        } catch (Exception e2) {
-                                                            e = e2;
-                                                        }
-                                                    } else {
-                                                        i3 = i2;
+                                                NativeByteBuffer data = cursor2.byteBufferValue(0);
+                                                if (data != null) {
+                                                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                                    message.readAttachPath(data, UserConfig.getInstance(CacheControlActivity.this.currentAccount).clientUserId);
+                                                    data.reuse();
+                                                    if (message != null) {
+                                                        messageId = message.id;
                                                     }
-                                                    arrayList = arrayList2;
-                                                    i2 = i3;
-                                                    z = false;
-                                                } catch (Exception e3) {
-                                                    e = e3;
                                                 }
-                                            } catch (Exception e4) {
-                                                e = e4;
-                                                arrayList2 = arrayList;
+                                            } catch (Throwable e) {
+                                                FileLog.m3e(e);
                                             }
                                         }
-                                        arrayList2 = arrayList;
-                                        i3 = i2;
-                                        queryFinalized2.dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM messages WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        stringBuilder.append(" AND mid != ");
-                                        stringBuilder.append(longValue2);
-                                        stringBuilder.append(" AND mid != ");
-                                        stringBuilder.append(longValue3);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM messages_holes WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM bot_keyboard WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM media_counts_v2 WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM media_v2 WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("DELETE FROM media_holes_v2 WHERE uid = ");
-                                        stringBuilder.append(l);
-                                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                                        DataQuery.getInstance(CacheControlActivity.this.currentAccount).clearBotKeyboard(l.longValue(), null);
-                                        if (i4 != -1) {
-                                            MessagesStorage.createFirstHoles(l.longValue(), executeFast, executeFast2, i4);
+                                        cursor2.dispose();
+                                        database.executeFast("DELETE FROM messages WHERE uid = " + did2 + " AND mid != " + last_mid_i + " AND mid != " + last_mid).stepThis().dispose();
+                                        database.executeFast("DELETE FROM messages_holes WHERE uid = " + did2).stepThis().dispose();
+                                        database.executeFast("DELETE FROM bot_keyboard WHERE uid = " + did2).stepThis().dispose();
+                                        database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did2).stepThis().dispose();
+                                        database.executeFast("DELETE FROM media_v2 WHERE uid = " + did2).stepThis().dispose();
+                                        database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did2).stepThis().dispose();
+                                        DataQuery.getInstance(CacheControlActivity.this.currentAccount).clearBotKeyboard(did2.longValue(), null);
+                                        if (messageId != -1) {
+                                            MessagesStorage.createFirstHoles(did2.longValue(), state5, state6, messageId);
                                         }
-                                    } else {
-                                        arrayList2 = arrayList;
-                                        i3 = i2;
                                     }
-                                    queryFinalized.dispose();
+                                    cursor.dispose();
                                 }
-                                i2 = i3 + 1;
-                                arrayList = arrayList2;
-                                z = false;
-                                i = 1;
                             }
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM messages WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM messages_holes WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM bot_keyboard WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM media_counts_v2 WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM media_v2 WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("DELETE FROM media_holes_v2 WHERE uid = ");
-                            stringBuilder.append(-NUM);
-                            database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                            executeFast.dispose();
-                            executeFast2.dispose();
+                            database.executeFast("DELETE FROM messages WHERE uid = " + -NUM).stepThis().dispose();
+                            database.executeFast("DELETE FROM messages_holes WHERE uid = " + -NUM).stepThis().dispose();
+                            database.executeFast("DELETE FROM bot_keyboard WHERE uid = " + -NUM).stepThis().dispose();
+                            database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + -NUM).stepThis().dispose();
+                            database.executeFast("DELETE FROM media_v2 WHERE uid = " + -NUM).stepThis().dispose();
+                            database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + -NUM).stepThis().dispose();
+                            state5.dispose();
+                            state6.dispose();
                             database.commitTransaction();
                             database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                             database.executeFast("VACUUM").stepThis().dispose();
                             database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
-                            c08441 = new C08441();
-                        } catch (Throwable e5) {
-                            FileLog.m3e(e5);
-                            c08441 = new C08441();
-                        } catch (Throwable e52) {
-                            Throwable th = e52;
+                        } catch (Throwable e2) {
+                            FileLog.m3e(e2);
+                        } finally {
                             AndroidUtilities.runOnUIThread(new C08441());
                         }
-                        AndroidUtilities.runOnUIThread(c08441);
-                        return;
-                        i3 = i2;
-                        FileLog.m3e(e52);
-                        queryFinalized2.dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM messages WHERE uid = ");
-                        stringBuilder.append(l);
-                        stringBuilder.append(" AND mid != ");
-                        stringBuilder.append(longValue2);
-                        stringBuilder.append(" AND mid != ");
-                        stringBuilder.append(longValue3);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM messages_holes WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM bot_keyboard WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_counts_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_holes_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        DataQuery.getInstance(CacheControlActivity.this.currentAccount).clearBotKeyboard(l.longValue(), null);
-                        if (i4 != -1) {
-                            MessagesStorage.createFirstHoles(l.longValue(), executeFast, executeFast2, i4);
-                        }
-                        queryFinalized.dispose();
-                        i2 = i3 + 1;
-                        arrayList = arrayList2;
-                        z = false;
-                        i = 1;
-                        FileLog.m3e(e52);
-                        queryFinalized2.dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM messages WHERE uid = ");
-                        stringBuilder.append(l);
-                        stringBuilder.append(" AND mid != ");
-                        stringBuilder.append(longValue2);
-                        stringBuilder.append(" AND mid != ");
-                        stringBuilder.append(longValue3);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM messages_holes WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM bot_keyboard WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_counts_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("DELETE FROM media_holes_v2 WHERE uid = ");
-                        stringBuilder.append(l);
-                        database.executeFast(stringBuilder.toString()).stepThis().dispose();
-                        DataQuery.getInstance(CacheControlActivity.this.currentAccount).clearBotKeyboard(l.longValue(), null);
-                        if (i4 != -1) {
-                            MessagesStorage.createFirstHoles(l.longValue(), executeFast, executeFast2, i4);
-                        }
-                        queryFinalized.dispose();
-                        i2 = i3 + 1;
-                        arrayList = arrayList2;
-                        z = false;
-                        i = 1;
                     }
                 });
             }
@@ -460,11 +276,11 @@ public class CacheControlActivity extends BaseFragment {
             C08473() {
             }
 
-            public void onClick(View view) {
-                CheckBoxCell checkBoxCell = (CheckBoxCell) view;
-                int intValue = ((Integer) checkBoxCell.getTag()).intValue();
-                CacheControlActivity.this.clear[intValue] = CacheControlActivity.this.clear[intValue] ^ true;
-                checkBoxCell.setChecked(CacheControlActivity.this.clear[intValue], true);
+            public void onClick(View v) {
+                CheckBoxCell cell = (CheckBoxCell) v;
+                int num = ((Integer) cell.getTag()).intValue();
+                CacheControlActivity.this.clear[num] = !CacheControlActivity.this.clear[num];
+                cell.setChecked(CacheControlActivity.this.clear[num], true);
             }
         }
 
@@ -473,7 +289,7 @@ public class CacheControlActivity extends BaseFragment {
             C08484() {
             }
 
-            public void onClick(View view) {
+            public void onClick(View v) {
                 try {
                     if (CacheControlActivity.this.visibleDialog != null) {
                         CacheControlActivity.this.visibleDialog.dismiss();
@@ -488,101 +304,69 @@ public class CacheControlActivity extends BaseFragment {
         C19294() {
         }
 
-        public void onItemClick(View view, int i) {
-            int i2 = i;
+        public void onItemClick(View view, int position) {
             if (CacheControlActivity.this.getParentActivity() != null) {
-                int i3 = 2;
-                int i4 = 4;
                 Builder builder;
-                if (i2 == CacheControlActivity.this.keepMediaRow) {
+                if (position == CacheControlActivity.this.keepMediaRow) {
                     builder = new Builder(CacheControlActivity.this.getParentActivity());
                     builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", C0446R.string.KeepMediaForever)}, new C08431());
                     CacheControlActivity.this.showDialog(builder.create());
-                } else if (i2 == CacheControlActivity.this.databaseRow) {
+                } else if (position == CacheControlActivity.this.databaseRow) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(CacheControlActivity.this.getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
                     builder2.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
                     builder2.setMessage(LocaleController.getString("LocalDatabaseClear", C0446R.string.LocalDatabaseClear));
                     builder2.setPositiveButton(LocaleController.getString("CacheClear", C0446R.string.CacheClear), new C08462());
                     CacheControlActivity.this.showDialog(builder2.create());
-                } else {
-                    if (i2 == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0) {
-                        if (CacheControlActivity.this.getParentActivity() != null) {
-                            builder = new Builder(CacheControlActivity.this.getParentActivity());
-                            builder.setApplyTopPadding(false);
-                            builder.setApplyBottomPadding(false);
-                            View linearLayout = new LinearLayout(CacheControlActivity.this.getParentActivity());
-                            linearLayout.setOrientation(1);
-                            int i5 = 0;
-                            while (i5 < 6) {
-                                long access$300;
-                                String string;
-                                long j;
-                                View checkBoxCell;
-                                if (i5 == 0) {
-                                    access$300 = CacheControlActivity.this.photoSize;
-                                    string = LocaleController.getString("LocalPhotoCache", C0446R.string.LocalPhotoCache);
-                                } else if (i5 == 1) {
-                                    access$300 = CacheControlActivity.this.videoSize;
-                                    string = LocaleController.getString("LocalVideoCache", C0446R.string.LocalVideoCache);
-                                } else if (i5 == i3) {
-                                    access$300 = CacheControlActivity.this.documentsSize;
-                                    string = LocaleController.getString("LocalDocumentCache", C0446R.string.LocalDocumentCache);
-                                } else if (i5 == 3) {
-                                    access$300 = CacheControlActivity.this.musicSize;
-                                    string = LocaleController.getString("LocalMusicCache", C0446R.string.LocalMusicCache);
-                                } else if (i5 == i4) {
-                                    access$300 = CacheControlActivity.this.audioSize;
-                                    string = LocaleController.getString("LocalAudioCache", C0446R.string.LocalAudioCache);
-                                } else if (i5 == 5) {
-                                    access$300 = CacheControlActivity.this.cacheSize;
-                                    string = LocaleController.getString("LocalCache", C0446R.string.LocalCache);
-                                } else {
-                                    j = 0;
-                                    string = null;
-                                    if (j <= 0) {
-                                        CacheControlActivity.this.clear[i5] = true;
-                                        checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity(), 1);
-                                        checkBoxCell.setTag(Integer.valueOf(i5));
-                                        checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                                        linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
-                                        checkBoxCell.setText(string, AndroidUtilities.formatFileSize(j), true, true);
-                                        checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                                        checkBoxCell.setOnClickListener(new C08473());
-                                    } else {
-                                        CacheControlActivity.this.clear[i5] = false;
-                                    }
-                                    i5++;
-                                    i3 = 2;
-                                    i4 = 4;
-                                }
-                                j = access$300;
-                                if (j <= 0) {
-                                    CacheControlActivity.this.clear[i5] = false;
-                                } else {
-                                    CacheControlActivity.this.clear[i5] = true;
-                                    checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity(), 1);
-                                    checkBoxCell.setTag(Integer.valueOf(i5));
-                                    checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                                    linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
-                                    checkBoxCell.setText(string, AndroidUtilities.formatFileSize(j), true, true);
-                                    checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                                    checkBoxCell.setOnClickListener(new C08473());
-                                }
-                                i5++;
-                                i3 = 2;
-                                i4 = 4;
-                            }
-                            View bottomSheetCell = new BottomSheetCell(CacheControlActivity.this.getParentActivity(), 1);
-                            bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            bottomSheetCell.setTextAndIcon(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache).toUpperCase(), 0);
-                            bottomSheetCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                            bottomSheetCell.setOnClickListener(new C08484());
-                            linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 48));
-                            builder.setCustomView(linearLayout);
-                            CacheControlActivity.this.showDialog(builder.create());
+                } else if (position == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0 && CacheControlActivity.this.getParentActivity() != null) {
+                    builder = new Builder(CacheControlActivity.this.getParentActivity());
+                    builder.setApplyTopPadding(false);
+                    builder.setApplyBottomPadding(false);
+                    LinearLayout linearLayout = new LinearLayout(CacheControlActivity.this.getParentActivity());
+                    linearLayout.setOrientation(1);
+                    for (int a = 0; a < 6; a++) {
+                        long size = 0;
+                        String name = null;
+                        if (a == 0) {
+                            size = CacheControlActivity.this.photoSize;
+                            name = LocaleController.getString("LocalPhotoCache", C0446R.string.LocalPhotoCache);
+                        } else if (a == 1) {
+                            size = CacheControlActivity.this.videoSize;
+                            name = LocaleController.getString("LocalVideoCache", C0446R.string.LocalVideoCache);
+                        } else if (a == 2) {
+                            size = CacheControlActivity.this.documentsSize;
+                            name = LocaleController.getString("LocalDocumentCache", C0446R.string.LocalDocumentCache);
+                        } else if (a == 3) {
+                            size = CacheControlActivity.this.musicSize;
+                            name = LocaleController.getString("LocalMusicCache", C0446R.string.LocalMusicCache);
+                        } else if (a == 4) {
+                            size = CacheControlActivity.this.audioSize;
+                            name = LocaleController.getString("LocalAudioCache", C0446R.string.LocalAudioCache);
+                        } else if (a == 5) {
+                            size = CacheControlActivity.this.cacheSize;
+                            name = LocaleController.getString("LocalCache", C0446R.string.LocalCache);
+                        }
+                        if (size > 0) {
+                            CacheControlActivity.this.clear[a] = true;
+                            CheckBoxCell checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity(), 1);
+                            checkBoxCell.setTag(Integer.valueOf(a));
+                            checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
+                            checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size), true, true);
+                            checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                            checkBoxCell.setOnClickListener(new C08473());
+                        } else {
+                            CacheControlActivity.this.clear[a] = false;
                         }
                     }
+                    BottomSheetCell cell = new BottomSheetCell(CacheControlActivity.this.getParentActivity(), 1);
+                    cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                    cell.setTextAndIcon(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache).toUpperCase(), 0);
+                    cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                    cell.setOnClickListener(new C08484());
+                    linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
+                    builder.setCustomView(linearLayout);
+                    CacheControlActivity.this.showDialog(builder.create());
                 }
             }
         }
@@ -595,74 +379,74 @@ public class CacheControlActivity extends BaseFragment {
             this.mContext = context;
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            viewHolder = viewHolder.getAdapterPosition();
-            if (viewHolder != CacheControlActivity.this.databaseRow && (viewHolder != CacheControlActivity.this.cacheRow || CacheControlActivity.this.totalSize <= 0)) {
-                if (viewHolder != CacheControlActivity.this.keepMediaRow) {
-                    return null;
-                }
-            }
-            return true;
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return position == CacheControlActivity.this.databaseRow || ((position == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0) || position == CacheControlActivity.this.keepMediaRow);
         }
 
         public int getItemCount() {
             return CacheControlActivity.this.rowCount;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i != 0) {
-                viewGroup = new TextInfoPrivacyCell(this.mContext);
-            } else {
-                viewGroup = new TextSettingsCell(this.mContext);
-                viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                default:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    break;
             }
-            return new Holder(viewGroup);
+            return new Holder(view);
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            switch (viewHolder.getItemViewType()) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
                 case 0:
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                    if (i == CacheControlActivity.this.databaseRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("LocalDatabase", C0446R.string.LocalDatabase), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
+                    TextSettingsCell textCell = holder.itemView;
+                    if (position == CacheControlActivity.this.databaseRow) {
+                        textCell.setTextAndValue(LocaleController.getString("LocalDatabase", C0446R.string.LocalDatabase), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
                         return;
-                    } else if (i == CacheControlActivity.this.cacheRow) {
-                        if (CacheControlActivity.this.calculating != 0) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), LocaleController.getString("CalculatingSize", C0446R.string.CalculatingSize), false);
+                    } else if (position == CacheControlActivity.this.cacheRow) {
+                        if (CacheControlActivity.this.calculating) {
+                            textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), LocaleController.getString("CalculatingSize", C0446R.string.CalculatingSize), false);
                             return;
                         } else {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), CacheControlActivity.this.totalSize == 0 ? LocaleController.getString("CacheEmpty", C0446R.string.CacheEmpty) : AndroidUtilities.formatFileSize(CacheControlActivity.this.totalSize), false);
+                            textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", C0446R.string.ClearMediaCache), CacheControlActivity.this.totalSize == 0 ? LocaleController.getString("CacheEmpty", C0446R.string.CacheEmpty) : AndroidUtilities.formatFileSize(CacheControlActivity.this.totalSize), false);
                             return;
                         }
-                    } else if (i == CacheControlActivity.this.keepMediaRow) {
-                        i = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
-                        if (i == 0) {
-                            i = LocaleController.formatPluralString("Weeks", 1);
-                        } else if (i == 1) {
-                            i = LocaleController.formatPluralString("Months", 1);
-                        } else if (i == 3) {
-                            i = LocaleController.formatPluralString("Days", 3);
+                    } else if (position == CacheControlActivity.this.keepMediaRow) {
+                        String value;
+                        int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+                        if (keepMedia == 0) {
+                            value = LocaleController.formatPluralString("Weeks", 1);
+                        } else if (keepMedia == 1) {
+                            value = LocaleController.formatPluralString("Months", 1);
+                        } else if (keepMedia == 3) {
+                            value = LocaleController.formatPluralString("Days", 3);
                         } else {
-                            i = LocaleController.getString("KeepMediaForever", C0446R.string.KeepMediaForever);
+                            value = LocaleController.getString("KeepMediaForever", C0446R.string.KeepMediaForever);
                         }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("KeepMedia", C0446R.string.KeepMedia), i, false);
+                        textCell.setTextAndValue(LocaleController.getString("KeepMedia", C0446R.string.KeepMedia), value, false);
                         return;
                     } else {
                         return;
                     }
                 case 1:
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    if (i == CacheControlActivity.this.databaseInfoRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("LocalDatabaseInfo", C0446R.string.LocalDatabaseInfo));
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    TextInfoPrivacyCell privacyCell = holder.itemView;
+                    if (position == CacheControlActivity.this.databaseInfoRow) {
+                        privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", C0446R.string.LocalDatabaseInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
-                    } else if (i == CacheControlActivity.this.cacheInfoRow) {
-                        textInfoPrivacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    } else if (position == CacheControlActivity.this.cacheInfoRow) {
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
-                    } else if (i == CacheControlActivity.this.keepMediaInfoRow) {
-                        textInfoPrivacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", C0446R.string.KeepMediaInfo)));
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    } else if (position == CacheControlActivity.this.keepMediaInfoRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", C0446R.string.KeepMediaInfo)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -673,12 +457,10 @@ public class CacheControlActivity extends BaseFragment {
         }
 
         public int getItemViewType(int i) {
-            if (!(i == CacheControlActivity.this.databaseInfoRow || i == CacheControlActivity.this.cacheInfoRow)) {
-                if (i != CacheControlActivity.this.keepMediaInfoRow) {
-                    return 0;
-                }
+            if (i == CacheControlActivity.this.databaseInfoRow || i == CacheControlActivity.this.cacheInfoRow || i == CacheControlActivity.this.keepMediaInfoRow) {
+                return 1;
             }
-            return 1;
+            return 0;
         }
     }
 
@@ -713,94 +495,84 @@ public class CacheControlActivity extends BaseFragment {
         this.canceled = true;
     }
 
-    private long getDirectorySize(File file, int i) {
-        long j = 0;
-        if (file != null) {
-            if (!this.canceled) {
-                if (file.isDirectory()) {
-                    j = Utilities.getDirSize(file.getAbsolutePath(), i);
-                } else if (file.isFile() != 0) {
-                    j = 0 + file.length();
-                }
-                return j;
-            }
+    private long getDirectorySize(File dir, int documentsMusicType) {
+        if (dir == null || this.canceled) {
+            return 0;
+        }
+        if (dir.isDirectory()) {
+            return Utilities.getDirSize(dir.getAbsolutePath(), documentsMusicType);
+        }
+        if (dir.isFile()) {
+            return 0 + dir.length();
         }
         return 0;
     }
 
     private void cleanupFolders() {
-        final AlertDialog alertDialog = new AlertDialog(getParentActivity(), 1);
-        alertDialog.setMessage(LocaleController.getString("Loading", C0446R.string.Loading));
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
+        progressDialog.setMessage(LocaleController.getString("Loading", C0446R.string.Loading));
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
-                int i = 0;
-                boolean z = i;
-                while (i < 6) {
-                    if (CacheControlActivity.this.clear[i]) {
-                        int i2;
-                        int i3;
-                        if (i == 0) {
-                            i2 = 0;
-                            i3 = i2;
-                        } else if (i == 1) {
-                            i3 = 0;
-                            i2 = 2;
-                        } else {
-                            if (i == 2) {
-                                i3 = 1;
-                            } else if (i == 3) {
-                                i3 = 2;
-                            } else if (i == 4) {
-                                i3 = 0;
-                                i2 = 1;
-                            } else if (i == 5) {
-                                i3 = 0;
-                                i2 = 4;
-                            } else {
-                                i3 = 0;
-                                i2 = -1;
-                            }
-                            i2 = 3;
+                boolean imagesCleared = false;
+                for (int a = 0; a < 6; a++) {
+                    if (CacheControlActivity.this.clear[a]) {
+                        int type = -1;
+                        int documentsMusicType = 0;
+                        if (a == 0) {
+                            type = 0;
+                        } else if (a == 1) {
+                            type = 2;
+                        } else if (a == 2) {
+                            type = 3;
+                            documentsMusicType = 1;
+                        } else if (a == 3) {
+                            type = 3;
+                            documentsMusicType = 2;
+                        } else if (a == 4) {
+                            type = 1;
+                        } else if (a == 5) {
+                            type = 4;
                         }
-                        if (i2 != -1) {
-                            File checkDirectory = FileLoader.checkDirectory(i2);
-                            if (checkDirectory != null) {
-                                Utilities.clearDir(checkDirectory.getAbsolutePath(), i3, Long.MAX_VALUE);
+                        if (type != -1) {
+                            File file = FileLoader.checkDirectory(type);
+                            if (file != null) {
+                                Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE);
                             }
-                            if (i2 == 4) {
-                                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), i3);
-                            } else if (i2 == 1) {
-                                CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(1), i3);
-                            } else if (i2 == 3) {
-                                if (i3 == 1) {
-                                    CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), i3);
+                            if (type == 4) {
+                                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), documentsMusicType);
+                                imagesCleared = true;
+                            } else if (type == 1) {
+                                CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(1), documentsMusicType);
+                            } else if (type == 3) {
+                                if (documentsMusicType == 1) {
+                                    CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
                                 } else {
-                                    CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), i3);
+                                    CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
                                 }
-                            } else if (i2 == 0) {
-                                CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(0), i3);
-                            } else if (i2 == 2) {
-                                CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(2), i3);
+                            } else if (type == 0) {
+                                imagesCleared = true;
+                                CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(0), documentsMusicType);
+                            } else if (type == 2) {
+                                CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(2), documentsMusicType);
                             }
-                            z = true;
                         }
                     }
-                    i++;
                 }
+                final boolean imagesClearedFinal = imagesCleared;
                 CacheControlActivity.this.totalSize = ((((CacheControlActivity.this.cacheSize + CacheControlActivity.this.videoSize) + CacheControlActivity.this.audioSize) + CacheControlActivity.this.photoSize) + CacheControlActivity.this.documentsSize) + CacheControlActivity.this.musicSize;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        if (z) {
+                        if (imagesClearedFinal) {
                             ImageLoader.getInstance().clearMemory();
                         }
                         if (CacheControlActivity.this.listAdapter != null) {
                             CacheControlActivity.this.listAdapter.notifyDataSetChanged();
                         }
                         try {
-                            alertDialog.dismiss();
+                            progressDialog.dismiss();
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -817,7 +589,7 @@ public class CacheControlActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new C19283());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
@@ -836,19 +608,19 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[12];
-        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r1[9] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
-        r1[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        return r1;
+        r9 = new ThemeDescription[12];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        r9[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        return r9;
     }
 }

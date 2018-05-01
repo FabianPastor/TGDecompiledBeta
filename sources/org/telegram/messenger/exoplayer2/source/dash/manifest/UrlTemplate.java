@@ -18,122 +18,109 @@ public final class UrlTemplate {
     private final int[] identifiers;
     private final String[] urlPieces;
 
-    public static UrlTemplate compile(String str) {
-        String[] strArr = new String[5];
-        int[] iArr = new int[4];
-        String[] strArr2 = new String[4];
-        return new UrlTemplate(strArr, iArr, strArr2, parseTemplate(str, strArr, iArr, strArr2));
+    public static UrlTemplate compile(String template) {
+        String[] urlPieces = new String[5];
+        int[] identifiers = new int[4];
+        String[] identifierFormatTags = new String[4];
+        return new UrlTemplate(urlPieces, identifiers, identifierFormatTags, parseTemplate(template, urlPieces, identifiers, identifierFormatTags));
     }
 
-    private UrlTemplate(String[] strArr, int[] iArr, String[] strArr2, int i) {
-        this.urlPieces = strArr;
-        this.identifiers = iArr;
-        this.identifierFormatTags = strArr2;
-        this.identifierCount = i;
+    private UrlTemplate(String[] urlPieces, int[] identifiers, String[] identifierFormatTags, int identifierCount) {
+        this.urlPieces = urlPieces;
+        this.identifiers = identifiers;
+        this.identifierFormatTags = identifierFormatTags;
+        this.identifierCount = identifierCount;
     }
 
-    public String buildUri(String str, int i, int i2, long j) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i3 = 0; i3 < this.identifierCount; i3++) {
-            stringBuilder.append(this.urlPieces[i3]);
-            if (this.identifiers[i3] == 1) {
-                stringBuilder.append(str);
-            } else if (this.identifiers[i3] == 2) {
-                stringBuilder.append(String.format(Locale.US, this.identifierFormatTags[i3], new Object[]{Integer.valueOf(i)}));
-            } else if (this.identifiers[i3] == 3) {
-                stringBuilder.append(String.format(Locale.US, this.identifierFormatTags[i3], new Object[]{Integer.valueOf(i2)}));
-            } else if (this.identifiers[i3] == 4) {
-                stringBuilder.append(String.format(Locale.US, this.identifierFormatTags[i3], new Object[]{Long.valueOf(j)}));
+    public String buildUri(String representationId, int segmentNumber, int bandwidth, long time) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < this.identifierCount; i++) {
+            builder.append(this.urlPieces[i]);
+            if (this.identifiers[i] == 1) {
+                builder.append(representationId);
+            } else if (this.identifiers[i] == 2) {
+                builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Integer.valueOf(segmentNumber)}));
+            } else if (this.identifiers[i] == 3) {
+                builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Integer.valueOf(bandwidth)}));
+            } else if (this.identifiers[i] == 4) {
+                builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Long.valueOf(time)}));
             }
         }
-        stringBuilder.append(this.urlPieces[this.identifierCount]);
-        return stringBuilder.toString();
+        builder.append(this.urlPieces[this.identifierCount]);
+        return builder.toString();
     }
 
-    private static int parseTemplate(String str, String[] strArr, int[] iArr, String[] strArr2) {
-        strArr[0] = TtmlNode.ANONYMOUS_REGION_ID;
-        int i = 0;
-        int i2 = i;
-        while (i < str.length()) {
-            int indexOf = str.indexOf("$", i);
-            int i3 = -1;
-            StringBuilder stringBuilder;
-            if (indexOf == -1) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(strArr[i2]);
-                stringBuilder.append(str.substring(i));
-                strArr[i2] = stringBuilder.toString();
-                i = str.length();
+    private static int parseTemplate(String template, String[] urlPieces, int[] identifiers, String[] identifierFormatTags) {
+        urlPieces[0] = TtmlNode.ANONYMOUS_REGION_ID;
+        int templateIndex = 0;
+        int identifierCount = 0;
+        while (templateIndex < template.length()) {
+            int dollarIndex = template.indexOf("$", templateIndex);
+            if (dollarIndex == -1) {
+                urlPieces[identifierCount] = urlPieces[identifierCount] + template.substring(templateIndex);
+                templateIndex = template.length();
+            } else if (dollarIndex != templateIndex) {
+                urlPieces[identifierCount] = urlPieces[identifierCount] + template.substring(templateIndex, dollarIndex);
+                templateIndex = dollarIndex;
+            } else if (template.startsWith(ESCAPED_DOLLAR, templateIndex)) {
+                urlPieces[identifierCount] = urlPieces[identifierCount] + "$";
+                templateIndex += 2;
             } else {
-                if (indexOf != i) {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(strArr[i2]);
-                    stringBuilder2.append(str.substring(i, indexOf));
-                    strArr[i2] = stringBuilder2.toString();
-                } else if (str.startsWith(ESCAPED_DOLLAR, i)) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(strArr[i2]);
-                    stringBuilder.append("$");
-                    strArr[i2] = stringBuilder.toString();
-                    i += 2;
+                int secondIndex = template.indexOf("$", templateIndex + 1);
+                String identifier = template.substring(templateIndex + 1, secondIndex);
+                if (identifier.equals(REPRESENTATION)) {
+                    identifiers[identifierCount] = 1;
                 } else {
-                    i++;
-                    indexOf = str.indexOf("$", i);
-                    String substring = str.substring(i, indexOf);
-                    if (substring.equals(REPRESENTATION)) {
-                        iArr[i2] = 1;
-                    } else {
-                        int indexOf2 = substring.indexOf("%0");
-                        String str2 = DEFAULT_FORMAT_TAG;
-                        if (indexOf2 != -1) {
-                            str2 = substring.substring(indexOf2);
-                            if (!str2.endsWith("d")) {
-                                StringBuilder stringBuilder3 = new StringBuilder();
-                                stringBuilder3.append(str2);
-                                stringBuilder3.append("d");
-                                str2 = stringBuilder3.toString();
-                            }
-                            substring = substring.substring(0, indexOf2);
+                    int formatTagIndex = identifier.indexOf("%0");
+                    String formatTag = DEFAULT_FORMAT_TAG;
+                    if (formatTagIndex != -1) {
+                        formatTag = identifier.substring(formatTagIndex);
+                        if (!formatTag.endsWith("d")) {
+                            formatTag = formatTag + "d";
                         }
-                        indexOf2 = substring.hashCode();
-                        if (indexOf2 != -NUM) {
-                            if (indexOf2 != 2606829) {
-                                if (indexOf2 == 38199441) {
-                                    if (substring.equals(BANDWIDTH)) {
-                                        i3 = 1;
-                                    }
-                                }
-                            } else if (substring.equals(TIME)) {
-                                i3 = 2;
-                            }
-                        } else if (substring.equals(NUMBER)) {
-                            i3 = 0;
-                        }
-                        switch (i3) {
-                            case 0:
-                                iArr[i2] = 2;
-                                break;
-                            case 1:
-                                iArr[i2] = 3;
-                                break;
-                            case 2:
-                                iArr[i2] = 4;
-                                break;
-                            default:
-                                iArr = new StringBuilder();
-                                iArr.append("Invalid template: ");
-                                iArr.append(str);
-                                throw new IllegalArgumentException(iArr.toString());
-                        }
-                        strArr2[i2] = str2;
+                        identifier = identifier.substring(0, formatTagIndex);
                     }
-                    i2++;
-                    strArr[i2] = TtmlNode.ANONYMOUS_REGION_ID;
-                    indexOf++;
+                    Object obj = -1;
+                    switch (identifier.hashCode()) {
+                        case -1950496919:
+                            if (identifier.equals(NUMBER)) {
+                                obj = null;
+                                break;
+                            }
+                            break;
+                        case 2606829:
+                            if (identifier.equals(TIME)) {
+                                obj = 2;
+                                break;
+                            }
+                            break;
+                        case 38199441:
+                            if (identifier.equals(BANDWIDTH)) {
+                                obj = 1;
+                                break;
+                            }
+                            break;
+                    }
+                    switch (obj) {
+                        case null:
+                            identifiers[identifierCount] = 2;
+                            break;
+                        case 1:
+                            identifiers[identifierCount] = 3;
+                            break;
+                        case 2:
+                            identifiers[identifierCount] = 4;
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Invalid template: " + template);
+                    }
+                    identifierFormatTags[identifierCount] = formatTag;
                 }
-                i = indexOf;
+                identifierCount++;
+                urlPieces[identifierCount] = TtmlNode.ANONYMOUS_REGION_ID;
+                templateIndex = secondIndex + 1;
             }
         }
-        return i2;
+        return identifierCount;
     }
 }

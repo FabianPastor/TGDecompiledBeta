@@ -14,39 +14,38 @@ public final class TrackKey implements Parcelable, Comparable<TrackKey> {
         C06191() {
         }
 
-        public TrackKey createFromParcel(Parcel parcel) {
-            return new TrackKey(parcel.readInt(), parcel.readInt());
+        public TrackKey createFromParcel(Parcel in) {
+            return new TrackKey(in.readInt(), in.readInt());
         }
 
-        public TrackKey[] newArray(int i) {
-            return new TrackKey[i];
+        public TrackKey[] newArray(int size) {
+            return new TrackKey[size];
         }
+    }
+
+    public TrackKey(int streamElementIndex, int trackIndex) {
+        this.streamElementIndex = streamElementIndex;
+        this.trackIndex = trackIndex;
+    }
+
+    public String toString() {
+        return this.streamElementIndex + "." + this.trackIndex;
     }
 
     public int describeContents() {
         return 0;
     }
 
-    public TrackKey(int i, int i2) {
-        this.streamElementIndex = i;
-        this.trackIndex = i2;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.streamElementIndex);
+        dest.writeInt(this.trackIndex);
     }
 
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.streamElementIndex);
-        stringBuilder.append(".");
-        stringBuilder.append(this.trackIndex);
-        return stringBuilder.toString();
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(this.streamElementIndex);
-        parcel.writeInt(this.trackIndex);
-    }
-
-    public int compareTo(TrackKey trackKey) {
-        int i = this.streamElementIndex - trackKey.streamElementIndex;
-        return i == 0 ? this.trackIndex - trackKey.trackIndex : i;
+    public int compareTo(TrackKey o) {
+        int result = this.streamElementIndex - o.streamElementIndex;
+        if (result == 0) {
+            return this.trackIndex - o.trackIndex;
+        }
+        return result;
     }
 }

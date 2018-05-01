@@ -42,8 +42,8 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         C21141() {
         }
 
-        public void onItemClick(int i) {
-            if (i == -1) {
+        public void onItemClick(int id) {
+            if (id == -1) {
                 ConvertGroupActivity.this.finishFragment();
             }
         }
@@ -65,14 +65,14 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         C21152() {
         }
 
-        public void onItemClick(View view, int i) {
-            if (i == ConvertGroupActivity.this.convertRow) {
-                view = new Builder(ConvertGroupActivity.this.getParentActivity());
-                view.setMessage(LocaleController.getString("ConvertGroupAlert", C0446R.string.ConvertGroupAlert));
-                view.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0446R.string.ConvertGroupAlertWarning));
-                view.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C13661());
-                view.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-                ConvertGroupActivity.this.showDialog(view.create());
+        public void onItemClick(View view, int position) {
+            if (position == ConvertGroupActivity.this.convertRow) {
+                Builder builder = new Builder(ConvertGroupActivity.this.getParentActivity());
+                builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0446R.string.ConvertGroupAlert));
+                builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0446R.string.ConvertGroupAlertWarning));
+                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C13661());
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                ConvertGroupActivity.this.showDialog(builder.create());
             }
         }
     }
@@ -84,42 +84,46 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
             this.mContext = context;
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return viewHolder.getAdapterPosition() == ConvertGroupActivity.this.convertRow ? true : null;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getAdapterPosition() == ConvertGroupActivity.this.convertRow;
         }
 
         public int getItemCount() {
             return ConvertGroupActivity.this.rowCount;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i != 0) {
-                viewGroup = new TextInfoPrivacyCell(this.mContext);
-            } else {
-                viewGroup = new TextSettingsCell(this.mContext);
-                viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                default:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    break;
             }
-            return new Holder(viewGroup);
+            return new Holder(view);
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            switch (viewHolder.getItemViewType()) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
                 case 0:
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                    if (i == ConvertGroupActivity.this.convertRow) {
-                        textSettingsCell.setText(LocaleController.getString("ConvertGroup", C0446R.string.ConvertGroup), false);
+                    TextSettingsCell textCell = holder.itemView;
+                    if (position == ConvertGroupActivity.this.convertRow) {
+                        textCell.setText(LocaleController.getString("ConvertGroup", C0446R.string.ConvertGroup), false);
                         return;
                     }
                     return;
                 case 1:
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    if (i == ConvertGroupActivity.this.convertInfoRow) {
-                        textInfoPrivacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", C0446R.string.ConvertGroupInfo2)));
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    TextInfoPrivacyCell privacyCell = holder.itemView;
+                    if (position == ConvertGroupActivity.this.convertInfoRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", C0446R.string.ConvertGroupInfo2)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
-                    } else if (i == ConvertGroupActivity.this.convertDetailRow) {
-                        textInfoPrivacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", C0446R.string.ConvertGroupInfo3)));
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    } else if (position == ConvertGroupActivity.this.convertDetailRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", C0446R.string.ConvertGroupInfo3)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -133,18 +137,16 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
             if (i == ConvertGroupActivity.this.convertRow) {
                 return 0;
             }
-            if (i != ConvertGroupActivity.this.convertInfoRow) {
-                if (i != ConvertGroupActivity.this.convertDetailRow) {
-                    return 0;
-                }
+            if (i == ConvertGroupActivity.this.convertInfoRow || i == ConvertGroupActivity.this.convertDetailRow) {
+                return 1;
             }
-            return 1;
+            return 0;
         }
     }
 
-    public ConvertGroupActivity(Bundle bundle) {
-        super(bundle);
-        this.chat_id = bundle.getInt("chat_id");
+    public ConvertGroupActivity(Bundle args) {
+        super(args);
+        this.chat_id = args.getInt("chat_id");
     }
 
     public boolean onFragmentCreate() {
@@ -174,7 +176,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.actionBar.setActionBarMenuOnItemClick(new C21141());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
@@ -192,25 +194,25 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.closeChats) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[11];
-        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r1[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        return r1;
+        r9 = new ThemeDescription[11];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        return r9;
     }
 }

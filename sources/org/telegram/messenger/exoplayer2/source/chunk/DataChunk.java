@@ -16,9 +16,9 @@ public abstract class DataChunk extends Chunk {
 
     protected abstract void consume(byte[] bArr, int i) throws IOException;
 
-    public DataChunk(DataSource dataSource, DataSpec dataSpec, int i, Format format, int i2, Object obj, byte[] bArr) {
-        super(dataSource, dataSpec, i, format, i2, obj, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
-        this.data = bArr;
+    public DataChunk(DataSource dataSource, DataSpec dataSpec, int type, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] data) {
+        super(dataSource, dataSpec, type, trackFormat, trackSelectionReason, trackSelectionData, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
+        this.data = data;
     }
 
     public byte[] getDataHolder() {
@@ -40,13 +40,13 @@ public abstract class DataChunk extends Chunk {
     public final void load() throws IOException, InterruptedException {
         try {
             this.dataSource.open(this.dataSpec);
-            int i = 0;
             this.limit = 0;
-            while (i != -1 && !this.loadCanceled) {
+            int bytesRead = 0;
+            while (bytesRead != -1 && !this.loadCanceled) {
                 maybeExpandData();
-                i = this.dataSource.read(this.data, this.limit, 16384);
-                if (i != -1) {
-                    this.limit += i;
+                bytesRead = this.dataSource.read(this.data, this.limit, 16384);
+                if (bytesRead != -1) {
+                    this.limit += bytesRead;
                 }
             }
             if (!this.loadCanceled) {

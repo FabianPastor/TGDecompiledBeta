@@ -30,27 +30,24 @@ public final class ConcatenatingMediaSource implements MediaSource {
         private final int[] sourceWindowOffsets;
         private final Timeline[] timelines;
 
-        public ConcatenatedTimeline(Timeline[] timelineArr, boolean z, ShuffleOrder shuffleOrder) {
+        public ConcatenatedTimeline(Timeline[] timelines, boolean isAtomic, ShuffleOrder shuffleOrder) {
             super(shuffleOrder);
-            int[] iArr = new int[timelineArr.length];
-            int[] iArr2 = new int[timelineArr.length];
-            long j = 0;
-            int i = 0;
-            int i2 = i;
-            while (i < timelineArr.length) {
-                Timeline timeline = timelineArr[i];
-                long periodCount = j + ((long) timeline.getPeriodCount());
+            int[] sourcePeriodOffsets = new int[timelines.length];
+            int[] sourceWindowOffsets = new int[timelines.length];
+            long periodCount = 0;
+            int windowCount = 0;
+            for (int i = 0; i < timelines.length; i++) {
+                Timeline timeline = timelines[i];
+                periodCount += (long) timeline.getPeriodCount();
                 Assertions.checkState(periodCount <= 2147483647L, "ConcatenatingMediaSource children contain too many periods");
-                iArr[i] = (int) periodCount;
-                i2 += timeline.getWindowCount();
-                iArr2[i] = i2;
-                i++;
-                j = periodCount;
+                sourcePeriodOffsets[i] = (int) periodCount;
+                windowCount += timeline.getWindowCount();
+                sourceWindowOffsets[i] = windowCount;
             }
-            this.timelines = timelineArr;
-            this.sourcePeriodOffsets = iArr;
-            this.sourceWindowOffsets = iArr2;
-            this.isAtomic = z;
+            this.timelines = timelines;
+            this.sourcePeriodOffsets = sourcePeriodOffsets;
+            this.sourceWindowOffsets = sourceWindowOffsets;
+            this.isAtomic = isAtomic;
         }
 
         public int getWindowCount() {
@@ -61,112 +58,113 @@ public final class ConcatenatingMediaSource implements MediaSource {
             return this.sourcePeriodOffsets[this.sourcePeriodOffsets.length - 1];
         }
 
-        public int getNextWindowIndex(int i, int i2, boolean z) {
-            boolean z2 = true;
-            if (this.isAtomic && i2 == 1) {
-                i2 = 2;
+        public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            boolean z = true;
+            if (this.isAtomic && repeatMode == 1) {
+                repeatMode = 2;
             }
-            if (this.isAtomic || !z) {
-                z2 = false;
+            if (this.isAtomic || !shuffleModeEnabled) {
+                z = false;
             }
-            return super.getNextWindowIndex(i, i2, z2);
+            return super.getNextWindowIndex(windowIndex, repeatMode, z);
         }
 
-        public int getPreviousWindowIndex(int i, int i2, boolean z) {
-            boolean z2 = true;
-            if (this.isAtomic && i2 == 1) {
-                i2 = 2;
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            boolean z = true;
+            if (this.isAtomic && repeatMode == 1) {
+                repeatMode = 2;
             }
-            if (this.isAtomic || !z) {
-                z2 = false;
+            if (this.isAtomic || !shuffleModeEnabled) {
+                z = false;
             }
-            return super.getPreviousWindowIndex(i, i2, z2);
+            return super.getPreviousWindowIndex(windowIndex, repeatMode, z);
         }
 
-        public int getLastWindowIndex(boolean z) {
-            z = !this.isAtomic && z;
+        public int getLastWindowIndex(boolean shuffleModeEnabled) {
+            boolean z = !this.isAtomic && shuffleModeEnabled;
             return super.getLastWindowIndex(z);
         }
 
-        public int getFirstWindowIndex(boolean z) {
-            z = !this.isAtomic && z;
+        public int getFirstWindowIndex(boolean shuffleModeEnabled) {
+            boolean z = !this.isAtomic && shuffleModeEnabled;
             return super.getFirstWindowIndex(z);
         }
 
-        protected int getChildIndexByPeriodIndex(int i) {
-            return Util.binarySearchFloor(this.sourcePeriodOffsets, i + 1, false, false) + 1;
+        protected int getChildIndexByPeriodIndex(int periodIndex) {
+            return Util.binarySearchFloor(this.sourcePeriodOffsets, periodIndex + 1, false, false) + 1;
         }
 
-        protected int getChildIndexByWindowIndex(int i) {
-            return Util.binarySearchFloor(this.sourceWindowOffsets, i + 1, false, false) + 1;
+        protected int getChildIndexByWindowIndex(int windowIndex) {
+            return Util.binarySearchFloor(this.sourceWindowOffsets, windowIndex + 1, false, false) + 1;
         }
 
-        protected int getChildIndexByChildUid(Object obj) {
-            if (obj instanceof Integer) {
-                return ((Integer) obj).intValue();
+        protected int getChildIndexByChildUid(Object childUid) {
+            if (childUid instanceof Integer) {
+                return ((Integer) childUid).intValue();
             }
             return -1;
         }
 
-        protected Timeline getTimelineByChildIndex(int i) {
-            return this.timelines[i];
+        protected Timeline getTimelineByChildIndex(int childIndex) {
+            return this.timelines[childIndex];
         }
 
-        protected int getFirstPeriodIndexByChildIndex(int i) {
-            return i == 0 ? 0 : this.sourcePeriodOffsets[i - 1];
+        protected int getFirstPeriodIndexByChildIndex(int childIndex) {
+            return childIndex == 0 ? 0 : this.sourcePeriodOffsets[childIndex - 1];
         }
 
-        protected int getFirstWindowIndexByChildIndex(int i) {
-            return i == 0 ? 0 : this.sourceWindowOffsets[i - 1];
+        protected int getFirstWindowIndexByChildIndex(int childIndex) {
+            return childIndex == 0 ? 0 : this.sourceWindowOffsets[childIndex - 1];
         }
 
-        protected Object getChildUidByChildIndex(int i) {
-            return Integer.valueOf(i);
+        protected Object getChildUidByChildIndex(int childIndex) {
+            return Integer.valueOf(childIndex);
         }
     }
 
-    public ConcatenatingMediaSource(MediaSource... mediaSourceArr) {
-        this(false, mediaSourceArr);
+    public ConcatenatingMediaSource(MediaSource... mediaSources) {
+        this(false, mediaSources);
     }
 
-    public ConcatenatingMediaSource(boolean z, MediaSource... mediaSourceArr) {
-        this(z, new DefaultShuffleOrder(mediaSourceArr.length), mediaSourceArr);
+    public ConcatenatingMediaSource(boolean isAtomic, MediaSource... mediaSources) {
+        this(isAtomic, new DefaultShuffleOrder(mediaSources.length), mediaSources);
     }
 
-    public ConcatenatingMediaSource(boolean z, ShuffleOrder shuffleOrder, MediaSource... mediaSourceArr) {
-        boolean z2 = false;
-        for (Object checkNotNull : mediaSourceArr) {
-            Assertions.checkNotNull(checkNotNull);
+    public ConcatenatingMediaSource(boolean isAtomic, ShuffleOrder shuffleOrder, MediaSource... mediaSources) {
+        boolean z = false;
+        for (MediaSource mediaSource : mediaSources) {
+            Assertions.checkNotNull(mediaSource);
         }
-        if (shuffleOrder.getLength() == mediaSourceArr.length) {
-            z2 = true;
+        if (shuffleOrder.getLength() == mediaSources.length) {
+            z = true;
         }
-        Assertions.checkArgument(z2);
-        this.mediaSources = mediaSourceArr;
-        this.isAtomic = z;
+        Assertions.checkArgument(z);
+        this.mediaSources = mediaSources;
+        this.isAtomic = isAtomic;
         this.shuffleOrder = shuffleOrder;
-        this.timelines = new Timeline[mediaSourceArr.length];
-        this.manifests = new Object[mediaSourceArr.length];
+        this.timelines = new Timeline[mediaSources.length];
+        this.manifests = new Object[mediaSources.length];
         this.sourceIndexByMediaPeriod = new HashMap();
-        this.duplicateFlags = buildDuplicateFlags(mediaSourceArr);
+        this.duplicateFlags = buildDuplicateFlags(mediaSources);
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        Assertions.checkState(!this.listener, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        Assertions.checkState(this.listener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.listener = listener;
-        if (this.mediaSources.length) {
-            for (z = false; z < this.mediaSources.length; z++) {
-                if (this.duplicateFlags[z] == null) {
-                    this.mediaSources[z].prepareSource(exoPlayer, false, new Listener() {
-                        public void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj) {
-                            ConcatenatingMediaSource.this.handleSourceInfoRefreshed(z, timeline, obj);
-                        }
-                    });
-                }
-            }
+        if (this.mediaSources.length == 0) {
+            listener.onSourceInfoRefreshed(this, Timeline.EMPTY, null);
             return;
         }
-        listener.onSourceInfoRefreshed(this, Timeline.EMPTY, false);
+        for (int i = 0; i < this.mediaSources.length; i++) {
+            if (!this.duplicateFlags[i]) {
+                final int index = i;
+                this.mediaSources[i].prepareSource(player, false, new Listener() {
+                    public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
+                        ConcatenatingMediaSource.this.handleSourceInfoRefreshed(index, timeline, manifest);
+                    }
+                });
+            }
+        }
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
@@ -177,17 +175,17 @@ public final class ConcatenatingMediaSource implements MediaSource {
         }
     }
 
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
-        int childIndexByPeriodIndex = this.timeline.getChildIndexByPeriodIndex(mediaPeriodId.periodIndex);
-        mediaPeriodId = this.mediaSources[childIndexByPeriodIndex].createPeriod(mediaPeriodId.copyWithPeriodIndex(mediaPeriodId.periodIndex - this.timeline.getFirstPeriodIndexByChildIndex(childIndexByPeriodIndex)), allocator);
-        this.sourceIndexByMediaPeriod.put(mediaPeriodId, Integer.valueOf(childIndexByPeriodIndex));
-        return mediaPeriodId;
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        int sourceIndex = this.timeline.getChildIndexByPeriodIndex(id.periodIndex);
+        MediaPeriod mediaPeriod = this.mediaSources[sourceIndex].createPeriod(id.copyWithPeriodIndex(id.periodIndex - this.timeline.getFirstPeriodIndexByChildIndex(sourceIndex)), allocator);
+        this.sourceIndexByMediaPeriod.put(mediaPeriod, Integer.valueOf(sourceIndex));
+        return mediaPeriod;
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
-        int intValue = ((Integer) this.sourceIndexByMediaPeriod.get(mediaPeriod)).intValue();
+        int sourceIndex = ((Integer) this.sourceIndexByMediaPeriod.get(mediaPeriod)).intValue();
         this.sourceIndexByMediaPeriod.remove(mediaPeriod);
-        this.mediaSources[intValue].releasePeriod(mediaPeriod);
+        this.mediaSources[sourceIndex].releasePeriod(mediaPeriod);
     }
 
     public void releaseSource() {
@@ -198,21 +196,21 @@ public final class ConcatenatingMediaSource implements MediaSource {
         }
     }
 
-    private void handleSourceInfoRefreshed(int i, Timeline timeline, Object obj) {
-        this.timelines[i] = timeline;
-        this.manifests[i] = obj;
-        for (int i2 = i + 1; i2 < this.mediaSources.length; i2++) {
-            if (this.mediaSources[i2] == this.mediaSources[i]) {
-                this.timelines[i2] = timeline;
-                this.manifests[i2] = obj;
+    private void handleSourceInfoRefreshed(int sourceFirstIndex, Timeline sourceTimeline, Object sourceManifest) {
+        this.timelines[sourceFirstIndex] = sourceTimeline;
+        this.manifests[sourceFirstIndex] = sourceManifest;
+        for (int i = sourceFirstIndex + 1; i < this.mediaSources.length; i++) {
+            if (this.mediaSources[i] == this.mediaSources[sourceFirstIndex]) {
+                this.timelines[i] = sourceTimeline;
+                this.manifests[i] = sourceManifest;
             }
         }
-        i = this.timelines;
-        timeline = i.length;
-        Timeline timeline2 = null;
-        while (timeline2 < timeline) {
-            if (i[timeline2] != null) {
-                timeline2++;
+        Timeline[] timelineArr = this.timelines;
+        int length = timelineArr.length;
+        int i2 = 0;
+        while (i2 < length) {
+            if (timelineArr[i2] != null) {
+                i2++;
             } else {
                 return;
             }
@@ -221,17 +219,17 @@ public final class ConcatenatingMediaSource implements MediaSource {
         this.listener.onSourceInfoRefreshed(this, this.timeline, this.manifests.clone());
     }
 
-    private static boolean[] buildDuplicateFlags(MediaSource[] mediaSourceArr) {
-        boolean[] zArr = new boolean[mediaSourceArr.length];
-        IdentityHashMap identityHashMap = new IdentityHashMap(mediaSourceArr.length);
-        for (int i = 0; i < mediaSourceArr.length; i++) {
-            Object obj = mediaSourceArr[i];
-            if (identityHashMap.containsKey(obj)) {
-                zArr[i] = true;
+    private static boolean[] buildDuplicateFlags(MediaSource[] mediaSources) {
+        boolean[] duplicateFlags = new boolean[mediaSources.length];
+        IdentityHashMap<MediaSource, Void> sources = new IdentityHashMap(mediaSources.length);
+        for (int i = 0; i < mediaSources.length; i++) {
+            MediaSource source = mediaSources[i];
+            if (sources.containsKey(source)) {
+                duplicateFlags[i] = true;
             } else {
-                identityHashMap.put(obj, null);
+                sources.put(source, null);
             }
         }
-        return zArr;
+        return duplicateFlags;
     }
 }

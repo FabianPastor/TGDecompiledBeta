@@ -65,31 +65,29 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.currentPosition = 0;
     }
 
-    public void selectTab(int i) {
-        if (i >= 0) {
-            if (i < this.tabCount) {
-                this.tabsContainer.getChildAt(i).performClick();
-            }
+    public void selectTab(int num) {
+        if (num >= 0 && num < this.tabCount) {
+            this.tabsContainer.getChildAt(num).performClick();
         }
     }
 
     public TextView addIconTabWithCounter(Drawable drawable) {
-        final int i = this.tabCount;
-        this.tabCount = i + 1;
-        View frameLayout = new FrameLayout(getContext());
-        frameLayout.setFocusable(true);
-        this.tabsContainer.addView(frameLayout);
-        View imageView = new ImageView(getContext());
+        final int position = this.tabCount;
+        this.tabCount = position + 1;
+        FrameLayout tab = new FrameLayout(getContext());
+        tab.setFocusable(true);
+        this.tabsContainer.addView(tab);
+        ImageView imageView = new ImageView(getContext());
         imageView.setImageDrawable(drawable);
         imageView.setScaleType(ScaleType.CENTER);
-        frameLayout.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(i);
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
             }
         });
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-        frameLayout.setSelected(i == this.currentPosition);
-        View textView = new TextView(getContext());
+        tab.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+        tab.setSelected(position == this.currentPosition);
+        TextView textView = new TextView(getContext());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 12.0f);
         textView.setTextColor(-1);
@@ -97,72 +95,72 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         textView.setBackgroundResource(C0446R.drawable.sticker_badge);
         textView.setMinWidth(AndroidUtilities.dp(18.0f));
         textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
-        frameLayout.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
+        tab.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
         return textView;
     }
 
     public void addIconTab(Drawable drawable) {
-        final int i = this.tabCount;
-        this.tabCount = i + 1;
-        View imageView = new ImageView(getContext());
         boolean z = true;
-        imageView.setFocusable(true);
-        imageView.setImageDrawable(drawable);
-        imageView.setScaleType(ScaleType.CENTER);
-        imageView.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(i);
+        final int position = this.tabCount;
+        this.tabCount = position + 1;
+        ImageView tab = new ImageView(getContext());
+        tab.setFocusable(true);
+        tab.setImageDrawable(drawable);
+        tab.setScaleType(ScaleType.CENTER);
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
             }
         });
-        this.tabsContainer.addView(imageView);
-        if (i != this.currentPosition) {
+        this.tabsContainer.addView(tab);
+        if (position != this.currentPosition) {
             z = false;
         }
-        imageView.setSelected(z);
+        tab.setSelected(z);
     }
 
     public void addStickerTab(Chat chat) {
-        final int i = this.tabCount;
-        this.tabCount = i + 1;
-        View frameLayout = new FrameLayout(getContext());
-        frameLayout.setFocusable(true);
-        frameLayout.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(i);
+        final int position = this.tabCount;
+        this.tabCount = position + 1;
+        FrameLayout tab = new FrameLayout(getContext());
+        tab.setFocusable(true);
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
             }
         });
-        this.tabsContainer.addView(frameLayout);
-        frameLayout.setSelected(i == this.currentPosition);
-        View backupImageView = new BackupImageView(getContext());
-        backupImageView.setRoundRadius(AndroidUtilities.dp(15.0f));
-        TLObject tLObject = null;
+        this.tabsContainer.addView(tab);
+        tab.setSelected(position == this.currentPosition);
+        BackupImageView imageView = new BackupImageView(getContext());
+        imageView.setRoundRadius(AndroidUtilities.dp(15.0f));
+        TLObject photo = null;
         Drawable avatarDrawable = new AvatarDrawable();
         if (chat.photo != null) {
-            tLObject = chat.photo.photo_small;
+            photo = chat.photo.photo_small;
         }
         avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
         avatarDrawable.setInfo(chat);
-        backupImageView.setImage(tLObject, "50_50", avatarDrawable);
-        backupImageView.setAspectFit(true);
-        frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        imageView.setImage(photo, "50_50", avatarDrawable);
+        imageView.setAspectFit(true);
+        tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
     }
 
-    public void addStickerTab(Document document) {
-        final int i = this.tabCount;
-        this.tabCount = i + 1;
-        View frameLayout = new FrameLayout(getContext());
-        frameLayout.setTag(document);
-        frameLayout.setFocusable(true);
-        frameLayout.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(i);
+    public void addStickerTab(Document sticker) {
+        final int position = this.tabCount;
+        this.tabCount = position + 1;
+        FrameLayout tab = new FrameLayout(getContext());
+        tab.setTag(sticker);
+        tab.setFocusable(true);
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
             }
         });
-        this.tabsContainer.addView(frameLayout);
-        frameLayout.setSelected(i == this.currentPosition);
-        View backupImageView = new BackupImageView(getContext());
-        backupImageView.setAspectFit(true);
-        frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        this.tabsContainer.addView(tab);
+        tab.setSelected(position == this.currentPosition);
+        BackupImageView imageView = new BackupImageView(getContext());
+        imageView.setAspectFit(true);
+        tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
     }
 
     public void updateTabStyles() {
@@ -171,98 +169,92 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    private void scrollToChild(int i) {
-        if (this.tabCount != 0) {
-            if (this.tabsContainer.getChildAt(i) != null) {
-                int left = this.tabsContainer.getChildAt(i).getLeft();
-                if (i > 0) {
-                    left -= this.scrollOffset;
-                }
-                i = getScrollX();
-                if (left != this.lastScrollX) {
-                    if (left < i) {
-                        this.lastScrollX = left;
-                        smoothScrollTo(this.lastScrollX, 0);
-                    } else if (this.scrollOffset + left > (i + getWidth()) - (this.scrollOffset * 2)) {
-                        this.lastScrollX = (left - getWidth()) + (this.scrollOffset * 3);
-                        smoothScrollTo(this.lastScrollX, 0);
-                    }
-                }
+    private void scrollToChild(int position) {
+        if (this.tabCount != 0 && this.tabsContainer.getChildAt(position) != null) {
+            int newScrollX = this.tabsContainer.getChildAt(position).getLeft();
+            if (position > 0) {
+                newScrollX -= this.scrollOffset;
+            }
+            int currentScrollX = getScrollX();
+            if (newScrollX == this.lastScrollX) {
+                return;
+            }
+            if (newScrollX < currentScrollX) {
+                this.lastScrollX = newScrollX;
+                smoothScrollTo(this.lastScrollX, 0);
+            } else if (this.scrollOffset + newScrollX > (getWidth() + currentScrollX) - (this.scrollOffset * 2)) {
+                this.lastScrollX = (newScrollX - getWidth()) + (this.scrollOffset * 3);
+                smoothScrollTo(this.lastScrollX, 0);
             }
         }
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
         setImages();
     }
 
     public void setImages() {
-        int dp = AndroidUtilities.dp(52.0f);
-        int scrollX = getScrollX() / dp;
-        dp = Math.min(this.tabsContainer.getChildCount(), (((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) dp)))) + scrollX) + 1);
-        while (scrollX < dp) {
-            View childAt = this.tabsContainer.getChildAt(scrollX);
-            Object tag = childAt.getTag();
-            if (tag instanceof Document) {
-                ((BackupImageView) ((FrameLayout) childAt).getChildAt(0)).setImage(((Document) tag).thumb.location, null, "webp", null);
+        int tabSize = AndroidUtilities.dp(52.0f);
+        int start = getScrollX() / tabSize;
+        int end = Math.min(this.tabsContainer.getChildCount(), (((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + start) + 1);
+        for (int a = start; a < end; a++) {
+            View child = this.tabsContainer.getChildAt(a);
+            Document object = child.getTag();
+            if (object instanceof Document) {
+                ((BackupImageView) ((FrameLayout) child).getChildAt(0)).setImage(object.thumb.location, null, "webp", null);
             }
-            scrollX++;
         }
     }
 
-    protected void onScrollChanged(int i, int i2, int i3, int i4) {
-        super.onScrollChanged(i, i2, i3, i4);
-        i2 = AndroidUtilities.dp(NUM);
-        i3 /= i2;
-        i /= i2;
-        i2 = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) i2)))) + 1;
-        i3 = Math.min(this.tabsContainer.getChildCount(), Math.max(i3, i) + i2);
-        for (i4 = Math.max(0, Math.min(i3, i)); i4 < i3; i4++) {
-            View childAt = this.tabsContainer.getChildAt(i4);
-            if (childAt != null) {
-                Object tag = childAt.getTag();
-                if (tag instanceof Document) {
-                    BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                    if (i4 >= i) {
-                        if (i4 < i + i2) {
-                            Document document = (Document) tag;
-                            if (document.thumb != null) {
-                                backupImageView.setImage(document.thumb.location, null, "webp", null);
-                            }
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        int tabSize = AndroidUtilities.dp(52.0f);
+        int oldStart = oldl / tabSize;
+        int newStart = l / tabSize;
+        int count = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + 1;
+        int start = Math.max(0, Math.min(oldStart, newStart));
+        int end = Math.min(this.tabsContainer.getChildCount(), Math.max(oldStart, newStart) + count);
+        int a = start;
+        while (a < end) {
+            View child = this.tabsContainer.getChildAt(a);
+            if (child != null) {
+                Document object = child.getTag();
+                if (object instanceof Document) {
+                    BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
+                    if (a < newStart || a >= newStart + count) {
+                        imageView.setImageDrawable(null);
+                    } else {
+                        Document sticker = object;
+                        if (sticker.thumb != null) {
+                            imageView.setImage(sticker.thumb.location, null, "webp", null);
                         }
                     }
-                    backupImageView.setImageDrawable(null);
                 }
             }
+            a++;
         }
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!isInEditMode()) {
-            if (this.tabCount != 0) {
-                float right;
-                float left;
-                int height = getHeight();
-                this.rectPaint.setColor(this.underlineColor);
-                float f = (float) height;
-                canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), f, this.rectPaint);
-                View childAt = this.tabsContainer.getChildAt(this.currentPosition);
-                if (childAt != null) {
-                    right = (float) childAt.getRight();
-                    left = (float) childAt.getLeft();
-                } else {
-                    left = 0.0f;
-                    right = left;
-                }
-                this.rectPaint.setColor(this.indicatorColor);
-                if (this.indicatorHeight == 0) {
-                    canvas.drawRect(left, 0.0f, right, f, this.rectPaint);
-                } else {
-                    canvas.drawRect(left, (float) (height - this.indicatorHeight), right, f, this.rectPaint);
-                }
+        if (!isInEditMode() && this.tabCount != 0) {
+            int height = getHeight();
+            this.rectPaint.setColor(this.underlineColor);
+            canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
+            View currentTab = this.tabsContainer.getChildAt(this.currentPosition);
+            float lineLeft = 0.0f;
+            float lineRight = 0.0f;
+            if (currentTab != null) {
+                lineLeft = (float) currentTab.getLeft();
+                lineRight = (float) currentTab.getRight();
             }
+            this.rectPaint.setColor(this.indicatorColor);
+            if (this.indicatorHeight == 0) {
+                canvas.drawRect(lineLeft, 0.0f, lineRight, (float) height, this.rectPaint);
+                return;
+            }
+            canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);
         }
     }
 
@@ -270,55 +262,47 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         return this.currentPosition;
     }
 
-    public void onPageScrolled(int i, int i2) {
-        if (this.currentPosition != i) {
-            this.currentPosition = i;
-            if (i < this.tabsContainer.getChildCount()) {
-                int i3 = 0;
-                while (true) {
-                    boolean z = true;
-                    if (i3 >= this.tabsContainer.getChildCount()) {
-                        break;
-                    }
-                    View childAt = this.tabsContainer.getChildAt(i3);
-                    if (i3 != i) {
-                        z = false;
-                    }
-                    childAt.setSelected(z);
-                    i3++;
+    public void onPageScrolled(int position, int first) {
+        if (this.currentPosition != position) {
+            this.currentPosition = position;
+            if (position < this.tabsContainer.getChildCount()) {
+                int a = 0;
+                while (a < this.tabsContainer.getChildCount()) {
+                    this.tabsContainer.getChildAt(a).setSelected(a == position);
+                    a++;
                 }
-                if (i2 != i || i <= 1) {
-                    scrollToChild(i);
+                if (first != position || position <= 1) {
+                    scrollToChild(position);
                 } else {
-                    scrollToChild(i - 1);
+                    scrollToChild(position - 1);
                 }
                 invalidate();
             }
         }
     }
 
-    public void setIndicatorHeight(int i) {
-        this.indicatorHeight = i;
+    public void setIndicatorHeight(int value) {
+        this.indicatorHeight = value;
         invalidate();
     }
 
-    public void setIndicatorColor(int i) {
-        this.indicatorColor = i;
+    public void setIndicatorColor(int value) {
+        this.indicatorColor = value;
         invalidate();
     }
 
-    public void setUnderlineColor(int i) {
-        this.underlineColor = i;
+    public void setUnderlineColor(int value) {
+        this.underlineColor = value;
         invalidate();
     }
 
-    public void setUnderlineColorResource(int i) {
-        this.underlineColor = getResources().getColor(i);
+    public void setUnderlineColorResource(int resId) {
+        this.underlineColor = getResources().getColor(resId);
         invalidate();
     }
 
-    public void setUnderlineHeight(int i) {
-        this.underlineHeight = i;
+    public void setUnderlineHeight(int value) {
+        this.underlineHeight = value;
         invalidate();
     }
 }

@@ -36,45 +36,45 @@ final class TrackFragment {
         this.trackEncryptionBox = null;
     }
 
-    public void initTables(int i, int i2) {
-        this.trunCount = i;
-        this.sampleCount = i2;
-        if (this.trunLength == null || this.trunLength.length < i) {
-            this.trunDataPosition = new long[i];
-            this.trunLength = new int[i];
+    public void initTables(int trunCount, int sampleCount) {
+        this.trunCount = trunCount;
+        this.sampleCount = sampleCount;
+        if (this.trunLength == null || this.trunLength.length < trunCount) {
+            this.trunDataPosition = new long[trunCount];
+            this.trunLength = new int[trunCount];
         }
-        if (this.sampleSizeTable == 0 || this.sampleSizeTable.length < i2) {
-            i2 = (i2 * 125) / 100;
-            this.sampleSizeTable = new int[i2];
-            this.sampleCompositionTimeOffsetTable = new int[i2];
-            this.sampleDecodingTimeTable = new long[i2];
-            this.sampleIsSyncFrameTable = new boolean[i2];
-            this.sampleHasSubsampleEncryptionTable = new boolean[i2];
+        if (this.sampleSizeTable == null || this.sampleSizeTable.length < sampleCount) {
+            int tableSize = (sampleCount * 125) / 100;
+            this.sampleSizeTable = new int[tableSize];
+            this.sampleCompositionTimeOffsetTable = new int[tableSize];
+            this.sampleDecodingTimeTable = new long[tableSize];
+            this.sampleIsSyncFrameTable = new boolean[tableSize];
+            this.sampleHasSubsampleEncryptionTable = new boolean[tableSize];
         }
     }
 
-    public void initEncryptionData(int i) {
-        if (this.sampleEncryptionData == null || this.sampleEncryptionData.limit() < i) {
-            this.sampleEncryptionData = new ParsableByteArray(i);
+    public void initEncryptionData(int length) {
+        if (this.sampleEncryptionData == null || this.sampleEncryptionData.limit() < length) {
+            this.sampleEncryptionData = new ParsableByteArray(length);
         }
-        this.sampleEncryptionDataLength = i;
+        this.sampleEncryptionDataLength = length;
         this.definesEncryptionData = true;
         this.sampleEncryptionDataNeedsFill = true;
     }
 
-    public void fillEncryptionData(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        extractorInput.readFully(this.sampleEncryptionData.data, 0, this.sampleEncryptionDataLength);
+    public void fillEncryptionData(ExtractorInput input) throws IOException, InterruptedException {
+        input.readFully(this.sampleEncryptionData.data, 0, this.sampleEncryptionDataLength);
         this.sampleEncryptionData.setPosition(0);
         this.sampleEncryptionDataNeedsFill = false;
     }
 
-    public void fillEncryptionData(ParsableByteArray parsableByteArray) {
-        parsableByteArray.readBytes(this.sampleEncryptionData.data, 0, this.sampleEncryptionDataLength);
+    public void fillEncryptionData(ParsableByteArray source) {
+        source.readBytes(this.sampleEncryptionData.data, 0, this.sampleEncryptionDataLength);
         this.sampleEncryptionData.setPosition(0);
         this.sampleEncryptionDataNeedsFill = false;
     }
 
-    public long getSamplePresentationTime(int i) {
-        return this.sampleDecodingTimeTable[i] + ((long) this.sampleCompositionTimeOffsetTable[i]);
+    public long getSamplePresentationTime(int index) {
+        return this.sampleDecodingTimeTable[index] + ((long) this.sampleCompositionTimeOffsetTable[index]);
     }
 }

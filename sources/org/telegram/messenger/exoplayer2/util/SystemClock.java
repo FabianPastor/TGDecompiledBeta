@@ -16,8 +16,8 @@ final class SystemClock implements Clock {
         return android.os.SystemClock.uptimeMillis();
     }
 
-    public void sleep(long j) {
-        android.os.SystemClock.sleep(j);
+    public void sleep(long sleepTimeMs) {
+        android.os.SystemClock.sleep(sleepTimeMs);
     }
 
     public HandlerWrapper createHandler(Looper looper, Callback callback) {

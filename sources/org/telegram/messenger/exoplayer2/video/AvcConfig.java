@@ -5,6 +5,7 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.util.CodecSpecificDataUtil;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
+import org.telegram.messenger.exoplayer2.util.NalUnitUtil.SpsData;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class AvcConfig {
@@ -14,56 +15,50 @@ public final class AvcConfig {
     public final float pixelWidthAspectRatio;
     public final int width;
 
-    public static AvcConfig parse(ParsableByteArray parsableByteArray) throws ParserException {
+    public static AvcConfig parse(ParsableByteArray data) throws ParserException {
         try {
-            parsableByteArray.skipBytes(4);
-            int readUnsignedByte = (parsableByteArray.readUnsignedByte() & 3) + 1;
-            if (readUnsignedByte == 3) {
+            data.skipBytes(4);
+            int nalUnitLengthFieldLength = (data.readUnsignedByte() & 3) + 1;
+            if (nalUnitLengthFieldLength == 3) {
                 throw new IllegalStateException();
             }
-            int i;
-            int i2;
-            float f;
-            int i3;
-            List arrayList = new ArrayList();
-            int readUnsignedByte2 = parsableByteArray.readUnsignedByte() & 31;
-            for (i = 0; i < readUnsignedByte2; i++) {
-                arrayList.add(buildNalUnitForChild(parsableByteArray));
+            int j;
+            List<byte[]> initializationData = new ArrayList();
+            int numSequenceParameterSets = data.readUnsignedByte() & 31;
+            for (j = 0; j < numSequenceParameterSets; j++) {
+                initializationData.add(buildNalUnitForChild(data));
             }
-            i = parsableByteArray.readUnsignedByte();
-            for (i2 = 0; i2 < i; i2++) {
-                arrayList.add(buildNalUnitForChild(parsableByteArray));
+            int numPictureParameterSets = data.readUnsignedByte();
+            for (j = 0; j < numPictureParameterSets; j++) {
+                initializationData.add(buildNalUnitForChild(data));
             }
-            if (readUnsignedByte2 > 0) {
-                parsableByteArray = NalUnitUtil.parseSpsNalUnit((byte[]) arrayList.get(0), readUnsignedByte, ((byte[]) arrayList.get(0)).length);
-                readUnsignedByte2 = parsableByteArray.width;
-                int i4 = parsableByteArray.height;
-                f = parsableByteArray.pixelWidthAspectRatio;
-                i2 = readUnsignedByte2;
-                i3 = i4;
-            } else {
-                f = 1.0f;
-                i2 = -1;
-                i3 = i2;
+            int width = -1;
+            int height = -1;
+            float pixelWidthAspectRatio = 1.0f;
+            if (numSequenceParameterSets > 0) {
+                SpsData spsData = NalUnitUtil.parseSpsNalUnit((byte[]) initializationData.get(0), nalUnitLengthFieldLength, ((byte[]) initializationData.get(0)).length);
+                width = spsData.width;
+                height = spsData.height;
+                pixelWidthAspectRatio = spsData.pixelWidthAspectRatio;
             }
-            return new AvcConfig(arrayList, readUnsignedByte, i2, i3, f);
-        } catch (ParsableByteArray parsableByteArray2) {
-            throw new ParserException("Error parsing AVC config", parsableByteArray2);
+            return new AvcConfig(initializationData, nalUnitLengthFieldLength, width, height, pixelWidthAspectRatio);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ParserException("Error parsing AVC config", e);
         }
     }
 
-    private AvcConfig(List<byte[]> list, int i, int i2, int i3, float f) {
-        this.initializationData = list;
-        this.nalUnitLengthFieldLength = i;
-        this.width = i2;
-        this.height = i3;
-        this.pixelWidthAspectRatio = f;
+    private AvcConfig(List<byte[]> initializationData, int nalUnitLengthFieldLength, int width, int height, float pixelWidthAspectRatio) {
+        this.initializationData = initializationData;
+        this.nalUnitLengthFieldLength = nalUnitLengthFieldLength;
+        this.width = width;
+        this.height = height;
+        this.pixelWidthAspectRatio = pixelWidthAspectRatio;
     }
 
-    private static byte[] buildNalUnitForChild(ParsableByteArray parsableByteArray) {
-        int readUnsignedShort = parsableByteArray.readUnsignedShort();
-        int position = parsableByteArray.getPosition();
-        parsableByteArray.skipBytes(readUnsignedShort);
-        return CodecSpecificDataUtil.buildNalUnit(parsableByteArray.data, position, readUnsignedShort);
+    private static byte[] buildNalUnitForChild(ParsableByteArray data) {
+        int length = data.readUnsignedShort();
+        int offset = data.getPosition();
+        data.skipBytes(length);
+        return CodecSpecificDataUtil.buildNalUnit(data.data, offset, length);
     }
 }

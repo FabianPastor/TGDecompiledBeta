@@ -7,27 +7,27 @@ public final class XmlPullParserUtil {
     private XmlPullParserUtil() {
     }
 
-    public static boolean isEndTag(XmlPullParser xmlPullParser, String str) throws XmlPullParserException {
-        return (!isEndTag(xmlPullParser) || xmlPullParser.getName().equals(str) == null) ? null : true;
+    public static boolean isEndTag(XmlPullParser xpp, String name) throws XmlPullParserException {
+        return isEndTag(xpp) && xpp.getName().equals(name);
     }
 
-    public static boolean isEndTag(XmlPullParser xmlPullParser) throws XmlPullParserException {
-        return xmlPullParser.getEventType() == 3 ? true : null;
+    public static boolean isEndTag(XmlPullParser xpp) throws XmlPullParserException {
+        return xpp.getEventType() == 3;
     }
 
-    public static boolean isStartTag(XmlPullParser xmlPullParser, String str) throws XmlPullParserException {
-        return (!isStartTag(xmlPullParser) || xmlPullParser.getName().equals(str) == null) ? null : true;
+    public static boolean isStartTag(XmlPullParser xpp, String name) throws XmlPullParserException {
+        return isStartTag(xpp) && xpp.getName().equals(name);
     }
 
-    public static boolean isStartTag(XmlPullParser xmlPullParser) throws XmlPullParserException {
-        return xmlPullParser.getEventType() == 2 ? true : null;
+    public static boolean isStartTag(XmlPullParser xpp) throws XmlPullParserException {
+        return xpp.getEventType() == 2;
     }
 
-    public static String getAttributeValue(XmlPullParser xmlPullParser, String str) {
-        int attributeCount = xmlPullParser.getAttributeCount();
+    public static String getAttributeValue(XmlPullParser xpp, String attributeName) {
+        int attributeCount = xpp.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            if (str.equals(xmlPullParser.getAttributeName(i))) {
-                return xmlPullParser.getAttributeValue(i);
+            if (attributeName.equals(xpp.getAttributeName(i))) {
+                return xpp.getAttributeValue(i);
             }
         }
         return null;

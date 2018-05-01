@@ -10,8 +10,8 @@ public final class FilteringSsManifestParser implements Parser<SsManifest> {
     private final List<TrackKey> filter;
     private final SsManifestParser ssManifestParser = new SsManifestParser();
 
-    public FilteringSsManifestParser(List<TrackKey> list) {
-        this.filter = list;
+    public FilteringSsManifestParser(List<TrackKey> filter) {
+        this.filter = filter;
     }
 
     public SsManifest parse(Uri uri, InputStream inputStream) throws IOException {

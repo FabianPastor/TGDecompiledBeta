@@ -38,7 +38,7 @@ public class CropRotationWheel extends FrameLayout {
         C11211() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (CropRotationWheel.this.rotationListener != null) {
                 CropRotationWheel.this.rotationListener.aspectRatioPressed();
             }
@@ -50,7 +50,7 @@ public class CropRotationWheel extends FrameLayout {
         C11222() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (CropRotationWheel.this.rotationListener != null) {
                 CropRotationWheel.this.rotationListener.rotate90Pressed();
             }
@@ -99,64 +99,59 @@ public class CropRotationWheel extends FrameLayout {
         setRotation(0.0f, false);
     }
 
-    public void setFreeform(boolean z) {
-        this.aspectRatioButton.setVisibility(z ? false : true);
+    public void setFreeform(boolean freeform) {
+        this.aspectRatioButton.setVisibility(freeform ? 0 : 8);
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(i), AndroidUtilities.dp(400.0f)), NUM), i2);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(400.0f)), NUM), heightMeasureSpec);
     }
 
     public void reset() {
         setRotation(0.0f, false);
     }
 
-    public void setListener(RotationWheelListener rotationWheelListener) {
-        this.rotationListener = rotationWheelListener;
+    public void setListener(RotationWheelListener listener) {
+        this.rotationListener = listener;
     }
 
-    public void setRotation(float f, boolean z) {
-        this.rotation = f;
-        f = this.rotation;
-        if (((double) Math.abs(f)) < 0.099d) {
-            f = Math.abs(f);
+    public void setRotation(float rotation, boolean animated) {
+        this.rotation = rotation;
+        float value = this.rotation;
+        if (((double) Math.abs(value)) < 0.099d) {
+            value = Math.abs(value);
         }
-        this.degreesLabel.setText(String.format("%.1f\u00ba", new Object[]{Float.valueOf(f)}));
+        this.degreesLabel.setText(String.format("%.1f\u00ba", new Object[]{Float.valueOf(value)}));
         invalidate();
     }
 
-    public void setAspectLock(boolean z) {
-        this.aspectRatioButton.setColorFilter(z ? new PorterDuffColorFilter(-11420173, Mode.MULTIPLY) : false);
+    public void setAspectLock(boolean enabled) {
+        this.aspectRatioButton.setColorFilter(enabled ? new PorterDuffColorFilter(-11420173, Mode.MULTIPLY) : null);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        int actionMasked = motionEvent.getActionMasked();
-        motionEvent = motionEvent.getX();
-        if (actionMasked == 0) {
-            this.prevX = motionEvent;
+    public boolean onTouchEvent(MotionEvent ev) {
+        int action = ev.getActionMasked();
+        float x = ev.getX();
+        if (action == 0) {
+            this.prevX = x;
             if (this.rotationListener != null) {
                 this.rotationListener.onStart();
             }
-        } else {
-            if (actionMasked != 1) {
-                if (actionMasked != 3) {
-                    if (actionMasked == 2) {
-                        float max = Math.max(-45.0f, Math.min(45.0f, this.rotation + ((float) ((((double) ((this.prevX - motionEvent) / AndroidUtilities.density)) / 3.141592653589793d) / 1.649999976158142d))));
-                        if (((double) Math.abs(max - this.rotation)) > 0.001d) {
-                            if (((double) Math.abs(max)) < 0.05d) {
-                                max = 0.0f;
-                            }
-                            setRotation(max, false);
-                            if (this.rotationListener != null) {
-                                this.rotationListener.onChange(this.rotation);
-                            }
-                            this.prevX = motionEvent;
-                        }
-                    }
-                }
-            }
+        } else if (action == 1 || action == 3) {
             if (this.rotationListener != null) {
                 this.rotationListener.onEnd(this.rotation);
+            }
+        } else if (action == 2) {
+            float newAngle = Math.max(-45.0f, Math.min(45.0f, this.rotation + ((float) ((((double) ((this.prevX - x) / AndroidUtilities.density)) / 3.141592653589793d) / 1.649999976158142d))));
+            if (((double) Math.abs(newAngle - this.rotation)) > 0.001d) {
+                if (((double) Math.abs(newAngle)) < 0.05d) {
+                    newAngle = 0.0f;
+                }
+                setRotation(newAngle, false);
+                if (this.rotationListener != null) {
+                    this.rotationListener.onChange(this.rotation);
+                }
+                this.prevX = x;
             }
         }
         return true;
@@ -166,93 +161,48 @@ public class CropRotationWheel extends FrameLayout {
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
-        float f = (-this.rotation) * 2.0f;
-        float f2 = f % 5.0f;
-        int floor = (int) Math.floor((double) (f / 5.0f));
+        float angle = (-this.rotation) * 2.0f;
+        float delta = angle % 5.0f;
+        int segments = (int) Math.floor((double) (angle / 5.0f));
         for (int i = 0; i < 16; i++) {
-            Paint paint;
-            boolean z;
-            int i2;
-            Paint paint2 = r8.whitePaint;
-            if (i >= floor) {
-                if (i == 0 && f2 < 0.0f) {
-                }
-                paint = paint2;
-                if (i != floor) {
-                    if (i == 0 || floor != -1) {
-                        z = false;
-                        drawLine(canvas, i, f2, width, height, z, paint);
-                        if (i == 0) {
-                            i2 = -i;
-                            drawLine(canvas, i2, f2, width, height, i2 != floor + 1, i2 <= floor ? r8.bluePaint : r8.whitePaint);
-                        }
-                    }
-                }
-                z = true;
-                drawLine(canvas, i, f2, width, height, z, paint);
-                if (i == 0) {
-                    i2 = -i;
-                    if (i2 <= floor) {
-                    }
-                    if (i2 != floor + 1) {
-                    }
-                    drawLine(canvas, i2, f2, width, height, i2 != floor + 1, i2 <= floor ? r8.bluePaint : r8.whitePaint);
-                }
+            Paint paint = this.whitePaint;
+            int a = i;
+            if (a < segments || (a == 0 && delta < 0.0f)) {
+                paint = this.bluePaint;
             }
-            paint2 = r8.bluePaint;
-            paint = paint2;
-            if (i != floor) {
-                if (i == 0) {
+            boolean z = a == segments || (a == 0 && segments == -1);
+            drawLine(canvas, a, delta, width, height, z, paint);
+            if (i != 0) {
+                a = -i;
+                paint = a > segments ? this.bluePaint : this.whitePaint;
+                if (a == segments + 1) {
+                    z = true;
+                } else {
+                    z = false;
                 }
-                z = false;
-                drawLine(canvas, i, f2, width, height, z, paint);
-                if (i == 0) {
-                    i2 = -i;
-                    if (i2 <= floor) {
-                    }
-                    if (i2 != floor + 1) {
-                    }
-                    drawLine(canvas, i2, f2, width, height, i2 != floor + 1, i2 <= floor ? r8.bluePaint : r8.whitePaint);
-                }
-            }
-            z = true;
-            drawLine(canvas, i, f2, width, height, z, paint);
-            if (i == 0) {
-                i2 = -i;
-                if (i2 <= floor) {
-                }
-                if (i2 != floor + 1) {
-                }
-                drawLine(canvas, i2, f2, width, height, i2 != floor + 1, i2 <= floor ? r8.bluePaint : r8.whitePaint);
+                drawLine(canvas, a, delta, width, height, z, paint);
             }
         }
-        r8.bluePaint.setAlpha(255);
-        r8.tempRect.left = (float) ((width - AndroidUtilities.dp(2.5f)) / 2);
-        r8.tempRect.top = (float) ((height - AndroidUtilities.dp(22.0f)) / 2);
-        r8.tempRect.right = (float) ((width + AndroidUtilities.dp(2.5f)) / 2);
-        r8.tempRect.bottom = (float) ((height + AndroidUtilities.dp(22.0f)) / 2);
-        canvas.drawRoundRect(r8.tempRect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), r8.bluePaint);
+        this.bluePaint.setAlpha(255);
+        this.tempRect.left = (float) ((width - AndroidUtilities.dp(2.5f)) / 2);
+        this.tempRect.top = (float) ((height - AndroidUtilities.dp(22.0f)) / 2);
+        this.tempRect.right = (float) ((AndroidUtilities.dp(2.5f) + width) / 2);
+        this.tempRect.bottom = (float) ((AndroidUtilities.dp(22.0f) + height) / 2);
+        canvas.drawRoundRect(this.tempRect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.bluePaint);
     }
 
-    protected void drawLine(Canvas canvas, int i, float f, int i2, int i3, boolean z, Paint paint) {
-        int dp = (int) ((((float) i2) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
-        i = (int) (((double) dp) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + f)))));
-        i2 = (i2 / 2) + i;
-        i = ((float) Math.abs(i)) / ((float) dp);
-        i = Math.min(255, Math.max(0, (int) ((1.0f - (i * i)) * NUM)));
-        if (z) {
+    protected void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
+        int radius = (int) ((((float) width) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
+        int val = (int) (((double) radius) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta)))));
+        int x = (width / 2) + val;
+        float f = ((float) Math.abs(val)) / ((float) radius);
+        int alpha = Math.min(255, Math.max(0, (int) ((1.0f - (f * f)) * 255.0f)));
+        if (center) {
             paint = this.bluePaint;
         }
-        Paint paint2 = paint;
-        paint2.setAlpha(i);
-        i = z ? 4 : 2;
-        if (z) {
-            z = true;
-        } else {
-            z = true;
-        }
-        z = AndroidUtilities.dp(z);
-        i /= 2;
-        canvas.drawRect((float) (i2 - i), (float) ((i3 - z) / 2), (float) (i2 + i), (float) ((i3 + z) / 2), paint2);
+        paint.setAlpha(alpha);
+        int w = center ? 4 : 2;
+        int h = center ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(12.0f);
+        canvas.drawRect((float) (x - (w / 2)), (float) ((height - h) / 2), (float) ((w / 2) + x), (float) ((height + h) / 2), paint);
     }
 }

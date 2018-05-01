@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.text.TextUtils;
 import android.util.Base64;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -9,30 +10,33 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC.TL_message;
+import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
+import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_peerChat;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_updateReadChannelInbox;
 import org.telegram.tgnet.TLRPC.TL_updateReadHistoryInbox;
 import org.telegram.tgnet.TLRPC.TL_updateServiceNotification;
 import org.telegram.tgnet.TLRPC.TL_updates;
+import org.telegram.tgnet.TLRPC.Update;
 
 public class GcmPushListenerService extends FirebaseMessagingService {
     public static final int NOTIFICATION_ID = 1;
 
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        String from = remoteMessage.getFrom();
-        final Map data = remoteMessage.getData();
-        final long sentTime = remoteMessage.getSentTime();
-        if (BuildVars.LOGS_ENABLED != null) {
-            remoteMessage = new StringBuilder();
-            remoteMessage.append("GCM received data: ");
-            remoteMessage.append(data);
-            remoteMessage.append(" from: ");
-            remoteMessage.append(from);
-            FileLog.m0d(remoteMessage.toString());
+    public void onMessageReceived(RemoteMessage message) {
+        String from = message.getFrom();
+        final Map data = message.getData();
+        final long time = message.getSentTime();
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m0d("GCM received data: " + data + " from: " + from);
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
 
@@ -41,1990 +45,1197 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                 C01821() {
                 }
 
-                /* JADX WARNING: inconsistent code. */
-                /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
-                    String string;
-                    Throwable th;
-                    Throwable th2;
-                    int i;
-                    StringBuilder stringBuilder;
-                    int i2;
-                    int i3;
+                    String loc_key = null;
+                    int currentAccount;
+                    Throwable e;
                     try {
-                        Object obj = data.get(TtmlNode.TAG_P);
-                        if (obj instanceof String) {
-                            Object computeSHA1;
-                            byte[] decode = Base64.decode((String) obj, 8);
-                            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(decode.length);
-                            nativeByteBuffer.writeBytes(decode);
+                        Object value = data.get(TtmlNode.TAG_P);
+                        if (value instanceof String) {
+                            byte[] bytes = Base64.decode((String) value, 8);
+                            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(bytes.length);
+                            nativeByteBuffer.writeBytes(bytes);
                             nativeByteBuffer.position(0);
                             if (SharedConfig.pushAuthKeyId == null) {
                                 SharedConfig.pushAuthKeyId = new byte[8];
-                                computeSHA1 = Utilities.computeSHA1(SharedConfig.pushAuthKey);
-                                System.arraycopy(computeSHA1, computeSHA1.length - 8, SharedConfig.pushAuthKeyId, 0, 8);
+                                Object authKeyHash = Utilities.computeSHA1(SharedConfig.pushAuthKey);
+                                System.arraycopy(authKeyHash, authKeyHash.length - 8, SharedConfig.pushAuthKeyId, 0, 8);
                             }
-                            byte[] bArr = new byte[8];
-                            nativeByteBuffer.readBytes(bArr, true);
-                            if (Arrays.equals(SharedConfig.pushAuthKeyId, bArr)) {
-                                bArr = new byte[16];
-                                nativeByteBuffer.readBytes(bArr, true);
-                                MessageKeyData generateMessageKeyData = MessageKeyData.generateMessageKeyData(SharedConfig.pushAuthKey, bArr, true, 2);
-                                Utilities.aesIgeEncryption(nativeByteBuffer.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, false, false, 24, decode.length - 24);
-                                if (Utilities.arraysEquals(bArr, 0, Utilities.computeSHA256(SharedConfig.pushAuthKey, 96, 32, nativeByteBuffer.buffer, 24, nativeByteBuffer.buffer.limit()), 8)) {
-                                    int clientUserId;
-                                    int i4;
-                                    decode = new byte[nativeByteBuffer.readInt32(true)];
-                                    nativeByteBuffer.readBytes(decode, true);
-                                    JSONObject jSONObject = new JSONObject(new String(decode, C0542C.UTF8_NAME));
-                                    JSONObject jSONObject2 = jSONObject.getJSONObject("custom");
-                                    computeSHA1 = jSONObject.has("user_id") ? jSONObject.get("user_id") : null;
-                                    if (computeSHA1 == null) {
-                                        clientUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-                                    } else if (computeSHA1 instanceof Integer) {
-                                        clientUserId = ((Integer) computeSHA1).intValue();
-                                    } else if (computeSHA1 instanceof String) {
-                                        clientUserId = Utilities.parseInt((String) computeSHA1).intValue();
+                            byte[] inAuthKeyId = new byte[8];
+                            nativeByteBuffer.readBytes(inAuthKeyId, true);
+                            if (Arrays.equals(SharedConfig.pushAuthKeyId, inAuthKeyId)) {
+                                byte[] messageKey = new byte[16];
+                                nativeByteBuffer.readBytes(messageKey, true);
+                                MessageKeyData messageKeyData = MessageKeyData.generateMessageKeyData(SharedConfig.pushAuthKey, messageKey, true, 2);
+                                Utilities.aesIgeEncryption(nativeByteBuffer.buffer, messageKeyData.aesKey, messageKeyData.aesIv, false, false, 24, bytes.length - 24);
+                                if (Utilities.arraysEquals(messageKey, 0, Utilities.computeSHA256(SharedConfig.pushAuthKey, 96, 32, nativeByteBuffer.buffer, 24, nativeByteBuffer.buffer.limit()), 8)) {
+                                    Object obj;
+                                    int accountUserId;
+                                    int a;
+                                    byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
+                                    nativeByteBuffer.readBytes(strBytes, true);
+                                    JSONObject json = new JSONObject(new String(strBytes, C0542C.UTF8_NAME));
+                                    JSONObject custom = json.getJSONObject("custom");
+                                    if (json.has("user_id")) {
+                                        obj = json.get("user_id");
                                     } else {
-                                        clientUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                                        obj = null;
                                     }
-                                    i3 = UserConfig.selectedAccount;
-                                    for (i4 = 0; i4 < 3; i4++) {
-                                        if (UserConfig.getInstance(i4).getClientUserId() == clientUserId) {
-                                            i3 = i4;
+                                    if (obj == null) {
+                                        accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                                    } else if (obj instanceof Integer) {
+                                        accountUserId = ((Integer) obj).intValue();
+                                    } else if (obj instanceof String) {
+                                        accountUserId = Utilities.parseInt((String) obj).intValue();
+                                    } else {
+                                        accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                                    }
+                                    int account = UserConfig.selectedAccount;
+                                    for (a = 0; a < 3; a++) {
+                                        if (UserConfig.getInstance(a).getClientUserId() == accountUserId) {
+                                            account = a;
                                             break;
                                         }
                                     }
+                                    currentAccount = account;
+                                    int accountFinal = account;
                                     try {
-                                        if (UserConfig.getInstance(i3).isClientActivated()) {
-                                            if (jSONObject.has("loc_key")) {
-                                                try {
-                                                    string = jSONObject.getString("loc_key");
-                                                } catch (Throwable th22) {
-                                                    th = th22;
-                                                    i = -1;
-                                                    string = null;
-                                                    if (i3 != i) {
-                                                        GcmPushListenerService.this.onDecryptError();
-                                                    } else {
-                                                        ConnectionsManager.onInternalPushReceived(i3);
-                                                        ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                    }
-                                                    if (BuildVars.LOGS_ENABLED) {
-                                                        stringBuilder = new StringBuilder();
-                                                        stringBuilder.append("error in loc_key = ");
-                                                        stringBuilder.append(string);
-                                                        FileLog.m1e(stringBuilder.toString());
-                                                    }
-                                                    FileLog.m3e(th);
+                                    } catch (Throwable th) {
+                                        e = th;
+                                    }
+                                    if (UserConfig.getInstance(currentAccount).isClientActivated()) {
+                                        if (json.has("loc_key")) {
+                                            loc_key = json.getString("loc_key");
+                                        } else {
+                                            loc_key = TtmlNode.ANONYMOUS_REGION_ID;
+                                        }
+                                        Object obj2 = data.get("google.sent_time");
+                                        Object obj3 = -1;
+                                        switch (loc_key.hashCode()) {
+                                            case -920689527:
+                                                if (loc_key.equals("DC_UPDATE")) {
+                                                    obj3 = null;
+                                                    break;
                                                 }
-                                            }
-                                            string = TtmlNode.ANONYMOUS_REGION_ID;
-                                            try {
-                                                boolean z;
-                                                String[] split;
-                                                TL_updateServiceNotification tL_updateServiceNotification;
-                                                final TL_updates tL_updates;
-                                                long j;
-                                                int i5;
-                                                int i6;
-                                                Integer num;
-                                                int i7;
-                                                boolean z2;
-                                                JSONArray jSONArray;
-                                                String[] strArr;
-                                                int i8;
-                                                int i9;
-                                                String str;
-                                                String str2;
-                                                String str3;
-                                                boolean z3;
-                                                Object obj2;
-                                                StringBuilder stringBuilder2;
-                                                Object obj3;
-                                                ArrayList arrayList;
-                                                StringBuilder stringBuilder3;
-                                                TL_updateReadChannelInbox tL_updateReadChannelInbox;
-                                                TL_updateReadHistoryInbox tL_updateReadHistoryInbox;
-                                                data.get("google.sent_time");
-                                                i4 = string.hashCode();
-                                                if (i4 != -920689527) {
-                                                    if (i4 == 633004703) {
-                                                        if (string.equals("MESSAGE_ANNOUNCEMENT")) {
-                                                            z = true;
-                                                            switch (z) {
-                                                                case false:
-                                                                    i = jSONObject2.getInt("dc");
-                                                                    split = jSONObject2.getString("addr").split(":");
-                                                                    if (split.length != 2) {
-                                                                        ConnectionsManager.getInstance(i3).applyDatacenterAddress(i, split[0], Integer.parseInt(split[1]));
-                                                                        ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                        return;
+                                                break;
+                                            case 633004703:
+                                                if (loc_key.equals("MESSAGE_ANNOUNCEMENT")) {
+                                                    obj3 = 1;
+                                                    break;
+                                                }
+                                                break;
+                                        }
+                                        switch (obj3) {
+                                            case null:
+                                                int dc = custom.getInt("dc");
+                                                String[] parts = custom.getString("addr").split(":");
+                                                if (parts.length == 2) {
+                                                    ConnectionsManager.getInstance(currentAccount).applyDatacenterAddress(dc, parts[0], Integer.parseInt(parts[1]));
+                                                    ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
+                                                    return;
+                                                }
+                                                return;
+                                            case 1:
+                                                TL_updateServiceNotification update = new TL_updateServiceNotification();
+                                                update.popup = false;
+                                                update.flags = 2;
+                                                update.inbox_date = (int) (time / 1000);
+                                                update.message = json.getString("message");
+                                                update.type = "announcement";
+                                                update.media = new TL_messageMediaEmpty();
+                                                TL_updates updates = new TL_updates();
+                                                updates.updates.add(update);
+                                                final int i = accountFinal;
+                                                final TL_updates tL_updates = updates;
+                                                Utilities.stageQueue.postRunnable(new Runnable() {
+                                                    public void run() {
+                                                        MessagesController.getInstance(i).processUpdates(tL_updates, false);
+                                                    }
+                                                });
+                                                ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
+                                                return;
+                                            default:
+                                                int channel_id;
+                                                int user_id;
+                                                int chat_id;
+                                                long dialog_id = 0;
+                                                if (custom.has("channel_id")) {
+                                                    channel_id = custom.getInt("channel_id");
+                                                    dialog_id = (long) (-channel_id);
+                                                } else {
+                                                    channel_id = 0;
+                                                }
+                                                if (custom.has("from_id")) {
+                                                    user_id = custom.getInt("from_id");
+                                                    dialog_id = (long) user_id;
+                                                } else {
+                                                    user_id = 0;
+                                                }
+                                                if (custom.has("chat_id")) {
+                                                    chat_id = custom.getInt("chat_id");
+                                                    dialog_id = (long) (-chat_id);
+                                                } else {
+                                                    chat_id = 0;
+                                                }
+                                                if (dialog_id != 0) {
+                                                    int badge;
+                                                    if (json.has("badge")) {
+                                                        badge = json.getInt("badge");
+                                                    } else {
+                                                        badge = 0;
+                                                    }
+                                                    if (badge != 0) {
+                                                        int msg_id = custom.getInt("msg_id");
+                                                        Integer currentReadValue = (Integer) MessagesController.getInstance(currentAccount).dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
+                                                        if (currentReadValue == null) {
+                                                            currentReadValue = Integer.valueOf(MessagesStorage.getInstance(currentAccount).getDialogReadMax(false, dialog_id));
+                                                            MessagesController.getInstance(accountFinal).dialogs_read_inbox_max.put(Long.valueOf(dialog_id), currentReadValue);
+                                                        }
+                                                        if (msg_id > currentReadValue.intValue()) {
+                                                            int chat_from_id;
+                                                            String[] args;
+                                                            if (custom.has("chat_from_id")) {
+                                                                chat_from_id = custom.getInt("chat_from_id");
+                                                            } else {
+                                                                chat_from_id = 0;
+                                                            }
+                                                            boolean mention = custom.has("mention") && custom.getInt("mention") != 0;
+                                                            if (json.has("loc_args")) {
+                                                                JSONArray loc_args = json.getJSONArray("loc_args");
+                                                                args = new String[loc_args.length()];
+                                                                for (a = 0; a < args.length; a++) {
+                                                                    args[a] = loc_args.getString(a);
+                                                                }
+                                                            } else {
+                                                                args = null;
+                                                            }
+                                                            String messageText = null;
+                                                            String message = null;
+                                                            String name = args[0];
+                                                            String userName = null;
+                                                            boolean localMessage = false;
+                                                            boolean supergroup = false;
+                                                            boolean pinned = false;
+                                                            boolean channel = false;
+                                                            if (loc_key.startsWith("CHAT_")) {
+                                                                supergroup = channel_id != 0;
+                                                                userName = name;
+                                                                name = args[1];
+                                                            } else if (loc_key.startsWith("PINNED_")) {
+                                                                supergroup = chat_from_id != 0;
+                                                                pinned = true;
+                                                            } else if (loc_key.startsWith("CHANNEL_")) {
+                                                                channel = true;
+                                                            }
+                                                            if (BuildVars.LOGS_ENABLED) {
+                                                                FileLog.m0d("GCM received message notification " + loc_key + " for dialogId = " + dialog_id + " mid = " + msg_id);
+                                                            }
+                                                            obj3 = -1;
+                                                            switch (loc_key.hashCode()) {
+                                                                case -2091498420:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_CONTACT")) {
+                                                                        obj3 = 28;
+                                                                        break;
                                                                     }
-                                                                    return;
-                                                                case true:
-                                                                    tL_updateServiceNotification = new TL_updateServiceNotification();
-                                                                    tL_updateServiceNotification.popup = false;
-                                                                    tL_updateServiceNotification.flags = 2;
-                                                                    tL_updateServiceNotification.inbox_date = (int) (sentTime / 1000);
-                                                                    tL_updateServiceNotification.message = jSONObject.getString("message");
-                                                                    tL_updateServiceNotification.type = "announcement";
-                                                                    tL_updateServiceNotification.media = new TL_messageMediaEmpty();
-                                                                    tL_updates = new TL_updates();
-                                                                    tL_updates.updates.add(tL_updateServiceNotification);
-                                                                    Utilities.stageQueue.postRunnable(new Runnable() {
-                                                                        public void run() {
-                                                                            MessagesController.getInstance(i3).processUpdates(tL_updates, false);
-                                                                        }
-                                                                    });
-                                                                    ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                    return;
-                                                                default:
-                                                                    j = 0;
-                                                                    if (jSONObject2.has("channel_id")) {
-                                                                        i4 = jSONObject2.getInt("channel_id");
-                                                                        j = (long) (-i4);
-                                                                    } else {
-                                                                        i4 = 0;
+                                                                    break;
+                                                                case -2053872415:
+                                                                    if (loc_key.equals("CHAT_CREATED")) {
+                                                                        obj3 = 50;
+                                                                        break;
                                                                     }
-                                                                    if (jSONObject2.has("from_id")) {
-                                                                        i5 = jSONObject2.getInt("from_id");
-                                                                        j = (long) i5;
-                                                                    } else {
-                                                                        i5 = 0;
+                                                                    break;
+                                                                case -2039746363:
+                                                                    if (loc_key.equals("MESSAGE_STICKER")) {
+                                                                        obj3 = 9;
+                                                                        break;
                                                                     }
-                                                                    if (jSONObject2.has("chat_id")) {
-                                                                        i6 = jSONObject2.getInt("chat_id");
-                                                                        j = (long) (-i6);
-                                                                    } else {
-                                                                        i6 = 0;
+                                                                    break;
+                                                                case -1979538588:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_DOC")) {
+                                                                        obj3 = 25;
+                                                                        break;
                                                                     }
-                                                                    if (j == 0) {
-                                                                        if ((jSONObject.has("badge") ? jSONObject.getInt("badge") : 0) != 0) {
-                                                                            i = jSONObject2.getInt("msg_id");
-                                                                            num = (Integer) MessagesController.getInstance(i3).dialogs_read_inbox_max.get(Long.valueOf(j));
-                                                                            if (num == null) {
-                                                                                num = Integer.valueOf(MessagesStorage.getInstance(i3).getDialogReadMax(false, j));
-                                                                                MessagesController.getInstance(i3).dialogs_read_inbox_max.put(Long.valueOf(j), num);
-                                                                            }
-                                                                            if (i <= num.intValue()) {
-                                                                                i7 = jSONObject2.has("chat_from_id") ? jSONObject2.getInt("chat_from_id") : 0;
-                                                                                z2 = jSONObject2.has("mention") && jSONObject2.getInt("mention") != 0;
-                                                                                if (jSONObject.has("loc_args")) {
-                                                                                    jSONArray = jSONObject.getJSONArray("loc_args");
-                                                                                    strArr = new String[jSONArray.length()];
-                                                                                    for (i8 = 0; i8 < strArr.length; i8++) {
-                                                                                        strArr[i8] = jSONArray.getString(i8);
-                                                                                    }
-                                                                                    i9 = 0;
-                                                                                } else {
-                                                                                    i9 = 0;
-                                                                                    strArr = null;
-                                                                                }
-                                                                                str = strArr[i9];
-                                                                                if (!string.startsWith("CHAT_")) {
-                                                                                    obj = i4 != 0 ? 1 : null;
-                                                                                    str2 = str;
-                                                                                    str3 = strArr[1];
-                                                                                    z3 = false;
-                                                                                    obj2 = obj;
-                                                                                    obj = null;
-                                                                                } else if (!string.startsWith("PINNED_")) {
-                                                                                    str3 = str;
-                                                                                    str2 = null;
-                                                                                    z3 = false;
-                                                                                    obj2 = i7 != 0 ? 1 : null;
-                                                                                    obj = 1;
-                                                                                } else if (string.startsWith("CHANNEL_")) {
-                                                                                    str3 = str;
-                                                                                    obj = null;
-                                                                                    obj2 = null;
-                                                                                    str2 = null;
-                                                                                    z3 = true;
-                                                                                } else {
-                                                                                    str3 = str;
-                                                                                    obj = null;
-                                                                                    obj2 = null;
-                                                                                    str2 = null;
-                                                                                    z3 = false;
-                                                                                }
-                                                                                if (BuildVars.LOGS_ENABLED) {
-                                                                                    try {
-                                                                                        stringBuilder2 = new StringBuilder();
-                                                                                        i2 = i3;
-                                                                                        try {
-                                                                                            stringBuilder2.append("GCM received message notification ");
-                                                                                            stringBuilder2.append(string);
-                                                                                            stringBuilder2.append(" for dialogId = ");
-                                                                                            stringBuilder2.append(j);
-                                                                                            stringBuilder2.append(" mid = ");
-                                                                                            stringBuilder2.append(i);
-                                                                                            i3 = stringBuilder2.toString();
-                                                                                            FileLog.m0d(i3);
-                                                                                        } catch (Throwable th222) {
-                                                                                            th = th222;
-                                                                                            i3 = i2;
-                                                                                            i = -1;
-                                                                                            if (i3 != i) {
-                                                                                                ConnectionsManager.onInternalPushReceived(i3);
-                                                                                                ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                                            } else {
-                                                                                                GcmPushListenerService.this.onDecryptError();
-                                                                                            }
-                                                                                            if (BuildVars.LOGS_ENABLED) {
-                                                                                                stringBuilder = new StringBuilder();
-                                                                                                stringBuilder.append("error in loc_key = ");
-                                                                                                stringBuilder.append(string);
-                                                                                                FileLog.m1e(stringBuilder.toString());
-                                                                                            }
-                                                                                            FileLog.m3e(th);
-                                                                                        }
-                                                                                    } catch (Throwable th3) {
-                                                                                        th222 = th3;
-                                                                                        i2 = i3;
-                                                                                        th = th222;
-                                                                                        i = -1;
-                                                                                        if (i3 != i) {
-                                                                                            ConnectionsManager.onInternalPushReceived(i3);
-                                                                                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                                        } else {
-                                                                                            GcmPushListenerService.this.onDecryptError();
-                                                                                        }
-                                                                                        if (BuildVars.LOGS_ENABLED) {
-                                                                                            stringBuilder = new StringBuilder();
-                                                                                            stringBuilder.append("error in loc_key = ");
-                                                                                            stringBuilder.append(string);
-                                                                                            FileLog.m1e(stringBuilder.toString());
-                                                                                        }
-                                                                                        FileLog.m3e(th);
-                                                                                    }
-                                                                                }
-                                                                                i2 = i3;
-                                                                                switch (string.hashCode()) {
-                                                                                    case -2091498420:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_CONTACT")) {
-                                                                                            obj3 = 28;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -2053872415:
-                                                                                        if (string.equals("CHAT_CREATED")) {
-                                                                                            obj3 = 50;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -2039746363:
-                                                                                        if (string.equals("MESSAGE_STICKER")) {
-                                                                                            obj3 = 9;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1979538588:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_DOC")) {
-                                                                                            obj3 = 25;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1979536003:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_GEO")) {
-                                                                                            obj3 = 29;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1979535888:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_GIF")) {
-                                                                                            obj3 = 31;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1969004705:
-                                                                                        if (string.equals("CHAT_ADD_MEMBER")) {
-                                                                                            obj3 = 53;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1946699248:
-                                                                                        if (string.equals("CHAT_JOINED")) {
-                                                                                            obj3 = 59;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1528047021:
-                                                                                        if (string.equals("CHAT_MESSAGES")) {
-                                                                                            obj3 = 62;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1493579426:
-                                                                                        if (string.equals("MESSAGE_AUDIO")) {
-                                                                                            obj3 = 10;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1480102982:
-                                                                                        if (string.equals("MESSAGE_PHOTO")) {
-                                                                                            obj3 = 2;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1478041834:
-                                                                                        if (string.equals("MESSAGE_ROUND")) {
-                                                                                            obj3 = 7;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1474543101:
-                                                                                        if (string.equals("MESSAGE_VIDEO")) {
-                                                                                            obj3 = 4;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1465695932:
-                                                                                        if (string.equals("ENCRYPTION_ACCEPT")) {
-                                                                                            obj3 = 81;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1374906292:
-                                                                                        if (string.equals("ENCRYPTED_MESSAGE")) {
-                                                                                            obj3 = 82;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1372940586:
-                                                                                        if (string.equals("CHAT_RETURNED")) {
-                                                                                            obj3 = 58;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1264245338:
-                                                                                        if (string.equals("PINNED_INVOICE")) {
-                                                                                            obj3 = 75;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1236086700:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_FWDS")) {
-                                                                                            obj3 = 33;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1236077786:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_GAME")) {
-                                                                                            obj3 = 32;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1235686303:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_TEXT")) {
-                                                                                            obj3 = 20;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1198046100:
-                                                                                        if (string.equals("MESSAGE_VIDEO_SECRET")) {
-                                                                                            obj3 = 5;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1124254527:
-                                                                                        if (string.equals("CHAT_MESSAGE_CONTACT")) {
-                                                                                            obj3 = 44;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1085137927:
-                                                                                        if (string.equals("PINNED_GAME")) {
-                                                                                            obj3 = 74;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -1084746444:
-                                                                                        if (string.equals("PINNED_TEXT")) {
-                                                                                            obj3 = 63;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -819729482:
-                                                                                        if (string.equals("PINNED_STICKER")) {
-                                                                                            obj3 = 69;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -772141857:
-                                                                                        if (string.equals("PHONE_CALL_REQUEST")) {
-                                                                                            obj3 = 84;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -638310039:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_STICKER")) {
-                                                                                            obj3 = 26;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -589196239:
-                                                                                        if (string.equals("PINNED_DOC")) {
-                                                                                            obj3 = 68;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -589193654:
-                                                                                        if (string.equals("PINNED_GEO")) {
-                                                                                            obj3 = 72;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -589193539:
-                                                                                        if (string.equals("PINNED_GIF")) {
-                                                                                            obj3 = 76;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -440169325:
-                                                                                        if (string.equals("AUTH_UNKNOWN")) {
-                                                                                            obj3 = 78;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -412748110:
-                                                                                        if (string.equals("CHAT_DELETE_YOU")) {
-                                                                                            obj3 = 56;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -228518075:
-                                                                                        if (string.equals("MESSAGE_GEOLIVE")) {
-                                                                                            obj3 = 13;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -213586509:
-                                                                                        if (string.equals("ENCRYPTION_REQUEST")) {
-                                                                                            obj3 = 80;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -115582002:
-                                                                                        if (string.equals("CHAT_MESSAGE_INVOICE")) {
-                                                                                            obj3 = 49;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -112621464:
-                                                                                        if (string.equals("CONTACT_JOINED")) {
-                                                                                            obj3 = 77;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -108522133:
-                                                                                        if (string.equals("AUTH_REGION")) {
-                                                                                            obj3 = 79;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -107572034:
-                                                                                        if (string.equals("MESSAGE_SCREENSHOT")) {
-                                                                                            obj3 = 6;
-                                                                                            break;
-                                                                                        }
-                                                                                    case -40534265:
-                                                                                        if (string.equals("CHAT_DELETE_MEMBER")) {
-                                                                                            obj3 = 55;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 65254746:
-                                                                                        if (string.equals("CHAT_ADD_YOU")) {
-                                                                                            obj3 = 54;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 141040782:
-                                                                                        if (string.equals("CHAT_LEFT")) {
-                                                                                            obj3 = 57;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 309993049:
-                                                                                        if (string.equals("CHAT_MESSAGE_DOC")) {
-                                                                                            obj3 = 41;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 309995634:
-                                                                                        if (string.equals("CHAT_MESSAGE_GEO")) {
-                                                                                            obj3 = 45;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 309995749:
-                                                                                        if (string.equals("CHAT_MESSAGE_GIF")) {
-                                                                                            obj3 = 47;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 320532812:
-                                                                                        if (string.equals("MESSAGES")) {
-                                                                                            obj3 = 19;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 328933854:
-                                                                                        if (string.equals("CHAT_MESSAGE_STICKER")) {
-                                                                                            obj3 = 42;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 331340546:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_AUDIO")) {
-                                                                                            obj3 = 27;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 344816990:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_PHOTO")) {
-                                                                                            obj3 = 22;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 346878138:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_ROUND")) {
-                                                                                            obj3 = 24;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 350376871:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_VIDEO")) {
-                                                                                            obj3 = 23;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 615714517:
-                                                                                        if (string.equals("MESSAGE_PHOTO_SECRET")) {
-                                                                                            obj3 = 3;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 715508879:
-                                                                                        if (string.equals("PINNED_AUDIO")) {
-                                                                                            obj3 = 70;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 728985323:
-                                                                                        if (string.equals("PINNED_PHOTO")) {
-                                                                                            obj3 = 65;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 731046471:
-                                                                                        if (string.equals("PINNED_ROUND")) {
-                                                                                            obj3 = 67;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 734545204:
-                                                                                        if (string.equals("PINNED_VIDEO")) {
-                                                                                            obj3 = 66;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 802032552:
-                                                                                        if (string.equals("MESSAGE_CONTACT")) {
-                                                                                            obj3 = 11;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 991498806:
-                                                                                        if (string.equals("PINNED_GEOLIVE")) {
-                                                                                            obj3 = 73;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1019917311:
-                                                                                        if (string.equals("CHAT_MESSAGE_FWDS")) {
-                                                                                            obj3 = 60;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1019926225:
-                                                                                        if (string.equals("CHAT_MESSAGE_GAME")) {
-                                                                                            obj3 = 48;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1020317708:
-                                                                                        if (string.equals("CHAT_MESSAGE_TEXT")) {
-                                                                                            obj3 = 36;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1060349560:
-                                                                                        if (string.equals("MESSAGE_FWDS")) {
-                                                                                            obj3 = 17;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1060358474:
-                                                                                        if (string.equals("MESSAGE_GAME")) {
-                                                                                            obj3 = 15;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1060749957:
-                                                                                        if (string.equals("MESSAGE_TEXT")) {
-                                                                                            obj3 = null;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1073049781:
-                                                                                        if (string.equals("PINNED_NOTEXT")) {
-                                                                                            obj3 = 64;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1078101399:
-                                                                                        if (string.equals("CHAT_TITLE_EDITED")) {
-                                                                                            obj3 = 51;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1110103437:
-                                                                                        if (string.equals("CHAT_MESSAGE_NOTEXT")) {
-                                                                                            obj3 = 37;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1160762272:
-                                                                                        if (string.equals("CHAT_MESSAGE_PHOTOS")) {
-                                                                                            obj3 = 61;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1172918249:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_GEOLIVE")) {
-                                                                                            obj3 = 30;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1281128640:
-                                                                                        if (string.equals("MESSAGE_DOC")) {
-                                                                                            obj3 = 8;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1281131225:
-                                                                                        if (string.equals("MESSAGE_GEO")) {
-                                                                                            obj3 = 12;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1281131340:
-                                                                                        if (string.equals("MESSAGE_GIF")) {
-                                                                                            obj3 = 14;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1310789062:
-                                                                                        if (string.equals("MESSAGE_NOTEXT")) {
-                                                                                            obj3 = 1;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1361447897:
-                                                                                        if (string.equals("MESSAGE_PHOTOS")) {
-                                                                                            obj3 = 18;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1498266155:
-                                                                                        if (string.equals("PHONE_CALL_MISSED")) {
-                                                                                            obj3 = 85;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1547988151:
-                                                                                        if (string.equals("CHAT_MESSAGE_AUDIO")) {
-                                                                                            obj3 = 43;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1561464595:
-                                                                                        if (string.equals("CHAT_MESSAGE_PHOTO")) {
-                                                                                            obj3 = 38;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1563525743:
-                                                                                        if (string.equals("CHAT_MESSAGE_ROUND")) {
-                                                                                            obj3 = 40;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1567024476:
-                                                                                        if (string.equals("CHAT_MESSAGE_VIDEO")) {
-                                                                                            obj3 = 39;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1810705077:
-                                                                                        if (string.equals("MESSAGE_INVOICE")) {
-                                                                                            obj3 = 16;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1815177512:
-                                                                                        if (string.equals("CHANNEL_MESSAGES")) {
-                                                                                            obj3 = 35;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 1963241394:
-                                                                                        if (string.equals("LOCKED_MESSAGE")) {
-                                                                                            obj3 = 83;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 2014789757:
-                                                                                        if (string.equals("CHAT_PHOTO_EDITED")) {
-                                                                                            obj3 = 52;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 2022049433:
-                                                                                        if (string.equals("PINNED_CONTACT")) {
-                                                                                            obj3 = 71;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 2048733346:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_NOTEXT")) {
-                                                                                            obj3 = 21;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 2099392181:
-                                                                                        if (string.equals("CHANNEL_MESSAGE_PHOTOS")) {
-                                                                                            obj3 = 34;
-                                                                                            break;
-                                                                                        }
-                                                                                    case 2140162142:
-                                                                                        if (string.equals("CHAT_MESSAGE_GEOLIVE")) {
-                                                                                            obj3 = 46;
-                                                                                            break;
-                                                                                        }
-                                                                                        obj3 = -1;
-                                                                                        break;
-                                                                                    default:
-                                                                                }
-                                                                            } else {
-                                                                                return;
-                                                                            }
-                                                                        }
-                                                                        i = jSONObject2.getInt("max_id");
-                                                                        arrayList = new ArrayList();
-                                                                        if (BuildVars.LOGS_ENABLED) {
-                                                                            stringBuilder3 = new StringBuilder();
-                                                                            stringBuilder3.append("GCM received read notification max_id = ");
-                                                                            stringBuilder3.append(i);
-                                                                            stringBuilder3.append(" for dialogId = ");
-                                                                            stringBuilder3.append(j);
-                                                                            FileLog.m0d(stringBuilder3.toString());
-                                                                        }
-                                                                        if (i4 != 0) {
-                                                                            tL_updateReadChannelInbox = new TL_updateReadChannelInbox();
-                                                                            tL_updateReadChannelInbox.channel_id = i4;
-                                                                            tL_updateReadChannelInbox.max_id = i;
-                                                                            arrayList.add(tL_updateReadChannelInbox);
-                                                                        } else {
-                                                                            tL_updateReadHistoryInbox = new TL_updateReadHistoryInbox();
-                                                                            if (i5 != 0) {
-                                                                                tL_updateReadHistoryInbox.peer = new TL_peerUser();
-                                                                                tL_updateReadHistoryInbox.peer.user_id = i5;
-                                                                            } else {
-                                                                                tL_updateReadHistoryInbox.peer = new TL_peerChat();
-                                                                                tL_updateReadHistoryInbox.peer.chat_id = i6;
-                                                                            }
-                                                                            tL_updateReadHistoryInbox.max_id = i;
-                                                                            arrayList.add(tL_updateReadHistoryInbox);
-                                                                        }
-                                                                        MessagesController.getInstance(i3).processUpdateArray(arrayList, null, null, false);
-                                                                        ConnectionsManager.onInternalPushReceived(i3);
-                                                                        ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                    } else {
-                                                                        return;
+                                                                    break;
+                                                                case -1979536003:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_GEO")) {
+                                                                        obj3 = 29;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1979535888:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_GIF")) {
+                                                                        obj3 = 31;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1969004705:
+                                                                    if (loc_key.equals("CHAT_ADD_MEMBER")) {
+                                                                        obj3 = 53;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1946699248:
+                                                                    if (loc_key.equals("CHAT_JOINED")) {
+                                                                        obj3 = 59;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1528047021:
+                                                                    if (loc_key.equals("CHAT_MESSAGES")) {
+                                                                        obj3 = 62;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1493579426:
+                                                                    if (loc_key.equals("MESSAGE_AUDIO")) {
+                                                                        obj3 = 10;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1480102982:
+                                                                    if (loc_key.equals("MESSAGE_PHOTO")) {
+                                                                        obj3 = 2;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1478041834:
+                                                                    if (loc_key.equals("MESSAGE_ROUND")) {
+                                                                        obj3 = 7;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1474543101:
+                                                                    if (loc_key.equals("MESSAGE_VIDEO")) {
+                                                                        obj3 = 4;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1465695932:
+                                                                    if (loc_key.equals("ENCRYPTION_ACCEPT")) {
+                                                                        obj3 = 81;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1374906292:
+                                                                    if (loc_key.equals("ENCRYPTED_MESSAGE")) {
+                                                                        obj3 = 82;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1372940586:
+                                                                    if (loc_key.equals("CHAT_RETURNED")) {
+                                                                        obj3 = 58;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1264245338:
+                                                                    if (loc_key.equals("PINNED_INVOICE")) {
+                                                                        obj3 = 75;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1236086700:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_FWDS")) {
+                                                                        obj3 = 33;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1236077786:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_GAME")) {
+                                                                        obj3 = 32;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1235686303:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_TEXT")) {
+                                                                        obj3 = 20;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1198046100:
+                                                                    if (loc_key.equals("MESSAGE_VIDEO_SECRET")) {
+                                                                        obj3 = 5;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1124254527:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_CONTACT")) {
+                                                                        obj3 = 44;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1085137927:
+                                                                    if (loc_key.equals("PINNED_GAME")) {
+                                                                        obj3 = 74;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -1084746444:
+                                                                    if (loc_key.equals("PINNED_TEXT")) {
+                                                                        obj3 = 63;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -819729482:
+                                                                    if (loc_key.equals("PINNED_STICKER")) {
+                                                                        obj3 = 69;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -772141857:
+                                                                    if (loc_key.equals("PHONE_CALL_REQUEST")) {
+                                                                        obj3 = 84;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -638310039:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_STICKER")) {
+                                                                        obj3 = 26;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -589196239:
+                                                                    if (loc_key.equals("PINNED_DOC")) {
+                                                                        obj3 = 68;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -589193654:
+                                                                    if (loc_key.equals("PINNED_GEO")) {
+                                                                        obj3 = 72;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -589193539:
+                                                                    if (loc_key.equals("PINNED_GIF")) {
+                                                                        obj3 = 76;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -440169325:
+                                                                    if (loc_key.equals("AUTH_UNKNOWN")) {
+                                                                        obj3 = 78;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -412748110:
+                                                                    if (loc_key.equals("CHAT_DELETE_YOU")) {
+                                                                        obj3 = 56;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -228518075:
+                                                                    if (loc_key.equals("MESSAGE_GEOLIVE")) {
+                                                                        obj3 = 13;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -213586509:
+                                                                    if (loc_key.equals("ENCRYPTION_REQUEST")) {
+                                                                        obj3 = 80;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -115582002:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_INVOICE")) {
+                                                                        obj3 = 49;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -112621464:
+                                                                    if (loc_key.equals("CONTACT_JOINED")) {
+                                                                        obj3 = 77;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -108522133:
+                                                                    if (loc_key.equals("AUTH_REGION")) {
+                                                                        obj3 = 79;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -107572034:
+                                                                    if (loc_key.equals("MESSAGE_SCREENSHOT")) {
+                                                                        obj3 = 6;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case -40534265:
+                                                                    if (loc_key.equals("CHAT_DELETE_MEMBER")) {
+                                                                        obj3 = 55;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 65254746:
+                                                                    if (loc_key.equals("CHAT_ADD_YOU")) {
+                                                                        obj3 = 54;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 141040782:
+                                                                    if (loc_key.equals("CHAT_LEFT")) {
+                                                                        obj3 = 57;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 309993049:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_DOC")) {
+                                                                        obj3 = 41;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 309995634:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_GEO")) {
+                                                                        obj3 = 45;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 309995749:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_GIF")) {
+                                                                        obj3 = 47;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 320532812:
+                                                                    if (loc_key.equals("MESSAGES")) {
+                                                                        obj3 = 19;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 328933854:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_STICKER")) {
+                                                                        obj3 = 42;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 331340546:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_AUDIO")) {
+                                                                        obj3 = 27;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 344816990:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_PHOTO")) {
+                                                                        obj3 = 22;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 346878138:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_ROUND")) {
+                                                                        obj3 = 24;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 350376871:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_VIDEO")) {
+                                                                        obj3 = 23;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 615714517:
+                                                                    if (loc_key.equals("MESSAGE_PHOTO_SECRET")) {
+                                                                        obj3 = 3;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 715508879:
+                                                                    if (loc_key.equals("PINNED_AUDIO")) {
+                                                                        obj3 = 70;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 728985323:
+                                                                    if (loc_key.equals("PINNED_PHOTO")) {
+                                                                        obj3 = 65;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 731046471:
+                                                                    if (loc_key.equals("PINNED_ROUND")) {
+                                                                        obj3 = 67;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 734545204:
+                                                                    if (loc_key.equals("PINNED_VIDEO")) {
+                                                                        obj3 = 66;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 802032552:
+                                                                    if (loc_key.equals("MESSAGE_CONTACT")) {
+                                                                        obj3 = 11;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 991498806:
+                                                                    if (loc_key.equals("PINNED_GEOLIVE")) {
+                                                                        obj3 = 73;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1019917311:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_FWDS")) {
+                                                                        obj3 = 60;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1019926225:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_GAME")) {
+                                                                        obj3 = 48;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1020317708:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_TEXT")) {
+                                                                        obj3 = 36;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1060349560:
+                                                                    if (loc_key.equals("MESSAGE_FWDS")) {
+                                                                        obj3 = 17;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1060358474:
+                                                                    if (loc_key.equals("MESSAGE_GAME")) {
+                                                                        obj3 = 15;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1060749957:
+                                                                    if (loc_key.equals("MESSAGE_TEXT")) {
+                                                                        obj3 = null;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1073049781:
+                                                                    if (loc_key.equals("PINNED_NOTEXT")) {
+                                                                        obj3 = 64;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1078101399:
+                                                                    if (loc_key.equals("CHAT_TITLE_EDITED")) {
+                                                                        obj3 = 51;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1110103437:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_NOTEXT")) {
+                                                                        obj3 = 37;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1160762272:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_PHOTOS")) {
+                                                                        obj3 = 61;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1172918249:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_GEOLIVE")) {
+                                                                        obj3 = 30;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1281128640:
+                                                                    if (loc_key.equals("MESSAGE_DOC")) {
+                                                                        obj3 = 8;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1281131225:
+                                                                    if (loc_key.equals("MESSAGE_GEO")) {
+                                                                        obj3 = 12;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1281131340:
+                                                                    if (loc_key.equals("MESSAGE_GIF")) {
+                                                                        obj3 = 14;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1310789062:
+                                                                    if (loc_key.equals("MESSAGE_NOTEXT")) {
+                                                                        obj3 = 1;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1361447897:
+                                                                    if (loc_key.equals("MESSAGE_PHOTOS")) {
+                                                                        obj3 = 18;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1498266155:
+                                                                    if (loc_key.equals("PHONE_CALL_MISSED")) {
+                                                                        obj3 = 85;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1547988151:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_AUDIO")) {
+                                                                        obj3 = 43;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1561464595:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_PHOTO")) {
+                                                                        obj3 = 38;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1563525743:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_ROUND")) {
+                                                                        obj3 = 40;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1567024476:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_VIDEO")) {
+                                                                        obj3 = 39;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1810705077:
+                                                                    if (loc_key.equals("MESSAGE_INVOICE")) {
+                                                                        obj3 = 16;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1815177512:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGES")) {
+                                                                        obj3 = 35;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 1963241394:
+                                                                    if (loc_key.equals("LOCKED_MESSAGE")) {
+                                                                        obj3 = 83;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 2014789757:
+                                                                    if (loc_key.equals("CHAT_PHOTO_EDITED")) {
+                                                                        obj3 = 52;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 2022049433:
+                                                                    if (loc_key.equals("PINNED_CONTACT")) {
+                                                                        obj3 = 71;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 2048733346:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_NOTEXT")) {
+                                                                        obj3 = 21;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 2099392181:
+                                                                    if (loc_key.equals("CHANNEL_MESSAGE_PHOTOS")) {
+                                                                        obj3 = 34;
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                                case 2140162142:
+                                                                    if (loc_key.equals("CHAT_MESSAGE_GEOLIVE")) {
+                                                                        obj3 = 46;
+                                                                        break;
                                                                     }
                                                                     break;
                                                             }
-                                                        }
-                                                    }
-                                                } else if (string.equals("DC_UPDATE")) {
-                                                    z = false;
-                                                    switch (z) {
-                                                        case false:
-                                                            i = jSONObject2.getInt("dc");
-                                                            split = jSONObject2.getString("addr").split(":");
-                                                            if (split.length != 2) {
-                                                                ConnectionsManager.getInstance(i3).applyDatacenterAddress(i, split[0], Integer.parseInt(split[1]));
-                                                                ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                return;
-                                                            }
-                                                            return;
-                                                        case true:
-                                                            tL_updateServiceNotification = new TL_updateServiceNotification();
-                                                            tL_updateServiceNotification.popup = false;
-                                                            tL_updateServiceNotification.flags = 2;
-                                                            tL_updateServiceNotification.inbox_date = (int) (sentTime / 1000);
-                                                            tL_updateServiceNotification.message = jSONObject.getString("message");
-                                                            tL_updateServiceNotification.type = "announcement";
-                                                            tL_updateServiceNotification.media = new TL_messageMediaEmpty();
-                                                            tL_updates = new TL_updates();
-                                                            tL_updates.updates.add(tL_updateServiceNotification);
-                                                            Utilities.stageQueue.postRunnable(/* anonymous class already generated */);
-                                                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                            return;
-                                                        default:
-                                                            j = 0;
-                                                            if (jSONObject2.has("channel_id")) {
-                                                                i4 = 0;
-                                                            } else {
-                                                                i4 = jSONObject2.getInt("channel_id");
-                                                                j = (long) (-i4);
-                                                            }
-                                                            if (jSONObject2.has("from_id")) {
-                                                                i5 = 0;
-                                                            } else {
-                                                                i5 = jSONObject2.getInt("from_id");
-                                                                j = (long) i5;
-                                                            }
-                                                            if (jSONObject2.has("chat_id")) {
-                                                                i6 = 0;
-                                                            } else {
-                                                                i6 = jSONObject2.getInt("chat_id");
-                                                                j = (long) (-i6);
-                                                            }
-                                                            if (j == 0) {
-                                                                if (jSONObject.has("badge")) {
-                                                                }
-                                                                if ((jSONObject.has("badge") ? jSONObject.getInt("badge") : 0) != 0) {
-                                                                    i = jSONObject2.getInt("max_id");
-                                                                    arrayList = new ArrayList();
-                                                                    if (BuildVars.LOGS_ENABLED) {
-                                                                        stringBuilder3 = new StringBuilder();
-                                                                        stringBuilder3.append("GCM received read notification max_id = ");
-                                                                        stringBuilder3.append(i);
-                                                                        stringBuilder3.append(" for dialogId = ");
-                                                                        stringBuilder3.append(j);
-                                                                        FileLog.m0d(stringBuilder3.toString());
-                                                                    }
-                                                                    if (i4 != 0) {
-                                                                        tL_updateReadHistoryInbox = new TL_updateReadHistoryInbox();
-                                                                        if (i5 != 0) {
-                                                                            tL_updateReadHistoryInbox.peer = new TL_peerChat();
-                                                                            tL_updateReadHistoryInbox.peer.chat_id = i6;
-                                                                        } else {
-                                                                            tL_updateReadHistoryInbox.peer = new TL_peerUser();
-                                                                            tL_updateReadHistoryInbox.peer.user_id = i5;
-                                                                        }
-                                                                        tL_updateReadHistoryInbox.max_id = i;
-                                                                        arrayList.add(tL_updateReadHistoryInbox);
+                                                            switch (obj3) {
+                                                                case null:
+                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0446R.string.NotificationMessageText, args[0], args[1]);
+                                                                    message = args[1];
+                                                                    break;
+                                                                case 1:
+                                                                    messageText = LocaleController.formatString("NotificationMessageNoText", C0446R.string.NotificationMessageNoText, args[0]);
+                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    break;
+                                                                case 2:
+                                                                    messageText = LocaleController.formatString("NotificationMessagePhoto", C0446R.string.NotificationMessagePhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0446R.string.AttachPhoto);
+                                                                    break;
+                                                                case 3:
+                                                                    messageText = LocaleController.formatString("NotificationMessageSDPhoto", C0446R.string.NotificationMessageSDPhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0446R.string.AttachPhoto);
+                                                                    break;
+                                                                case 4:
+                                                                    messageText = LocaleController.formatString("NotificationMessageVideo", C0446R.string.NotificationMessageVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachVideo", C0446R.string.AttachVideo);
+                                                                    break;
+                                                                case 5:
+                                                                    messageText = LocaleController.formatString("NotificationMessageSDVideo", C0446R.string.NotificationMessageSDVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachVideo", C0446R.string.AttachVideo);
+                                                                    break;
+                                                                case 6:
+                                                                    messageText = LocaleController.getString("ActionTakeScreenshoot", C0446R.string.ActionTakeScreenshoot).replace("un1", args[0]);
+                                                                    break;
+                                                                case 7:
+                                                                    messageText = LocaleController.formatString("NotificationMessageRound", C0446R.string.NotificationMessageRound, args[0]);
+                                                                    message = LocaleController.getString("AttachRound", C0446R.string.AttachRound);
+                                                                    break;
+                                                                case 8:
+                                                                    messageText = LocaleController.formatString("NotificationMessageDocument", C0446R.string.NotificationMessageDocument, args[0]);
+                                                                    message = LocaleController.getString("AttachDocument", C0446R.string.AttachDocument);
+                                                                    break;
+                                                                case 9:
+                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
+                                                                        messageText = LocaleController.formatString("NotificationMessageSticker", C0446R.string.NotificationMessageSticker, args[0]);
                                                                     } else {
-                                                                        tL_updateReadChannelInbox = new TL_updateReadChannelInbox();
-                                                                        tL_updateReadChannelInbox.channel_id = i4;
-                                                                        tL_updateReadChannelInbox.max_id = i;
-                                                                        arrayList.add(tL_updateReadChannelInbox);
+                                                                        messageText = LocaleController.formatString("NotificationMessageStickerEmoji", C0446R.string.NotificationMessageStickerEmoji, args[0], args[1]);
                                                                     }
-                                                                    MessagesController.getInstance(i3).processUpdateArray(arrayList, null, null, false);
-                                                                } else {
-                                                                    i = jSONObject2.getInt("msg_id");
-                                                                    num = (Integer) MessagesController.getInstance(i3).dialogs_read_inbox_max.get(Long.valueOf(j));
-                                                                    if (num == null) {
-                                                                        num = Integer.valueOf(MessagesStorage.getInstance(i3).getDialogReadMax(false, j));
-                                                                        MessagesController.getInstance(i3).dialogs_read_inbox_max.put(Long.valueOf(j), num);
-                                                                    }
-                                                                    if (i <= num.intValue()) {
-                                                                        if (jSONObject2.has("chat_from_id")) {
-                                                                        }
-                                                                        if (!jSONObject2.has("mention")) {
-                                                                            break;
-                                                                        }
-                                                                        if (jSONObject.has("loc_args")) {
-                                                                            i9 = 0;
-                                                                            strArr = null;
-                                                                        } else {
-                                                                            jSONArray = jSONObject.getJSONArray("loc_args");
-                                                                            strArr = new String[jSONArray.length()];
-                                                                            for (i8 = 0; i8 < strArr.length; i8++) {
-                                                                                strArr[i8] = jSONArray.getString(i8);
-                                                                            }
-                                                                            i9 = 0;
-                                                                        }
-                                                                        str = strArr[i9];
-                                                                        if (!string.startsWith("CHAT_")) {
-                                                                            if (i4 != 0) {
-                                                                            }
-                                                                            str2 = str;
-                                                                            str3 = strArr[1];
-                                                                            z3 = false;
-                                                                            obj2 = obj;
-                                                                            obj = null;
-                                                                        } else if (!string.startsWith("PINNED_")) {
-                                                                            if (i7 != 0) {
-                                                                            }
-                                                                            str3 = str;
-                                                                            str2 = null;
-                                                                            z3 = false;
-                                                                            obj2 = i7 != 0 ? 1 : null;
-                                                                            obj = 1;
-                                                                        } else if (string.startsWith("CHANNEL_")) {
-                                                                            str3 = str;
-                                                                            obj = null;
-                                                                            obj2 = null;
-                                                                            str2 = null;
-                                                                            z3 = false;
-                                                                        } else {
-                                                                            str3 = str;
-                                                                            obj = null;
-                                                                            obj2 = null;
-                                                                            str2 = null;
-                                                                            z3 = true;
-                                                                        }
-                                                                        if (BuildVars.LOGS_ENABLED) {
-                                                                            i2 = i3;
-                                                                        } else {
-                                                                            stringBuilder2 = new StringBuilder();
-                                                                            i2 = i3;
-                                                                            stringBuilder2.append("GCM received message notification ");
-                                                                            stringBuilder2.append(string);
-                                                                            stringBuilder2.append(" for dialogId = ");
-                                                                            stringBuilder2.append(j);
-                                                                            stringBuilder2.append(" mid = ");
-                                                                            stringBuilder2.append(i);
-                                                                            i3 = stringBuilder2.toString();
-                                                                            FileLog.m0d(i3);
-                                                                        }
-                                                                        switch (string.hashCode()) {
-                                                                            case -2091498420:
-                                                                                if (string.equals("CHANNEL_MESSAGE_CONTACT")) {
-                                                                                    obj3 = 28;
-                                                                                    break;
-                                                                                }
-                                                                            case -2053872415:
-                                                                                if (string.equals("CHAT_CREATED")) {
-                                                                                    obj3 = 50;
-                                                                                    break;
-                                                                                }
-                                                                            case -2039746363:
-                                                                                if (string.equals("MESSAGE_STICKER")) {
-                                                                                    obj3 = 9;
-                                                                                    break;
-                                                                                }
-                                                                            case -1979538588:
-                                                                                if (string.equals("CHANNEL_MESSAGE_DOC")) {
-                                                                                    obj3 = 25;
-                                                                                    break;
-                                                                                }
-                                                                            case -1979536003:
-                                                                                if (string.equals("CHANNEL_MESSAGE_GEO")) {
-                                                                                    obj3 = 29;
-                                                                                    break;
-                                                                                }
-                                                                            case -1979535888:
-                                                                                if (string.equals("CHANNEL_MESSAGE_GIF")) {
-                                                                                    obj3 = 31;
-                                                                                    break;
-                                                                                }
-                                                                            case -1969004705:
-                                                                                if (string.equals("CHAT_ADD_MEMBER")) {
-                                                                                    obj3 = 53;
-                                                                                    break;
-                                                                                }
-                                                                            case -1946699248:
-                                                                                if (string.equals("CHAT_JOINED")) {
-                                                                                    obj3 = 59;
-                                                                                    break;
-                                                                                }
-                                                                            case -1528047021:
-                                                                                if (string.equals("CHAT_MESSAGES")) {
-                                                                                    obj3 = 62;
-                                                                                    break;
-                                                                                }
-                                                                            case -1493579426:
-                                                                                if (string.equals("MESSAGE_AUDIO")) {
-                                                                                    obj3 = 10;
-                                                                                    break;
-                                                                                }
-                                                                            case -1480102982:
-                                                                                if (string.equals("MESSAGE_PHOTO")) {
-                                                                                    obj3 = 2;
-                                                                                    break;
-                                                                                }
-                                                                            case -1478041834:
-                                                                                if (string.equals("MESSAGE_ROUND")) {
-                                                                                    obj3 = 7;
-                                                                                    break;
-                                                                                }
-                                                                            case -1474543101:
-                                                                                if (string.equals("MESSAGE_VIDEO")) {
-                                                                                    obj3 = 4;
-                                                                                    break;
-                                                                                }
-                                                                            case -1465695932:
-                                                                                if (string.equals("ENCRYPTION_ACCEPT")) {
-                                                                                    obj3 = 81;
-                                                                                    break;
-                                                                                }
-                                                                            case -1374906292:
-                                                                                if (string.equals("ENCRYPTED_MESSAGE")) {
-                                                                                    obj3 = 82;
-                                                                                    break;
-                                                                                }
-                                                                            case -1372940586:
-                                                                                if (string.equals("CHAT_RETURNED")) {
-                                                                                    obj3 = 58;
-                                                                                    break;
-                                                                                }
-                                                                            case -1264245338:
-                                                                                if (string.equals("PINNED_INVOICE")) {
-                                                                                    obj3 = 75;
-                                                                                    break;
-                                                                                }
-                                                                            case -1236086700:
-                                                                                if (string.equals("CHANNEL_MESSAGE_FWDS")) {
-                                                                                    obj3 = 33;
-                                                                                    break;
-                                                                                }
-                                                                            case -1236077786:
-                                                                                if (string.equals("CHANNEL_MESSAGE_GAME")) {
-                                                                                    obj3 = 32;
-                                                                                    break;
-                                                                                }
-                                                                            case -1235686303:
-                                                                                if (string.equals("CHANNEL_MESSAGE_TEXT")) {
-                                                                                    obj3 = 20;
-                                                                                    break;
-                                                                                }
-                                                                            case -1198046100:
-                                                                                if (string.equals("MESSAGE_VIDEO_SECRET")) {
-                                                                                    obj3 = 5;
-                                                                                    break;
-                                                                                }
-                                                                            case -1124254527:
-                                                                                if (string.equals("CHAT_MESSAGE_CONTACT")) {
-                                                                                    obj3 = 44;
-                                                                                    break;
-                                                                                }
-                                                                            case -1085137927:
-                                                                                if (string.equals("PINNED_GAME")) {
-                                                                                    obj3 = 74;
-                                                                                    break;
-                                                                                }
-                                                                            case -1084746444:
-                                                                                if (string.equals("PINNED_TEXT")) {
-                                                                                    obj3 = 63;
-                                                                                    break;
-                                                                                }
-                                                                            case -819729482:
-                                                                                if (string.equals("PINNED_STICKER")) {
-                                                                                    obj3 = 69;
-                                                                                    break;
-                                                                                }
-                                                                            case -772141857:
-                                                                                if (string.equals("PHONE_CALL_REQUEST")) {
-                                                                                    obj3 = 84;
-                                                                                    break;
-                                                                                }
-                                                                            case -638310039:
-                                                                                if (string.equals("CHANNEL_MESSAGE_STICKER")) {
-                                                                                    obj3 = 26;
-                                                                                    break;
-                                                                                }
-                                                                            case -589196239:
-                                                                                if (string.equals("PINNED_DOC")) {
-                                                                                    obj3 = 68;
-                                                                                    break;
-                                                                                }
-                                                                            case -589193654:
-                                                                                if (string.equals("PINNED_GEO")) {
-                                                                                    obj3 = 72;
-                                                                                    break;
-                                                                                }
-                                                                            case -589193539:
-                                                                                if (string.equals("PINNED_GIF")) {
-                                                                                    obj3 = 76;
-                                                                                    break;
-                                                                                }
-                                                                            case -440169325:
-                                                                                if (string.equals("AUTH_UNKNOWN")) {
-                                                                                    obj3 = 78;
-                                                                                    break;
-                                                                                }
-                                                                            case -412748110:
-                                                                                if (string.equals("CHAT_DELETE_YOU")) {
-                                                                                    obj3 = 56;
-                                                                                    break;
-                                                                                }
-                                                                            case -228518075:
-                                                                                if (string.equals("MESSAGE_GEOLIVE")) {
-                                                                                    obj3 = 13;
-                                                                                    break;
-                                                                                }
-                                                                            case -213586509:
-                                                                                if (string.equals("ENCRYPTION_REQUEST")) {
-                                                                                    obj3 = 80;
-                                                                                    break;
-                                                                                }
-                                                                            case -115582002:
-                                                                                if (string.equals("CHAT_MESSAGE_INVOICE")) {
-                                                                                    obj3 = 49;
-                                                                                    break;
-                                                                                }
-                                                                            case -112621464:
-                                                                                if (string.equals("CONTACT_JOINED")) {
-                                                                                    obj3 = 77;
-                                                                                    break;
-                                                                                }
-                                                                            case -108522133:
-                                                                                if (string.equals("AUTH_REGION")) {
-                                                                                    obj3 = 79;
-                                                                                    break;
-                                                                                }
-                                                                            case -107572034:
-                                                                                if (string.equals("MESSAGE_SCREENSHOT")) {
-                                                                                    obj3 = 6;
-                                                                                    break;
-                                                                                }
-                                                                            case -40534265:
-                                                                                if (string.equals("CHAT_DELETE_MEMBER")) {
-                                                                                    obj3 = 55;
-                                                                                    break;
-                                                                                }
-                                                                            case 65254746:
-                                                                                if (string.equals("CHAT_ADD_YOU")) {
-                                                                                    obj3 = 54;
-                                                                                    break;
-                                                                                }
-                                                                            case 141040782:
-                                                                                if (string.equals("CHAT_LEFT")) {
-                                                                                    obj3 = 57;
-                                                                                    break;
-                                                                                }
-                                                                            case 309993049:
-                                                                                if (string.equals("CHAT_MESSAGE_DOC")) {
-                                                                                    obj3 = 41;
-                                                                                    break;
-                                                                                }
-                                                                            case 309995634:
-                                                                                if (string.equals("CHAT_MESSAGE_GEO")) {
-                                                                                    obj3 = 45;
-                                                                                    break;
-                                                                                }
-                                                                            case 309995749:
-                                                                                if (string.equals("CHAT_MESSAGE_GIF")) {
-                                                                                    obj3 = 47;
-                                                                                    break;
-                                                                                }
-                                                                            case 320532812:
-                                                                                if (string.equals("MESSAGES")) {
-                                                                                    obj3 = 19;
-                                                                                    break;
-                                                                                }
-                                                                            case 328933854:
-                                                                                if (string.equals("CHAT_MESSAGE_STICKER")) {
-                                                                                    obj3 = 42;
-                                                                                    break;
-                                                                                }
-                                                                            case 331340546:
-                                                                                if (string.equals("CHANNEL_MESSAGE_AUDIO")) {
-                                                                                    obj3 = 27;
-                                                                                    break;
-                                                                                }
-                                                                            case 344816990:
-                                                                                if (string.equals("CHANNEL_MESSAGE_PHOTO")) {
-                                                                                    obj3 = 22;
-                                                                                    break;
-                                                                                }
-                                                                            case 346878138:
-                                                                                if (string.equals("CHANNEL_MESSAGE_ROUND")) {
-                                                                                    obj3 = 24;
-                                                                                    break;
-                                                                                }
-                                                                            case 350376871:
-                                                                                if (string.equals("CHANNEL_MESSAGE_VIDEO")) {
-                                                                                    obj3 = 23;
-                                                                                    break;
-                                                                                }
-                                                                            case 615714517:
-                                                                                if (string.equals("MESSAGE_PHOTO_SECRET")) {
-                                                                                    obj3 = 3;
-                                                                                    break;
-                                                                                }
-                                                                            case 715508879:
-                                                                                if (string.equals("PINNED_AUDIO")) {
-                                                                                    obj3 = 70;
-                                                                                    break;
-                                                                                }
-                                                                            case 728985323:
-                                                                                if (string.equals("PINNED_PHOTO")) {
-                                                                                    obj3 = 65;
-                                                                                    break;
-                                                                                }
-                                                                            case 731046471:
-                                                                                if (string.equals("PINNED_ROUND")) {
-                                                                                    obj3 = 67;
-                                                                                    break;
-                                                                                }
-                                                                            case 734545204:
-                                                                                if (string.equals("PINNED_VIDEO")) {
-                                                                                    obj3 = 66;
-                                                                                    break;
-                                                                                }
-                                                                            case 802032552:
-                                                                                if (string.equals("MESSAGE_CONTACT")) {
-                                                                                    obj3 = 11;
-                                                                                    break;
-                                                                                }
-                                                                            case 991498806:
-                                                                                if (string.equals("PINNED_GEOLIVE")) {
-                                                                                    obj3 = 73;
-                                                                                    break;
-                                                                                }
-                                                                            case 1019917311:
-                                                                                if (string.equals("CHAT_MESSAGE_FWDS")) {
-                                                                                    obj3 = 60;
-                                                                                    break;
-                                                                                }
-                                                                            case 1019926225:
-                                                                                if (string.equals("CHAT_MESSAGE_GAME")) {
-                                                                                    obj3 = 48;
-                                                                                    break;
-                                                                                }
-                                                                            case 1020317708:
-                                                                                if (string.equals("CHAT_MESSAGE_TEXT")) {
-                                                                                    obj3 = 36;
-                                                                                    break;
-                                                                                }
-                                                                            case 1060349560:
-                                                                                if (string.equals("MESSAGE_FWDS")) {
-                                                                                    obj3 = 17;
-                                                                                    break;
-                                                                                }
-                                                                            case 1060358474:
-                                                                                if (string.equals("MESSAGE_GAME")) {
-                                                                                    obj3 = 15;
-                                                                                    break;
-                                                                                }
-                                                                            case 1060749957:
-                                                                                if (string.equals("MESSAGE_TEXT")) {
-                                                                                    obj3 = null;
-                                                                                    break;
-                                                                                }
-                                                                            case 1073049781:
-                                                                                if (string.equals("PINNED_NOTEXT")) {
-                                                                                    obj3 = 64;
-                                                                                    break;
-                                                                                }
-                                                                            case 1078101399:
-                                                                                if (string.equals("CHAT_TITLE_EDITED")) {
-                                                                                    obj3 = 51;
-                                                                                    break;
-                                                                                }
-                                                                            case 1110103437:
-                                                                                if (string.equals("CHAT_MESSAGE_NOTEXT")) {
-                                                                                    obj3 = 37;
-                                                                                    break;
-                                                                                }
-                                                                            case 1160762272:
-                                                                                if (string.equals("CHAT_MESSAGE_PHOTOS")) {
-                                                                                    obj3 = 61;
-                                                                                    break;
-                                                                                }
-                                                                            case 1172918249:
-                                                                                if (string.equals("CHANNEL_MESSAGE_GEOLIVE")) {
-                                                                                    obj3 = 30;
-                                                                                    break;
-                                                                                }
-                                                                            case 1281128640:
-                                                                                if (string.equals("MESSAGE_DOC")) {
-                                                                                    obj3 = 8;
-                                                                                    break;
-                                                                                }
-                                                                            case 1281131225:
-                                                                                if (string.equals("MESSAGE_GEO")) {
-                                                                                    obj3 = 12;
-                                                                                    break;
-                                                                                }
-                                                                            case 1281131340:
-                                                                                if (string.equals("MESSAGE_GIF")) {
-                                                                                    obj3 = 14;
-                                                                                    break;
-                                                                                }
-                                                                            case 1310789062:
-                                                                                if (string.equals("MESSAGE_NOTEXT")) {
-                                                                                    obj3 = 1;
-                                                                                    break;
-                                                                                }
-                                                                            case 1361447897:
-                                                                                if (string.equals("MESSAGE_PHOTOS")) {
-                                                                                    obj3 = 18;
-                                                                                    break;
-                                                                                }
-                                                                            case 1498266155:
-                                                                                if (string.equals("PHONE_CALL_MISSED")) {
-                                                                                    obj3 = 85;
-                                                                                    break;
-                                                                                }
-                                                                            case 1547988151:
-                                                                                if (string.equals("CHAT_MESSAGE_AUDIO")) {
-                                                                                    obj3 = 43;
-                                                                                    break;
-                                                                                }
-                                                                            case 1561464595:
-                                                                                if (string.equals("CHAT_MESSAGE_PHOTO")) {
-                                                                                    obj3 = 38;
-                                                                                    break;
-                                                                                }
-                                                                            case 1563525743:
-                                                                                if (string.equals("CHAT_MESSAGE_ROUND")) {
-                                                                                    obj3 = 40;
-                                                                                    break;
-                                                                                }
-                                                                            case 1567024476:
-                                                                                if (string.equals("CHAT_MESSAGE_VIDEO")) {
-                                                                                    obj3 = 39;
-                                                                                    break;
-                                                                                }
-                                                                            case 1810705077:
-                                                                                if (string.equals("MESSAGE_INVOICE")) {
-                                                                                    obj3 = 16;
-                                                                                    break;
-                                                                                }
-                                                                            case 1815177512:
-                                                                                if (string.equals("CHANNEL_MESSAGES")) {
-                                                                                    obj3 = 35;
-                                                                                    break;
-                                                                                }
-                                                                            case 1963241394:
-                                                                                if (string.equals("LOCKED_MESSAGE")) {
-                                                                                    obj3 = 83;
-                                                                                    break;
-                                                                                }
-                                                                            case 2014789757:
-                                                                                if (string.equals("CHAT_PHOTO_EDITED")) {
-                                                                                    obj3 = 52;
-                                                                                    break;
-                                                                                }
-                                                                            case 2022049433:
-                                                                                if (string.equals("PINNED_CONTACT")) {
-                                                                                    obj3 = 71;
-                                                                                    break;
-                                                                                }
-                                                                            case 2048733346:
-                                                                                if (string.equals("CHANNEL_MESSAGE_NOTEXT")) {
-                                                                                    obj3 = 21;
-                                                                                    break;
-                                                                                }
-                                                                            case 2099392181:
-                                                                                if (string.equals("CHANNEL_MESSAGE_PHOTOS")) {
-                                                                                    obj3 = 34;
-                                                                                    break;
-                                                                                }
-                                                                            case 2140162142:
-                                                                                if (string.equals("CHAT_MESSAGE_GEOLIVE")) {
-                                                                                    obj3 = 46;
-                                                                                    break;
-                                                                                }
-                                                                                obj3 = -1;
-                                                                                break;
-                                                                            default:
-                                                                        }
+                                                                    message = LocaleController.getString("AttachSticker", C0446R.string.AttachSticker);
+                                                                    break;
+                                                                case 10:
+                                                                    messageText = LocaleController.formatString("NotificationMessageAudio", C0446R.string.NotificationMessageAudio, args[0]);
+                                                                    message = LocaleController.getString("AttachAudio", C0446R.string.AttachAudio);
+                                                                    break;
+                                                                case 11:
+                                                                    messageText = LocaleController.formatString("NotificationMessageContact", C0446R.string.NotificationMessageContact, args[0]);
+                                                                    message = LocaleController.getString("AttachContact", C0446R.string.AttachContact);
+                                                                    break;
+                                                                case 12:
+                                                                    messageText = LocaleController.formatString("NotificationMessageMap", C0446R.string.NotificationMessageMap, args[0]);
+                                                                    message = LocaleController.getString("AttachLocation", C0446R.string.AttachLocation);
+                                                                    break;
+                                                                case 13:
+                                                                    messageText = LocaleController.formatString("NotificationMessageLiveLocation", C0446R.string.NotificationMessageLiveLocation, args[0]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0446R.string.AttachLiveLocation);
+                                                                    break;
+                                                                case 14:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGif", C0446R.string.NotificationMessageGif, args[0]);
+                                                                    message = LocaleController.getString("AttachGif", C0446R.string.AttachGif);
+                                                                    break;
+                                                                case 15:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0446R.string.NotificationMessageGame, args[0]);
+                                                                    message = LocaleController.getString("AttachGame", C0446R.string.AttachGame);
+                                                                    break;
+                                                                case 16:
+                                                                    messageText = LocaleController.formatString("NotificationMessageInvoice", C0446R.string.NotificationMessageInvoice, args[0], args[1]);
+                                                                    message = LocaleController.getString("PaymentInvoice", C0446R.string.PaymentInvoice);
+                                                                    break;
+                                                                case 17:
+                                                                    messageText = LocaleController.formatString("NotificationMessageForwardFew", C0446R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 18:
+                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0446R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 19:
+                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0446R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 20:
+                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0446R.string.NotificationMessageText, args[0], args[1]);
+                                                                    message = args[1];
+                                                                    break;
+                                                                case 21:
+                                                                    messageText = LocaleController.formatString("ChannelMessageNoText", C0446R.string.ChannelMessageNoText, args[0]);
+                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    break;
+                                                                case 22:
+                                                                    messageText = LocaleController.formatString("ChannelMessagePhoto", C0446R.string.ChannelMessagePhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0446R.string.AttachPhoto);
+                                                                    break;
+                                                                case 23:
+                                                                    messageText = LocaleController.formatString("ChannelMessageVideo", C0446R.string.ChannelMessageVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachVideo", C0446R.string.AttachVideo);
+                                                                    break;
+                                                                case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+                                                                    messageText = LocaleController.formatString("ChannelMessageRound", C0446R.string.ChannelMessageRound, args[0]);
+                                                                    message = LocaleController.getString("AttachRound", C0446R.string.AttachRound);
+                                                                    break;
+                                                                case 25:
+                                                                    messageText = LocaleController.formatString("ChannelMessageDocument", C0446R.string.ChannelMessageDocument, args[0]);
+                                                                    message = LocaleController.getString("AttachDocument", C0446R.string.AttachDocument);
+                                                                    break;
+                                                                case 26:
+                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
+                                                                        messageText = LocaleController.formatString("ChannelMessageSticker", C0446R.string.ChannelMessageSticker, args[0]);
                                                                     } else {
-                                                                        return;
+                                                                        messageText = LocaleController.formatString("ChannelMessageStickerEmoji", C0446R.string.ChannelMessageStickerEmoji, args[0], args[1]);
                                                                     }
-                                                                }
-                                                                ConnectionsManager.onInternalPushReceived(i3);
-                                                                ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                                break;
-                                                            }
-                                                            return;
-                                                    }
-                                                }
-                                                z = true;
-                                                switch (z) {
-                                                    case false:
-                                                        i = jSONObject2.getInt("dc");
-                                                        split = jSONObject2.getString("addr").split(":");
-                                                        if (split.length != 2) {
-                                                            ConnectionsManager.getInstance(i3).applyDatacenterAddress(i, split[0], Integer.parseInt(split[1]));
-                                                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                            return;
-                                                        }
-                                                        return;
-                                                    case true:
-                                                        tL_updateServiceNotification = new TL_updateServiceNotification();
-                                                        tL_updateServiceNotification.popup = false;
-                                                        tL_updateServiceNotification.flags = 2;
-                                                        tL_updateServiceNotification.inbox_date = (int) (sentTime / 1000);
-                                                        tL_updateServiceNotification.message = jSONObject.getString("message");
-                                                        tL_updateServiceNotification.type = "announcement";
-                                                        tL_updateServiceNotification.media = new TL_messageMediaEmpty();
-                                                        tL_updates = new TL_updates();
-                                                        tL_updates.updates.add(tL_updateServiceNotification);
-                                                        Utilities.stageQueue.postRunnable(/* anonymous class already generated */);
-                                                        ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                        return;
-                                                    default:
-                                                        j = 0;
-                                                        if (jSONObject2.has("channel_id")) {
-                                                            i4 = jSONObject2.getInt("channel_id");
-                                                            j = (long) (-i4);
-                                                        } else {
-                                                            i4 = 0;
-                                                        }
-                                                        if (jSONObject2.has("from_id")) {
-                                                            i5 = jSONObject2.getInt("from_id");
-                                                            j = (long) i5;
-                                                        } else {
-                                                            i5 = 0;
-                                                        }
-                                                        if (jSONObject2.has("chat_id")) {
-                                                            i6 = jSONObject2.getInt("chat_id");
-                                                            j = (long) (-i6);
-                                                        } else {
-                                                            i6 = 0;
-                                                        }
-                                                        if (j == 0) {
-                                                            if (jSONObject.has("badge")) {
-                                                            }
-                                                            if ((jSONObject.has("badge") ? jSONObject.getInt("badge") : 0) != 0) {
-                                                                i = jSONObject2.getInt("msg_id");
-                                                                num = (Integer) MessagesController.getInstance(i3).dialogs_read_inbox_max.get(Long.valueOf(j));
-                                                                if (num == null) {
-                                                                    num = Integer.valueOf(MessagesStorage.getInstance(i3).getDialogReadMax(false, j));
-                                                                    MessagesController.getInstance(i3).dialogs_read_inbox_max.put(Long.valueOf(j), num);
-                                                                }
-                                                                if (i <= num.intValue()) {
-                                                                    if (jSONObject2.has("chat_from_id")) {
+                                                                    message = LocaleController.getString("AttachSticker", C0446R.string.AttachSticker);
+                                                                    break;
+                                                                case 27:
+                                                                    messageText = LocaleController.formatString("ChannelMessageAudio", C0446R.string.ChannelMessageAudio, args[0]);
+                                                                    message = LocaleController.getString("AttachAudio", C0446R.string.AttachAudio);
+                                                                    break;
+                                                                case 28:
+                                                                    messageText = LocaleController.formatString("ChannelMessageContact", C0446R.string.ChannelMessageContact, args[0]);
+                                                                    message = LocaleController.getString("AttachContact", C0446R.string.AttachContact);
+                                                                    break;
+                                                                case 29:
+                                                                    messageText = LocaleController.formatString("ChannelMessageMap", C0446R.string.ChannelMessageMap, args[0]);
+                                                                    message = LocaleController.getString("AttachLocation", C0446R.string.AttachLocation);
+                                                                    break;
+                                                                case 30:
+                                                                    messageText = LocaleController.formatString("ChannelMessageLiveLocation", C0446R.string.ChannelMessageLiveLocation, args[0]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0446R.string.AttachLiveLocation);
+                                                                    break;
+                                                                case 31:
+                                                                    messageText = LocaleController.formatString("ChannelMessageGIF", C0446R.string.ChannelMessageGIF, args[0]);
+                                                                    message = LocaleController.getString("AttachGif", C0446R.string.AttachGif);
+                                                                    break;
+                                                                case 32:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0446R.string.NotificationMessageGame, args[0]);
+                                                                    message = LocaleController.getString("AttachGame", C0446R.string.AttachGame);
+                                                                    break;
+                                                                case 33:
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0446R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1]).intValue()).toLowerCase());
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 34:
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0446R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 35:
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0446R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupText", C0446R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
+                                                                    message = args[1];
+                                                                    break;
+                                                                case 37:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupNoText", C0446R.string.NotificationMessageGroupNoText, args[0], args[1]);
+                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    break;
+                                                                case 38:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupPhoto", C0446R.string.NotificationMessageGroupPhoto, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0446R.string.AttachPhoto);
+                                                                    break;
+                                                                case 39:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupVideo", C0446R.string.NotificationMessageGroupVideo, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachVideo", C0446R.string.AttachVideo);
+                                                                    break;
+                                                                case 40:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupRound", C0446R.string.NotificationMessageGroupRound, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachRound", C0446R.string.AttachRound);
+                                                                    break;
+                                                                case 41:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupDocument", C0446R.string.NotificationMessageGroupDocument, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachDocument", C0446R.string.AttachDocument);
+                                                                    break;
+                                                                case 42:
+                                                                    if (args.length <= 2 || TextUtils.isEmpty(args[2])) {
+                                                                        messageText = LocaleController.formatString("NotificationMessageGroupSticker", C0446R.string.NotificationMessageGroupSticker, args[0], args[1]);
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", C0446R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
                                                                     }
-                                                                    if (jSONObject2.has("mention")) {
+                                                                    message = LocaleController.getString("AttachSticker", C0446R.string.AttachSticker);
+                                                                    break;
+                                                                case 43:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupAudio", C0446R.string.NotificationMessageGroupAudio, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachAudio", C0446R.string.AttachAudio);
+                                                                    break;
+                                                                case 44:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupContact", C0446R.string.NotificationMessageGroupContact, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachContact", C0446R.string.AttachContact);
+                                                                    break;
+                                                                case 45:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupMap", C0446R.string.NotificationMessageGroupMap, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachLocation", C0446R.string.AttachLocation);
+                                                                    break;
+                                                                case 46:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", C0446R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0446R.string.AttachLiveLocation);
+                                                                    break;
+                                                                case 47:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGif", C0446R.string.NotificationMessageGroupGif, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachGif", C0446R.string.AttachGif);
+                                                                    break;
+                                                                case 48:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGame", C0446R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
+                                                                    message = LocaleController.getString("AttachGame", C0446R.string.AttachGame);
+                                                                    break;
+                                                                case 49:
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupInvoice", C0446R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
+                                                                    message = LocaleController.getString("PaymentInvoice", C0446R.string.PaymentInvoice);
+                                                                    break;
+                                                                case 50:
+                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0446R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                                                    break;
+                                                                case 51:
+                                                                    messageText = LocaleController.formatString("NotificationEditedGroupName", C0446R.string.NotificationEditedGroupName, args[0], args[1]);
+                                                                    break;
+                                                                case 52:
+                                                                    messageText = LocaleController.formatString("NotificationEditedGroupPhoto", C0446R.string.NotificationEditedGroupPhoto, args[0], args[1]);
+                                                                    break;
+                                                                case 53:
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddMember", C0446R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
+                                                                    break;
+                                                                case 54:
+                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0446R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                                                    break;
+                                                                case 55:
+                                                                    messageText = LocaleController.formatString("NotificationGroupKickMember", C0446R.string.NotificationGroupKickMember, args[0], args[1]);
+                                                                    break;
+                                                                case 56:
+                                                                    messageText = LocaleController.formatString("NotificationGroupKickYou", C0446R.string.NotificationGroupKickYou, args[0], args[1]);
+                                                                    break;
+                                                                case 57:
+                                                                    messageText = LocaleController.formatString("NotificationGroupLeftMember", C0446R.string.NotificationGroupLeftMember, args[0], args[1]);
+                                                                    break;
+                                                                case 58:
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelf", C0446R.string.NotificationGroupAddSelf, args[0], args[1]);
+                                                                    break;
+                                                                case 59:
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelfMega", C0446R.string.NotificationGroupAddSelfMega, args[0], args[1]);
+                                                                    break;
+                                                                case 60:
+                                                                    messageText = LocaleController.formatString("NotificationGroupForwardedFew", C0446R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 61:
+                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0446R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 62:
+                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0446R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
+                                                                    localMessage = true;
+                                                                    break;
+                                                                case 63:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", C0446R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedText", C0446R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
                                                                         break;
                                                                     }
-                                                                    if (jSONObject.has("loc_args")) {
-                                                                        jSONArray = jSONObject.getJSONArray("loc_args");
-                                                                        strArr = new String[jSONArray.length()];
-                                                                        for (i8 = 0; i8 < strArr.length; i8++) {
-                                                                            strArr[i8] = jSONArray.getString(i8);
-                                                                        }
-                                                                        i9 = 0;
+                                                                case 64:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", C0446R.string.NotificationActionPinnedNoTextChannel, args[0]);
+                                                                        break;
                                                                     } else {
-                                                                        i9 = 0;
-                                                                        strArr = null;
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoText", C0446R.string.NotificationActionPinnedNoText, args[0], args[1]);
+                                                                        break;
                                                                     }
-                                                                    str = strArr[i9];
-                                                                    if (!string.startsWith("CHAT_")) {
-                                                                        if (i4 != 0) {
-                                                                        }
-                                                                        str2 = str;
-                                                                        str3 = strArr[1];
-                                                                        z3 = false;
-                                                                        obj2 = obj;
-                                                                        obj = null;
-                                                                    } else if (!string.startsWith("PINNED_")) {
-                                                                        if (i7 != 0) {
-                                                                        }
-                                                                        str3 = str;
-                                                                        str2 = null;
-                                                                        z3 = false;
-                                                                        obj2 = i7 != 0 ? 1 : null;
-                                                                        obj = 1;
-                                                                    } else if (string.startsWith("CHANNEL_")) {
-                                                                        str3 = str;
-                                                                        obj = null;
-                                                                        obj2 = null;
-                                                                        str2 = null;
-                                                                        z3 = true;
+                                                                case VoIPService.CALL_MIN_LAYER /*65*/:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", C0446R.string.NotificationActionPinnedPhotoChannel, args[0]);
+                                                                        break;
                                                                     } else {
-                                                                        str3 = str;
-                                                                        obj = null;
-                                                                        obj2 = null;
-                                                                        str2 = null;
-                                                                        z3 = false;
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhoto", C0446R.string.NotificationActionPinnedPhoto, args[0], args[1]);
+                                                                        break;
                                                                     }
-                                                                    if (BuildVars.LOGS_ENABLED) {
-                                                                        stringBuilder2 = new StringBuilder();
-                                                                        i2 = i3;
-                                                                        stringBuilder2.append("GCM received message notification ");
-                                                                        stringBuilder2.append(string);
-                                                                        stringBuilder2.append(" for dialogId = ");
-                                                                        stringBuilder2.append(j);
-                                                                        stringBuilder2.append(" mid = ");
-                                                                        stringBuilder2.append(i);
-                                                                        i3 = stringBuilder2.toString();
-                                                                        FileLog.m0d(i3);
+                                                                case 66:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", C0446R.string.NotificationActionPinnedVideoChannel, args[0]);
+                                                                        break;
                                                                     } else {
-                                                                        i2 = i3;
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideo", C0446R.string.NotificationActionPinnedVideo, args[0], args[1]);
+                                                                        break;
                                                                     }
-                                                                    switch (string.hashCode()) {
-                                                                        case -2091498420:
-                                                                            if (string.equals("CHANNEL_MESSAGE_CONTACT")) {
-                                                                                obj3 = 28;
-                                                                                break;
-                                                                            }
-                                                                        case -2053872415:
-                                                                            if (string.equals("CHAT_CREATED")) {
-                                                                                obj3 = 50;
-                                                                                break;
-                                                                            }
-                                                                        case -2039746363:
-                                                                            if (string.equals("MESSAGE_STICKER")) {
-                                                                                obj3 = 9;
-                                                                                break;
-                                                                            }
-                                                                        case -1979538588:
-                                                                            if (string.equals("CHANNEL_MESSAGE_DOC")) {
-                                                                                obj3 = 25;
-                                                                                break;
-                                                                            }
-                                                                        case -1979536003:
-                                                                            if (string.equals("CHANNEL_MESSAGE_GEO")) {
-                                                                                obj3 = 29;
-                                                                                break;
-                                                                            }
-                                                                        case -1979535888:
-                                                                            if (string.equals("CHANNEL_MESSAGE_GIF")) {
-                                                                                obj3 = 31;
-                                                                                break;
-                                                                            }
-                                                                        case -1969004705:
-                                                                            if (string.equals("CHAT_ADD_MEMBER")) {
-                                                                                obj3 = 53;
-                                                                                break;
-                                                                            }
-                                                                        case -1946699248:
-                                                                            if (string.equals("CHAT_JOINED")) {
-                                                                                obj3 = 59;
-                                                                                break;
-                                                                            }
-                                                                        case -1528047021:
-                                                                            if (string.equals("CHAT_MESSAGES")) {
-                                                                                obj3 = 62;
-                                                                                break;
-                                                                            }
-                                                                        case -1493579426:
-                                                                            if (string.equals("MESSAGE_AUDIO")) {
-                                                                                obj3 = 10;
-                                                                                break;
-                                                                            }
-                                                                        case -1480102982:
-                                                                            if (string.equals("MESSAGE_PHOTO")) {
-                                                                                obj3 = 2;
-                                                                                break;
-                                                                            }
-                                                                        case -1478041834:
-                                                                            if (string.equals("MESSAGE_ROUND")) {
-                                                                                obj3 = 7;
-                                                                                break;
-                                                                            }
-                                                                        case -1474543101:
-                                                                            if (string.equals("MESSAGE_VIDEO")) {
-                                                                                obj3 = 4;
-                                                                                break;
-                                                                            }
-                                                                        case -1465695932:
-                                                                            if (string.equals("ENCRYPTION_ACCEPT")) {
-                                                                                obj3 = 81;
-                                                                                break;
-                                                                            }
-                                                                        case -1374906292:
-                                                                            if (string.equals("ENCRYPTED_MESSAGE")) {
-                                                                                obj3 = 82;
-                                                                                break;
-                                                                            }
-                                                                        case -1372940586:
-                                                                            if (string.equals("CHAT_RETURNED")) {
-                                                                                obj3 = 58;
-                                                                                break;
-                                                                            }
-                                                                        case -1264245338:
-                                                                            if (string.equals("PINNED_INVOICE")) {
-                                                                                obj3 = 75;
-                                                                                break;
-                                                                            }
-                                                                        case -1236086700:
-                                                                            if (string.equals("CHANNEL_MESSAGE_FWDS")) {
-                                                                                obj3 = 33;
-                                                                                break;
-                                                                            }
-                                                                        case -1236077786:
-                                                                            if (string.equals("CHANNEL_MESSAGE_GAME")) {
-                                                                                obj3 = 32;
-                                                                                break;
-                                                                            }
-                                                                        case -1235686303:
-                                                                            if (string.equals("CHANNEL_MESSAGE_TEXT")) {
-                                                                                obj3 = 20;
-                                                                                break;
-                                                                            }
-                                                                        case -1198046100:
-                                                                            if (string.equals("MESSAGE_VIDEO_SECRET")) {
-                                                                                obj3 = 5;
-                                                                                break;
-                                                                            }
-                                                                        case -1124254527:
-                                                                            if (string.equals("CHAT_MESSAGE_CONTACT")) {
-                                                                                obj3 = 44;
-                                                                                break;
-                                                                            }
-                                                                        case -1085137927:
-                                                                            if (string.equals("PINNED_GAME")) {
-                                                                                obj3 = 74;
-                                                                                break;
-                                                                            }
-                                                                        case -1084746444:
-                                                                            if (string.equals("PINNED_TEXT")) {
-                                                                                obj3 = 63;
-                                                                                break;
-                                                                            }
-                                                                        case -819729482:
-                                                                            if (string.equals("PINNED_STICKER")) {
-                                                                                obj3 = 69;
-                                                                                break;
-                                                                            }
-                                                                        case -772141857:
-                                                                            if (string.equals("PHONE_CALL_REQUEST")) {
-                                                                                obj3 = 84;
-                                                                                break;
-                                                                            }
-                                                                        case -638310039:
-                                                                            if (string.equals("CHANNEL_MESSAGE_STICKER")) {
-                                                                                obj3 = 26;
-                                                                                break;
-                                                                            }
-                                                                        case -589196239:
-                                                                            if (string.equals("PINNED_DOC")) {
-                                                                                obj3 = 68;
-                                                                                break;
-                                                                            }
-                                                                        case -589193654:
-                                                                            if (string.equals("PINNED_GEO")) {
-                                                                                obj3 = 72;
-                                                                                break;
-                                                                            }
-                                                                        case -589193539:
-                                                                            if (string.equals("PINNED_GIF")) {
-                                                                                obj3 = 76;
-                                                                                break;
-                                                                            }
-                                                                        case -440169325:
-                                                                            if (string.equals("AUTH_UNKNOWN")) {
-                                                                                obj3 = 78;
-                                                                                break;
-                                                                            }
-                                                                        case -412748110:
-                                                                            if (string.equals("CHAT_DELETE_YOU")) {
-                                                                                obj3 = 56;
-                                                                                break;
-                                                                            }
-                                                                        case -228518075:
-                                                                            if (string.equals("MESSAGE_GEOLIVE")) {
-                                                                                obj3 = 13;
-                                                                                break;
-                                                                            }
-                                                                        case -213586509:
-                                                                            if (string.equals("ENCRYPTION_REQUEST")) {
-                                                                                obj3 = 80;
-                                                                                break;
-                                                                            }
-                                                                        case -115582002:
-                                                                            if (string.equals("CHAT_MESSAGE_INVOICE")) {
-                                                                                obj3 = 49;
-                                                                                break;
-                                                                            }
-                                                                        case -112621464:
-                                                                            if (string.equals("CONTACT_JOINED")) {
-                                                                                obj3 = 77;
-                                                                                break;
-                                                                            }
-                                                                        case -108522133:
-                                                                            if (string.equals("AUTH_REGION")) {
-                                                                                obj3 = 79;
-                                                                                break;
-                                                                            }
-                                                                        case -107572034:
-                                                                            if (string.equals("MESSAGE_SCREENSHOT")) {
-                                                                                obj3 = 6;
-                                                                                break;
-                                                                            }
-                                                                        case -40534265:
-                                                                            if (string.equals("CHAT_DELETE_MEMBER")) {
-                                                                                obj3 = 55;
-                                                                                break;
-                                                                            }
-                                                                        case 65254746:
-                                                                            if (string.equals("CHAT_ADD_YOU")) {
-                                                                                obj3 = 54;
-                                                                                break;
-                                                                            }
-                                                                        case 141040782:
-                                                                            if (string.equals("CHAT_LEFT")) {
-                                                                                obj3 = 57;
-                                                                                break;
-                                                                            }
-                                                                        case 309993049:
-                                                                            if (string.equals("CHAT_MESSAGE_DOC")) {
-                                                                                obj3 = 41;
-                                                                                break;
-                                                                            }
-                                                                        case 309995634:
-                                                                            if (string.equals("CHAT_MESSAGE_GEO")) {
-                                                                                obj3 = 45;
-                                                                                break;
-                                                                            }
-                                                                        case 309995749:
-                                                                            if (string.equals("CHAT_MESSAGE_GIF")) {
-                                                                                obj3 = 47;
-                                                                                break;
-                                                                            }
-                                                                        case 320532812:
-                                                                            if (string.equals("MESSAGES")) {
-                                                                                obj3 = 19;
-                                                                                break;
-                                                                            }
-                                                                        case 328933854:
-                                                                            if (string.equals("CHAT_MESSAGE_STICKER")) {
-                                                                                obj3 = 42;
-                                                                                break;
-                                                                            }
-                                                                        case 331340546:
-                                                                            if (string.equals("CHANNEL_MESSAGE_AUDIO")) {
-                                                                                obj3 = 27;
-                                                                                break;
-                                                                            }
-                                                                        case 344816990:
-                                                                            if (string.equals("CHANNEL_MESSAGE_PHOTO")) {
-                                                                                obj3 = 22;
-                                                                                break;
-                                                                            }
-                                                                        case 346878138:
-                                                                            if (string.equals("CHANNEL_MESSAGE_ROUND")) {
-                                                                                obj3 = 24;
-                                                                                break;
-                                                                            }
-                                                                        case 350376871:
-                                                                            if (string.equals("CHANNEL_MESSAGE_VIDEO")) {
-                                                                                obj3 = 23;
-                                                                                break;
-                                                                            }
-                                                                        case 615714517:
-                                                                            if (string.equals("MESSAGE_PHOTO_SECRET")) {
-                                                                                obj3 = 3;
-                                                                                break;
-                                                                            }
-                                                                        case 715508879:
-                                                                            if (string.equals("PINNED_AUDIO")) {
-                                                                                obj3 = 70;
-                                                                                break;
-                                                                            }
-                                                                        case 728985323:
-                                                                            if (string.equals("PINNED_PHOTO")) {
-                                                                                obj3 = 65;
-                                                                                break;
-                                                                            }
-                                                                        case 731046471:
-                                                                            if (string.equals("PINNED_ROUND")) {
-                                                                                obj3 = 67;
-                                                                                break;
-                                                                            }
-                                                                        case 734545204:
-                                                                            if (string.equals("PINNED_VIDEO")) {
-                                                                                obj3 = 66;
-                                                                                break;
-                                                                            }
-                                                                        case 802032552:
-                                                                            if (string.equals("MESSAGE_CONTACT")) {
-                                                                                obj3 = 11;
-                                                                                break;
-                                                                            }
-                                                                        case 991498806:
-                                                                            if (string.equals("PINNED_GEOLIVE")) {
-                                                                                obj3 = 73;
-                                                                                break;
-                                                                            }
-                                                                        case 1019917311:
-                                                                            if (string.equals("CHAT_MESSAGE_FWDS")) {
-                                                                                obj3 = 60;
-                                                                                break;
-                                                                            }
-                                                                        case 1019926225:
-                                                                            if (string.equals("CHAT_MESSAGE_GAME")) {
-                                                                                obj3 = 48;
-                                                                                break;
-                                                                            }
-                                                                        case 1020317708:
-                                                                            if (string.equals("CHAT_MESSAGE_TEXT")) {
-                                                                                obj3 = 36;
-                                                                                break;
-                                                                            }
-                                                                        case 1060349560:
-                                                                            if (string.equals("MESSAGE_FWDS")) {
-                                                                                obj3 = 17;
-                                                                                break;
-                                                                            }
-                                                                        case 1060358474:
-                                                                            if (string.equals("MESSAGE_GAME")) {
-                                                                                obj3 = 15;
-                                                                                break;
-                                                                            }
-                                                                        case 1060749957:
-                                                                            if (string.equals("MESSAGE_TEXT")) {
-                                                                                obj3 = null;
-                                                                                break;
-                                                                            }
-                                                                        case 1073049781:
-                                                                            if (string.equals("PINNED_NOTEXT")) {
-                                                                                obj3 = 64;
-                                                                                break;
-                                                                            }
-                                                                        case 1078101399:
-                                                                            if (string.equals("CHAT_TITLE_EDITED")) {
-                                                                                obj3 = 51;
-                                                                                break;
-                                                                            }
-                                                                        case 1110103437:
-                                                                            if (string.equals("CHAT_MESSAGE_NOTEXT")) {
-                                                                                obj3 = 37;
-                                                                                break;
-                                                                            }
-                                                                        case 1160762272:
-                                                                            if (string.equals("CHAT_MESSAGE_PHOTOS")) {
-                                                                                obj3 = 61;
-                                                                                break;
-                                                                            }
-                                                                        case 1172918249:
-                                                                            if (string.equals("CHANNEL_MESSAGE_GEOLIVE")) {
-                                                                                obj3 = 30;
-                                                                                break;
-                                                                            }
-                                                                        case 1281128640:
-                                                                            if (string.equals("MESSAGE_DOC")) {
-                                                                                obj3 = 8;
-                                                                                break;
-                                                                            }
-                                                                        case 1281131225:
-                                                                            if (string.equals("MESSAGE_GEO")) {
-                                                                                obj3 = 12;
-                                                                                break;
-                                                                            }
-                                                                        case 1281131340:
-                                                                            if (string.equals("MESSAGE_GIF")) {
-                                                                                obj3 = 14;
-                                                                                break;
-                                                                            }
-                                                                        case 1310789062:
-                                                                            if (string.equals("MESSAGE_NOTEXT")) {
-                                                                                obj3 = 1;
-                                                                                break;
-                                                                            }
-                                                                        case 1361447897:
-                                                                            if (string.equals("MESSAGE_PHOTOS")) {
-                                                                                obj3 = 18;
-                                                                                break;
-                                                                            }
-                                                                        case 1498266155:
-                                                                            if (string.equals("PHONE_CALL_MISSED")) {
-                                                                                obj3 = 85;
-                                                                                break;
-                                                                            }
-                                                                        case 1547988151:
-                                                                            if (string.equals("CHAT_MESSAGE_AUDIO")) {
-                                                                                obj3 = 43;
-                                                                                break;
-                                                                            }
-                                                                        case 1561464595:
-                                                                            if (string.equals("CHAT_MESSAGE_PHOTO")) {
-                                                                                obj3 = 38;
-                                                                                break;
-                                                                            }
-                                                                        case 1563525743:
-                                                                            if (string.equals("CHAT_MESSAGE_ROUND")) {
-                                                                                obj3 = 40;
-                                                                                break;
-                                                                            }
-                                                                        case 1567024476:
-                                                                            if (string.equals("CHAT_MESSAGE_VIDEO")) {
-                                                                                obj3 = 39;
-                                                                                break;
-                                                                            }
-                                                                        case 1810705077:
-                                                                            if (string.equals("MESSAGE_INVOICE")) {
-                                                                                obj3 = 16;
-                                                                                break;
-                                                                            }
-                                                                        case 1815177512:
-                                                                            if (string.equals("CHANNEL_MESSAGES")) {
-                                                                                obj3 = 35;
-                                                                                break;
-                                                                            }
-                                                                        case 1963241394:
-                                                                            if (string.equals("LOCKED_MESSAGE")) {
-                                                                                obj3 = 83;
-                                                                                break;
-                                                                            }
-                                                                        case 2014789757:
-                                                                            if (string.equals("CHAT_PHOTO_EDITED")) {
-                                                                                obj3 = 52;
-                                                                                break;
-                                                                            }
-                                                                        case 2022049433:
-                                                                            if (string.equals("PINNED_CONTACT")) {
-                                                                                obj3 = 71;
-                                                                                break;
-                                                                            }
-                                                                        case 2048733346:
-                                                                            if (string.equals("CHANNEL_MESSAGE_NOTEXT")) {
-                                                                                obj3 = 21;
-                                                                                break;
-                                                                            }
-                                                                        case 2099392181:
-                                                                            if (string.equals("CHANNEL_MESSAGE_PHOTOS")) {
-                                                                                obj3 = 34;
-                                                                                break;
-                                                                            }
-                                                                        case 2140162142:
-                                                                            if (string.equals("CHAT_MESSAGE_GEOLIVE")) {
-                                                                                obj3 = 46;
-                                                                                break;
-                                                                            }
-                                                                            obj3 = -1;
+                                                                case 67:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", C0446R.string.NotificationActionPinnedRoundChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRound", C0446R.string.NotificationActionPinnedRound, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 68:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", C0446R.string.NotificationActionPinnedFileChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFile", C0446R.string.NotificationActionPinnedFile, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 69:
+                                                                    if (chat_from_id == 0) {
+                                                                        if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
+                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", C0446R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
                                                                             break;
-                                                                        default:
+                                                                        } else {
+                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", C0446R.string.NotificationActionPinnedStickerChannel, args[0]);
+                                                                            break;
+                                                                        }
+                                                                    } else if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", C0446R.string.NotificationActionPinnedStickerEmoji, args[0], args[1], args[2]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedSticker", C0446R.string.NotificationActionPinnedSticker, args[0], args[1]);
+                                                                        break;
                                                                     }
-                                                                } else {
-                                                                    return;
+                                                                    break;
+                                                                case 70:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", C0446R.string.NotificationActionPinnedVoiceChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoice", C0446R.string.NotificationActionPinnedVoice, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 71:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContactChannel", C0446R.string.NotificationActionPinnedContactChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContact", C0446R.string.NotificationActionPinnedContact, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 72:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", C0446R.string.NotificationActionPinnedGeoChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeo", C0446R.string.NotificationActionPinnedGeo, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*73*/:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", C0446R.string.NotificationActionPinnedGeoLiveChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", C0446R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case VoIPService.CALL_MAX_LAYER /*74*/:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", C0446R.string.NotificationActionPinnedGameChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGame", C0446R.string.NotificationActionPinnedGame, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 75:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoiceChannel", C0446R.string.NotificationActionPinnedInvoiceChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoice", C0446R.string.NotificationActionPinnedInvoice, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case TLRPC.LAYER /*76*/:
+                                                                    if (chat_from_id == 0) {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGifChannel", C0446R.string.NotificationActionPinnedGifChannel, args[0]);
+                                                                        break;
+                                                                    } else {
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGif", C0446R.string.NotificationActionPinnedGif, args[0], args[1]);
+                                                                        break;
+                                                                    }
+                                                                case 77:
+                                                                case 78:
+                                                                case 79:
+                                                                case 80:
+                                                                case 81:
+                                                                case 82:
+                                                                case 83:
+                                                                case 84:
+                                                                case 85:
+                                                                    break;
+                                                                default:
+                                                                    if (BuildVars.LOGS_ENABLED) {
+                                                                        FileLog.m4w("unhandled loc_key = " + loc_key);
+                                                                        break;
+                                                                    }
+                                                                    break;
+                                                            }
+                                                            if (messageText != null) {
+                                                                TL_message messageOwner = new TL_message();
+                                                                messageOwner.id = msg_id;
+                                                                if (message == null) {
+                                                                    message = messageText;
                                                                 }
-                                                            }
-                                                            i = jSONObject2.getInt("max_id");
-                                                            arrayList = new ArrayList();
-                                                            if (BuildVars.LOGS_ENABLED) {
-                                                                stringBuilder3 = new StringBuilder();
-                                                                stringBuilder3.append("GCM received read notification max_id = ");
-                                                                stringBuilder3.append(i);
-                                                                stringBuilder3.append(" for dialogId = ");
-                                                                stringBuilder3.append(j);
-                                                                FileLog.m0d(stringBuilder3.toString());
-                                                            }
-                                                            if (i4 != 0) {
-                                                                tL_updateReadChannelInbox = new TL_updateReadChannelInbox();
-                                                                tL_updateReadChannelInbox.channel_id = i4;
-                                                                tL_updateReadChannelInbox.max_id = i;
-                                                                arrayList.add(tL_updateReadChannelInbox);
-                                                            } else {
-                                                                tL_updateReadHistoryInbox = new TL_updateReadHistoryInbox();
-                                                                if (i5 != 0) {
-                                                                    tL_updateReadHistoryInbox.peer = new TL_peerUser();
-                                                                    tL_updateReadHistoryInbox.peer.user_id = i5;
-                                                                } else {
-                                                                    tL_updateReadHistoryInbox.peer = new TL_peerChat();
-                                                                    tL_updateReadHistoryInbox.peer.chat_id = i6;
+                                                                messageOwner.message = message;
+                                                                messageOwner.date = (int) (time / 1000);
+                                                                if (pinned) {
+                                                                    messageOwner.action = new TL_messageActionPinMessage();
                                                                 }
-                                                                tL_updateReadHistoryInbox.max_id = i;
-                                                                arrayList.add(tL_updateReadHistoryInbox);
+                                                                if (supergroup) {
+                                                                    messageOwner.flags |= Integer.MIN_VALUE;
+                                                                }
+                                                                if (channel_id != 0) {
+                                                                    messageOwner.to_id = new TL_peerChannel();
+                                                                    messageOwner.to_id.channel_id = channel_id;
+                                                                    messageOwner.dialog_id = (long) (-channel_id);
+                                                                } else if (chat_id != 0) {
+                                                                    messageOwner.to_id = new TL_peerChat();
+                                                                    messageOwner.to_id.chat_id = chat_id;
+                                                                    messageOwner.dialog_id = (long) (-chat_id);
+                                                                } else {
+                                                                    messageOwner.to_id = new TL_peerUser();
+                                                                    messageOwner.to_id.user_id = user_id;
+                                                                    messageOwner.dialog_id = (long) user_id;
+                                                                }
+                                                                messageOwner.from_id = chat_from_id;
+                                                                messageOwner.mentioned = mention;
+                                                                MessageObject messageObject = new MessageObject(currentAccount, messageOwner, messageText, name, userName, localMessage, channel);
+                                                                ArrayList<MessageObject> arrayList = new ArrayList();
+                                                                arrayList.add(messageObject);
+                                                                NotificationsController.getInstance(currentAccount).processNewMessages(arrayList, true, true);
                                                             }
-                                                            MessagesController.getInstance(i3).processUpdateArray(arrayList, null, null, false);
-                                                            ConnectionsManager.onInternalPushReceived(i3);
-                                                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                            break;
+                                                        } else {
+                                                            return;
                                                         }
-                                                        return;
+                                                    }
+                                                    int max_id = custom.getInt("max_id");
+                                                    ArrayList<Update> updates2 = new ArrayList();
+                                                    if (BuildVars.LOGS_ENABLED) {
+                                                        FileLog.m0d("GCM received read notification max_id = " + max_id + " for dialogId = " + dialog_id);
+                                                    }
+                                                    if (channel_id != 0) {
+                                                        TL_updateReadChannelInbox update2 = new TL_updateReadChannelInbox();
+                                                        update2.channel_id = channel_id;
+                                                        update2.max_id = max_id;
+                                                        updates2.add(update2);
+                                                    } else {
+                                                        TL_updateReadHistoryInbox update3 = new TL_updateReadHistoryInbox();
+                                                        if (user_id != 0) {
+                                                            update3.peer = new TL_peerUser();
+                                                            update3.peer.user_id = user_id;
+                                                        } else {
+                                                            update3.peer = new TL_peerChat();
+                                                            update3.peer.chat_id = chat_id;
+                                                        }
+                                                        update3.max_id = max_id;
+                                                        updates2.add(update3);
+                                                    }
+                                                    MessagesController.getInstance(accountFinal).processUpdateArray(updates2, null, null, false);
+                                                    ConnectionsManager.onInternalPushReceived(currentAccount);
+                                                    ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
+                                                    return;
                                                 }
-                                            } catch (Throwable th4) {
-                                                th222 = th4;
-                                                th = th222;
-                                                i = -1;
-                                                if (i3 != i) {
-                                                    GcmPushListenerService.this.onDecryptError();
-                                                } else {
-                                                    ConnectionsManager.onInternalPushReceived(i3);
-                                                    ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                                                }
-                                                if (BuildVars.LOGS_ENABLED) {
-                                                    stringBuilder = new StringBuilder();
-                                                    stringBuilder.append("error in loc_key = ");
-                                                    stringBuilder.append(string);
-                                                    FileLog.m1e(stringBuilder.toString());
-                                                }
-                                                FileLog.m3e(th);
-                                            }
+                                                return;
                                         }
-                                        return;
-                                    } catch (Throwable th2222) {
-                                        th = th2222;
-                                        string = null;
-                                        i = -1;
-                                        if (i3 != i) {
-                                            GcmPushListenerService.this.onDecryptError();
+                                        e = th;
+                                        if (currentAccount != -1) {
+                                            ConnectionsManager.onInternalPushReceived(currentAccount);
+                                            ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                                         } else {
-                                            ConnectionsManager.onInternalPushReceived(i3);
-                                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
+                                            GcmPushListenerService.this.onDecryptError();
                                         }
                                         if (BuildVars.LOGS_ENABLED) {
-                                            stringBuilder = new StringBuilder();
-                                            stringBuilder.append("error in loc_key = ");
-                                            stringBuilder.append(string);
-                                            FileLog.m1e(stringBuilder.toString());
+                                            FileLog.m1e("error in loc_key = " + loc_key);
                                         }
-                                        FileLog.m3e(th);
+                                        FileLog.m3e(e);
+                                        return;
                                     }
+                                    return;
                                 }
                                 GcmPushListenerService.this.onDecryptError();
+                                currentAccount = -1;
                                 return;
                             }
                             GcmPushListenerService.this.onDecryptError();
+                            currentAccount = -1;
                             return;
                         }
-                        try {
-                            GcmPushListenerService.this.onDecryptError();
-                        } catch (Throwable th22222) {
-                            th = th22222;
-                            i = -1;
-                            string = null;
-                        }
-                    } catch (Throwable th222222) {
-                        th = th222222;
-                        string = null;
-                        i = -1;
-                        i3 = -1;
-                        if (i3 != i) {
-                            ConnectionsManager.onInternalPushReceived(i3);
-                            ConnectionsManager.getInstance(i3).resumeNetworkMaybe();
-                        } else {
-                            GcmPushListenerService.this.onDecryptError();
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("error in loc_key = ");
-                            stringBuilder.append(string);
-                            FileLog.m1e(stringBuilder.toString());
-                        }
-                        FileLog.m3e(th);
+                        GcmPushListenerService.this.onDecryptError();
+                        currentAccount = -1;
+                    } catch (Throwable th2) {
+                        e = th2;
+                        currentAccount = -1;
                     }
                 }
             }
@@ -2037,10 +1248,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     }
 
     private void onDecryptError() {
-        for (int i = 0; i < 3; i++) {
-            if (UserConfig.getInstance(i).isClientActivated()) {
-                ConnectionsManager.onInternalPushReceived(i);
-                ConnectionsManager.getInstance(i).resumeNetworkMaybe();
+        for (int a = 0; a < 3; a++) {
+            if (UserConfig.getInstance(a).isClientActivated()) {
+                ConnectionsManager.onInternalPushReceived(a);
+                ConnectionsManager.getInstance(a).resumeNetworkMaybe();
             }
         }
     }

@@ -24,12 +24,9 @@ public class BrightnessControlCell extends FrameLayout {
         C19422() {
         }
 
-        public void onSeekBarDrag(float f) {
-            BrightnessControlCell.this.didChangedValue(f);
+        public void onSeekBarDrag(float progress) {
+            BrightnessControlCell.this.didChangedValue(progress);
         }
-    }
-
-    protected void didChangedValue(float f) {
     }
 
     public BrightnessControlCell(Context context) {
@@ -38,11 +35,11 @@ public class BrightnessControlCell extends FrameLayout {
         this.leftImageView.setImageResource(C0446R.drawable.brightness_low);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
         this.seekBarView = new SeekBarView(context) {
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (motionEvent.getAction() == 0) {
+            public boolean onTouchEvent(MotionEvent event) {
+                if (event.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                return super.onTouchEvent(motionEvent);
+                return super.onTouchEvent(event);
             }
         };
         this.seekBarView.setReportChanges(true);
@@ -59,11 +56,14 @@ public class BrightnessControlCell extends FrameLayout {
         this.rightImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), Mode.MULTIPLY));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    protected void didChangedValue(float value) {
     }
 
-    public void setProgress(float f) {
-        this.seekBarView.setProgress(f);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    }
+
+    public void setProgress(float value) {
+        this.seekBarView.setProgress(value);
     }
 }

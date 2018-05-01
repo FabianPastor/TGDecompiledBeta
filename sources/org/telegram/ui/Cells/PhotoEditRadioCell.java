@@ -26,8 +26,8 @@ public class PhotoEditRadioCell extends FrameLayout {
         C08841() {
         }
 
-        public void onClick(View view) {
-            RadioButton radioButton = (RadioButton) view;
+        public void onClick(View v) {
+            RadioButton radioButton = (RadioButton) v;
             if (PhotoEditRadioCell.this.currentType == 0) {
                 PhotoEditRadioCell.this.currentColor = PhotoEditRadioCell.this.tintShadowColors[((Integer) radioButton.getTag()).intValue()];
             } else {
@@ -50,10 +50,10 @@ public class PhotoEditRadioCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(80, -2.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
         this.tintButtonsContainer = new LinearLayout(context);
         this.tintButtonsContainer.setOrientation(0);
-        for (int i = 0; i < this.tintShadowColors.length; i++) {
-            View radioButton = new RadioButton(context);
+        for (int a = 0; a < this.tintShadowColors.length; a++) {
+            RadioButton radioButton = new RadioButton(context);
             radioButton.setSize(AndroidUtilities.dp(20.0f));
-            radioButton.setTag(Integer.valueOf(i));
+            radioButton.setTag(Integer.valueOf(a));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
             radioButton.setOnClickListener(new C08841());
         }
@@ -64,40 +64,33 @@ public class PhotoEditRadioCell extends FrameLayout {
         return this.currentColor;
     }
 
-    private void updateSelectedTintButton(boolean z) {
+    private void updateSelectedTintButton(boolean animated) {
         int childCount = this.tintButtonsContainer.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = this.tintButtonsContainer.getChildAt(i);
-            if (childAt instanceof RadioButton) {
-                RadioButton radioButton = (RadioButton) childAt;
-                int intValue = ((Integer) radioButton.getTag()).intValue();
-                radioButton.setChecked(this.currentColor == (this.currentType == 0 ? this.tintShadowColors[intValue] : this.tintHighlighsColors[intValue]), z);
-                int i2 = -1;
-                int i3 = intValue == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[intValue] : this.tintHighlighsColors[intValue];
-                if (intValue != 0) {
-                    i2 = this.currentType == 0 ? this.tintShadowColors[intValue] : this.tintHighlighsColors[intValue];
-                }
-                radioButton.setColor(i3, i2);
+        for (int a = 0; a < childCount; a++) {
+            View child = this.tintButtonsContainer.getChildAt(a);
+            if (child instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) child;
+                int num = ((Integer) radioButton.getTag()).intValue();
+                radioButton.setChecked(this.currentColor == (this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num]), animated);
+                int i = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
+                int i2 = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
+                radioButton.setColor(i, i2);
             }
         }
     }
 
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setOnClickListener(OnClickListener l) {
+        this.onClickListener = l;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 
-    public void setIconAndTextAndValue(String str, int i, int i2) {
-        this.currentType = i;
-        this.currentColor = i2;
-        i = this.nameTextView;
-        i2 = new StringBuilder();
-        i2.append(str.substring(0, 1).toUpperCase());
-        i2.append(str.substring(1).toLowerCase());
-        i.setText(i2.toString());
+    public void setIconAndTextAndValue(String text, int type, int value) {
+        this.currentType = type;
+        this.currentColor = value;
+        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
         updateSelectedTintButton(false);
     }
 }

@@ -13,48 +13,45 @@ public final class BinaryFrame extends Id3Frame {
         C05801() {
         }
 
-        public BinaryFrame createFromParcel(Parcel parcel) {
-            return new BinaryFrame(parcel);
+        public BinaryFrame createFromParcel(Parcel in) {
+            return new BinaryFrame(in);
         }
 
-        public BinaryFrame[] newArray(int i) {
-            return new BinaryFrame[i];
+        public BinaryFrame[] newArray(int size) {
+            return new BinaryFrame[size];
         }
     }
 
-    public BinaryFrame(String str, byte[] bArr) {
-        super(str);
-        this.data = bArr;
+    public BinaryFrame(String id, byte[] data) {
+        super(id);
+        this.data = data;
     }
 
-    BinaryFrame(Parcel parcel) {
-        super(parcel.readString());
-        this.data = parcel.createByteArray();
+    BinaryFrame(Parcel in) {
+        super(in.readString());
+        this.data = in.createByteArray();
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                BinaryFrame binaryFrame = (BinaryFrame) obj;
-                if (!this.id.equals(binaryFrame.id) || Arrays.equals(this.data, binaryFrame.data) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BinaryFrame other = (BinaryFrame) obj;
+        if (this.id.equals(other.id) && Arrays.equals(this.data, other.data)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (527 + this.id.hashCode())) + Arrays.hashCode(this.data);
+        return ((this.id.hashCode() + 527) * 31) + Arrays.hashCode(this.data);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.id);
-        parcel.writeByteArray(this.data);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeByteArray(this.data);
     }
 }

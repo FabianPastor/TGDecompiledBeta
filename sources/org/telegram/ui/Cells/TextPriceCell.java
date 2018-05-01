@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -18,10 +19,10 @@ public class TextPriceCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
 
-    protected void onDraw(Canvas canvas) {
-    }
-
     public TextPriceCell(Context context) {
+        int i;
+        int i2;
+        int i3 = 3;
         super(context);
         this.dotstring = LocaleController.isRTL ? " ." : ". ";
         setWillNotDraw(false);
@@ -31,9 +32,20 @@ public class TextPriceCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        int i = 3;
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        TextView textView = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -41,39 +53,45 @@ public class TextPriceCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-        context = this.valueTextView;
-        if (!LocaleController.isRTL) {
+        textView = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
             i = 5;
         }
-        addView(context, LayoutHelper.createFrame(-2, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        textView.setGravity(i | 16);
+        view = this.valueTextView;
+        if (!LocaleController.isRTL) {
+            i3 = 5;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(NUM));
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(NUM);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec((i - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(NUM), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(40.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
         this.dotLength = (int) Math.ceil((double) this.textView.getPaint().measureText(this.dotstring));
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setTextValueColor(int i) {
-        this.valueTextView.setTextColor(i);
+    public void setTextValueColor(int color) {
+        this.valueTextView.setTextColor(color);
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        if (str2 != null) {
-            this.valueTextView.setText(str2);
-            this.valueTextView.setVisibility(null);
+    public void setTextAndValue(String text, String value, boolean bold) {
+        this.textView.setText(text);
+        if (value != null) {
+            this.valueTextView.setText(value);
+            this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);
         }
-        if (z) {
+        if (bold) {
             setTag(Theme.key_windowBackgroundWhiteBlackText);
             this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -87,5 +105,8 @@ public class TextPriceCell extends FrameLayout {
             this.valueTextView.setTypeface(Typeface.DEFAULT);
         }
         requestLayout();
+    }
+
+    protected void onDraw(Canvas canvas) {
     }
 }

@@ -30,24 +30,15 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     public interface Output extends MetadataOutput {
     }
 
-    public boolean isReady() {
-        return true;
+    public MetadataRenderer(MetadataOutput output, Looper outputLooper) {
+        this(output, outputLooper, MetadataDecoderFactory.DEFAULT);
     }
 
-    public MetadataRenderer(MetadataOutput metadataOutput, Looper looper) {
-        this(metadataOutput, looper, MetadataDecoderFactory.DEFAULT);
-    }
-
-    public MetadataRenderer(MetadataOutput metadataOutput, Looper looper, MetadataDecoderFactory metadataDecoderFactory) {
+    public MetadataRenderer(MetadataOutput output, Looper outputLooper, MetadataDecoderFactory decoderFactory) {
         super(4);
-        this.output = (MetadataOutput) Assertions.checkNotNull(metadataOutput);
-        if (looper == null) {
-            metadataOutput = null;
-        } else {
-            metadataOutput = new Handler(looper, this);
-        }
-        this.outputHandler = metadataOutput;
-        this.decoderFactory = (MetadataDecoderFactory) Assertions.checkNotNull(metadataDecoderFactory);
+        this.output = (MetadataOutput) Assertions.checkNotNull(output);
+        this.outputHandler = outputLooper == null ? null : new Handler(outputLooper, this);
+        this.decoderFactory = (MetadataDecoderFactory) Assertions.checkNotNull(decoderFactory);
         this.formatHolder = new FormatHolder();
         this.buffer = new MetadataInputBuffer();
         this.pendingMetadata = new Metadata[5];
@@ -55,44 +46,45 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     }
 
     public int supportsFormat(Format format) {
-        if (!this.decoderFactory.supportsFormat(format)) {
-            return null;
+        if (this.decoderFactory.supportsFormat(format)) {
+            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
+        } else {
+            return 0;
         }
-        return BaseRenderer.supportsFormatDrm(null, format.drmInitData) != null ? 4 : 2;
     }
 
-    protected void onStreamChanged(Format[] formatArr, long j) throws ExoPlaybackException {
-        this.decoder = this.decoderFactory.createDecoder(formatArr[0]);
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
+        this.decoder = this.decoderFactory.createDecoder(formats[0]);
     }
 
-    protected void onPositionReset(long j, boolean z) {
+    protected void onPositionReset(long positionUs, boolean joining) {
         flushPendingMetadata();
-        this.inputStreamEnded = 0;
+        this.inputStreamEnded = false;
     }
 
-    public void render(long j, long j2) throws ExoPlaybackException {
-        if (this.inputStreamEnded == null && this.pendingMetadataCount < 5) {
+    public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
+        if (!this.inputStreamEnded && this.pendingMetadataCount < 5) {
             this.buffer.clear();
             if (readSource(this.formatHolder, this.buffer, false) == -4) {
-                if (this.buffer.isEndOfStream() != null) {
+                if (this.buffer.isEndOfStream()) {
                     this.inputStreamEnded = true;
-                } else if (this.buffer.isDecodeOnly() == null) {
+                } else if (!this.buffer.isDecodeOnly()) {
                     this.buffer.subsampleOffsetUs = this.formatHolder.format.subsampleOffsetUs;
                     this.buffer.flip();
                     try {
-                        j2 = (this.pendingMetadataIndex + this.pendingMetadataCount) % 5;
-                        this.pendingMetadata[j2] = this.decoder.decode(this.buffer);
-                        this.pendingMetadataTimestamps[j2] = this.buffer.timeUs;
+                        int index = (this.pendingMetadataIndex + this.pendingMetadataCount) % 5;
+                        this.pendingMetadata[index] = this.decoder.decode(this.buffer);
+                        this.pendingMetadataTimestamps[index] = this.buffer.timeUs;
                         this.pendingMetadataCount++;
-                    } catch (long j3) {
-                        throw ExoPlaybackException.createForRenderer(j3, getIndex());
+                    } catch (MetadataDecoderException e) {
+                        throw ExoPlaybackException.createForRenderer(e, getIndex());
                     }
                 }
             }
         }
-        if (this.pendingMetadataCount > null && this.pendingMetadataTimestamps[this.pendingMetadataIndex] <= j3) {
+        if (this.pendingMetadataCount > 0 && this.pendingMetadataTimestamps[this.pendingMetadataIndex] <= positionUs) {
             invokeRenderer(this.pendingMetadata[this.pendingMetadataIndex]);
-            this.pendingMetadata[this.pendingMetadataIndex] = 0;
+            this.pendingMetadata[this.pendingMetadataIndex] = null;
             this.pendingMetadataIndex = (this.pendingMetadataIndex + 1) % 5;
             this.pendingMetadataCount--;
         }
@@ -105,6 +97,10 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
 
     public boolean isEnded() {
         return this.inputStreamEnded;
+    }
+
+    public boolean isReady() {
+        return true;
     }
 
     private void invokeRenderer(Metadata metadata) {
@@ -121,12 +117,14 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
         this.pendingMetadataCount = 0;
     }
 
-    public boolean handleMessage(Message message) {
-        if (message.what != 0) {
-            throw new IllegalStateException();
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case 0:
+                invokeRendererInternal((Metadata) msg.obj);
+                return true;
+            default:
+                throw new IllegalStateException();
         }
-        invokeRendererInternal((Metadata) message.obj);
-        return true;
     }
 
     private void invokeRendererInternal(Metadata metadata) {

@@ -8,21 +8,21 @@ import org.telegram.messenger.support.customtabs.CustomTabsServiceConnection;
 public class ServiceConnection extends CustomTabsServiceConnection {
     private WeakReference<ServiceConnectionCallback> mConnectionCallback;
 
-    public ServiceConnection(ServiceConnectionCallback serviceConnectionCallback) {
-        this.mConnectionCallback = new WeakReference(serviceConnectionCallback);
+    public ServiceConnection(ServiceConnectionCallback connectionCallback) {
+        this.mConnectionCallback = new WeakReference(connectionCallback);
     }
 
-    public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-        ServiceConnectionCallback serviceConnectionCallback = (ServiceConnectionCallback) this.mConnectionCallback.get();
-        if (serviceConnectionCallback != null) {
-            serviceConnectionCallback.onServiceConnected(customTabsClient);
+    public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
+        ServiceConnectionCallback connectionCallback = (ServiceConnectionCallback) this.mConnectionCallback.get();
+        if (connectionCallback != null) {
+            connectionCallback.onServiceConnected(client);
         }
     }
 
-    public void onServiceDisconnected(ComponentName componentName) {
-        ServiceConnectionCallback serviceConnectionCallback = (ServiceConnectionCallback) this.mConnectionCallback.get();
-        if (serviceConnectionCallback != null) {
-            serviceConnectionCallback.onServiceDisconnected();
+    public void onServiceDisconnected(ComponentName name) {
+        ServiceConnectionCallback connectionCallback = (ServiceConnectionCallback) this.mConnectionCallback.get();
+        if (connectionCallback != null) {
+            connectionCallback.onServiceDisconnected();
         }
     }
 }

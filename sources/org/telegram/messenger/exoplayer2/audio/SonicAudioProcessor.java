@@ -28,87 +28,80 @@ public final class SonicAudioProcessor implements AudioProcessor {
     private Sonic sonic;
     private float speed = 1.0f;
 
-    public int getOutputEncoding() {
-        return 2;
-    }
-
-    public float setSpeed(float f) {
-        this.speed = Util.constrainValue(f, 0.1f, 8.0f);
+    public float setSpeed(float speed) {
+        this.speed = Util.constrainValue(speed, 0.1f, 8.0f);
         return this.speed;
     }
 
-    public float setPitch(float f) {
-        this.pitch = Util.constrainValue(f, 0.1f, 8.0f);
-        return f;
+    public float setPitch(float pitch) {
+        this.pitch = Util.constrainValue(pitch, 0.1f, 8.0f);
+        return pitch;
     }
 
-    public void setOutputSampleRateHz(int i) {
-        this.pendingOutputSampleRateHz = i;
+    public void setOutputSampleRateHz(int sampleRateHz) {
+        this.pendingOutputSampleRateHz = sampleRateHz;
     }
 
-    public long scaleDurationForSpeedup(long j) {
+    public long scaleDurationForSpeedup(long duration) {
         if (this.outputBytes < 1024) {
-            return (long) (((double) this.speed) * ((double) j));
+            return (long) (((double) this.speed) * ((double) duration));
         }
         if (this.outputSampleRateHz == this.sampleRateHz) {
-            j = Util.scaleLargeTimestamp(j, this.inputBytes, this.outputBytes);
-        } else {
-            j = Util.scaleLargeTimestamp(j, this.inputBytes * ((long) this.outputSampleRateHz), this.outputBytes * ((long) this.sampleRateHz));
+            return Util.scaleLargeTimestamp(duration, this.inputBytes, this.outputBytes);
         }
-        return j;
+        return Util.scaleLargeTimestamp(duration, ((long) this.outputSampleRateHz) * this.inputBytes, ((long) this.sampleRateHz) * this.outputBytes);
     }
 
-    public boolean configure(int i, int i2, int i3) throws UnhandledFormatException {
-        if (i3 != 2) {
-            throw new UnhandledFormatException(i, i2, i3);
+    public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
+        if (encoding != 2) {
+            throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
         }
-        i3 = this.pendingOutputSampleRateHz == -1 ? i : this.pendingOutputSampleRateHz;
-        if (this.sampleRateHz == i && this.channelCount == i2 && this.outputSampleRateHz == i3) {
+        int outputSampleRateHz = this.pendingOutputSampleRateHz == -1 ? sampleRateHz : this.pendingOutputSampleRateHz;
+        if (this.sampleRateHz == sampleRateHz && this.channelCount == channelCount && this.outputSampleRateHz == outputSampleRateHz) {
             return false;
         }
-        this.sampleRateHz = i;
-        this.channelCount = i2;
-        this.outputSampleRateHz = i3;
+        this.sampleRateHz = sampleRateHz;
+        this.channelCount = channelCount;
+        this.outputSampleRateHz = outputSampleRateHz;
         return true;
     }
 
     public boolean isActive() {
-        if (Math.abs(this.speed - 1.0f) < CLOSE_THRESHOLD && Math.abs(this.pitch - 1.0f) < CLOSE_THRESHOLD) {
-            if (this.outputSampleRateHz == this.sampleRateHz) {
-                return false;
-            }
-        }
-        return true;
+        return Math.abs(this.speed - 1.0f) >= CLOSE_THRESHOLD || Math.abs(this.pitch - 1.0f) >= CLOSE_THRESHOLD || this.outputSampleRateHz != this.sampleRateHz;
     }
 
     public int getOutputChannelCount() {
         return this.channelCount;
     }
 
+    public int getOutputEncoding() {
+        return 2;
+    }
+
     public int getOutputSampleRateHz() {
         return this.outputSampleRateHz;
     }
 
-    public void queueInput(ByteBuffer byteBuffer) {
-        if (byteBuffer.hasRemaining()) {
-            ShortBuffer asShortBuffer = byteBuffer.asShortBuffer();
-            int remaining = byteBuffer.remaining();
-            this.inputBytes += (long) remaining;
-            this.sonic.queueInput(asShortBuffer);
-            byteBuffer.position(byteBuffer.position() + remaining);
+    public void queueInput(ByteBuffer inputBuffer) {
+        if (inputBuffer.hasRemaining()) {
+            ShortBuffer shortBuffer = inputBuffer.asShortBuffer();
+            int inputSize = inputBuffer.remaining();
+            this.inputBytes += (long) inputSize;
+            this.sonic.queueInput(shortBuffer);
+            inputBuffer.position(inputBuffer.position() + inputSize);
         }
-        byteBuffer = (this.sonic.getSamplesAvailable() * this.channelCount) * 2;
-        if (byteBuffer > null) {
-            if (this.buffer.capacity() < byteBuffer) {
-                this.buffer = ByteBuffer.allocateDirect(byteBuffer).order(ByteOrder.nativeOrder());
+        int outputSize = (this.sonic.getSamplesAvailable() * this.channelCount) * 2;
+        if (outputSize > 0) {
+            if (this.buffer.capacity() < outputSize) {
+                this.buffer = ByteBuffer.allocateDirect(outputSize).order(ByteOrder.nativeOrder());
                 this.shortBuffer = this.buffer.asShortBuffer();
             } else {
                 this.buffer.clear();
                 this.shortBuffer.clear();
             }
             this.sonic.getOutput(this.shortBuffer);
-            this.outputBytes += (long) byteBuffer;
-            this.buffer.limit(byteBuffer);
+            this.outputBytes += (long) outputSize;
+            this.buffer.limit(outputSize);
             this.outputBuffer = this.buffer;
         }
     }
@@ -119,9 +112,9 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public ByteBuffer getOutput() {
-        ByteBuffer byteBuffer = this.outputBuffer;
+        ByteBuffer outputBuffer = this.outputBuffer;
         this.outputBuffer = EMPTY_BUFFER;
-        return byteBuffer;
+        return outputBuffer;
     }
 
     public boolean isEnded() {

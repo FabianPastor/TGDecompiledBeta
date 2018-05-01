@@ -27,76 +27,66 @@ public class OggExtractor implements Extractor {
         }
     }
 
-    public void release() {
-    }
-
-    public boolean sniff(org.telegram.messenger.exoplayer2.extractor.ExtractorInput r1) throws java.io.IOException, java.lang.InterruptedException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r0 = this;
-        r1 = r0.sniffInternal(r1);	 Catch:{ ParserException -> 0x0005 }
-        return r1;
-    L_0x0005:
-        r1 = 0;
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.extractor.ogg.OggExtractor.sniff(org.telegram.messenger.exoplayer2.extractor.ExtractorInput):boolean");
-    }
-
-    public void init(ExtractorOutput extractorOutput) {
-        this.output = extractorOutput;
-    }
-
-    public void seek(long j, long j2) {
-        if (this.streamReader != null) {
-            this.streamReader.seek(j, j2);
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        try {
+            return sniffInternal(input);
+        } catch (ParserException e) {
+            return false;
         }
     }
 
-    public int read(ExtractorInput extractorInput, PositionHolder positionHolder) throws IOException, InterruptedException {
+    public void init(ExtractorOutput output) {
+        this.output = output;
+    }
+
+    public void seek(long position, long timeUs) {
+        if (this.streamReader != null) {
+            this.streamReader.seek(position, timeUs);
+        }
+    }
+
+    public void release() {
+    }
+
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
         if (this.streamReader == null) {
-            if (sniffInternal(extractorInput)) {
-                extractorInput.resetPeekPosition();
+            if (sniffInternal(input)) {
+                input.resetPeekPosition();
             } else {
                 throw new ParserException("Failed to determine bitstream type");
             }
         }
         if (!this.streamReaderInitialized) {
-            TrackOutput track = this.output.track(0, 1);
+            TrackOutput trackOutput = this.output.track(0, 1);
             this.output.endTracks();
-            this.streamReader.init(this.output, track);
+            this.streamReader.init(this.output, trackOutput);
             this.streamReaderInitialized = true;
         }
-        return this.streamReader.read(extractorInput, positionHolder);
+        return this.streamReader.read(input, seekPosition);
     }
 
-    private boolean sniffInternal(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        OggPageHeader oggPageHeader = new OggPageHeader();
-        if (oggPageHeader.populate(extractorInput, true)) {
-            if ((oggPageHeader.type & 2) == 2) {
-                int min = Math.min(oggPageHeader.bodySize, 8);
-                ParsableByteArray parsableByteArray = new ParsableByteArray(min);
-                extractorInput.peekFully(parsableByteArray.data, 0, min);
-                if (FlacReader.verifyBitstreamType(resetPosition(parsableByteArray)) != null) {
-                    this.streamReader = new FlacReader();
-                } else if (VorbisReader.verifyBitstreamType(resetPosition(parsableByteArray)) != null) {
-                    this.streamReader = new VorbisReader();
-                } else if (OpusReader.verifyBitstreamType(resetPosition(parsableByteArray)) == null) {
-                    return false;
-                } else {
-                    this.streamReader = new OpusReader();
-                }
-                return true;
-            }
+    private boolean sniffInternal(ExtractorInput input) throws IOException, InterruptedException {
+        OggPageHeader header = new OggPageHeader();
+        if (!header.populate(input, true) || (header.type & 2) != 2) {
+            return false;
         }
-        return false;
+        int length = Math.min(header.bodySize, 8);
+        ParsableByteArray scratch = new ParsableByteArray(length);
+        input.peekFully(scratch.data, 0, length);
+        if (FlacReader.verifyBitstreamType(resetPosition(scratch))) {
+            this.streamReader = new FlacReader();
+        } else if (VorbisReader.verifyBitstreamType(resetPosition(scratch))) {
+            this.streamReader = new VorbisReader();
+        } else if (!OpusReader.verifyBitstreamType(resetPosition(scratch))) {
+            return false;
+        } else {
+            this.streamReader = new OpusReader();
+        }
+        return true;
     }
 
-    private static ParsableByteArray resetPosition(ParsableByteArray parsableByteArray) {
-        parsableByteArray.setPosition(0);
-        return parsableByteArray;
+    private static ParsableByteArray resetPosition(ParsableByteArray scratch) {
+        scratch.setPosition(0);
+        return scratch;
     }
 }

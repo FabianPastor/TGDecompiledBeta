@@ -30,8 +30,8 @@ public class PhotoEditToolCell extends FrameLayout {
             C08851() {
             }
 
-            public void onAnimationEnd(Animator animator) {
-                if (animator.equals(PhotoEditToolCell.this.valueAnimation) != null) {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(PhotoEditToolCell.this.valueAnimation)) {
                     PhotoEditToolCell.this.valueAnimation = null;
                 }
             }
@@ -83,38 +83,29 @@ public class PhotoEditToolCell extends FrameLayout {
                 C08871() {
                 }
 
-                public void onAnimationEnd(Animator animator) {
+                public void onAnimationEnd(Animator animation) {
                     AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
                 }
             }
 
-            public void onProgressChanged(int i, int i2) {
-                photoEditorSeekBarDelegate.onProgressChanged(i, i2);
-                StringBuilder stringBuilder;
-                if (i2 > 0) {
-                    i = PhotoEditToolCell.this.valueTextView;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("+");
-                    stringBuilder.append(i2);
-                    i.setText(stringBuilder.toString());
+            public void onProgressChanged(int i, int progress) {
+                photoEditorSeekBarDelegate.onProgressChanged(i, progress);
+                if (progress > 0) {
+                    PhotoEditToolCell.this.valueTextView.setText("+" + progress);
                 } else {
-                    i = PhotoEditToolCell.this.valueTextView;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder.append(i2);
-                    i.setText(stringBuilder.toString());
+                    PhotoEditToolCell.this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + progress);
                 }
-                if (PhotoEditToolCell.this.valueTextView.getTag() == 0) {
-                    if (PhotoEditToolCell.this.valueAnimation != 0) {
+                if (PhotoEditToolCell.this.valueTextView.getTag() == null) {
+                    if (PhotoEditToolCell.this.valueAnimation != null) {
                         PhotoEditToolCell.this.valueAnimation.cancel();
                     }
                     PhotoEditToolCell.this.valueTextView.setTag(Integer.valueOf(1));
                     PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
-                    i = PhotoEditToolCell.this.valueAnimation;
-                    r0 = new Animator[2];
-                    r0[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f});
-                    r0[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f});
-                    i.playTogether(r0);
+                    AnimatorSet access$100 = PhotoEditToolCell.this.valueAnimation;
+                    r1 = new Animator[2];
+                    r1[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f});
+                    r1[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f});
+                    access$100.playTogether(r1);
                     PhotoEditToolCell.this.valueAnimation.setDuration(180);
                     PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
                     PhotoEditToolCell.this.valueAnimation.addListener(new C08871());
@@ -127,43 +118,31 @@ public class PhotoEditToolCell extends FrameLayout {
         });
     }
 
-    public void setTag(Object obj) {
-        super.setTag(obj);
-        this.seekBar.setTag(obj);
+    public void setTag(Object tag) {
+        super.setTag(tag);
+        this.seekBar.setTag(tag);
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 
-    public void setIconAndTextAndValue(String str, float f, int i, int i2) {
+    public void setIconAndTextAndValue(String text, float value, int min, int max) {
         if (this.valueAnimation != null) {
             this.valueAnimation.cancel();
             this.valueAnimation = null;
         }
         AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
         this.valueTextView.setTag(null);
-        TextView textView = this.nameTextView;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(str.substring(0, 1).toUpperCase());
-        stringBuilder.append(str.substring(1).toLowerCase());
-        textView.setText(stringBuilder.toString());
-        if (f > 0.0f) {
-            textView = this.valueTextView;
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append((int) f);
-            textView.setText(stringBuilder.toString());
+        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
+        if (value > 0.0f) {
+            this.valueTextView.setText("+" + ((int) value));
         } else {
-            textView = this.valueTextView;
-            stringBuilder = new StringBuilder();
-            stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-            stringBuilder.append((int) f);
-            textView.setText(stringBuilder.toString());
+            this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + ((int) value));
         }
         this.valueTextView.setAlpha(0.0f);
         this.nameTextView.setAlpha(1.0f);
-        this.seekBar.setMinMax(i, i2);
-        this.seekBar.setProgress((int) f, false);
+        this.seekBar.setMinMax(min, max);
+        this.seekBar.setProgress((int) value, false);
     }
 }

@@ -25,19 +25,19 @@ public final class CacheDataSink implements DataSink {
     private FileOutputStream underlyingFileOutputStream;
 
     public static class CacheDataSinkException extends CacheException {
-        public CacheDataSinkException(IOException iOException) {
-            super((Throwable) iOException);
+        public CacheDataSinkException(IOException cause) {
+            super((Throwable) cause);
         }
     }
 
-    public CacheDataSink(Cache cache, long j) {
-        this(cache, j, DEFAULT_BUFFER_SIZE);
+    public CacheDataSink(Cache cache, long maxCacheFileSize) {
+        this(cache, maxCacheFileSize, DEFAULT_BUFFER_SIZE);
     }
 
-    public CacheDataSink(Cache cache, long j, int i) {
+    public CacheDataSink(Cache cache, long maxCacheFileSize, int bufferSize) {
         this.cache = (Cache) Assertions.checkNotNull(cache);
-        this.maxCacheFileSize = j;
-        this.bufferSize = i;
+        this.maxCacheFileSize = maxCacheFileSize;
+        this.bufferSize = bufferSize;
     }
 
     public void open(DataSpec dataSpec) throws CacheDataSinkException {
@@ -47,30 +47,29 @@ public final class CacheDataSink implements DataSink {
             try {
                 openNextOutputStream();
                 return;
-            } catch (DataSpec dataSpec2) {
-                throw new CacheDataSinkException(dataSpec2);
+            } catch (IOException e) {
+                throw new CacheDataSinkException(e);
             }
         }
         this.dataSpec = null;
     }
 
-    public void write(byte[] bArr, int i, int i2) throws CacheDataSinkException {
+    public void write(byte[] buffer, int offset, int length) throws CacheDataSinkException {
         if (this.dataSpec != null) {
-            int i3 = 0;
-            while (i3 < i2) {
+            int bytesWritten = 0;
+            while (bytesWritten < length) {
                 try {
                     if (this.outputStreamBytesWritten == this.maxCacheFileSize) {
                         closeCurrentOutputStream();
                         openNextOutputStream();
                     }
-                    int min = (int) Math.min((long) (i2 - i3), this.maxCacheFileSize - this.outputStreamBytesWritten);
-                    this.outputStream.write(bArr, i + i3, min);
-                    i3 += min;
-                    long j = (long) min;
-                    this.outputStreamBytesWritten += j;
-                    this.dataSpecBytesWritten += j;
-                } catch (byte[] bArr2) {
-                    throw new CacheDataSinkException(bArr2);
+                    int bytesToWrite = (int) Math.min((long) (length - bytesWritten), this.maxCacheFileSize - this.outputStreamBytesWritten);
+                    this.outputStream.write(buffer, offset + bytesWritten, bytesToWrite);
+                    bytesWritten += bytesToWrite;
+                    this.outputStreamBytesWritten += (long) bytesToWrite;
+                    this.dataSpecBytesWritten += (long) bytesToWrite;
+                } catch (IOException e) {
+                    throw new CacheDataSinkException(e);
                 }
             }
         }
@@ -87,13 +86,13 @@ public final class CacheDataSink implements DataSink {
     }
 
     private void openNextOutputStream() throws IOException {
-        long j;
+        long maxLength;
         if (this.dataSpec.length == -1) {
-            j = this.maxCacheFileSize;
+            maxLength = this.maxCacheFileSize;
         } else {
-            j = Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize);
+            maxLength = Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize);
         }
-        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, j);
+        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, maxLength);
         this.underlyingFileOutputStream = new FileOutputStream(this.file);
         if (this.bufferSize > 0) {
             if (this.bufferedOutputStream == null) {
@@ -108,22 +107,32 @@ public final class CacheDataSink implements DataSink {
         this.outputStreamBytesWritten = 0;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void closeCurrentOutputStream() throws IOException {
         if (this.outputStream != null) {
+            File fileToCommit;
             try {
                 this.outputStream.flush();
                 this.underlyingFileOutputStream.getFD().sync();
                 Util.closeQuietly(this.outputStream);
                 this.outputStream = null;
-                File file = this.file;
+                fileToCommit = this.file;
                 this.file = null;
-                this.cache.commitFile(file);
+                if (true) {
+                    this.cache.commitFile(fileToCommit);
+                }
+                fileToCommit.delete();
             } catch (Throwable th) {
                 Util.closeQuietly(this.outputStream);
                 this.outputStream = null;
-                File file2 = this.file;
+                fileToCommit = this.file;
                 this.file = null;
-                file2.delete();
+                if (false) {
+                    this.cache.commitFile(fileToCommit);
+                } else {
+                    fileToCommit.delete();
+                }
             }
         }
     }

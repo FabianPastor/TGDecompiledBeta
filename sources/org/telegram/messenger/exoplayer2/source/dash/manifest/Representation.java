@@ -21,7 +21,12 @@ public abstract class Representation {
     public static class MultiSegmentRepresentation extends Representation implements DashSegmentIndex {
         private final MultiSegmentBase segmentBase;
 
-        public String getCacheKey() {
+        public MultiSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, MultiSegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
+            super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
+            this.segmentBase = segmentBase;
+        }
+
+        public RangedUri getIndexUri() {
             return null;
         }
 
@@ -29,37 +34,32 @@ public abstract class Representation {
             return this;
         }
 
-        public RangedUri getIndexUri() {
+        public String getCacheKey() {
             return null;
         }
 
-        public MultiSegmentRepresentation(String str, long j, Format format, String str2, MultiSegmentBase multiSegmentBase, List<Descriptor> list) {
-            super(str, j, format, str2, multiSegmentBase, list);
-            this.segmentBase = multiSegmentBase;
+        public RangedUri getSegmentUrl(int segmentIndex) {
+            return this.segmentBase.getSegmentUrl(this, segmentIndex);
         }
 
-        public RangedUri getSegmentUrl(int i) {
-            return this.segmentBase.getSegmentUrl(this, i);
+        public int getSegmentNum(long timeUs, long periodDurationUs) {
+            return this.segmentBase.getSegmentNum(timeUs, periodDurationUs);
         }
 
-        public int getSegmentNum(long j, long j2) {
-            return this.segmentBase.getSegmentNum(j, j2);
+        public long getTimeUs(int segmentIndex) {
+            return this.segmentBase.getSegmentTimeUs(segmentIndex);
         }
 
-        public long getTimeUs(int i) {
-            return this.segmentBase.getSegmentTimeUs(i);
-        }
-
-        public long getDurationUs(int i, long j) {
-            return this.segmentBase.getSegmentDurationUs(i, j);
+        public long getDurationUs(int segmentIndex, long periodDurationUs) {
+            return this.segmentBase.getSegmentDurationUs(segmentIndex, periodDurationUs);
         }
 
         public int getFirstSegmentNum() {
             return this.segmentBase.getFirstSegmentNum();
         }
 
-        public int getSegmentCount(long j) {
-            return this.segmentBase.getSegmentCount(j);
+        public int getSegmentCount(long periodDurationUs) {
+            return this.segmentBase.getSegmentCount(periodDurationUs);
         }
 
         public boolean isExplicit() {
@@ -74,37 +74,21 @@ public abstract class Representation {
         private final SingleSegmentIndex segmentIndex;
         public final Uri uri;
 
-        public static SingleSegmentRepresentation newInstance(String str, long j, Format format, String str2, long j2, long j3, long j4, long j5, List<Descriptor> list, String str3, long j6) {
-            return new SingleSegmentRepresentation(str, j, format, str2, new SingleSegmentBase(new RangedUri(null, j2, (j3 - j2) + 1), 1, 0, j4, (j5 - j4) + 1), list, str3, j6);
+        public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
+            long j = 1 + (indexEnd - indexStart);
+            return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, j), inbandEventStreams, customCacheKey, contentLength);
         }
 
-        public SingleSegmentRepresentation(String str, long j, Format format, String str2, SingleSegmentBase singleSegmentBase, List<Descriptor> list, String str3, long j2) {
-            String str4;
-            String str5 = str;
-            super(str5, j, format, str2, singleSegmentBase, list);
-            this.uri = Uri.parse(str2);
-            this.indexUri = singleSegmentBase.getIndex();
-            SingleSegmentIndex singleSegmentIndex = null;
-            if (str3 != null) {
-                str4 = str3;
-            } else if (str5 != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(str5);
-                stringBuilder.append(".");
-                stringBuilder.append(format.id);
-                stringBuilder.append(".");
-                stringBuilder.append(j);
-                str4 = stringBuilder.toString();
-            } else {
-                str4 = null;
+        public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
+            super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
+            this.uri = Uri.parse(baseUrl);
+            this.indexUri = segmentBase.getIndex();
+            if (customCacheKey == null) {
+                customCacheKey = contentId != null ? contentId + "." + format.id + "." + revisionId : null;
             }
-            r9.cacheKey = str4;
-            long j3 = j2;
-            r9.contentLength = j3;
-            if (r9.indexUri == null) {
-                singleSegmentIndex = new SingleSegmentIndex(new RangedUri(null, 0, j3));
-            }
-            r9.segmentIndex = singleSegmentIndex;
+            this.cacheKey = customCacheKey;
+            this.contentLength = contentLength;
+            this.segmentIndex = this.indexUri != null ? null : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
         }
 
         public RangedUri getIndexUri() {
@@ -126,36 +110,36 @@ public abstract class Representation {
 
     public abstract RangedUri getIndexUri();
 
-    public static Representation newInstance(String str, long j, Format format, String str2, SegmentBase segmentBase) {
-        return newInstance(str, j, format, str2, segmentBase, null);
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase) {
+        return newInstance(contentId, revisionId, format, baseUrl, segmentBase, null);
     }
 
-    public static Representation newInstance(String str, long j, Format format, String str2, SegmentBase segmentBase, List<Descriptor> list) {
-        return newInstance(str, j, format, str2, segmentBase, list, null);
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
+        return newInstance(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams, null);
     }
 
-    public static Representation newInstance(String str, long j, Format format, String str2, SegmentBase segmentBase, List<Descriptor> list, String str3) {
-        SegmentBase segmentBase2 = segmentBase;
-        if (segmentBase2 instanceof SingleSegmentBase) {
-            return new SingleSegmentRepresentation(str, j, format, str2, (SingleSegmentBase) segmentBase2, list, str3, -1);
-        } else if (segmentBase2 instanceof MultiSegmentBase) {
-            return new MultiSegmentRepresentation(str, j, format, str2, (MultiSegmentBase) segmentBase2, list);
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey) {
+        if (segmentBase instanceof SingleSegmentBase) {
+            return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase, inbandEventStreams, customCacheKey, -1);
+        } else if (segmentBase instanceof MultiSegmentBase) {
+            return new MultiSegmentRepresentation(contentId, revisionId, format, baseUrl, (MultiSegmentBase) segmentBase, inbandEventStreams);
         } else {
             throw new IllegalArgumentException("segmentBase must be of type SingleSegmentBase or MultiSegmentBase");
         }
     }
 
-    private Representation(String str, long j, Format format, String str2, SegmentBase segmentBase, List<Descriptor> list) {
-        this.contentId = str;
-        this.revisionId = j;
+    private Representation(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
+        List emptyList;
+        this.contentId = contentId;
+        this.revisionId = revisionId;
         this.format = format;
-        this.baseUrl = str2;
-        if (list == null) {
-            str = Collections.emptyList();
+        this.baseUrl = baseUrl;
+        if (inbandEventStreams == null) {
+            emptyList = Collections.emptyList();
         } else {
-            str = Collections.unmodifiableList(list);
+            emptyList = Collections.unmodifiableList(inbandEventStreams);
         }
-        this.inbandEventStreams = str;
+        this.inbandEventStreams = emptyList;
         this.initializationUri = segmentBase.getInitialization(this);
         this.presentationTimeOffsetUs = segmentBase.getPresentationTimeOffsetUs();
     }

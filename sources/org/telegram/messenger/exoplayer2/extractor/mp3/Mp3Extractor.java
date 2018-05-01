@@ -1,15 +1,18 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
+import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
@@ -43,8 +46,8 @@ public final class Mp3Extractor implements Extractor {
     private int synchronizedHeaderData;
     private TrackOutput trackOutput;
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Flags {
+    interface Seeker extends SeekMap {
+        long getTimeUs(long j);
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor$1 */
@@ -57,133 +60,64 @@ public final class Mp3Extractor implements Extractor {
         }
     }
 
-    interface Seeker extends SeekMap {
-        long getTimeUs(long j);
-    }
-
-    private static boolean headersMatch(int i, long j) {
-        return ((long) (i & MPEG_AUDIO_HEADER_MASK)) == (j & -128000);
-    }
-
-    public void release() {
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
     }
 
     public Mp3Extractor() {
         this(0);
     }
 
-    public Mp3Extractor(int i) {
-        this(i, C0542C.TIME_UNSET);
+    public Mp3Extractor(int flags) {
+        this(flags, C0542C.TIME_UNSET);
     }
 
-    public Mp3Extractor(int i, long j) {
-        this.flags = i;
-        this.forcedFirstSampleTimestampUs = j;
-        this.scratch = new ParsableByteArray((int) 10);
+    public Mp3Extractor(int flags, long forcedFirstSampleTimestampUs) {
+        this.flags = flags;
+        this.forcedFirstSampleTimestampUs = forcedFirstSampleTimestampUs;
+        this.scratch = new ParsableByteArray(10);
         this.synchronizedHeader = new MpegAudioHeader();
         this.gaplessInfoHolder = new GaplessInfoHolder();
-        this.basisTimeUs = 1;
+        this.basisTimeUs = C0542C.TIME_UNSET;
     }
 
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        return synchronize(extractorInput, true);
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        return synchronize(input, true);
     }
 
-    public void init(ExtractorOutput extractorOutput) {
-        this.extractorOutput = extractorOutput;
+    public void init(ExtractorOutput output) {
+        this.extractorOutput = output;
         this.trackOutput = this.extractorOutput.track(0, 1);
         this.extractorOutput.endTracks();
     }
 
-    public void seek(long j, long j2) {
+    public void seek(long position, long timeUs) {
         this.synchronizedHeaderData = 0;
         this.basisTimeUs = C0542C.TIME_UNSET;
         this.samplesRead = 0;
         this.sampleBytesRemaining = 0;
     }
 
-    public int read(org.telegram.messenger.exoplayer2.extractor.ExtractorInput r20, org.telegram.messenger.exoplayer2.extractor.PositionHolder r21) throws java.io.IOException, java.lang.InterruptedException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r19 = this;
-        r0 = r19;
-        r1 = r0.synchronizedHeaderData;
-        if (r1 != 0) goto L_0x000f;
-    L_0x0006:
-        r1 = 0;
-        r2 = r20;
-        r0.synchronize(r2, r1);	 Catch:{ EOFException -> 0x000d }
-        goto L_0x0011;
-    L_0x000d:
-        r1 = -1;
-        return r1;
-    L_0x000f:
-        r2 = r20;
-    L_0x0011:
-        r1 = r0.seeker;
-        if (r1 != 0) goto L_0x006f;
-    L_0x0015:
-        r1 = r19.maybeReadSeekFrame(r20);
-        r0.seeker = r1;
-        r1 = r0.seeker;
-        if (r1 == 0) goto L_0x002d;
-    L_0x001f:
-        r1 = r0.seeker;
-        r1 = r1.isSeekable();
-        if (r1 != 0) goto L_0x0033;
-    L_0x0027:
-        r1 = r0.flags;
-        r1 = r1 & 1;
-        if (r1 == 0) goto L_0x0033;
-    L_0x002d:
-        r1 = r19.getConstantBitrateSeeker(r20);
-        r0.seeker = r1;
-    L_0x0033:
-        r1 = r0.extractorOutput;
-        r3 = r0.seeker;
-        r1.seekMap(r3);
-        r1 = r0.trackOutput;
-        r3 = 0;
-        r4 = r0.synchronizedHeader;
-        r4 = r4.mimeType;
-        r5 = 0;
-        r6 = -1;
-        r7 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-        r8 = r0.synchronizedHeader;
-        r8 = r8.channels;
-        r9 = r0.synchronizedHeader;
-        r9 = r9.sampleRate;
-        r10 = -1;
-        r11 = r0.gaplessInfoHolder;
-        r11 = r11.encoderDelay;
-        r12 = r0.gaplessInfoHolder;
-        r12 = r12.encoderPadding;
-        r13 = 0;
-        r14 = 0;
-        r16 = 0;
-        r15 = r0.flags;
-        r15 = r15 & 2;
-        if (r15 == 0) goto L_0x0064;
-    L_0x0060:
-        r15 = 0;
-    L_0x0061:
-        r17 = r15;
-        goto L_0x0067;
-    L_0x0064:
-        r15 = r0.metadata;
-        goto L_0x0061;
-    L_0x0067:
-        r15 = 0;
-        r3 = org.telegram.messenger.exoplayer2.Format.createAudioSampleFormat(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);
-        r1.format(r3);
-    L_0x006f:
-        r1 = r19.readSample(r20);
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor.read(org.telegram.messenger.exoplayer2.extractor.ExtractorInput, org.telegram.messenger.exoplayer2.extractor.PositionHolder):int");
+    public void release() {
+    }
+
+    public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
+        if (this.synchronizedHeaderData == 0) {
+            try {
+                synchronize(input, false);
+            } catch (EOFException e) {
+                return -1;
+            }
+        }
+        if (this.seeker == null) {
+            this.seeker = maybeReadSeekFrame(input);
+            if (this.seeker == null || !(this.seeker.isSeekable() || (this.flags & 1) == 0)) {
+                this.seeker = getConstantBitrateSeeker(input);
+            }
+            this.extractorOutput.seekMap(this.seeker);
+            this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null, (this.flags & 2) != 0 ? null : this.metadata));
+        }
+        return readSample(input);
     }
 
     private int readSample(ExtractorInput extractorInput) throws IOException, InterruptedException {
@@ -193,29 +127,27 @@ Error: java.lang.NullPointerException
                 return -1;
             }
             this.scratch.setPosition(0);
-            int readInt = this.scratch.readInt();
-            if (headersMatch(readInt, (long) this.synchronizedHeaderData)) {
-                if (MpegAudioHeader.getFrameSize(readInt) != -1) {
-                    MpegAudioHeader.populateHeader(readInt, this.synchronizedHeader);
-                    if (this.basisTimeUs == C0542C.TIME_UNSET) {
-                        this.basisTimeUs = this.seeker.getTimeUs(extractorInput.getPosition());
-                        if (this.forcedFirstSampleTimestampUs != C0542C.TIME_UNSET) {
-                            this.basisTimeUs += this.forcedFirstSampleTimestampUs - this.seeker.getTimeUs(0);
-                        }
-                    }
-                    this.sampleBytesRemaining = this.synchronizedHeader.frameSize;
+            int sampleHeaderData = this.scratch.readInt();
+            if (!headersMatch(sampleHeaderData, (long) this.synchronizedHeaderData) || MpegAudioHeader.getFrameSize(sampleHeaderData) == -1) {
+                extractorInput.skipFully(1);
+                this.synchronizedHeaderData = 0;
+                return 0;
+            }
+            MpegAudioHeader.populateHeader(sampleHeaderData, this.synchronizedHeader);
+            if (this.basisTimeUs == C0542C.TIME_UNSET) {
+                this.basisTimeUs = this.seeker.getTimeUs(extractorInput.getPosition());
+                if (this.forcedFirstSampleTimestampUs != C0542C.TIME_UNSET) {
+                    this.basisTimeUs += this.forcedFirstSampleTimestampUs - this.seeker.getTimeUs(0);
                 }
             }
-            extractorInput.skipFully(1);
-            this.synchronizedHeaderData = 0;
-            return 0;
+            this.sampleBytesRemaining = this.synchronizedHeader.frameSize;
         }
-        extractorInput = this.trackOutput.sampleData(extractorInput, this.sampleBytesRemaining, true);
-        if (extractorInput == -1) {
+        int bytesAppended = this.trackOutput.sampleData(extractorInput, this.sampleBytesRemaining, true);
+        if (bytesAppended == -1) {
             return -1;
         }
-        this.sampleBytesRemaining -= extractorInput;
-        if (this.sampleBytesRemaining > null) {
+        this.sampleBytesRemaining -= bytesAppended;
+        if (this.sampleBytesRemaining > 0) {
             return 0;
         }
         this.trackOutput.sampleMetadata(this.basisTimeUs + ((this.samplesRead * C0542C.MICROS_PER_SECOND) / ((long) this.synchronizedHeader.sampleRate)), 1, this.synchronizedHeader.frameSize, 0, null);
@@ -226,162 +158,161 @@ Error: java.lang.NullPointerException
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean synchronize(ExtractorInput extractorInput, boolean z) throws IOException, InterruptedException {
-        int peekPosition;
-        int i;
-        int i2;
-        int i3;
-        int i4 = z ? 16384 : 131072;
-        extractorInput.resetPeekPosition();
-        if (extractorInput.getPosition() == 0) {
-            peekId3Data(extractorInput);
-            peekPosition = (int) extractorInput.getPeekPosition();
-            if (!z) {
-                extractorInput.skipFully(peekPosition);
+    private boolean synchronize(ExtractorInput input, boolean sniffing) throws IOException, InterruptedException {
+        int validFrameCount = 0;
+        int candidateSynchronizedHeaderData = 0;
+        int peekedId3Bytes = 0;
+        int searchedBytes = 0;
+        int searchLimitBytes = sniffing ? 16384 : 131072;
+        input.resetPeekPosition();
+        if (input.getPosition() == 0) {
+            peekId3Data(input);
+            peekedId3Bytes = (int) input.getPeekPosition();
+            if (!sniffing) {
+                input.skipFully(peekedId3Bytes);
             }
-            i = 0;
-            i2 = i;
-            i3 = peekPosition;
-            peekPosition = i2;
-        } else {
-            peekPosition = 0;
-            i = peekPosition;
-            i2 = i;
-            i3 = i2;
         }
         while (true) {
-            if (!extractorInput.peekFully(this.scratch.data, 0, 4, peekPosition > 0)) {
+            boolean z;
+            byte[] bArr = this.scratch.data;
+            if (validFrameCount > 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            if (!input.peekFully(bArr, 0, 4, z)) {
                 break;
             }
             this.scratch.setPosition(0);
-            int readInt = this.scratch.readInt();
-            if (i == 0 || headersMatch(readInt, (long) i)) {
-                int frameSize = MpegAudioHeader.getFrameSize(readInt);
+            int headerData = this.scratch.readInt();
+            if (candidateSynchronizedHeaderData == 0 || headersMatch(headerData, (long) candidateSynchronizedHeaderData)) {
+                int frameSize = MpegAudioHeader.getFrameSize(headerData);
                 if (frameSize != -1) {
-                    peekPosition++;
-                    if (peekPosition != 1) {
-                        if (peekPosition == 4) {
+                    validFrameCount++;
+                    if (validFrameCount != 1) {
+                        if (validFrameCount == 4) {
                             break;
                         }
                     }
-                    MpegAudioHeader.populateHeader(readInt, this.synchronizedHeader);
-                    i = readInt;
-                    extractorInput.advancePeekPosition(frameSize - 4);
+                    MpegAudioHeader.populateHeader(headerData, this.synchronizedHeader);
+                    candidateSynchronizedHeaderData = headerData;
+                    input.advancePeekPosition(frameSize - 4);
                 }
             }
-            peekPosition = i2 + 1;
-            if (i2 == i4) {
+            int searchedBytes2 = searchedBytes + 1;
+            if (searchedBytes == searchLimitBytes) {
                 break;
             }
-            if (z) {
-                extractorInput.resetPeekPosition();
-                extractorInput.advancePeekPosition(i3 + peekPosition);
+            validFrameCount = 0;
+            candidateSynchronizedHeaderData = 0;
+            if (sniffing) {
+                input.resetPeekPosition();
+                input.advancePeekPosition(peekedId3Bytes + searchedBytes2);
+                searchedBytes = searchedBytes2;
             } else {
-                extractorInput.skipFully(1);
+                input.skipFully(1);
+                searchedBytes = searchedBytes2;
             }
-            i = 0;
-            i2 = peekPosition;
-            peekPosition = i;
         }
-        if (z) {
-            extractorInput.skipFully(i3 + i2);
+        if (sniffing) {
+            input.skipFully(peekedId3Bytes + searchedBytes);
         } else {
-            extractorInput.resetPeekPosition();
+            input.resetPeekPosition();
         }
-        this.synchronizedHeaderData = i;
+        this.synchronizedHeaderData = candidateSynchronizedHeaderData;
         return true;
     }
 
-    private void peekId3Data(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        int i = 0;
+    private void peekId3Data(ExtractorInput input) throws IOException, InterruptedException {
+        int peekedId3Bytes = 0;
         while (true) {
-            extractorInput.peekFully(this.scratch.data, 0, 10);
+            input.peekFully(this.scratch.data, 0, 10);
             this.scratch.setPosition(0);
             if (this.scratch.readUnsignedInt24() != Id3Decoder.ID3_TAG) {
-                extractorInput.resetPeekPosition();
-                extractorInput.advancePeekPosition(i);
+                input.resetPeekPosition();
+                input.advancePeekPosition(peekedId3Bytes);
                 return;
             }
             this.scratch.skipBytes(3);
-            int readSynchSafeInt = this.scratch.readSynchSafeInt();
-            int i2 = 10 + readSynchSafeInt;
+            int framesLength = this.scratch.readSynchSafeInt();
+            int tagLength = framesLength + 10;
             if (this.metadata == null) {
-                Object obj = new byte[i2];
-                System.arraycopy(this.scratch.data, 0, obj, 0, 10);
-                extractorInput.peekFully(obj, 10, readSynchSafeInt);
-                this.metadata = new Id3Decoder((this.flags & 2) != 0 ? GaplessInfoHolder.GAPLESS_INFO_ID3_FRAME_PREDICATE : null).decode(obj, i2);
+                byte[] id3Data = new byte[tagLength];
+                System.arraycopy(this.scratch.data, 0, id3Data, 0, 10);
+                input.peekFully(id3Data, 10, framesLength);
+                this.metadata = new Id3Decoder((this.flags & 2) != 0 ? GaplessInfoHolder.GAPLESS_INFO_ID3_FRAME_PREDICATE : null).decode(id3Data, tagLength);
                 if (this.metadata != null) {
                     this.gaplessInfoHolder.setFromMetadata(this.metadata);
                 }
             } else {
-                extractorInput.advancePeekPosition(readSynchSafeInt);
+                input.advancePeekPosition(framesLength);
             }
-            i += i2;
+            peekedId3Bytes += tagLength;
         }
     }
 
-    private Seeker maybeReadSeekFrame(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        Seeker create;
-        ParsableByteArray parsableByteArray = new ParsableByteArray(this.synchronizedHeader.frameSize);
-        extractorInput.peekFully(parsableByteArray.data, 0, this.synchronizedHeader.frameSize);
-        int i = 21;
+    private Seeker maybeReadSeekFrame(ExtractorInput input) throws IOException, InterruptedException {
+        Seeker seeker;
+        int xingBase = 21;
+        ParsableByteArray frame = new ParsableByteArray(this.synchronizedHeader.frameSize);
+        input.peekFully(frame.data, 0, this.synchronizedHeader.frameSize);
         if ((this.synchronizedHeader.version & 1) != 0) {
             if (this.synchronizedHeader.channels != 1) {
-                i = 36;
+                xingBase = 36;
             }
         } else if (this.synchronizedHeader.channels == 1) {
-            i = 13;
+            xingBase = 13;
         }
-        int i2 = i;
-        int seekFrameHeader = getSeekFrameHeader(parsableByteArray, i2);
-        if (seekFrameHeader != SEEK_HEADER_XING) {
-            if (seekFrameHeader != SEEK_HEADER_INFO) {
-                if (seekFrameHeader == SEEK_HEADER_VBRI) {
-                    create = VbriSeeker.create(extractorInput.getLength(), extractorInput.getPosition(), this.synchronizedHeader, parsableByteArray);
-                    extractorInput.skipFully(this.synchronizedHeader.frameSize);
-                } else {
-                    create = null;
-                    extractorInput.resetPeekPosition();
-                }
-                return create;
+        int seekHeader = getSeekFrameHeader(frame, xingBase);
+        if (seekHeader == SEEK_HEADER_XING || seekHeader == SEEK_HEADER_INFO) {
+            seeker = XingSeeker.create(input.getLength(), input.getPosition(), this.synchronizedHeader, frame);
+            if (!(seeker == null || this.gaplessInfoHolder.hasGaplessInfo())) {
+                input.resetPeekPosition();
+                input.advancePeekPosition(xingBase + 141);
+                input.peekFully(this.scratch.data, 0, 3);
+                this.scratch.setPosition(0);
+                this.gaplessInfoHolder.setFromXingHeaderValue(this.scratch.readUnsignedInt24());
             }
+            input.skipFully(this.synchronizedHeader.frameSize);
+            if (!(seeker == null || seeker.isSeekable() || seekHeader != SEEK_HEADER_INFO)) {
+                return getConstantBitrateSeeker(input);
+            }
+        } else if (seekHeader == SEEK_HEADER_VBRI) {
+            seeker = VbriSeeker.create(input.getLength(), input.getPosition(), this.synchronizedHeader, frame);
+            input.skipFully(this.synchronizedHeader.frameSize);
+        } else {
+            seeker = null;
+            input.resetPeekPosition();
         }
-        create = XingSeeker.create(extractorInput.getLength(), extractorInput.getPosition(), this.synchronizedHeader, parsableByteArray);
-        if (!(create == null || this.gaplessInfoHolder.hasGaplessInfo())) {
-            extractorInput.resetPeekPosition();
-            extractorInput.advancePeekPosition(i2 + 141);
-            extractorInput.peekFully(this.scratch.data, 0, 3);
-            this.scratch.setPosition(0);
-            this.gaplessInfoHolder.setFromXingHeaderValue(this.scratch.readUnsignedInt24());
-        }
-        extractorInput.skipFully(this.synchronizedHeader.frameSize);
-        if (!(create == null || create.isSeekable() || seekFrameHeader != SEEK_HEADER_INFO)) {
-            return getConstantBitrateSeeker(extractorInput);
-        }
-        return create;
+        Seeker seeker2 = seeker;
+        return seeker;
     }
 
-    private Seeker getConstantBitrateSeeker(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        extractorInput.peekFully(this.scratch.data, 0, 4);
+    private Seeker getConstantBitrateSeeker(ExtractorInput input) throws IOException, InterruptedException {
+        input.peekFully(this.scratch.data, 0, 4);
         this.scratch.setPosition(0);
         MpegAudioHeader.populateHeader(this.scratch.readInt(), this.synchronizedHeader);
-        return new ConstantBitrateSeeker(extractorInput.getLength(), extractorInput.getPosition(), this.synchronizedHeader);
+        return new ConstantBitrateSeeker(input.getLength(), input.getPosition(), this.synchronizedHeader);
     }
 
-    private static int getSeekFrameHeader(ParsableByteArray parsableByteArray, int i) {
-        if (parsableByteArray.limit() >= i + 4) {
-            parsableByteArray.setPosition(i);
-            i = parsableByteArray.readInt();
-            if (i == SEEK_HEADER_XING || i == SEEK_HEADER_INFO) {
-                return i;
+    private static boolean headersMatch(int headerA, long headerB) {
+        return ((long) (MPEG_AUDIO_HEADER_MASK & headerA)) == (-128000 & headerB);
+    }
+
+    private static int getSeekFrameHeader(ParsableByteArray frame, int xingBase) {
+        if (frame.limit() >= xingBase + 4) {
+            frame.setPosition(xingBase);
+            int headerData = frame.readInt();
+            if (headerData == SEEK_HEADER_XING || headerData == SEEK_HEADER_INFO) {
+                return headerData;
             }
         }
-        if (parsableByteArray.limit() >= 40) {
-            parsableByteArray.setPosition(36);
-            if (parsableByteArray.readInt() == SEEK_HEADER_VBRI) {
+        if (frame.limit() >= 40) {
+            frame.setPosition(36);
+            if (frame.readInt() == SEEK_HEADER_VBRI) {
                 return SEEK_HEADER_VBRI;
             }
         }
-        return null;
+        return 0;
     }
 }

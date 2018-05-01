@@ -37,6 +37,52 @@ public class PhotoCropView extends FrameLayout {
     private boolean showOnSetBitmap;
     private CropRotationWheel wheelView;
 
+    /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
+    class C20661 implements CropViewListener {
+        C20661() {
+        }
+
+        public void onChange(boolean reset) {
+            if (PhotoCropView.this.delegate != null) {
+                PhotoCropView.this.delegate.onChange(reset);
+            }
+        }
+
+        public void onAspectLock(boolean enabled) {
+            PhotoCropView.this.wheelView.setAspectLock(enabled);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
+    class C20672 implements RotationWheelListener {
+        C20672() {
+        }
+
+        public void onStart() {
+            PhotoCropView.this.cropView.onRotationBegan();
+        }
+
+        public void onChange(float angle) {
+            PhotoCropView.this.cropView.setRotation(angle);
+            if (PhotoCropView.this.delegate != null) {
+                PhotoCropView.this.delegate.onChange(false);
+            }
+        }
+
+        public void onEnd(float angle) {
+            PhotoCropView.this.cropView.onRotationEnded();
+        }
+
+        public void aspectRatioPressed() {
+            PhotoCropView.this.cropView.showAspectRatioDialog();
+        }
+
+        public void rotate90Pressed() {
+            PhotoCropView.this.wheelView.reset();
+            PhotoCropView.this.cropView.rotate90Degrees();
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
     class C12383 implements Runnable {
         C12383() {
@@ -58,57 +104,11 @@ public class PhotoCropView extends FrameLayout {
         void onChange(boolean z);
     }
 
-    /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
-    class C20661 implements CropViewListener {
-        C20661() {
-        }
-
-        public void onChange(boolean z) {
-            if (PhotoCropView.this.delegate != null) {
-                PhotoCropView.this.delegate.onChange(z);
-            }
-        }
-
-        public void onAspectLock(boolean z) {
-            PhotoCropView.this.wheelView.setAspectLock(z);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
-    class C20672 implements RotationWheelListener {
-        C20672() {
-        }
-
-        public void onStart() {
-            PhotoCropView.this.cropView.onRotationBegan();
-        }
-
-        public void onChange(float f) {
-            PhotoCropView.this.cropView.setRotation(f);
-            if (PhotoCropView.this.delegate != null) {
-                PhotoCropView.this.delegate.onChange(false);
-            }
-        }
-
-        public void onEnd(float f) {
-            PhotoCropView.this.cropView.onRotationEnded();
-        }
-
-        public void aspectRatioPressed() {
-            PhotoCropView.this.cropView.showAspectRatioDialog();
-        }
-
-        public void rotate90Pressed() {
-            PhotoCropView.this.wheelView.reset();
-            PhotoCropView.this.cropView.rotate90Degrees();
-        }
-    }
-
     public PhotoCropView(Context context) {
         super(context);
     }
 
-    public void setBitmap(Bitmap bitmap, int i, boolean z) {
+    public void setBitmap(Bitmap bitmap, int rotation, boolean freeform) {
         this.bitmapToEdit = bitmap;
         this.rectSizeX = 600.0f;
         this.rectSizeY = 600.0f;
@@ -119,8 +119,8 @@ public class PhotoCropView extends FrameLayout {
         this.bitmapHeight = 1;
         this.rectX = -1.0f;
         this.rectY = -1.0f;
-        this.freeformCrop = z;
-        this.orientation = i;
+        this.freeformCrop = freeform;
+        this.orientation = rotation;
         requestLayout();
         if (this.cropView == null) {
             this.cropView = new CropView(getContext());
@@ -132,17 +132,17 @@ public class PhotoCropView extends FrameLayout {
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);
-        this.cropView.setBitmap(bitmap, i, z);
-        if (this.showOnSetBitmap != null) {
+        this.cropView.setBitmap(bitmap, rotation, freeform);
+        if (this.showOnSetBitmap) {
             this.showOnSetBitmap = false;
             this.cropView.show();
         }
-        this.wheelView.setFreeform(z);
+        this.wheelView.setFreeform(freeform);
         this.wheelView.reset();
     }
 
-    public void setOrientation(int i) {
-        this.orientation = i;
+    public void setOrientation(int rotation) {
+        this.orientation = rotation;
         this.rectX = -1.0f;
         this.rectY = -1.0f;
         this.rectSizeX = 600.0f;
@@ -215,18 +215,21 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getLimitHeight() {
-        float f = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-        return (((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - f) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) - f) / 2.0f)))))) - this.rectSizeY;
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        return (((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - additionalY) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) - additionalY) / 2.0f)))))) - this.rectSizeY;
     }
 
     public Bitmap getBitmap() {
-        return this.cropView != null ? this.cropView.getResult() : null;
+        if (this.cropView != null) {
+            return this.cropView.getResult();
+        }
+        return null;
     }
 
-    public void setBitmapParams(float f, float f2, float f3) {
-        this.bitmapGlobalScale = f;
-        this.bitmapGlobalX = f2;
-        this.bitmapGlobalY = f3;
+    public void setBitmapParams(float scale, float x, float y) {
+        this.bitmapGlobalScale = scale;
+        this.bitmapGlobalX = x;
+        this.bitmapGlobalY = y;
     }
 
     public void startAnimationRunnable() {
@@ -245,9 +248,9 @@ public class PhotoCropView extends FrameLayout {
         }
     }
 
-    public void setAnimationProgress(float f) {
+    public void setAnimationProgress(float animationProgress) {
         if (this.animationStartValues != null) {
-            if (f == 1.0f) {
+            if (animationProgress == 1.0f) {
                 this.rectX = this.animationEndValues.left;
                 this.rectY = this.animationEndValues.top;
                 this.rectSizeX = this.animationEndValues.right;
@@ -255,48 +258,50 @@ public class PhotoCropView extends FrameLayout {
                 this.animationStartValues = null;
                 this.animationEndValues = null;
             } else {
-                this.rectX = this.animationStartValues.left + ((this.animationEndValues.left - this.animationStartValues.left) * f);
-                this.rectY = this.animationStartValues.top + ((this.animationEndValues.top - this.animationStartValues.top) * f);
-                this.rectSizeX = this.animationStartValues.right + ((this.animationEndValues.right - this.animationStartValues.right) * f);
-                this.rectSizeY = this.animationStartValues.bottom + ((this.animationEndValues.bottom - this.animationStartValues.bottom) * f);
+                this.rectX = this.animationStartValues.left + ((this.animationEndValues.left - this.animationStartValues.left) * animationProgress);
+                this.rectY = this.animationStartValues.top + ((this.animationEndValues.top - this.animationStartValues.top) * animationProgress);
+                this.rectSizeX = this.animationStartValues.right + ((this.animationEndValues.right - this.animationStartValues.right) * animationProgress);
+                this.rectSizeY = this.animationStartValues.bottom + ((this.animationEndValues.bottom - this.animationStartValues.bottom) * animationProgress);
             }
             invalidate();
         }
     }
 
-    public void moveToFill(boolean z) {
-        float f = ((float) this.bitmapWidth) / this.rectSizeX;
-        float f2 = ((float) this.bitmapHeight) / this.rectSizeY;
-        if (f > f2) {
-            f = f2;
+    public void moveToFill(boolean animated) {
+        float scaleTo;
+        float scaleToX = ((float) this.bitmapWidth) / this.rectSizeX;
+        float scaleToY = ((float) this.bitmapHeight) / this.rectSizeY;
+        if (scaleToX > scaleToY) {
+            scaleTo = scaleToY;
+        } else {
+            scaleTo = scaleToX;
         }
-        if (f > 1.0f && this.bitmapGlobalScale * f > 3.0f) {
-            f = 3.0f / this.bitmapGlobalScale;
-        } else if (f < 1.0f && this.bitmapGlobalScale * f < 1.0f) {
-            f = 1.0f / this.bitmapGlobalScale;
+        if (scaleTo > 1.0f && this.bitmapGlobalScale * scaleTo > 3.0f) {
+            scaleTo = 3.0f / this.bitmapGlobalScale;
+        } else if (scaleTo < 1.0f && this.bitmapGlobalScale * scaleTo < 1.0f) {
+            scaleTo = 1.0f / this.bitmapGlobalScale;
         }
-        float f3 = this.rectSizeX * f;
-        float f4 = this.rectSizeY * f;
-        float f5 = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-        float width = (((float) getWidth()) - f3) / 2.0f;
-        float height = ((((float) getHeight()) - f4) + f5) / 2.0f;
+        float newSizeX = this.rectSizeX * scaleTo;
+        float newSizeY = this.rectSizeY * scaleTo;
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float newX = (((float) getWidth()) - newSizeX) / 2.0f;
+        float newY = ((((float) getHeight()) - newSizeY) + additionalY) / 2.0f;
         this.animationStartValues = new RectF(this.rectX, this.rectY, this.rectSizeX, this.rectSizeY);
-        this.animationEndValues = new RectF(width, height, f3, f4);
-        f2 = f - 1.0f;
-        this.delegate.needMoveImageTo((width + (((float) (getWidth() / 2)) * f2)) + ((this.bitmapGlobalX - this.rectX) * f), (height + (((((float) getHeight()) + f5) / 2.0f) * f2)) + ((this.bitmapGlobalY - this.rectY) * f), this.bitmapGlobalScale * f, z);
+        this.animationEndValues = new RectF(newX, newY, newSizeX, newSizeY);
+        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - 1.0f)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - 1.0f)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
     }
 
-    public void setDelegate(PhotoCropViewDelegate photoCropViewDelegate) {
-        this.delegate = photoCropViewDelegate;
+    public void setDelegate(PhotoCropViewDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
-        z = this.delegate.getBitmap();
-        if (z) {
-            this.bitmapToEdit = z;
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        Bitmap newBitmap = this.delegate.getBitmap();
+        if (newBitmap != null) {
+            this.bitmapToEdit = newBitmap;
         }
-        if (this.cropView) {
+        if (this.cropView != null) {
             this.cropView.updateLayout();
         }
     }

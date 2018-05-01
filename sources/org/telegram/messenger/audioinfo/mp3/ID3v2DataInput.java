@@ -7,34 +7,34 @@ import java.io.InputStream;
 public class ID3v2DataInput {
     private final InputStream input;
 
-    public ID3v2DataInput(InputStream inputStream) {
-        this.input = inputStream;
+    public ID3v2DataInput(InputStream in) {
+        this.input = in;
     }
 
-    public final void readFully(byte[] bArr, int i, int i2) throws IOException {
-        int i3 = 0;
-        while (i3 < i2) {
-            int read = this.input.read(bArr, i + i3, i2 - i3);
-            if (read > 0) {
-                i3 += read;
+    public final void readFully(byte[] b, int off, int len) throws IOException {
+        int total = 0;
+        while (total < len) {
+            int current = this.input.read(b, off + total, len - total);
+            if (current > 0) {
+                total += current;
             } else {
                 throw new EOFException();
             }
         }
     }
 
-    public byte[] readFully(int i) throws IOException {
-        byte[] bArr = new byte[i];
-        readFully(bArr, 0, i);
-        return bArr;
+    public byte[] readFully(int len) throws IOException {
+        byte[] bytes = new byte[len];
+        readFully(bytes, 0, len);
+        return bytes;
     }
 
-    public void skipFully(long j) throws IOException {
-        long j2 = 0;
-        while (j2 < j) {
-            long skip = this.input.skip(j - j2);
-            if (skip > 0) {
-                j2 += skip;
+    public void skipFully(long len) throws IOException {
+        long total = 0;
+        while (total < len) {
+            long current = this.input.skip(len - total);
+            if (current > 0) {
+                total += current;
             } else {
                 throw new EOFException();
             }
@@ -42,9 +42,9 @@ public class ID3v2DataInput {
     }
 
     public byte readByte() throws IOException {
-        int read = this.input.read();
-        if (read >= 0) {
-            return (byte) read;
+        int b = this.input.read();
+        if (b >= 0) {
+            return (byte) b;
         }
         throw new EOFException();
     }

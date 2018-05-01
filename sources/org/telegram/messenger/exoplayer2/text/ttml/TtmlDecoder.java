@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.text.ttml;
 
+import android.text.Layout.Alignment;
 import android.util.Log;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
+import org.telegram.messenger.exoplayer2.util.ColorParser;
+import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.util.XmlPullParserUtil;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -37,10 +40,10 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         final int subFrameRate;
         final int tickRate;
 
-        FrameAndTickRate(float f, int i, int i2) {
-            this.effectiveFrameRate = f;
-            this.subFrameRate = i;
-            this.tickRate = i2;
+        FrameAndTickRate(float effectiveFrameRate, int subFrameRate, int tickRate) {
+            this.effectiveFrameRate = effectiveFrameRate;
+            this.subFrameRate = subFrameRate;
+            this.tickRate = tickRate;
         }
     }
 
@@ -49,988 +52,628 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         try {
             this.xmlParserFactory = XmlPullParserFactory.newInstance();
             this.xmlParserFactory.setNamespaceAware(true);
-        } catch (Throwable e) {
+        } catch (XmlPullParserException e) {
             throw new RuntimeException("Couldn't create XmlPullParserFactory instance", e);
         }
     }
 
-    protected TtmlSubtitle decode(byte[] bArr, int i, boolean z) throws SubtitleDecoderException {
+    protected TtmlSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
         try {
-            z = this.xmlParserFactory.newPullParser();
-            Map hashMap = new HashMap();
-            Map hashMap2 = new HashMap();
+            XmlPullParser xmlParser = this.xmlParserFactory.newPullParser();
+            Map<String, TtmlStyle> globalStyles = new HashMap();
+            Map<String, TtmlRegion> regionMap = new HashMap();
+            regionMap.put(TtmlNode.ANONYMOUS_REGION_ID, new TtmlRegion(null));
+            xmlParser.setInput(new ByteArrayInputStream(bytes, 0, length), null);
             TtmlSubtitle ttmlSubtitle = null;
-            hashMap2.put(TtmlNode.ANONYMOUS_REGION_ID, new TtmlRegion(null));
-            int i2 = 0;
-            z.setInput(new ByteArrayInputStream(bArr, 0, i), null);
-            bArr = new LinkedList();
+            LinkedList<TtmlNode> nodeStack = new LinkedList();
+            int unsupportedNodeDepth = 0;
             FrameAndTickRate frameAndTickRate = DEFAULT_FRAME_AND_TICK_RATE;
-            for (i = z.getEventType(); i != 1; i = z.getEventType()) {
-                TtmlNode ttmlNode = (TtmlNode) bArr.peekLast();
-                if (i2 == 0) {
-                    String name = z.getName();
-                    if (i == 2) {
-                        if (TtmlNode.TAG_TT.equals(name) != 0) {
-                            frameAndTickRate = parseFrameAndTickRates(z);
+            for (int eventType = xmlParser.getEventType(); eventType != 1; eventType = xmlParser.getEventType()) {
+                TtmlNode parent = (TtmlNode) nodeStack.peekLast();
+                if (unsupportedNodeDepth == 0) {
+                    String name = xmlParser.getName();
+                    if (eventType == 2) {
+                        if (TtmlNode.TAG_TT.equals(name)) {
+                            frameAndTickRate = parseFrameAndTickRates(xmlParser);
                         }
-                        if (isSupportedTag(name) == 0) {
-                            i = TAG;
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("Ignoring unsupported tag: ");
-                            stringBuilder.append(z.getName());
-                            Log.i(i, stringBuilder.toString());
-                            i2++;
-                        } else if (TtmlNode.TAG_HEAD.equals(name) != 0) {
-                            parseHeader(z, hashMap, hashMap2);
+                        if (!isSupportedTag(name)) {
+                            Log.i(TAG, "Ignoring unsupported tag: " + xmlParser.getName());
+                            unsupportedNodeDepth++;
+                        } else if (TtmlNode.TAG_HEAD.equals(name)) {
+                            parseHeader(xmlParser, globalStyles, regionMap);
                         } else {
                             try {
-                                i = parseNode(z, ttmlNode, hashMap2, frameAndTickRate);
-                                bArr.addLast(i);
-                                if (ttmlNode != null) {
-                                    ttmlNode.addChild(i);
+                                TtmlNode node = parseNode(xmlParser, parent, regionMap, frameAndTickRate);
+                                nodeStack.addLast(node);
+                                if (parent != null) {
+                                    parent.addChild(node);
                                 }
-                            } catch (int i3) {
-                                Log.w(TAG, "Suppressing parser error", i3);
-                                i2++;
+                            } catch (SubtitleDecoderException e) {
+                                Log.w(TAG, "Suppressing parser error", e);
+                                unsupportedNodeDepth++;
                             }
                         }
-                    } else if (i3 == 4) {
-                        ttmlNode.addChild(TtmlNode.buildTextNode(z.getText()));
-                    } else if (i3 == 3) {
-                        if (z.getName().equals(TtmlNode.TAG_TT) != 0) {
-                            ttmlSubtitle = new TtmlSubtitle((TtmlNode) bArr.getLast(), hashMap, hashMap2);
+                    } else if (eventType == 4) {
+                        parent.addChild(TtmlNode.buildTextNode(xmlParser.getText()));
+                    } else if (eventType == 3) {
+                        if (xmlParser.getName().equals(TtmlNode.TAG_TT)) {
+                            ttmlSubtitle = new TtmlSubtitle((TtmlNode) nodeStack.getLast(), globalStyles, regionMap);
                         }
-                        bArr.removeLast();
+                        nodeStack.removeLast();
+                    } else {
+                        continue;
                     }
-                } else if (i3 == 2) {
-                    i2++;
-                } else if (i3 == 3) {
-                    i2--;
+                } else if (eventType == 2) {
+                    unsupportedNodeDepth++;
+                } else if (eventType == 3) {
+                    unsupportedNodeDepth--;
                 }
-                z.next();
+                xmlParser.next();
             }
             return ttmlSubtitle;
-        } catch (byte[] bArr2) {
-            throw new SubtitleDecoderException("Unable to decode source", bArr2);
-        } catch (byte[] bArr22) {
-            throw new IllegalStateException("Unexpected error when reading input.", bArr22);
+        } catch (Throwable xppe) {
+            throw new SubtitleDecoderException("Unable to decode source", xppe);
+        } catch (IOException e2) {
+            throw new IllegalStateException("Unexpected error when reading input.", e2);
         }
     }
 
-    private FrameAndTickRate parseFrameAndTickRates(XmlPullParser xmlPullParser) throws SubtitleDecoderException {
-        String attributeValue = xmlPullParser.getAttributeValue(TTP, "frameRate");
-        int parseInt = attributeValue != null ? Integer.parseInt(attributeValue) : DEFAULT_FRAME_RATE;
-        float f = 1.0f;
-        String attributeValue2 = xmlPullParser.getAttributeValue(TTP, "frameRateMultiplier");
-        if (attributeValue2 != null) {
-            String[] split = attributeValue2.split(" ");
-            if (split.length != 2) {
+    private FrameAndTickRate parseFrameAndTickRates(XmlPullParser xmlParser) throws SubtitleDecoderException {
+        int frameRate = DEFAULT_FRAME_RATE;
+        String frameRateString = xmlParser.getAttributeValue(TTP, "frameRate");
+        if (frameRateString != null) {
+            frameRate = Integer.parseInt(frameRateString);
+        }
+        float frameRateMultiplier = 1.0f;
+        String frameRateMultiplierString = xmlParser.getAttributeValue(TTP, "frameRateMultiplier");
+        if (frameRateMultiplierString != null) {
+            String[] parts = frameRateMultiplierString.split(" ");
+            if (parts.length != 2) {
                 throw new SubtitleDecoderException("frameRateMultiplier doesn't have 2 parts");
             }
-            f = ((float) Integer.parseInt(split[0])) / ((float) Integer.parseInt(split[1]));
+            frameRateMultiplier = ((float) Integer.parseInt(parts[0])) / ((float) Integer.parseInt(parts[1]));
         }
-        int i = DEFAULT_FRAME_AND_TICK_RATE.subFrameRate;
-        String attributeValue3 = xmlPullParser.getAttributeValue(TTP, "subFrameRate");
-        if (attributeValue3 != null) {
-            i = Integer.parseInt(attributeValue3);
+        int subFrameRate = DEFAULT_FRAME_AND_TICK_RATE.subFrameRate;
+        String subFrameRateString = xmlParser.getAttributeValue(TTP, "subFrameRate");
+        if (subFrameRateString != null) {
+            subFrameRate = Integer.parseInt(subFrameRateString);
         }
-        int i2 = DEFAULT_FRAME_AND_TICK_RATE.tickRate;
-        xmlPullParser = xmlPullParser.getAttributeValue(TTP, "tickRate");
-        if (xmlPullParser != null) {
-            i2 = Integer.parseInt(xmlPullParser);
+        int tickRate = DEFAULT_FRAME_AND_TICK_RATE.tickRate;
+        String tickRateString = xmlParser.getAttributeValue(TTP, "tickRate");
+        if (tickRateString != null) {
+            tickRate = Integer.parseInt(tickRateString);
         }
-        return new FrameAndTickRate(((float) parseInt) * f, i, i2);
+        return new FrameAndTickRate(((float) frameRate) * frameRateMultiplier, subFrameRate, tickRate);
     }
 
-    private Map<String, TtmlStyle> parseHeader(XmlPullParser xmlPullParser, Map<String, TtmlStyle> map, Map<String, TtmlRegion> map2) throws IOException, XmlPullParserException {
+    private Map<String, TtmlStyle> parseHeader(XmlPullParser xmlParser, Map<String, TtmlStyle> globalStyles, Map<String, TtmlRegion> globalRegions) throws IOException, XmlPullParserException {
         do {
-            xmlPullParser.next();
-            if (XmlPullParserUtil.isStartTag(xmlPullParser, "style")) {
-                String attributeValue = XmlPullParserUtil.getAttributeValue(xmlPullParser, "style");
-                TtmlStyle parseStyleAttributes = parseStyleAttributes(xmlPullParser, new TtmlStyle());
-                if (attributeValue != null) {
-                    for (Object obj : parseStyleIds(attributeValue)) {
-                        parseStyleAttributes.chain((TtmlStyle) map.get(obj));
+            xmlParser.next();
+            if (XmlPullParserUtil.isStartTag(xmlParser, "style")) {
+                String parentStyleId = XmlPullParserUtil.getAttributeValue(xmlParser, "style");
+                TtmlStyle style = parseStyleAttributes(xmlParser, new TtmlStyle());
+                if (parentStyleId != null) {
+                    for (String id : parseStyleIds(parentStyleId)) {
+                        style.chain((TtmlStyle) globalStyles.get(id));
                     }
                 }
-                if (parseStyleAttributes.getId() != null) {
-                    map.put(parseStyleAttributes.getId(), parseStyleAttributes);
+                if (style.getId() != null) {
+                    globalStyles.put(style.getId(), style);
                 }
-            } else if (XmlPullParserUtil.isStartTag(xmlPullParser, "region")) {
-                TtmlRegion parseRegionAttributes = parseRegionAttributes(xmlPullParser);
-                if (parseRegionAttributes != null) {
-                    map2.put(parseRegionAttributes.id, parseRegionAttributes);
+            } else if (XmlPullParserUtil.isStartTag(xmlParser, "region")) {
+                TtmlRegion ttmlRegion = parseRegionAttributes(xmlParser);
+                if (ttmlRegion != null) {
+                    globalRegions.put(ttmlRegion.id, ttmlRegion);
                 }
             }
-        } while (!XmlPullParserUtil.isEndTag(xmlPullParser, TtmlNode.TAG_HEAD));
-        return map;
+        } while (!XmlPullParserUtil.isEndTag(xmlParser, TtmlNode.TAG_HEAD));
+        return globalStyles;
     }
 
-    private org.telegram.messenger.exoplayer2.text.ttml.TtmlRegion parseRegionAttributes(org.xmlpull.v1.XmlPullParser r12) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r11 = this;
-        r0 = "id";
-        r2 = org.telegram.messenger.exoplayer2.util.XmlPullParserUtil.getAttributeValue(r12, r0);
-        r0 = 0;
-        if (r2 != 0) goto L_0x000a;
-    L_0x0009:
-        return r0;
-    L_0x000a:
-        r1 = "origin";
-        r1 = org.telegram.messenger.exoplayer2.util.XmlPullParserUtil.getAttributeValue(r12, r1);
-        if (r1 == 0) goto L_0x0109;
-    L_0x0012:
-        r3 = PERCENTAGE_COORDINATES;
-        r3 = r3.matcher(r1);
-        r4 = r3.matches();
-        if (r4 == 0) goto L_0x00f2;
-    L_0x001e:
-        r4 = 1;
-        r5 = r3.group(r4);	 Catch:{ NumberFormatException -> 0x00db }
-        r5 = java.lang.Float.parseFloat(r5);	 Catch:{ NumberFormatException -> 0x00db }
-        r6 = NUM; // 0x42c80000 float:100.0 double:5.53552857E-315;	 Catch:{ NumberFormatException -> 0x00db }
-        r5 = r5 / r6;	 Catch:{ NumberFormatException -> 0x00db }
-        r7 = 2;	 Catch:{ NumberFormatException -> 0x00db }
-        r3 = r3.group(r7);	 Catch:{ NumberFormatException -> 0x00db }
-        r3 = java.lang.Float.parseFloat(r3);	 Catch:{ NumberFormatException -> 0x00db }
-        r3 = r3 / r6;
-        r8 = "extent";
-        r8 = org.telegram.messenger.exoplayer2.util.XmlPullParserUtil.getAttributeValue(r12, r8);
-        if (r8 == 0) goto L_0x00d3;
-    L_0x003c:
-        r9 = PERCENTAGE_COORDINATES;
-        r8 = r9.matcher(r8);
-        r9 = r8.matches();
-        if (r9 == 0) goto L_0x00bc;
-    L_0x0048:
-        r9 = r8.group(r4);	 Catch:{ NumberFormatException -> 0x00a5 }
-        r9 = java.lang.Float.parseFloat(r9);	 Catch:{ NumberFormatException -> 0x00a5 }
-        r9 = r9 / r6;	 Catch:{ NumberFormatException -> 0x00a5 }
-        r8 = r8.group(r7);	 Catch:{ NumberFormatException -> 0x00a5 }
-        r8 = java.lang.Float.parseFloat(r8);	 Catch:{ NumberFormatException -> 0x00a5 }
-        r8 = r8 / r6;
-        r0 = "displayAlign";
-        r12 = org.telegram.messenger.exoplayer2.util.XmlPullParserUtil.getAttributeValue(r12, r0);
-        r0 = 0;
-        if (r12 == 0) goto L_0x0098;
-    L_0x0063:
-        r12 = org.telegram.messenger.exoplayer2.util.Util.toLowerInvariant(r12);
-        r1 = -1;
-        r6 = r12.hashCode();
-        r10 = -NUM; // 0xffffffffaeb2cc55 float:-8.1307995E-11 double:NaN;
-        if (r6 == r10) goto L_0x0081;
-    L_0x0071:
-        r10 = 92734940; // 0x58705dc float:1.2697491E-35 double:4.5817148E-316;
-        if (r6 == r10) goto L_0x0077;
-    L_0x0076:
-        goto L_0x008a;
-    L_0x0077:
-        r6 = "after";
-        r12 = r12.equals(r6);
-        if (r12 == 0) goto L_0x008a;
-    L_0x007f:
-        r1 = r4;
-        goto L_0x008a;
-    L_0x0081:
-        r6 = "center";
-        r12 = r12.equals(r6);
-        if (r12 == 0) goto L_0x008a;
-    L_0x0089:
-        r1 = r0;
-    L_0x008a:
-        switch(r1) {
-            case 0: goto L_0x0092;
-            case 1: goto L_0x008e;
-            default: goto L_0x008d;
-        };
-    L_0x008d:
-        goto L_0x0098;
-    L_0x008e:
-        r3 = r3 + r8;
-        r4 = r3;
-        r6 = r7;
-        goto L_0x009a;
-    L_0x0092:
-        r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r8 = r8 / r12;
-        r3 = r3 + r8;
-        r6 = r4;
-        goto L_0x0099;
-    L_0x0098:
-        r6 = r0;
-    L_0x0099:
-        r4 = r3;
-    L_0x009a:
-        r12 = new org.telegram.messenger.exoplayer2.text.ttml.TtmlRegion;
-        r0 = 0;
-        r1 = r12;
-        r3 = r5;
-        r5 = r0;
-        r7 = r9;
-        r1.<init>(r2, r3, r4, r5, r6, r7);
-        return r12;
-    L_0x00a5:
-        r12 = "TtmlDecoder";
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r3 = "Ignoring region with malformed extent: ";
-        r2.append(r3);
-        r2.append(r1);
-        r1 = r2.toString();
-        android.util.Log.w(r12, r1);
-        return r0;
-    L_0x00bc:
-        r12 = "TtmlDecoder";
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r3 = "Ignoring region with unsupported extent: ";
-        r2.append(r3);
-        r2.append(r1);
-        r1 = r2.toString();
-        android.util.Log.w(r12, r1);
-        return r0;
-    L_0x00d3:
-        r12 = "TtmlDecoder";
-        r1 = "Ignoring region without an extent";
-        android.util.Log.w(r12, r1);
-        return r0;
-    L_0x00db:
-        r12 = "TtmlDecoder";
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r3 = "Ignoring region with malformed origin: ";
-        r2.append(r3);
-        r2.append(r1);
-        r1 = r2.toString();
-        android.util.Log.w(r12, r1);
-        return r0;
-    L_0x00f2:
-        r12 = "TtmlDecoder";
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r3 = "Ignoring region with unsupported origin: ";
-        r2.append(r3);
-        r2.append(r1);
-        r1 = r2.toString();
-        android.util.Log.w(r12, r1);
-        return r0;
-    L_0x0109:
-        r12 = "TtmlDecoder";
-        r1 = "Ignoring region without an origin";
-        android.util.Log.w(r12, r1);
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.text.ttml.TtmlDecoder.parseRegionAttributes(org.xmlpull.v1.XmlPullParser):org.telegram.messenger.exoplayer2.text.ttml.TtmlRegion");
+    private TtmlRegion parseRegionAttributes(XmlPullParser xmlParser) {
+        String regionId = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_ID);
+        if (regionId == null) {
+            return null;
+        }
+        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_ORIGIN);
+        if (regionOrigin != null) {
+            Matcher originMatcher = PERCENTAGE_COORDINATES.matcher(regionOrigin);
+            if (originMatcher.matches()) {
+                try {
+                    float position = Float.parseFloat(originMatcher.group(1)) / 100.0f;
+                    float line = Float.parseFloat(originMatcher.group(2)) / 100.0f;
+                    String regionExtent = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_EXTENT);
+                    if (regionExtent != null) {
+                        Matcher extentMatcher = PERCENTAGE_COORDINATES.matcher(regionExtent);
+                        if (extentMatcher.matches()) {
+                            try {
+                                float width = Float.parseFloat(extentMatcher.group(1)) / 100.0f;
+                                float height = Float.parseFloat(extentMatcher.group(2)) / 100.0f;
+                                int lineAnchor = 0;
+                                String displayAlign = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_DISPLAY_ALIGN);
+                                if (displayAlign != null) {
+                                    String toLowerInvariant = Util.toLowerInvariant(displayAlign);
+                                    Object obj = -1;
+                                    switch (toLowerInvariant.hashCode()) {
+                                        case -1364013995:
+                                            if (toLowerInvariant.equals(TtmlNode.CENTER)) {
+                                                obj = null;
+                                                break;
+                                            }
+                                            break;
+                                        case 92734940:
+                                            if (toLowerInvariant.equals("after")) {
+                                                obj = 1;
+                                                break;
+                                            }
+                                            break;
+                                    }
+                                    switch (obj) {
+                                        case null:
+                                            lineAnchor = 1;
+                                            line += height / 2.0f;
+                                            break;
+                                        case 1:
+                                            lineAnchor = 2;
+                                            line += height;
+                                            break;
+                                    }
+                                }
+                                return new TtmlRegion(regionId, position, line, 0, lineAnchor, width);
+                            } catch (NumberFormatException e) {
+                                Log.w(TAG, "Ignoring region with malformed extent: " + regionOrigin);
+                                return null;
+                            }
+                        }
+                        Log.w(TAG, "Ignoring region with unsupported extent: " + regionOrigin);
+                        return null;
+                    }
+                    Log.w(TAG, "Ignoring region without an extent");
+                    return null;
+                } catch (NumberFormatException e2) {
+                    Log.w(TAG, "Ignoring region with malformed origin: " + regionOrigin);
+                    return null;
+                }
+            }
+            Log.w(TAG, "Ignoring region with unsupported origin: " + regionOrigin);
+            return null;
+        }
+        Log.w(TAG, "Ignoring region without an origin");
+        return null;
     }
 
-    private String[] parseStyleIds(String str) {
-        return str.split("\\s+");
+    private String[] parseStyleIds(String parentStyleIds) {
+        return parentStyleIds.split("\\s+");
     }
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private org.telegram.messenger.exoplayer2.text.ttml.TtmlStyle parseStyleAttributes(org.xmlpull.v1.XmlPullParser r12, org.telegram.messenger.exoplayer2.text.ttml.TtmlStyle r13) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r11 = this;
-        r0 = r12.getAttributeCount();
-        r1 = 0;
-        r2 = r13;
-        r13 = r1;
-    L_0x0007:
-        if (r13 >= r0) goto L_0x021a;
-    L_0x0009:
-        r3 = r12.getAttributeValue(r13);
-        r4 = r12.getAttributeName(r13);
-        r5 = r4.hashCode();
-        r6 = 4;
-        r7 = 3;
-        r8 = 2;
-        r9 = -1;
-        r10 = 1;
-        switch(r5) {
-            case -1550943582: goto L_0x0070;
-            case -1224696685: goto L_0x0066;
-            case -1065511464: goto L_0x005c;
-            case -879295043: goto L_0x0051;
-            case -734428249: goto L_0x0047;
-            case 3355: goto L_0x003d;
-            case 94842723: goto L_0x0033;
-            case 365601008: goto L_0x0029;
-            case 1287124693: goto L_0x001f;
-            default: goto L_0x001d;
-        };
-    L_0x001d:
-        goto L_0x007a;
-    L_0x001f:
-        r5 = "backgroundColor";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0027:
-        r4 = r10;
-        goto L_0x007b;
-    L_0x0029:
-        r5 = "fontSize";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0031:
-        r4 = r6;
-        goto L_0x007b;
-    L_0x0033:
-        r5 = "color";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x003b:
-        r4 = r8;
-        goto L_0x007b;
-    L_0x003d:
-        r5 = "id";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0045:
-        r4 = r1;
-        goto L_0x007b;
-    L_0x0047:
-        r5 = "fontWeight";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x004f:
-        r4 = 5;
-        goto L_0x007b;
-    L_0x0051:
-        r5 = "textDecoration";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0059:
-        r4 = 8;
-        goto L_0x007b;
-    L_0x005c:
-        r5 = "textAlign";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0064:
-        r4 = 7;
-        goto L_0x007b;
-    L_0x0066:
-        r5 = "fontFamily";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x006e:
-        r4 = r7;
-        goto L_0x007b;
-    L_0x0070:
-        r5 = "fontStyle";
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x007a;
-    L_0x0078:
-        r4 = 6;
-        goto L_0x007b;
-    L_0x007a:
-        r4 = r9;
-    L_0x007b:
-        switch(r4) {
-            case 0: goto L_0x0202;
-            case 1: goto L_0x01df;
-            case 2: goto L_0x01bc;
-            case 3: goto L_0x01b3;
-            case 4: goto L_0x0191;
-            case 5: goto L_0x0181;
-            case 6: goto L_0x0171;
-            case 7: goto L_0x00f2;
-            case 8: goto L_0x0080;
-            default: goto L_0x007e;
-        };
-    L_0x007e:
-        goto L_0x0216;
-    L_0x0080:
-        r3 = org.telegram.messenger.exoplayer2.util.Util.toLowerInvariant(r3);
-        r4 = r3.hashCode();
-        r5 = -NUM; // 0xffffffffa8e6a22b float:-2.5605459E-14 double:NaN;
-        if (r4 == r5) goto L_0x00bb;
-    L_0x008d:
-        r5 = -NUM; // 0xffffffffc2c9c6cc float:-100.888275 double:NaN;
-        if (r4 == r5) goto L_0x00b1;
-    L_0x0092:
-        r5 = 913457136; // 0x36723ff0 float:3.6098027E-6 double:4.5130779E-315;
-        if (r4 == r5) goto L_0x00a7;
-    L_0x0097:
-        r5 = NUM; // 0x641ec051 float:1.1713774E22 double:8.29900303E-315;
-        if (r4 == r5) goto L_0x009d;
-    L_0x009c:
-        goto L_0x00c4;
-    L_0x009d:
-        r4 = "linethrough";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x00c4;
-    L_0x00a5:
-        r7 = r1;
-        goto L_0x00c5;
-    L_0x00a7:
-        r4 = "nolinethrough";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x00c4;
-    L_0x00af:
-        r7 = r10;
-        goto L_0x00c5;
-    L_0x00b1:
-        r4 = "underline";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x00c4;
-    L_0x00b9:
-        r7 = r8;
-        goto L_0x00c5;
-    L_0x00bb:
-        r4 = "nounderline";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x00c4;
-    L_0x00c3:
-        goto L_0x00c5;
-    L_0x00c4:
-        r7 = r9;
-    L_0x00c5:
-        switch(r7) {
-            case 0: goto L_0x00e8;
-            case 1: goto L_0x00de;
-            case 2: goto L_0x00d4;
-            case 3: goto L_0x00ca;
-            default: goto L_0x00c8;
-        };
-    L_0x00c8:
-        goto L_0x0216;
-    L_0x00ca:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setUnderline(r1);
-        goto L_0x0216;
-    L_0x00d4:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setUnderline(r10);
-        goto L_0x0216;
-    L_0x00de:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setLinethrough(r1);
-        goto L_0x0216;
-    L_0x00e8:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setLinethrough(r10);
-        goto L_0x0216;
-    L_0x00f2:
-        r3 = org.telegram.messenger.exoplayer2.util.Util.toLowerInvariant(r3);
-        r4 = r3.hashCode();
-        switch(r4) {
-            case -1364013995: goto L_0x0126;
-            case 100571: goto L_0x011c;
-            case 3317767: goto L_0x0112;
-            case 108511772: goto L_0x0108;
-            case 109757538: goto L_0x00fe;
-            default: goto L_0x00fd;
-        };
-    L_0x00fd:
-        goto L_0x012f;
-    L_0x00fe:
-        r4 = "start";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x012f;
-    L_0x0106:
-        r6 = r10;
-        goto L_0x0130;
-    L_0x0108:
-        r4 = "right";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x012f;
-    L_0x0110:
-        r6 = r8;
-        goto L_0x0130;
-    L_0x0112:
-        r4 = "left";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x012f;
-    L_0x011a:
-        r6 = r1;
-        goto L_0x0130;
-    L_0x011c:
-        r4 = "end";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x012f;
-    L_0x0124:
-        r6 = r7;
-        goto L_0x0130;
-    L_0x0126:
-        r4 = "center";
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x012f;
-    L_0x012e:
-        goto L_0x0130;
-    L_0x012f:
-        r6 = r9;
-    L_0x0130:
-        switch(r6) {
-            case 0: goto L_0x0165;
-            case 1: goto L_0x0159;
-            case 2: goto L_0x014d;
-            case 3: goto L_0x0141;
-            case 4: goto L_0x0135;
-            default: goto L_0x0133;
-        };
-    L_0x0133:
-        goto L_0x0216;
-    L_0x0135:
-        r2 = r11.createIfNull(r2);
-        r3 = android.text.Layout.Alignment.ALIGN_CENTER;
-        r2 = r2.setTextAlign(r3);
-        goto L_0x0216;
-    L_0x0141:
-        r2 = r11.createIfNull(r2);
-        r3 = android.text.Layout.Alignment.ALIGN_OPPOSITE;
-        r2 = r2.setTextAlign(r3);
-        goto L_0x0216;
-    L_0x014d:
-        r2 = r11.createIfNull(r2);
-        r3 = android.text.Layout.Alignment.ALIGN_OPPOSITE;
-        r2 = r2.setTextAlign(r3);
-        goto L_0x0216;
-    L_0x0159:
-        r2 = r11.createIfNull(r2);
-        r3 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        r2 = r2.setTextAlign(r3);
-        goto L_0x0216;
-    L_0x0165:
-        r2 = r11.createIfNull(r2);
-        r3 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        r2 = r2.setTextAlign(r3);
-        goto L_0x0216;
-    L_0x0171:
-        r2 = r11.createIfNull(r2);
-        r4 = "italic";
-        r3 = r4.equalsIgnoreCase(r3);
-        r2 = r2.setItalic(r3);
-        goto L_0x0216;
-    L_0x0181:
-        r2 = r11.createIfNull(r2);
-        r4 = "bold";
-        r3 = r4.equalsIgnoreCase(r3);
-        r2 = r2.setBold(r3);
-        goto L_0x0216;
-    L_0x0191:
-        r4 = r11.createIfNull(r2);	 Catch:{ SubtitleDecoderException -> 0x019c }
-        parseFontSize(r3, r4);	 Catch:{ SubtitleDecoderException -> 0x019b }
-        r2 = r4;
-        goto L_0x0216;
-    L_0x019b:
-        r2 = r4;
-    L_0x019c:
-        r4 = "TtmlDecoder";
-        r5 = new java.lang.StringBuilder;
-        r5.<init>();
-        r6 = "Failed parsing fontSize value: ";
-        r5.append(r6);
-        r5.append(r3);
-        r3 = r5.toString();
-        android.util.Log.w(r4, r3);
-        goto L_0x0216;
-    L_0x01b3:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setFontFamily(r3);
-        goto L_0x0216;
-    L_0x01bc:
-        r2 = r11.createIfNull(r2);
-        r4 = org.telegram.messenger.exoplayer2.util.ColorParser.parseTtmlColor(r3);	 Catch:{ IllegalArgumentException -> 0x01c8 }
-        r2.setFontColor(r4);	 Catch:{ IllegalArgumentException -> 0x01c8 }
-        goto L_0x0216;
-    L_0x01c8:
-        r4 = "TtmlDecoder";
-        r5 = new java.lang.StringBuilder;
-        r5.<init>();
-        r6 = "Failed parsing color value: ";
-        r5.append(r6);
-        r5.append(r3);
-        r3 = r5.toString();
-        android.util.Log.w(r4, r3);
-        goto L_0x0216;
-    L_0x01df:
-        r2 = r11.createIfNull(r2);
-        r4 = org.telegram.messenger.exoplayer2.util.ColorParser.parseTtmlColor(r3);	 Catch:{ IllegalArgumentException -> 0x01eb }
-        r2.setBackgroundColor(r4);	 Catch:{ IllegalArgumentException -> 0x01eb }
-        goto L_0x0216;
-    L_0x01eb:
-        r4 = "TtmlDecoder";
-        r5 = new java.lang.StringBuilder;
-        r5.<init>();
-        r6 = "Failed parsing background value: ";
-        r5.append(r6);
-        r5.append(r3);
-        r3 = r5.toString();
-        android.util.Log.w(r4, r3);
-        goto L_0x0216;
-    L_0x0202:
-        r4 = "style";
-        r5 = r12.getName();
-        r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0216;
-    L_0x020e:
-        r2 = r11.createIfNull(r2);
-        r2 = r2.setId(r3);
-    L_0x0216:
-        r13 = r13 + 1;
-        goto L_0x0007;
-    L_0x021a:
-        return r2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.text.ttml.TtmlDecoder.parseStyleAttributes(org.xmlpull.v1.XmlPullParser, org.telegram.messenger.exoplayer2.text.ttml.TtmlStyle):org.telegram.messenger.exoplayer2.text.ttml.TtmlStyle");
-    }
-
-    private TtmlStyle createIfNull(TtmlStyle ttmlStyle) {
-        return ttmlStyle == null ? new TtmlStyle() : ttmlStyle;
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private TtmlNode parseNode(XmlPullParser xmlPullParser, TtmlNode ttmlNode, Map<String, TtmlRegion> map, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
-        long j;
-        long j2;
-        XmlPullParser xmlPullParser2 = xmlPullParser;
-        TtmlNode ttmlNode2 = ttmlNode;
-        FrameAndTickRate frameAndTickRate2 = frameAndTickRate;
-        String str = TtmlNode.ANONYMOUS_REGION_ID;
-        int attributeCount = xmlPullParser.getAttributeCount();
-        TtmlStyle parseStyleAttributes = parseStyleAttributes(xmlPullParser2, null);
-        TtmlStyle ttmlStyle = null;
-        long j3 = C0542C.TIME_UNSET;
-        long j4 = C0542C.TIME_UNSET;
-        long j5 = C0542C.TIME_UNSET;
-        String str2 = str;
+    private TtmlStyle parseStyleAttributes(XmlPullParser parser, TtmlStyle style) {
+        int attributeCount = parser.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            Object obj;
-            String attributeName = xmlPullParser2.getAttributeName(i);
-            String attributeValue = xmlPullParser2.getAttributeValue(i);
+            boolean z;
+            String attributeValue = parser.getAttributeValue(i);
+            String attributeName = parser.getAttributeName(i);
             switch (attributeName.hashCode()) {
-                case -934795532:
-                    if (attributeName.equals("region")) {
-                        obj = 4;
+                case -1550943582:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_FONT_STYLE)) {
+                        z = true;
                         break;
                     }
-                case 99841:
-                    if (attributeName.equals(ATTR_DURATION)) {
-                        obj = 2;
+                case -1224696685:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_FONT_FAMILY)) {
+                        z = true;
                         break;
                     }
-                case 100571:
-                    if (attributeName.equals("end")) {
-                        obj = 1;
+                case -1065511464:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_TEXT_ALIGN)) {
+                        z = true;
                         break;
                     }
-                case 93616297:
-                    if (attributeName.equals(ATTR_BEGIN)) {
-                        obj = null;
+                case -879295043:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_TEXT_DECORATION)) {
+                        z = true;
                         break;
                     }
-                case 109780401:
-                    if (attributeName.equals("style")) {
-                        obj = 3;
+                case -734428249:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_FONT_WEIGHT)) {
+                        z = true;
+                        break;
+                    }
+                case 3355:
+                    if (attributeName.equals(TtmlNode.ATTR_ID)) {
+                        z = false;
+                        break;
+                    }
+                case 94842723:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_COLOR)) {
+                        z = true;
+                        break;
+                    }
+                case 365601008:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_FONT_SIZE)) {
+                        z = true;
+                        break;
+                    }
+                case 1287124693:
+                    if (attributeName.equals(TtmlNode.ATTR_TTS_BACKGROUND_COLOR)) {
+                        z = true;
                         break;
                     }
                 default:
+                    z = true;
+                    break;
             }
-            obj = -1;
-            Map<String, TtmlRegion> map2;
-            switch (obj) {
-                case null:
-                    map2 = map;
-                    j3 = parseTimeExpression(attributeValue, frameAndTickRate2);
-                    break;
-                case 1:
-                    map2 = map;
-                    j4 = parseTimeExpression(attributeValue, frameAndTickRate2);
-                    break;
-                case 2:
-                    map2 = map;
-                    j5 = parseTimeExpression(attributeValue, frameAndTickRate2);
-                    break;
-                case 3:
-                    map2 = map;
-                    String[] parseStyleIds = parseStyleIds(attributeValue);
-                    if (parseStyleIds.length <= 0) {
+            switch (z) {
+                case false:
+                    if (!"style".equals(parser.getName())) {
                         break;
                     }
-                    ttmlStyle = parseStyleIds;
+                    style = createIfNull(style).setId(attributeValue);
                     break;
-                case 4:
-                    if (!map.containsKey(attributeValue)) {
+                case true:
+                    style = createIfNull(style);
+                    try {
+                        style.setBackgroundColor(ColorParser.parseTtmlColor(attributeValue));
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        Log.w(TAG, "Failed parsing background value: " + attributeValue);
                         break;
                     }
-                    str2 = attributeValue;
-                    break;
-                default:
-                    map2 = map;
-                    break;
-            }
-        }
-        if (ttmlNode2 != null) {
-            long j6 = ttmlNode2.startTimeUs;
-            j = C0542C.TIME_UNSET;
-            if (j6 != C0542C.TIME_UNSET) {
-                if (j3 != C0542C.TIME_UNSET) {
-                    j3 += ttmlNode2.startTimeUs;
-                }
-                if (j4 != C0542C.TIME_UNSET) {
-                    j4 += ttmlNode2.startTimeUs;
-                }
-            }
-        } else {
-            j = C0542C.TIME_UNSET;
-        }
-        if (j4 == j) {
-            if (j5 != j) {
-                j2 = j3 + j5;
-            } else if (!(ttmlNode2 == null || ttmlNode2.endTimeUs == j)) {
-                j2 = ttmlNode2.endTimeUs;
-            }
-            return TtmlNode.buildNode(xmlPullParser.getName(), j3, j2, parseStyleAttributes, ttmlStyle, str2);
-        }
-        j2 = j4;
-        return TtmlNode.buildNode(xmlPullParser.getName(), j3, j2, parseStyleAttributes, ttmlStyle, str2);
-    }
-
-    private static boolean isSupportedTag(String str) {
-        if (!(str.equals(TtmlNode.TAG_TT) || str.equals(TtmlNode.TAG_HEAD) || str.equals(TtmlNode.TAG_BODY) || str.equals(TtmlNode.TAG_DIV) || str.equals(TtmlNode.TAG_P) || str.equals(TtmlNode.TAG_SPAN) || str.equals(TtmlNode.TAG_BR) || str.equals("style") || str.equals(TtmlNode.TAG_STYLING) || str.equals(TtmlNode.TAG_LAYOUT) || str.equals("region") || str.equals(TtmlNode.TAG_METADATA) || str.equals(TtmlNode.TAG_SMPTE_IMAGE) || str.equals(TtmlNode.TAG_SMPTE_DATA))) {
-            if (str.equals(TtmlNode.TAG_SMPTE_INFORMATION) == null) {
-                return null;
-            }
-        }
-        return true;
-    }
-
-    private static void parseFontSize(String str, TtmlStyle ttmlStyle) throws SubtitleDecoderException {
-        Matcher matcher;
-        String[] split = str.split("\\s+");
-        if (split.length == 1) {
-            matcher = FONT_SIZE.matcher(str);
-        } else if (split.length == 2) {
-            matcher = FONT_SIZE.matcher(split[1]);
-            Log.w(TAG, "Multiple values in fontSize attribute. Picking the second value for vertical font size and ignoring the first.");
-        } else {
-            ttmlStyle = new StringBuilder();
-            ttmlStyle.append("Invalid number of entries for fontSize: ");
-            ttmlStyle.append(split.length);
-            ttmlStyle.append(".");
-            throw new SubtitleDecoderException(ttmlStyle.toString());
-        }
-        if (matcher.matches()) {
-            String group = matcher.group(3);
-            int i = -1;
-            int hashCode = group.hashCode();
-            if (hashCode != 37) {
-                if (hashCode != 3240) {
-                    if (hashCode == 3592) {
-                        if (group.equals("px")) {
-                            i = 0;
-                        }
+                case true:
+                    style = createIfNull(style);
+                    try {
+                        style.setFontColor(ColorParser.parseTtmlColor(attributeValue));
+                        break;
+                    } catch (IllegalArgumentException e2) {
+                        Log.w(TAG, "Failed parsing color value: " + attributeValue);
+                        break;
                     }
-                } else if (group.equals("em")) {
-                    i = 1;
-                }
-            } else if (group.equals("%")) {
-                i = 2;
-            }
-            switch (i) {
-                case 0:
-                    ttmlStyle.setFontSizeUnit(1);
+                case true:
+                    style = createIfNull(style).setFontFamily(attributeValue);
                     break;
-                case 1:
-                    ttmlStyle.setFontSizeUnit(2);
+                case true:
+                    try {
+                        style = createIfNull(style);
+                        parseFontSize(attributeValue, style);
+                        break;
+                    } catch (SubtitleDecoderException e3) {
+                        Log.w(TAG, "Failed parsing fontSize value: " + attributeValue);
+                        break;
+                    }
+                case true:
+                    style = createIfNull(style).setBold(TtmlNode.BOLD.equalsIgnoreCase(attributeValue));
                     break;
-                case 2:
-                    ttmlStyle.setFontSizeUnit(3);
+                case true:
+                    style = createIfNull(style).setItalic(TtmlNode.ITALIC.equalsIgnoreCase(attributeValue));
                     break;
-                default:
-                    ttmlStyle = new StringBuilder();
-                    ttmlStyle.append("Invalid unit for fontSize: '");
-                    ttmlStyle.append(group);
-                    ttmlStyle.append("'.");
-                    throw new SubtitleDecoderException(ttmlStyle.toString());
-            }
-            ttmlStyle.setFontSize(Float.valueOf(matcher.group(1)).floatValue());
-            return;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid expression for fontSize: '");
-        stringBuilder.append(str);
-        stringBuilder.append("'.");
-        throw new SubtitleDecoderException(stringBuilder.toString());
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static long parseTimeExpression(String str, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
-        Matcher matcher = CLOCK_TIME.matcher(str);
-        int i = 5;
-        if (matcher.matches()) {
-            double parseLong = (((double) (Long.parseLong(matcher.group(1)) * 3600)) + ((double) (Long.parseLong(matcher.group(2)) * 60))) + ((double) Long.parseLong(matcher.group(3)));
-            str = matcher.group(4);
-            double d = 0.0d;
-            parseLong += str != null ? Double.parseDouble(str) : 0.0d;
-            str = matcher.group(5);
-            parseLong += str != null ? (double) (((float) Long.parseLong(str)) / frameAndTickRate.effectiveFrameRate) : 0.0d;
-            str = matcher.group(6);
-            if (str != null) {
-                d = (((double) Long.parseLong(str)) / ((double) frameAndTickRate.subFrameRate)) / ((double) frameAndTickRate.effectiveFrameRate);
-            }
-            return (long) ((parseLong + d) * 1000000.0d);
-        }
-        matcher = OFFSET_TIME.matcher(str);
-        if (matcher.matches()) {
-            double parseDouble = Double.parseDouble(matcher.group(1));
-            str = matcher.group(2);
-            int hashCode = str.hashCode();
-            if (hashCode != 102) {
-                if (hashCode != 104) {
-                    if (hashCode != 109) {
-                        if (hashCode != 3494) {
-                            switch (hashCode) {
-                                case 115:
-                                    if (str.equals("s") != null) {
-                                        i = 2;
-                                        break;
-                                    }
-                                case 116:
-                                    if (str.equals("t") != null) {
-                                        break;
-                                    }
-                                default:
+                case true:
+                    attributeName = Util.toLowerInvariant(attributeValue);
+                    switch (attributeName.hashCode()) {
+                        case -1364013995:
+                            if (attributeName.equals(TtmlNode.CENTER)) {
+                                z = true;
+                                break;
                             }
-                        } else if (str.equals("ms") != null) {
-                            i = 3;
-                            switch (i) {
-                                case 0:
-                                    parseDouble *= 0;
-                                    break;
-                                case 1:
-                                    parseDouble *= 0;
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    parseDouble /= 0;
-                                    break;
-                                case 4:
-                                    parseDouble /= (double) frameAndTickRate.effectiveFrameRate;
-                                    break;
-                                case 5:
-                                    parseDouble /= (double) frameAndTickRate.tickRate;
-                                    break;
-                                default:
-                                    break;
+                        case 100571:
+                            if (attributeName.equals("end")) {
+                                z = true;
+                                break;
                             }
-                            return (long) (parseDouble * 1000000.0d);
-                        }
-                    } else if (str.equals("m") != null) {
-                        i = 1;
-                        switch (i) {
-                            case 0:
-                                parseDouble *= 0;
+                        case 3317767:
+                            if (attributeName.equals(TtmlNode.LEFT)) {
+                                z = false;
                                 break;
-                            case 1:
-                                parseDouble *= 0;
+                            }
+                        case 108511772:
+                            if (attributeName.equals(TtmlNode.RIGHT)) {
+                                z = true;
                                 break;
-                            case 2:
+                            }
+                        case 109757538:
+                            if (attributeName.equals(TtmlNode.START)) {
+                                z = true;
                                 break;
-                            case 3:
-                                parseDouble /= 0;
-                                break;
-                            case 4:
-                                parseDouble /= (double) frameAndTickRate.effectiveFrameRate;
-                                break;
-                            case 5:
-                                parseDouble /= (double) frameAndTickRate.tickRate;
-                                break;
-                            default:
-                                break;
-                        }
-                        return (long) (parseDouble * 1000000.0d);
+                            }
+                        default:
+                            z = true;
+                            break;
                     }
-                } else if (str.equals("h") != null) {
-                    i = 0;
-                    switch (i) {
-                        case 0:
-                            parseDouble *= 0;
+                    switch (z) {
+                        case false:
+                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_NORMAL);
                             break;
-                        case 1:
-                            parseDouble *= 0;
+                        case true:
+                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_NORMAL);
                             break;
-                        case 2:
+                        case true:
+                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_OPPOSITE);
                             break;
-                        case 3:
-                            parseDouble /= 0;
+                        case true:
+                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_OPPOSITE);
                             break;
-                        case 4:
-                            parseDouble /= (double) frameAndTickRate.effectiveFrameRate;
-                            break;
-                        case 5:
-                            parseDouble /= (double) frameAndTickRate.tickRate;
+                        case true:
+                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_CENTER);
                             break;
                         default:
                             break;
                     }
-                    return (long) (parseDouble * 1000000.0d);
-                }
-            } else if (str.equals("f") != null) {
-                i = 4;
-                switch (i) {
-                    case 0:
-                        parseDouble *= 0;
-                        break;
-                    case 1:
-                        parseDouble *= 0;
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        parseDouble /= 0;
-                        break;
-                    case 4:
-                        parseDouble /= (double) frameAndTickRate.effectiveFrameRate;
-                        break;
-                    case 5:
-                        parseDouble /= (double) frameAndTickRate.tickRate;
-                        break;
-                    default:
-                        break;
-                }
-                return (long) (parseDouble * 1000000.0d);
+                case true:
+                    attributeName = Util.toLowerInvariant(attributeValue);
+                    switch (attributeName.hashCode()) {
+                        case -1461280213:
+                            if (attributeName.equals(TtmlNode.NO_UNDERLINE)) {
+                                z = true;
+                                break;
+                            }
+                        case -1026963764:
+                            if (attributeName.equals(TtmlNode.UNDERLINE)) {
+                                z = true;
+                                break;
+                            }
+                        case 913457136:
+                            if (attributeName.equals(TtmlNode.NO_LINETHROUGH)) {
+                                z = true;
+                                break;
+                            }
+                        case 1679736913:
+                            if (attributeName.equals(TtmlNode.LINETHROUGH)) {
+                                z = false;
+                                break;
+                            }
+                        default:
+                            z = true;
+                            break;
+                    }
+                    switch (z) {
+                        case false:
+                            style = createIfNull(style).setLinethrough(true);
+                            break;
+                        case true:
+                            style = createIfNull(style).setLinethrough(false);
+                            break;
+                        case true:
+                            style = createIfNull(style).setUnderline(true);
+                            break;
+                        case true:
+                            style = createIfNull(style).setUnderline(false);
+                            break;
+                        default:
+                            break;
+                    }
+                default:
+                    break;
             }
-            i = -1;
-            switch (i) {
-                case 0:
-                    parseDouble *= 0;
+        }
+        return style;
+    }
+
+    private TtmlStyle createIfNull(TtmlStyle style) {
+        return style == null ? new TtmlStyle() : style;
+    }
+
+    private TtmlNode parseNode(XmlPullParser parser, TtmlNode parent, Map<String, TtmlRegion> regionMap, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
+        long duration = C0542C.TIME_UNSET;
+        long startTime = C0542C.TIME_UNSET;
+        long endTime = C0542C.TIME_UNSET;
+        String regionId = TtmlNode.ANONYMOUS_REGION_ID;
+        String[] styleIds = null;
+        int attributeCount = parser.getAttributeCount();
+        TtmlStyle style = parseStyleAttributes(parser, null);
+        for (int i = 0; i < attributeCount; i++) {
+            String attr = parser.getAttributeName(i);
+            String value = parser.getAttributeValue(i);
+            Object obj = -1;
+            switch (attr.hashCode()) {
+                case -934795532:
+                    if (attr.equals("region")) {
+                        obj = 4;
+                        break;
+                    }
+                    break;
+                case 99841:
+                    if (attr.equals(ATTR_DURATION)) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
+                case 100571:
+                    if (attr.equals("end")) {
+                        obj = 1;
+                        break;
+                    }
+                    break;
+                case 93616297:
+                    if (attr.equals(ATTR_BEGIN)) {
+                        obj = null;
+                        break;
+                    }
+                    break;
+                case 109780401:
+                    if (attr.equals("style")) {
+                        obj = 3;
+                        break;
+                    }
+                    break;
+            }
+            switch (obj) {
+                case null:
+                    startTime = parseTimeExpression(value, frameAndTickRate);
                     break;
                 case 1:
-                    parseDouble *= 0;
+                    endTime = parseTimeExpression(value, frameAndTickRate);
                     break;
                 case 2:
+                    duration = parseTimeExpression(value, frameAndTickRate);
                     break;
                 case 3:
-                    parseDouble /= 0;
+                    String[] ids = parseStyleIds(value);
+                    if (ids.length <= 0) {
+                        break;
+                    }
+                    styleIds = ids;
                     break;
                 case 4:
-                    parseDouble /= (double) frameAndTickRate.effectiveFrameRate;
-                    break;
-                case 5:
-                    parseDouble /= (double) frameAndTickRate.tickRate;
+                    if (!regionMap.containsKey(value)) {
+                        break;
+                    }
+                    regionId = value;
                     break;
                 default:
                     break;
             }
-            return (long) (parseDouble * 1000000.0d);
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Malformed time expression: ");
-        stringBuilder.append(str);
-        throw new SubtitleDecoderException(stringBuilder.toString());
+        if (!(parent == null || parent.startTimeUs == C0542C.TIME_UNSET)) {
+            if (startTime != C0542C.TIME_UNSET) {
+                startTime += parent.startTimeUs;
+            }
+            if (endTime != C0542C.TIME_UNSET) {
+                endTime += parent.startTimeUs;
+            }
+        }
+        if (endTime == C0542C.TIME_UNSET) {
+            if (duration != C0542C.TIME_UNSET) {
+                endTime = startTime + duration;
+            } else if (!(parent == null || parent.endTimeUs == C0542C.TIME_UNSET)) {
+                endTime = parent.endTimeUs;
+            }
+        }
+        return TtmlNode.buildNode(parser.getName(), startTime, endTime, style, styleIds, regionId);
+    }
+
+    private static boolean isSupportedTag(String tag) {
+        if (tag.equals(TtmlNode.TAG_TT) || tag.equals(TtmlNode.TAG_HEAD) || tag.equals(TtmlNode.TAG_BODY) || tag.equals(TtmlNode.TAG_DIV) || tag.equals(TtmlNode.TAG_P) || tag.equals(TtmlNode.TAG_SPAN) || tag.equals(TtmlNode.TAG_BR) || tag.equals("style") || tag.equals(TtmlNode.TAG_STYLING) || tag.equals(TtmlNode.TAG_LAYOUT) || tag.equals("region") || tag.equals(TtmlNode.TAG_METADATA) || tag.equals(TtmlNode.TAG_SMPTE_IMAGE) || tag.equals(TtmlNode.TAG_SMPTE_DATA) || tag.equals(TtmlNode.TAG_SMPTE_INFORMATION)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static void parseFontSize(String expression, TtmlStyle out) throws SubtitleDecoderException {
+        Matcher matcher;
+        String[] expressions = expression.split("\\s+");
+        if (expressions.length == 1) {
+            matcher = FONT_SIZE.matcher(expression);
+        } else if (expressions.length == 2) {
+            matcher = FONT_SIZE.matcher(expressions[1]);
+            Log.w(TAG, "Multiple values in fontSize attribute. Picking the second value for vertical font size and ignoring the first.");
+        } else {
+            throw new SubtitleDecoderException("Invalid number of entries for fontSize: " + expressions.length + ".");
+        }
+        if (matcher.matches()) {
+            String unit = matcher.group(3);
+            int i = -1;
+            switch (unit.hashCode()) {
+                case 37:
+                    if (unit.equals("%")) {
+                        i = 2;
+                        break;
+                    }
+                    break;
+                case 3240:
+                    if (unit.equals("em")) {
+                        i = 1;
+                        break;
+                    }
+                    break;
+                case 3592:
+                    if (unit.equals("px")) {
+                        i = 0;
+                        break;
+                    }
+                    break;
+            }
+            switch (i) {
+                case 0:
+                    out.setFontSizeUnit(1);
+                    break;
+                case 1:
+                    out.setFontSizeUnit(2);
+                    break;
+                case 2:
+                    out.setFontSizeUnit(3);
+                    break;
+                default:
+                    throw new SubtitleDecoderException("Invalid unit for fontSize: '" + unit + "'.");
+            }
+            out.setFontSize(Float.valueOf(matcher.group(1)).floatValue());
+            return;
+        }
+        throw new SubtitleDecoderException("Invalid expression for fontSize: '" + expression + "'.");
+    }
+
+    private static long parseTimeExpression(String time, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
+        Matcher matcher = CLOCK_TIME.matcher(time);
+        if (matcher.matches()) {
+            double durationSeconds = (((double) (Long.parseLong(matcher.group(1)) * 3600)) + ((double) (Long.parseLong(matcher.group(2)) * 60))) + ((double) Long.parseLong(matcher.group(3)));
+            String fraction = matcher.group(4);
+            durationSeconds += fraction != null ? Double.parseDouble(fraction) : 0.0d;
+            String frames = matcher.group(5);
+            durationSeconds += frames != null ? (double) (((float) Long.parseLong(frames)) / frameAndTickRate.effectiveFrameRate) : 0.0d;
+            String subframes = matcher.group(6);
+            return (long) (1000000.0d * (durationSeconds + (subframes != null ? (((double) Long.parseLong(subframes)) / ((double) frameAndTickRate.subFrameRate)) / ((double) frameAndTickRate.effectiveFrameRate) : 0.0d)));
+        }
+        matcher = OFFSET_TIME.matcher(time);
+        if (matcher.matches()) {
+            double offsetSeconds = Double.parseDouble(matcher.group(1));
+            String unit = matcher.group(2);
+            Object obj = -1;
+            switch (unit.hashCode()) {
+                case 102:
+                    if (unit.equals("f")) {
+                        obj = 4;
+                        break;
+                    }
+                    break;
+                case 104:
+                    if (unit.equals("h")) {
+                        obj = null;
+                        break;
+                    }
+                    break;
+                case 109:
+                    if (unit.equals("m")) {
+                        obj = 1;
+                        break;
+                    }
+                    break;
+                case 115:
+                    if (unit.equals("s")) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
+                case 116:
+                    if (unit.equals("t")) {
+                        obj = 5;
+                        break;
+                    }
+                    break;
+                case 3494:
+                    if (unit.equals("ms")) {
+                        obj = 3;
+                        break;
+                    }
+                    break;
+            }
+            switch (obj) {
+                case null:
+                    offsetSeconds *= 3600.0d;
+                    break;
+                case 1:
+                    offsetSeconds *= 60.0d;
+                    break;
+                case 3:
+                    offsetSeconds /= 1000.0d;
+                    break;
+                case 4:
+                    offsetSeconds /= (double) frameAndTickRate.effectiveFrameRate;
+                    break;
+                case 5:
+                    offsetSeconds /= (double) frameAndTickRate.tickRate;
+                    break;
+            }
+            return (long) (1000000.0d * offsetSeconds);
+        }
+        throw new SubtitleDecoderException("Malformed time expression: " + time);
     }
 }

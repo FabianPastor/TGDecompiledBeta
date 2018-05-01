@@ -8,10 +8,10 @@ public final class PriorityDataSourceFactory implements Factory {
     private final PriorityTaskManager priorityTaskManager;
     private final Factory upstreamFactory;
 
-    public PriorityDataSourceFactory(Factory factory, PriorityTaskManager priorityTaskManager, int i) {
-        this.upstreamFactory = factory;
+    public PriorityDataSourceFactory(Factory upstreamFactory, PriorityTaskManager priorityTaskManager, int priority) {
+        this.upstreamFactory = upstreamFactory;
         this.priorityTaskManager = priorityTaskManager;
-        this.priority = i;
+        this.priority = priority;
     }
 
     public PriorityDataSource createDataSource() {

@@ -7,17 +7,17 @@ public class SimpleOutputBuffer extends OutputBuffer {
     public ByteBuffer data;
     private final SimpleDecoder<?, SimpleOutputBuffer, ?> owner;
 
-    public SimpleOutputBuffer(SimpleDecoder<?, SimpleOutputBuffer, ?> simpleDecoder) {
-        this.owner = simpleDecoder;
+    public SimpleOutputBuffer(SimpleDecoder<?, SimpleOutputBuffer, ?> owner) {
+        this.owner = owner;
     }
 
-    public ByteBuffer init(long j, int i) {
-        this.timeUs = j;
-        if (this.data == null || this.data.capacity() < i) {
-            this.data = ByteBuffer.allocateDirect(i).order(ByteOrder.nativeOrder());
+    public ByteBuffer init(long timeUs, int size) {
+        this.timeUs = timeUs;
+        if (this.data == null || this.data.capacity() < size) {
+            this.data = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
         }
         this.data.position(0);
-        this.data.limit(i);
+        this.data.limit(size);
         return this.data;
     }
 

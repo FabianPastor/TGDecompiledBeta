@@ -18,62 +18,37 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     private long streamOffsetUs;
     private final int trackType;
 
-    public final RendererCapabilities getCapabilities() {
-        return this;
-    }
-
-    public MediaClock getMediaClock() {
-        return null;
-    }
-
-    public void handleMessage(int i, Object obj) throws ExoPlaybackException {
-    }
-
-    protected void onDisabled() {
-    }
-
-    protected void onEnabled(boolean z) throws ExoPlaybackException {
-    }
-
-    protected void onPositionReset(long j, boolean z) throws ExoPlaybackException {
-    }
-
-    protected void onStarted() throws ExoPlaybackException {
-    }
-
-    protected void onStopped() throws ExoPlaybackException {
-    }
-
-    protected void onStreamChanged(Format[] formatArr, long j) throws ExoPlaybackException {
-    }
-
-    public int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
-        return 0;
-    }
-
-    public BaseRenderer(int i) {
-        this.trackType = i;
+    public BaseRenderer(int trackType) {
+        this.trackType = trackType;
     }
 
     public final int getTrackType() {
         return this.trackType;
     }
 
-    public final void setIndex(int i) {
-        this.index = i;
+    public final RendererCapabilities getCapabilities() {
+        return this;
+    }
+
+    public final void setIndex(int index) {
+        this.index = index;
+    }
+
+    public MediaClock getMediaClock() {
+        return null;
     }
 
     public final int getState() {
         return this.state;
     }
 
-    public final void enable(RendererConfiguration rendererConfiguration, Format[] formatArr, SampleStream sampleStream, long j, boolean z, long j2) throws ExoPlaybackException {
+    public final void enable(RendererConfiguration configuration, Format[] formats, SampleStream stream, long positionUs, boolean joining, long offsetUs) throws ExoPlaybackException {
         Assertions.checkState(this.state == 0);
-        this.configuration = rendererConfiguration;
+        this.configuration = configuration;
         this.state = 1;
-        onEnabled(z);
-        replaceStream(formatArr, sampleStream, j2);
-        onPositionReset(j, z);
+        onEnabled(joining);
+        replaceStream(formats, stream, offsetUs);
+        onPositionReset(positionUs, joining);
     }
 
     public final void start() throws ExoPlaybackException {
@@ -86,12 +61,12 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         onStarted();
     }
 
-    public final void replaceStream(Format[] formatArr, SampleStream sampleStream, long j) throws ExoPlaybackException {
-        Assertions.checkState(this.streamIsFinal ^ 1);
-        this.stream = sampleStream;
-        this.readEndOfStream = null;
-        this.streamOffsetUs = j;
-        onStreamChanged(formatArr, j);
+    public final void replaceStream(Format[] formats, SampleStream stream, long offsetUs) throws ExoPlaybackException {
+        Assertions.checkState(!this.streamIsFinal);
+        this.stream = stream;
+        this.readEndOfStream = false;
+        this.streamOffsetUs = offsetUs;
+        onStreamChanged(formats, offsetUs);
     }
 
     public final SampleStream getStream() {
@@ -114,10 +89,10 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         this.stream.maybeThrowError();
     }
 
-    public final void resetPosition(long j) throws ExoPlaybackException {
+    public final void resetPosition(long positionUs) throws ExoPlaybackException {
         this.streamIsFinal = false;
         this.readEndOfStream = false;
-        onPositionReset(j, false);
+        onPositionReset(positionUs, false);
     }
 
     public final void stop() throws ExoPlaybackException {
@@ -138,6 +113,31 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         onDisabled();
     }
 
+    public int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
+        return 0;
+    }
+
+    public void handleMessage(int what, Object object) throws ExoPlaybackException {
+    }
+
+    protected void onEnabled(boolean joining) throws ExoPlaybackException {
+    }
+
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
+    }
+
+    protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
+    }
+
+    protected void onStarted() throws ExoPlaybackException {
+    }
+
+    protected void onStopped() throws ExoPlaybackException {
+    }
+
+    protected void onDisabled() {
+    }
+
     protected final RendererConfiguration getConfiguration() {
         return this.configuration;
     }
@@ -146,29 +146,28 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return this.index;
     }
 
-    protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z) {
-        z = this.stream.readData(formatHolder, decoderInputBuffer, z);
-        int i = -4;
-        if (z) {
-            if (decoderInputBuffer.isEndOfStream() != null) {
+    protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+        int result = this.stream.readData(formatHolder, buffer, formatRequired);
+        if (result == -4) {
+            if (buffer.isEndOfStream()) {
                 this.readEndOfStream = true;
-                if (this.streamIsFinal == null) {
-                    i = -3;
+                if (this.streamIsFinal) {
+                    return -4;
                 }
-                return i;
+                return -3;
             }
-            decoderInputBuffer.timeUs += this.streamOffsetUs;
-        } else if (z) {
-            decoderInputBuffer = formatHolder.format;
-            if (decoderInputBuffer.subsampleOffsetUs != Long.MAX_VALUE) {
-                formatHolder.format = decoderInputBuffer.copyWithSubsampleOffsetUs(decoderInputBuffer.subsampleOffsetUs + this.streamOffsetUs);
+            buffer.timeUs += this.streamOffsetUs;
+        } else if (result == -5) {
+            Format format = formatHolder.format;
+            if (format.subsampleOffsetUs != Long.MAX_VALUE) {
+                formatHolder.format = format.copyWithSubsampleOffsetUs(format.subsampleOffsetUs + this.streamOffsetUs);
             }
         }
-        return z;
+        return result;
     }
 
-    protected int skipSource(long j) {
-        return this.stream.skipData(j - this.streamOffsetUs);
+    protected int skipSource(long positionUs) {
+        return this.stream.skipData(positionUs - this.streamOffsetUs);
     }
 
     protected final boolean isSourceReady() {
@@ -179,6 +178,9 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         if (drmInitData == null) {
             return true;
         }
-        return drmSessionManager == null ? null : drmSessionManager.canAcquireSession(drmInitData);
+        if (drmSessionManager == null) {
+            return false;
+        }
+        return drmSessionManager.canAcquireSession(drmInitData);
     }
 }

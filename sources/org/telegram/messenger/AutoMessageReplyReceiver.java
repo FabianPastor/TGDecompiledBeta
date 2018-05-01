@@ -8,22 +8,17 @@ import android.support.v4.app.RemoteInput;
 
 public class AutoMessageReplyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        Intent intent2 = intent;
         ApplicationLoader.postInitApplication();
-        Bundle resultsFromIntent = RemoteInput.getResultsFromIntent(intent);
-        if (resultsFromIntent != null) {
-            CharSequence charSequence = resultsFromIntent.getCharSequence(NotificationsController.EXTRA_VOICE_REPLY);
-            if (charSequence != null) {
-                if (charSequence.length() != 0) {
-                    long longExtra = intent2.getLongExtra("dialog_id", 0);
-                    int intExtra = intent2.getIntExtra("max_id", 0);
-                    int intExtra2 = intent2.getIntExtra("currentAccount", 0);
-                    if (longExtra != 0) {
-                        if (intExtra != 0) {
-                            SendMessagesHelper.getInstance(intExtra2).sendMessage(charSequence.toString(), longExtra, null, null, true, null, null, null);
-                            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true);
-                        }
-                    }
+        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        if (remoteInput != null) {
+            CharSequence text = remoteInput.getCharSequence(NotificationsController.EXTRA_VOICE_REPLY);
+            if (text != null && text.length() != 0) {
+                long dialog_id = intent.getLongExtra("dialog_id", 0);
+                int max_id = intent.getIntExtra("max_id", 0);
+                int currentAccount = intent.getIntExtra("currentAccount", 0);
+                if (dialog_id != 0 && max_id != 0) {
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage(text.toString(), dialog_id, null, null, true, null, null, null);
+                    MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
                 }
             }
         }

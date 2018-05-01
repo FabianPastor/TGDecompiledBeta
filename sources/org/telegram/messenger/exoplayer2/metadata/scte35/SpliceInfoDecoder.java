@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.metadata.scte35;
 
+import java.nio.ByteBuffer;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.Metadata.Entry;
 import org.telegram.messenger.exoplayer2.metadata.MetadataDecoder;
@@ -19,45 +20,43 @@ public final class SpliceInfoDecoder implements MetadataDecoder {
     private final ParsableBitArray sectionHeader = new ParsableBitArray();
     private TimestampAdjuster timestampAdjuster;
 
-    public Metadata decode(MetadataInputBuffer metadataInputBuffer) throws MetadataDecoderException {
-        if (this.timestampAdjuster == null || metadataInputBuffer.subsampleOffsetUs != this.timestampAdjuster.getTimestampOffsetUs()) {
-            this.timestampAdjuster = new TimestampAdjuster(metadataInputBuffer.timeUs);
-            this.timestampAdjuster.adjustSampleTimestamp(metadataInputBuffer.timeUs - metadataInputBuffer.subsampleOffsetUs);
+    public Metadata decode(MetadataInputBuffer inputBuffer) throws MetadataDecoderException {
+        if (this.timestampAdjuster == null || inputBuffer.subsampleOffsetUs != this.timestampAdjuster.getTimestampOffsetUs()) {
+            this.timestampAdjuster = new TimestampAdjuster(inputBuffer.timeUs);
+            this.timestampAdjuster.adjustSampleTimestamp(inputBuffer.timeUs - inputBuffer.subsampleOffsetUs);
         }
-        metadataInputBuffer = metadataInputBuffer.data;
-        byte[] array = metadataInputBuffer.array();
-        metadataInputBuffer = metadataInputBuffer.limit();
-        this.sectionData.reset(array, metadataInputBuffer);
-        this.sectionHeader.reset(array, metadataInputBuffer);
+        ByteBuffer buffer = inputBuffer.data;
+        byte[] data = buffer.array();
+        int size = buffer.limit();
+        this.sectionData.reset(data, size);
+        this.sectionHeader.reset(data, size);
         this.sectionHeader.skipBits(39);
-        long readBits = (((long) this.sectionHeader.readBits(1)) << 32) | ((long) this.sectionHeader.readBits(32));
+        long ptsAdjustment = (((long) this.sectionHeader.readBits(1)) << 32) | ((long) this.sectionHeader.readBits(32));
         this.sectionHeader.skipBits(20);
-        metadataInputBuffer = this.sectionHeader.readBits(12);
-        int readBits2 = this.sectionHeader.readBits(8);
-        TimeSignalCommand timeSignalCommand = null;
+        int spliceCommandLength = this.sectionHeader.readBits(12);
+        int spliceCommandType = this.sectionHeader.readBits(8);
+        SpliceCommand command = null;
         this.sectionData.skipBytes(14);
-        if (readBits2 == 0) {
-            timeSignalCommand = new SpliceNullCommand();
-        } else if (readBits2 != 255) {
-            switch (readBits2) {
-                case 4:
-                    timeSignalCommand = SpliceScheduleCommand.parseFromSection(this.sectionData);
-                    break;
-                case 5:
-                    timeSignalCommand = SpliceInsertCommand.parseFromSection(this.sectionData, readBits, this.timestampAdjuster);
-                    break;
-                case 6:
-                    timeSignalCommand = TimeSignalCommand.parseFromSection(this.sectionData, readBits, this.timestampAdjuster);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            timeSignalCommand = PrivateCommand.parseFromSection(this.sectionData, metadataInputBuffer, readBits);
+        switch (spliceCommandType) {
+            case 0:
+                command = new SpliceNullCommand();
+                break;
+            case 4:
+                command = SpliceScheduleCommand.parseFromSection(this.sectionData);
+                break;
+            case 5:
+                command = SpliceInsertCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
+                break;
+            case 6:
+                command = TimeSignalCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
+                break;
+            case 255:
+                command = PrivateCommand.parseFromSection(this.sectionData, spliceCommandLength, ptsAdjustment);
+                break;
         }
-        if (timeSignalCommand == null) {
+        if (command == null) {
             return new Metadata(new Entry[0]);
         }
-        return new Metadata(timeSignalCommand);
+        return new Metadata(command);
     }
 }

@@ -10,43 +10,36 @@ public final class ByteArrayDataSource implements DataSource {
     private int readPosition;
     private Uri uri;
 
-    public ByteArrayDataSource(byte[] bArr) {
-        Assertions.checkNotNull(bArr);
-        Assertions.checkArgument(bArr.length > 0);
-        this.data = bArr;
+    public ByteArrayDataSource(byte[] data) {
+        Assertions.checkNotNull(data);
+        Assertions.checkArgument(data.length > 0);
+        this.data = data;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
         this.uri = dataSpec.uri;
         this.readPosition = (int) dataSpec.position;
         this.bytesRemaining = (int) (dataSpec.length == -1 ? ((long) this.data.length) - dataSpec.position : dataSpec.length);
-        if (this.bytesRemaining > 0) {
-            if (this.readPosition + this.bytesRemaining <= this.data.length) {
-                return (long) this.bytesRemaining;
-            }
+        if (this.bytesRemaining > 0 && this.readPosition + this.bytesRemaining <= this.data.length) {
+            return (long) this.bytesRemaining;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Unsatisfiable range: [");
-        stringBuilder.append(this.readPosition);
-        stringBuilder.append(", ");
-        stringBuilder.append(dataSpec.length);
-        stringBuilder.append("], length: ");
-        stringBuilder.append(this.data.length);
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("Unsatisfiable range: [" + this.readPosition + ", " + dataSpec.length + "], length: " + this.data.length);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        if (i2 == 0) {
-            return null;
-        }
-        if (this.bytesRemaining == 0) {
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
+        if (readLength == 0) {
+            return 0;
+        } else if (this.bytesRemaining == 0) {
+            r0 = readLength;
             return -1;
+        } else {
+            readLength = Math.min(readLength, this.bytesRemaining);
+            System.arraycopy(this.data, this.readPosition, buffer, offset, readLength);
+            this.readPosition += readLength;
+            this.bytesRemaining -= readLength;
+            r0 = readLength;
+            return readLength;
         }
-        i2 = Math.min(i2, this.bytesRemaining);
-        System.arraycopy(this.data, this.readPosition, bArr, i, i2);
-        this.readPosition += i2;
-        this.bytesRemaining -= i2;
-        return i2;
     }
 
     public Uri getUri() {

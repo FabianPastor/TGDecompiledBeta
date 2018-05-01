@@ -1,6 +1,7 @@
 package org.telegram.messenger.support.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -18,19 +19,19 @@ public class DividerItemDecoration extends ItemDecoration {
     private Drawable mDivider;
     private int mOrientation;
 
-    public DividerItemDecoration(Context context, int i) {
-        context = context.obtainStyledAttributes(ATTRS);
-        this.mDivider = context.getDrawable(0);
+    public DividerItemDecoration(Context context, int orientation) {
+        TypedArray a = context.obtainStyledAttributes(ATTRS);
+        this.mDivider = a.getDrawable(0);
         if (this.mDivider == null) {
             Log.w(TAG, "@android:attr/listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute all call setDrawable()");
         }
-        context.recycle();
-        setOrientation(i);
+        a.recycle();
+        setOrientation(orientation);
     }
 
-    public void setOrientation(int i) {
-        if (i == 0 || i == 1) {
-            this.mOrientation = i;
+    public void setOrientation(int orientation) {
+        if (orientation == 0 || orientation == 1) {
+            this.mOrientation = orientation;
             return;
         }
         throw new IllegalArgumentException("Invalid orientation. It should be either HORIZONTAL or VERTICAL");
@@ -43,77 +44,69 @@ public class DividerItemDecoration extends ItemDecoration {
         this.mDivider = drawable;
     }
 
-    public void onDraw(Canvas canvas, RecyclerView recyclerView, State state) {
-        if (recyclerView.getLayoutManager() != null) {
-            if (this.mDivider != null) {
-                if (this.mOrientation == 1) {
-                    drawVertical(canvas, recyclerView);
-                } else {
-                    drawHorizontal(canvas, recyclerView);
-                }
+    public void onDraw(Canvas c, RecyclerView parent, State state) {
+        if (parent.getLayoutManager() != null && this.mDivider != null) {
+            if (this.mOrientation == 1) {
+                drawVertical(c, parent);
+            } else {
+                drawHorizontal(c, parent);
             }
         }
     }
 
-    private void drawVertical(Canvas canvas, RecyclerView recyclerView) {
-        int paddingLeft;
-        int width;
+    private void drawVertical(Canvas canvas, RecyclerView parent) {
+        int left;
+        int right;
         canvas.save();
-        int i = 0;
-        if (recyclerView.getClipToPadding()) {
-            paddingLeft = recyclerView.getPaddingLeft();
-            width = recyclerView.getWidth() - recyclerView.getPaddingRight();
-            canvas.clipRect(paddingLeft, recyclerView.getPaddingTop(), width, recyclerView.getHeight() - recyclerView.getPaddingBottom());
+        if (parent.getClipToPadding()) {
+            left = parent.getPaddingLeft();
+            right = parent.getWidth() - parent.getPaddingRight();
+            canvas.clipRect(left, parent.getPaddingTop(), right, parent.getHeight() - parent.getPaddingBottom());
         } else {
-            width = recyclerView.getWidth();
-            paddingLeft = 0;
+            left = 0;
+            right = parent.getWidth();
         }
-        int childCount = recyclerView.getChildCount();
-        while (i < childCount) {
-            View childAt = recyclerView.getChildAt(i);
-            recyclerView.getDecoratedBoundsWithMargins(childAt, this.mBounds);
-            int round = this.mBounds.bottom + Math.round(childAt.getTranslationY());
-            this.mDivider.setBounds(paddingLeft, round - this.mDivider.getIntrinsicHeight(), width, round);
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = parent.getChildAt(i);
+            parent.getDecoratedBoundsWithMargins(child, this.mBounds);
+            int bottom = this.mBounds.bottom + Math.round(child.getTranslationY());
+            this.mDivider.setBounds(left, bottom - this.mDivider.getIntrinsicHeight(), right, bottom);
             this.mDivider.draw(canvas);
-            i++;
         }
         canvas.restore();
     }
 
-    private void drawHorizontal(Canvas canvas, RecyclerView recyclerView) {
-        int paddingTop;
-        int height;
+    private void drawHorizontal(Canvas canvas, RecyclerView parent) {
+        int top;
+        int bottom;
         canvas.save();
-        int i = 0;
-        if (recyclerView.getClipToPadding()) {
-            paddingTop = recyclerView.getPaddingTop();
-            height = recyclerView.getHeight() - recyclerView.getPaddingBottom();
-            canvas.clipRect(recyclerView.getPaddingLeft(), paddingTop, recyclerView.getWidth() - recyclerView.getPaddingRight(), height);
+        if (parent.getClipToPadding()) {
+            top = parent.getPaddingTop();
+            bottom = parent.getHeight() - parent.getPaddingBottom();
+            canvas.clipRect(parent.getPaddingLeft(), top, parent.getWidth() - parent.getPaddingRight(), bottom);
         } else {
-            height = recyclerView.getHeight();
-            paddingTop = 0;
+            top = 0;
+            bottom = parent.getHeight();
         }
-        int childCount = recyclerView.getChildCount();
-        while (i < childCount) {
-            View childAt = recyclerView.getChildAt(i);
-            recyclerView.getLayoutManager().getDecoratedBoundsWithMargins(childAt, this.mBounds);
-            int round = this.mBounds.right + Math.round(childAt.getTranslationX());
-            this.mDivider.setBounds(round - this.mDivider.getIntrinsicWidth(), paddingTop, round, height);
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = parent.getChildAt(i);
+            parent.getLayoutManager().getDecoratedBoundsWithMargins(child, this.mBounds);
+            int right = this.mBounds.right + Math.round(child.getTranslationX());
+            this.mDivider.setBounds(right - this.mDivider.getIntrinsicWidth(), top, right, bottom);
             this.mDivider.draw(canvas);
-            i++;
         }
         canvas.restore();
     }
 
-    public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, State state) {
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
         if (this.mDivider == null) {
-            rect.set(0, 0, 0, 0);
-            return;
-        }
-        if (this.mOrientation == 1) {
-            rect.set(0, 0, 0, this.mDivider.getIntrinsicHeight());
+            outRect.set(0, 0, 0, 0);
+        } else if (this.mOrientation == 1) {
+            outRect.set(0, 0, 0, this.mDivider.getIntrinsicHeight());
         } else {
-            rect.set(0, 0, this.mDivider.getIntrinsicWidth(), 0);
+            outRect.set(0, 0, this.mDivider.getIntrinsicWidth(), 0);
         }
     }
 }

@@ -7,15 +7,8 @@ public interface AudioProcessor {
     public static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocateDirect(0).order(ByteOrder.nativeOrder());
 
     public static final class UnhandledFormatException extends Exception {
-        public UnhandledFormatException(int i, int i2, int i3) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unhandled format: ");
-            stringBuilder.append(i);
-            stringBuilder.append(" Hz, ");
-            stringBuilder.append(i2);
-            stringBuilder.append(" channels in encoding ");
-            stringBuilder.append(i3);
-            super(stringBuilder.toString());
+        public UnhandledFormatException(int sampleRateHz, int channelCount, int encoding) {
+            super("Unhandled format: " + sampleRateHz + " Hz, " + channelCount + " channels in encoding " + encoding);
         }
     }
 

@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.C0446R;
 import org.telegram.messenger.LocaleController;
@@ -36,88 +37,119 @@ public class StickerSetCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
 
-    public StickerSetCell(Context context, int i) {
-        Context context2 = context;
-        int i2 = i;
+    public StickerSetCell(Context context, int option) {
+        int i;
+        int i2;
+        int i3 = 5;
+        int i4 = 3;
         super(context);
-        this.textView = new TextView(context2);
+        this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        int i3 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(r0.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
-        r0.valueTextView = new TextView(context2);
-        r0.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-        r0.valueTextView.setTextSize(1, 13.0f);
-        r0.valueTextView.setLines(1);
-        r0.valueTextView.setMaxLines(1);
-        r0.valueTextView.setSingleLine(true);
-        r0.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(r0.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
-        r0.imageView = new BackupImageView(context2);
-        r0.imageView.setAspectFit(true);
-        addView(r0.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        View view;
-        if (i2 == 2) {
-            r0.progressView = new RadialProgressView(getContext());
-            r0.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
-            r0.progressView.setSize(AndroidUtilities.dp(30.0f));
-            view = r0.progressView;
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        this.valueTextView = new TextView(context);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        this.valueTextView.setTextSize(1, 13.0f);
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        TextView textView = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        textView.setGravity(i2);
+        view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        this.imageView = new BackupImageView(context);
+        this.imageView.setAspectFit(true);
+        view = this.imageView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        if (option == 2) {
+            float f;
+            float f2;
+            this.progressView = new RadialProgressView(getContext());
+            this.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
+            this.progressView.setSize(AndroidUtilities.dp(30.0f));
+            view = this.progressView;
             if (!LocaleController.isRTL) {
                 i3 = 3;
             }
-            addView(view, LayoutHelper.createFrame(48, 48.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        } else if (i2 != 0) {
-            r0.optionsButton = new ImageView(context2);
-            int i4 = 0;
-            r0.optionsButton.setFocusable(false);
-            r0.optionsButton.setScaleType(ScaleType.CENTER);
-            r0.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            if (i2 == 1) {
-                r0.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
-                r0.optionsButton.setImageResource(C0446R.drawable.msg_actions);
-                view = r0.optionsButton;
-                if (LocaleController.isRTL) {
-                    i3 = 3;
-                }
-                addView(view, LayoutHelper.createFrame(40, 40, i3 | 48));
-            } else if (i2 == 3) {
-                r0.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-                r0.optionsButton.setImageResource(C0446R.drawable.sticker_added);
-                view = r0.optionsButton;
-                if (LocaleController.isRTL) {
-                    i3 = 3;
-                }
-                int i5 = i3 | 48;
-                float f = (float) (LocaleController.isRTL ? 10 : 0);
+            i = i3 | 48;
+            if (LocaleController.isRTL) {
+                f = 0.0f;
+            } else {
+                f = 12.0f;
+            }
+            if (LocaleController.isRTL) {
+                f2 = 12.0f;
+            } else {
+                f2 = 0.0f;
+            }
+            addView(view, LayoutHelper.createFrame(48, 48.0f, i, f, 8.0f, f2, 0.0f));
+        } else if (option != 0) {
+            this.optionsButton = new ImageView(context);
+            this.optionsButton.setFocusable(false);
+            this.optionsButton.setScaleType(ScaleType.CENTER);
+            this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+            if (option == 1) {
+                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
+                this.optionsButton.setImageResource(C0446R.drawable.msg_actions);
+                View view2 = this.optionsButton;
                 if (!LocaleController.isRTL) {
-                    i4 = 10;
+                    i4 = 5;
                 }
-                addView(view, LayoutHelper.createFrame(40, 40.0f, i5, f, 12.0f, (float) i4, 0.0f));
+                addView(view2, LayoutHelper.createFrame(40, 40, i4 | 48));
+            } else if (option == 3) {
+                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
+                this.optionsButton.setImageResource(C0446R.drawable.sticker_added);
+                view = this.optionsButton;
+                if (!LocaleController.isRTL) {
+                    i4 = 5;
+                }
+                addView(view, LayoutHelper.createFrame(40, 40.0f, i4 | 48, (float) (LocaleController.isRTL ? 10 : 0), 12.0f, (float) (LocaleController.isRTL ? 0 : 10), 0.0f));
             }
         }
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
     }
 
-    public void setText(String str, String str2, int i, boolean z) {
-        this.needDivider = z;
-        this.stickersSet = false;
-        this.textView.setText(str);
-        this.valueTextView.setText(str2);
-        if (TextUtils.isEmpty(str2) != null) {
+    public void setText(String title, String subtitle, int icon, boolean divider) {
+        this.needDivider = divider;
+        this.stickersSet = null;
+        this.textView.setText(title);
+        this.valueTextView.setText(subtitle);
+        if (TextUtils.isEmpty(subtitle)) {
             this.textView.setTranslationY((float) AndroidUtilities.dp(10.0f));
         } else {
-            this.textView.setTranslationY(null);
+            this.textView.setTranslationY(0.0f);
         }
-        if (i != 0) {
-            this.imageView.setImageResource(i, Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon));
+        if (icon != 0) {
+            this.imageView.setImageResource(icon, Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon));
             this.imageView.setVisibility(0);
             if (this.progressView != null) {
                 this.progressView.setVisibility(4);
@@ -131,11 +163,11 @@ public class StickerSetCell extends FrameLayout {
         }
     }
 
-    public void setStickersSet(TL_messages_stickerSet tL_messages_stickerSet, boolean z) {
-        this.needDivider = z;
-        this.stickersSet = tL_messages_stickerSet;
+    public void setStickersSet(TL_messages_stickerSet set, boolean divider) {
+        this.needDivider = divider;
+        this.stickersSet = set;
         this.imageView.setVisibility(0);
-        if (this.progressView) {
+        if (this.progressView != null) {
             this.progressView.setVisibility(4);
         }
         this.textView.setTranslationY(0.0f);
@@ -149,27 +181,27 @@ public class StickerSetCell extends FrameLayout {
             this.valueTextView.setAlpha(1.0f);
             this.imageView.setAlpha(1.0f);
         }
-        tL_messages_stickerSet = tL_messages_stickerSet.documents;
-        if (tL_messages_stickerSet == null || tL_messages_stickerSet.isEmpty()) {
+        ArrayList<Document> documents = set.documents;
+        if (documents == null || documents.isEmpty()) {
             this.valueTextView.setText(LocaleController.formatPluralString("Stickers", 0));
             return;
         }
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tL_messages_stickerSet.size()));
-        Document document = (Document) tL_messages_stickerSet.get(0);
-        if (document.thumb && document.thumb.location) {
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", documents.size()));
+        Document document = (Document) documents.get(0);
+        if (document.thumb != null && document.thumb.location != null) {
             this.imageView.setImage(document.thumb.location, null, "webp", null);
         }
     }
 
-    public void setChecked(boolean z) {
+    public void setChecked(boolean checked) {
         if (this.optionsButton != null) {
-            this.optionsButton.setVisibility(z ? false : true);
+            this.optionsButton.setVisibility(checked ? 0 : 4);
         }
     }
 
-    public void setOnOptionsClick(OnClickListener onClickListener) {
+    public void setOnOptionsClick(OnClickListener listener) {
         if (this.optionsButton != null) {
-            this.optionsButton.setOnClickListener(onClickListener);
+            this.optionsButton.setOnClickListener(listener);
         }
     }
 
@@ -177,14 +209,14 @@ public class StickerSetCell extends FrameLayout {
         return this.stickersSet;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (!(VERSION.SDK_INT < 21 || getBackground() == null || this.optionsButton == null)) {
             this.optionsButton.getHitRect(this.rect);
-            if (this.rect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+            if (this.rect.contains((int) event.getX(), (int) event.getY())) {
                 return true;
             }
         }
-        return super.onTouchEvent(motionEvent);
+        return super.onTouchEvent(event);
     }
 
     protected void onDraw(Canvas canvas) {

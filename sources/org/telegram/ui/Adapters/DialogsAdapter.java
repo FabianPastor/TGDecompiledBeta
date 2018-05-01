@@ -50,37 +50,37 @@ public class DialogsAdapter extends SelectionAdapter {
         }
     }
 
-    public DialogsAdapter(Context context, int i, boolean z) {
+    public DialogsAdapter(Context context, int type, boolean onlySelect) {
         this.mContext = context;
-        this.dialogsType = i;
-        this.isOnlySelect = z;
-        context = (i != 0 || z) ? null : true;
-        this.hasHints = context;
-        if (z) {
+        this.dialogsType = type;
+        this.isOnlySelect = onlySelect;
+        boolean z = type == 0 && !onlySelect;
+        this.hasHints = z;
+        if (onlySelect) {
             this.selectedDialogs = new ArrayList();
         }
     }
 
-    public void setOpenedDialogId(long j) {
-        this.openedDialogId = j;
+    public void setOpenedDialogId(long id) {
+        this.openedDialogId = id;
     }
 
     public boolean hasSelectedDialogs() {
         return (this.selectedDialogs == null || this.selectedDialogs.isEmpty()) ? false : true;
     }
 
-    public void addOrRemoveSelectedDialog(long j, View view) {
-        if (this.selectedDialogs.contains(Long.valueOf(j))) {
-            this.selectedDialogs.remove(Long.valueOf(j));
-            if ((view instanceof DialogCell) != null) {
-                ((DialogCell) view).setChecked(0, true);
+    public void addOrRemoveSelectedDialog(long did, View cell) {
+        if (this.selectedDialogs.contains(Long.valueOf(did))) {
+            this.selectedDialogs.remove(Long.valueOf(did));
+            if (cell instanceof DialogCell) {
+                ((DialogCell) cell).setChecked(false, true);
                 return;
             }
             return;
         }
-        this.selectedDialogs.add(Long.valueOf(j));
-        if ((view instanceof DialogCell) != null) {
-            ((DialogCell) view).setChecked(true, true);
+        this.selectedDialogs.add(Long.valueOf(did));
+        if (cell instanceof DialogCell) {
+            ((DialogCell) cell).setChecked(true, true);
         }
     }
 
@@ -89,12 +89,11 @@ public class DialogsAdapter extends SelectionAdapter {
     }
 
     public boolean isDataSetChanged() {
-        int i = this.currentCount;
-        if (i == getItemCount()) {
-            return i == 1;
-        } else {
+        int current = this.currentCount;
+        if (current != getItemCount() || current == 1) {
             return true;
         }
+        return false;
     }
 
     private ArrayList<TL_dialog> getDialogsArray() {
@@ -107,39 +106,41 @@ public class DialogsAdapter extends SelectionAdapter {
         if (this.dialogsType == 2) {
             return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
         }
-        return this.dialogsType == 3 ? MessagesController.getInstance(this.currentAccount).dialogsForward : null;
+        if (this.dialogsType == 3) {
+            return MessagesController.getInstance(this.currentAccount).dialogsForward;
+        }
+        return null;
     }
 
     public int getItemCount() {
-        int size = getDialogsArray().size();
-        if (size == 0 && MessagesController.getInstance(this.currentAccount).loadingDialogs) {
+        int count = getDialogsArray().size();
+        if (count == 0 && MessagesController.getInstance(this.currentAccount).loadingDialogs) {
             return 0;
         }
-        if (!MessagesController.getInstance(this.currentAccount).dialogsEndReached || size == 0) {
-            size++;
+        if (!MessagesController.getInstance(this.currentAccount).dialogsEndReached || count == 0) {
+            count++;
         }
         if (this.hasHints) {
-            size += 2 + MessagesController.getInstance(this.currentAccount).hintDialogs.size();
+            count += MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
         }
-        this.currentCount = size;
-        return size;
+        this.currentCount = count;
+        int i = count;
+        return count;
     }
 
     public TLObject getItem(int i) {
-        ArrayList dialogsArray = getDialogsArray();
+        ArrayList<TL_dialog> arrayList = getDialogsArray();
         if (this.hasHints) {
-            int size = 2 + MessagesController.getInstance(this.currentAccount).hintDialogs.size();
-            if (i < size) {
+            int count = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
+            if (i < count + 2) {
                 return (TLObject) MessagesController.getInstance(this.currentAccount).hintDialogs.get(i - 1);
             }
-            i -= size;
+            i -= count + 2;
         }
-        if (i >= 0) {
-            if (i < dialogsArray.size()) {
-                return (TLObject) dialogsArray.get(i);
-            }
+        if (i < 0 || i >= arrayList.size()) {
+            return null;
         }
-        return 0;
+        return (TLObject) arrayList.get(i);
     }
 
     public void notifyDataSetChanged() {
@@ -148,108 +149,125 @@ public class DialogsAdapter extends SelectionAdapter {
         super.notifyDataSetChanged();
     }
 
-    public void onViewAttachedToWindow(ViewHolder viewHolder) {
-        if (viewHolder.itemView instanceof DialogCell) {
-            ((DialogCell) viewHolder.itemView).checkCurrentDialogIndex();
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        if (holder.itemView instanceof DialogCell) {
+            ((DialogCell) holder.itemView).checkCurrentDialogIndex();
         }
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
-        viewHolder = viewHolder.getItemViewType();
-        return (viewHolder == 1 || viewHolder == 5 || viewHolder == 3) ? false : true;
+    public boolean isEnabled(ViewHolder holder) {
+        int viewType = holder.getItemViewType();
+        if (viewType == 1 || viewType == 5 || viewType == 3) {
+            return false;
+        }
+        return true;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View dialogCell;
-        View textView;
-        switch (i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view;
+        switch (viewType) {
             case 0:
-                dialogCell = new DialogCell(this.mContext, this.isOnlySelect);
+                view = new DialogCell(this.mContext, this.isOnlySelect);
                 break;
             case 1:
-                dialogCell = new LoadingCell(this.mContext);
+                view = new LoadingCell(this.mContext);
                 break;
             case 2:
-                dialogCell = new HeaderCell(this.mContext);
-                dialogCell.setText(LocaleController.getString("RecentlyViewed", C0446R.string.RecentlyViewed));
-                textView = new TextView(this.mContext);
+                int i;
+                View headerCell = new HeaderCell(this.mContext);
+                headerCell.setText(LocaleController.getString("RecentlyViewed", C0446R.string.RecentlyViewed));
+                TextView textView = new TextView(this.mContext);
                 textView.setTextSize(1, 15.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
                 textView.setText(LocaleController.getString("RecentlyViewedHide", C0446R.string.RecentlyViewedHide));
-                int i2 = 3;
-                textView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-                if (!LocaleController.isRTL) {
-                    i2 = 5;
+                if (LocaleController.isRTL) {
+                    i = 3;
+                } else {
+                    i = 5;
                 }
-                dialogCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 15.0f, 17.0f, 0.0f));
+                textView.setGravity(i | 16);
+                if (LocaleController.isRTL) {
+                    i = 3;
+                } else {
+                    i = 5;
+                }
+                headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
                 textView.setOnClickListener(new C07711());
+                view = headerCell;
                 break;
             case 3:
-                dialogCell = new FrameLayout(this.mContext) {
-                    protected void onMeasure(int i, int i2) {
-                        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(12.0f), NUM));
+                View frameLayout = new FrameLayout(this.mContext) {
+                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(12.0f), NUM));
                     }
                 };
-                dialogCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-                textView = new View(this.mContext);
-                textView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                dialogCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+                View v = new View(this.mContext);
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
+                view = frameLayout;
                 break;
             case 4:
-                dialogCell = new DialogMeUrlCell(this.mContext);
+                view = new DialogMeUrlCell(this.mContext);
                 break;
             default:
-                dialogCell = new DialogsEmptyCell(this.mContext);
+                view = new DialogsEmptyCell(this.mContext);
                 break;
         }
-        dialogCell.setLayoutParams(new LayoutParams(-1, i == 5 ? -1 : -2));
-        return new Holder(dialogCell);
+        view.setLayoutParams(new LayoutParams(-1, viewType == 5 ? -1 : -2));
+        return new Holder(view);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        int itemViewType = viewHolder.getItemViewType();
-        if (itemViewType == 0) {
-            DialogCell dialogCell = (DialogCell) viewHolder.itemView;
-            TL_dialog tL_dialog = (TL_dialog) getItem(i);
-            if (this.hasHints) {
-                i -= 2 + MessagesController.getInstance(this.currentAccount).hintDialogs.size();
-            }
-            boolean z = true;
-            dialogCell.useSeparator = i != getItemCount() - 1;
-            if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
-                if (tL_dialog.id != this.openedDialogId) {
-                    z = false;
+    public void onBindViewHolder(ViewHolder holder, int i) {
+        boolean z = true;
+        switch (holder.getItemViewType()) {
+            case 0:
+                DialogCell cell = holder.itemView;
+                TL_dialog dialog = (TL_dialog) getItem(i);
+                if (this.hasHints) {
+                    i -= MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
                 }
-                dialogCell.setDialogSelected(z);
-            }
-            if (this.selectedDialogs != null) {
-                dialogCell.setChecked(this.selectedDialogs.contains(Long.valueOf(tL_dialog.id)), false);
-            }
-            dialogCell.setDialog(tL_dialog, i, this.dialogsType);
-        } else if (itemViewType == 4) {
-            ((DialogMeUrlCell) viewHolder.itemView).setRecentMeUrl((RecentMeUrl) getItem(i));
+                cell.useSeparator = i != getItemCount() + -1;
+                if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
+                    if (dialog.id != this.openedDialogId) {
+                        z = false;
+                    }
+                    cell.setDialogSelected(z);
+                }
+                if (this.selectedDialogs != null) {
+                    cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.id)), false);
+                }
+                cell.setDialog(dialog, i, this.dialogsType);
+                return;
+            case 4:
+                holder.itemView.setRecentMeUrl((RecentMeUrl) getItem(i));
+                return;
+            default:
+                return;
         }
     }
 
     public int getItemViewType(int i) {
         if (this.hasHints) {
-            int size = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
-            int i2 = 2 + size;
-            if (i >= i2) {
-                i -= i2;
+            int count = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
+            if (i >= count + 2) {
+                i -= count + 2;
             } else if (i == 0) {
                 return 2;
             } else {
-                return i == 1 + size ? 3 : 4;
+                if (i == count + 1) {
+                    return 3;
+                }
+                return 4;
             }
         }
         if (i != getDialogsArray().size()) {
             return 0;
         }
-        if (MessagesController.getInstance(this.currentAccount).dialogsEndReached == 0) {
-            return 1;
+        if (MessagesController.getInstance(this.currentAccount).dialogsEndReached) {
+            return 5;
         }
-        return 5;
+        return 1;
     }
 }

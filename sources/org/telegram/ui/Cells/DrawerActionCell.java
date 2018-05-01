@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -28,8 +29,8 @@ public class DrawerActionCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 19.0f, 0.0f, 16.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -37,16 +38,16 @@ public class DrawerActionCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
     }
 
-    public void setTextAndIcon(String str, int i) {
+    public void setTextAndIcon(String text, int resId) {
         try {
-            this.textView.setText(str);
-            str = getResources().getDrawable(i);
-            if (str != null) {
-                str.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), Mode.MULTIPLY));
+            this.textView.setText(text);
+            Drawable drawable = getResources().getDrawable(resId);
+            if (drawable != null) {
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), Mode.MULTIPLY));
             }
-            this.textView.setCompoundDrawablesWithIntrinsicBounds(str, null, null, null);
-        } catch (Throwable th) {
-            FileLog.m3e(th);
+            this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        } catch (Throwable e) {
+            FileLog.m3e(e);
         }
     }
 }

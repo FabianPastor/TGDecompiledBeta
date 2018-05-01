@@ -17,24 +17,24 @@ public class LibflacAudioRenderer extends SimpleDecoderAudioRenderer {
         this(null, null, new AudioProcessor[0]);
     }
 
-    public LibflacAudioRenderer(Handler handler, AudioRendererEventListener audioRendererEventListener, AudioProcessor... audioProcessorArr) {
-        super(handler, audioRendererEventListener, audioProcessorArr);
+    public LibflacAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioProcessor... audioProcessors) {
+        super(eventHandler, eventListener, audioProcessors);
     }
 
     protected int supportsFormatInternal(DrmSessionManager<ExoMediaCrypto> drmSessionManager, Format format) {
         if (!MimeTypes.AUDIO_FLAC.equalsIgnoreCase(format.sampleMimeType)) {
-            return null;
+            return 0;
         }
         if (!supportsOutputEncoding(2)) {
             return 1;
         }
-        if (BaseRenderer.supportsFormatDrm(drmSessionManager, format.drmInitData) == null) {
-            return 2;
+        if (BaseRenderer.supportsFormatDrm(drmSessionManager, format.drmInitData)) {
+            return 4;
         }
-        return 4;
+        return 2;
     }
 
-    protected FlacDecoder createDecoder(Format format, ExoMediaCrypto exoMediaCrypto) throws FlacDecoderException {
+    protected FlacDecoder createDecoder(Format format, ExoMediaCrypto mediaCrypto) throws FlacDecoderException {
         return new FlacDecoder(16, 16, format.initializationData);
     }
 }

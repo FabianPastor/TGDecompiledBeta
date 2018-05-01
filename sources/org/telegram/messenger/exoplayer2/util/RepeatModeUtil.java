@@ -12,36 +12,32 @@ public final class RepeatModeUtil {
     public @interface RepeatToggleModes {
     }
 
-    public static boolean isRepeatModeEnabled(int i, int i2) {
-        boolean z = false;
-        switch (i) {
-            case 0:
-                return true;
-            case 1:
-                if ((i2 & 1) != 0) {
-                    z = true;
-                }
-                return z;
-            case 2:
-                if ((i2 & 2) != 0) {
-                    z = true;
-                }
-                return z;
-            default:
-                return false;
-        }
-    }
-
     private RepeatModeUtil() {
     }
 
-    public static int getNextRepeatMode(int i, int i2) {
-        for (int i3 = 1; i3 <= 2; i3++) {
-            int i4 = (i + i3) % 3;
-            if (isRepeatModeEnabled(i4, i2)) {
-                return i4;
+    public static int getNextRepeatMode(int currentMode, int enabledModes) {
+        for (int offset = 1; offset <= 2; offset++) {
+            int proposedMode = (currentMode + offset) % 3;
+            if (isRepeatModeEnabled(proposedMode, enabledModes)) {
+                return proposedMode;
             }
         }
-        return i;
+        return currentMode;
+    }
+
+    public static boolean isRepeatModeEnabled(int repeatMode, int enabledModes) {
+        switch (repeatMode) {
+            case 0:
+                return true;
+            case 1:
+                if ((enabledModes & 1) == 0) {
+                    return false;
+                }
+                return true;
+            case 2:
+                return (enabledModes & 2) != 0;
+            default:
+                return false;
+        }
     }
 }

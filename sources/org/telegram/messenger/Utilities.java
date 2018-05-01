@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utilities {
@@ -45,245 +46,235 @@ public class Utilities {
 
     static {
         try {
-            FileInputStream fileInputStream = new FileInputStream(new File("/dev/urandom"));
-            byte[] bArr = new byte[1024];
-            fileInputStream.read(bArr);
-            fileInputStream.close();
-            random.setSeed(bArr);
+            FileInputStream sUrandomIn = new FileInputStream(new File("/dev/urandom"));
+            byte[] buffer = new byte[1024];
+            sUrandomIn.read(buffer);
+            sUrandomIn.close();
+            random.setSeed(buffer);
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
     }
 
-    public static void aesIgeEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, boolean z, boolean z2, int i, int i2) {
-        if (!z2) {
-            bArr2 = (byte[]) bArr2.clone();
-        }
-        aesIgeEncryption(byteBuffer, bArr, bArr2, z, i, i2);
+    public static void aesIgeEncryption(ByteBuffer buffer, byte[] key, byte[] iv, boolean encrypt, boolean changeIv, int offset, int length) {
+        aesIgeEncryption(buffer, key, changeIv ? iv : (byte[]) iv.clone(), encrypt, offset, length);
     }
 
-    public static Integer parseInt(String str) {
-        if (str == null) {
+    public static Integer parseInt(String value) {
+        if (value == null) {
             return Integer.valueOf(0);
         }
-        Integer valueOf = Integer.valueOf(0);
+        Integer val = Integer.valueOf(0);
         try {
-            str = pattern.matcher(str);
-            if (str.find()) {
-                valueOf = Integer.valueOf(Integer.parseInt(str.group(0)));
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                return Integer.valueOf(Integer.parseInt(matcher.group(0)));
             }
+            return val;
         } catch (Throwable e) {
             FileLog.m3e(e);
+            return val;
         }
-        return valueOf;
     }
 
-    public static Long parseLong(String str) {
-        if (str == null) {
+    public static Long parseLong(String value) {
+        if (value == null) {
             return Long.valueOf(0);
         }
-        Long valueOf = Long.valueOf(0);
+        Long val = Long.valueOf(0);
         try {
-            str = pattern.matcher(str);
-            if (str.find()) {
-                valueOf = Long.valueOf(Long.parseLong(str.group(0)));
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                return Long.valueOf(Long.parseLong(matcher.group(0)));
             }
+            return val;
         } catch (Throwable e) {
             FileLog.m3e(e);
+            return val;
         }
-        return valueOf;
     }
 
-    public static String parseIntToString(String str) {
-        str = pattern.matcher(str);
-        return str.find() ? str.group(0) : null;
+    public static String parseIntToString(String value) {
+        Matcher matcher = pattern.matcher(value);
+        if (matcher.find()) {
+            return matcher.group(0);
+        }
+        return null;
     }
 
-    public static String bytesToHex(byte[] bArr) {
-        if (bArr == null) {
+    public static String bytesToHex(byte[] bytes) {
+        if (bytes == null) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
-        char[] cArr = new char[(bArr.length * 2)];
-        for (int i = 0; i < bArr.length; i++) {
-            int i2 = bArr[i] & 255;
-            int i3 = i * 2;
-            cArr[i3] = hexArray[i2 >>> 4];
-            cArr[i3 + 1] = hexArray[i2 & 15];
+        char[] hexChars = new char[(bytes.length * 2)];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 255;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[(j * 2) + 1] = hexArray[v & 15];
         }
-        return new String(cArr);
+        return new String(hexChars);
     }
 
-    public static byte[] hexToBytes(String str) {
-        if (str == null) {
+    public static byte[] hexToBytes(String hex) {
+        if (hex == null) {
             return null;
         }
-        int length = str.length();
-        byte[] bArr = new byte[(length / 2)];
-        for (int i = 0; i < length; i += 2) {
-            bArr[i / 2] = (byte) ((Character.digit(str.charAt(i), 16) << 4) + Character.digit(str.charAt(i + 1), 16));
+        int len = hex.length();
+        byte[] data = new byte[(len / 2)];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4) + Character.digit(hex.charAt(i + 1), 16));
         }
-        return bArr;
+        return data;
     }
 
-    public static boolean isGoodPrime(byte[] bArr, int i) {
-        boolean z = false;
-        if (i >= 2) {
-            if (i <= 7) {
-                if (bArr.length == 256) {
-                    if (bArr[0] < (byte) 0) {
-                        BigInteger bigInteger = new BigInteger(1, bArr);
-                        if (i == 2) {
-                            if (bigInteger.mod(BigInteger.valueOf(8)).intValue() != 7) {
-                                return false;
-                            }
-                        } else if (i == 3) {
-                            if (bigInteger.mod(BigInteger.valueOf(3)).intValue() != 2) {
-                                return false;
-                            }
-                        } else if (i == 5) {
-                            i = bigInteger.mod(BigInteger.valueOf(5)).intValue();
-                            if (!(i == 1 || i == 4)) {
-                                return false;
-                            }
-                        } else if (i == 6) {
-                            i = bigInteger.mod(BigInteger.valueOf(24)).intValue();
-                            if (!(i == 19 || i == 23)) {
-                                return false;
-                            }
-                        } else if (i == 7) {
-                            i = bigInteger.mod(BigInteger.valueOf(7)).intValue();
-                            if (!(i == 3 || i == 5 || i == 6)) {
-                                return false;
-                            }
-                        }
-                        if (bytesToHex(bArr).equals("C71CAEB9C6B1C9048E6C522F70F13F73980D40238E3E21C14934D037563D930F48198A0AA7C14058229493D22530F4DBFA336F6E0AC925139543AED44CCE7C3720FD51F69458705AC68CD4FE6B6B13ABDC9746512969328454F18FAF8C595F642477FE96BB2A941D5BCD1D4AC8CC49880708FA9B378E3C4F3A9060BEE67CF9A4A4A695811051907E162753B56B0F6B410DBA74D8A84B2A14B3144E0EF1284754FD17ED950D5965B4B9DD46582DB1178D169C6BC465B0D6FF9CA3928FEF5B9AE4E418FC15E83EBEA0F87FA9FF5EED70050DED2849F47BF959D956850CE929851F0D8115F635B105EE2E4E15D04B2454BF6F4FADF034B10403119CD8E3B92FCC5B") != null) {
-                            return true;
-                        }
-                        bArr = bigInteger.subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(2));
-                        if (bigInteger.isProbablePrime(30) && bArr.isProbablePrime(30) != null) {
-                            z = true;
-                        }
-                        return z;
-                    }
-                }
+    public static boolean isGoodPrime(byte[] prime, int g) {
+        boolean z = true;
+        if (g < 2 || g > 7 || prime.length != 256 || prime[0] >= (byte) 0) {
+            return false;
+        }
+        BigInteger dhBI = new BigInteger(1, prime);
+        if (g == 2) {
+            if (dhBI.mod(BigInteger.valueOf(8)).intValue() != 7) {
+                return false;
+            }
+        } else if (g == 3) {
+            if (dhBI.mod(BigInteger.valueOf(3)).intValue() != 2) {
+                return false;
+            }
+        } else if (g == 5) {
+            val = dhBI.mod(BigInteger.valueOf(5)).intValue();
+            if (!(val == 1 || val == 4)) {
+                return false;
+            }
+        } else if (g == 6) {
+            val = dhBI.mod(BigInteger.valueOf(24)).intValue();
+            if (!(val == 19 || val == 23)) {
+                return false;
+            }
+        } else if (g == 7) {
+            val = dhBI.mod(BigInteger.valueOf(7)).intValue();
+            if (!(val == 3 || val == 5 || val == 6)) {
                 return false;
             }
         }
-        return false;
+        if (bytesToHex(prime).equals("C71CAEB9C6B1C9048E6C522F70F13F73980D40238E3E21C14934D037563D930F48198A0AA7C14058229493D22530F4DBFA336F6E0AC925139543AED44CCE7C3720FD51F69458705AC68CD4FE6B6B13ABDC9746512969328454F18FAF8C595F642477FE96BB2A941D5BCD1D4AC8CC49880708FA9B378E3C4F3A9060BEE67CF9A4A4A695811051907E162753B56B0F6B410DBA74D8A84B2A14B3144E0EF1284754FD17ED950D5965B4B9DD46582DB1178D169C6BC465B0D6FF9CA3928FEF5B9AE4E418FC15E83EBEA0F87FA9FF5EED70050DED2849F47BF959D956850CE929851F0D8115F635B105EE2E4E15D04B2454BF6F4FADF034B10403119CD8E3B92FCC5B")) {
+            return true;
+        }
+        BigInteger dhBI2 = dhBI.subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(2));
+        if (!(dhBI.isProbablePrime(30) && dhBI2.isProbablePrime(30))) {
+            z = false;
+        }
+        return z;
     }
 
-    public static boolean isGoodGaAndGb(BigInteger bigInteger, BigInteger bigInteger2) {
-        return bigInteger.compareTo(BigInteger.valueOf(1)) == 1 && bigInteger.compareTo(bigInteger2.subtract(BigInteger.valueOf(1))) == -1;
+    public static boolean isGoodGaAndGb(BigInteger g_a, BigInteger p) {
+        return g_a.compareTo(BigInteger.valueOf(1)) == 1 && g_a.compareTo(p.subtract(BigInteger.valueOf(1))) == -1;
     }
 
-    public static boolean arraysEquals(byte[] bArr, int i, byte[] bArr2, int i2) {
-        if (bArr != null && bArr2 != null && i >= 0 && i2 >= 0 && bArr.length - i <= bArr2.length - i2 && bArr.length - i >= 0) {
-            if (bArr2.length - i2 >= 0) {
-                boolean z = true;
-                for (int i3 = i; i3 < bArr.length; i3++) {
-                    if (bArr[i3 + i] != bArr2[i3 + i2]) {
-                        z = false;
-                    }
+    public static boolean arraysEquals(byte[] arr1, int offset1, byte[] arr2, int offset2) {
+        if (arr1 == null || arr2 == null || offset1 < 0 || offset2 < 0 || arr1.length - offset1 > arr2.length - offset2 || arr1.length - offset1 < 0 || arr2.length - offset2 < 0) {
+            return false;
+        }
+        boolean result = true;
+        for (int a = offset1; a < arr1.length; a++) {
+            if (arr1[a + offset1] != arr2[a + offset2]) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public static byte[] computeSHA1(byte[] convertme, int offset, int len) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(convertme, offset, len);
+            return md.digest();
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[20];
+        }
+    }
+
+    public static byte[] computeSHA1(ByteBuffer convertme, int offset, int len) {
+        int oldp = convertme.position();
+        int oldl = convertme.limit();
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            convertme.position(offset);
+            convertme.limit(len);
+            md.update(convertme);
+            byte[] digest = md.digest();
+            return digest;
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[20];
+        } finally {
+            convertme.limit(oldl);
+            convertme.position(oldp);
+        }
+    }
+
+    public static byte[] computeSHA1(ByteBuffer convertme) {
+        return computeSHA1(convertme, 0, convertme.limit());
+    }
+
+    public static byte[] computeSHA1(byte[] convertme) {
+        return computeSHA1(convertme, 0, convertme.length);
+    }
+
+    public static byte[] computeSHA256(byte[] convertme) {
+        return computeSHA256(convertme, 0, convertme.length);
+    }
+
+    public static byte[] computeSHA256(byte[] convertme, int offset, int len) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(convertme, offset, len);
+            return md.digest();
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[32];
+        }
+    }
+
+    public static byte[] computeSHA256(byte[] b1, int o1, int l1, ByteBuffer b2, int o2, int l2) {
+        int oldp = b2.position();
+        int oldl = b2.limit();
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(b1, o1, l1);
+            b2.position(o2);
+            b2.limit(l2);
+            md.update(b2);
+            byte[] digest = md.digest();
+            return digest;
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[32];
+        } finally {
+            b2.limit(oldl);
+            b2.position(oldp);
+        }
+    }
+
+    public static long bytesToLong(byte[] bytes) {
+        return (((((((((long) bytes[7]) << 56) + ((((long) bytes[6]) & 255) << 48)) + ((((long) bytes[5]) & 255) << 40)) + ((((long) bytes[4]) & 255) << 32)) + ((((long) bytes[3]) & 255) << 24)) + ((((long) bytes[2]) & 255) << 16)) + ((((long) bytes[1]) & 255) << 8)) + (((long) bytes[0]) & 255);
+    }
+
+    public static String MD5(String md5) {
+        String str = null;
+        if (md5 != null) {
+            try {
+                byte[] array = MessageDigest.getInstance("MD5").digest(md5.getBytes());
+                StringBuilder sb = new StringBuilder();
+                for (byte b : array) {
+                    sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
                 }
-                return z;
+                str = sb.toString();
+            } catch (Throwable e) {
+                FileLog.m3e(e);
             }
         }
-        return false;
-    }
-
-    public static byte[] computeSHA1(byte[] bArr, int i, int i2) {
-        try {
-            MessageDigest instance = MessageDigest.getInstance("SHA-1");
-            instance.update(bArr, i, i2);
-            return instance.digest();
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            return new byte[20];
-        }
-    }
-
-    public static byte[] computeSHA1(ByteBuffer byteBuffer, int i, int i2) {
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        try {
-            MessageDigest instance = MessageDigest.getInstance("SHA-1");
-            byteBuffer.position(i);
-            byteBuffer.limit(i2);
-            instance.update(byteBuffer);
-            i = instance.digest();
-            return i;
-        } catch (Exception e) {
-            i = e;
-            FileLog.m3e((Throwable) i);
-            return new byte[20];
-        } finally {
-            byteBuffer.limit(limit);
-            byteBuffer.position(position);
-        }
-    }
-
-    public static byte[] computeSHA1(ByteBuffer byteBuffer) {
-        return computeSHA1(byteBuffer, 0, byteBuffer.limit());
-    }
-
-    public static byte[] computeSHA1(byte[] bArr) {
-        return computeSHA1(bArr, 0, bArr.length);
-    }
-
-    public static byte[] computeSHA256(byte[] bArr) {
-        return computeSHA256(bArr, 0, bArr.length);
-    }
-
-    public static byte[] computeSHA256(byte[] bArr, int i, int i2) {
-        try {
-            MessageDigest instance = MessageDigest.getInstance("SHA-256");
-            instance.update(bArr, i, i2);
-            return instance.digest();
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            return new byte[32];
-        }
-    }
-
-    public static byte[] computeSHA256(byte[] bArr, int i, int i2, ByteBuffer byteBuffer, int i3, int i4) {
-        int position = byteBuffer.position();
-        int limit = byteBuffer.limit();
-        try {
-            MessageDigest instance = MessageDigest.getInstance("SHA-256");
-            instance.update(bArr, i, i2);
-            byteBuffer.position(i3);
-            byteBuffer.limit(i4);
-            instance.update(byteBuffer);
-            bArr = instance.digest();
-            return bArr;
-        } catch (Exception e) {
-            bArr = e;
-            FileLog.m3e((Throwable) bArr);
-            return new byte[32];
-        } finally {
-            byteBuffer.limit(limit);
-            byteBuffer.position(position);
-        }
-    }
-
-    public static long bytesToLong(byte[] bArr) {
-        return (((((((((long) bArr[7]) << 56) + ((((long) bArr[6]) & 255) << 48)) + ((((long) bArr[5]) & 255) << 40)) + ((((long) bArr[4]) & 255) << 32)) + ((((long) bArr[3]) & 255) << 24)) + ((((long) bArr[2]) & 255) << 16)) + ((((long) bArr[1]) & 255) << 8)) + (((long) bArr[0]) & 255);
-    }
-
-    public static String MD5(String str) {
-        if (str == null) {
-            return null;
-        }
-        try {
-            str = MessageDigest.getInstance("MD5").digest(str.getBytes());
-            StringBuilder stringBuilder = new StringBuilder();
-            for (byte b : str) {
-                stringBuilder.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
-            }
-            return stringBuilder.toString();
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            return null;
-        }
+        return str;
     }
 }

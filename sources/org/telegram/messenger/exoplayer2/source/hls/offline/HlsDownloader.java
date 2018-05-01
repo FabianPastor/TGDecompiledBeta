@@ -19,77 +19,74 @@ import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable;
 import org.telegram.messenger.exoplayer2.util.UriUtil;
 
 public final class HlsDownloader extends SegmentDownloader<HlsMasterPlaylist, String> {
-    public HlsDownloader(Uri uri, DownloaderConstructorHelper downloaderConstructorHelper) {
-        super(uri, downloaderConstructorHelper);
+    public HlsDownloader(Uri manifestUri, DownloaderConstructorHelper constructorHelper) {
+        super(manifestUri, constructorHelper);
     }
 
     protected HlsMasterPlaylist getManifest(DataSource dataSource, Uri uri) throws IOException {
-        dataSource = loadManifest(dataSource, uri);
-        if ((dataSource instanceof HlsMasterPlaylist) != null) {
-            return (HlsMasterPlaylist) dataSource;
+        HlsPlaylist hlsPlaylist = loadManifest(dataSource, uri);
+        if (hlsPlaylist instanceof HlsMasterPlaylist) {
+            return (HlsMasterPlaylist) hlsPlaylist;
         }
-        return HlsMasterPlaylist.createSingleVariantMasterPlaylist(dataSource.baseUri);
+        return HlsMasterPlaylist.createSingleVariantMasterPlaylist(hlsPlaylist.baseUri);
     }
 
-    protected List<Segment> getAllSegments(DataSource dataSource, HlsMasterPlaylist hlsMasterPlaylist, boolean z) throws InterruptedException, IOException {
-        ArrayList arrayList = new ArrayList();
-        extractUrls(hlsMasterPlaylist.variants, arrayList);
-        extractUrls(hlsMasterPlaylist.audios, arrayList);
-        extractUrls(hlsMasterPlaylist.subtitles, arrayList);
-        return getSegments(dataSource, hlsMasterPlaylist, (String[]) arrayList.toArray(new String[arrayList.size()]), z);
+    protected List<Segment> getAllSegments(DataSource dataSource, HlsMasterPlaylist manifest, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
+        ArrayList<String> urls = new ArrayList();
+        extractUrls(manifest.variants, urls);
+        extractUrls(manifest.audios, urls);
+        extractUrls(manifest.subtitles, urls);
+        return getSegments(dataSource, manifest, (String[]) urls.toArray(new String[urls.size()]), allowIndexLoadErrors);
     }
 
-    protected List<Segment> getSegments(DataSource dataSource, HlsMasterPlaylist hlsMasterPlaylist, String[] strArr, boolean z) throws InterruptedException, IOException {
-        HashSet hashSet = new HashSet();
-        List arrayList = new ArrayList();
-        for (String resolveToUri : strArr) {
-            HlsMediaPlaylist hlsMediaPlaylist = null;
-            Uri resolveToUri2 = UriUtil.resolveToUri(hlsMasterPlaylist.baseUri, resolveToUri);
+    protected List<Segment> getSegments(DataSource dataSource, HlsMasterPlaylist manifest, String[] keys, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
+        HashSet<Uri> encryptionKeyUris = new HashSet();
+        ArrayList<Segment> segments = new ArrayList();
+        for (String playlistUrl : keys) {
+            HlsMediaPlaylist mediaPlaylist = null;
+            Uri uri = UriUtil.resolveToUri(manifest.baseUri, playlistUrl);
             try {
-                hlsMediaPlaylist = (HlsMediaPlaylist) loadManifest(dataSource, resolveToUri2);
+                mediaPlaylist = (HlsMediaPlaylist) loadManifest(dataSource, uri);
             } catch (IOException e) {
-                if (!z) {
+                if (!allowIndexLoadErrors) {
                     throw e;
                 }
             }
-            arrayList.add(new Segment(hlsMediaPlaylist != null ? hlsMediaPlaylist.startTimeUs : Long.MIN_VALUE, new DataSpec(resolveToUri2)));
-            if (hlsMediaPlaylist != null) {
-                Segment segment = hlsMediaPlaylist.initializationSegment;
-                if (segment != null) {
-                    addSegment(arrayList, hlsMediaPlaylist, segment, hashSet);
+            segments.add(new Segment(mediaPlaylist != null ? mediaPlaylist.startTimeUs : Long.MIN_VALUE, new DataSpec(uri)));
+            if (mediaPlaylist != null) {
+                Segment initSegment = mediaPlaylist.initializationSegment;
+                if (initSegment != null) {
+                    addSegment(segments, mediaPlaylist, initSegment, encryptionKeyUris);
                 }
-                List list = hlsMediaPlaylist.segments;
-                for (int i = 0; i < list.size(); i++) {
-                    addSegment(arrayList, hlsMediaPlaylist, (Segment) list.get(i), hashSet);
+                List<Segment> hlsSegments = mediaPlaylist.segments;
+                for (int i = 0; i < hlsSegments.size(); i++) {
+                    addSegment(segments, mediaPlaylist, (Segment) hlsSegments.get(i), encryptionKeyUris);
                 }
             }
         }
-        return arrayList;
+        return segments;
     }
 
     private HlsPlaylist loadManifest(DataSource dataSource, Uri uri) throws IOException {
-        uri = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new HlsPlaylistParser());
-        uri.load();
-        return (HlsPlaylist) uri.getResult();
+        ParsingLoadable<HlsPlaylist> loadable = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new HlsPlaylistParser());
+        loadable.load();
+        return (HlsPlaylist) loadable.getResult();
     }
 
-    private static void addSegment(ArrayList<Segment> arrayList, HlsMediaPlaylist hlsMediaPlaylist, Segment segment, HashSet<Uri> hashSet) throws IOException, InterruptedException {
-        ArrayList<Segment> arrayList2 = arrayList;
-        HlsMediaPlaylist hlsMediaPlaylist2 = hlsMediaPlaylist;
-        Segment segment2 = segment;
-        long j = hlsMediaPlaylist2.startTimeUs + segment2.relativeStartTimeUs;
-        if (segment2.fullSegmentEncryptionKeyUri != null) {
-            Uri resolveToUri = UriUtil.resolveToUri(hlsMediaPlaylist2.baseUri, segment2.fullSegmentEncryptionKeyUri);
-            if (hashSet.add(resolveToUri)) {
-                arrayList2.add(new Segment(j, new DataSpec(resolveToUri)));
+    private static void addSegment(ArrayList<Segment> segments, HlsMediaPlaylist mediaPlaylist, Segment hlsSegment, HashSet<Uri> encryptionKeyUris) throws IOException, InterruptedException {
+        long startTimeUs = mediaPlaylist.startTimeUs + hlsSegment.relativeStartTimeUs;
+        if (hlsSegment.fullSegmentEncryptionKeyUri != null) {
+            Uri keyUri = UriUtil.resolveToUri(mediaPlaylist.baseUri, hlsSegment.fullSegmentEncryptionKeyUri);
+            if (encryptionKeyUris.add(keyUri)) {
+                segments.add(new Segment(startTimeUs, new DataSpec(keyUri)));
             }
         }
-        arrayList2.add(new Segment(j, new DataSpec(UriUtil.resolveToUri(hlsMediaPlaylist2.baseUri, segment2.url), segment2.byterangeOffset, segment2.byterangeLength, null)));
+        segments.add(new Segment(startTimeUs, new DataSpec(UriUtil.resolveToUri(mediaPlaylist.baseUri, hlsSegment.url), hlsSegment.byterangeOffset, hlsSegment.byterangeLength, null)));
     }
 
-    private static void extractUrls(List<HlsUrl> list, ArrayList<String> arrayList) {
-        for (int i = 0; i < list.size(); i++) {
-            arrayList.add(((HlsUrl) list.get(i)).url);
+    private static void extractUrls(List<HlsUrl> hlsUrls, ArrayList<String> urls) {
+        for (int i = 0; i < hlsUrls.size(); i++) {
+            urls.add(((HlsUrl) hlsUrls.get(i)).url);
         }
     }
 }

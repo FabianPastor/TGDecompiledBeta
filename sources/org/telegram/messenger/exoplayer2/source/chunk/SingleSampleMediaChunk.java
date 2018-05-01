@@ -17,10 +17,10 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
     private final Format sampleFormat;
     private final int trackType;
 
-    public SingleSampleMediaChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, long j, long j2, int i2, int i3, Format format2) {
-        super(dataSource, dataSpec, format, i, obj, j, j2, i2);
-        this.trackType = i3;
-        this.sampleFormat = format2;
+    public SingleSampleMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int trackType, Format sampleFormat) {
+        super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
+        this.trackType = trackType;
+        this.sampleFormat = sampleFormat;
     }
 
     public boolean isLoadCompleted() {
@@ -41,18 +41,19 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
 
     public void load() throws IOException, InterruptedException {
         try {
-            long open = this.dataSource.open(this.dataSpec.subrange((long) this.bytesLoaded));
-            ExtractorInput defaultExtractorInput = new DefaultExtractorInput(this.dataSource, (long) this.bytesLoaded, open != -1 ? open + ((long) this.bytesLoaded) : open);
+            long length = this.dataSource.open(this.dataSpec.subrange((long) this.bytesLoaded));
+            if (length != -1) {
+                length += (long) this.bytesLoaded;
+            }
+            ExtractorInput extractorInput = new DefaultExtractorInput(this.dataSource, (long) this.bytesLoaded, length);
             BaseMediaChunkOutput output = getOutput();
             output.setSampleOffsetUs(0);
-            int i = 0;
-            TrackOutput track = output.track(0, this.trackType);
-            track.format(this.sampleFormat);
-            while (i != -1) {
-                this.bytesLoaded += i;
-                i = track.sampleData(defaultExtractorInput, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
+            TrackOutput trackOutput = output.track(0, this.trackType);
+            trackOutput.format(this.sampleFormat);
+            for (int result = 0; result != -1; result = trackOutput.sampleData(extractorInput, ConnectionsManager.DEFAULT_DATACENTER_ID, true)) {
+                this.bytesLoaded += result;
             }
-            track.sampleMetadata(this.startTimeUs, 1, this.bytesLoaded, 0, null);
+            trackOutput.sampleMetadata(this.startTimeUs, 1, this.bytesLoaded, 0, null);
             this.loadCompleted = true;
         } finally {
             Util.closeQuietly(this.dataSource);

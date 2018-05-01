@@ -11,17 +11,17 @@ public class CacheSpan implements Comparable<CacheSpan> {
     public final long length;
     public final long position;
 
-    public CacheSpan(String str, long j, long j2) {
-        this(str, j, j2, C0542C.TIME_UNSET, null);
+    public CacheSpan(String key, long position, long length) {
+        this(key, position, length, C0542C.TIME_UNSET, null);
     }
 
-    public CacheSpan(String str, long j, long j2, long j3, File file) {
-        this.key = str;
-        this.position = j;
-        this.length = j2;
-        this.isCached = file != null ? true : null;
+    public CacheSpan(String key, long position, long length, long lastAccessTimestamp, File file) {
+        this.key = key;
+        this.position = position;
+        this.length = length;
+        this.isCached = file != null;
         this.file = file;
-        this.lastAccessTimestamp = j3;
+        this.lastAccessTimestamp = lastAccessTimestamp;
     }
 
     public boolean isOpenEnded() {
@@ -29,15 +29,17 @@ public class CacheSpan implements Comparable<CacheSpan> {
     }
 
     public boolean isHoleSpan() {
-        return this.isCached ^ 1;
+        return !this.isCached;
     }
 
-    public int compareTo(CacheSpan cacheSpan) {
-        if (!this.key.equals(cacheSpan.key)) {
-            return this.key.compareTo(cacheSpan.key);
+    public int compareTo(CacheSpan another) {
+        if (!this.key.equals(another.key)) {
+            return this.key.compareTo(another.key);
         }
-        long j = this.position - cacheSpan.position;
-        cacheSpan = j == 0 ? null : j < 0 ? -1 : true;
-        return cacheSpan;
+        long startOffsetDiff = this.position - another.position;
+        if (startOffsetDiff == 0) {
+            return 0;
+        }
+        return startOffsetDiff < 0 ? -1 : 1;
     }
 }

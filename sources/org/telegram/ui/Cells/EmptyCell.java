@@ -11,17 +11,17 @@ public class EmptyCell extends FrameLayout {
         this(context, 8);
     }
 
-    public EmptyCell(Context context, int i) {
+    public EmptyCell(Context context, int height) {
         super(context);
-        this.cellHeight = i;
+        this.cellHeight = height;
     }
 
-    public void setHeight(int i) {
-        this.cellHeight = i;
+    public void setHeight(int height) {
+        this.cellHeight = height;
         requestLayout();
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(this.cellHeight, NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(this.cellHeight, NUM));
     }
 }

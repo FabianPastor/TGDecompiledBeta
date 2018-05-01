@@ -68,40 +68,41 @@ public final class WebvttCssStyle {
         this.textAlign = null;
     }
 
-    public void setTargetId(String str) {
-        this.targetId = str;
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
     }
 
-    public void setTargetTagName(String str) {
-        this.targetTag = str;
+    public void setTargetTagName(String targetTag) {
+        this.targetTag = targetTag;
     }
 
-    public void setTargetClasses(String[] strArr) {
-        this.targetClasses = Arrays.asList(strArr);
+    public void setTargetClasses(String[] targetClasses) {
+        this.targetClasses = Arrays.asList(targetClasses);
     }
 
-    public void setTargetVoice(String str) {
-        this.targetVoice = str;
+    public void setTargetVoice(String targetVoice) {
+        this.targetVoice = targetVoice;
     }
 
-    public int getSpecificityScore(String str, String str2, String[] strArr, String str3) {
-        if (this.targetId.isEmpty() && this.targetTag.isEmpty() && this.targetClasses.isEmpty() && this.targetVoice.isEmpty()) {
-            return str2.isEmpty();
-        }
-        str = updateScoreForMatch(updateScoreForMatch(updateScoreForMatch(0, this.targetId, str, NUM), this.targetTag, str2, 2), this.targetVoice, str3, 4);
-        if (str != -1) {
-            if (Arrays.asList(strArr).containsAll(this.targetClasses) != null) {
-                return str + (this.targetClasses.size() * 4);
+    public int getSpecificityScore(String id, String tag, String[] classes, String voice) {
+        if (!this.targetId.isEmpty() || !this.targetTag.isEmpty() || !this.targetClasses.isEmpty() || !this.targetVoice.isEmpty()) {
+            int score = updateScoreForMatch(updateScoreForMatch(updateScoreForMatch(0, this.targetId, id, NUM), this.targetTag, tag, 2), this.targetVoice, voice, 4);
+            if (score == -1 || !Arrays.asList(classes).containsAll(this.targetClasses)) {
+                return 0;
             }
+            return score + (this.targetClasses.size() * 4);
+        } else if (tag.isEmpty()) {
+            return 1;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public int getStyle() {
+        int i = 0;
         if (this.bold == -1 && this.italic == -1) {
             return -1;
         }
-        int i = 0;
         int i2 = this.bold == 1 ? 1 : 0;
         if (this.italic == 1) {
             i = 2;
@@ -113,8 +114,8 @@ public final class WebvttCssStyle {
         return this.linethrough == 1;
     }
 
-    public WebvttCssStyle setLinethrough(boolean z) {
-        this.linethrough = z;
+    public WebvttCssStyle setLinethrough(boolean linethrough) {
+        this.linethrough = linethrough ? 1 : 0;
         return this;
     }
 
@@ -122,18 +123,18 @@ public final class WebvttCssStyle {
         return this.underline == 1;
     }
 
-    public WebvttCssStyle setUnderline(boolean z) {
-        this.underline = z;
+    public WebvttCssStyle setUnderline(boolean underline) {
+        this.underline = underline ? 1 : 0;
         return this;
     }
 
-    public WebvttCssStyle setBold(boolean z) {
-        this.bold = z;
+    public WebvttCssStyle setBold(boolean bold) {
+        this.bold = bold ? 1 : 0;
         return this;
     }
 
-    public WebvttCssStyle setItalic(boolean z) {
-        this.italic = z;
+    public WebvttCssStyle setItalic(boolean italic) {
+        this.italic = italic ? 1 : 0;
         return this;
     }
 
@@ -141,8 +142,8 @@ public final class WebvttCssStyle {
         return this.fontFamily;
     }
 
-    public WebvttCssStyle setFontFamily(String str) {
-        this.fontFamily = Util.toLowerInvariant(str);
+    public WebvttCssStyle setFontFamily(String fontFamily) {
+        this.fontFamily = Util.toLowerInvariant(fontFamily);
         return this;
     }
 
@@ -153,8 +154,8 @@ public final class WebvttCssStyle {
         throw new IllegalStateException("Font color not defined");
     }
 
-    public WebvttCssStyle setFontColor(int i) {
-        this.fontColor = i;
+    public WebvttCssStyle setFontColor(int color) {
+        this.fontColor = color;
         this.hasFontColor = true;
         return this;
     }
@@ -170,8 +171,8 @@ public final class WebvttCssStyle {
         throw new IllegalStateException("Background color not defined.");
     }
 
-    public WebvttCssStyle setBackgroundColor(int i) {
-        this.backgroundColor = i;
+    public WebvttCssStyle setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         this.hasBackgroundColor = true;
         return this;
     }
@@ -184,18 +185,18 @@ public final class WebvttCssStyle {
         return this.textAlign;
     }
 
-    public WebvttCssStyle setTextAlign(Alignment alignment) {
-        this.textAlign = alignment;
+    public WebvttCssStyle setTextAlign(Alignment textAlign) {
+        this.textAlign = textAlign;
         return this;
     }
 
-    public WebvttCssStyle setFontSize(float f) {
-        this.fontSize = f;
+    public WebvttCssStyle setFontSize(float fontSize) {
+        this.fontSize = fontSize;
         return this;
     }
 
-    public WebvttCssStyle setFontSizeUnit(short s) {
-        this.fontSizeUnit = s;
+    public WebvttCssStyle setFontSizeUnit(short unit) {
+        this.fontSizeUnit = unit;
         return this;
     }
 
@@ -207,47 +208,44 @@ public final class WebvttCssStyle {
         return this.fontSize;
     }
 
-    public void cascadeFrom(WebvttCssStyle webvttCssStyle) {
-        if (webvttCssStyle.hasFontColor) {
-            setFontColor(webvttCssStyle.fontColor);
+    public void cascadeFrom(WebvttCssStyle style) {
+        if (style.hasFontColor) {
+            setFontColor(style.fontColor);
         }
-        if (webvttCssStyle.bold != -1) {
-            this.bold = webvttCssStyle.bold;
+        if (style.bold != -1) {
+            this.bold = style.bold;
         }
-        if (webvttCssStyle.italic != -1) {
-            this.italic = webvttCssStyle.italic;
+        if (style.italic != -1) {
+            this.italic = style.italic;
         }
-        if (webvttCssStyle.fontFamily != null) {
-            this.fontFamily = webvttCssStyle.fontFamily;
+        if (style.fontFamily != null) {
+            this.fontFamily = style.fontFamily;
         }
         if (this.linethrough == -1) {
-            this.linethrough = webvttCssStyle.linethrough;
+            this.linethrough = style.linethrough;
         }
         if (this.underline == -1) {
-            this.underline = webvttCssStyle.underline;
+            this.underline = style.underline;
         }
         if (this.textAlign == null) {
-            this.textAlign = webvttCssStyle.textAlign;
+            this.textAlign = style.textAlign;
         }
         if (this.fontSizeUnit == -1) {
-            this.fontSizeUnit = webvttCssStyle.fontSizeUnit;
-            this.fontSize = webvttCssStyle.fontSize;
+            this.fontSizeUnit = style.fontSizeUnit;
+            this.fontSize = style.fontSize;
         }
-        if (webvttCssStyle.hasBackgroundColor) {
-            setBackgroundColor(webvttCssStyle.backgroundColor);
+        if (style.hasBackgroundColor) {
+            setBackgroundColor(style.backgroundColor);
         }
     }
 
-    private static int updateScoreForMatch(int i, String str, String str2, int i2) {
-        if (!str.isEmpty()) {
-            int i3 = -1;
-            if (i != -1) {
-                if (str.equals(str2) != null) {
-                    i3 = i + i2;
-                }
-                return i3;
-            }
+    private static int updateScoreForMatch(int currentScore, String target, String actual, int score) {
+        if (target.isEmpty() || currentScore == -1) {
+            return currentScore;
         }
-        return i;
+        if (target.equals(actual)) {
+            return currentScore + score;
+        }
+        return -1;
     }
 }

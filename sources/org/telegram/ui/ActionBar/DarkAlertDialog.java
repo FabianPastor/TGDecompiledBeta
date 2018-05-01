@@ -9,76 +9,45 @@ public class DarkAlertDialog extends AlertDialog {
             super(new DarkAlertDialog(context, 0));
         }
 
-        public Builder(Context context, int i) {
-            super(new DarkAlertDialog(context, i));
+        public Builder(Context context, int progressViewStyle) {
+            super(new DarkAlertDialog(context, progressViewStyle));
         }
     }
 
-    public DarkAlertDialog(Context context, int i) {
-        super(context, i);
+    public DarkAlertDialog(Context context, int progressStyle) {
+        super(context, progressStyle);
     }
 
-    protected int getThemeColor(String str) {
-        int hashCode = str.hashCode();
-        if (hashCode != -NUM) {
-            if (hashCode != -451706526) {
-                if (hashCode != -93324646) {
-                    if (hashCode == NUM) {
-                        if (str.equals(Theme.key_dialogTextBlack)) {
-                            hashCode = 1;
-                            switch (hashCode) {
-                                case 0:
-                                    return -14277082;
-                                case 1:
-                                case 2:
-                                case 3:
-                                    return -1;
-                                default:
-                                    return super.getThemeColor(str);
-                            }
-                        }
-                    }
-                } else if (str.equals(Theme.key_dialogButton)) {
-                    hashCode = 2;
-                    switch (hashCode) {
-                        case 0:
-                            return -14277082;
-                        case 1:
-                        case 2:
-                        case 3:
-                            return -1;
-                        default:
-                            return super.getThemeColor(str);
-                    }
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    protected int getThemeColor(String key) {
+        int i;
+        switch (key.hashCode()) {
+            case -1849805674:
+                if (key.equals(Theme.key_dialogBackground)) {
+                    i = 0;
+                    break;
                 }
-            } else if (str.equals(Theme.key_dialogScrollGlow)) {
-                hashCode = 3;
-                switch (hashCode) {
-                    case 0:
-                        return -14277082;
-                    case 1:
-                    case 2:
-                    case 3:
-                        return -1;
-                    default:
-                        return super.getThemeColor(str);
+            case -451706526:
+                if (key.equals(Theme.key_dialogScrollGlow)) {
+                    i = 3;
+                    break;
                 }
-            }
-        } else if (str.equals(Theme.key_dialogBackground)) {
-            hashCode = 0;
-            switch (hashCode) {
-                case 0:
-                    return -14277082;
-                case 1:
-                case 2:
-                case 3:
-                    return -1;
-                default:
-                    return super.getThemeColor(str);
-            }
+            case -93324646:
+                if (key.equals(Theme.key_dialogButton)) {
+                    i = 2;
+                    break;
+                }
+            case 1828201066:
+                if (key.equals(Theme.key_dialogTextBlack)) {
+                    i = 1;
+                    break;
+                }
+            default:
+                i = -1;
+                break;
         }
-        hashCode = -1;
-        switch (hashCode) {
+        switch (i) {
             case 0:
                 return -14277082;
             case 1:
@@ -86,7 +55,7 @@ public class DarkAlertDialog extends AlertDialog {
             case 3:
                 return -1;
             default:
-                return super.getThemeColor(str);
+                return super.getThemeColor(key);
         }
     }
 }

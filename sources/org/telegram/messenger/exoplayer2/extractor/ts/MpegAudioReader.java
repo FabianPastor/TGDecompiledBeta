@@ -26,19 +26,16 @@ public final class MpegAudioReader implements ElementaryStreamReader {
     private int state;
     private long timeUs;
 
-    public void packetFinished() {
-    }
-
     public MpegAudioReader() {
         this(null);
     }
 
-    public MpegAudioReader(String str) {
+    public MpegAudioReader(String language) {
         this.state = 0;
         this.headerScratch = new ParsableByteArray(4);
         this.headerScratch.data[0] = (byte) -1;
         this.header = new MpegAudioHeader();
-        this.language = str;
+        this.language = language;
     }
 
     public void seek() {
@@ -47,27 +44,27 @@ public final class MpegAudioReader implements ElementaryStreamReader {
         this.lastByteWasFF = false;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.formatId = trackIdGenerator.getFormatId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 1);
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
     }
 
-    public void packetStarted(long j, boolean z) {
-        this.timeUs = j;
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        this.timeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
-        while (parsableByteArray.bytesLeft() > 0) {
+    public void consume(ParsableByteArray data) {
+        while (data.bytesLeft() > 0) {
             switch (this.state) {
                 case 0:
-                    findHeader(parsableByteArray);
+                    findHeader(data);
                     break;
                 case 1:
-                    readHeaderRemainder(parsableByteArray);
+                    readHeaderRemainder(data);
                     break;
                 case 2:
-                    readFrameRemainder(parsableByteArray);
+                    readFrameRemainder(data);
                     break;
                 default:
                     break;
@@ -75,52 +72,63 @@ public final class MpegAudioReader implements ElementaryStreamReader {
         }
     }
 
-    private void findHeader(ParsableByteArray parsableByteArray) {
-        byte[] bArr = parsableByteArray.data;
-        int limit = parsableByteArray.limit();
-        for (int position = parsableByteArray.getPosition(); position < limit; position++) {
-            boolean z = (bArr[position] & 255) == 255;
-            int i = (this.lastByteWasFF && (bArr[position] & 224) == 224) ? 1 : false;
-            this.lastByteWasFF = z;
-            if (i != 0) {
-                parsableByteArray.setPosition(position + 1);
+    public void packetFinished() {
+    }
+
+    private void findHeader(ParsableByteArray source) {
+        byte[] data = source.data;
+        int startOffset = source.getPosition();
+        int endOffset = source.limit();
+        int i = startOffset;
+        while (i < endOffset) {
+            boolean found;
+            boolean byteIsFF = (data[i] & 255) == 255;
+            if (this.lastByteWasFF && (data[i] & 224) == 224) {
+                found = true;
+            } else {
+                found = false;
+            }
+            this.lastByteWasFF = byteIsFF;
+            if (found) {
+                source.setPosition(i + 1);
                 this.lastByteWasFF = false;
-                this.headerScratch.data[1] = bArr[position];
+                this.headerScratch.data[1] = data[i];
                 this.frameBytesRead = 2;
                 this.state = 1;
                 return;
             }
+            i++;
         }
-        parsableByteArray.setPosition(limit);
+        source.setPosition(endOffset);
     }
 
-    private void readHeaderRemainder(ParsableByteArray parsableByteArray) {
-        int min = Math.min(parsableByteArray.bytesLeft(), 4 - this.frameBytesRead);
-        parsableByteArray.readBytes(this.headerScratch.data, this.frameBytesRead, min);
-        this.frameBytesRead += min;
+    private void readHeaderRemainder(ParsableByteArray source) {
+        int bytesToRead = Math.min(source.bytesLeft(), 4 - this.frameBytesRead);
+        source.readBytes(this.headerScratch.data, this.frameBytesRead, bytesToRead);
+        this.frameBytesRead += bytesToRead;
         if (this.frameBytesRead >= 4) {
-            r0.headerScratch.setPosition(0);
-            if (MpegAudioHeader.populateHeader(r0.headerScratch.readInt(), r0.header)) {
-                r0.frameSize = r0.header.frameSize;
-                if (!r0.hasOutputFormat) {
-                    r0.frameDurationUs = (C0542C.MICROS_PER_SECOND * ((long) r0.header.samplesPerFrame)) / ((long) r0.header.sampleRate);
-                    r0.output.format(Format.createAudioSampleFormat(r0.formatId, r0.header.mimeType, null, -1, 4096, r0.header.channels, r0.header.sampleRate, null, null, 0, r0.language));
-                    r0.hasOutputFormat = true;
+            this.headerScratch.setPosition(0);
+            if (MpegAudioHeader.populateHeader(this.headerScratch.readInt(), this.header)) {
+                this.frameSize = this.header.frameSize;
+                if (!this.hasOutputFormat) {
+                    this.frameDurationUs = (C0542C.MICROS_PER_SECOND * ((long) this.header.samplesPerFrame)) / ((long) this.header.sampleRate);
+                    this.output.format(Format.createAudioSampleFormat(this.formatId, this.header.mimeType, null, -1, 4096, this.header.channels, this.header.sampleRate, null, null, 0, this.language));
+                    this.hasOutputFormat = true;
                 }
-                r0.headerScratch.setPosition(0);
-                r0.output.sampleData(r0.headerScratch, 4);
-                r0.state = 2;
+                this.headerScratch.setPosition(0);
+                this.output.sampleData(this.headerScratch, 4);
+                this.state = 2;
                 return;
             }
-            r0.frameBytesRead = 0;
-            r0.state = 1;
+            this.frameBytesRead = 0;
+            this.state = 1;
         }
     }
 
-    private void readFrameRemainder(ParsableByteArray parsableByteArray) {
-        int min = Math.min(parsableByteArray.bytesLeft(), this.frameSize - this.frameBytesRead);
-        this.output.sampleData(parsableByteArray, min);
-        this.frameBytesRead += min;
+    private void readFrameRemainder(ParsableByteArray source) {
+        int bytesToRead = Math.min(source.bytesLeft(), this.frameSize - this.frameBytesRead);
+        this.output.sampleData(source, bytesToRead);
+        this.frameBytesRead += bytesToRead;
         if (this.frameBytesRead >= this.frameSize) {
             this.output.sampleMetadata(this.timeUs, 1, this.frameSize, 0, null);
             this.timeUs += this.frameDurationUs;

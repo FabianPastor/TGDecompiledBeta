@@ -7,20 +7,20 @@ public class URLSpanBotCommand extends URLSpanNoUnderline {
     public static boolean enabled = true;
     public int currentType;
 
-    public URLSpanBotCommand(String str, int i) {
-        super(str);
-        this.currentType = i;
+    public URLSpanBotCommand(String url, int type) {
+        super(url);
+        this.currentType = type;
     }
 
-    public void updateDrawState(TextPaint textPaint) {
-        super.updateDrawState(textPaint);
+    public void updateDrawState(TextPaint ds) {
+        super.updateDrawState(ds);
         if (this.currentType == 2) {
-            textPaint.setColor(-1);
+            ds.setColor(-1);
         } else if (this.currentType == 1) {
-            textPaint.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkOut : Theme.key_chat_messageTextOut));
+            ds.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkOut : Theme.key_chat_messageTextOut));
         } else {
-            textPaint.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkIn : Theme.key_chat_messageTextIn));
+            ds.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkIn : Theme.key_chat_messageTextIn));
         }
-        textPaint.setUnderlineText(false);
+        ds.setUnderlineText(false);
     }
 }

@@ -14,7 +14,7 @@ public class Scroller {
     private static final int SCROLL_MODE = 0;
     private static final float[] SPLINE = new float[101];
     private static float START_TENSION = 0.4f;
-    private static float sViscousFluidNormalize = (1.0f / viscousFluid(1.0f));
+    private static float sViscousFluidNormalize;
     private static float sViscousFluidScale = 8.0f;
     private int mCurrX;
     private int mCurrY;
@@ -40,29 +40,29 @@ public class Scroller {
     private float mVelocity;
 
     static {
-        float f = 0.0f;
+        float x_min = 0.0f;
         for (int i = 0; i <= NB_SAMPLES; i++) {
-            float f2;
-            float f3;
-            float f4 = ((float) i) / 100.0f;
-            float f5 = 1.0f;
+            float x;
+            float coef;
+            float t = ((float) i) / 100.0f;
+            float x_max = 1.0f;
             while (true) {
-                float f6 = ((f5 - f) / 2.0f) + f;
-                float f7 = 1.0f - f6;
-                f2 = (3.0f * f6) * f7;
-                f3 = (f6 * f6) * f6;
-                f7 = (((f7 * START_TENSION) + (END_TENSION * f6)) * f2) + f3;
-                if (((double) Math.abs(f7 - f4)) < 1.0E-5d) {
+                x = x_min + ((x_max - x_min) / 2.0f);
+                coef = (3.0f * x) * (1.0f - x);
+                float tx = ((((1.0f - x) * START_TENSION) + (END_TENSION * x)) * coef) + ((x * x) * x);
+                if (((double) Math.abs(tx - t)) < 1.0E-5d) {
                     break;
-                } else if (f7 > f4) {
-                    f5 = f6;
+                } else if (tx > t) {
+                    x_max = x;
                 } else {
-                    f = f6;
+                    x_min = x;
                 }
             }
-            SPLINE[i] = f2 + f3;
+            SPLINE[i] = coef + ((x * x) * x);
         }
         SPLINE[NB_SAMPLES] = 1.0f;
+        sViscousFluidNormalize = 1.0f;
+        sViscousFluidNormalize = 1.0f / viscousFluid(1.0f);
     }
 
     public Scroller(Context context) {
@@ -73,28 +73,28 @@ public class Scroller {
         this(context, interpolator, true);
     }
 
-    public Scroller(Context context, Interpolator interpolator, boolean z) {
+    public Scroller(Context context, Interpolator interpolator, boolean flywheel) {
         this.mFinished = true;
         this.mInterpolator = interpolator;
-        this.mPpi = context.getResources().getDisplayMetrics().density * NUM;
+        this.mPpi = context.getResources().getDisplayMetrics().density * 160.0f;
         this.mDeceleration = computeDeceleration(ViewConfiguration.getScrollFriction());
-        this.mFlywheel = z;
+        this.mFlywheel = flywheel;
     }
 
-    public final void setFriction(float f) {
-        this.mDeceleration = computeDeceleration(f);
+    public final void setFriction(float friction) {
+        this.mDeceleration = computeDeceleration(friction);
     }
 
-    private float computeDeceleration(float f) {
-        return (386.0878f * this.mPpi) * f;
+    private float computeDeceleration(float friction) {
+        return (386.0878f * this.mPpi) * friction;
     }
 
     public final boolean isFinished() {
         return this.mFinished;
     }
 
-    public final void forceFinished(boolean z) {
-        this.mFinished = z;
+    public final void forceFinished(boolean finished) {
+        this.mFinished = finished;
     }
 
     public final int getDuration() {
@@ -133,40 +133,39 @@ public class Scroller {
         if (this.mFinished) {
             return false;
         }
-        int currentAnimationTimeMillis = (int) (AnimationUtils.currentAnimationTimeMillis() - this.mStartTime);
-        if (currentAnimationTimeMillis < this.mDuration) {
-            float f;
+        int timePassed = (int) (AnimationUtils.currentAnimationTimeMillis() - this.mStartTime);
+        if (timePassed < this.mDuration) {
             switch (this.mMode) {
                 case 0:
-                    f = ((float) currentAnimationTimeMillis) * this.mDurationReciprocal;
+                    float x = ((float) timePassed) * this.mDurationReciprocal;
                     if (this.mInterpolator == null) {
-                        f = viscousFluid(f);
+                        x = viscousFluid(x);
                     } else {
-                        f = this.mInterpolator.getInterpolation(f);
+                        x = this.mInterpolator.getInterpolation(x);
                     }
-                    this.mCurrX = this.mStartX + Math.round(this.mDeltaX * f);
-                    this.mCurrY = this.mStartY + Math.round(f * this.mDeltaY);
-                    break;
+                    this.mCurrX = this.mStartX + Math.round(this.mDeltaX * x);
+                    this.mCurrY = this.mStartY + Math.round(this.mDeltaY * x);
+                    return true;
                 case 1:
-                    f = ((float) currentAnimationTimeMillis) / ((float) this.mDuration);
-                    int i = (int) (100.0f * f);
-                    float f2 = ((float) i) / 100.0f;
-                    int i2 = i + 1;
-                    float f3 = ((float) i2) / 100.0f;
-                    float f4 = SPLINE[i];
-                    f4 += ((f - f2) / (f3 - f2)) * (SPLINE[i2] - f4);
-                    this.mCurrX = this.mStartX + Math.round(((float) (this.mFinalX - this.mStartX)) * f4);
+                    float t = ((float) timePassed) / ((float) this.mDuration);
+                    int index = (int) (100.0f * t);
+                    float t_inf = ((float) index) / 100.0f;
+                    float t_sup = ((float) (index + 1)) / 100.0f;
+                    float d_inf = SPLINE[index];
+                    float distanceCoef = d_inf + (((t - t_inf) / (t_sup - t_inf)) * (SPLINE[index + 1] - d_inf));
+                    this.mCurrX = this.mStartX + Math.round(((float) (this.mFinalX - this.mStartX)) * distanceCoef);
                     this.mCurrX = Math.min(this.mCurrX, this.mMaxX);
                     this.mCurrX = Math.max(this.mCurrX, this.mMinX);
-                    this.mCurrY = this.mStartY + Math.round(f4 * ((float) (this.mFinalY - this.mStartY)));
+                    this.mCurrY = this.mStartY + Math.round(((float) (this.mFinalY - this.mStartY)) * distanceCoef);
                     this.mCurrY = Math.min(this.mCurrY, this.mMaxY);
                     this.mCurrY = Math.max(this.mCurrY, this.mMinY);
-                    if (this.mCurrX == this.mFinalX && this.mCurrY == this.mFinalY) {
-                        this.mFinished = true;
-                        break;
+                    if (this.mCurrX != this.mFinalX || this.mCurrY != this.mFinalY) {
+                        return true;
                     }
+                    this.mFinished = true;
+                    return true;
                 default:
-                    break;
+                    return true;
             }
         }
         this.mCurrX = this.mFinalX;
@@ -175,118 +174,69 @@ public class Scroller {
         return true;
     }
 
-    public void startScroll(int i, int i2, int i3, int i4) {
-        startScroll(i, i2, i3, i4, 250);
+    public void startScroll(int startX, int startY, int dx, int dy) {
+        startScroll(startX, startY, dx, dy, 250);
     }
 
-    public void startScroll(int i, int i2, int i3, int i4, int i5) {
+    public void startScroll(int startX, int startY, int dx, int dy, int duration) {
         this.mMode = 0;
         this.mFinished = false;
-        this.mDuration = i5;
+        this.mDuration = duration;
         this.mStartTime = AnimationUtils.currentAnimationTimeMillis();
-        this.mStartX = i;
-        this.mStartY = i2;
-        this.mFinalX = i + i3;
-        this.mFinalY = i2 + i4;
-        this.mDeltaX = (float) i3;
-        this.mDeltaY = (float) i4;
-        this.mDurationReciprocal = NUM / ((float) this.mDuration);
+        this.mStartX = startX;
+        this.mStartY = startY;
+        this.mFinalX = startX + dx;
+        this.mFinalY = startY + dy;
+        this.mDeltaX = (float) dx;
+        this.mDeltaY = (float) dy;
+        this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
     }
 
-    public void fling(int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
-        int i9;
-        float currVelocity;
-        float f;
-        int i10;
-        double log;
-        float f2;
-        int exp;
-        int i11 = i;
-        int i12 = i2;
-        if (!this.mFlywheel || r0.mFinished) {
-            i9 = i3;
-        } else {
-            currVelocity = getCurrVelocity();
-            f = (float) (r0.mFinalX - r0.mStartX);
-            float f3 = (float) (r0.mFinalY - r0.mStartY);
-            float sqrt = (float) Math.sqrt((double) ((f * f) + (f3 * f3)));
-            f = (f / sqrt) * currVelocity;
-            f3 = (f3 / sqrt) * currVelocity;
-            i9 = i3;
-            sqrt = (float) i9;
-            if (Math.signum(sqrt) == Math.signum(f)) {
-                i10 = i4;
-                float f4 = (float) i10;
-                if (Math.signum(f4) == Math.signum(f3)) {
-                    i9 = (int) (sqrt + f);
-                    i10 = (int) (f4 + f3);
-                }
-                r0.mMode = 1;
-                r0.mFinished = false;
-                f = (float) Math.sqrt((double) ((i9 * i9) + (i10 * i10)));
-                r0.mVelocity = f;
-                log = Math.log((double) ((START_TENSION * f) / 800.0f));
-                r0.mDuration = (int) (1000.0d * Math.exp(log / (((double) DECELERATION_RATE) - 1.0d)));
-                r0.mStartTime = AnimationUtils.currentAnimationTimeMillis();
-                r0.mStartX = i11;
-                r0.mStartY = i12;
-                f2 = 1.0f;
-                currVelocity = f != 0.0f ? 1.0f : ((float) i9) / f;
-                if (f == 0.0f) {
-                    f2 = ((float) i10) / f;
-                }
-                exp = (int) (((double) NUM) * Math.exp((((double) DECELERATION_RATE) / (((double) DECELERATION_RATE) - 1.0d)) * log));
-                r0.mMinX = i5;
-                r0.mMaxX = i6;
-                r0.mMinY = i7;
-                r0.mMaxY = i8;
-                f = (float) exp;
-                r0.mFinalX = i11 + Math.round(currVelocity * f);
-                r0.mFinalX = Math.min(r0.mFinalX, r0.mMaxX);
-                r0.mFinalX = Math.max(r0.mFinalX, r0.mMinX);
-                r0.mFinalY = Math.round(f * f2) + i12;
-                r0.mFinalY = Math.min(r0.mFinalY, r0.mMaxY);
-                r0.mFinalY = Math.max(r0.mFinalY, r0.mMinY);
+    public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
+        if (this.mFlywheel && !this.mFinished) {
+            float oldVel = getCurrVelocity();
+            float dx = (float) (this.mFinalX - this.mStartX);
+            float dy = (float) (this.mFinalY - this.mStartY);
+            float hyp = (float) Math.sqrt((double) ((dx * dx) + (dy * dy)));
+            float oldVelocityX = (dx / hyp) * oldVel;
+            float oldVelocityY = (dy / hyp) * oldVel;
+            if (Math.signum((float) velocityX) == Math.signum(oldVelocityX) && Math.signum((float) velocityY) == Math.signum(oldVelocityY)) {
+                velocityX = (int) (((float) velocityX) + oldVelocityX);
+                velocityY = (int) (((float) velocityY) + oldVelocityY);
             }
         }
-        i10 = i4;
-        r0.mMode = 1;
-        r0.mFinished = false;
-        f = (float) Math.sqrt((double) ((i9 * i9) + (i10 * i10)));
-        r0.mVelocity = f;
-        log = Math.log((double) ((START_TENSION * f) / 800.0f));
-        r0.mDuration = (int) (1000.0d * Math.exp(log / (((double) DECELERATION_RATE) - 1.0d)));
-        r0.mStartTime = AnimationUtils.currentAnimationTimeMillis();
-        r0.mStartX = i11;
-        r0.mStartY = i12;
-        f2 = 1.0f;
-        if (f != 0.0f) {
-        }
-        if (f == 0.0f) {
-            f2 = ((float) i10) / f;
-        }
-        exp = (int) (((double) NUM) * Math.exp((((double) DECELERATION_RATE) / (((double) DECELERATION_RATE) - 1.0d)) * log));
-        r0.mMinX = i5;
-        r0.mMaxX = i6;
-        r0.mMinY = i7;
-        r0.mMaxY = i8;
-        f = (float) exp;
-        r0.mFinalX = i11 + Math.round(currVelocity * f);
-        r0.mFinalX = Math.min(r0.mFinalX, r0.mMaxX);
-        r0.mFinalX = Math.max(r0.mFinalX, r0.mMinX);
-        r0.mFinalY = Math.round(f * f2) + i12;
-        r0.mFinalY = Math.min(r0.mFinalY, r0.mMaxY);
-        r0.mFinalY = Math.max(r0.mFinalY, r0.mMinY);
+        this.mMode = 1;
+        this.mFinished = false;
+        float velocity = (float) Math.sqrt((double) ((velocityX * velocityX) + (velocityY * velocityY)));
+        this.mVelocity = velocity;
+        double l = Math.log((double) ((START_TENSION * velocity) / 800.0f));
+        this.mDuration = (int) (1000.0d * Math.exp(l / (((double) DECELERATION_RATE) - 1.0d)));
+        this.mStartTime = AnimationUtils.currentAnimationTimeMillis();
+        this.mStartX = startX;
+        this.mStartY = startY;
+        float coeffX = velocity == 0.0f ? 1.0f : ((float) velocityX) / velocity;
+        float coeffY = velocity == 0.0f ? 1.0f : ((float) velocityY) / velocity;
+        int totalDistance = (int) (((double) NUM) * Math.exp((((double) DECELERATION_RATE) / (((double) DECELERATION_RATE) - 1.0d)) * l));
+        this.mMinX = minX;
+        this.mMaxX = maxX;
+        this.mMinY = minY;
+        this.mMaxY = maxY;
+        this.mFinalX = Math.round(((float) totalDistance) * coeffX) + startX;
+        this.mFinalX = Math.min(this.mFinalX, this.mMaxX);
+        this.mFinalX = Math.max(this.mFinalX, this.mMinX);
+        this.mFinalY = Math.round(((float) totalDistance) * coeffY) + startY;
+        this.mFinalY = Math.min(this.mFinalY, this.mMaxY);
+        this.mFinalY = Math.max(this.mFinalY, this.mMinY);
     }
 
-    static float viscousFluid(float f) {
-        f *= sViscousFluidScale;
-        if (f < 1.0f) {
-            f -= 1.0f - ((float) Math.exp((double) (-f)));
+    static float viscousFluid(float x) {
+        x *= sViscousFluidScale;
+        if (x < 1.0f) {
+            x -= 1.0f - ((float) Math.exp((double) (-x)));
         } else {
-            f = 0.36787945f + ((1.0f - ((float) Math.exp((double) (1.0f - f)))) * 0.63212055f);
+            x = 0.36787945f + ((1.0f - 0.36787945f) * (1.0f - ((float) Math.exp((double) (1.0f - x)))));
         }
-        return f * sViscousFluidNormalize;
+        return x * sViscousFluidNormalize;
     }
 
     public void abortAnimation() {
@@ -295,8 +245,8 @@ public class Scroller {
         this.mFinished = true;
     }
 
-    public void extendDuration(int i) {
-        this.mDuration = timePassed() + i;
+    public void extendDuration(int extend) {
+        this.mDuration = timePassed() + extend;
         this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
         this.mFinished = false;
     }
@@ -305,19 +255,19 @@ public class Scroller {
         return (int) (AnimationUtils.currentAnimationTimeMillis() - this.mStartTime);
     }
 
-    public void setFinalX(int i) {
-        this.mFinalX = i;
+    public void setFinalX(int newX) {
+        this.mFinalX = newX;
         this.mDeltaX = (float) (this.mFinalX - this.mStartX);
         this.mFinished = false;
     }
 
-    public void setFinalY(int i) {
-        this.mFinalY = i;
+    public void setFinalY(int newY) {
+        this.mFinalY = newY;
         this.mDeltaY = (float) (this.mFinalY - this.mStartY);
         this.mFinished = false;
     }
 
-    public boolean isScrollingInDirection(float f, float f2) {
-        return !this.mFinished && Math.signum(f) == Math.signum((float) (this.mFinalX - this.mStartX)) && Math.signum(f2) == Math.signum((float) (this.mFinalY - this.mStartY));
+    public boolean isScrollingInDirection(float xvel, float yvel) {
+        return !this.mFinished && Math.signum(xvel) == Math.signum((float) (this.mFinalX - this.mStartX)) && Math.signum(yvel) == Math.signum((float) (this.mFinalY - this.mStartY));
     }
 }

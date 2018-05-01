@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.metadata.id3;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -21,40 +20,36 @@ public final class ChapterFrame extends Id3Frame {
         C05811() {
         }
 
-        public ChapterFrame createFromParcel(Parcel parcel) {
-            return new ChapterFrame(parcel);
+        public ChapterFrame createFromParcel(Parcel in) {
+            return new ChapterFrame(in);
         }
 
-        public ChapterFrame[] newArray(int i) {
-            return new ChapterFrame[i];
+        public ChapterFrame[] newArray(int size) {
+            return new ChapterFrame[size];
         }
     }
 
-    public int describeContents() {
-        return 0;
+    public ChapterFrame(String chapterId, int startTimeMs, int endTimeMs, long startOffset, long endOffset, Id3Frame[] subFrames) {
+        super(ID);
+        this.chapterId = chapterId;
+        this.startTimeMs = startTimeMs;
+        this.endTimeMs = endTimeMs;
+        this.startOffset = startOffset;
+        this.endOffset = endOffset;
+        this.subFrames = subFrames;
     }
 
-    public ChapterFrame(String str, int i, int i2, long j, long j2, Id3Frame[] id3FrameArr) {
+    ChapterFrame(Parcel in) {
         super(ID);
-        this.chapterId = str;
-        this.startTimeMs = i;
-        this.endTimeMs = i2;
-        this.startOffset = j;
-        this.endOffset = j2;
-        this.subFrames = id3FrameArr;
-    }
-
-    ChapterFrame(Parcel parcel) {
-        super(ID);
-        this.chapterId = parcel.readString();
-        this.startTimeMs = parcel.readInt();
-        this.endTimeMs = parcel.readInt();
-        this.startOffset = parcel.readLong();
-        this.endOffset = parcel.readLong();
-        int readInt = parcel.readInt();
-        this.subFrames = new Id3Frame[readInt];
-        for (int i = 0; i < readInt; i++) {
-            this.subFrames[i] = (Id3Frame) parcel.readParcelable(Id3Frame.class.getClassLoader());
+        this.chapterId = in.readString();
+        this.startTimeMs = in.readInt();
+        this.endTimeMs = in.readInt();
+        this.startOffset = in.readLong();
+        this.endOffset = in.readLong();
+        int subFrameCount = in.readInt();
+        this.subFrames = new Id3Frame[subFrameCount];
+        for (int i = 0; i < subFrameCount; i++) {
+            this.subFrames[i] = (Id3Frame) in.readParcelable(Id3Frame.class.getClassLoader());
         }
     }
 
@@ -62,40 +57,41 @@ public final class ChapterFrame extends Id3Frame {
         return this.subFrames.length;
     }
 
-    public Id3Frame getSubFrame(int i) {
-        return this.subFrames[i];
+    public Id3Frame getSubFrame(int index) {
+        return this.subFrames[index];
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ChapterFrame chapterFrame = (ChapterFrame) obj;
-                if (this.startTimeMs != chapterFrame.startTimeMs || this.endTimeMs != chapterFrame.endTimeMs || this.startOffset != chapterFrame.startOffset || this.endOffset != chapterFrame.endOffset || !Util.areEqual(this.chapterId, chapterFrame.chapterId) || Arrays.equals(this.subFrames, chapterFrame.subFrames) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChapterFrame other = (ChapterFrame) obj;
+        if (this.startTimeMs == other.startTimeMs && this.endTimeMs == other.endTimeMs && this.startOffset == other.startOffset && this.endOffset == other.endOffset && Util.areEqual(this.chapterId, other.chapterId) && Arrays.equals(this.subFrames, other.subFrames)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (((((((527 + this.startTimeMs) * 31) + this.endTimeMs) * 31) + ((int) this.startOffset)) * 31) + ((int) this.endOffset))) + (this.chapterId != null ? this.chapterId.hashCode() : 0);
+        return ((((((((this.startTimeMs + 527) * 31) + this.endTimeMs) * 31) + ((int) this.startOffset)) * 31) + ((int) this.endOffset)) * 31) + (this.chapterId != null ? this.chapterId.hashCode() : 0);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.chapterId);
-        parcel.writeInt(this.startTimeMs);
-        parcel.writeInt(this.endTimeMs);
-        parcel.writeLong(this.startOffset);
-        parcel.writeLong(this.endOffset);
-        parcel.writeInt(this.subFrames.length);
-        for (Parcelable writeParcelable : this.subFrames) {
-            parcel.writeParcelable(writeParcelable, 0);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.chapterId);
+        dest.writeInt(this.startTimeMs);
+        dest.writeInt(this.endTimeMs);
+        dest.writeLong(this.startOffset);
+        dest.writeLong(this.endOffset);
+        dest.writeInt(this.subFrames.length);
+        for (Id3Frame subFrame : this.subFrames) {
+            dest.writeParcelable(subFrame, 0);
         }
+    }
+
+    public int describeContents() {
+        return 0;
     }
 }

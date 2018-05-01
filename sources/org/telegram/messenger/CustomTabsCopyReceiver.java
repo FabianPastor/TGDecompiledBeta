@@ -7,9 +7,9 @@ import android.widget.Toast;
 
 public class CustomTabsCopyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        intent = intent.getDataString();
-        if (intent != null) {
-            AndroidUtilities.addToClipboard(intent);
+        String url = intent.getDataString();
+        if (url != null) {
+            AndroidUtilities.addToClipboard(url);
             Toast.makeText(context, LocaleController.getString("LinkCopied", C0446R.string.LinkCopied), 0).show();
         }
     }

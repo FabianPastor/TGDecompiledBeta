@@ -17,1325 +17,1331 @@ import org.telegram.ui.ActionBar.Theme;
 public class DarkTheme {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static int getColor(String str) {
-        int i;
-        String str2 = str;
-        switch (str.hashCode()) {
+    public static int getColor(String key) {
+        Object obj;
+        switch (key.hashCode()) {
             case -2147269658:
-                if (str2.equals(Theme.key_chat_outMenu)) {
-                    i = 23;
+                if (key.equals(Theme.key_chat_outMenu)) {
+                    obj = 23;
                     break;
                 }
             case -2139469579:
-                if (str2.equals(Theme.key_chat_emojiPanelEmptyText)) {
-                    i = 99;
+                if (key.equals(Theme.key_chat_emojiPanelEmptyText)) {
+                    obj = 99;
                     break;
                 }
             case -2132427577:
-                if (str2.equals(Theme.key_chat_outViews)) {
-                    i = 40;
+                if (key.equals(Theme.key_chat_outViews)) {
+                    obj = 40;
                     break;
                 }
             case -2103805301:
-                if (str2.equals(Theme.key_actionBarActionModeDefault)) {
-                    i = 24;
+                if (key.equals(Theme.key_actionBarActionModeDefault)) {
+                    obj = 24;
                     break;
                 }
             case -2102232027:
-                if (str2.equals(Theme.key_profile_actionIcon)) {
-                    i = 150;
+                if (key.equals(Theme.key_profile_actionIcon)) {
+                    obj = 150;
                     break;
                 }
             case -2019587427:
-                if (str2.equals("listSelector")) {
-                    i = 101;
+                if (key.equals("listSelector")) {
+                    obj = 101;
                     break;
                 }
             case -1992864503:
-                if (str2.equals(Theme.key_actionBarDefaultSubmenuBackground)) {
-                    i = 88;
+                if (key.equals(Theme.key_actionBarDefaultSubmenuBackground)) {
+                    obj = 88;
                     break;
                 }
             case -1992639563:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorViolet)) {
-                    i = 195;
+                if (key.equals(Theme.key_avatar_actionBarSelectorViolet)) {
+                    obj = 195;
                     break;
                 }
             case -1975862704:
-                if (str2.equals(Theme.key_player_button)) {
-                    i = 33;
+                if (key.equals(Theme.key_player_button)) {
+                    obj = 33;
                     break;
                 }
             case -1974166005:
-                if (str2.equals(Theme.key_chat_outFileProgressSelected)) {
-                    i = 30;
+                if (key.equals(Theme.key_chat_outFileProgressSelected)) {
+                    obj = 30;
                     break;
                 }
             case -1961633574:
-                if (str2.equals(Theme.key_chat_outLoader)) {
-                    i = 179;
+                if (key.equals(Theme.key_chat_outLoader)) {
+                    obj = 179;
                     break;
                 }
             case -1942198229:
-                if (str2.equals(Theme.key_chats_menuPhone)) {
-                    i = 196;
+                if (key.equals(Theme.key_chats_menuPhone)) {
+                    obj = 196;
                     break;
                 }
             case -1927175348:
-                if (str2.equals(Theme.key_chat_outFileBackgroundSelected)) {
-                    i = 208;
+                if (key.equals(Theme.key_chat_outFileBackgroundSelected)) {
+                    obj = 208;
                     break;
                 }
             case -1926854985:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGrayText2)) {
-                    i = 148;
+                if (key.equals(Theme.key_windowBackgroundWhiteGrayText2)) {
+                    obj = 148;
                     break;
                 }
             case -1926854984:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGrayText3)) {
-                    i = 87;
+                if (key.equals(Theme.key_windowBackgroundWhiteGrayText3)) {
+                    obj = 87;
                     break;
                 }
             case -1926854983:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGrayText4)) {
-                    i = 159;
+                if (key.equals(Theme.key_windowBackgroundWhiteGrayText4)) {
+                    obj = 159;
                     break;
                 }
             case -1924841028:
-                if (str2.equals(Theme.key_actionBarDefaultSubtitle)) {
-                    i = 105;
+                if (key.equals(Theme.key_actionBarDefaultSubtitle)) {
+                    obj = 105;
                     break;
                 }
             case -1891930735:
-                if (str2.equals(Theme.key_chat_outFileBackground)) {
-                    i = 162;
+                if (key.equals(Theme.key_chat_outFileBackground)) {
+                    obj = 162;
                     break;
                 }
             case -1878988531:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorGreen)) {
-                    i = 108;
+                if (key.equals(Theme.key_avatar_actionBarSelectorGreen)) {
+                    obj = 108;
                     break;
                 }
             case -1853661732:
-                if (str2.equals(Theme.key_chat_outTimeSelectedText)) {
-                    i = 90;
+                if (key.equals(Theme.key_chat_outTimeSelectedText)) {
+                    obj = 90;
                     break;
                 }
             case -1850167367:
-                if (str2.equals(Theme.key_chat_emojiPanelShadowLine)) {
-                    i = 25;
+                if (key.equals(Theme.key_chat_emojiPanelShadowLine)) {
+                    obj = 25;
                     break;
                 }
             case -1849805674:
-                if (str2.equals(Theme.key_dialogBackground)) {
-                    i = 26;
+                if (key.equals(Theme.key_dialogBackground)) {
+                    obj = 26;
                     break;
                 }
             case -1787129273:
-                if (str2.equals(Theme.key_chat_outContactBackground)) {
-                    i = 211;
+                if (key.equals(Theme.key_chat_outContactBackground)) {
+                    obj = 211;
                     break;
                 }
             case -1779173263:
-                if (str2.equals(Theme.key_chat_topPanelMessage)) {
-                    i = 132;
+                if (key.equals(Theme.key_chat_topPanelMessage)) {
+                    obj = 132;
                     break;
                 }
             case -1777297962:
-                if (str2.equals(Theme.key_chats_muteIcon)) {
-                    i = 244;
+                if (key.equals(Theme.key_chats_muteIcon)) {
+                    obj = 244;
                     break;
                 }
             case -1767675171:
-                if (str2.equals(Theme.key_chat_inViaBotNameText)) {
-                    i = 156;
+                if (key.equals(Theme.key_chat_inViaBotNameText)) {
+                    obj = 156;
                     break;
                 }
             case -1758608141:
-                if (str2.equals(Theme.key_windowBackgroundWhiteValueText)) {
-                    i = 232;
+                if (key.equals(Theme.key_windowBackgroundWhiteValueText)) {
+                    obj = 232;
                     break;
                 }
             case -1733632792:
-                if (str2.equals(Theme.key_emptyListPlaceholder)) {
-                    i = 241;
+                if (key.equals(Theme.key_emptyListPlaceholder)) {
+                    obj = 241;
                     break;
                 }
             case -1724033454:
-                if (str2.equals(Theme.key_chat_inPreviewInstantText)) {
-                    i = 27;
+                if (key.equals(Theme.key_chat_inPreviewInstantText)) {
+                    obj = 27;
                     break;
                 }
             case -1719903102:
-                if (str2.equals(Theme.key_chat_outViewsSelected)) {
-                    i = 145;
+                if (key.equals(Theme.key_chat_outViewsSelected)) {
+                    obj = 145;
                     break;
                 }
             case -1719839798:
-                if (str2.equals(Theme.key_avatar_backgroundInProfileBlue)) {
-                    i = PsExtractor.PRIVATE_STREAM_1;
+                if (key.equals(Theme.key_avatar_backgroundInProfileBlue)) {
+                    obj = PsExtractor.PRIVATE_STREAM_1;
                     break;
                 }
             case -1683744660:
-                if (str2.equals(Theme.key_profile_verifiedBackground)) {
-                    i = 161;
+                if (key.equals(Theme.key_profile_verifiedBackground)) {
+                    obj = 161;
                     break;
                 }
             case -1654302575:
-                if (str2.equals(Theme.key_chats_menuBackground)) {
-                    i = 173;
+                if (key.equals(Theme.key_chats_menuBackground)) {
+                    obj = 173;
                     break;
                 }
             case -1633591792:
-                if (str2.equals(Theme.key_chat_emojiPanelStickerPackSelector)) {
-                    i = 225;
+                if (key.equals(Theme.key_chat_emojiPanelStickerPackSelector)) {
+                    obj = 225;
                     break;
                 }
             case -1625862693:
-                if (str2.equals(Theme.key_chat_wallpaper)) {
-                    i = 224;
+                if (key.equals(Theme.key_chat_wallpaper)) {
+                    obj = 224;
                     break;
                 }
             case -1623818608:
-                if (str2.equals(Theme.key_chat_inForwardedNameText)) {
-                    i = 165;
+                if (key.equals(Theme.key_chat_inForwardedNameText)) {
+                    obj = 165;
                     break;
                 }
             case -1604008580:
-                if (str2.equals(Theme.key_chat_outAudioProgress)) {
-                    i = 54;
+                if (key.equals(Theme.key_chat_outAudioProgress)) {
+                    obj = 54;
                     break;
                 }
             case -1589702002:
-                if (str2.equals(Theme.key_chat_inLoaderPhotoSelected)) {
-                    i = 60;
+                if (key.equals(Theme.key_chat_inLoaderPhotoSelected)) {
+                    obj = 60;
                     break;
                 }
             case -1565843249:
-                if (str2.equals(Theme.key_files_folderIcon)) {
-                    i = 139;
+                if (key.equals(Theme.key_files_folderIcon)) {
+                    obj = 139;
                     break;
                 }
             case -1543133775:
-                if (str2.equals(Theme.key_chat_outContactNameText)) {
-                    i = 222;
+                if (key.equals(Theme.key_chat_outContactNameText)) {
+                    obj = 222;
                     break;
                 }
             case -1542353776:
-                if (str2.equals(Theme.key_chat_outVoiceSeekbar)) {
-                    i = 133;
+                if (key.equals(Theme.key_chat_outVoiceSeekbar)) {
+                    obj = 133;
                     break;
                 }
             case -1533503664:
-                if (str2.equals(Theme.key_chat_outFileProgress)) {
-                    i = 124;
+                if (key.equals(Theme.key_chat_outFileProgress)) {
+                    obj = 124;
                     break;
                 }
             case -1530345450:
-                if (str2.equals(Theme.key_chat_inReplyMessageText)) {
-                    i = 107;
+                if (key.equals(Theme.key_chat_inReplyMessageText)) {
+                    obj = 107;
                     break;
                 }
             case -1496224782:
-                if (str2.equals(Theme.key_chat_inReplyLine)) {
-                    i = 104;
+                if (key.equals(Theme.key_chat_inReplyLine)) {
+                    obj = 104;
                     break;
                 }
             case -1415980195:
-                if (str2.equals(Theme.key_files_folderIconBackground)) {
-                    i = 160;
+                if (key.equals(Theme.key_files_folderIconBackground)) {
+                    obj = 160;
                     break;
                 }
             case -1407570354:
-                if (str2.equals(Theme.key_chat_inReplyMediaMessageText)) {
-                    i = 176;
+                if (key.equals(Theme.key_chat_inReplyMediaMessageText)) {
+                    obj = 176;
                     break;
                 }
             case -1397026623:
-                if (str2.equals(Theme.key_windowBackgroundGray)) {
-                    i = 9;
+                if (key.equals(Theme.key_windowBackgroundGray)) {
+                    obj = 9;
                     break;
                 }
             case -1385379359:
-                if (str2.equals(Theme.key_dialogIcon)) {
-                    i = 93;
+                if (key.equals(Theme.key_dialogIcon)) {
+                    obj = 93;
                     break;
                 }
             case -1316415606:
-                if (str2.equals(Theme.key_actionBarActionModeDefaultSelector)) {
-                    i = 5;
+                if (key.equals(Theme.key_actionBarActionModeDefaultSelector)) {
+                    obj = 5;
                     break;
                 }
             case -1310183623:
-                if (str2.equals(Theme.key_chat_muteIcon)) {
-                    i = 20;
+                if (key.equals(Theme.key_chat_muteIcon)) {
+                    obj = 20;
                     break;
                 }
             case -1262649070:
-                if (str2.equals(Theme.key_avatar_nameInMessageGreen)) {
-                    i = 66;
+                if (key.equals(Theme.key_avatar_nameInMessageGreen)) {
+                    obj = 66;
                     break;
                 }
             case -1240647597:
-                if (str2.equals(Theme.key_chat_outBubbleShadow)) {
-                    i = 55;
+                if (key.equals(Theme.key_chat_outBubbleShadow)) {
+                    obj = 55;
                     break;
                 }
             case -1229478359:
-                if (str2.equals(Theme.key_chats_unreadCounter)) {
-                    i = 85;
+                if (key.equals(Theme.key_chats_unreadCounter)) {
+                    obj = 85;
                     break;
                 }
             case -1213387098:
-                if (str2.equals(Theme.key_chat_inMenuSelected)) {
-                    i = 56;
+                if (key.equals(Theme.key_chat_inMenuSelected)) {
+                    obj = 56;
                     break;
                 }
             case -1147596450:
-                if (str2.equals(Theme.key_chat_inFileInfoSelectedText)) {
-                    i = 79;
+                if (key.equals(Theme.key_chat_inFileInfoSelectedText)) {
+                    obj = 79;
                     break;
                 }
             case -1106471792:
-                if (str2.equals(Theme.key_chat_outAudioPerfomerText)) {
-                    i = 94;
+                if (key.equals(Theme.key_chat_outAudioPerfomerText)) {
+                    obj = 94;
                     break;
                 }
             case -1078554766:
-                if (str2.equals(Theme.key_windowBackgroundWhiteBlueHeader)) {
-                    i = 97;
+                if (key.equals(Theme.key_windowBackgroundWhiteBlueHeader)) {
+                    obj = 97;
                     break;
                 }
             case -1074293766:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarGreen)) {
-                    i = 143;
+                if (key.equals(Theme.key_avatar_backgroundActionBarGreen)) {
+                    obj = 143;
                     break;
                 }
             case -1063762099:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGreenText2)) {
-                    i = 10;
+                if (key.equals(Theme.key_windowBackgroundWhiteGreenText2)) {
+                    obj = 10;
                     break;
                 }
             case -1062379852:
-                if (str2.equals(Theme.key_chat_messageLinkOut)) {
-                    i = 204;
+                if (key.equals(Theme.key_chat_messageLinkOut)) {
+                    obj = 204;
                     break;
                 }
             case -1046600742:
-                if (str2.equals(Theme.key_profile_actionBackground)) {
-                    i = 64;
+                if (key.equals(Theme.key_profile_actionBackground)) {
+                    obj = 64;
                     break;
                 }
             case -1019316079:
-                if (str2.equals(Theme.key_chat_outReplyMessageText)) {
-                    i = 210;
+                if (key.equals(Theme.key_chat_outReplyMessageText)) {
+                    obj = 210;
                     break;
                 }
             case -1012016554:
-                if (str2.equals(Theme.key_chat_inFileBackground)) {
-                    i = 3;
+                if (key.equals(Theme.key_chat_inFileBackground)) {
+                    obj = 3;
                     break;
                 }
             case -1006953508:
-                if (str2.equals(Theme.key_chat_secretTimerBackground)) {
-                    i = 1;
+                if (key.equals(Theme.key_chat_secretTimerBackground)) {
+                    obj = 1;
                     break;
                 }
             case -1005376655:
-                if (str2.equals(Theme.key_chat_inAudioSeekbar)) {
-                    i = 187;
+                if (key.equals(Theme.key_chat_inAudioSeekbar)) {
+                    obj = 187;
                     break;
                 }
             case -1005120019:
-                if (str2.equals(Theme.key_chats_secretIcon)) {
-                    i = 92;
+                if (key.equals(Theme.key_chats_secretIcon)) {
+                    obj = 92;
                     break;
                 }
             case -1004973057:
-                if (str2.equals(Theme.key_chats_secretName)) {
-                    i = 103;
+                if (key.equals(Theme.key_chats_secretName)) {
+                    obj = 103;
                     break;
                 }
             case -960321732:
-                if (str2.equals(Theme.key_chat_mediaMenu)) {
-                    i = 21;
+                if (key.equals(Theme.key_chat_mediaMenu)) {
+                    obj = 21;
                     break;
                 }
             case -955211830:
-                if (str2.equals(Theme.key_chat_topPanelLine)) {
-                    i = 49;
+                if (key.equals(Theme.key_chat_topPanelLine)) {
+                    obj = 49;
                     break;
                 }
             case -938826921:
-                if (str2.equals(Theme.key_player_actionBarSubtitle)) {
-                    i = 223;
+                if (key.equals(Theme.key_player_actionBarSubtitle)) {
+                    obj = 223;
                     break;
                 }
             case -901363160:
-                if (str2.equals(Theme.key_chats_menuPhoneCats)) {
-                    i = 226;
+                if (key.equals(Theme.key_chats_menuPhoneCats)) {
+                    obj = 226;
                     break;
                 }
             case -834035478:
-                if (str2.equals(Theme.key_chat_outSentClockSelected)) {
-                    i = 65;
+                if (key.equals(Theme.key_chat_outSentClockSelected)) {
+                    obj = 65;
                     break;
                 }
             case -810517465:
-                if (str2.equals(Theme.key_chat_outAudioSeekbarSelected)) {
-                    i = TsExtractor.TS_STREAM_TYPE_AC3;
+                if (key.equals(Theme.key_chat_outAudioSeekbarSelected)) {
+                    obj = TsExtractor.TS_STREAM_TYPE_AC3;
                     break;
                 }
             case -805096120:
-                if (str2.equals(Theme.key_chats_nameIcon)) {
-                    i = 72;
+                if (key.equals(Theme.key_chats_nameIcon)) {
+                    obj = 72;
                     break;
                 }
             case -792942846:
-                if (str2.equals(Theme.key_graySection)) {
-                    i = 71;
+                if (key.equals(Theme.key_graySection)) {
+                    obj = 71;
                     break;
                 }
             case -779362418:
-                if (str2.equals(Theme.key_chat_emojiPanelTrendingTitle)) {
-                    i = 77;
+                if (key.equals(Theme.key_chat_emojiPanelTrendingTitle)) {
+                    obj = 77;
                     break;
                 }
             case -763385518:
-                if (str2.equals(Theme.key_chats_date)) {
-                    i = 123;
+                if (key.equals(Theme.key_chats_date)) {
+                    obj = 123;
                     break;
                 }
             case -763087825:
-                if (str2.equals(Theme.key_chats_name)) {
-                    i = 168;
+                if (key.equals(Theme.key_chats_name)) {
+                    obj = 168;
                     break;
                 }
             case -756337980:
-                if (str2.equals(Theme.key_profile_actionPressedBackground)) {
-                    i = 116;
+                if (key.equals(Theme.key_profile_actionPressedBackground)) {
+                    obj = 116;
                     break;
                 }
             case -712338357:
-                if (str2.equals(Theme.key_chat_inSiteNameText)) {
-                    i = TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
+                if (key.equals(Theme.key_chat_inSiteNameText)) {
+                    obj = TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
                     break;
                 }
             case -687452692:
-                if (str2.equals(Theme.key_chat_inLoaderPhotoIcon)) {
-                    i = 193;
+                if (key.equals(Theme.key_chat_inLoaderPhotoIcon)) {
+                    obj = 193;
                     break;
                 }
             case -654429213:
-                if (str2.equals(Theme.key_chats_message)) {
-                    i = 238;
+                if (key.equals(Theme.key_chats_message)) {
+                    obj = 238;
                     break;
                 }
             case -652337344:
-                if (str2.equals(Theme.key_chat_outVenueNameText)) {
-                    i = PsExtractor.VIDEO_STREAM_MASK;
+                if (key.equals(Theme.key_chat_outVenueNameText)) {
+                    obj = PsExtractor.VIDEO_STREAM_MASK;
                     break;
                 }
             case -629209323:
-                if (str2.equals(Theme.key_chats_pinnedIcon)) {
-                    i = 18;
+                if (key.equals(Theme.key_chats_pinnedIcon)) {
+                    obj = 18;
                     break;
                 }
             case -608456434:
-                if (str2.equals(Theme.key_chat_outBubbleSelected)) {
-                    i = 125;
+                if (key.equals(Theme.key_chat_outBubbleSelected)) {
+                    obj = 125;
                     break;
                 }
             case -603597494:
-                if (str2.equals(Theme.key_chat_inSentClock)) {
-                    i = 166;
+                if (key.equals(Theme.key_chat_inSentClock)) {
+                    obj = 166;
                     break;
                 }
             case -570274322:
-                if (str2.equals(Theme.key_chat_outReplyMediaMessageSelectedText)) {
-                    i = 248;
+                if (key.equals(Theme.key_chat_outReplyMediaMessageSelectedText)) {
+                    obj = 248;
                     break;
                 }
             case -564899147:
-                if (str2.equals(Theme.key_chat_outInstantSelected)) {
-                    i = 190;
+                if (key.equals(Theme.key_chat_outInstantSelected)) {
+                    obj = 190;
                     break;
                 }
             case -560721948:
-                if (str2.equals(Theme.key_chat_outSentCheckSelected)) {
-                    i = 89;
+                if (key.equals(Theme.key_chat_outSentCheckSelected)) {
+                    obj = 89;
                     break;
                 }
             case -552118908:
-                if (str2.equals(Theme.key_actionBarDefault)) {
-                    i = 113;
+                if (key.equals(Theme.key_actionBarDefault)) {
+                    obj = 113;
                     break;
                 }
             case -493564645:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorRed)) {
-                    i = 32;
+                if (key.equals(Theme.key_avatar_actionBarSelectorRed)) {
+                    obj = 32;
                     break;
                 }
             case -450514995:
-                if (str2.equals(Theme.key_chats_actionMessage)) {
-                    i = 42;
+                if (key.equals(Theme.key_chats_actionMessage)) {
+                    obj = 42;
                     break;
                 }
             case -427186938:
-                if (str2.equals(Theme.key_chat_inAudioDurationSelectedText)) {
-                    i = 111;
+                if (key.equals(Theme.key_chat_inAudioDurationSelectedText)) {
+                    obj = 111;
                     break;
                 }
             case -391617936:
-                if (str2.equals(Theme.key_chat_selectedBackground)) {
-                    i = 17;
+                if (key.equals(Theme.key_chat_selectedBackground)) {
+                    obj = 17;
                     break;
                 }
             case -354489314:
-                if (str2.equals(Theme.key_chat_outFileInfoText)) {
-                    i = 51;
+                if (key.equals(Theme.key_chat_outFileInfoText)) {
+                    obj = 51;
                     break;
                 }
             case -343666293:
-                if (str2.equals(Theme.key_windowBackgroundWhite)) {
-                    i = 171;
+                if (key.equals(Theme.key_windowBackgroundWhite)) {
+                    obj = 171;
                     break;
                 }
             case -294026410:
-                if (str2.equals(Theme.key_chat_inReplyNameText)) {
-                    i = 69;
+                if (key.equals(Theme.key_chat_inReplyNameText)) {
+                    obj = 69;
                     break;
                 }
             case -264184037:
-                if (str2.equals(Theme.key_inappPlayerClose)) {
-                    i = 206;
+                if (key.equals(Theme.key_inappPlayerClose)) {
+                    obj = 206;
                     break;
                 }
             case -260428237:
-                if (str2.equals(Theme.key_chat_outVoiceSeekbarFill)) {
-                    i = 197;
+                if (key.equals(Theme.key_chat_outVoiceSeekbarFill)) {
+                    obj = 197;
                     break;
                 }
             case -258492929:
-                if (str2.equals(Theme.key_avatar_nameInMessageOrange)) {
-                    i = 158;
+                if (key.equals(Theme.key_avatar_nameInMessageOrange)) {
+                    obj = 158;
                     break;
                 }
             case -251079667:
-                if (str2.equals(Theme.key_chat_outPreviewInstantText)) {
-                    i = 76;
+                if (key.equals(Theme.key_chat_outPreviewInstantText)) {
+                    obj = 76;
                     break;
                 }
             case -249481380:
-                if (str2.equals(Theme.key_listSelector)) {
-                    i = 213;
+                if (key.equals(Theme.key_listSelector)) {
+                    obj = 213;
                     break;
                 }
             case -248568965:
-                if (str2.equals(Theme.key_inappPlayerTitle)) {
-                    i = 229;
+                if (key.equals(Theme.key_inappPlayerTitle)) {
+                    obj = 229;
                     break;
                 }
             case -212237793:
-                if (str2.equals(Theme.key_player_actionBar)) {
-                    i = 50;
+                if (key.equals(Theme.key_player_actionBar)) {
+                    obj = 50;
                     break;
                 }
             case -185786131:
-                if (str2.equals(Theme.key_chat_unreadMessagesStartText)) {
-                    i = 205;
+                if (key.equals(Theme.key_chat_unreadMessagesStartText)) {
+                    obj = 205;
                     break;
                 }
             case -176488427:
-                if (str2.equals(Theme.key_chat_replyPanelLine)) {
-                    i = 175;
+                if (key.equals(Theme.key_chat_replyPanelLine)) {
+                    obj = 175;
                     break;
                 }
             case -143547632:
-                if (str2.equals(Theme.key_chat_inFileProgressSelected)) {
-                    i = 131;
+                if (key.equals(Theme.key_chat_inFileProgressSelected)) {
+                    obj = 131;
                     break;
                 }
             case -127673038:
-                if (str2.equals("key_chats_menuTopShadow")) {
-                    i = 170;
+                if (key.equals("key_chats_menuTopShadow")) {
+                    obj = 170;
                     break;
                 }
             case -108292334:
-                if (str2.equals(Theme.key_chats_menuTopShadow)) {
-                    i = 136;
+                if (key.equals(Theme.key_chats_menuTopShadow)) {
+                    obj = 136;
                     break;
                 }
             case -71280336:
-                if (str2.equals(Theme.key_switchTrackChecked)) {
-                    i = 146;
+                if (key.equals(Theme.key_switchTrackChecked)) {
+                    obj = 146;
                     break;
                 }
             case -65607089:
-                if (str2.equals(Theme.key_chats_menuItemIcon)) {
-                    i = 6;
+                if (key.equals(Theme.key_chats_menuItemIcon)) {
+                    obj = 6;
                     break;
                 }
             case -65277181:
-                if (str2.equals(Theme.key_chats_menuItemText)) {
-                    i = 37;
+                if (key.equals(Theme.key_chats_menuItemText)) {
+                    obj = 37;
                     break;
                 }
             case -35597940:
-                if (str2.equals(Theme.key_chat_inContactNameText)) {
-                    i = 218;
+                if (key.equals(Theme.key_chat_inContactNameText)) {
+                    obj = 218;
                     break;
                 }
             case -18073397:
-                if (str2.equals(Theme.key_chats_tabletSelectedOverlay)) {
-                    i = 36;
+                if (key.equals(Theme.key_chats_tabletSelectedOverlay)) {
+                    obj = 36;
                     break;
                 }
             case -12871922:
-                if (str2.equals(Theme.key_chat_secretChatStatusText)) {
-                    i = 151;
+                if (key.equals(Theme.key_chat_secretChatStatusText)) {
+                    obj = 151;
                     break;
                 }
             case 6289575:
-                if (str2.equals(Theme.key_chat_inLoaderPhotoIconSelected)) {
-                    i = 216;
+                if (key.equals(Theme.key_chat_inLoaderPhotoIconSelected)) {
+                    obj = 216;
                     break;
                 }
             case 27337780:
-                if (str2.equals(Theme.key_chats_pinnedOverlay)) {
-                    i = 95;
+                if (key.equals(Theme.key_chats_pinnedOverlay)) {
+                    obj = 95;
                     break;
                 }
             case 49148112:
-                if (str2.equals(Theme.key_chat_inPreviewLine)) {
-                    i = 153;
+                if (key.equals(Theme.key_chat_inPreviewLine)) {
+                    obj = 153;
                     break;
                 }
             case 51359814:
-                if (str2.equals(Theme.key_chat_replyPanelMessage)) {
-                    i = 75;
+                if (key.equals(Theme.key_chat_replyPanelMessage)) {
+                    obj = 75;
                     break;
                 }
             case 57332012:
-                if (str2.equals(Theme.key_chats_sentCheck)) {
-                    i = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
+                if (key.equals(Theme.key_chats_sentCheck)) {
+                    obj = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
                     break;
                 }
             case 57460786:
-                if (str2.equals(Theme.key_chats_sentClock)) {
-                    i = 203;
+                if (key.equals(Theme.key_chats_sentClock)) {
+                    obj = 203;
                     break;
                 }
             case 89466127:
-                if (str2.equals(Theme.key_chat_outAudioSeekbarFill)) {
-                    i = 67;
+                if (key.equals(Theme.key_chat_outAudioSeekbarFill)) {
+                    obj = 67;
                     break;
                 }
             case 117743477:
-                if (str2.equals(Theme.key_chat_outPreviewLine)) {
-                    i = 199;
+                if (key.equals(Theme.key_chat_outPreviewLine)) {
+                    obj = 199;
                     break;
                 }
             case 141076636:
-                if (str2.equals(Theme.key_groupcreate_spanBackground)) {
-                    i = 43;
+                if (key.equals(Theme.key_groupcreate_spanBackground)) {
+                    obj = 43;
                     break;
                 }
             case 141894978:
-                if (str2.equals(Theme.key_windowBackgroundWhiteRedText5)) {
-                    i = 194;
+                if (key.equals(Theme.key_windowBackgroundWhiteRedText5)) {
+                    obj = 194;
                     break;
                 }
             case 185438775:
-                if (str2.equals(Theme.key_chat_outAudioSelectedProgress)) {
-                    i = 182;
+                if (key.equals(Theme.key_chat_outAudioSelectedProgress)) {
+                    obj = 182;
                     break;
                 }
             case 216441603:
-                if (str2.equals(Theme.key_chat_goDownButton)) {
-                    i = 114;
+                if (key.equals(Theme.key_chat_goDownButton)) {
+                    obj = 114;
                     break;
                 }
             case 231486891:
-                if (str2.equals(Theme.key_chat_inAudioPerfomerText)) {
-                    i = 82;
+                if (key.equals(Theme.key_chat_inAudioPerfomerText)) {
+                    obj = 82;
                     break;
                 }
             case 243668262:
-                if (str2.equals(Theme.key_chat_inTimeText)) {
-                    i = 7;
+                if (key.equals(Theme.key_chat_inTimeText)) {
+                    obj = 7;
                     break;
                 }
             case 257089712:
-                if (str2.equals(Theme.key_chat_outAudioDurationText)) {
-                    i = 119;
+                if (key.equals(Theme.key_chat_outAudioDurationText)) {
+                    obj = 119;
                     break;
                 }
             case 271457747:
-                if (str2.equals(Theme.key_chat_inBubbleSelected)) {
-                    i = 122;
+                if (key.equals(Theme.key_chat_inBubbleSelected)) {
+                    obj = 122;
                     break;
                 }
             case 303350244:
-                if (str2.equals(Theme.key_chat_reportSpam)) {
-                    i = 227;
+                if (key.equals(Theme.key_chat_reportSpam)) {
+                    obj = 227;
                     break;
                 }
             case 316847509:
-                if (str2.equals(Theme.key_chat_outLoaderSelected)) {
-                    i = 15;
+                if (key.equals(Theme.key_chat_outLoaderSelected)) {
+                    obj = 15;
                     break;
                 }
             case 339397761:
-                if (str2.equals(Theme.key_windowBackgroundWhiteBlackText)) {
-                    i = 246;
+                if (key.equals(Theme.key_windowBackgroundWhiteBlackText)) {
+                    obj = 246;
                     break;
                 }
             case 371859081:
-                if (str2.equals(Theme.key_chat_inReplyMediaMessageSelectedText)) {
-                    i = 140;
+                if (key.equals(Theme.key_chat_inReplyMediaMessageSelectedText)) {
+                    obj = 140;
                     break;
                 }
             case 415452907:
-                if (str2.equals(Theme.key_chat_outAudioDurationSelectedText)) {
-                    i = 142;
+                if (key.equals(Theme.key_chat_outAudioDurationSelectedText)) {
+                    obj = 142;
                     break;
                 }
             case 421601145:
-                if (str2.equals(Theme.key_chat_emojiPanelIconSelected)) {
-                    i = 4;
+                if (key.equals(Theme.key_chat_emojiPanelIconSelected)) {
+                    obj = 4;
                     break;
                 }
             case 421601469:
-                if (str2.equals(Theme.key_chat_emojiPanelIconSelector)) {
-                    i = 74;
+                if (key.equals(Theme.key_chat_emojiPanelIconSelector)) {
+                    obj = 74;
                     break;
                 }
             case 426061980:
-                if (str2.equals(Theme.key_chat_serviceBackground)) {
-                    i = 147;
+                if (key.equals(Theme.key_chat_serviceBackground)) {
+                    obj = 147;
                     break;
                 }
             case 429680544:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileBlue)) {
-                    i = 239;
+                if (key.equals(Theme.key_avatar_subtitleInProfileBlue)) {
+                    obj = 239;
                     break;
                 }
             case 429722217:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileCyan)) {
-                    i = 63;
+                if (key.equals(Theme.key_avatar_subtitleInProfileCyan)) {
+                    obj = 63;
                     break;
                 }
             case 430094524:
-                if (str2.equals(Theme.key_avatar_subtitleInProfilePink)) {
-                    i = 0;
+                if (key.equals(Theme.key_avatar_subtitleInProfilePink)) {
+                    obj = null;
                     break;
                 }
             case 435303214:
-                if (str2.equals(Theme.key_actionBarDefaultSubmenuItem)) {
-                    i = 198;
+                if (key.equals(Theme.key_actionBarDefaultSubmenuItem)) {
+                    obj = 198;
                     break;
                 }
             case 439976061:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileGreen)) {
-                    i = 228;
+                if (key.equals(Theme.key_avatar_subtitleInProfileGreen)) {
+                    obj = 228;
                     break;
                 }
             case 444983522:
-                if (str2.equals(Theme.key_chat_topPanelClose)) {
-                    i = Callback.DEFAULT_SWIPE_ANIMATION_DURATION;
+                if (key.equals(Theme.key_chat_topPanelClose)) {
+                    obj = Callback.DEFAULT_SWIPE_ANIMATION_DURATION;
                     break;
                 }
             case 446162770:
-                if (str2.equals(Theme.key_windowBackgroundWhiteBlueText)) {
-                    i = 247;
+                if (key.equals(Theme.key_windowBackgroundWhiteBlueText)) {
+                    obj = 247;
                     break;
                 }
             case 460598594:
-                if (str2.equals(Theme.key_chat_topPanelTitle)) {
-                    i = 219;
+                if (key.equals(Theme.key_chat_topPanelTitle)) {
+                    obj = 219;
                     break;
                 }
             case 484353662:
-                if (str2.equals(Theme.key_chat_inVenueInfoText)) {
-                    i = 118;
+                if (key.equals(Theme.key_chat_inVenueInfoText)) {
+                    obj = 118;
                     break;
                 }
             case 503923205:
-                if (str2.equals(Theme.key_chat_inSentClockSelected)) {
-                    i = 183;
+                if (key.equals(Theme.key_chat_inSentClockSelected)) {
+                    obj = 183;
                     break;
                 }
             case 527405547:
-                if (str2.equals(Theme.key_inappPlayerBackground)) {
-                    i = 48;
+                if (key.equals(Theme.key_inappPlayerBackground)) {
+                    obj = 48;
                     break;
                 }
             case 556028747:
-                if (str2.equals(Theme.key_chat_outVoiceSeekbarSelected)) {
-                    i = 28;
+                if (key.equals(Theme.key_chat_outVoiceSeekbarSelected)) {
+                    obj = 28;
                     break;
                 }
             case 589961756:
-                if (str2.equals(Theme.key_chat_goDownButtonIcon)) {
-                    i = 214;
+                if (key.equals(Theme.key_chat_goDownButtonIcon)) {
+                    obj = 214;
                     break;
                 }
             case 613458991:
-                if (str2.equals(Theme.key_dialogTextLink)) {
-                    i = 164;
+                if (key.equals(Theme.key_dialogTextLink)) {
+                    obj = 164;
                     break;
                 }
             case 626157205:
-                if (str2.equals(Theme.key_chat_inVoiceSeekbar)) {
-                    i = 34;
+                if (key.equals(Theme.key_chat_inVoiceSeekbar)) {
+                    obj = 34;
                     break;
                 }
             case 634019162:
-                if (str2.equals(Theme.key_chat_emojiPanelBackspace)) {
-                    i = 11;
+                if (key.equals(Theme.key_chat_emojiPanelBackspace)) {
+                    obj = 11;
                     break;
                 }
             case 635007317:
-                if (str2.equals(Theme.key_chat_inFileProgress)) {
-                    i = 242;
+                if (key.equals(Theme.key_chat_inFileProgress)) {
+                    obj = 242;
                     break;
                 }
             case 648238646:
-                if (str2.equals(Theme.key_chat_outAudioTitleText)) {
-                    i = 59;
+                if (key.equals(Theme.key_chat_outAudioTitleText)) {
+                    obj = 59;
                     break;
                 }
             case 655457041:
-                if (str2.equals(Theme.key_chat_inFileBackgroundSelected)) {
-                    i = 234;
+                if (key.equals(Theme.key_chat_inFileBackgroundSelected)) {
+                    obj = 234;
                     break;
                 }
             case 676996437:
-                if (str2.equals(Theme.key_chat_outLocationIcon)) {
-                    i = 81;
+                if (key.equals(Theme.key_chat_outLocationIcon)) {
+                    obj = 81;
                     break;
                 }
             case 716656587:
-                if (str2.equals(Theme.key_avatar_backgroundGroupCreateSpanBlue)) {
-                    i = 8;
+                if (key.equals(Theme.key_avatar_backgroundGroupCreateSpanBlue)) {
+                    obj = 8;
                     break;
                 }
             case 732262561:
-                if (str2.equals(Theme.key_chat_outTimeText)) {
-                    i = 258;
+                if (key.equals(Theme.key_chat_outTimeText)) {
+                    obj = 258;
                     break;
                 }
             case 759679774:
-                if (str2.equals(Theme.key_chat_outVenueInfoSelectedText)) {
-                    i = TsExtractor.TS_STREAM_TYPE_E_AC3;
+                if (key.equals(Theme.key_chat_outVenueInfoSelectedText)) {
+                    obj = TsExtractor.TS_STREAM_TYPE_E_AC3;
                     break;
                 }
             case 765296599:
-                if (str2.equals(Theme.key_chat_outReplyLine)) {
-                    i = 254;
+                if (key.equals(Theme.key_chat_outReplyLine)) {
+                    obj = 254;
                     break;
                 }
             case 803672502:
-                if (str2.equals(Theme.key_chat_messagePanelIcons)) {
-                    i = 70;
+                if (key.equals(Theme.key_chat_messagePanelIcons)) {
+                    obj = 70;
                     break;
                 }
             case 826015922:
-                if (str2.equals(Theme.key_chat_emojiPanelTrendingDescription)) {
-                    i = 2;
+                if (key.equals(Theme.key_chat_emojiPanelTrendingDescription)) {
+                    obj = 2;
                     break;
                 }
             case 850854541:
-                if (str2.equals(Theme.key_chat_inPreviewInstantSelectedText)) {
-                    i = 78;
+                if (key.equals(Theme.key_chat_inPreviewInstantSelectedText)) {
+                    obj = 78;
                     break;
                 }
             case 890367586:
-                if (str2.equals(Theme.key_chat_inViews)) {
-                    i = 100;
+                if (key.equals(Theme.key_chat_inViews)) {
+                    obj = 100;
                     break;
                 }
             case 911091978:
-                if (str2.equals(Theme.key_chat_outLocationBackground)) {
-                    i = 243;
+                if (key.equals(Theme.key_chat_outLocationBackground)) {
+                    obj = 243;
                     break;
                 }
             case 913069217:
-                if (str2.equals(Theme.key_chat_outMenuSelected)) {
-                    i = 252;
+                if (key.equals(Theme.key_chat_outMenuSelected)) {
+                    obj = 252;
                     break;
                 }
             case 927863384:
-                if (str2.equals(Theme.key_chat_inBubbleShadow)) {
-                    i = 184;
+                if (key.equals(Theme.key_chat_inBubbleShadow)) {
+                    obj = 184;
                     break;
                 }
             case 939137799:
-                if (str2.equals(Theme.key_chat_inContactPhoneText)) {
-                    i = 188;
+                if (key.equals(Theme.key_chat_inContactPhoneText)) {
+                    obj = 188;
                     break;
                 }
             case 939824634:
-                if (str2.equals(Theme.key_chat_outInstant)) {
-                    i = 209;
+                if (key.equals(Theme.key_chat_outInstant)) {
+                    obj = 209;
                     break;
                 }
             case 946144034:
-                if (str2.equals(Theme.key_windowBackgroundWhiteBlueText4)) {
-                    i = 217;
+                if (key.equals(Theme.key_windowBackgroundWhiteBlueText4)) {
+                    obj = 217;
                     break;
                 }
             case 962085693:
-                if (str2.equals(Theme.key_chats_menuCloudBackgroundCats)) {
-                    i = 215;
+                if (key.equals(Theme.key_chats_menuCloudBackgroundCats)) {
+                    obj = 215;
                     break;
                 }
             case 983278580:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileOrange)) {
-                    i = 261;
+                if (key.equals(Theme.key_avatar_subtitleInProfileOrange)) {
+                    obj = 261;
                     break;
                 }
             case 993048796:
-                if (str2.equals(Theme.key_chat_inFileSelectedIcon)) {
-                    i = 149;
+                if (key.equals(Theme.key_chat_inFileSelectedIcon)) {
+                    obj = 149;
                     break;
                 }
             case 1008947016:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarRed)) {
-                    i = 231;
+                if (key.equals(Theme.key_avatar_backgroundActionBarRed)) {
+                    obj = 231;
                     break;
                 }
             case 1020100908:
-                if (str2.equals(Theme.key_chat_inAudioSeekbarSelected)) {
-                    i = 167;
+                if (key.equals(Theme.key_chat_inAudioSeekbarSelected)) {
+                    obj = 167;
                     break;
                 }
             case 1045892135:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGrayIcon)) {
-                    i = 186;
+                if (key.equals(Theme.key_windowBackgroundWhiteGrayIcon)) {
+                    obj = 186;
                     break;
                 }
             case 1046222043:
-                if (str2.equals(Theme.key_windowBackgroundWhiteGrayText)) {
-                    i = 86;
+                if (key.equals(Theme.key_windowBackgroundWhiteGrayText)) {
+                    obj = 86;
                     break;
                 }
             case 1079427869:
-                if (str2.equals(Theme.key_chat_inViewsSelected)) {
-                    i = 141;
+                if (key.equals(Theme.key_chat_inViewsSelected)) {
+                    obj = 141;
                     break;
                 }
             case 1100033490:
-                if (str2.equals(Theme.key_chat_inAudioSelectedProgress)) {
-                    i = 115;
+                if (key.equals(Theme.key_chat_inAudioSelectedProgress)) {
+                    obj = 115;
                     break;
                 }
             case 1106068251:
-                if (str2.equals(Theme.key_groupcreate_spanText)) {
-                    i = 245;
+                if (key.equals(Theme.key_groupcreate_spanText)) {
+                    obj = 245;
                     break;
                 }
             case 1121079660:
-                if (str2.equals(Theme.key_chat_outAudioSeekbar)) {
-                    i = PsExtractor.AUDIO_STREAM;
+                if (key.equals(Theme.key_chat_outAudioSeekbar)) {
+                    obj = PsExtractor.AUDIO_STREAM;
                     break;
                 }
             case 1122192435:
-                if (str2.equals(Theme.key_chat_outLoaderPhotoSelected)) {
-                    i = 220;
+                if (key.equals(Theme.key_chat_outLoaderPhotoSelected)) {
+                    obj = 220;
                     break;
                 }
             case 1175786053:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileViolet)) {
-                    i = 181;
+                if (key.equals(Theme.key_avatar_subtitleInProfileViolet)) {
+                    obj = 181;
                     break;
                 }
             case 1195322391:
-                if (str2.equals(Theme.key_chat_inAudioProgress)) {
-                    i = 207;
+                if (key.equals(Theme.key_chat_inAudioProgress)) {
+                    obj = 207;
                     break;
                 }
             case 1199344772:
-                if (str2.equals(Theme.key_chat_topPanelBackground)) {
-                    i = TsExtractor.TS_STREAM_TYPE_SPLICE_INFO;
+                if (key.equals(Theme.key_chat_topPanelBackground)) {
+                    obj = TsExtractor.TS_STREAM_TYPE_SPLICE_INFO;
                     break;
                 }
             case 1201609915:
-                if (str2.equals(Theme.key_chat_outReplyNameText)) {
-                    i = 180;
+                if (key.equals(Theme.key_chat_outReplyNameText)) {
+                    obj = 180;
                     break;
                 }
             case 1202885960:
-                if (str2.equals(Theme.key_chat_outPreviewInstantSelectedText)) {
-                    i = 12;
+                if (key.equals(Theme.key_chat_outPreviewInstantSelectedText)) {
+                    obj = 12;
                     break;
                 }
             case 1212117123:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarBlue)) {
-                    i = 155;
+                if (key.equals(Theme.key_avatar_backgroundActionBarBlue)) {
+                    obj = 155;
                     break;
                 }
             case 1212158796:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarCyan)) {
-                    i = 249;
+                if (key.equals(Theme.key_avatar_backgroundActionBarCyan)) {
+                    obj = 249;
                     break;
                 }
             case 1212531103:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarPink)) {
-                    i = 178;
+                if (key.equals(Theme.key_avatar_backgroundActionBarPink)) {
+                    obj = 178;
                     break;
                 }
             case 1231763334:
-                if (str2.equals(Theme.key_chat_addContact)) {
-                    i = 22;
+                if (key.equals(Theme.key_chat_addContact)) {
+                    obj = 22;
                     break;
                 }
             case 1239758101:
-                if (str2.equals(Theme.key_player_placeholder)) {
-                    i = 68;
+                if (key.equals(Theme.key_player_placeholder)) {
+                    obj = 68;
                     break;
                 }
             case 1265168609:
-                if (str2.equals(Theme.key_player_actionBarItems)) {
-                    i = TsExtractor.TS_STREAM_TYPE_DTS;
+                if (key.equals(Theme.key_player_actionBarItems)) {
+                    obj = TsExtractor.TS_STREAM_TYPE_DTS;
                     break;
                 }
             case 1269980952:
-                if (str2.equals(Theme.key_chat_inBubble)) {
-                    i = 13;
+                if (key.equals(Theme.key_chat_inBubble)) {
+                    obj = 13;
                     break;
                 }
             case 1275014009:
-                if (str2.equals(Theme.key_player_actionBarTitle)) {
-                    i = 19;
+                if (key.equals(Theme.key_player_actionBarTitle)) {
+                    obj = 19;
                     break;
                 }
             case 1285554199:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarOrange)) {
-                    i = 233;
+                if (key.equals(Theme.key_avatar_backgroundActionBarOrange)) {
+                    obj = 233;
                     break;
                 }
             case 1288729698:
-                if (str2.equals(Theme.key_chat_unreadMessagesStartArrowIcon)) {
-                    i = 53;
+                if (key.equals(Theme.key_chat_unreadMessagesStartArrowIcon)) {
+                    obj = 53;
                     break;
                 }
             case 1308150651:
-                if (str2.equals(Theme.key_chat_outFileNameText)) {
-                    i = 38;
+                if (key.equals(Theme.key_chat_outFileNameText)) {
+                    obj = 38;
                     break;
                 }
             case 1316752473:
-                if (str2.equals(Theme.key_chat_outFileInfoSelectedText)) {
-                    i = 14;
+                if (key.equals(Theme.key_chat_outFileInfoSelectedText)) {
+                    obj = 14;
                     break;
                 }
             case 1327229315:
-                if (str2.equals(Theme.key_actionBarDefaultSelector)) {
-                    i = 98;
+                if (key.equals(Theme.key_actionBarDefaultSelector)) {
+                    obj = 98;
                     break;
                 }
             case 1333190005:
-                if (str2.equals(Theme.key_chat_outForwardedNameText)) {
-                    i = 29;
+                if (key.equals(Theme.key_chat_outForwardedNameText)) {
+                    obj = 29;
                     break;
                 }
             case 1372411761:
-                if (str2.equals(Theme.key_inappPlayerPerformer)) {
-                    i = 61;
+                if (key.equals(Theme.key_inappPlayerPerformer)) {
+                    obj = 61;
                     break;
                 }
             case 1381159341:
-                if (str2.equals(Theme.key_chat_inContactIcon)) {
-                    i = 57;
+                if (key.equals(Theme.key_chat_inContactIcon)) {
+                    obj = 57;
                     break;
                 }
             case 1411374187:
-                if (str2.equals(Theme.key_chat_messagePanelHint)) {
-                    i = 174;
+                if (key.equals(Theme.key_chat_messagePanelHint)) {
+                    obj = 174;
                     break;
                 }
             case 1411728145:
-                if (str2.equals(Theme.key_chat_messagePanelText)) {
-                    i = 253;
+                if (key.equals(Theme.key_chat_messagePanelText)) {
+                    obj = 253;
                     break;
                 }
             case 1414117958:
-                if (str2.equals(Theme.key_chat_outSiteNameText)) {
-                    i = 121;
+                if (key.equals(Theme.key_chat_outSiteNameText)) {
+                    obj = 121;
                     break;
                 }
             case 1449754706:
-                if (str2.equals(Theme.key_chat_outContactIcon)) {
-                    i = 96;
+                if (key.equals(Theme.key_chat_outContactIcon)) {
+                    obj = 96;
                     break;
                 }
             case 1450167170:
-                if (str2.equals(Theme.key_chat_outContactPhoneText)) {
-                    i = 117;
+                if (key.equals(Theme.key_chat_outContactPhoneText)) {
+                    obj = 117;
                     break;
                 }
             case 1456911705:
-                if (str2.equals(Theme.key_player_progressBackground)) {
-                    i = 31;
+                if (key.equals(Theme.key_player_progressBackground)) {
+                    obj = 31;
                     break;
                 }
             case 1478061672:
-                if (str2.equals(Theme.key_avatar_backgroundActionBarViolet)) {
-                    i = 73;
+                if (key.equals(Theme.key_avatar_backgroundActionBarViolet)) {
+                    obj = 73;
                     break;
                 }
             case 1491567659:
-                if (str2.equals("player_seekBarBackground")) {
-                    i = 202;
+                if (key.equals("player_seekBarBackground")) {
+                    obj = 202;
                     break;
                 }
             case 1504078167:
-                if (str2.equals(Theme.key_chat_outFileSelectedIcon)) {
-                    i = 91;
+                if (key.equals(Theme.key_chat_outFileSelectedIcon)) {
+                    obj = 91;
                     break;
                 }
             case 1528152827:
-                if (str2.equals(Theme.key_chat_inAudioTitleText)) {
-                    i = 110;
+                if (key.equals(Theme.key_chat_inAudioTitleText)) {
+                    obj = 110;
                     break;
                 }
             case 1549064140:
-                if (str2.equals(Theme.key_chat_outLoaderPhotoIconSelected)) {
-                    i = 191;
+                if (key.equals(Theme.key_chat_outLoaderPhotoIconSelected)) {
+                    obj = 191;
                     break;
                 }
             case 1573464919:
-                if (str2.equals(Theme.key_chat_serviceBackgroundSelected)) {
-                    i = 47;
+                if (key.equals(Theme.key_chat_serviceBackgroundSelected)) {
+                    obj = 47;
                     break;
                 }
             case 1585168289:
-                if (str2.equals(Theme.key_chat_inFileIcon)) {
-                    i = 109;
+                if (key.equals(Theme.key_chat_inFileIcon)) {
+                    obj = 109;
                     break;
                 }
             case 1595048395:
-                if (str2.equals(Theme.key_chat_inAudioDurationText)) {
-                    i = 212;
+                if (key.equals(Theme.key_chat_inAudioDurationText)) {
+                    obj = 212;
                     break;
                 }
             case 1628297471:
-                if (str2.equals(Theme.key_chat_messageLinkIn)) {
-                    i = 84;
+                if (key.equals(Theme.key_chat_messageLinkIn)) {
+                    obj = 84;
                     break;
                 }
             case 1635685130:
-                if (str2.equals(Theme.key_profile_verifiedCheck)) {
-                    i = 144;
+                if (key.equals(Theme.key_profile_verifiedCheck)) {
+                    obj = 144;
                     break;
                 }
             case 1637669025:
-                if (str2.equals(Theme.key_chat_messageTextOut)) {
-                    i = 58;
+                if (key.equals(Theme.key_chat_messageTextOut)) {
+                    obj = 58;
                     break;
                 }
             case 1647377944:
-                if (str2.equals(Theme.key_chat_outViaBotNameText)) {
-                    i = 230;
+                if (key.equals(Theme.key_chat_outViaBotNameText)) {
+                    obj = 230;
                     break;
                 }
             case 1657795113:
-                if (str2.equals(Theme.key_chat_outSentCheck)) {
-                    i = 251;
+                if (key.equals(Theme.key_chat_outSentCheck)) {
+                    obj = 251;
                     break;
                 }
             case 1657923887:
-                if (str2.equals(Theme.key_chat_outSentClock)) {
-                    i = 112;
+                if (key.equals(Theme.key_chat_outSentClock)) {
+                    obj = 112;
                     break;
                 }
             case 1663688926:
-                if (str2.equals(Theme.key_chats_attachMessage)) {
-                    i = 83;
+                if (key.equals(Theme.key_chats_attachMessage)) {
+                    obj = 83;
                     break;
                 }
             case 1674274489:
-                if (str2.equals(Theme.key_chat_inVenueInfoSelectedText)) {
-                    i = 236;
+                if (key.equals(Theme.key_chat_inVenueInfoSelectedText)) {
+                    obj = 236;
                     break;
                 }
             case 1674318617:
-                if (str2.equals(Theme.key_divider)) {
-                    i = 39;
+                if (key.equals(Theme.key_divider)) {
+                    obj = 39;
                     break;
                 }
             case 1676443787:
-                if (str2.equals(Theme.key_avatar_subtitleInProfileRed)) {
-                    i = 80;
+                if (key.equals(Theme.key_avatar_subtitleInProfileRed)) {
+                    obj = 80;
                     break;
                 }
             case 1682961989:
-                if (str2.equals(Theme.key_switchThumbChecked)) {
-                    i = 106;
+                if (key.equals(Theme.key_switchThumbChecked)) {
+                    obj = 106;
                     break;
                 }
             case 1687612836:
-                if (str2.equals(Theme.key_actionBarActionModeDefaultIcon)) {
-                    i = 237;
+                if (key.equals(Theme.key_actionBarActionModeDefaultIcon)) {
+                    obj = 237;
                     break;
                 }
             case 1714118894:
-                if (str2.equals(Theme.key_chat_unreadMessagesStartBackground)) {
-                    i = 154;
+                if (key.equals(Theme.key_chat_unreadMessagesStartBackground)) {
+                    obj = 154;
                     break;
                 }
             case 1743255577:
-                if (str2.equals(Theme.key_dialogBackgroundGray)) {
-                    i = 255;
+                if (key.equals(Theme.key_dialogBackgroundGray)) {
+                    obj = 255;
                     break;
                 }
             case 1809914009:
-                if (str2.equals(Theme.key_dialogButtonSelector)) {
-                    i = 256;
+                if (key.equals(Theme.key_dialogButtonSelector)) {
+                    obj = 256;
                     break;
                 }
             case 1814021667:
-                if (str2.equals(Theme.key_chat_inFileInfoText)) {
-                    i = 185;
+                if (key.equals(Theme.key_chat_inFileInfoText)) {
+                    obj = 185;
                     break;
                 }
             case 1828201066:
-                if (str2.equals(Theme.key_dialogTextBlack)) {
-                    i = 137;
+                if (key.equals(Theme.key_dialogTextBlack)) {
+                    obj = 137;
                     break;
                 }
             case 1829565163:
-                if (str2.equals(Theme.key_chat_inMenu)) {
-                    i = 201;
+                if (key.equals(Theme.key_chat_inMenu)) {
+                    obj = 201;
                     break;
                 }
             case 1853943154:
-                if (str2.equals(Theme.key_chat_messageTextIn)) {
-                    i = 44;
+                if (key.equals(Theme.key_chat_messageTextIn)) {
+                    obj = 44;
                     break;
                 }
             case 1878895888:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorBlue)) {
-                    i = 41;
+                if (key.equals(Theme.key_avatar_actionBarSelectorBlue)) {
+                    obj = 41;
                     break;
                 }
             case 1878937561:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorCyan)) {
-                    i = 157;
+                if (key.equals(Theme.key_avatar_actionBarSelectorCyan)) {
+                    obj = 157;
                     break;
                 }
             case 1879309868:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorPink)) {
-                    i = 221;
+                if (key.equals(Theme.key_avatar_actionBarSelectorPink)) {
+                    obj = 221;
                     break;
                 }
             case 1921699010:
-                if (str2.equals(Theme.key_chats_unreadCounterMuted)) {
-                    i = 127;
+                if (key.equals(Theme.key_chats_unreadCounterMuted)) {
+                    obj = 127;
                     break;
                 }
             case 1929729373:
-                if (str2.equals(Theme.key_progressCircle)) {
-                    i = 126;
+                if (key.equals(Theme.key_progressCircle)) {
+                    obj = 126;
                     break;
                 }
             case 1930276193:
-                if (str2.equals(Theme.key_chat_inTimeSelectedText)) {
-                    i = 259;
+                if (key.equals(Theme.key_chat_inTimeSelectedText)) {
+                    obj = 259;
                     break;
                 }
             case 1947549395:
-                if (str2.equals(Theme.key_chat_inLoaderPhoto)) {
-                    i = 163;
+                if (key.equals(Theme.key_chat_inLoaderPhoto)) {
+                    obj = 163;
                     break;
                 }
             case 1972802227:
-                if (str2.equals(Theme.key_chat_outReplyMediaMessageText)) {
-                    i = 177;
+                if (key.equals(Theme.key_chat_outReplyMediaMessageText)) {
+                    obj = 177;
                     break;
                 }
             case 1979989987:
-                if (str2.equals(Theme.key_chat_outVenueInfoText)) {
-                    i = 257;
+                if (key.equals(Theme.key_chat_outVenueInfoText)) {
+                    obj = 257;
                     break;
                 }
             case 1994112714:
-                if (str2.equals(Theme.key_actionBarActionModeDefaultTop)) {
-                    i = 62;
+                if (key.equals(Theme.key_actionBarActionModeDefaultTop)) {
+                    obj = 62;
                     break;
                 }
             case 2016144760:
-                if (str2.equals(Theme.key_chat_outLoaderPhoto)) {
-                    i = 45;
+                if (key.equals(Theme.key_chat_outLoaderPhoto)) {
+                    obj = 45;
                     break;
                 }
             case 2016511272:
-                if (str2.equals(Theme.key_stickers_menu)) {
-                    i = 128;
+                if (key.equals(Theme.key_stickers_menu)) {
+                    obj = 128;
                     break;
                 }
             case 2052611411:
-                if (str2.equals(Theme.key_chat_outBubble)) {
-                    i = 172;
+                if (key.equals(Theme.key_chat_outBubble)) {
+                    obj = 172;
                     break;
                 }
             case 2067556030:
-                if (str2.equals(Theme.key_chat_emojiPanelIcon)) {
-                    i = 16;
+                if (key.equals(Theme.key_chat_emojiPanelIcon)) {
+                    obj = 16;
                     break;
                 }
             case 2073762588:
-                if (str2.equals(Theme.key_chat_outFileIcon)) {
-                    i = 46;
+                if (key.equals(Theme.key_chat_outFileIcon)) {
+                    obj = 46;
                     break;
                 }
             case 2090082520:
-                if (str2.equals(Theme.key_chats_nameMessage)) {
-                    i = 169;
+                if (key.equals(Theme.key_chats_nameMessage)) {
+                    obj = 169;
                     break;
                 }
             case 2099978769:
-                if (str2.equals(Theme.key_chat_outLoaderPhotoIcon)) {
-                    i = 52;
+                if (key.equals(Theme.key_chat_outLoaderPhotoIcon)) {
+                    obj = 52;
                     break;
                 }
             case 2109820260:
-                if (str2.equals(Theme.key_avatar_actionBarSelectorOrange)) {
-                    i = 235;
+                if (key.equals(Theme.key_avatar_actionBarSelectorOrange)) {
+                    obj = 235;
                     break;
                 }
             case 2118871810:
-                if (str2.equals(Theme.key_switchThumb)) {
-                    i = 35;
+                if (key.equals(Theme.key_switchThumb)) {
+                    obj = 35;
                     break;
                 }
             case 2119150199:
-                if (str2.equals(Theme.key_switchTrack)) {
-                    i = 260;
+                if (key.equals(Theme.key_switchTrack)) {
+                    obj = 260;
                     break;
                 }
             case 2131990258:
-                if (str2.equals(Theme.key_windowBackgroundWhiteLinkText)) {
-                    i = 120;
+                if (key.equals(Theme.key_windowBackgroundWhiteLinkText)) {
+                    obj = 120;
                     break;
                 }
             case 2133456819:
-                if (str2.equals(Theme.key_chat_emojiPanelBackground)) {
-                    i = 152;
+                if (key.equals(Theme.key_chat_emojiPanelBackground)) {
+                    obj = 152;
                     break;
                 }
             case 2141345810:
-                if (str2.equals(Theme.key_chat_messagePanelBackground)) {
-                    i = 102;
+                if (key.equals(Theme.key_chat_messagePanelBackground)) {
+                    obj = 102;
                     break;
                 }
             default:
+                obj = -1;
+                break;
         }
-        i = -1;
-        switch (i) {
-            case 0:
+        switch (obj) {
+            case null:
+            case 63:
+            case 80:
+            case 181:
+            case 228:
+            case 239:
+            case 261:
                 return -7697782;
             case 1:
                 return -NUM;
@@ -1461,8 +1467,6 @@ public class DarkTheme {
                 return -328966;
             case 62:
                 return -NUM;
-            case 63:
-                return -7697782;
             case 64:
                 return -13091262;
             case VoIPService.CALL_MIN_LAYER /*65*/:
@@ -1495,8 +1499,6 @@ public class DarkTheme {
                 return -11099429;
             case 79:
                 return -5648402;
-            case 80:
-                return -7697782;
             case 81:
                 return -10052929;
             case 82:
@@ -1697,8 +1699,6 @@ public class DarkTheme {
                 return -7421976;
             case 180:
                 return -3019777;
-            case 181:
-                return -7697782;
             case 182:
                 return -14187829;
             case 183:
@@ -1791,8 +1791,6 @@ public class DarkTheme {
                 return -7434610;
             case 227:
                 return -1481631;
-            case 228:
-                return -7697782;
             case 229:
                 return -6513508;
             case 230:
@@ -1813,8 +1811,6 @@ public class DarkTheme {
                 return -1;
             case 238:
                 return -9934744;
-            case 239:
-                return -7697782;
             case PsExtractor.VIDEO_STREAM_MASK /*240*/:
                 return -3019777;
             case 241:
@@ -1857,21 +1853,15 @@ public class DarkTheme {
                 return -5582866;
             case 260:
                 return -13948117;
-            case 261:
-                return -7697782;
             default:
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("returning color for key ");
-                stringBuilder.append(str2);
-                stringBuilder.append(" from current theme");
-                FileLog.m4w(stringBuilder.toString());
-                return Theme.getColor(str);
+                FileLog.m4w("returning color for key " + key + " from current theme");
+                return Theme.getColor(key);
         }
     }
 
-    public static Drawable getThemedDrawable(Context context, int i, String str) {
-        context = context.getResources().getDrawable(i).mutate();
-        context.setColorFilter(new PorterDuffColorFilter(getColor(str), Mode.MULTIPLY));
-        return context;
+    public static Drawable getThemedDrawable(Context context, int resId, String key) {
+        Drawable drawable = context.getResources().getDrawable(resId).mutate();
+        drawable.setColorFilter(new PorterDuffColorFilter(getColor(key), Mode.MULTIPLY));
+        return drawable;
     }
 }

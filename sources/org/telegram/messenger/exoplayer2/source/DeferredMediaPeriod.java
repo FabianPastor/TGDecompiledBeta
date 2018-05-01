@@ -15,8 +15,8 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
     public final MediaSource mediaSource;
     private long preparePositionUs;
 
-    public DeferredMediaPeriod(MediaSource mediaSource, MediaPeriodId mediaPeriodId, Allocator allocator) {
-        this.id = mediaPeriodId;
+    public DeferredMediaPeriod(MediaSource mediaSource, MediaPeriodId id, Allocator allocator) {
+        this.id = id;
         this.allocator = allocator;
         this.mediaSource = mediaSource;
     }
@@ -34,11 +34,11 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
         }
     }
 
-    public void prepare(Callback callback, long j) {
+    public void prepare(Callback callback, long preparePositionUs) {
         this.callback = callback;
-        this.preparePositionUs = j;
+        this.preparePositionUs = preparePositionUs;
         if (this.mediaPeriod != null) {
-            this.mediaPeriod.prepare(this, j);
+            this.mediaPeriod.prepare(this, preparePositionUs);
         }
     }
 
@@ -54,12 +54,12 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
         return this.mediaPeriod.getTrackGroups();
     }
 
-    public long selectTracks(TrackSelection[] trackSelectionArr, boolean[] zArr, SampleStream[] sampleStreamArr, boolean[] zArr2, long j) {
-        return this.mediaPeriod.selectTracks(trackSelectionArr, zArr, sampleStreamArr, zArr2, j);
+    public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
+        return this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs);
     }
 
-    public void discardBuffer(long j, boolean z) {
-        this.mediaPeriod.discardBuffer(j, z);
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
+        this.mediaPeriod.discardBuffer(positionUs, toKeyframe);
     }
 
     public long readDiscontinuity() {
@@ -70,27 +70,27 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
         return this.mediaPeriod.getBufferedPositionUs();
     }
 
-    public long seekToUs(long j) {
-        return this.mediaPeriod.seekToUs(j);
+    public long seekToUs(long positionUs) {
+        return this.mediaPeriod.seekToUs(positionUs);
     }
 
-    public long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters) {
-        return this.mediaPeriod.getAdjustedSeekPositionUs(j, seekParameters);
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        return this.mediaPeriod.getAdjustedSeekPositionUs(positionUs, seekParameters);
     }
 
     public long getNextLoadPositionUs() {
         return this.mediaPeriod.getNextLoadPositionUs();
     }
 
-    public void reevaluateBuffer(long j) {
-        this.mediaPeriod.reevaluateBuffer(j);
+    public void reevaluateBuffer(long positionUs) {
+        this.mediaPeriod.reevaluateBuffer(positionUs);
     }
 
-    public boolean continueLoading(long j) {
-        return (this.mediaPeriod == null || this.mediaPeriod.continueLoading(j) == null) ? 0 : 1;
+    public boolean continueLoading(long positionUs) {
+        return this.mediaPeriod != null && this.mediaPeriod.continueLoading(positionUs);
     }
 
-    public void onContinueLoadingRequested(MediaPeriod mediaPeriod) {
+    public void onContinueLoadingRequested(MediaPeriod source) {
         this.callback.onContinueLoadingRequested(this);
     }
 

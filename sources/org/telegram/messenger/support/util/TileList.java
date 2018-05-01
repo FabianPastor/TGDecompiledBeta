@@ -14,32 +14,32 @@ class TileList<T> {
         Tile<T> mNext;
         public int mStartPosition;
 
-        public Tile(Class<T> cls, int i) {
-            this.mItems = (Object[]) Array.newInstance(cls, i);
+        public Tile(Class<T> klass, int size) {
+            this.mItems = (Object[]) Array.newInstance(klass, size);
         }
 
-        boolean containsPosition(int i) {
-            return this.mStartPosition <= i && i < this.mStartPosition + this.mItemCount;
+        boolean containsPosition(int pos) {
+            return this.mStartPosition <= pos && pos < this.mStartPosition + this.mItemCount;
         }
 
-        T getByPosition(int i) {
-            return this.mItems[i - this.mStartPosition];
+        T getByPosition(int pos) {
+            return this.mItems[pos - this.mStartPosition];
         }
     }
 
-    public TileList(int i) {
-        this.mTileSize = i;
+    public TileList(int tileSize) {
+        this.mTileSize = tileSize;
     }
 
-    public T getItemAt(int i) {
-        if (this.mLastAccessedTile == null || !this.mLastAccessedTile.containsPosition(i)) {
-            int indexOfKey = this.mTiles.indexOfKey(i - (i % this.mTileSize));
-            if (indexOfKey < 0) {
+    public T getItemAt(int pos) {
+        if (this.mLastAccessedTile == null || !this.mLastAccessedTile.containsPosition(pos)) {
+            int index = this.mTiles.indexOfKey(pos - (pos % this.mTileSize));
+            if (index < 0) {
                 return null;
             }
-            this.mLastAccessedTile = (Tile) this.mTiles.valueAt(indexOfKey);
+            this.mLastAccessedTile = (Tile) this.mTiles.valueAt(index);
         }
-        return this.mLastAccessedTile.getByPosition(i);
+        return this.mLastAccessedTile.getByPosition(pos);
     }
 
     public int size() {
@@ -50,30 +50,31 @@ class TileList<T> {
         this.mTiles.clear();
     }
 
-    public Tile<T> getAtIndex(int i) {
-        return (Tile) this.mTiles.valueAt(i);
+    public Tile<T> getAtIndex(int index) {
+        return (Tile) this.mTiles.valueAt(index);
     }
 
-    public Tile<T> addOrReplace(Tile<T> tile) {
-        int indexOfKey = this.mTiles.indexOfKey(tile.mStartPosition);
-        if (indexOfKey < 0) {
-            this.mTiles.put(tile.mStartPosition, tile);
+    public Tile<T> addOrReplace(Tile<T> newTile) {
+        int index = this.mTiles.indexOfKey(newTile.mStartPosition);
+        if (index < 0) {
+            this.mTiles.put(newTile.mStartPosition, newTile);
             return null;
         }
-        Tile<T> tile2 = (Tile) this.mTiles.valueAt(indexOfKey);
-        this.mTiles.setValueAt(indexOfKey, tile);
-        if (this.mLastAccessedTile == tile2) {
-            this.mLastAccessedTile = tile;
+        Tile<T> oldTile = (Tile) this.mTiles.valueAt(index);
+        this.mTiles.setValueAt(index, newTile);
+        if (this.mLastAccessedTile != oldTile) {
+            return oldTile;
         }
-        return tile2;
+        this.mLastAccessedTile = newTile;
+        return oldTile;
     }
 
-    public Tile<T> removeAtPos(int i) {
-        Tile<T> tile = (Tile) this.mTiles.get(i);
+    public Tile<T> removeAtPos(int startPosition) {
+        Tile<T> tile = (Tile) this.mTiles.get(startPosition);
         if (this.mLastAccessedTile == tile) {
             this.mLastAccessedTile = null;
         }
-        this.mTiles.delete(i);
+        this.mTiles.delete(startPosition);
         return tile;
     }
 }

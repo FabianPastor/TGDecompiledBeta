@@ -22,6 +22,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
@@ -63,17 +64,6 @@ public class AdminLogFilterAlert extends BottomSheet {
     private Drawable shadowDrawable;
     private Pattern urlPattern;
 
-    /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$5 */
-    class C10705 implements OnClickListener {
-        C10705() {
-        }
-
-        public void onClick(View view) {
-            AdminLogFilterAlert.this.delegate.didSelectRights(AdminLogFilterAlert.this.currentFilter, AdminLogFilterAlert.this.selectedAdmins);
-            AdminLogFilterAlert.this.dismiss();
-        }
-    }
-
     public interface AdminLogFilterAlertDelegate {
         void didSelectRights(TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter, SparseArray<User> sparseArray);
     }
@@ -83,7 +73,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         C20343() {
         }
 
-        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             AdminLogFilterAlert.this.updateLayout();
         }
     }
@@ -93,14 +83,14 @@ public class AdminLogFilterAlert extends BottomSheet {
         C20354() {
         }
 
-        public void onItemClick(View view, int i) {
-            C20354 c20354 = this;
-            View view2 = view;
-            int i2 = i;
-            if (view2 instanceof CheckBoxCell) {
-                CheckBoxCell checkBoxCell = (CheckBoxCell) view2;
-                boolean isChecked = checkBoxCell.isChecked();
-                checkBoxCell.setChecked(isChecked ^ 1, true);
+        public void onItemClick(View view, int position) {
+            boolean isChecked;
+            int a;
+            ViewHolder holder;
+            if (view instanceof CheckBoxCell) {
+                CheckBoxCell cell = (CheckBoxCell) view;
+                isChecked = cell.isChecked();
+                cell.setChecked(!isChecked, true);
                 TL_channelAdminLogEventsFilter access$1000;
                 TL_channelAdminLogEventsFilter access$10002;
                 TL_channelAdminLogEventsFilter access$10003;
@@ -114,11 +104,11 @@ public class AdminLogFilterAlert extends BottomSheet {
                 TL_channelAdminLogEventsFilter access$100011;
                 TL_channelAdminLogEventsFilter access$100012;
                 TL_channelAdminLogEventsFilter access$100013;
-                int childCount;
-                View childAt;
-                ViewHolder findContainingViewHolder;
-                if (i2 == 0) {
-                    int i3;
+                int count;
+                View child;
+                int pos;
+                boolean z;
+                if (position == 0) {
                     if (isChecked) {
                         AdminLogFilterAlert.this.currentFilter = new TL_channelAdminLogEventsFilter();
                         access$1000 = AdminLogFilterAlert.this.currentFilter;
@@ -134,7 +124,6 @@ public class AdminLogFilterAlert extends BottomSheet {
                         access$100011 = AdminLogFilterAlert.this.currentFilter;
                         access$100012 = AdminLogFilterAlert.this.currentFilter;
                         access$100013 = AdminLogFilterAlert.this.currentFilter;
-                        i3 = isChecked;
                         AdminLogFilterAlert.this.currentFilter.delete = false;
                         access$100013.edit = false;
                         access$100012.pinned = false;
@@ -150,105 +139,119 @@ public class AdminLogFilterAlert extends BottomSheet {
                         access$10002.leave = false;
                         access$1000.join = false;
                     } else {
-                        i3 = isChecked;
                         AdminLogFilterAlert.this.currentFilter = null;
                     }
-                    childCount = AdminLogFilterAlert.this.listView.getChildCount();
-                    for (i2 = 0; i2 < childCount; i2++) {
-                        childAt = AdminLogFilterAlert.this.listView.getChildAt(i2);
-                        findContainingViewHolder = AdminLogFilterAlert.this.listView.findContainingViewHolder(childAt);
-                        int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                        if (findContainingViewHolder.getItemViewType() == 0 && adapterPosition > 0 && adapterPosition < AdminLogFilterAlert.this.allAdminsRow - 1) {
-                            ((CheckBoxCell) childAt).setChecked(i3 ^ 1, true);
+                    count = AdminLogFilterAlert.this.listView.getChildCount();
+                    for (a = 0; a < count; a++) {
+                        child = AdminLogFilterAlert.this.listView.getChildAt(a);
+                        holder = AdminLogFilterAlert.this.listView.findContainingViewHolder(child);
+                        pos = holder.getAdapterPosition();
+                        if (holder.getItemViewType() == 0 && pos > 0 && pos < AdminLogFilterAlert.this.allAdminsRow - 1) {
+                            CheckBoxCell checkBoxCell = (CheckBoxCell) child;
+                            if (isChecked) {
+                                z = false;
+                            } else {
+                                z = true;
+                            }
+                            checkBoxCell.setChecked(z, true);
+                        }
+                    }
+                } else if (position == AdminLogFilterAlert.this.allAdminsRow) {
+                    if (isChecked) {
+                        AdminLogFilterAlert.this.selectedAdmins = new SparseArray();
+                    } else {
+                        AdminLogFilterAlert.this.selectedAdmins = null;
+                    }
+                    count = AdminLogFilterAlert.this.listView.getChildCount();
+                    for (a = 0; a < count; a++) {
+                        child = AdminLogFilterAlert.this.listView.getChildAt(a);
+                        holder = AdminLogFilterAlert.this.listView.findContainingViewHolder(child);
+                        pos = holder.getAdapterPosition();
+                        if (holder.getItemViewType() == 2) {
+                            CheckBoxUserCell userCell = (CheckBoxUserCell) child;
+                            if (isChecked) {
+                                z = false;
+                            } else {
+                                z = true;
+                            }
+                            userCell.setChecked(z, true);
                         }
                     }
                 } else {
-                    boolean z = isChecked;
-                    if (i2 == AdminLogFilterAlert.this.allAdminsRow) {
-                        if (z) {
-                            AdminLogFilterAlert.this.selectedAdmins = new SparseArray();
+                    if (AdminLogFilterAlert.this.currentFilter == null) {
+                        AdminLogFilterAlert.this.currentFilter = new TL_channelAdminLogEventsFilter();
+                        access$1000 = AdminLogFilterAlert.this.currentFilter;
+                        access$10002 = AdminLogFilterAlert.this.currentFilter;
+                        access$10003 = AdminLogFilterAlert.this.currentFilter;
+                        access$10004 = AdminLogFilterAlert.this.currentFilter;
+                        access$10005 = AdminLogFilterAlert.this.currentFilter;
+                        access$10006 = AdminLogFilterAlert.this.currentFilter;
+                        access$10007 = AdminLogFilterAlert.this.currentFilter;
+                        access$10008 = AdminLogFilterAlert.this.currentFilter;
+                        access$10009 = AdminLogFilterAlert.this.currentFilter;
+                        access$100010 = AdminLogFilterAlert.this.currentFilter;
+                        access$100011 = AdminLogFilterAlert.this.currentFilter;
+                        access$100012 = AdminLogFilterAlert.this.currentFilter;
+                        access$100013 = AdminLogFilterAlert.this.currentFilter;
+                        AdminLogFilterAlert.this.currentFilter.delete = true;
+                        access$100013.edit = true;
+                        access$100012.pinned = true;
+                        access$100011.settings = true;
+                        access$100010.info = true;
+                        access$10009.demote = true;
+                        access$10008.promote = true;
+                        access$10007.unkick = true;
+                        access$10006.kick = true;
+                        access$10005.unban = true;
+                        access$10004.ban = true;
+                        access$10003.invite = true;
+                        access$10002.leave = true;
+                        access$1000.join = true;
+                        holder = AdminLogFilterAlert.this.listView.findViewHolderForAdapterPosition(0);
+                        if (holder != null) {
+                            ((CheckBoxCell) holder.itemView).setChecked(false, true);
+                        }
+                    }
+                    if (position == AdminLogFilterAlert.this.restrictionsRow) {
+                        access$10002 = AdminLogFilterAlert.this.currentFilter;
+                        access$10003 = AdminLogFilterAlert.this.currentFilter;
+                        access$10004 = AdminLogFilterAlert.this.currentFilter;
+                        access$10005 = AdminLogFilterAlert.this.currentFilter;
+                        if (AdminLogFilterAlert.this.currentFilter.kick) {
+                            z = false;
                         } else {
-                            AdminLogFilterAlert.this.selectedAdmins = null;
+                            z = true;
                         }
-                        childCount = AdminLogFilterAlert.this.listView.getChildCount();
-                        for (i2 = 0; i2 < childCount; i2++) {
-                            childAt = AdminLogFilterAlert.this.listView.getChildAt(i2);
-                            findContainingViewHolder = AdminLogFilterAlert.this.listView.findContainingViewHolder(childAt);
-                            findContainingViewHolder.getAdapterPosition();
-                            if (findContainingViewHolder.getItemViewType() == 2) {
-                                ((CheckBoxUserCell) childAt).setChecked(z ^ 1, true);
-                            }
-                        }
-                    } else {
-                        TL_channelAdminLogEventsFilter access$100014;
-                        if (AdminLogFilterAlert.this.currentFilter == null) {
-                            AdminLogFilterAlert.this.currentFilter = new TL_channelAdminLogEventsFilter();
-                            access$1000 = AdminLogFilterAlert.this.currentFilter;
-                            access$100014 = AdminLogFilterAlert.this.currentFilter;
-                            access$100013 = AdminLogFilterAlert.this.currentFilter;
-                            access$10003 = AdminLogFilterAlert.this.currentFilter;
-                            access$10004 = AdminLogFilterAlert.this.currentFilter;
-                            access$10005 = AdminLogFilterAlert.this.currentFilter;
-                            access$10006 = AdminLogFilterAlert.this.currentFilter;
-                            access$10007 = AdminLogFilterAlert.this.currentFilter;
-                            access$10008 = AdminLogFilterAlert.this.currentFilter;
-                            access$10009 = AdminLogFilterAlert.this.currentFilter;
-                            access$100010 = AdminLogFilterAlert.this.currentFilter;
-                            access$100011 = AdminLogFilterAlert.this.currentFilter;
-                            access$100012 = AdminLogFilterAlert.this.currentFilter;
-                            AdminLogFilterAlert.this.currentFilter.delete = true;
-                            access$100012.edit = true;
-                            access$100011.pinned = true;
-                            access$100010.settings = true;
-                            access$10009.info = true;
-                            access$10008.demote = true;
-                            access$10007.promote = true;
-                            access$10006.unkick = true;
-                            access$10005.kick = true;
-                            access$10004.unban = true;
-                            access$10003.ban = true;
-                            access$100013.invite = true;
-                            access$100014.leave = true;
-                            access$1000.join = true;
-                            ViewHolder findViewHolderForAdapterPosition = AdminLogFilterAlert.this.listView.findViewHolderForAdapterPosition(0);
-                            if (findViewHolderForAdapterPosition != null) {
-                                ((CheckBoxCell) findViewHolderForAdapterPosition.itemView).setChecked(false, true);
-                            }
-                        }
-                        i2 = i;
-                        if (i2 == AdminLogFilterAlert.this.restrictionsRow) {
-                            access$1000 = AdminLogFilterAlert.this.currentFilter;
-                            access$10002 = AdminLogFilterAlert.this.currentFilter;
-                            access$100014 = AdminLogFilterAlert.this.currentFilter;
-                            boolean z2 = AdminLogFilterAlert.this.currentFilter.kick ^ true;
-                            AdminLogFilterAlert.this.currentFilter.unban = z2;
-                            access$100014.unkick = z2;
-                            access$10002.ban = z2;
-                            access$1000.kick = z2;
-                        } else if (i2 == AdminLogFilterAlert.this.adminsRow) {
-                            access$1000 = AdminLogFilterAlert.this.currentFilter;
-                            isChecked = AdminLogFilterAlert.this.currentFilter.demote ^ true;
-                            AdminLogFilterAlert.this.currentFilter.demote = isChecked;
-                            access$1000.promote = isChecked;
-                        } else if (i2 == AdminLogFilterAlert.this.membersRow) {
-                            access$1000 = AdminLogFilterAlert.this.currentFilter;
-                            isChecked = AdminLogFilterAlert.this.currentFilter.join ^ true;
-                            AdminLogFilterAlert.this.currentFilter.join = isChecked;
-                            access$1000.invite = isChecked;
-                        } else if (i2 == AdminLogFilterAlert.this.infoRow) {
-                            access$1000 = AdminLogFilterAlert.this.currentFilter;
-                            isChecked = AdminLogFilterAlert.this.currentFilter.info ^ true;
-                            AdminLogFilterAlert.this.currentFilter.settings = isChecked;
-                            access$1000.info = isChecked;
-                        } else if (i2 == AdminLogFilterAlert.this.deleteRow) {
-                            AdminLogFilterAlert.this.currentFilter.delete ^= true;
-                        } else if (i2 == AdminLogFilterAlert.this.editRow) {
-                            AdminLogFilterAlert.this.currentFilter.edit ^= true;
-                        } else if (i2 == AdminLogFilterAlert.this.pinnedRow) {
-                            AdminLogFilterAlert.this.currentFilter.pinned ^= true;
-                        } else if (i2 == AdminLogFilterAlert.this.leavingRow) {
-                            AdminLogFilterAlert.this.currentFilter.leave ^= true;
-                        }
+                        access$10005.unban = z;
+                        access$10004.unkick = z;
+                        access$10003.ban = z;
+                        access$10002.kick = z;
+                    } else if (position == AdminLogFilterAlert.this.adminsRow) {
+                        access$10002 = AdminLogFilterAlert.this.currentFilter;
+                        access$10003 = AdminLogFilterAlert.this.currentFilter;
+                        z = !AdminLogFilterAlert.this.currentFilter.demote;
+                        access$10003.demote = z;
+                        access$10002.promote = z;
+                    } else if (position == AdminLogFilterAlert.this.membersRow) {
+                        access$10002 = AdminLogFilterAlert.this.currentFilter;
+                        access$10003 = AdminLogFilterAlert.this.currentFilter;
+                        z = !AdminLogFilterAlert.this.currentFilter.join;
+                        access$10003.join = z;
+                        access$10002.invite = z;
+                    } else if (position == AdminLogFilterAlert.this.infoRow) {
+                        access$10002 = AdminLogFilterAlert.this.currentFilter;
+                        access$10003 = AdminLogFilterAlert.this.currentFilter;
+                        z = !AdminLogFilterAlert.this.currentFilter.info;
+                        access$10003.settings = z;
+                        access$10002.info = z;
+                    } else if (position == AdminLogFilterAlert.this.deleteRow) {
+                        AdminLogFilterAlert.this.currentFilter.delete = !AdminLogFilterAlert.this.currentFilter.delete;
+                    } else if (position == AdminLogFilterAlert.this.editRow) {
+                        AdminLogFilterAlert.this.currentFilter.edit = !AdminLogFilterAlert.this.currentFilter.edit;
+                    } else if (position == AdminLogFilterAlert.this.pinnedRow) {
+                        AdminLogFilterAlert.this.currentFilter.pinned = !AdminLogFilterAlert.this.currentFilter.pinned;
+                    } else if (position == AdminLogFilterAlert.this.leavingRow) {
+                        AdminLogFilterAlert.this.currentFilter.leave = !AdminLogFilterAlert.this.currentFilter.leave;
                     }
                 }
                 if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.join || AdminLogFilterAlert.this.currentFilter.leave || AdminLogFilterAlert.this.currentFilter.leave || AdminLogFilterAlert.this.currentFilter.invite || AdminLogFilterAlert.this.currentFilter.ban || AdminLogFilterAlert.this.currentFilter.unban || AdminLogFilterAlert.this.currentFilter.kick || AdminLogFilterAlert.this.currentFilter.unkick || AdminLogFilterAlert.this.currentFilter.promote || AdminLogFilterAlert.this.currentFilter.demote || AdminLogFilterAlert.this.currentFilter.info || AdminLogFilterAlert.this.currentFilter.settings || AdminLogFilterAlert.this.currentFilter.pinned || AdminLogFilterAlert.this.currentFilter.edit || AdminLogFilterAlert.this.currentFilter.delete) {
@@ -258,33 +261,40 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
                 AdminLogFilterAlert.this.saveButton.setEnabled(false);
                 AdminLogFilterAlert.this.saveButton.setAlpha(0.5f);
-            } else if (view2 instanceof CheckBoxUserCell) {
-                CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) view2;
+            } else if (view instanceof CheckBoxUserCell) {
+                User user;
+                CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) view;
                 if (AdminLogFilterAlert.this.selectedAdmins == null) {
-                    int i4;
                     AdminLogFilterAlert.this.selectedAdmins = new SparseArray();
-                    ViewHolder findViewHolderForAdapterPosition2 = AdminLogFilterAlert.this.listView.findViewHolderForAdapterPosition(AdminLogFilterAlert.this.allAdminsRow);
-                    if (findViewHolderForAdapterPosition2 != null) {
-                        i4 = 0;
-                        ((CheckBoxCell) findViewHolderForAdapterPosition2.itemView).setChecked(false, true);
-                    } else {
-                        i4 = 0;
+                    holder = AdminLogFilterAlert.this.listView.findViewHolderForAdapterPosition(AdminLogFilterAlert.this.allAdminsRow);
+                    if (holder != null) {
+                        ((CheckBoxCell) holder.itemView).setChecked(false, true);
                     }
-                    while (i4 < AdminLogFilterAlert.this.currentAdmins.size()) {
-                        User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(i4)).user_id));
+                    for (a = 0; a < AdminLogFilterAlert.this.currentAdmins.size(); a++) {
+                        user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
                         AdminLogFilterAlert.this.selectedAdmins.put(user.id, user);
-                        i4++;
                     }
                 }
-                boolean isChecked2 = checkBoxUserCell.isChecked();
-                User currentUser = checkBoxUserCell.getCurrentUser();
-                if (isChecked2) {
-                    AdminLogFilterAlert.this.selectedAdmins.remove(currentUser.id);
+                isChecked = checkBoxUserCell.isChecked();
+                user = checkBoxUserCell.getCurrentUser();
+                if (isChecked) {
+                    AdminLogFilterAlert.this.selectedAdmins.remove(user.id);
                 } else {
-                    AdminLogFilterAlert.this.selectedAdmins.put(currentUser.id, currentUser);
+                    AdminLogFilterAlert.this.selectedAdmins.put(user.id, user);
                 }
-                checkBoxUserCell.setChecked(isChecked2 ^ true, true);
+                checkBoxUserCell.setChecked(!isChecked, true);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$5 */
+    class C10705 implements OnClickListener {
+        C10705() {
+        }
+
+        public void onClick(View v) {
+            AdminLogFilterAlert.this.delegate.didSelectRights(AdminLogFilterAlert.this.currentFilter, AdminLogFilterAlert.this.selectedAdmins);
+            AdminLogFilterAlert.this.dismiss();
         }
     }
 
@@ -296,341 +306,325 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
 
         public int getItemCount() {
-            return (AdminLogFilterAlert.this.isMegagroup ? 9 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? 2 + AdminLogFilterAlert.this.currentAdmins.size() : 0);
+            return (AdminLogFilterAlert.this.isMegagroup ? 9 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
         }
 
-        public int getItemViewType(int i) {
-            if (i >= AdminLogFilterAlert.this.allAdminsRow - 1) {
-                if (i != AdminLogFilterAlert.this.allAdminsRow) {
-                    if (i == AdminLogFilterAlert.this.allAdminsRow - 1) {
-                        return 1;
-                    }
-                    return 2;
-                }
+        public int getItemViewType(int position) {
+            if (position < AdminLogFilterAlert.this.allAdminsRow - 1 || position == AdminLogFilterAlert.this.allAdminsRow) {
+                return 0;
             }
-            return 0;
+            if (position == AdminLogFilterAlert.this.allAdminsRow - 1) {
+                return 1;
+            }
+            return 2;
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() != 1;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() != 1;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            switch (i) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            switch (viewType) {
                 case 0:
-                    i = new CheckBoxCell(this.context, 1);
-                    i.setBackgroundDrawable(Theme.getSelectorDrawable(null));
+                    view = new CheckBoxCell(this.context, 1);
+                    view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     break;
                 case 1:
-                    viewGroup = new ShadowSectionCell(this.context);
-                    viewGroup.setSize(18);
-                    i = new FrameLayout(this.context);
-                    ((FrameLayout) i).addView(viewGroup, LayoutHelper.createFrame(-1, -1.0f));
-                    i.setBackgroundColor(Theme.getColor(Theme.key_dialogBackgroundGray));
+                    ShadowSectionCell shadowSectionCell = new ShadowSectionCell(this.context);
+                    shadowSectionCell.setSize(18);
+                    view = new FrameLayout(this.context);
+                    ((FrameLayout) view).addView(shadowSectionCell, LayoutHelper.createFrame(-1, -1.0f));
+                    view.setBackgroundColor(Theme.getColor(Theme.key_dialogBackgroundGray));
                     break;
                 case 2:
-                    i = new CheckBoxUserCell(this.context, true);
-                    break;
-                default:
-                    i = 0;
+                    view = new CheckBoxUserCell(this.context, true);
                     break;
             }
-            return new Holder(i);
+            return new Holder(view);
         }
 
-        public void onViewAttachedToWindow(ViewHolder viewHolder) {
-            int adapterPosition = viewHolder.getAdapterPosition();
-            int itemViewType = viewHolder.getItemViewType();
+        public void onViewAttachedToWindow(ViewHolder holder) {
             boolean z = true;
-            if (itemViewType == 0) {
-                CheckBoxCell checkBoxCell = (CheckBoxCell) viewHolder.itemView;
-                if (adapterPosition == 0) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
+            int position = holder.getAdapterPosition();
+            switch (holder.getItemViewType()) {
+                case 0:
+                    CheckBoxCell cell = holder.itemView;
+                    if (position == 0) {
+                        cell.setChecked(AdminLogFilterAlert.this.currentFilter == null, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.restrictionsRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.kick && AdminLogFilterAlert.this.currentFilter.ban && AdminLogFilterAlert.this.currentFilter.unkick && AdminLogFilterAlert.this.currentFilter.unban))) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.adminsRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.promote && AdminLogFilterAlert.this.currentFilter.demote))) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.membersRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.invite && AdminLogFilterAlert.this.currentFilter.join))) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.infoRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info)) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.deleteRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.delete)) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.editRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.edit)) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.pinnedRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.pinned)) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.leavingRow) {
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave)) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.allAdminsRow) {
+                        if (AdminLogFilterAlert.this.selectedAdmins != null) {
+                            z = false;
+                        }
+                        cell.setChecked(z, false);
+                        return;
+                    } else {
+                        return;
+                    }
+                case 2:
+                    CheckBoxUserCell userCell = holder.itemView;
+                    int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
+                    if (AdminLogFilterAlert.this.selectedAdmins != null && AdminLogFilterAlert.this.selectedAdmins.indexOfKey(userId) < 0) {
                         z = false;
                     }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.restrictionsRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.kick || !AdminLogFilterAlert.this.currentFilter.ban || !AdminLogFilterAlert.this.currentFilter.unkick || !AdminLogFilterAlert.this.currentFilter.unban) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.adminsRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.promote || !AdminLogFilterAlert.this.currentFilter.demote) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.membersRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.invite || !AdminLogFilterAlert.this.currentFilter.join) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.infoRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.info) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.deleteRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.delete) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.editRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.edit) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.pinnedRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.pinned) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.leavingRow) {
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.leave) {
-                            z = false;
-                        }
-                    }
-                    checkBoxCell.setChecked(z, false);
-                } else if (adapterPosition == AdminLogFilterAlert.this.allAdminsRow) {
-                    if (AdminLogFilterAlert.this.selectedAdmins != null) {
-                        z = false;
-                    }
-                    checkBoxCell.setChecked(z, false);
-                }
-            } else if (itemViewType == 2) {
-                CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                adapterPosition = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((adapterPosition - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                if (AdminLogFilterAlert.this.selectedAdmins != null) {
-                    if (AdminLogFilterAlert.this.selectedAdmins.indexOfKey(adapterPosition) < 0) {
-                        z = false;
-                    }
-                }
-                checkBoxUserCell.setChecked(z, false);
+                    userCell.setChecked(z, false);
+                    return;
+                default:
+                    return;
             }
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
+        public void onBindViewHolder(ViewHolder holder, int position) {
             boolean z = false;
             boolean z2 = true;
-            if (itemViewType == 0) {
-                CheckBoxCell checkBoxCell = (CheckBoxCell) viewHolder.itemView;
-                String str;
-                if (i == 0) {
-                    i = LocaleController.getString("EventLogFilterAll", C0446R.string.EventLogFilterAll);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.restrictionsRow) {
-                    i = LocaleController.getString("EventLogFilterNewRestrictions", C0446R.string.EventLogFilterNewRestrictions);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.kick && AdminLogFilterAlert.this.currentFilter.ban && AdminLogFilterAlert.this.currentFilter.unkick && AdminLogFilterAlert.this.currentFilter.unban)) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.adminsRow) {
-                    i = LocaleController.getString("EventLogFilterNewAdmins", C0446R.string.EventLogFilterNewAdmins);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.promote && AdminLogFilterAlert.this.currentFilter.demote)) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.membersRow) {
-                    i = LocaleController.getString("EventLogFilterNewMembers", C0446R.string.EventLogFilterNewMembers);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.invite && AdminLogFilterAlert.this.currentFilter.join)) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.infoRow) {
-                    if (AdminLogFilterAlert.this.isMegagroup != 0) {
-                        i = LocaleController.getString("EventLogFilterGroupInfo", C0446R.string.EventLogFilterGroupInfo);
-                        str = TtmlNode.ANONYMOUS_REGION_ID;
+            switch (holder.getItemViewType()) {
+                case 0:
+                    CheckBoxCell cell = holder.itemView;
+                    if (position == 0) {
+                        cell.setText(LocaleController.getString("EventLogFilterAll", C0446R.string.EventLogFilterAll), TtmlNode.ANONYMOUS_REGION_ID, AdminLogFilterAlert.this.currentFilter == null, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.restrictionsRow) {
+                        r3 = LocaleController.getString("EventLogFilterNewRestrictions", C0446R.string.EventLogFilterNewRestrictions);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.kick && AdminLogFilterAlert.this.currentFilter.ban && AdminLogFilterAlert.this.currentFilter.unkick && AdminLogFilterAlert.this.currentFilter.unban)) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.adminsRow) {
+                        r3 = LocaleController.getString("EventLogFilterNewAdmins", C0446R.string.EventLogFilterNewAdmins);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.promote && AdminLogFilterAlert.this.currentFilter.demote)) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.membersRow) {
+                        r3 = LocaleController.getString("EventLogFilterNewMembers", C0446R.string.EventLogFilterNewMembers);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.invite && AdminLogFilterAlert.this.currentFilter.join)) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.infoRow) {
+                        if (AdminLogFilterAlert.this.isMegagroup) {
+                            r3 = LocaleController.getString("EventLogFilterGroupInfo", C0446R.string.EventLogFilterGroupInfo);
+                            r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                            if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
+                                z = true;
+                            }
+                            cell.setText(r3, r6, z, true);
+                            return;
+                        }
+                        r3 = LocaleController.getString("EventLogFilterChannelInfo", C0446R.string.EventLogFilterChannelInfo);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
                             z = true;
                         }
-                        checkBoxCell.setText(i, str, z, true);
+                        cell.setText(r3, r6, z, true);
                         return;
-                    }
-                    i = LocaleController.getString("EventLogFilterChannelInfo", C0446R.string.EventLogFilterChannelInfo);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.deleteRow) {
-                    i = LocaleController.getString("EventLogFilterDeletedMessages", C0446R.string.EventLogFilterDeletedMessages);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.delete) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.editRow) {
-                    i = LocaleController.getString("EventLogFilterEditedMessages", C0446R.string.EventLogFilterEditedMessages);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.edit) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.pinnedRow) {
-                    i = LocaleController.getString("EventLogFilterPinnedMessages", C0446R.string.EventLogFilterPinnedMessages);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.pinned) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                } else if (i == AdminLogFilterAlert.this.leavingRow) {
-                    i = LocaleController.getString("EventLogFilterLeavingMembers", C0446R.string.EventLogFilterLeavingMembers);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.currentFilter != null) {
-                        if (!AdminLogFilterAlert.this.currentFilter.leave) {
-                            z2 = false;
-                        }
-                    }
-                    checkBoxCell.setText(i, str, z2, false);
-                } else if (i == AdminLogFilterAlert.this.allAdminsRow) {
-                    i = LocaleController.getString("EventLogAllAdmins", C0446R.string.EventLogAllAdmins);
-                    str = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (AdminLogFilterAlert.this.selectedAdmins == null) {
-                        z = true;
-                    }
-                    checkBoxCell.setText(i, str, z, true);
-                }
-            } else if (itemViewType == 2) {
-                boolean z3;
-                CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                itemViewType = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(itemViewType));
-                if (AdminLogFilterAlert.this.selectedAdmins != null) {
-                    if (AdminLogFilterAlert.this.selectedAdmins.indexOfKey(itemViewType) < 0) {
-                        z3 = false;
-                        if (i != getItemCount() - 1) {
+                    } else if (position == AdminLogFilterAlert.this.deleteRow) {
+                        r3 = LocaleController.getString("EventLogFilterDeletedMessages", C0446R.string.EventLogFilterDeletedMessages);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.delete) {
                             z = true;
                         }
-                        checkBoxUserCell.setUser(user, z3, z);
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.editRow) {
+                        r3 = LocaleController.getString("EventLogFilterEditedMessages", C0446R.string.EventLogFilterEditedMessages);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.edit) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.pinnedRow) {
+                        r3 = LocaleController.getString("EventLogFilterPinnedMessages", C0446R.string.EventLogFilterPinnedMessages);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.pinned) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.leavingRow) {
+                        r3 = LocaleController.getString("EventLogFilterLeavingMembers", C0446R.string.EventLogFilterLeavingMembers);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave)) {
+                            z2 = false;
+                        }
+                        cell.setText(r3, r6, z2, false);
+                        return;
+                    } else if (position == AdminLogFilterAlert.this.allAdminsRow) {
+                        r3 = LocaleController.getString("EventLogAllAdmins", C0446R.string.EventLogAllAdmins);
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (AdminLogFilterAlert.this.selectedAdmins == null) {
+                            z = true;
+                        }
+                        cell.setText(r3, r6, z, true);
+                        return;
+                    } else {
+                        return;
                     }
-                }
-                z3 = true;
-                if (i != getItemCount() - 1) {
-                    z = true;
-                }
-                checkBoxUserCell.setUser(user, z3, z);
+                case 2:
+                    CheckBoxUserCell userCell = holder.itemView;
+                    int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
+                    User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(userId));
+                    boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(userId) >= 0;
+                    if (position == getItemCount() - 1) {
+                        z2 = false;
+                    }
+                    userCell.setUser(user, z3, z2);
+                    return;
+                default:
+                    return;
             }
         }
     }
 
-    protected boolean canDismissWithSwipe() {
-        return false;
-    }
-
-    public AdminLogFilterAlert(Context context, TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter, SparseArray<User> sparseArray, boolean z) {
+    public AdminLogFilterAlert(Context context, TL_channelAdminLogEventsFilter filter, SparseArray<User> admins, boolean megagroup) {
+        int rowCount;
         super(context, false);
-        if (tL_channelAdminLogEventsFilter != null) {
+        if (filter != null) {
             this.currentFilter = new TL_channelAdminLogEventsFilter();
-            this.currentFilter.join = tL_channelAdminLogEventsFilter.join;
-            this.currentFilter.leave = tL_channelAdminLogEventsFilter.leave;
-            this.currentFilter.invite = tL_channelAdminLogEventsFilter.invite;
-            this.currentFilter.ban = tL_channelAdminLogEventsFilter.ban;
-            this.currentFilter.unban = tL_channelAdminLogEventsFilter.unban;
-            this.currentFilter.kick = tL_channelAdminLogEventsFilter.kick;
-            this.currentFilter.unkick = tL_channelAdminLogEventsFilter.unkick;
-            this.currentFilter.promote = tL_channelAdminLogEventsFilter.promote;
-            this.currentFilter.demote = tL_channelAdminLogEventsFilter.demote;
-            this.currentFilter.info = tL_channelAdminLogEventsFilter.info;
-            this.currentFilter.settings = tL_channelAdminLogEventsFilter.settings;
-            this.currentFilter.pinned = tL_channelAdminLogEventsFilter.pinned;
-            this.currentFilter.edit = tL_channelAdminLogEventsFilter.edit;
-            this.currentFilter.delete = tL_channelAdminLogEventsFilter.delete;
+            this.currentFilter.join = filter.join;
+            this.currentFilter.leave = filter.leave;
+            this.currentFilter.invite = filter.invite;
+            this.currentFilter.ban = filter.ban;
+            this.currentFilter.unban = filter.unban;
+            this.currentFilter.kick = filter.kick;
+            this.currentFilter.unkick = filter.unkick;
+            this.currentFilter.promote = filter.promote;
+            this.currentFilter.demote = filter.demote;
+            this.currentFilter.info = filter.info;
+            this.currentFilter.settings = filter.settings;
+            this.currentFilter.pinned = filter.pinned;
+            this.currentFilter.edit = filter.edit;
+            this.currentFilter.delete = filter.delete;
         }
-        if (sparseArray != null) {
-            this.selectedAdmins = sparseArray.clone();
+        if (admins != null) {
+            this.selectedAdmins = admins.clone();
         }
-        this.isMegagroup = z;
-        if (this.isMegagroup != null) {
+        this.isMegagroup = megagroup;
+        int rowCount2 = 1;
+        if (this.isMegagroup) {
+            rowCount = 1 + 1;
             this.restrictionsRow = 1;
-            tL_channelAdminLogEventsFilter = 2;
+            rowCount2 = rowCount;
         } else {
             this.restrictionsRow = -1;
-            tL_channelAdminLogEventsFilter = 1;
         }
-        int i = tL_channelAdminLogEventsFilter + 1;
-        this.adminsRow = tL_channelAdminLogEventsFilter;
-        tL_channelAdminLogEventsFilter = i + 1;
-        this.membersRow = i;
-        i = tL_channelAdminLogEventsFilter + 1;
-        this.infoRow = tL_channelAdminLogEventsFilter;
-        tL_channelAdminLogEventsFilter = i + 1;
-        this.deleteRow = i;
-        i = tL_channelAdminLogEventsFilter + 1;
-        this.editRow = tL_channelAdminLogEventsFilter;
-        if (this.isMegagroup != null) {
-            tL_channelAdminLogEventsFilter = i + 1;
-            this.pinnedRow = i;
+        rowCount = rowCount2 + 1;
+        this.adminsRow = rowCount2;
+        rowCount2 = rowCount + 1;
+        this.membersRow = rowCount;
+        rowCount = rowCount2 + 1;
+        this.infoRow = rowCount2;
+        rowCount2 = rowCount + 1;
+        this.deleteRow = rowCount;
+        rowCount = rowCount2 + 1;
+        this.editRow = rowCount2;
+        if (this.isMegagroup) {
+            rowCount2 = rowCount + 1;
+            this.pinnedRow = rowCount;
         } else {
             this.pinnedRow = -1;
-            tL_channelAdminLogEventsFilter = i;
+            rowCount2 = rowCount;
         }
-        this.leavingRow = tL_channelAdminLogEventsFilter;
-        this.allAdminsRow = tL_channelAdminLogEventsFilter + 2;
+        this.leavingRow = rowCount2;
+        this.allAdminsRow = rowCount2 + 2;
         this.shadowDrawable = context.getResources().getDrawable(C0446R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                if (motionEvent.getAction() != 0 || AdminLogFilterAlert.this.scrollOffsetY == 0 || motionEvent.getY() >= ((float) AdminLogFilterAlert.this.scrollOffsetY)) {
-                    return super.onInterceptTouchEvent(motionEvent);
+            public boolean onInterceptTouchEvent(MotionEvent ev) {
+                if (ev.getAction() != 0 || AdminLogFilterAlert.this.scrollOffsetY == 0 || ev.getY() >= ((float) AdminLogFilterAlert.this.scrollOffsetY)) {
+                    return super.onInterceptTouchEvent(ev);
                 }
                 AdminLogFilterAlert.this.dismiss();
                 return true;
             }
 
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                return (AdminLogFilterAlert.this.isDismissed() || super.onTouchEvent(motionEvent) == null) ? null : true;
+            public boolean onTouchEvent(MotionEvent e) {
+                return !AdminLogFilterAlert.this.isDismissed() && super.onTouchEvent(e);
             }
 
-            protected void onMeasure(int i, int i2) {
-                i2 = MeasureSpec.getSize(i2);
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int height = MeasureSpec.getSize(heightMeasureSpec);
                 if (VERSION.SDK_INT >= 21) {
-                    i2 -= AndroidUtilities.statusBarHeight;
+                    height -= AndroidUtilities.statusBarHeight;
                 }
-                getMeasuredWidth();
-                int dp = (AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 9 : 7) * AndroidUtilities.dp(48.0f))) + AdminLogFilterAlert.backgroundPaddingTop;
+                int measuredWidth = getMeasuredWidth();
+                int contentSize = (((AdminLogFilterAlert.this.isMegagroup ? 9 : 7) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.backgroundPaddingTop;
                 if (AdminLogFilterAlert.this.currentAdmins != null) {
-                    dp += ((AdminLogFilterAlert.this.currentAdmins.size() + 1) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(20.0f);
+                    contentSize += ((AdminLogFilterAlert.this.currentAdmins.size() + 1) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(20.0f);
                 }
-                int i3 = i2 / 5;
-                int i4 = ((float) dp) < ((float) i3) * 3.2f ? 0 : i3 * 2;
-                if (i4 != 0 && dp < i2) {
-                    i4 -= i2 - dp;
+                int padding = ((float) contentSize) < ((float) (height / 5)) * 3.2f ? 0 : (height / 5) * 2;
+                if (padding != 0 && contentSize < height) {
+                    padding -= height - contentSize;
                 }
-                if (i4 == 0) {
-                    i4 = AdminLogFilterAlert.backgroundPaddingTop;
+                if (padding == 0) {
+                    padding = AdminLogFilterAlert.backgroundPaddingTop;
                 }
-                if (AdminLogFilterAlert.this.listView.getPaddingTop() != i4) {
+                if (AdminLogFilterAlert.this.listView.getPaddingTop() != padding) {
                     AdminLogFilterAlert.this.ignoreLayout = true;
-                    AdminLogFilterAlert.this.listView.setPadding(0, i4, 0, 0);
+                    AdminLogFilterAlert.this.listView.setPadding(0, padding, 0, 0);
                     AdminLogFilterAlert.this.ignoreLayout = false;
                 }
-                super.onMeasure(i, MeasureSpec.makeMeasureSpec(Math.min(dp, i2), NUM));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
             }
 
-            protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                super.onLayout(z, i, i2, i3, i4);
+            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                super.onLayout(changed, left, top, right, bottom);
                 AdminLogFilterAlert.this.updateLayout();
             }
 
@@ -648,9 +642,9 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.containerView.setWillNotDraw(false);
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.listView = new RecyclerListView(context) {
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                boolean onInterceptTouchEvent = StickerPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, AdminLogFilterAlert.this.listView, 0, null);
-                if (super.onInterceptTouchEvent(motionEvent) != null || onInterceptTouchEvent) {
+            public boolean onInterceptTouchEvent(MotionEvent event) {
+                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, AdminLogFilterAlert.this.listView, 0, null);
+                if (super.onInterceptTouchEvent(event) || result) {
                     return true;
                 }
                 return false;
@@ -663,10 +657,10 @@ public class AdminLogFilterAlert extends BottomSheet {
             }
         };
         this.listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
-        tL_channelAdminLogEventsFilter = this.listView;
-        sparseArray = new ListAdapter(context);
-        this.adapter = sparseArray;
-        tL_channelAdminLogEventsFilter.setAdapter(sparseArray);
+        RecyclerListView recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
+        this.adapter = listAdapter;
+        recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
@@ -674,9 +668,9 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.listView.setOnScrollListener(new C20343());
         this.listView.setOnItemClickListener(new C20354());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        tL_channelAdminLogEventsFilter = new View(context);
-        tL_channelAdminLogEventsFilter.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
-        this.containerView.addView(tL_channelAdminLogEventsFilter, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        View shadow = new View(context);
+        shadow.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
+        this.containerView.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         this.saveButton = new BottomSheetCell(context, 1);
         this.saveButton.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.saveButton.setTextAndIcon(LocaleController.getString("Save", C0446R.string.Save).toUpperCase(), 0);
@@ -686,11 +680,15 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.adapter.notifyDataSetChanged();
     }
 
-    public void setCurrentAdmins(ArrayList<ChannelParticipant> arrayList) {
-        this.currentAdmins = arrayList;
+    public void setCurrentAdmins(ArrayList<ChannelParticipant> admins) {
+        this.currentAdmins = admins;
         if (this.adapter != null) {
             this.adapter.notifyDataSetChanged();
         }
+    }
+
+    protected boolean canDismissWithSwipe() {
+        return false;
     }
 
     public void setAdminLogFilterAlertDelegate(AdminLogFilterAlertDelegate adminLogFilterAlertDelegate) {
@@ -699,6 +697,7 @@ public class AdminLogFilterAlert extends BottomSheet {
 
     @SuppressLint({"NewApi"})
     private void updateLayout() {
+        int newOffset = 0;
         if (this.listView.getChildCount() <= 0) {
             RecyclerListView recyclerListView = this.listView;
             int paddingTop = this.listView.getPaddingTop();
@@ -707,16 +706,16 @@ public class AdminLogFilterAlert extends BottomSheet {
             this.containerView.invalidate();
             return;
         }
-        View childAt = this.listView.getChildAt(0);
-        Holder holder = (Holder) this.listView.findContainingViewHolder(childAt);
-        int top = childAt.getTop() - AndroidUtilities.dp(8.0f);
-        if (top <= 0 || holder == null || holder.getAdapterPosition() != 0) {
-            top = 0;
+        View child = this.listView.getChildAt(0);
+        Holder holder = (Holder) this.listView.findContainingViewHolder(child);
+        int top = child.getTop() - AndroidUtilities.dp(8.0f);
+        if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
+            newOffset = top;
         }
-        if (this.scrollOffsetY != top) {
-            RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = top;
-            recyclerListView2.setTopGlowOffset(top);
+        if (this.scrollOffsetY != newOffset) {
+            recyclerListView = this.listView;
+            this.scrollOffsetY = newOffset;
+            recyclerListView.setTopGlowOffset(newOffset);
             this.containerView.invalidate();
         }
     }

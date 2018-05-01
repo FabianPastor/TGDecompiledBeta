@@ -6,7 +6,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Vibrator;
@@ -19,7 +21,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -90,13 +91,97 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private HashMap<String, String> phoneFormatMap = new HashMap();
     private TextView textView;
 
-    /* renamed from: org.telegram.ui.NewContactActivity$2 */
-    class C15342 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+    /* renamed from: org.telegram.ui.NewContactActivity$1 */
+    class C22071 extends ActionBarMenuOnItemClick {
+        C22071() {
         }
 
+        public void onItemClick(int id) {
+            if (id == -1) {
+                NewContactActivity.this.finishFragment();
+            } else if (id == 1 && !NewContactActivity.this.donePressed) {
+                Vibrator v;
+                if (NewContactActivity.this.firstNameField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.firstNameField, 2.0f, 0);
+                } else if (NewContactActivity.this.codeField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.codeField, 2.0f, 0);
+                } else if (NewContactActivity.this.phoneField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.phoneField, 2.0f, 0);
+                } else {
+                    NewContactActivity.this.donePressed = true;
+                    NewContactActivity.this.showEditDoneProgress(true, true);
+                    final TL_contacts_importContacts req = new TL_contacts_importContacts();
+                    final TL_inputPhoneContact inputPhoneContact = new TL_inputPhoneContact();
+                    inputPhoneContact.first_name = NewContactActivity.this.firstNameField.getText().toString();
+                    inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
+                    inputPhoneContact.phone = "+" + NewContactActivity.this.codeField.getText().toString() + NewContactActivity.this.phoneField.getText().toString();
+                    req.contacts.add(inputPhoneContact);
+                    ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
+                        public void run(TLObject response, final TL_error error) {
+                            final TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+
+                                /* renamed from: org.telegram.ui.NewContactActivity$1$1$1$1 */
+                                class C15321 implements OnClickListener {
+                                    C15321() {
+                                    }
+
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
+                                            intent.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
+                                            NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
+                                        } catch (Throwable e) {
+                                            FileLog.m3e(e);
+                                        }
+                                    }
+                                }
+
+                                public void run() {
+                                    NewContactActivity.this.donePressed = false;
+                                    if (res == null) {
+                                        NewContactActivity.this.showEditDoneProgress(false, true);
+                                        AlertsCreator.processError(NewContactActivity.this.currentAccount, error, NewContactActivity.this, req, new Object[0]);
+                                    } else if (!res.users.isEmpty()) {
+                                        MessagesController.getInstance(NewContactActivity.this.currentAccount).putUsers(res.users, false);
+                                        MessagesController.openChatOrProfileWith((User) res.users.get(0), null, NewContactActivity.this, 1, true);
+                                    } else if (NewContactActivity.this.getParentActivity() != null) {
+                                        NewContactActivity.this.showEditDoneProgress(false, true);
+                                        Builder builder = new Builder(NewContactActivity.this.getParentActivity());
+                                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                                        builder.setMessage(LocaleController.formatString("ContactNotRegistered", C0446R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
+                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                                        builder.setPositiveButton(LocaleController.getString("Invite", C0446R.string.Invite), new C15321());
+                                        NewContactActivity.this.showDialog(builder.create());
+                                    }
+                                }
+                            });
+                        }
+                    }, 2), NewContactActivity.this.classGuid);
+                }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.NewContactActivity$2 */
+    class C15342 implements OnTouchListener {
         C15342() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 
@@ -107,7 +192,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
-                return null;
+                return false;
             }
             NewContactActivity.this.lastNameField.requestFocus();
             NewContactActivity.this.lastNameField.setSelection(NewContactActivity.this.lastNameField.length());
@@ -117,13 +202,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     /* renamed from: org.telegram.ui.NewContactActivity$4 */
     class C15364 implements TextWatcher {
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
         C15364() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
         public void afterTextChanged(Editable editable) {
@@ -139,7 +224,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
-                return null;
+                return false;
             }
             NewContactActivity.this.phoneField.requestFocus();
             NewContactActivity.this.phoneField.setSelection(NewContactActivity.this.phoneField.length());
@@ -149,13 +234,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     /* renamed from: org.telegram.ui.NewContactActivity$6 */
     class C15386 implements TextWatcher {
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
         C15386() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
         public void afterTextChanged(Editable editable) {
@@ -165,7 +250,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$7 */
-    class C15407 implements OnClickListener {
+    class C15407 implements View.OnClickListener {
 
         /* renamed from: org.telegram.ui.NewContactActivity$7$1 */
         class C22081 implements CountrySelectActivityDelegate {
@@ -183,8 +268,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             C22081() {
             }
 
-            public void didSelectCountry(String str, String str2) {
-                NewContactActivity.this.selectCountry(str);
+            public void didSelectCountry(String name, String shortName) {
+                NewContactActivity.this.selectCountry(name);
                 AndroidUtilities.runOnUIThread(new C15391(), 300);
                 NewContactActivity.this.phoneField.requestFocus();
                 NewContactActivity.this.phoneField.setSelection(NewContactActivity.this.phoneField.length());
@@ -195,83 +280,63 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         }
 
         public void onClick(View view) {
-            view = new CountrySelectActivity(true);
-            view.setCountrySelectActivityDelegate(new C22081());
-            NewContactActivity.this.presentFragment(view);
+            CountrySelectActivity fragment = new CountrySelectActivity(true);
+            fragment.setCountrySelectActivityDelegate(new C22081());
+            NewContactActivity.this.presentFragment(fragment);
         }
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$8 */
     class C15418 implements TextWatcher {
+        C15418() {
+        }
+
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
-        C15418() {
-        }
-
         public void afterTextChanged(Editable editable) {
-            if (NewContactActivity.this.ignoreOnTextChange == null) {
+            if (!NewContactActivity.this.ignoreOnTextChange) {
                 NewContactActivity.this.ignoreOnTextChange = true;
-                editable = PhoneFormat.stripExceptNumbers(NewContactActivity.this.codeField.getText().toString());
-                NewContactActivity.this.codeField.setText(editable);
-                String str = null;
-                if (editable.length() == 0) {
+                String text = PhoneFormat.stripExceptNumbers(NewContactActivity.this.codeField.getText().toString());
+                NewContactActivity.this.codeField.setText(text);
+                if (text.length() == 0) {
                     NewContactActivity.this.countryButton.setText(LocaleController.getString("ChooseCountry", C0446R.string.ChooseCountry));
                     NewContactActivity.this.phoneField.setHintText(null);
                     NewContactActivity.this.countryState = 1;
                 } else {
-                    Object substring;
-                    CharSequence charSequence;
-                    int i = 4;
-                    if (editable.length() > 4) {
+                    boolean ok = false;
+                    String textToSet = null;
+                    if (text.length() > 4) {
                         NewContactActivity.this.ignoreOnTextChange = true;
-                        while (i >= 1) {
-                            substring = editable.substring(0, i);
-                            if (((String) NewContactActivity.this.codesMap.get(substring)) != null) {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append(editable.substring(i, editable.length()));
-                                stringBuilder.append(NewContactActivity.this.phoneField.getText().toString());
-                                editable = stringBuilder.toString();
-                                NewContactActivity.this.codeField.setText(substring);
-                                charSequence = editable;
-                                editable = 1;
+                        for (int a = 4; a >= 1; a--) {
+                            String sub = text.substring(0, a);
+                            if (((String) NewContactActivity.this.codesMap.get(sub)) != null) {
+                                ok = true;
+                                textToSet = text.substring(a, text.length()) + NewContactActivity.this.phoneField.getText().toString();
+                                text = sub;
+                                NewContactActivity.this.codeField.setText(sub);
                                 break;
                             }
-                            i--;
                         }
-                        substring = editable;
-                        editable = null;
-                        charSequence = null;
-                        if (editable == null) {
+                        if (!ok) {
                             NewContactActivity.this.ignoreOnTextChange = true;
-                            StringBuilder stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append(substring.substring(1, substring.length()));
-                            stringBuilder2.append(NewContactActivity.this.phoneField.getText().toString());
-                            charSequence = stringBuilder2.toString();
+                            textToSet = text.substring(1, text.length()) + NewContactActivity.this.phoneField.getText().toString();
                             EditTextBoldCursor access$200 = NewContactActivity.this.codeField;
-                            substring = substring.substring(0, 1);
-                            access$200.setText(substring);
+                            text = text.substring(0, 1);
+                            access$200.setText(text);
                         }
-                    } else {
-                        substring = editable;
-                        editable = null;
-                        charSequence = null;
                     }
-                    String str2 = (String) NewContactActivity.this.codesMap.get(substring);
-                    if (str2 != null) {
-                        int indexOf = NewContactActivity.this.countriesArray.indexOf(str2);
-                        if (indexOf != -1) {
+                    String country = (String) NewContactActivity.this.codesMap.get(text);
+                    if (country != null) {
+                        int index = NewContactActivity.this.countriesArray.indexOf(country);
+                        if (index != -1) {
                             NewContactActivity.this.ignoreSelection = true;
-                            NewContactActivity.this.countryButton.setText((CharSequence) NewContactActivity.this.countriesArray.get(indexOf));
-                            String str3 = (String) NewContactActivity.this.phoneFormatMap.get(substring);
-                            HintEditText access$300 = NewContactActivity.this.phoneField;
-                            if (str3 != null) {
-                                str = str3.replace('X', '\u2013');
-                            }
-                            access$300.setHintText(str);
+                            NewContactActivity.this.countryButton.setText((CharSequence) NewContactActivity.this.countriesArray.get(index));
+                            String hint = (String) NewContactActivity.this.phoneFormatMap.get(text);
+                            NewContactActivity.this.phoneField.setHintText(hint != null ? hint.replace('X', '\u2013') : null);
                             NewContactActivity.this.countryState = 0;
                         } else {
                             NewContactActivity.this.countryButton.setText(LocaleController.getString("WrongCountry", C0446R.string.WrongCountry));
@@ -283,12 +348,12 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                         NewContactActivity.this.phoneField.setHintText(null);
                         NewContactActivity.this.countryState = 2;
                     }
-                    if (editable == null) {
+                    if (!ok) {
                         NewContactActivity.this.codeField.setSelection(NewContactActivity.this.codeField.getText().length());
                     }
-                    if (charSequence != null) {
+                    if (textToSet != null) {
                         NewContactActivity.this.phoneField.requestFocus();
-                        NewContactActivity.this.phoneField.setText(charSequence);
+                        NewContactActivity.this.phoneField.setText(textToSet);
                         NewContactActivity.this.phoneField.setSelection(NewContactActivity.this.phoneField.length());
                     }
                 }
@@ -304,7 +369,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
-                return null;
+                return false;
             }
             NewContactActivity.this.phoneField.requestFocus();
             NewContactActivity.this.phoneField.setSelection(NewContactActivity.this.phoneField.length());
@@ -312,101 +377,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         }
     }
 
-    /* renamed from: org.telegram.ui.NewContactActivity$1 */
-    class C22071 extends ActionBarMenuOnItemClick {
-        C22071() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                NewContactActivity.this.finishFragment();
-            } else if (i != 1 || NewContactActivity.this.donePressed != 0) {
-            } else {
-                Vibrator vibrator;
-                if (NewContactActivity.this.firstNameField.length() == 0) {
-                    vibrator = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (vibrator != null) {
-                        vibrator.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.firstNameField, 2.0f, 0);
-                } else if (NewContactActivity.this.codeField.length() == 0) {
-                    vibrator = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (vibrator != null) {
-                        vibrator.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.codeField, 2.0f, 0);
-                } else if (NewContactActivity.this.phoneField.length() == 0) {
-                    vibrator = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (vibrator != null) {
-                        vibrator.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.phoneField, 2.0f, 0);
-                } else {
-                    NewContactActivity.this.donePressed = true;
-                    NewContactActivity.this.showEditDoneProgress(true, true);
-                    i = new TL_contacts_importContacts();
-                    final TL_inputPhoneContact tL_inputPhoneContact = new TL_inputPhoneContact();
-                    tL_inputPhoneContact.first_name = NewContactActivity.this.firstNameField.getText().toString();
-                    tL_inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("+");
-                    stringBuilder.append(NewContactActivity.this.codeField.getText().toString());
-                    stringBuilder.append(NewContactActivity.this.phoneField.getText().toString());
-                    tL_inputPhoneContact.phone = stringBuilder.toString();
-                    i.contacts.add(tL_inputPhoneContact);
-                    ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).sendRequest(i, new RequestDelegate() {
-                        public void run(TLObject tLObject, final TL_error tL_error) {
-                            final TL_contacts_importedContacts tL_contacts_importedContacts = (TL_contacts_importedContacts) tLObject;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-
-                                /* renamed from: org.telegram.ui.NewContactActivity$1$1$1$1 */
-                                class C15321 implements DialogInterface.OnClickListener {
-                                    C15321() {
-                                    }
-
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        try {
-                                            dialogInterface = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", tL_inputPhoneContact.phone, null));
-                                            dialogInterface.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
-                                            NewContactActivity.this.getParentActivity().startActivityForResult(dialogInterface, 500);
-                                        } catch (Throwable e) {
-                                            FileLog.m3e(e);
-                                        }
-                                    }
-                                }
-
-                                public void run() {
-                                    NewContactActivity.this.donePressed = false;
-                                    if (tL_contacts_importedContacts == null) {
-                                        NewContactActivity.this.showEditDoneProgress(false, true);
-                                        AlertsCreator.processError(NewContactActivity.this.currentAccount, tL_error, NewContactActivity.this, i, new Object[0]);
-                                    } else if (!tL_contacts_importedContacts.users.isEmpty()) {
-                                        MessagesController.getInstance(NewContactActivity.this.currentAccount).putUsers(tL_contacts_importedContacts.users, false);
-                                        MessagesController.openChatOrProfileWith((User) tL_contacts_importedContacts.users.get(0), null, NewContactActivity.this, 1, true);
-                                    } else if (NewContactActivity.this.getParentActivity() != null) {
-                                        NewContactActivity.this.showEditDoneProgress(false, true);
-                                        Builder builder = new Builder(NewContactActivity.this.getParentActivity());
-                                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                                        builder.setMessage(LocaleController.formatString("ContactNotRegistered", C0446R.string.ContactNotRegistered, ContactsController.formatName(tL_inputPhoneContact.first_name, tL_inputPhoneContact.last_name)));
-                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-                                        builder.setPositiveButton(LocaleController.getString("Invite", C0446R.string.Invite), new C15321());
-                                        NewContactActivity.this.showDialog(builder.create());
-                                    }
-                                }
-                            });
-                        }
-                    }, 2), NewContactActivity.this.classGuid);
-                }
-            }
-        }
-    }
-
-    public void onNothingSelected(AdapterView<?> adapterView) {
-    }
-
     public View createView(Context context) {
-        String readLine;
-        Context context2 = context;
         this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("AddContactTitle", C0446R.string.AddContactTitle));
@@ -414,28 +385,28 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setInfo(5, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, false);
         this.editDoneItem = this.actionBar.createMenu().addItemWithWidth(1, C0446R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.editDoneItemProgress = new ContextProgressView(context2, 1);
+        this.editDoneItemProgress = new ContextProgressView(context, 1);
         this.editDoneItem.addView(this.editDoneItemProgress, LayoutHelper.createFrame(-1, -1.0f));
         this.editDoneItemProgress.setVisibility(4);
-        this.fragmentView = new ScrollView(context2);
-        View linearLayout = new LinearLayout(context2);
+        this.fragmentView = new ScrollView(context);
+        View linearLayout = new LinearLayout(context);
         linearLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
         linearLayout.setOrientation(1);
         ((ScrollView) this.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         linearLayout.setOnTouchListener(new C15342());
-        View frameLayout = new FrameLayout(context2);
+        FrameLayout frameLayout = new FrameLayout(context);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 24.0f, 0.0f, 0.0f));
-        this.avatarImage = new BackupImageView(context2);
+        this.avatarImage = new BackupImageView(context);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, 60.0f, 51, 0.0f, 9.0f, 0.0f, 0.0f));
-        this.firstNameField = new EditTextBoldCursor(context2);
+        this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setMaxLines(1);
         this.firstNameField.setLines(1);
         this.firstNameField.setSingleLine(true);
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.firstNameField.setGravity(3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
@@ -446,11 +417,11 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 0.0f, 0.0f, 0.0f));
         this.firstNameField.setOnEditorActionListener(new C15353());
         this.firstNameField.addTextChangedListener(new C15364());
-        this.lastNameField = new EditTextBoldCursor(context2);
+        this.lastNameField = new EditTextBoldCursor(context);
         this.lastNameField.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.lastNameField.setMaxLines(1);
         this.lastNameField.setLines(1);
         this.lastNameField.setSingleLine(true);
@@ -464,7 +435,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         frameLayout.addView(this.lastNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 44.0f, 0.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new C15375());
         this.lastNameField.addTextChangedListener(new C15386());
-        this.countryButton = new TextView(context2);
+        this.countryButton = new TextView(context);
         this.countryButton.setTextSize(1, 18.0f);
         this.countryButton.setPadding(AndroidUtilities.dp(6.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(6.0f), 0);
         this.countryButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -475,22 +446,22 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.countryButton.setBackgroundResource(C0446R.drawable.spinner_states);
         linearLayout.addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 24.0f, 0.0f, 14.0f));
         this.countryButton.setOnClickListener(new C15407());
-        this.lineView = new View(context2);
+        this.lineView = new View(context);
         this.lineView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
         this.lineView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayLine));
         linearLayout.addView(this.lineView, LayoutHelper.createLinear(-1, 1, 0.0f, -17.5f, 0.0f, 0.0f));
-        frameLayout = new LinearLayout(context2);
-        frameLayout.setOrientation(0);
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
-        this.textView = new TextView(context2);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(0);
+        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
+        this.textView = new TextView(context);
         this.textView.setText("+");
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 18.0f);
-        frameLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
-        this.codeField = new EditTextBoldCursor(context2);
+        linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
+        this.codeField = new EditTextBoldCursor(context);
         this.codeField.setInputType(3);
         this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.codeField.setCursorWidth(1.5f);
@@ -500,14 +471,14 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.codeField.setGravity(19);
         this.codeField.setImeOptions(268435461);
         this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
-        frameLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
+        linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
         this.codeField.addTextChangedListener(new C15418());
         this.codeField.setOnEditorActionListener(new C15429());
-        this.phoneField = new HintEditText(context2);
+        this.phoneField = new HintEditText(context);
         this.phoneField.setInputType(3);
         this.phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.phoneField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.phoneField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.phoneField.setPadding(0, 0, 0, 0);
         this.phoneField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.phoneField.setCursorSize(AndroidUtilities.dp(20.0f));
@@ -516,81 +487,73 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.phoneField.setMaxLines(1);
         this.phoneField.setGravity(19);
         this.phoneField.setImeOptions(268435462);
-        frameLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
+        linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
         this.phoneField.addTextChangedListener(new TextWatcher() {
             private int actionPosition;
             private int characterAction = -1;
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            }
-
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                if (i2 == 0 && i3 == 1) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (count == 0 && after == 1) {
                     this.characterAction = 1;
-                } else if (i2 != 1 || i3 != 0) {
+                } else if (count != 1 || after != 0) {
                     this.characterAction = -1;
-                } else if (charSequence.charAt(i) != 32 || i <= 0) {
+                } else if (s.charAt(start) != ' ' || start <= 0) {
                     this.characterAction = 2;
                 } else {
                     this.characterAction = 3;
-                    this.actionPosition = i - 1;
+                    this.actionPosition = start - 1;
                 }
             }
 
-            public void afterTextChanged(Editable editable) {
-                if (NewContactActivity.this.ignoreOnPhoneChange == null) {
-                    editable = NewContactActivity.this.phoneField.getSelectionStart();
-                    String str = "0123456789";
-                    String obj = NewContactActivity.this.phoneField.getText().toString();
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            public void afterTextChanged(Editable s) {
+                if (!NewContactActivity.this.ignoreOnPhoneChange) {
+                    int a;
+                    int start = NewContactActivity.this.phoneField.getSelectionStart();
+                    String phoneChars = "0123456789";
+                    String str = NewContactActivity.this.phoneField.getText().toString();
                     if (this.characterAction == 3) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(obj.substring(0, this.actionPosition));
-                        stringBuilder.append(obj.substring(this.actionPosition + 1, obj.length()));
-                        obj = stringBuilder.toString();
-                        editable--;
+                        str = str.substring(0, this.actionPosition) + str.substring(this.actionPosition + 1, str.length());
+                        start--;
                     }
-                    CharSequence stringBuilder2 = new StringBuilder(obj.length());
-                    int i = 0;
-                    while (i < obj.length()) {
-                        int i2 = i + 1;
-                        Object substring = obj.substring(i, i2);
-                        if (str.contains(substring)) {
-                            stringBuilder2.append(substring);
+                    StringBuilder builder = new StringBuilder(str.length());
+                    for (a = 0; a < str.length(); a++) {
+                        String ch = str.substring(a, a + 1);
+                        if (phoneChars.contains(ch)) {
+                            builder.append(ch);
                         }
-                        i = i2;
                     }
                     NewContactActivity.this.ignoreOnPhoneChange = true;
-                    str = NewContactActivity.this.phoneField.getHintText();
-                    if (str != null) {
-                        int i3 = editable;
-                        editable = null;
-                        while (editable < stringBuilder2.length()) {
-                            if (editable < str.length()) {
-                                if (str.charAt(editable) == ' ') {
-                                    stringBuilder2.insert(editable, ' ');
-                                    editable++;
-                                    if (!(i3 != editable || this.characterAction == 2 || this.characterAction == 3)) {
-                                        i3++;
+                    String hint = NewContactActivity.this.phoneField.getHintText();
+                    if (hint != null) {
+                        a = 0;
+                        while (a < builder.length()) {
+                            if (a < hint.length()) {
+                                if (hint.charAt(a) == ' ') {
+                                    builder.insert(a, ' ');
+                                    a++;
+                                    if (!(start != a || this.characterAction == 2 || this.characterAction == 3)) {
+                                        start++;
                                     }
                                 }
-                                editable += 1;
+                                a++;
                             } else {
-                                stringBuilder2.insert(editable, ' ');
-                                if (!(i3 != editable + 1 || this.characterAction == 2 || this.characterAction == 3)) {
-                                    editable = i3 + 1;
+                                builder.insert(a, ' ');
+                                if (!(start != a + 1 || this.characterAction == 2 || this.characterAction == 3)) {
+                                    start++;
                                 }
-                                editable = i3;
                             }
                         }
-                        editable = i3;
                     }
-                    NewContactActivity.this.phoneField.setText(stringBuilder2);
-                    if (editable >= null) {
+                    NewContactActivity.this.phoneField.setText(builder);
+                    if (start >= 0) {
                         HintEditText access$300 = NewContactActivity.this.phoneField;
-                        if (editable > NewContactActivity.this.phoneField.length()) {
-                            editable = NewContactActivity.this.phoneField.length();
+                        if (start > NewContactActivity.this.phoneField.length()) {
+                            start = NewContactActivity.this.phoneField.length();
                         }
-                        access$300.setSelection(editable);
+                        access$300.setSelection(start);
                     }
                     NewContactActivity.this.phoneField.onTextChange();
                     NewContactActivity.this.ignoreOnPhoneChange = false;
@@ -600,60 +563,60 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.phoneField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i != 6) {
-                    return null;
+                    return false;
                 }
                 NewContactActivity.this.editDoneItem.performClick();
                 return true;
             }
         });
-        HashMap hashMap = new HashMap();
+        HashMap<String, String> languageMap = new HashMap();
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getResources().getAssets().open("countries.txt")));
             while (true) {
-                readLine = bufferedReader.readLine();
-                if (readLine == null) {
+                String line = bufferedReader.readLine();
+                if (line == null) {
                     break;
                 }
-                String[] split = readLine.split(";");
-                r1.countriesArray.add(0, split[2]);
-                r1.countriesMap.put(split[2], split[0]);
-                r1.codesMap.put(split[0], split[2]);
-                if (split.length > 3) {
-                    r1.phoneFormatMap.put(split[0], split[3]);
+                String[] args = line.split(";");
+                this.countriesArray.add(0, args[2]);
+                this.countriesMap.put(args[2], args[0]);
+                this.codesMap.put(args[0], args[2]);
+                if (args.length > 3) {
+                    this.phoneFormatMap.put(args[0], args[3]);
                 }
-                hashMap.put(split[1], split[2]);
+                languageMap.put(args[1], args[2]);
             }
             bufferedReader.close();
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        Collections.sort(r1.countriesArray, new Comparator<String>() {
-            public int compare(String str, String str2) {
-                return str.compareTo(str2);
+        Collections.sort(this.countriesArray, new Comparator<String>() {
+            public int compare(String lhs, String rhs) {
+                return lhs.compareTo(rhs);
             }
         });
-        Object obj = null;
+        String country = null;
         try {
             TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
             if (telephonyManager != null) {
-                obj = telephonyManager.getSimCountryIso().toUpperCase();
+                country = telephonyManager.getSimCountryIso().toUpperCase();
             }
         } catch (Throwable e2) {
             FileLog.m3e(e2);
         }
-        if (obj != null) {
-            readLine = (String) hashMap.get(obj);
-            if (!(readLine == null || r1.countriesArray.indexOf(readLine) == -1)) {
-                r1.codeField.setText((CharSequence) r1.countriesMap.get(readLine));
-                r1.countryState = 0;
+        if (country != null) {
+            String countryName = (String) languageMap.get(country);
+            if (!(countryName == null || this.countriesArray.indexOf(countryName) == -1)) {
+                this.codeField.setText((CharSequence) this.countriesMap.get(countryName));
+                this.countryState = 0;
             }
         }
-        if (r1.codeField.length() == 0) {
-            r1.countryButton.setText(LocaleController.getString("ChooseCountry", C0446R.string.ChooseCountry));
-            r1.phoneField.setHintText(null);
-            r1.countryState = 1;
+        if (this.codeField.length() == 0) {
+            this.countryButton.setText(LocaleController.getString("ChooseCountry", C0446R.string.ChooseCountry));
+            this.phoneField.setHintText(null);
+            this.countryState = 1;
         }
-        return r1.fragmentView;
+        return this.fragmentView;
     }
 
     public void onResume() {
@@ -664,28 +627,28 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         }
     }
 
-    public void onTransitionAnimationEnd(boolean z, boolean z2) {
-        if (z) {
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+        if (isOpen) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
-    public void selectCountry(String str) {
-        if (this.countriesArray.indexOf(str) != -1) {
+    public void selectCountry(String name) {
+        if (this.countriesArray.indexOf(name) != -1) {
             this.ignoreOnTextChange = true;
-            String str2 = (String) this.countriesMap.get(str);
-            this.codeField.setText(str2);
-            this.countryButton.setText(str);
-            str = (String) this.phoneFormatMap.get(str2);
-            this.phoneField.setHintText(str != null ? str.replace('X', '\u2013') : null);
+            String code = (String) this.countriesMap.get(name);
+            this.codeField.setText(code);
+            this.countryButton.setText(name);
+            String hint = (String) this.phoneFormatMap.get(code);
+            this.phoneField.setHintText(hint != null ? hint.replace('X', '\u2013') : null);
             this.countryState = 0;
             this.ignoreOnTextChange = false;
         }
     }
 
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
-        if (this.ignoreSelection != null) {
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (this.ignoreSelection) {
             this.ignoreSelection = false;
             return;
         }
@@ -694,15 +657,18 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.ignoreOnTextChange = false;
     }
 
-    private void showEditDoneProgress(final boolean z, boolean z2) {
+    public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    private void showEditDoneProgress(final boolean show, boolean animated) {
         if (this.editDoneItemAnimation != null) {
             this.editDoneItemAnimation.cancel();
         }
-        if (z2) {
+        if (animated) {
             this.editDoneItemAnimation = new AnimatorSet();
             AnimatorSet animatorSet;
             Animator[] animatorArr;
-            if (z) {
+            if (show) {
                 this.editDoneItemProgress.setVisibility(0);
                 this.editDoneItem.setEnabled(false);
                 animatorSet = this.editDoneItemAnimation;
@@ -728,25 +694,25 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 animatorSet.playTogether(animatorArr);
             }
             this.editDoneItemAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (NewContactActivity.this.editDoneItemAnimation != null && NewContactActivity.this.editDoneItemAnimation.equals(animator) != null) {
-                        if (z == null) {
-                            NewContactActivity.this.editDoneItemProgress.setVisibility(4);
-                        } else {
+                public void onAnimationEnd(Animator animation) {
+                    if (NewContactActivity.this.editDoneItemAnimation != null && NewContactActivity.this.editDoneItemAnimation.equals(animation)) {
+                        if (show) {
                             NewContactActivity.this.editDoneItem.getImageView().setVisibility(4);
+                        } else {
+                            NewContactActivity.this.editDoneItemProgress.setVisibility(4);
                         }
                     }
                 }
 
-                public void onAnimationCancel(Animator animator) {
-                    if (NewContactActivity.this.editDoneItemAnimation != null && NewContactActivity.this.editDoneItemAnimation.equals(animator) != null) {
+                public void onAnimationCancel(Animator animation) {
+                    if (NewContactActivity.this.editDoneItemAnimation != null && NewContactActivity.this.editDoneItemAnimation.equals(animation)) {
                         NewContactActivity.this.editDoneItemAnimation = null;
                     }
                 }
             });
             this.editDoneItemAnimation.setDuration(150);
             this.editDoneItemAnimation.start();
-        } else if (z) {
+        } else if (show) {
             this.editDoneItem.getImageView().setScaleX(0.1f);
             this.editDoneItem.getImageView().setScaleY(0.1f);
             this.editDoneItem.getImageView().setAlpha(0.0f);
@@ -770,8 +736,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r10 = new ThemeDescription[34];
-        AnonymousClass14 anonymousClass14 = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (NewContactActivity.this.avatarImage != null) {
                     NewContactActivity.this.avatarDrawable.setInfo(5, NewContactActivity.this.firstNameField.getText().toString(), NewContactActivity.this.lastNameField.getText().toString(), false);
@@ -779,14 +744,44 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 }
             }
         };
-        r10[26] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, anonymousClass14, Theme.key_avatar_text);
-        r10[27] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundRed);
-        r10[28] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundOrange);
-        r10[29] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundViolet);
-        r10[30] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundGreen);
-        r10[31] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundCyan);
-        r10[32] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundBlue);
-        r10[33] = new ThemeDescription(null, 0, null, null, null, anonymousClass14, Theme.key_avatar_backgroundPink);
-        return r10;
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[9] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        themeDescriptionArr[10] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[11] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[12] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[13] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        themeDescriptionArr[14] = new ThemeDescription(this.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[15] = new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[16] = new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        themeDescriptionArr[17] = new ThemeDescription(this.phoneField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[18] = new ThemeDescription(this.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[19] = new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[20] = new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        themeDescriptionArr[21] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[22] = new ThemeDescription(this.lineView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhiteGrayLine);
+        themeDescriptionArr[23] = new ThemeDescription(this.countryButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[24] = new ThemeDescription(this.editDoneItemProgress, 0, null, null, null, null, Theme.key_contextProgressInner2);
+        themeDescriptionArr[25] = new ThemeDescription(this.editDoneItemProgress, 0, null, null, null, null, Theme.key_contextProgressOuter2);
+        int i = 0;
+        Class[] clsArr = null;
+        Paint paint = null;
+        themeDescriptionArr[26] = new ThemeDescription(null, i, clsArr, paint, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, сellDelegate, Theme.key_avatar_text);
+        themeDescriptionArr[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        themeDescriptionArr[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        themeDescriptionArr[29] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        themeDescriptionArr[30] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        themeDescriptionArr[31] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        themeDescriptionArr[32] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        themeDescriptionArr[33] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        return themeDescriptionArr;
     }
 }

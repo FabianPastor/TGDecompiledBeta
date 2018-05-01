@@ -17,43 +17,43 @@ public final class HlsMasterPlaylist extends HlsPlaylist {
         public final Format format;
         public final String url;
 
-        public static HlsUrl createMediaPlaylistHlsUrl(String str) {
-            return new HlsUrl(str, Format.createContainerFormat("0", MimeTypes.APPLICATION_M3U8, null, null, -1, 0, null));
+        public static HlsUrl createMediaPlaylistHlsUrl(String url) {
+            return new HlsUrl(url, Format.createContainerFormat("0", MimeTypes.APPLICATION_M3U8, null, null, -1, 0, null));
         }
 
-        public HlsUrl(String str, Format format) {
-            this.url = str;
+        public HlsUrl(String url, Format format) {
+            this.url = url;
             this.format = format;
         }
     }
 
-    public HlsMasterPlaylist(String str, List<String> list, List<HlsUrl> list2, List<HlsUrl> list3, List<HlsUrl> list4, Format format, List<Format> list5) {
-        super(str, list);
-        this.variants = Collections.unmodifiableList(list2);
-        this.audios = Collections.unmodifiableList(list3);
-        this.subtitles = Collections.unmodifiableList(list4);
-        this.muxedAudioFormat = format;
-        this.muxedCaptionFormats = list5 != null ? Collections.unmodifiableList(list5) : null;
+    public HlsMasterPlaylist(String baseUri, List<String> tags, List<HlsUrl> variants, List<HlsUrl> audios, List<HlsUrl> subtitles, Format muxedAudioFormat, List<Format> muxedCaptionFormats) {
+        super(baseUri, tags);
+        this.variants = Collections.unmodifiableList(variants);
+        this.audios = Collections.unmodifiableList(audios);
+        this.subtitles = Collections.unmodifiableList(subtitles);
+        this.muxedAudioFormat = muxedAudioFormat;
+        this.muxedCaptionFormats = muxedCaptionFormats != null ? Collections.unmodifiableList(muxedCaptionFormats) : null;
     }
 
-    public HlsMasterPlaylist copy(List<String> list) {
-        return new HlsMasterPlaylist(this.baseUri, this.tags, copyRenditionsList(this.variants, list), copyRenditionsList(this.audios, list), copyRenditionsList(this.subtitles, list), this.muxedAudioFormat, this.muxedCaptionFormats);
+    public HlsMasterPlaylist copy(List<String> renditionUrls) {
+        return new HlsMasterPlaylist(this.baseUri, this.tags, copyRenditionsList(this.variants, renditionUrls), copyRenditionsList(this.audios, renditionUrls), copyRenditionsList(this.subtitles, renditionUrls), this.muxedAudioFormat, this.muxedCaptionFormats);
     }
 
-    public static HlsMasterPlaylist createSingleVariantMasterPlaylist(String str) {
-        List singletonList = Collections.singletonList(HlsUrl.createMediaPlaylistHlsUrl(str));
-        List emptyList = Collections.emptyList();
-        return new HlsMasterPlaylist(null, Collections.emptyList(), singletonList, emptyList, emptyList, null, null);
+    public static HlsMasterPlaylist createSingleVariantMasterPlaylist(String variantUrl) {
+        List<HlsUrl> variant = Collections.singletonList(HlsUrl.createMediaPlaylistHlsUrl(variantUrl));
+        List<HlsUrl> emptyList = Collections.emptyList();
+        return new HlsMasterPlaylist(null, Collections.emptyList(), variant, emptyList, emptyList, null, null);
     }
 
-    private static List<HlsUrl> copyRenditionsList(List<HlsUrl> list, List<String> list2) {
-        List<HlsUrl> arrayList = new ArrayList(list2.size());
-        for (int i = 0; i < list.size(); i++) {
-            HlsUrl hlsUrl = (HlsUrl) list.get(i);
-            if (list2.contains(hlsUrl.url)) {
-                arrayList.add(hlsUrl);
+    private static List<HlsUrl> copyRenditionsList(List<HlsUrl> renditions, List<String> urls) {
+        List<HlsUrl> copiedRenditions = new ArrayList(urls.size());
+        for (int i = 0; i < renditions.size(); i++) {
+            HlsUrl rendition = (HlsUrl) renditions.get(i);
+            if (urls.contains(rendition.url)) {
+                copiedRenditions.add(rendition);
             }
         }
-        return arrayList;
+        return copiedRenditions;
     }
 }

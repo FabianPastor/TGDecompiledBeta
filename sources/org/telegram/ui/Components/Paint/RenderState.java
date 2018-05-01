@@ -34,20 +34,18 @@ public class RenderState {
         return this.buffer.getFloat();
     }
 
-    public void setPosition(int i) {
-        if (this.buffer != null && i >= 0) {
-            if (i < this.allocatedCount) {
-                this.buffer.position((i * 5) * 4);
-            }
+    public void setPosition(int position) {
+        if (this.buffer != null && position >= 0 && position < this.allocatedCount) {
+            this.buffer.position((position * 5) * 4);
         }
     }
 
-    public void appendValuesCount(int i) {
-        int i2 = this.count + i;
-        if (i2 > this.allocatedCount || this.buffer == 0) {
+    public void appendValuesCount(int count) {
+        int newTotalCount = this.count + count;
+        if (newTotalCount > this.allocatedCount || this.buffer == null) {
             resizeBuffer();
         }
-        this.count = i2;
+        this.count = newTotalCount;
     }
 
     public void resizeBuffer() {
@@ -60,20 +58,20 @@ public class RenderState {
         this.buffer.position(0);
     }
 
-    public boolean addPoint(PointF pointF, float f, float f2, float f3, int i) {
-        if ((i == -1 || i < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
-            if (i != -1) {
-                this.buffer.position((i * 5) * 4);
+    public boolean addPoint(PointF point, float size, float angle, float alpha, int index) {
+        if ((index == -1 || index < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
+            if (index != -1) {
+                this.buffer.position((index * 5) * 4);
             }
-            this.buffer.putFloat(pointF.x);
-            this.buffer.putFloat(pointF.y);
-            this.buffer.putFloat(f);
-            this.buffer.putFloat(f2);
-            this.buffer.putFloat(f3);
+            this.buffer.putFloat(point.x);
+            this.buffer.putFloat(point.y);
+            this.buffer.putFloat(size);
+            this.buffer.putFloat(angle);
+            this.buffer.putFloat(alpha);
             return true;
         }
         resizeBuffer();
-        return null;
+        return false;
     }
 
     public void reset() {

@@ -25,13 +25,25 @@ public class ChannelIntroActivity extends BaseFragment {
     private ImageView imageView;
     private TextView whatIsChannelText;
 
-    /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
-    class C09983 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
+    class C19901 extends ActionBarMenuOnItemClick {
+        C19901() {
         }
 
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChannelIntroActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
+    class C09983 implements OnTouchListener {
         C09983() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 
@@ -40,22 +52,10 @@ public class ChannelIntroActivity extends BaseFragment {
         C09994() {
         }
 
-        public void onClick(View view) {
-            view = new Bundle();
-            view.putInt("step", 0);
-            ChannelIntroActivity.this.presentFragment(new ChannelCreateActivity(view), true);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class C19901 extends ActionBarMenuOnItemClick {
-        C19901() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                ChannelIntroActivity.this.finishFragment();
-            }
+        public void onClick(View v) {
+            Bundle args = new Bundle();
+            args.putInt("step", 0);
+            ChannelIntroActivity.this.presentFragment(new ChannelCreateActivity(args), true);
         }
     }
 
@@ -70,57 +70,52 @@ public class ChannelIntroActivity extends BaseFragment {
         }
         this.actionBar.setActionBarMenuOnItemClick(new C19901());
         this.fragmentView = new ViewGroup(context) {
-            protected void onMeasure(int i, int i2) {
-                i = MeasureSpec.getSize(i);
-                i2 = MeasureSpec.getSize(i2);
-                if (i > i2) {
-                    float f = (float) i;
-                    ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec((int) (0.45f * f), NUM), MeasureSpec.makeMeasureSpec((int) (((float) i2) * 0.78f), NUM));
-                    int i3 = (int) (0.6f * f);
-                    ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec(i3, NUM), MeasureSpec.makeMeasureSpec(i2, 0));
-                    ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (f * 0.5f), NUM), MeasureSpec.makeMeasureSpec(i2, 0));
-                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec(i3, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int width = MeasureSpec.getSize(widthMeasureSpec);
+                int height = MeasureSpec.getSize(heightMeasureSpec);
+                if (width > height) {
+                    ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.78f), NUM));
+                    ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
+                    ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.5f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
+                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
                 } else {
-                    ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec((int) (((float) i2) * 0.44f), NUM));
-                    ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, 0));
-                    ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) i) * 0.9f), NUM), MeasureSpec.makeMeasureSpec(i2, 0));
-                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
+                    ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.44f), NUM));
+                    ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, 0));
+                    ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.9f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
+                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
                 }
-                setMeasuredDimension(i, i2);
+                setMeasuredDimension(width, height);
             }
 
-            protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                z = i3 - i;
-                i = i4 - i2;
-                if (i3 > i4) {
-                    i = (float) i;
-                    i2 = (int) (NUM * i);
-                    ChannelIntroActivity.this.imageView.layout(0, i2, ChannelIntroActivity.this.imageView.getMeasuredWidth(), ChannelIntroActivity.this.imageView.getMeasuredHeight() + i2);
-                    z = (float) z;
-                    i2 = (int) (NUM * z);
-                    i3 = (int) (NUM * i);
-                    ChannelIntroActivity.this.whatIsChannelText.layout(i2, i3, ChannelIntroActivity.this.whatIsChannelText.getMeasuredWidth() + i2, ChannelIntroActivity.this.whatIsChannelText.getMeasuredHeight() + i3);
-                    i3 = (int) (NUM * i);
-                    ChannelIntroActivity.this.createChannelText.layout(i2, i3, ChannelIntroActivity.this.createChannelText.getMeasuredWidth() + i2, ChannelIntroActivity.this.createChannelText.getMeasuredHeight() + i3);
-                    z = (int) (z * true);
-                    i = (int) (i * NUM);
-                    ChannelIntroActivity.this.descriptionText.layout(z, i, ChannelIntroActivity.this.descriptionText.getMeasuredWidth() + z, ChannelIntroActivity.this.descriptionText.getMeasuredHeight() + i);
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                int width = r - l;
+                int height = b - t;
+                if (r > b) {
+                    int y = (int) (((float) height) * 0.05f);
+                    ChannelIntroActivity.this.imageView.layout(0, y, ChannelIntroActivity.this.imageView.getMeasuredWidth(), ChannelIntroActivity.this.imageView.getMeasuredHeight() + y);
+                    int x = (int) (((float) width) * 0.4f);
+                    y = (int) (((float) height) * 0.14f);
+                    ChannelIntroActivity.this.whatIsChannelText.layout(x, y, ChannelIntroActivity.this.whatIsChannelText.getMeasuredWidth() + x, ChannelIntroActivity.this.whatIsChannelText.getMeasuredHeight() + y);
+                    y = (int) (((float) height) * 0.61f);
+                    ChannelIntroActivity.this.createChannelText.layout(x, y, ChannelIntroActivity.this.createChannelText.getMeasuredWidth() + x, ChannelIntroActivity.this.createChannelText.getMeasuredHeight() + y);
+                    x = (int) (((float) width) * 0.45f);
+                    y = (int) (((float) height) * 0.31f);
+                    ChannelIntroActivity.this.descriptionText.layout(x, y, ChannelIntroActivity.this.descriptionText.getMeasuredWidth() + x, ChannelIntroActivity.this.descriptionText.getMeasuredHeight() + y);
                     return;
                 }
-                i = (float) i;
-                i3 = (int) (i * NUM);
-                ChannelIntroActivity.this.imageView.layout(0, i3, ChannelIntroActivity.this.imageView.getMeasuredWidth(), ChannelIntroActivity.this.imageView.getMeasuredHeight() + i3);
-                i3 = (int) (NUM * i);
-                ChannelIntroActivity.this.whatIsChannelText.layout(0, i3, ChannelIntroActivity.this.whatIsChannelText.getMeasuredWidth(), ChannelIntroActivity.this.whatIsChannelText.getMeasuredHeight() + i3);
-                i3 = (int) (NUM * i);
-                z = (int) (((float) z) * true);
-                ChannelIntroActivity.this.descriptionText.layout(z, i3, ChannelIntroActivity.this.descriptionText.getMeasuredWidth() + z, ChannelIntroActivity.this.descriptionText.getMeasuredHeight() + i3);
-                z = (int) (i * true);
-                ChannelIntroActivity.this.createChannelText.layout(0, z, ChannelIntroActivity.this.createChannelText.getMeasuredWidth(), ChannelIntroActivity.this.createChannelText.getMeasuredHeight() + z);
+                y = (int) (((float) height) * 0.05f);
+                ChannelIntroActivity.this.imageView.layout(0, y, ChannelIntroActivity.this.imageView.getMeasuredWidth(), ChannelIntroActivity.this.imageView.getMeasuredHeight() + y);
+                y = (int) (((float) height) * 0.59f);
+                ChannelIntroActivity.this.whatIsChannelText.layout(0, y, ChannelIntroActivity.this.whatIsChannelText.getMeasuredWidth(), ChannelIntroActivity.this.whatIsChannelText.getMeasuredHeight() + y);
+                y = (int) (((float) height) * 0.68f);
+                x = (int) (((float) width) * 0.05f);
+                ChannelIntroActivity.this.descriptionText.layout(x, y, ChannelIntroActivity.this.descriptionText.getMeasuredWidth() + x, ChannelIntroActivity.this.descriptionText.getMeasuredHeight() + y);
+                y = (int) (((float) height) * 0.86f);
+                ChannelIntroActivity.this.createChannelText.layout(0, y, ChannelIntroActivity.this.createChannelText.getMeasuredWidth(), ChannelIntroActivity.this.createChannelText.getMeasuredHeight() + y);
             }
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        ViewGroup viewGroup = (ViewGroup) this.fragmentView;
+        ViewGroup viewGroup = this.fragmentView;
         viewGroup.setOnTouchListener(new C09983());
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(C0446R.drawable.channelintro);
@@ -150,6 +145,14 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector), new ThemeDescription(this.whatIsChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6), new ThemeDescription(this.createChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText5)};
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[7];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector);
+        themeDescriptionArr[4] = new ThemeDescription(this.whatIsChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[5] = new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[6] = new ThemeDescription(this.createChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText5);
+        return themeDescriptionArr;
     }
 }

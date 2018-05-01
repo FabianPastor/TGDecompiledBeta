@@ -9,10 +9,10 @@ public class NotificationCallbackReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
             ApplicationLoader.postInitApplication();
-            context = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
-            long longExtra = intent.getLongExtra("did", 777000);
-            byte[] byteArrayExtra = intent.getByteArrayExtra(DataSchemeDataSource.SCHEME_DATA);
-            SendMessagesHelper.getInstance(context).sendNotificationCallback(longExtra, intent.getIntExtra("mid", 0), byteArrayExtra);
+            int currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+            long did = intent.getLongExtra("did", 777000);
+            byte[] data = intent.getByteArrayExtra(DataSchemeDataSource.SCHEME_DATA);
+            SendMessagesHelper.getInstance(currentAccount).sendNotificationCallback(did, intent.getIntExtra("mid", 0), data);
         }
     }
 }

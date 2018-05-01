@@ -28,6 +28,22 @@ class ViewBoundsCheck {
     BoundFlags mBoundFlags = new BoundFlags();
     final Callback mCallback;
 
+    interface Callback {
+        View getChildAt(int i);
+
+        int getChildCount();
+
+        int getChildEnd(View view);
+
+        int getChildStart(View view);
+
+        View getParent();
+
+        int getParentEnd();
+
+        int getParentStart();
+    }
+
     static class BoundFlags {
         int mBoundFlags = 0;
         int mChildEnd;
@@ -35,30 +51,36 @@ class ViewBoundsCheck {
         int mRvEnd;
         int mRvStart;
 
-        int compare(int i, int i2) {
-            return i > i2 ? 1 : i == i2 ? 2 : 4;
-        }
-
         BoundFlags() {
         }
 
-        void setBounds(int i, int i2, int i3, int i4) {
-            this.mRvStart = i;
-            this.mRvEnd = i2;
-            this.mChildStart = i3;
-            this.mChildEnd = i4;
+        void setBounds(int rvStart, int rvEnd, int childStart, int childEnd) {
+            this.mRvStart = rvStart;
+            this.mRvEnd = rvEnd;
+            this.mChildStart = childStart;
+            this.mChildEnd = childEnd;
         }
 
-        void setFlags(int i, int i2) {
-            this.mBoundFlags = (i & i2) | (this.mBoundFlags & (i2 ^ -1));
+        void setFlags(int flags, int mask) {
+            this.mBoundFlags = (this.mBoundFlags & (mask ^ -1)) | (flags & mask);
         }
 
-        void addFlags(int i) {
-            this.mBoundFlags = i | this.mBoundFlags;
+        void addFlags(int flags) {
+            this.mBoundFlags |= flags;
         }
 
         void resetFlags() {
             this.mBoundFlags = 0;
+        }
+
+        int compare(int x, int y) {
+            if (x > y) {
+                return 1;
+            }
+            if (x == y) {
+                return 2;
+            }
+            return 4;
         }
 
         boolean boundsMatch() {
@@ -78,22 +100,6 @@ class ViewBoundsCheck {
         }
     }
 
-    interface Callback {
-        View getChildAt(int i);
-
-        int getChildCount();
-
-        int getChildEnd(View view);
-
-        int getChildStart(View view);
-
-        View getParent();
-
-        int getParentEnd();
-
-        int getParentStart();
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     public @interface ViewBounds {
     }
@@ -102,40 +108,39 @@ class ViewBoundsCheck {
         this.mCallback = callback;
     }
 
-    View findOneViewWithinBoundFlags(int i, int i2, int i3, int i4) {
-        int parentStart = this.mCallback.getParentStart();
-        int parentEnd = this.mCallback.getParentEnd();
-        int i5 = i2 > i ? 1 : -1;
-        View view = null;
-        while (i != i2) {
-            View childAt = this.mCallback.getChildAt(i);
-            this.mBoundFlags.setBounds(parentStart, parentEnd, this.mCallback.getChildStart(childAt), this.mCallback.getChildEnd(childAt));
-            if (i3 != 0) {
+    View findOneViewWithinBoundFlags(int fromIndex, int toIndex, int preferredBoundFlags, int acceptableBoundFlags) {
+        int start = this.mCallback.getParentStart();
+        int end = this.mCallback.getParentEnd();
+        int next = toIndex > fromIndex ? 1 : -1;
+        View acceptableMatch = null;
+        for (int i = fromIndex; i != toIndex; i += next) {
+            View child = this.mCallback.getChildAt(i);
+            this.mBoundFlags.setBounds(start, end, this.mCallback.getChildStart(child), this.mCallback.getChildEnd(child));
+            if (preferredBoundFlags != 0) {
                 this.mBoundFlags.resetFlags();
-                this.mBoundFlags.addFlags(i3);
+                this.mBoundFlags.addFlags(preferredBoundFlags);
                 if (this.mBoundFlags.boundsMatch()) {
-                    return childAt;
+                    return child;
                 }
             }
-            if (i4 != 0) {
+            if (acceptableBoundFlags != 0) {
                 this.mBoundFlags.resetFlags();
-                this.mBoundFlags.addFlags(i4);
+                this.mBoundFlags.addFlags(acceptableBoundFlags);
                 if (this.mBoundFlags.boundsMatch()) {
-                    view = childAt;
+                    acceptableMatch = child;
                 }
             }
-            i += i5;
         }
-        return view;
+        return acceptableMatch;
     }
 
-    boolean isViewWithinBoundFlags(View view, int i) {
-        this.mBoundFlags.setBounds(this.mCallback.getParentStart(), this.mCallback.getParentEnd(), this.mCallback.getChildStart(view), this.mCallback.getChildEnd(view));
-        if (i == 0) {
-            return null;
+    boolean isViewWithinBoundFlags(View child, int boundsFlags) {
+        this.mBoundFlags.setBounds(this.mCallback.getParentStart(), this.mCallback.getParentEnd(), this.mCallback.getChildStart(child), this.mCallback.getChildEnd(child));
+        if (boundsFlags == 0) {
+            return false;
         }
         this.mBoundFlags.resetFlags();
-        this.mBoundFlags.addFlags(i);
+        this.mBoundFlags.addFlags(boundsFlags);
         return this.mBoundFlags.boundsMatch();
     }
 }

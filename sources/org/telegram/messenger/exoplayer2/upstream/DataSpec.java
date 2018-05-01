@@ -25,76 +25,56 @@ public final class DataSpec {
         this(uri, 0);
     }
 
-    public DataSpec(Uri uri, int i) {
-        this(uri, 0, -1, null, i);
+    public DataSpec(Uri uri, int flags) {
+        this(uri, 0, -1, null, flags);
     }
 
-    public DataSpec(Uri uri, long j, long j2, String str) {
-        this(uri, j, j, j2, str, 0);
+    public DataSpec(Uri uri, long absoluteStreamPosition, long length, String key) {
+        this(uri, absoluteStreamPosition, absoluteStreamPosition, length, key, 0);
     }
 
-    public DataSpec(Uri uri, long j, long j2, String str, int i) {
-        this(uri, j, j, j2, str, i);
+    public DataSpec(Uri uri, long absoluteStreamPosition, long length, String key, int flags) {
+        this(uri, absoluteStreamPosition, absoluteStreamPosition, length, key, flags);
     }
 
-    public DataSpec(Uri uri, long j, long j2, long j3, String str, int i) {
-        this(uri, null, j, j2, j3, str, i);
+    public DataSpec(Uri uri, long absoluteStreamPosition, long position, long length, String key, int flags) {
+        this(uri, null, absoluteStreamPosition, position, length, key, flags);
     }
 
-    public DataSpec(Uri uri, byte[] bArr, long j, long j2, long j3, String str, int i) {
-        boolean z = false;
-        Assertions.checkArgument(j >= 0);
-        Assertions.checkArgument(j2 >= 0);
-        if (j3 > 0 || j3 == -1) {
-            z = true;
-        }
+    public DataSpec(Uri uri, byte[] postBody, long absoluteStreamPosition, long position, long length, String key, int flags) {
+        Assertions.checkArgument(absoluteStreamPosition >= 0);
+        Assertions.checkArgument(position >= 0);
+        boolean z = length > 0 || length == -1;
         Assertions.checkArgument(z);
         this.uri = uri;
-        this.postBody = bArr;
-        this.absoluteStreamPosition = j;
-        this.position = j2;
-        this.length = j3;
-        this.key = str;
-        this.flags = i;
+        this.postBody = postBody;
+        this.absoluteStreamPosition = absoluteStreamPosition;
+        this.position = position;
+        this.length = length;
+        this.key = key;
+        this.flags = flags;
     }
 
-    public boolean isFlagSet(int i) {
-        return (this.flags & i) == i;
+    public boolean isFlagSet(int flag) {
+        return (this.flags & flag) == flag;
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("DataSpec[");
-        stringBuilder.append(this.uri);
-        stringBuilder.append(", ");
-        stringBuilder.append(Arrays.toString(this.postBody));
-        stringBuilder.append(", ");
-        stringBuilder.append(this.absoluteStreamPosition);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.position);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.length);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.key);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.flags);
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "DataSpec[" + this.uri + ", " + Arrays.toString(this.postBody) + ", " + this.absoluteStreamPosition + ", " + this.position + ", " + this.length + ", " + this.key + ", " + this.flags + "]";
     }
 
-    public DataSpec subrange(long j) {
-        long j2 = -1;
+    public DataSpec subrange(long offset) {
+        long j = -1;
         if (this.length != -1) {
-            j2 = this.length - j;
+            j = this.length - offset;
         }
-        return subrange(j, j2);
+        return subrange(offset, j);
     }
 
-    public DataSpec subrange(long j, long j2) {
-        DataSpec dataSpec = this;
-        if (j == 0 && dataSpec.length == j2) {
-            return dataSpec;
+    public DataSpec subrange(long offset, long length) {
+        if (offset == 0 && this.length == length) {
+            return this;
         }
-        return new DataSpec(dataSpec.uri, dataSpec.postBody, dataSpec.absoluteStreamPosition + j, dataSpec.position + j, j2, dataSpec.key, dataSpec.flags);
+        return new DataSpec(this.uri, this.postBody, this.absoluteStreamPosition + offset, this.position + offset, length, this.key, this.flags);
     }
 }

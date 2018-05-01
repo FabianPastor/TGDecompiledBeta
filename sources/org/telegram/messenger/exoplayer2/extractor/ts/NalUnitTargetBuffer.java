@@ -10,9 +10,9 @@ final class NalUnitTargetBuffer {
     public int nalLength;
     private final int targetType;
 
-    public NalUnitTargetBuffer(int i, int i2) {
-        this.targetType = i;
-        this.nalData = new byte[(3 + i2)];
+    public NalUnitTargetBuffer(int targetType, int initialCapacity) {
+        this.targetType = targetType;
+        this.nalData = new byte[(initialCapacity + 3)];
         this.nalData[2] = (byte) 1;
     }
 
@@ -25,35 +25,35 @@ final class NalUnitTargetBuffer {
         return this.isCompleted;
     }
 
-    public void startNalUnit(int i) {
+    public void startNalUnit(int type) {
         boolean z = true;
-        Assertions.checkState(this.isFilling ^ true);
-        if (i != this.targetType) {
+        Assertions.checkState(!this.isFilling);
+        if (type != this.targetType) {
             z = false;
         }
         this.isFilling = z;
-        if (this.isFilling != 0) {
+        if (this.isFilling) {
             this.nalLength = 3;
             this.isCompleted = false;
         }
     }
 
-    public void appendToNalUnit(byte[] bArr, int i, int i2) {
+    public void appendToNalUnit(byte[] data, int offset, int limit) {
         if (this.isFilling) {
-            i2 -= i;
-            if (this.nalData.length < this.nalLength + i2) {
-                this.nalData = Arrays.copyOf(this.nalData, (this.nalLength + i2) * 2);
+            int readLength = limit - offset;
+            if (this.nalData.length < this.nalLength + readLength) {
+                this.nalData = Arrays.copyOf(this.nalData, (this.nalLength + readLength) * 2);
             }
-            System.arraycopy(bArr, i, this.nalData, this.nalLength, i2);
-            this.nalLength += i2;
+            System.arraycopy(data, offset, this.nalData, this.nalLength, readLength);
+            this.nalLength += readLength;
         }
     }
 
-    public boolean endNalUnit(int i) {
+    public boolean endNalUnit(int discardPadding) {
         if (!this.isFilling) {
             return false;
         }
-        this.nalLength -= i;
+        this.nalLength -= discardPadding;
         this.isFilling = false;
         this.isCompleted = true;
         return true;

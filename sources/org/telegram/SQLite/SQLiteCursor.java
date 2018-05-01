@@ -29,60 +29,64 @@ public class SQLiteCursor {
 
     native int columnType(long j, int i);
 
-    public SQLiteCursor(SQLitePreparedStatement sQLitePreparedStatement) {
-        this.preparedStatement = sQLitePreparedStatement;
+    public SQLiteCursor(SQLitePreparedStatement stmt) {
+        this.preparedStatement = stmt;
     }
 
-    public boolean isNull(int i) throws SQLiteException {
+    public boolean isNull(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnIsNull(this.preparedStatement.getStatementHandle(), i) == 1;
+        if (columnIsNull(this.preparedStatement.getStatementHandle(), columnIndex) == 1) {
+            return true;
+        }
+        return false;
     }
 
-    public int intValue(int i) throws SQLiteException {
+    public int intValue(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnIntValue(this.preparedStatement.getStatementHandle(), i);
+        return columnIntValue(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    public double doubleValue(int i) throws SQLiteException {
+    public double doubleValue(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnDoubleValue(this.preparedStatement.getStatementHandle(), i);
+        return columnDoubleValue(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    public long longValue(int i) throws SQLiteException {
+    public long longValue(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnLongValue(this.preparedStatement.getStatementHandle(), i);
+        return columnLongValue(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    public String stringValue(int i) throws SQLiteException {
+    public String stringValue(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnStringValue(this.preparedStatement.getStatementHandle(), i);
+        return columnStringValue(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    public byte[] byteArrayValue(int i) throws SQLiteException {
+    public byte[] byteArrayValue(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnByteArrayValue(this.preparedStatement.getStatementHandle(), i);
+        return columnByteArrayValue(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    public NativeByteBuffer byteBufferValue(int i) throws SQLiteException {
+    public NativeByteBuffer byteBufferValue(int columnIndex) throws SQLiteException {
         checkRow();
-        long columnByteBufferValue = columnByteBufferValue(this.preparedStatement.getStatementHandle(), i);
-        return columnByteBufferValue != 0 ? NativeByteBuffer.wrap(columnByteBufferValue) : 0;
+        long ptr = columnByteBufferValue(this.preparedStatement.getStatementHandle(), columnIndex);
+        if (ptr != 0) {
+            return NativeByteBuffer.wrap(ptr);
+        }
+        return null;
     }
 
-    public int getTypeOf(int i) throws SQLiteException {
+    public int getTypeOf(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnType(this.preparedStatement.getStatementHandle(), i);
+        return columnType(this.preparedStatement.getStatementHandle(), columnIndex);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean next() throws SQLiteException {
-        int step = this.preparedStatement.step(this.preparedStatement.getStatementHandle());
-        if (step == -1) {
-            int i = 6;
+        int res = this.preparedStatement.step(this.preparedStatement.getStatementHandle());
+        if (res == -1) {
+            int repeatCount = 6;
             while (true) {
-                int i2 = i - 1;
-                if (i == 0) {
+                int repeatCount2 = repeatCount - 1;
+                if (repeatCount == 0) {
                     break;
                 }
                 try {
@@ -90,21 +94,21 @@ public class SQLiteCursor {
                         FileLog.m0d("sqlite busy, waiting...");
                     }
                     Thread.sleep(500);
-                    i = this.preparedStatement.step();
-                    if (i == 0) {
+                    res = this.preparedStatement.step();
+                    if (res == 0) {
                         break;
                     }
-                    step = i;
-                    i = i2;
+                    repeatCount = repeatCount2;
                 } catch (Throwable e) {
                     FileLog.m3e(e);
+                    repeatCount = repeatCount2;
                 }
             }
-            if (step == -1) {
+            if (res == -1) {
                 throw new SQLiteException("sqlite busy");
             }
         }
-        this.inRow = step == 0;
+        this.inRow = res == 0;
         return this.inRow;
     }
 

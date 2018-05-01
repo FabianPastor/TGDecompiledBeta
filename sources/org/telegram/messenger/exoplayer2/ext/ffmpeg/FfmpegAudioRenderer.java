@@ -19,37 +19,38 @@ public final class FfmpegAudioRenderer extends SimpleDecoderAudioRenderer {
     private FfmpegDecoder decoder;
     private final boolean enableFloatOutput;
 
-    public final int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
-        return 8;
-    }
-
     public FfmpegAudioRenderer() {
         this(null, null, new AudioProcessor[0]);
     }
 
-    public FfmpegAudioRenderer(Handler handler, AudioRendererEventListener audioRendererEventListener, AudioProcessor... audioProcessorArr) {
-        this(handler, audioRendererEventListener, new DefaultAudioSink(null, audioProcessorArr), null);
+    public FfmpegAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioProcessor... audioProcessors) {
+        this(eventHandler, eventListener, new DefaultAudioSink(null, audioProcessors), false);
     }
 
-    public FfmpegAudioRenderer(Handler handler, AudioRendererEventListener audioRendererEventListener, AudioSink audioSink, boolean z) {
-        super(handler, audioRendererEventListener, null, false, audioSink);
-        this.enableFloatOutput = z;
+    public FfmpegAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioSink audioSink, boolean enableFloatOutput) {
+        super(eventHandler, eventListener, null, false, audioSink);
+        this.enableFloatOutput = enableFloatOutput;
     }
 
     protected int supportsFormatInternal(DrmSessionManager<ExoMediaCrypto> drmSessionManager, Format format) {
-        String str = format.sampleMimeType;
-        if (!MimeTypes.isAudio(str)) {
-            return null;
+        String sampleMimeType = format.sampleMimeType;
+        if (!MimeTypes.isAudio(sampleMimeType)) {
+            return 0;
         }
-        if (FfmpegLibrary.supportsFormat(str)) {
-            if (isOutputSupported(format)) {
-                return BaseRenderer.supportsFormatDrm(drmSessionManager, format.drmInitData) == null ? 2 : 4;
-            }
+        if (!FfmpegLibrary.supportsFormat(sampleMimeType) || !isOutputSupported(format)) {
+            return 1;
         }
-        return 1;
+        if (BaseRenderer.supportsFormatDrm(drmSessionManager, format.drmInitData)) {
+            return 4;
+        }
+        return 2;
     }
 
-    protected FfmpegDecoder createDecoder(Format format, ExoMediaCrypto exoMediaCrypto) throws FfmpegDecoderException {
+    public final int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
+        return 8;
+    }
+
+    protected FfmpegDecoder createDecoder(Format format, ExoMediaCrypto mediaCrypto) throws FfmpegDecoderException {
         this.decoder = new FfmpegDecoder(16, 16, INITIAL_INPUT_BUFFER_SIZE, format.sampleMimeType, format.initializationData, shouldUseFloatOutput(format));
         return this.decoder;
     }
@@ -58,44 +59,40 @@ public final class FfmpegAudioRenderer extends SimpleDecoderAudioRenderer {
         return Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, -1, -1, this.decoder.getChannelCount(), this.decoder.getSampleRate(), this.decoder.getEncoding(), null, null, 0, null);
     }
 
-    private boolean isOutputSupported(Format format) {
-        if (shouldUseFloatOutput(format) == null) {
-            if (supportsOutputEncoding(2) == null) {
-                return null;
-            }
-        }
-        return true;
+    private boolean isOutputSupported(Format inputFormat) {
+        return shouldUseFloatOutput(inputFormat) || supportsOutputEncoding(2);
     }
 
-    private boolean shouldUseFloatOutput(Format format) {
-        boolean z = false;
-        if (this.enableFloatOutput) {
-            if (supportsOutputEncoding(4)) {
-                String str = format.sampleMimeType;
-                boolean z2 = true;
-                int hashCode = str.hashCode();
-                if (hashCode != 187078296) {
-                    if (hashCode == 187094639) {
-                        if (str.equals(MimeTypes.AUDIO_RAW)) {
-                            z2 = false;
-                        }
-                    }
-                } else if (str.equals(MimeTypes.AUDIO_AC3)) {
-                    z2 = true;
-                }
-                switch (z2) {
-                    case false:
-                        if (format.pcmEncoding == Integer.MIN_VALUE || format.pcmEncoding == NUM || format.pcmEncoding == 4) {
-                            z = true;
-                        }
-                        return z;
-                    case true:
-                        return false;
-                    default:
-                        return true;
-                }
-            }
+    private boolean shouldUseFloatOutput(Format inputFormat) {
+        if (!this.enableFloatOutput || !supportsOutputEncoding(4)) {
+            return false;
         }
-        return false;
+        String str = inputFormat.sampleMimeType;
+        boolean z = true;
+        switch (str.hashCode()) {
+            case 187078296:
+                if (str.equals(MimeTypes.AUDIO_AC3)) {
+                    z = true;
+                    break;
+                }
+                break;
+            case 187094639:
+                if (str.equals(MimeTypes.AUDIO_RAW)) {
+                    z = false;
+                    break;
+                }
+                break;
+        }
+        switch (z) {
+            case false:
+                if (inputFormat.pcmEncoding == Integer.MIN_VALUE || inputFormat.pcmEncoding == NUM || inputFormat.pcmEncoding == 4) {
+                    return true;
+                }
+                return false;
+            case true:
+                return false;
+            default:
+                return true;
+        }
     }
 }

@@ -16,48 +16,46 @@ final class WavHeader implements SeekMap {
     private final int numChannels;
     private final int sampleRateHz;
 
-    public boolean isSeekable() {
-        return true;
+    public WavHeader(int numChannels, int sampleRateHz, int averageBytesPerSecond, int blockAlignment, int bitsPerSample, int encoding) {
+        this.numChannels = numChannels;
+        this.sampleRateHz = sampleRateHz;
+        this.averageBytesPerSecond = averageBytesPerSecond;
+        this.blockAlignment = blockAlignment;
+        this.bitsPerSample = bitsPerSample;
+        this.encoding = encoding;
     }
 
-    public WavHeader(int i, int i2, int i3, int i4, int i5, int i6) {
-        this.numChannels = i;
-        this.sampleRateHz = i2;
-        this.averageBytesPerSecond = i3;
-        this.blockAlignment = i4;
-        this.bitsPerSample = i5;
-        this.encoding = i6;
-    }
-
-    public void setDataBounds(long j, long j2) {
-        this.dataStartPosition = j;
-        this.dataSize = j2;
+    public void setDataBounds(long dataStartPosition, long dataSize) {
+        this.dataStartPosition = dataStartPosition;
+        this.dataSize = dataSize;
     }
 
     public boolean hasDataBounds() {
         return (this.dataStartPosition == 0 || this.dataSize == 0) ? false : true;
     }
 
+    public boolean isSeekable() {
+        return true;
+    }
+
     public long getDurationUs() {
-        return ((this.dataSize / ((long) this.blockAlignment)) * C0542C.MICROS_PER_SECOND) / ((long) this.sampleRateHz);
+        return (C0542C.MICROS_PER_SECOND * (this.dataSize / ((long) this.blockAlignment))) / ((long) this.sampleRateHz);
     }
 
-    public SeekPoints getSeekPoints(long j) {
-        long constrainValue = Util.constrainValue((((((long) this.averageBytesPerSecond) * j) / C0542C.MICROS_PER_SECOND) / ((long) this.blockAlignment)) * ((long) this.blockAlignment), 0, this.dataSize - ((long) this.blockAlignment));
-        long j2 = this.dataStartPosition + constrainValue;
-        long timeUs = getTimeUs(j2);
-        SeekPoint seekPoint = new SeekPoint(timeUs, j2);
-        if (timeUs < j) {
-            if (constrainValue != this.dataSize - ((long) this.blockAlignment)) {
-                constrainValue = j2 + ((long) this.blockAlignment);
-                return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(constrainValue), constrainValue));
-            }
+    public SeekPoints getSeekPoints(long timeUs) {
+        long positionOffset = Util.constrainValue((((((long) this.averageBytesPerSecond) * timeUs) / C0542C.MICROS_PER_SECOND) / ((long) this.blockAlignment)) * ((long) this.blockAlignment), 0, this.dataSize - ((long) this.blockAlignment));
+        long seekPosition = this.dataStartPosition + positionOffset;
+        long seekTimeUs = getTimeUs(seekPosition);
+        SeekPoint seekPoint = new SeekPoint(seekTimeUs, seekPosition);
+        if (seekTimeUs >= timeUs || positionOffset == this.dataSize - ((long) this.blockAlignment)) {
+            return new SeekPoints(seekPoint);
         }
-        return new SeekPoints(seekPoint);
+        long secondSeekPosition = seekPosition + ((long) this.blockAlignment);
+        return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(secondSeekPosition), secondSeekPosition));
     }
 
-    public long getTimeUs(long j) {
-        return (Math.max(0, j - this.dataStartPosition) * C0542C.MICROS_PER_SECOND) / ((long) this.averageBytesPerSecond);
+    public long getTimeUs(long position) {
+        return (C0542C.MICROS_PER_SECOND * Math.max(0, position - this.dataStartPosition)) / ((long) this.averageBytesPerSecond);
     }
 
     public int getBytesPerFrame() {

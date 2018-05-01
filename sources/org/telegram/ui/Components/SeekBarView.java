@@ -27,7 +27,7 @@ public class SeekBarView extends FrameLayout {
 
     public SeekBarView(Context context) {
         super(context);
-        setWillNotDraw(null);
+        setWillNotDraw(false);
         this.innerPaint1.setColor(Theme.getColor(Theme.key_player_progressBackground));
         this.outerPaint1 = new Paint(1);
         this.outerPaint1.setColor(Theme.getColor(Theme.key_player_progress));
@@ -35,92 +35,88 @@ public class SeekBarView extends FrameLayout {
         this.thumbHeight = AndroidUtilities.dp(24.0f);
     }
 
-    public void setColors(int i, int i2) {
-        this.innerPaint1.setColor(i);
-        this.outerPaint1.setColor(i2);
+    public void setColors(int inner, int outer) {
+        this.innerPaint1.setColor(inner);
+        this.outerPaint1.setColor(outer);
     }
 
-    public void setInnerColor(int i) {
-        this.innerPaint1.setColor(i);
+    public void setInnerColor(int inner) {
+        this.innerPaint1.setColor(inner);
     }
 
-    public void setOuterColor(int i) {
-        this.outerPaint1.setColor(i);
+    public void setOuterColor(int outer) {
+        this.outerPaint1.setColor(outer);
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-        return onTouch(motionEvent);
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return onTouch(ev);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        return onTouch(motionEvent);
+    public boolean onTouchEvent(MotionEvent event) {
+        return onTouch(event);
     }
 
-    public void setReportChanges(boolean z) {
-        this.reportChanges = z;
+    public void setReportChanges(boolean value) {
+        this.reportChanges = value;
     }
 
     public void setDelegate(SeekBarViewDelegate seekBarViewDelegate) {
         this.delegate = seekBarViewDelegate;
     }
 
-    boolean onTouch(MotionEvent motionEvent) {
-        if (motionEvent.getAction() == 0) {
+    boolean onTouch(MotionEvent ev) {
+        if (ev.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
-            int measuredHeight = (getMeasuredHeight() - this.thumbWidth) / 2;
-            if (motionEvent.getY() >= 0.0f && motionEvent.getY() <= ((float) getMeasuredHeight())) {
-                if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) ((this.thumbX + this.thumbWidth) + measuredHeight))) {
-                    this.thumbX = ((int) motionEvent.getX()) - (this.thumbWidth / 2);
+            int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
+            if (ev.getY() >= 0.0f && ev.getY() <= ((float) getMeasuredHeight())) {
+                if (((float) (this.thumbX - additionWidth)) > ev.getX() || ev.getX() > ((float) ((this.thumbX + this.thumbWidth) + additionWidth))) {
+                    this.thumbX = ((int) ev.getX()) - (this.thumbWidth / 2);
                     if (this.thumbX < 0) {
                         this.thumbX = 0;
                     } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
                         this.thumbX = getMeasuredWidth() - this.thumbWidth;
                     }
                 }
-                this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
+                this.thumbDX = (int) (ev.getX() - ((float) this.thumbX));
                 this.pressed = true;
                 invalidate();
                 return true;
             }
-        }
-        if (motionEvent.getAction() != 1) {
-            if (motionEvent.getAction() != 3) {
-                if (motionEvent.getAction() == 2 && this.pressed) {
-                    this.thumbX = (int) (motionEvent.getX() - ((float) this.thumbDX));
-                    if (this.thumbX < null) {
-                        this.thumbX = 0;
-                    } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
-                        this.thumbX = getMeasuredWidth() - this.thumbWidth;
-                    }
-                    if (this.reportChanges != null) {
-                        this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
-                    }
-                    invalidate();
-                    return true;
+        } else if (ev.getAction() == 1 || ev.getAction() == 3) {
+            if (this.pressed) {
+                if (ev.getAction() == 1) {
+                    this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
                 }
+                this.pressed = false;
+                invalidate();
+                return true;
             }
-        }
-        if (this.pressed) {
-            if (motionEvent.getAction() == 1) {
+        } else if (ev.getAction() == 2 && this.pressed) {
+            this.thumbX = (int) (ev.getX() - ((float) this.thumbDX));
+            if (this.thumbX < 0) {
+                this.thumbX = 0;
+            } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+                this.thumbX = getMeasuredWidth() - this.thumbWidth;
+            }
+            if (this.reportChanges) {
                 this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
             }
-            this.pressed = false;
             invalidate();
             return true;
         }
         return false;
     }
 
-    public void setProgress(float f) {
+    public void setProgress(float progress) {
         if (getMeasuredWidth() == 0) {
-            this.progressToSet = f;
+            this.progressToSet = progress;
             return;
         }
         this.progressToSet = -1.0f;
-        int ceil = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.thumbWidth)) * f));
-        if (this.thumbX != ceil) {
-            this.thumbX = ceil;
-            if (this.thumbX < null) {
+        int newThumbX = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.thumbWidth)) * progress));
+        if (this.thumbX != newThumbX) {
+            this.thumbX = newThumbX;
+            if (this.thumbX < 0) {
                 this.thumbX = 0;
             } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
                 this.thumbX = getMeasuredWidth() - this.thumbWidth;
@@ -129,15 +125,15 @@ public class SeekBarView extends FrameLayout {
         }
     }
 
-    public void setBufferedProgress(float f) {
-        this.bufferedProgress = f;
+    public void setBufferedProgress(float progress) {
+        this.bufferedProgress = progress;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
-        if (this.progressToSet >= 0 && getMeasuredWidth() > 0) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
             setProgress(this.progressToSet);
-            this.progressToSet = -NUM;
+            this.progressToSet = -1.0f;
         }
     }
 
@@ -146,12 +142,12 @@ public class SeekBarView extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        int measuredHeight = (getMeasuredHeight() - this.thumbHeight) / 2;
+        int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {
-            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), ((float) (this.thumbWidth / 2)) + (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
+            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         }
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.outerPaint1);
-        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) (measuredHeight + (this.thumbHeight / 2)), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
+        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
     }
 }

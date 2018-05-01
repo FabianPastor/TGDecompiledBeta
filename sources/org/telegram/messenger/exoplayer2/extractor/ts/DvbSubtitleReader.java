@@ -18,29 +18,29 @@ public final class DvbSubtitleReader implements ElementaryStreamReader {
     private final List<DvbSubtitleInfo> subtitleInfos;
     private boolean writingSample;
 
-    public DvbSubtitleReader(List<DvbSubtitleInfo> list) {
-        this.subtitleInfos = list;
-        this.outputs = new TrackOutput[list.size()];
+    public DvbSubtitleReader(List<DvbSubtitleInfo> subtitleInfos) {
+        this.subtitleInfos = subtitleInfos;
+        this.outputs = new TrackOutput[subtitleInfos.size()];
     }
 
     public void seek() {
         this.writingSample = false;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         for (int i = 0; i < this.outputs.length; i++) {
-            DvbSubtitleInfo dvbSubtitleInfo = (DvbSubtitleInfo) this.subtitleInfos.get(i);
-            trackIdGenerator.generateNewId();
-            TrackOutput track = extractorOutput.track(trackIdGenerator.getTrackId(), 3);
-            track.format(Format.createImageSampleFormat(trackIdGenerator.getFormatId(), MimeTypes.APPLICATION_DVBSUBS, null, -1, 0, Collections.singletonList(dvbSubtitleInfo.initializationData), dvbSubtitleInfo.language, null));
-            this.outputs[i] = track;
+            DvbSubtitleInfo subtitleInfo = (DvbSubtitleInfo) this.subtitleInfos.get(i);
+            idGenerator.generateNewId();
+            TrackOutput output = extractorOutput.track(idGenerator.getTrackId(), 3);
+            output.format(Format.createImageSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_DVBSUBS, null, -1, 0, Collections.singletonList(subtitleInfo.initializationData), subtitleInfo.language, null));
+            this.outputs[i] = output;
         }
     }
 
-    public void packetStarted(long j, boolean z) {
-        if (z) {
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        if (dataAlignmentIndicator) {
             this.writingSample = true;
-            this.sampleTimeUs = j;
+            this.sampleTimeUs = pesTimeUs;
             this.sampleBytesWritten = 0;
             this.bytesToCheck = 2;
         }
@@ -48,37 +48,41 @@ public final class DvbSubtitleReader implements ElementaryStreamReader {
 
     public void packetFinished() {
         if (this.writingSample) {
-            for (TrackOutput sampleMetadata : this.outputs) {
-                sampleMetadata.sampleMetadata(this.sampleTimeUs, 1, this.sampleBytesWritten, 0, null);
+            for (TrackOutput output : this.outputs) {
+                output.sampleMetadata(this.sampleTimeUs, 1, this.sampleBytesWritten, 0, null);
             }
             this.writingSample = false;
         }
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
-        if (this.writingSample && (this.bytesToCheck != 2 || checkNextByte(parsableByteArray, 32))) {
-            int i = 0;
-            if (this.bytesToCheck != 1 || checkNextByte(parsableByteArray, 0)) {
-                int position = parsableByteArray.getPosition();
-                int bytesLeft = parsableByteArray.bytesLeft();
-                TrackOutput[] trackOutputArr = this.outputs;
-                int length = trackOutputArr.length;
-                while (i < length) {
-                    TrackOutput trackOutput = trackOutputArr[i];
-                    parsableByteArray.setPosition(position);
-                    trackOutput.sampleData(parsableByteArray, bytesLeft);
-                    i++;
-                }
-                this.sampleBytesWritten += bytesLeft;
+    public void consume(ParsableByteArray data) {
+        int i = 0;
+        if (!this.writingSample) {
+            return;
+        }
+        if (this.bytesToCheck == 2 && !checkNextByte(data, 32)) {
+            return;
+        }
+        if (this.bytesToCheck != 1 || checkNextByte(data, 0)) {
+            int dataPosition = data.getPosition();
+            int bytesAvailable = data.bytesLeft();
+            TrackOutput[] trackOutputArr = this.outputs;
+            int length = trackOutputArr.length;
+            while (i < length) {
+                TrackOutput output = trackOutputArr[i];
+                data.setPosition(dataPosition);
+                output.sampleData(data, bytesAvailable);
+                i++;
             }
+            this.sampleBytesWritten += bytesAvailable;
         }
     }
 
-    private boolean checkNextByte(ParsableByteArray parsableByteArray, int i) {
-        if (parsableByteArray.bytesLeft() == 0) {
+    private boolean checkNextByte(ParsableByteArray data, int expectedValue) {
+        if (data.bytesLeft() == 0) {
             return false;
         }
-        if (parsableByteArray.readUnsignedByte() != i) {
+        if (data.readUnsignedByte() != expectedValue) {
             this.writingSample = false;
         }
         this.bytesToCheck--;

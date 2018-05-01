@@ -18,15 +18,15 @@ public abstract class Chunk implements Loadable {
 
     public abstract long bytesLoaded();
 
-    public Chunk(DataSource dataSource, DataSpec dataSpec, int i, Format format, int i2, Object obj, long j, long j2) {
+    public Chunk(DataSource dataSource, DataSpec dataSpec, int type, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs) {
         this.dataSource = (DataSource) Assertions.checkNotNull(dataSource);
         this.dataSpec = (DataSpec) Assertions.checkNotNull(dataSpec);
-        this.type = i;
-        this.trackFormat = format;
-        this.trackSelectionReason = i2;
-        this.trackSelectionData = obj;
-        this.startTimeUs = j;
-        this.endTimeUs = j2;
+        this.type = type;
+        this.trackFormat = trackFormat;
+        this.trackSelectionReason = trackSelectionReason;
+        this.trackSelectionData = trackSelectionData;
+        this.startTimeUs = startTimeUs;
+        this.endTimeUs = endTimeUs;
     }
 
     public final long getDurationUs() {

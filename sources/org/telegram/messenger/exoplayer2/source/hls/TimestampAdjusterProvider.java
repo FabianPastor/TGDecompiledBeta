@@ -6,14 +6,14 @@ import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 public final class TimestampAdjusterProvider {
     private final SparseArray<TimestampAdjuster> timestampAdjusters = new SparseArray();
 
-    public TimestampAdjuster getAdjuster(int i) {
-        TimestampAdjuster timestampAdjuster = (TimestampAdjuster) this.timestampAdjusters.get(i);
-        if (timestampAdjuster != null) {
-            return timestampAdjuster;
+    public TimestampAdjuster getAdjuster(int discontinuitySequence) {
+        TimestampAdjuster adjuster = (TimestampAdjuster) this.timestampAdjusters.get(discontinuitySequence);
+        if (adjuster != null) {
+            return adjuster;
         }
-        timestampAdjuster = new TimestampAdjuster(Long.MAX_VALUE);
-        this.timestampAdjusters.put(i, timestampAdjuster);
-        return timestampAdjuster;
+        adjuster = new TimestampAdjuster(Long.MAX_VALUE);
+        this.timestampAdjusters.put(discontinuitySequence, adjuster);
+        return adjuster;
     }
 
     public void reset() {

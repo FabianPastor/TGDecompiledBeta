@@ -6,7 +6,6 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -43,17 +42,25 @@ public class SendLocationCell extends FrameLayout {
         }
     }
 
-    public SendLocationCell(Context context, boolean z) {
+    public SendLocationCell(Context context, boolean live) {
+        String str;
         super(context);
         this.imageView = new ImageView(context);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor(z ? Theme.key_location_sendLiveLocationBackground : Theme.key_location_sendLocationBackground), Theme.getColor(z ? Theme.key_location_sendLiveLocationBackground : Theme.key_location_sendLocationBackground));
+        int dp = AndroidUtilities.dp(40.0f);
+        int color = Theme.getColor(live ? Theme.key_location_sendLiveLocationBackground : Theme.key_location_sendLocationBackground);
+        if (live) {
+            str = Theme.key_location_sendLiveLocationBackground;
+        } else {
+            str = Theme.key_location_sendLocationBackground;
+        }
+        Drawable circle = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
         Drawable drawable;
-        Drawable combinedDrawable;
-        if (z) {
+        CombinedDrawable combinedDrawable;
+        if (live) {
             this.rect = new RectF();
             drawable = getResources().getDrawable(C0446R.drawable.livelocationpin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
+            combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
@@ -61,23 +68,15 @@ public class SendLocationCell extends FrameLayout {
         } else {
             drawable = getResources().getDrawable(C0446R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
+            combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
         }
-        View view = this.imageView;
-        int i = 3;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f = 0.0f;
-        float f2 = LocaleController.isRTL ? 0.0f : 17.0f;
-        if (LocaleController.isRTL) {
-            f = 17.0f;
-        }
-        addView(view, LayoutHelper.createFrame(40, 40.0f, i2, f2, 13.0f, f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
         this.titleTextView = new SimpleTextView(context);
         this.titleTextView.setTextSize(16);
-        if (z) {
+        if (live) {
             this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
         } else {
             this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText7));
@@ -86,35 +85,44 @@ public class SendLocationCell extends FrameLayout {
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
         this.accurateTextView = new SimpleTextView(context);
-        this.accurateTextView.setTextSize(true);
+        this.accurateTextView.setTextSize(14);
         this.accurateTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        this.accurateTextView.setGravity(LocaleController.isRTL ? true : true);
-        context = this.accurateTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        }
-        addView(context, LayoutHelper.createFrame(-1, 20.0f, 48 | i, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
+        this.accurateTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        addView(this.accurateTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
     }
 
     private ImageView getImageView() {
         return this.imageView;
     }
 
-    public void setHasLocation(boolean z) {
+    public void setHasLocation(boolean value) {
+        float f = 1.0f;
         if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null) {
-            float f = 0.5f;
-            this.titleTextView.setAlpha(z ? 1.0f : 0.5f);
-            this.accurateTextView.setAlpha(z ? 1.0f : 0.5f);
+            float f2;
+            SimpleTextView simpleTextView = this.titleTextView;
+            if (value) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.5f;
+            }
+            simpleTextView.setAlpha(f2);
+            simpleTextView = this.accurateTextView;
+            if (value) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.5f;
+            }
+            simpleTextView.setAlpha(f2);
             ImageView imageView = this.imageView;
-            if (z) {
-                f = 1.0f;
+            if (!value) {
+                f = 0.5f;
             }
             imageView.setAlpha(f);
         }
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM));
     }
 
     protected void onDetachedFromWindow() {
@@ -129,31 +137,31 @@ public class SendLocationCell extends FrameLayout {
         }
     }
 
-    public void setText(String str, String str2) {
-        this.titleTextView.setText(str);
-        this.accurateTextView.setText(str2);
+    public void setText(String title, String text) {
+        this.titleTextView.setText(title);
+        this.accurateTextView.setText(text);
     }
 
-    public void setDialogId(long j) {
-        this.dialogId = j;
+    public void setDialogId(long did) {
+        this.dialogId = did;
         checkText();
     }
 
     private void checkText() {
-        SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
-        if (sharingLocationInfo != null) {
-            setText(LocaleController.getString("StopLiveLocation", C0446R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate((long) (sharingLocationInfo.messageObject.messageOwner.edit_date != 0 ? sharingLocationInfo.messageObject.messageOwner.edit_date : sharingLocationInfo.messageObject.messageOwner.date)));
+        SharingLocationInfo info = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
+        if (info != null) {
+            setText(LocaleController.getString("StopLiveLocation", C0446R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
         } else {
             setText(LocaleController.getString("SendLiveLocation", C0446R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", C0446R.string.SendLiveLocationInfo));
         }
     }
 
     protected void onDraw(Canvas canvas) {
-        SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
-        if (sharingLocationInfo != null) {
+        SharingLocationInfo currentInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
+        if (currentInfo != null) {
             int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            if (sharingLocationInfo.stopTime >= currentTime) {
-                float abs = ((float) Math.abs(sharingLocationInfo.stopTime - currentTime)) / ((float) sharingLocationInfo.period);
+            if (currentInfo.stopTime >= currentTime) {
+                float progress = ((float) Math.abs(currentInfo.stopTime - currentTime)) / ((float) currentInfo.period);
                 if (LocaleController.isRTL) {
                     this.rect.set((float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(43.0f), (float) AndroidUtilities.dp(48.0f));
                 } else {
@@ -162,9 +170,9 @@ public class SendLocationCell extends FrameLayout {
                 int color = Theme.getColor("location_liveLocationProgress");
                 Theme.chat_radialProgress2Paint.setColor(color);
                 Theme.chat_livePaint.setColor(color);
-                canvas.drawArc(this.rect, -90.0f, -360.0f * abs, false, Theme.chat_radialProgress2Paint);
-                String formatLocationLeftTime = LocaleController.formatLocationLeftTime(Math.abs(sharingLocationInfo.stopTime - currentTime));
-                canvas.drawText(formatLocationLeftTime, this.rect.centerX() - (Theme.chat_livePaint.measureText(formatLocationLeftTime) / 2.0f), (float) AndroidUtilities.dp(37.0f), Theme.chat_livePaint);
+                canvas.drawArc(this.rect, -90.0f, -360.0f * progress, false, Theme.chat_radialProgress2Paint);
+                String text = LocaleController.formatLocationLeftTime(Math.abs(currentInfo.stopTime - currentTime));
+                canvas.drawText(text, this.rect.centerX() - (Theme.chat_livePaint.measureText(text) / 2.0f), (float) AndroidUtilities.dp(37.0f), Theme.chat_livePaint);
             }
         }
     }

@@ -92,6 +92,25 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private SizeNotifierFrameLayout page2;
     private File themeFile;
 
+    /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
+    class C22991 extends ActionBarMenuItemSearchListener {
+        C22991() {
+        }
+
+        public void onSearchExpand() {
+        }
+
+        public boolean canCollapseSearch() {
+            return true;
+        }
+
+        public void onSearchCollapse() {
+        }
+
+        public void onTextChanged(EditText editText) {
+        }
+    }
+
     /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
     class C17263 extends ViewOutlineProvider {
         C17263() {
@@ -103,12 +122,62 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
     }
 
+    /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
+    class C23015 implements OnPageChangeListener {
+        C23015() {
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        public void onPageSelected(int position) {
+            ThemePreviewActivity.this.dotsContainer.invalidate();
+        }
+
+        public void onPageScrollStateChanged(int state) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
+    class C23026 extends PagerAdapter {
+        C23026() {
+        }
+
+        public int getCount() {
+            return 2;
+        }
+
+        public boolean isViewFromObject(View view, Object object) {
+            return object == view;
+        }
+
+        public int getItemPosition(Object object) {
+            return -1;
+        }
+
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view = position == 0 ? ThemePreviewActivity.this.page1 : ThemePreviewActivity.this.page2;
+            container.addView(view);
+            return view;
+        }
+
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        public void unregisterDataSetObserver(DataSetObserver observer) {
+            if (observer != null) {
+                super.unregisterDataSetObserver(observer);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ThemePreviewActivity$8 */
     class C17288 implements OnClickListener {
         C17288() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             Theme.applyPreviousTheme();
             ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
             ThemePreviewActivity.this.finishFragment();
@@ -120,80 +189,11 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         C17299() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             ThemePreviewActivity.this.applied = true;
             ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
             Theme.applyThemeFile(ThemePreviewActivity.this.themeFile, ThemePreviewActivity.this.applyingTheme.name, false);
             ThemePreviewActivity.this.finishFragment();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
-    class C22991 extends ActionBarMenuItemSearchListener {
-        public boolean canCollapseSearch() {
-            return true;
-        }
-
-        public void onSearchCollapse() {
-        }
-
-        public void onSearchExpand() {
-        }
-
-        public void onTextChanged(EditText editText) {
-        }
-
-        C22991() {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
-    class C23015 implements OnPageChangeListener {
-        public void onPageScrollStateChanged(int i) {
-        }
-
-        public void onPageScrolled(int i, float f, int i2) {
-        }
-
-        C23015() {
-        }
-
-        public void onPageSelected(int i) {
-            ThemePreviewActivity.this.dotsContainer.invalidate();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
-    class C23026 extends PagerAdapter {
-        public int getCount() {
-            return 2;
-        }
-
-        public int getItemPosition(Object obj) {
-            return -1;
-        }
-
-        public boolean isViewFromObject(View view, Object obj) {
-            return obj == view;
-        }
-
-        C23026() {
-        }
-
-        public Object instantiateItem(ViewGroup viewGroup, int i) {
-            i = i == 0 ? ThemePreviewActivity.this.page1 : ThemePreviewActivity.this.page2;
-            viewGroup.addView(i);
-            return i;
-        }
-
-        public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            viewGroup.removeView((View) obj);
-        }
-
-        public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-            if (dataSetObserver != null) {
-                super.unregisterDataSetObserver(dataSetObserver);
-            }
         }
     }
 
@@ -203,141 +203,145 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
         public DialogsAdapter(Context context) {
             this.mContext = context;
-            ThemePreviewActivity currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
-            context = new CustomDialog();
-            context.name = "Eva Summer";
-            context.message = "Reminds me of a Chinese prove...";
-            context.id = 0;
-            context.unread_count = 0;
-            context.pinned = true;
-            context.muted = false;
-            context.type = 0;
-            context.date = currentTimeMillis;
-            context.verified = false;
-            context.isMedia = false;
-            context.sent = true;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Alexandra Smith";
-            context.message = "Reminds me of a Chinese prove...";
-            context.id = 1;
-            context.unread_count = 2;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 0;
-            context.date = currentTimeMillis - 3600;
-            context.verified = false;
-            context.isMedia = false;
-            context.sent = false;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Make Apple";
-            context.message = "\ud83e\udd37\u200d\u2642\ufe0f Sticker";
-            context.id = 2;
-            context.unread_count = 3;
-            context.pinned = false;
-            context.muted = true;
-            context.type = 0;
-            context.date = currentTimeMillis - 7200;
-            context.verified = false;
-            context.isMedia = true;
-            context.sent = false;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Paul Newman";
-            context.message = "Any ideas?";
-            context.id = 3;
-            context.unread_count = 0;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 2;
-            context.date = currentTimeMillis - 10800;
-            context.verified = false;
-            context.isMedia = false;
-            context.sent = false;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Old Pirates";
-            context.message = "Yo-ho-ho!";
-            context.id = 4;
-            context.unread_count = 0;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 1;
-            context.date = currentTimeMillis - 14400;
-            context.verified = false;
-            context.isMedia = false;
-            context.sent = true;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Kate Bright";
-            context.message = "Hola!";
-            context.id = 5;
-            context.unread_count = 0;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 0;
-            context.date = currentTimeMillis - 18000;
-            context.verified = false;
-            context.isMedia = false;
-            context.sent = false;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Nick K";
-            context.message = "These are not the droids you are looking for";
-            context.id = 6;
-            context.unread_count = 0;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 0;
-            context.date = currentTimeMillis - 21600;
-            context.verified = true;
-            context.isMedia = false;
-            context.sent = false;
-            this.dialogs.add(context);
-            context = new CustomDialog();
-            context.name = "Adler Toberg";
-            context.message = "Did someone say peanut butter?";
-            context.id = 0;
-            context.unread_count = 0;
-            context.pinned = false;
-            context.muted = false;
-            context.type = 0;
-            context.date = currentTimeMillis - 25200;
-            context.verified = true;
-            context.isMedia = false;
-            context.sent = false;
-            this.dialogs.add(context);
+            int date = (int) (System.currentTimeMillis() / 1000);
+            CustomDialog customDialog = new CustomDialog();
+            customDialog.name = "Eva Summer";
+            customDialog.message = "Reminds me of a Chinese prove...";
+            customDialog.id = 0;
+            customDialog.unread_count = 0;
+            customDialog.pinned = true;
+            customDialog.muted = false;
+            customDialog.type = 0;
+            customDialog.date = date;
+            customDialog.verified = false;
+            customDialog.isMedia = false;
+            customDialog.sent = true;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Alexandra Smith";
+            customDialog.message = "Reminds me of a Chinese prove...";
+            customDialog.id = 1;
+            customDialog.unread_count = 2;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 0;
+            customDialog.date = date - 3600;
+            customDialog.verified = false;
+            customDialog.isMedia = false;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Make Apple";
+            customDialog.message = "\ud83e\udd37\u200d\u2642\ufe0f Sticker";
+            customDialog.id = 2;
+            customDialog.unread_count = 3;
+            customDialog.pinned = false;
+            customDialog.muted = true;
+            customDialog.type = 0;
+            customDialog.date = date - 7200;
+            customDialog.verified = false;
+            customDialog.isMedia = true;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Paul Newman";
+            customDialog.message = "Any ideas?";
+            customDialog.id = 3;
+            customDialog.unread_count = 0;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 2;
+            customDialog.date = date - 10800;
+            customDialog.verified = false;
+            customDialog.isMedia = false;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Old Pirates";
+            customDialog.message = "Yo-ho-ho!";
+            customDialog.id = 4;
+            customDialog.unread_count = 0;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 1;
+            customDialog.date = date - 14400;
+            customDialog.verified = false;
+            customDialog.isMedia = false;
+            customDialog.sent = true;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Kate Bright";
+            customDialog.message = "Hola!";
+            customDialog.id = 5;
+            customDialog.unread_count = 0;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 0;
+            customDialog.date = date - 18000;
+            customDialog.verified = false;
+            customDialog.isMedia = false;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Nick K";
+            customDialog.message = "These are not the droids you are looking for";
+            customDialog.id = 6;
+            customDialog.unread_count = 0;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 0;
+            customDialog.date = date - 21600;
+            customDialog.verified = true;
+            customDialog.isMedia = false;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
+            customDialog = new CustomDialog();
+            customDialog.name = "Adler Toberg";
+            customDialog.message = "Did someone say peanut butter?";
+            customDialog.id = 0;
+            customDialog.unread_count = 0;
+            customDialog.pinned = false;
+            customDialog.muted = false;
+            customDialog.type = 0;
+            customDialog.date = date - 25200;
+            customDialog.verified = true;
+            customDialog.isMedia = false;
+            customDialog.sent = false;
+            this.dialogs.add(customDialog);
         }
 
         public int getItemCount() {
             return this.dialogs.size() + 1;
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() != 1;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() != 1;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            viewGroup = i == 0 ? new DialogCell(this.mContext, false) : i == 1 ? new LoadingCell(this.mContext) : null;
-            viewGroup.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(viewGroup);
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            View view = null;
+            if (viewType == 0) {
+                view = new DialogCell(this.mContext, false);
+            } else if (viewType == 1) {
+                view = new LoadingCell(this.mContext);
+            }
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             if (viewHolder.getItemViewType() == 0) {
-                DialogCell dialogCell = (DialogCell) viewHolder.itemView;
-                boolean z = true;
-                if (i == getItemCount() - 1) {
-                    z = false;
-                }
-                dialogCell.useSeparator = z;
-                dialogCell.setDialog((CustomDialog) this.dialogs.get(i));
+                DialogCell cell = viewHolder.itemView;
+                cell.useSeparator = i != getItemCount() + -1;
+                cell.setDialog((CustomDialog) this.dialogs.get(i));
             }
         }
 
         public int getItemViewType(int i) {
-            return i == this.dialogs.size() ? 1 : 0;
+            if (i == this.dialogs.size()) {
+                return 1;
+            }
+            return 0;
         }
     }
 
@@ -347,280 +351,271 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 */
         class C23031 implements ChatMessageCellDelegate {
-            public boolean canPerformActions() {
-                return false;
+            C23031() {
             }
 
-            public void didLongPressed(ChatMessageCell chatMessageCell) {
-            }
-
-            public void didPressedBotButton(ChatMessageCell chatMessageCell, KeyboardButton keyboardButton) {
-            }
-
-            public void didPressedCancelSendButton(ChatMessageCell chatMessageCell) {
-            }
-
-            public void didPressedChannelAvatar(ChatMessageCell chatMessageCell, Chat chat, int i) {
-            }
-
-            public void didPressedImage(ChatMessageCell chatMessageCell) {
-            }
-
-            public void didPressedInstantButton(ChatMessageCell chatMessageCell, int i) {
-            }
-
-            public void didPressedOther(ChatMessageCell chatMessageCell) {
-            }
-
-            public void didPressedReplyMessage(ChatMessageCell chatMessageCell, int i) {
-            }
-
-            public void didPressedShare(ChatMessageCell chatMessageCell) {
-            }
-
-            public void didPressedUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
-            }
-
-            public void didPressedUserAvatar(ChatMessageCell chatMessageCell, User user) {
-            }
-
-            public void didPressedViaBot(ChatMessageCell chatMessageCell, String str) {
-            }
-
-            public boolean isChatAdminCell(int i) {
-                return false;
-            }
-
-            public void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
+            public void didPressedShare(ChatMessageCell cell) {
             }
 
             public boolean needPlayMessage(MessageObject messageObject) {
                 return false;
             }
 
-            C23031() {
+            public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
+            }
+
+            public void didPressedOther(ChatMessageCell cell) {
+            }
+
+            public void didPressedUserAvatar(ChatMessageCell cell, User user) {
+            }
+
+            public void didPressedBotButton(ChatMessageCell cell, KeyboardButton button) {
+            }
+
+            public void didPressedCancelSendButton(ChatMessageCell cell) {
+            }
+
+            public void didLongPressed(ChatMessageCell cell) {
+            }
+
+            public boolean canPerformActions() {
+                return false;
+            }
+
+            public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
+            }
+
+            public void needOpenWebView(String url, String title, String description, String originalUrl, int w, int h) {
+            }
+
+            public void didPressedReplyMessage(ChatMessageCell cell, int id) {
+            }
+
+            public void didPressedViaBot(ChatMessageCell cell, String username) {
+            }
+
+            public void didPressedImage(ChatMessageCell cell) {
+            }
+
+            public void didPressedInstantButton(ChatMessageCell cell, int type) {
+            }
+
+            public boolean isChatAdminCell(int uid) {
+                return false;
             }
         }
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 */
         class C23042 implements ChatActionCellDelegate {
-            public void didClickedImage(ChatActionCell chatActionCell) {
-            }
-
-            public void didLongPressed(ChatActionCell chatActionCell) {
-            }
-
-            public void didPressedBotButton(MessageObject messageObject, KeyboardButton keyboardButton) {
-            }
-
-            public void didPressedReplyMessage(ChatActionCell chatActionCell, int i) {
-            }
-
-            public void needOpenUserProfile(int i) {
-            }
-
             C23042() {
             }
-        }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return false;
+            public void didClickedImage(ChatActionCell cell) {
+            }
+
+            public void didLongPressed(ChatActionCell cell) {
+            }
+
+            public void needOpenUserProfile(int uid) {
+            }
+
+            public void didPressedReplyMessage(ChatActionCell cell, int id) {
+            }
+
+            public void didPressedBotButton(MessageObject messageObject, KeyboardButton button) {
+            }
         }
 
         public MessagesAdapter(Context context) {
             this.mContext = context;
-            context = ((int) (System.currentTimeMillis() / 1000)) - 3600;
-            Message tL_message = new TL_message();
-            tL_message.message = "Reinhardt, we need to find you some new tunes \ud83c\udfb6.";
-            int i = context + 60;
-            tL_message.date = i;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 259;
-            tL_message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            tL_message.id = 1;
-            tL_message.media = new TL_messageMediaEmpty();
-            tL_message.out = true;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = 0;
-            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true);
-            tL_message = new TL_message();
-            tL_message.message = "I can't even take you seriously right now.";
-            tL_message.date = context + 960;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 259;
-            tL_message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            tL_message.id = 1;
-            tL_message.media = new TL_messageMediaEmpty();
-            tL_message.out = true;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = 0;
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true));
-            tL_message = new TL_message();
-            tL_message.date = context + TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 259;
-            tL_message.from_id = 0;
-            tL_message.id = 5;
-            tL_message.media = new TL_messageMediaDocument();
-            MessageMedia messageMedia = tL_message.media;
+            int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;
+            Message message = new TL_message();
+            message.message = "Reinhardt, we need to find you some new tunes \ud83c\udfb6.";
+            message.date = date + 60;
+            message.dialog_id = 1;
+            message.flags = 259;
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            message.id = 1;
+            message.media = new TL_messageMediaEmpty();
+            message.out = true;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = 0;
+            MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+            message = new TL_message();
+            message.message = "I can't even take you seriously right now.";
+            message.date = date + 960;
+            message.dialog_id = 1;
+            message.flags = 259;
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            message.id = 1;
+            message.media = new TL_messageMediaEmpty();
+            message.out = true;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = 0;
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+            message = new TL_message();
+            message.date = date + TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
+            message.dialog_id = 1;
+            message.flags = 259;
+            message.from_id = 0;
+            message.id = 5;
+            message.media = new TL_messageMediaDocument();
+            MessageMedia messageMedia = message.media;
             messageMedia.flags |= 3;
-            tL_message.media.document = new TL_document();
-            tL_message.media.document.mime_type = MimeTypes.AUDIO_MP4;
-            tL_message.media.document.thumb = new TL_photoSizeEmpty();
-            tL_message.media.document.thumb.type = "s";
-            TL_documentAttributeAudio tL_documentAttributeAudio = new TL_documentAttributeAudio();
-            tL_documentAttributeAudio.duration = 243;
-            tL_documentAttributeAudio.performer = "David Hasselhoff";
-            tL_documentAttributeAudio.title = "True Survivor";
-            tL_message.media.document.attributes.add(tL_documentAttributeAudio);
-            tL_message.out = false;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true));
-            tL_message = new TL_message();
-            tL_message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
-            tL_message.date = i;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 265;
-            tL_message.from_id = 0;
-            tL_message.id = 1;
-            tL_message.reply_to_msg_id = 5;
-            tL_message.media = new TL_messageMediaEmpty();
-            tL_message.out = false;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            MessageObject messageObject2 = new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true);
-            messageObject2.customReplyName = "Lucio";
-            messageObject2.replyMessageObject = messageObject;
-            this.messages.add(messageObject2);
-            tL_message = new TL_message();
-            tL_message.date = context + 120;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 259;
-            tL_message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            tL_message.id = 1;
-            tL_message.media = new TL_messageMediaDocument();
-            MessageMedia messageMedia2 = tL_message.media;
-            messageMedia2.flags |= 3;
-            tL_message.media.document = new TL_document();
-            tL_message.media.document.mime_type = "audio/ogg";
-            tL_message.media.document.thumb = new TL_photoSizeEmpty();
-            tL_message.media.document.thumb.type = "s";
-            TL_documentAttributeAudio tL_documentAttributeAudio2 = new TL_documentAttributeAudio();
-            tL_documentAttributeAudio2.flags = 1028;
-            tL_documentAttributeAudio2.duration = 3;
-            tL_documentAttributeAudio2.voice = true;
-            tL_documentAttributeAudio2.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
-            tL_message.media.document.attributes.add(tL_documentAttributeAudio2);
-            tL_message.out = true;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = 0;
-            messageObject2 = new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true);
-            messageObject2.audioProgressSec = 1;
-            messageObject2.audioProgress = 0.3f;
-            messageObject2.useCustomPhoto = true;
-            this.messages.add(messageObject2);
+            message.media.document = new TL_document();
+            message.media.document.mime_type = MimeTypes.AUDIO_MP4;
+            message.media.document.thumb = new TL_photoSizeEmpty();
+            message.media.document.thumb.type = "s";
+            TL_documentAttributeAudio audio = new TL_documentAttributeAudio();
+            audio.duration = 243;
+            audio.performer = "David Hasselhoff";
+            audio.title = "True Survivor";
+            message.media.document.attributes.add(audio);
+            message.out = false;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+            message = new TL_message();
+            message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
+            message.date = date + 60;
+            message.dialog_id = 1;
+            message.flags = 265;
+            message.from_id = 0;
+            message.id = 1;
+            message.reply_to_msg_id = 5;
+            message.media = new TL_messageMediaEmpty();
+            message.out = false;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+            messageObject.customReplyName = "Lucio";
+            messageObject.replyMessageObject = replyMessageObject;
             this.messages.add(messageObject);
-            tL_message = new TL_message();
-            tL_message.date = context + 10;
-            tL_message.dialog_id = 1;
-            tL_message.flags = 257;
-            tL_message.from_id = 0;
-            tL_message.id = 1;
-            tL_message.media = new TL_messageMediaPhoto();
-            messageMedia2 = tL_message.media;
-            messageMedia2.flags |= 3;
-            tL_message.media.photo = new TL_photo();
-            tL_message.media.photo.has_stickers = false;
-            tL_message.media.photo.id = 1;
-            tL_message.media.photo.access_hash = 0;
-            tL_message.media.photo.date = context;
-            TL_photoSize tL_photoSize = new TL_photoSize();
-            tL_photoSize.size = 0;
-            tL_photoSize.w = 500;
-            tL_photoSize.h = 302;
-            tL_photoSize.type = "s";
-            tL_photoSize.location = new TL_fileLocationUnavailable();
-            tL_message.media.photo.sizes.add(tL_photoSize);
-            tL_message.message = "Bring it on! I LIVE for this!";
-            tL_message.out = false;
-            tL_message.to_id = new TL_peerUser();
-            tL_message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            messageObject2 = new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, true);
-            messageObject2.useCustomPhoto = true;
-            this.messages.add(messageObject2);
-            tL_message = new TL_message();
-            tL_message.message = LocaleController.formatDateChat((long) context);
-            tL_message.id = 0;
-            tL_message.date = context;
-            context = new MessageObject(ThemePreviewActivity.this.currentAccount, tL_message, false);
-            context.type = 10;
-            context.contentType = 1;
-            context.isDateObject = true;
-            this.messages.add(context);
+            message = new TL_message();
+            message.date = date + 120;
+            message.dialog_id = 1;
+            message.flags = 259;
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            message.id = 1;
+            message.media = new TL_messageMediaDocument();
+            messageMedia = message.media;
+            messageMedia.flags |= 3;
+            message.media.document = new TL_document();
+            message.media.document.mime_type = "audio/ogg";
+            message.media.document.thumb = new TL_photoSizeEmpty();
+            message.media.document.thumb.type = "s";
+            audio = new TL_documentAttributeAudio();
+            audio.flags = 1028;
+            audio.duration = 3;
+            audio.voice = true;
+            audio.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
+            message.media.document.attributes.add(audio);
+            message.out = true;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = 0;
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+            messageObject.audioProgressSec = 1;
+            messageObject.audioProgress = 0.3f;
+            messageObject.useCustomPhoto = true;
+            this.messages.add(messageObject);
+            this.messages.add(replyMessageObject);
+            message = new TL_message();
+            message.date = date + 10;
+            message.dialog_id = 1;
+            message.flags = 257;
+            message.from_id = 0;
+            message.id = 1;
+            message.media = new TL_messageMediaPhoto();
+            messageMedia = message.media;
+            messageMedia.flags |= 3;
+            message.media.photo = new TL_photo();
+            message.media.photo.has_stickers = false;
+            message.media.photo.id = 1;
+            message.media.photo.access_hash = 0;
+            message.media.photo.date = date;
+            TL_photoSize photoSize = new TL_photoSize();
+            photoSize.size = 0;
+            photoSize.w = 500;
+            photoSize.h = 302;
+            photoSize.type = "s";
+            photoSize.location = new TL_fileLocationUnavailable();
+            message.media.photo.sizes.add(photoSize);
+            message.message = "Bring it on! I LIVE for this!";
+            message.out = false;
+            message.to_id = new TL_peerUser();
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+            messageObject.useCustomPhoto = true;
+            this.messages.add(messageObject);
+            message = new TL_message();
+            message.message = LocaleController.formatDateChat((long) date);
+            message.id = 0;
+            message.date = date;
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, false);
+            messageObject.type = 10;
+            messageObject.contentType = 1;
+            messageObject.isDateObject = true;
+            this.messages.add(messageObject);
         }
 
         public int getItemCount() {
             return this.messages.size();
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i == 0) {
-                viewGroup = new ChatMessageCell(this.mContext);
-                ((ChatMessageCell) viewGroup).setDelegate(new C23031());
-            } else if (i == 1) {
-                viewGroup = new ChatActionCell(this.mContext);
-                ((ChatActionCell) viewGroup).setDelegate(new C23042());
-            } else {
-                viewGroup = null;
-            }
-            viewGroup.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(viewGroup);
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            MessageObject messageObject = (MessageObject) this.messages.get(i);
-            View view = viewHolder.itemView;
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            View view = null;
+            if (viewType == 0) {
+                view = new ChatMessageCell(this.mContext);
+                ((ChatMessageCell) view).setDelegate(new C23031());
+            } else if (viewType == 1) {
+                view = new ChatActionCell(this.mContext);
+                ((ChatActionCell) view).setDelegate(new C23042());
+            }
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            MessageObject message = (MessageObject) this.messages.get(position);
+            View view = holder.itemView;
             if (view instanceof ChatMessageCell) {
-                boolean z;
-                MessageObject messageObject2;
-                ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                boolean z2 = false;
-                chatMessageCell.isChat = false;
-                int i2 = i - 1;
-                int itemViewType = getItemViewType(i2);
-                i++;
-                int itemViewType2 = getItemViewType(i);
-                if (!(messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) && itemViewType == viewHolder.getItemViewType()) {
-                    MessageObject messageObject3 = (MessageObject) this.messages.get(i2);
-                    if (messageObject3.isOutOwner() == messageObject.isOutOwner() && Math.abs(messageObject3.messageOwner.date - messageObject.messageOwner.date) <= 300) {
-                        z = true;
-                        if (itemViewType2 == viewHolder.getItemViewType()) {
-                            messageObject2 = (MessageObject) this.messages.get(i);
-                            if ((messageObject2.messageOwner.reply_markup instanceof TL_replyInlineMarkup) == 0 && messageObject2.isOutOwner() == messageObject.isOutOwner() && Math.abs(messageObject2.messageOwner.date - messageObject.messageOwner.date) <= 300) {
-                                z2 = true;
-                            }
-                        }
-                        chatMessageCell.setFullyDraw(true);
-                        chatMessageCell.setMessageObject(messageObject, null, z, z2);
-                    }
+                boolean pinnedBotton;
+                boolean pinnedTop;
+                ChatMessageCell messageCell = (ChatMessageCell) view;
+                messageCell.isChat = false;
+                int nextType = getItemViewType(position - 1);
+                int prevType = getItemViewType(position + 1);
+                if ((message.messageOwner.reply_markup instanceof TL_replyInlineMarkup) || nextType != holder.getItemViewType()) {
+                    pinnedBotton = false;
+                } else {
+                    MessageObject nextMessage = (MessageObject) this.messages.get(position - 1);
+                    pinnedBotton = nextMessage.isOutOwner() == message.isOutOwner() && Math.abs(nextMessage.messageOwner.date - message.messageOwner.date) <= 300;
                 }
-                z = false;
-                if (itemViewType2 == viewHolder.getItemViewType()) {
-                    messageObject2 = (MessageObject) this.messages.get(i);
-                    z2 = true;
+                if (prevType == holder.getItemViewType()) {
+                    MessageObject prevMessage = (MessageObject) this.messages.get(position + 1);
+                    pinnedTop = !(prevMessage.messageOwner.reply_markup instanceof TL_replyInlineMarkup) && prevMessage.isOutOwner() == message.isOutOwner() && Math.abs(prevMessage.messageOwner.date - message.messageOwner.date) <= 300;
+                } else {
+                    pinnedTop = false;
                 }
-                chatMessageCell.setFullyDraw(true);
-                chatMessageCell.setMessageObject(messageObject, null, z, z2);
-            } else if ((view instanceof ChatActionCell) != null) {
-                ChatActionCell chatActionCell = (ChatActionCell) view;
-                chatActionCell.setMessageObject(messageObject);
-                chatActionCell.setAlpha(1.0f);
+                messageCell.setFullyDraw(true);
+                messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
+            } else if (view instanceof ChatActionCell) {
+                ChatActionCell actionCell = (ChatActionCell) view;
+                actionCell.setMessageObject(message);
+                actionCell.setAlpha(1.0f);
             }
         }
 
         public int getItemViewType(int i) {
-            return (i < 0 || i >= this.messages.size()) ? 4 : ((MessageObject) this.messages.get(i)).contentType;
+            if (i < 0 || i >= this.messages.size()) {
+                return 4;
+            }
+            return ((MessageObject) this.messages.get(i)).contentType;
         }
     }
 
@@ -631,155 +626,181 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        Drawable combinedDrawable;
-        Context context2 = context;
-        this.page1 = new FrameLayout(context2);
+        float f;
+        int i;
+        float f2;
+        float f3;
+        this.page1 = new FrameLayout(context);
         this.actionBar.createMenu().addItem(0, (int) C0446R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22991()).getSearchField().setHint(LocaleController.getString("Search", C0446R.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
         this.actionBar.setTitle(LocaleController.getString("ThemePreview", C0446R.string.ThemePreview));
-        this.page1 = new FrameLayout(context2) {
-            protected void onMeasure(int i, int i2) {
-                int size = MeasureSpec.getSize(i);
-                int size2 = MeasureSpec.getSize(i2);
-                setMeasuredDimension(size, size2);
-                measureChildWithMargins(ThemePreviewActivity.this.actionBar, i, 0, i2, 0);
-                int measuredHeight = ThemePreviewActivity.this.actionBar.getMeasuredHeight();
+        this.page1 = new FrameLayout(context) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+                int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+                setMeasuredDimension(widthSize, heightSize);
+                measureChildWithMargins(ThemePreviewActivity.this.actionBar, widthMeasureSpec, 0, heightMeasureSpec, 0);
+                int actionBarHeight = ThemePreviewActivity.this.actionBar.getMeasuredHeight();
                 if (ThemePreviewActivity.this.actionBar.getVisibility() == 0) {
-                    size2 -= measuredHeight;
+                    heightSize -= actionBarHeight;
                 }
-                ((FrameLayout.LayoutParams) ThemePreviewActivity.this.listView.getLayoutParams()).topMargin = measuredHeight;
-                ThemePreviewActivity.this.listView.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(size2, NUM));
-                measureChildWithMargins(ThemePreviewActivity.this.floatingButton, i, 0, i2, 0);
+                ((FrameLayout.LayoutParams) ThemePreviewActivity.this.listView.getLayoutParams()).topMargin = actionBarHeight;
+                ThemePreviewActivity.this.listView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                measureChildWithMargins(ThemePreviewActivity.this.floatingButton, widthMeasureSpec, 0, heightMeasureSpec, 0);
             }
 
-            protected boolean drawChild(Canvas canvas, View view, long j) {
-                j = super.drawChild(canvas, view, j);
-                if (view == ThemePreviewActivity.this.actionBar && ThemePreviewActivity.this.parentLayout != null) {
+            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (child == ThemePreviewActivity.this.actionBar && ThemePreviewActivity.this.parentLayout != null) {
                     ThemePreviewActivity.this.parentLayout.drawHeaderShadow(canvas, ThemePreviewActivity.this.actionBar.getVisibility() == 0 ? ThemePreviewActivity.this.actionBar.getMeasuredHeight() : 0);
                 }
-                return j;
+                return result;
             }
         };
         this.page1.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.listView = new RecyclerListView(context2);
+        this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        r0.page1.addView(r0.listView, LayoutHelper.createFrame(-1, -1, 51));
-        r0.floatingButton = new ImageView(context2);
-        r0.floatingButton.setScaleType(ScaleType.CENTER);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
+        this.page1.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        this.floatingButton = new ImageView(context);
+        this.floatingButton.setScaleType(ScaleType.CENTER);
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
-            Drawable mutate = context.getResources().getDrawable(C0446R.drawable.floating_shadow).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(mutate, createSimpleSelectorCircleDrawable, 0, 0);
+            Drawable shadowDrawable = context.getResources().getDrawable(C0446R.drawable.floating_shadow).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
+            Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
-        } else {
-            combinedDrawable = createSimpleSelectorCircleDrawable;
+            drawable = combinedDrawable;
         }
-        r0.floatingButton.setBackgroundDrawable(combinedDrawable);
-        r0.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
-        r0.floatingButton.setImageResource(C0446R.drawable.floating_pencil);
+        this.floatingButton.setBackgroundDrawable(drawable);
+        this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
+        this.floatingButton.setImageResource(C0446R.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
-            StateListAnimator stateListAnimator = new StateListAnimator();
-            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            r0.floatingButton.setStateListAnimator(stateListAnimator);
-            r0.floatingButton.setOutlineProvider(new C17263());
+            StateListAnimator animator = new StateListAnimator();
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
+            this.floatingButton.setStateListAnimator(animator);
+            this.floatingButton.setOutlineProvider(new C17263());
         }
-        r0.page1.addView(r0.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        r0.dialogsAdapter = new DialogsAdapter(context2);
-        r0.listView.setAdapter(r0.dialogsAdapter);
-        r0.page2 = new SizeNotifierFrameLayout(context2) {
-            protected void onMeasure(int i, int i2) {
-                int size = MeasureSpec.getSize(i);
-                int size2 = MeasureSpec.getSize(i2);
-                setMeasuredDimension(size, size2);
-                measureChildWithMargins(ThemePreviewActivity.this.actionBar2, i, 0, i2, 0);
-                i = ThemePreviewActivity.this.actionBar2.getMeasuredHeight();
+        FrameLayout frameLayout = this.page1;
+        View view = this.floatingButton;
+        int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
+        if (VERSION.SDK_INT >= 21) {
+            f = 56.0f;
+        } else {
+            f = 60.0f;
+        }
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        i |= 80;
+        if (LocaleController.isRTL) {
+            f2 = 14.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        if (LocaleController.isRTL) {
+            f3 = 0.0f;
+        } else {
+            f3 = 14.0f;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(i2, f, i, f2, 0.0f, f3, 14.0f));
+        this.dialogsAdapter = new DialogsAdapter(context);
+        this.listView.setAdapter(this.dialogsAdapter);
+        this.page2 = new SizeNotifierFrameLayout(context) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+                int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+                setMeasuredDimension(widthSize, heightSize);
+                measureChildWithMargins(ThemePreviewActivity.this.actionBar2, widthMeasureSpec, 0, heightMeasureSpec, 0);
+                int actionBarHeight = ThemePreviewActivity.this.actionBar2.getMeasuredHeight();
                 if (ThemePreviewActivity.this.actionBar2.getVisibility() == 0) {
-                    size2 -= i;
+                    heightSize -= actionBarHeight;
                 }
-                ((FrameLayout.LayoutParams) ThemePreviewActivity.this.listView2.getLayoutParams()).topMargin = i;
-                ThemePreviewActivity.this.listView2.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(size2, NUM));
+                ((FrameLayout.LayoutParams) ThemePreviewActivity.this.listView2.getLayoutParams()).topMargin = actionBarHeight;
+                ThemePreviewActivity.this.listView2.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
             }
 
-            protected boolean drawChild(Canvas canvas, View view, long j) {
-                j = super.drawChild(canvas, view, j);
-                if (view == ThemePreviewActivity.this.actionBar2 && ThemePreviewActivity.this.parentLayout != null) {
+            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (child == ThemePreviewActivity.this.actionBar2 && ThemePreviewActivity.this.parentLayout != null) {
                     ThemePreviewActivity.this.parentLayout.drawHeaderShadow(canvas, ThemePreviewActivity.this.actionBar2.getVisibility() == 0 ? ThemePreviewActivity.this.actionBar2.getMeasuredHeight() : 0);
                 }
-                return j;
+                return result;
             }
         };
-        r0.page2.setBackgroundImage(Theme.getCachedWallpaper());
-        r0.actionBar2 = createActionBar(context);
-        r0.actionBar2.setBackButtonDrawable(new BackDrawable(false));
-        r0.actionBar2.setTitle("Reinhardt");
-        r0.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
-        r0.page2.addView(r0.actionBar2, LayoutHelper.createFrame(-1, -2.0f));
-        r0.listView2 = new RecyclerListView(context2);
-        r0.listView2.setVerticalScrollBarEnabled(true);
-        r0.listView2.setItemAnimator(null);
-        r0.listView2.setLayoutAnimation(null);
-        r0.listView2.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
-        r0.listView2.setClipToPadding(false);
-        r0.listView2.setLayoutManager(new LinearLayoutManager(context2, 1, true));
-        r0.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        r0.page2.addView(r0.listView2, LayoutHelper.createFrame(-1, -1, 51));
-        r0.messagesAdapter = new MessagesAdapter(context2);
-        r0.listView2.setAdapter(r0.messagesAdapter);
-        r0.fragmentView = new FrameLayout(context2);
-        FrameLayout frameLayout = (FrameLayout) r0.fragmentView;
-        final View viewPager = new ViewPager(context2);
+        this.page2.setBackgroundImage(Theme.getCachedWallpaper());
+        this.actionBar2 = createActionBar(context);
+        this.actionBar2.setBackButtonDrawable(new BackDrawable(false));
+        this.actionBar2.setTitle("Reinhardt");
+        this.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
+        this.page2.addView(this.actionBar2, LayoutHelper.createFrame(-1, -2.0f));
+        this.listView2 = new RecyclerListView(context);
+        this.listView2.setVerticalScrollBarEnabled(true);
+        this.listView2.setItemAnimator(null);
+        this.listView2.setLayoutAnimation(null);
+        this.listView2.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        this.listView2.setClipToPadding(false);
+        this.listView2.setLayoutManager(new LinearLayoutManager(context, 1, true));
+        this.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
+        this.page2.addView(this.listView2, LayoutHelper.createFrame(-1, -1, 51));
+        this.messagesAdapter = new MessagesAdapter(context);
+        this.listView2.setAdapter(this.messagesAdapter);
+        this.fragmentView = new FrameLayout(context);
+        FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
+        View viewPager = new ViewPager(context);
         viewPager.addOnPageChangeListener(new C23015());
         viewPager.setAdapter(new C23026());
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor(Theme.key_actionBarDefault));
-        frameLayout.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        View view = new View(context2);
-        view.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-        view = new FrameLayout(context2);
-        view.setBackgroundColor(-1);
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, 48, 83));
-        r0.dotsContainer = new View(context2) {
+        frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
+        viewPager = new View(context);
+        viewPager.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
+        frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        FrameLayout bottomLayout = new FrameLayout(context);
+        bottomLayout.setBackgroundColor(-1);
+        frameLayout2.addView(bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
+        final View view2 = viewPager;
+        this.dotsContainer = new View(context) {
             private Paint paint = new Paint(1);
 
             protected void onDraw(Canvas canvas) {
-                int currentItem = viewPager.getCurrentItem();
-                int i = 0;
-                while (i < 2) {
-                    this.paint.setColor(i == currentItem ? -6710887 : -3355444);
-                    canvas.drawCircle((float) AndroidUtilities.dp((float) (3 + (15 * i))), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
-                    i++;
+                int selected = view2.getCurrentItem();
+                int a = 0;
+                while (a < 2) {
+                    this.paint.setColor(a == selected ? -6710887 : -3355444);
+                    canvas.drawCircle((float) AndroidUtilities.dp((float) ((a * 15) + 3)), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+                    a++;
                 }
             }
         };
-        view.addView(r0.dotsContainer, LayoutHelper.createFrame(22, 8, 17));
-        View textView = new TextView(context2);
-        textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-15095832);
-        textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-        textView.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        textView.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        view.addView(textView, LayoutHelper.createFrame(-2, -1, 51));
-        textView.setOnClickListener(new C17288());
-        textView = new TextView(context2);
-        textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-15095832);
-        textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-        textView.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        textView.setText(LocaleController.getString("ApplyTheme", C0446R.string.ApplyTheme).toUpperCase());
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        view.addView(textView, LayoutHelper.createFrame(-2, -1, 53));
-        textView.setOnClickListener(new C17299());
-        return r0.fragmentView;
+        bottomLayout.addView(this.dotsContainer, LayoutHelper.createFrame(22, 8, 17));
+        TextView cancelButton = new TextView(context);
+        cancelButton.setTextSize(1, 14.0f);
+        cancelButton.setTextColor(-15095832);
+        cancelButton.setGravity(17);
+        cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        cancelButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
+        cancelButton.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
+        cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
+        cancelButton.setOnClickListener(new C17288());
+        TextView doneButton = new TextView(context);
+        doneButton.setTextSize(1, 14.0f);
+        doneButton.setTextColor(-15095832);
+        doneButton.setGravity(17);
+        doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        doneButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
+        doneButton.setText(LocaleController.getString("ApplyTheme", C0446R.string.ApplyTheme).toUpperCase());
+        doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
+        doneButton.setOnClickListener(new C17299());
+        return this.fragmentView;
     }
 
     public boolean onFragmentCreate() {
@@ -808,13 +829,13 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         return super.onBackPressed();
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.emojiDidLoaded && this.listView != 0) {
-            i = this.listView.getChildCount();
-            for (objArr = null; objArr < i; objArr++) {
-                View childAt = this.listView.getChildAt(objArr);
-                if (childAt instanceof DialogCell) {
-                    ((DialogCell) childAt).update(0);
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.emojiDidLoaded && this.listView != null) {
+            int count = this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.listView.getChildAt(a);
+                if (child instanceof DialogCell) {
+                    ((DialogCell) child).update(0);
                 }
             }
         }

@@ -52,8 +52,8 @@ public class DrawerUserCell extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -61,16 +61,21 @@ public class DrawerUserCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
     }
 
-    public void setAccount(int i) {
-        this.accountNumber = i;
-        User currentUser = UserConfig.getInstance(this.accountNumber).getCurrentUser();
-        if (currentUser != null) {
-            this.avatarDrawable.setInfo(currentUser);
-            this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
-            TLObject tLObject = (currentUser.photo == null || currentUser.photo.photo_small == null || currentUser.photo.photo_small.volume_id == 0 || currentUser.photo.photo_small.local_id == 0) ? null : currentUser.photo.photo_small;
-            this.imageView.getImageReceiver().setCurrentAccount(i);
-            this.imageView.setImage(tLObject, "50_50", this.avatarDrawable);
-            this.checkBox.setVisibility(i == UserConfig.selectedAccount ? 0 : 4);
+    public void setAccount(int account) {
+        this.accountNumber = account;
+        User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        if (user != null) {
+            TLObject avatar;
+            this.avatarDrawable.setInfo(user);
+            this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+            if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
+                avatar = null;
+            } else {
+                avatar = user.photo.photo_small;
+            }
+            this.imageView.getImageReceiver().setCurrentAccount(account);
+            this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
+            this.checkBox.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
         }
     }
 
@@ -79,19 +84,15 @@ public class DrawerUserCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (UserConfig.getActivatedAccountsCount() > 1) {
-            if (NotificationsController.getInstance(this.accountNumber).showBadgeNumber) {
-                if (NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
-                    String format = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
-                    int dp = AndroidUtilities.dp(12.5f);
-                    int ceil = (int) Math.ceil((double) Theme.chat_livePaint.measureText(format));
-                    int max = Math.max(AndroidUtilities.dp(12.0f), ceil);
-                    int measuredWidth = ((getMeasuredWidth() - max) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
-                    this.rect.set((float) measuredWidth, (float) dp, (float) ((measuredWidth + max) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + dp));
-                    canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, 11.5f * AndroidUtilities.density, Theme.dialogs_countPaint);
-                    canvas.drawText(format, (this.rect.left + ((this.rect.width() - ((float) ceil)) / 2.0f)) - ((float) AndroidUtilities.dp(0.5f)), (float) (dp + AndroidUtilities.dp(16.0f)), Theme.dialogs_countTextPaint);
-                }
-            }
+        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
+            String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
+            int countTop = AndroidUtilities.dp(12.5f);
+            int textWidth = (int) Math.ceil((double) Theme.chat_livePaint.measureText(text));
+            int countWidth = Math.max(AndroidUtilities.dp(12.0f), textWidth);
+            int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
+            this.rect.set((float) x, (float) countTop, (float) ((x + countWidth) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + countTop));
+            canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_countPaint);
+            canvas.drawText(text, (this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f)) - ((float) AndroidUtilities.dp(0.5f)), (float) (AndroidUtilities.dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
         }
     }
 }

@@ -3,43 +3,43 @@ package org.telegram.messenger;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.telephony.SmsMessage;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SmsListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED") == null) {
-            context = intent.getAction().equals("android.provider.Telephony.NEW_OUTGOING_SMS");
-            if (context != null) {
+        boolean outgoing = false;
+        if (!intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
+            outgoing = intent.getAction().equals("android.provider.Telephony.NEW_OUTGOING_SMS");
+            if (!outgoing) {
+                return;
             }
         }
-        context = null;
         if (AndroidUtilities.isWaitingForSms()) {
-            intent = intent.getExtras();
-            if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
                 try {
-                    Object[] objArr = (Object[]) intent.get("pdus");
-                    SmsMessage[] smsMessageArr = new SmsMessage[objArr.length];
-                    CharSequence charSequence = TtmlNode.ANONYMOUS_REGION_ID;
-                    for (int i = 0; i < smsMessageArr.length; i++) {
-                        smsMessageArr[i] = SmsMessage.createFromPdu((byte[]) objArr[i]);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(charSequence);
-                        stringBuilder.append(smsMessageArr[i].getMessageBody());
-                        charSequence = stringBuilder.toString();
+                    Object[] pdus = (Object[]) bundle.get("pdus");
+                    SmsMessage[] msgs = new SmsMessage[pdus.length];
+                    String wholeString = TtmlNode.ANONYMOUS_REGION_ID;
+                    for (int i = 0; i < msgs.length; i++) {
+                        msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                        wholeString = wholeString + msgs[i].getMessageBody();
                     }
-                    if (context == null) {
-                        context = Pattern.compile("[0-9]+").matcher(charSequence);
-                        if (context.find() != null && context.group(0).length() >= 3) {
+                    if (!outgoing) {
+                        final Matcher matcher = Pattern.compile("[0-9]+").matcher(wholeString);
+                        if (matcher.find() && matcher.group(0).length() >= 3) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, context.group(0));
+                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, matcher.group(0));
                                 }
                             });
                         }
                     }
-                } catch (Throwable th) {
-                    FileLog.m3e(th);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
             }
         }

@@ -1,36 +1,43 @@
 package org.telegram.messenger.exoplayer2.ext.flac;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
 import org.telegram.messenger.exoplayer2.decoder.SimpleOutputBuffer;
+import org.telegram.messenger.exoplayer2.util.FlacStreamInfo;
 
 final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBuffer, FlacDecoderException> {
     private final FlacDecoderJni decoderJni;
     private final int maxOutputBufferSize;
 
-    public String getName() {
-        return "libflac";
-    }
-
-    public FlacDecoder(int i, int i2, List<byte[]> list) throws FlacDecoderException {
-        super(new DecoderInputBuffer[i], new SimpleOutputBuffer[i2]);
-        if (list.size() != 1) {
+    public FlacDecoder(int numInputBuffers, int numOutputBuffers, List<byte[]> initializationData) throws FlacDecoderException {
+        Exception e;
+        super(new DecoderInputBuffer[numInputBuffers], new SimpleOutputBuffer[numOutputBuffers]);
+        if (initializationData.size() != 1) {
             throw new FlacDecoderException("Initialization data must be of length 1");
         }
         this.decoderJni = new FlacDecoderJni();
-        this.decoderJni.setData(ByteBuffer.wrap((byte[]) list.get(0)));
+        this.decoderJni.setData(ByteBuffer.wrap((byte[]) initializationData.get(0)));
         try {
-            i = this.decoderJni.decodeMetadata();
-            if (i == 0) {
+            FlacStreamInfo streamInfo = this.decoderJni.decodeMetadata();
+            if (streamInfo == null) {
                 throw new FlacDecoderException("Metadata decoding failed");
             }
-            setInitialInputBufferSize(i.maxFrameSize);
-            this.maxOutputBufferSize = i.maxDecodedFrameSize();
-        } catch (int i3) {
-            throw new IllegalStateException(i3);
+            setInitialInputBufferSize(streamInfo.maxFrameSize);
+            this.maxOutputBufferSize = streamInfo.maxDecodedFrameSize();
+        } catch (IOException e2) {
+            e = e2;
+            throw new IllegalStateException(e);
+        } catch (InterruptedException e3) {
+            e = e3;
+            throw new IllegalStateException(e);
         }
+    }
+
+    public String getName() {
+        return "libflac";
     }
 
     protected DecoderInputBuffer createInputBuffer() {
@@ -41,26 +48,31 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
         return new SimpleOutputBuffer(this);
     }
 
-    protected FlacDecoderException createUnexpectedDecodeException(Throwable th) {
-        return new FlacDecoderException("Unexpected decode error", th);
+    protected FlacDecoderException createUnexpectedDecodeException(Throwable error) {
+        return new FlacDecoderException("Unexpected decode error", error);
     }
 
-    protected FlacDecoderException decode(DecoderInputBuffer decoderInputBuffer, SimpleOutputBuffer simpleOutputBuffer, boolean z) {
-        if (z) {
+    protected FlacDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
+        Exception e;
+        if (reset) {
             this.decoderJni.flush();
         }
-        this.decoderJni.setData(decoderInputBuffer.data);
-        decoderInputBuffer = simpleOutputBuffer.init(decoderInputBuffer.timeUs, this.maxOutputBufferSize);
+        this.decoderJni.setData(inputBuffer.data);
+        ByteBuffer outputData = outputBuffer.init(inputBuffer.timeUs, this.maxOutputBufferSize);
         try {
-            simpleOutputBuffer = this.decoderJni.decodeSample(decoderInputBuffer);
-            if (simpleOutputBuffer < null) {
+            int result = this.decoderJni.decodeSample(outputData);
+            if (result < 0) {
                 return new FlacDecoderException("Frame decoding failed");
             }
-            decoderInputBuffer.position(false);
-            decoderInputBuffer.limit(simpleOutputBuffer);
+            outputData.position(0);
+            outputData.limit(result);
             return null;
-        } catch (DecoderInputBuffer decoderInputBuffer2) {
-            throw new IllegalStateException(decoderInputBuffer2);
+        } catch (IOException e2) {
+            e = e2;
+            throw new IllegalStateException(e);
+        } catch (InterruptedException e3) {
+            e = e3;
+            throw new IllegalStateException(e);
         }
     }
 

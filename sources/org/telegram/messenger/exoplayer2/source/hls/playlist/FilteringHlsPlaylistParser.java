@@ -10,17 +10,18 @@ public final class FilteringHlsPlaylistParser implements Parser<HlsPlaylist> {
     private final List<String> filter;
     private final HlsPlaylistParser hlsPlaylistParser = new HlsPlaylistParser();
 
-    public FilteringHlsPlaylistParser(List<String> list) {
-        this.filter = list;
+    public FilteringHlsPlaylistParser(List<String> filter) {
+        this.filter = filter;
     }
 
     public HlsPlaylist parse(Uri uri, InputStream inputStream) throws IOException {
-        uri = this.hlsPlaylistParser.parse(uri, inputStream);
-        if ((uri instanceof HlsMasterPlaylist) != null) {
-            uri = (HlsMasterPlaylist) uri;
+        HlsMasterPlaylist hlsMasterPlaylist;
+        HlsPlaylist hlsPlaylist = this.hlsPlaylistParser.parse(uri, inputStream);
+        if (hlsPlaylist instanceof HlsMasterPlaylist) {
+            hlsMasterPlaylist = (HlsMasterPlaylist) hlsPlaylist;
         } else {
-            uri = HlsMasterPlaylist.createSingleVariantMasterPlaylist(uri.baseUri);
+            hlsMasterPlaylist = HlsMasterPlaylist.createSingleVariantMasterPlaylist(hlsPlaylist.baseUri);
         }
-        return uri.copy(this.filter);
+        return hlsMasterPlaylist.copy(this.filter);
     }
 }

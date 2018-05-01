@@ -19,6 +19,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonOther;
@@ -38,13 +39,58 @@ public class ReportOtherActivity extends BaseFragment {
     private View headerLabelView;
     private int message_id = getArguments().getInt("message_id", 0);
 
-    /* renamed from: org.telegram.ui.ReportOtherActivity$2 */
-    class C16622 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
+    /* renamed from: org.telegram.ui.ReportOtherActivity$1 */
+    class C22701 extends ActionBarMenuOnItemClick {
+
+        /* renamed from: org.telegram.ui.ReportOtherActivity$1$1 */
+        class C22691 implements RequestDelegate {
+            C22691() {
+            }
+
+            public void run(TLObject response, TL_error error) {
+            }
         }
 
+        C22701() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ReportOtherActivity.this.finishFragment();
+            } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
+                TLObject req;
+                InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                TLObject request;
+                if (ReportOtherActivity.this.message_id != 0) {
+                    request = new TL_messages_report();
+                    request.peer = peer;
+                    request.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                    request.reason = new TL_inputReportReasonOther();
+                    request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                    req = request;
+                } else {
+                    request = new TL_account_reportPeer();
+                    request.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                    request.reason = new TL_inputReportReasonOther();
+                    request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                    req = request;
+                }
+                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new C22691());
+                if (ReportOtherActivity.this.getParentActivity() != null) {
+                    Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", C0446R.string.ReportChatSent), 0).show();
+                }
+                ReportOtherActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ReportOtherActivity$2 */
+    class C16622 implements OnTouchListener {
         C16622() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 
@@ -55,7 +101,7 @@ public class ReportOtherActivity extends BaseFragment {
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 6 || ReportOtherActivity.this.doneButton == null) {
-                return null;
+                return false;
             }
             ReportOtherActivity.this.doneButton.performClick();
             return true;
@@ -75,59 +121,18 @@ public class ReportOtherActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.ReportOtherActivity$1 */
-    class C22701 extends ActionBarMenuOnItemClick {
-
-        /* renamed from: org.telegram.ui.ReportOtherActivity$1$1 */
-        class C22691 implements RequestDelegate {
-            public void run(TLObject tLObject, TL_error tL_error) {
-            }
-
-            C22691() {
-            }
-        }
-
-        C22701() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                ReportOtherActivity.this.finishFragment();
-            } else if (i == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
-                TLObject tL_messages_report;
-                i = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                if (ReportOtherActivity.this.message_id != 0) {
-                    tL_messages_report = new TL_messages_report();
-                    tL_messages_report.peer = i;
-                    tL_messages_report.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
-                    tL_messages_report.reason = new TL_inputReportReasonOther();
-                    tL_messages_report.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                } else {
-                    tL_messages_report = new TL_account_reportPeer();
-                    tL_messages_report.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                    tL_messages_report.reason = new TL_inputReportReasonOther();
-                    tL_messages_report.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                }
-                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(tL_messages_report, new C22691());
-                if (ReportOtherActivity.this.getParentActivity() != 0) {
-                    Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", C0446R.string.ReportChatSent), 0).show();
-                }
-                ReportOtherActivity.this.finishFragment();
-            }
-        }
-    }
-
-    public ReportOtherActivity(Bundle bundle) {
-        super(bundle);
+    public ReportOtherActivity(Bundle args) {
+        super(args);
     }
 
     public View createView(Context context) {
+        int i = 3;
         this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", C0446R.string.ReportChat));
         this.actionBar.setActionBarMenuOnItemClick(new C22701());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0446R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        View linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
@@ -137,17 +142,16 @@ public class ReportOtherActivity extends BaseFragment {
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        int i = 3;
         this.firstNameField.setMaxLines(3);
         this.firstNameField.setPadding(0, 0, 0, 0);
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(180224);
         this.firstNameField.setImeOptions(6);
-        context = this.firstNameField;
+        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        context.setGravity(i);
+        editTextBoldCursor.setGravity(i);
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -166,13 +170,23 @@ public class ReportOtherActivity extends BaseFragment {
         }
     }
 
-    public void onTransitionAnimationEnd(boolean z, boolean z2) {
-        if (z) {
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+        if (isOpen) {
             AndroidUtilities.runOnUIThread(new C16644(), 100);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated)};
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[9];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        return themeDescriptionArr;
     }
 }

@@ -10,27 +10,27 @@ public final class AesCipherDataSource implements DataSource {
     private final byte[] secretKey;
     private final DataSource upstream;
 
-    public AesCipherDataSource(byte[] bArr, DataSource dataSource) {
-        this.upstream = dataSource;
-        this.secretKey = bArr;
+    public AesCipherDataSource(byte[] secretKey, DataSource upstream) {
+        this.upstream = upstream;
+        this.secretKey = secretKey;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
-        long open = this.upstream.open(dataSpec);
+        long dataLength = this.upstream.open(dataSpec);
         this.cipher = new AesFlushingCipher(2, this.secretKey, CryptoUtil.getFNV64Hash(dataSpec.key), dataSpec.absoluteStreamPosition);
-        return open;
+        return dataLength;
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        if (i2 == 0) {
-            return null;
+    public int read(byte[] data, int offset, int readLength) throws IOException {
+        if (readLength == 0) {
+            return 0;
         }
-        i2 = this.upstream.read(bArr, i, i2);
-        if (i2 == -1) {
+        int read = this.upstream.read(data, offset, readLength);
+        if (read == -1) {
             return -1;
         }
-        this.cipher.updateInPlace(bArr, i, i2);
-        return i2;
+        this.cipher.updateInPlace(data, offset, read);
+        return read;
     }
 
     public void close() throws IOException {

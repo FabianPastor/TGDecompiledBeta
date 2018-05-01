@@ -19,16 +19,12 @@ public class EmptyTextProgressView extends FrameLayout {
 
     /* renamed from: org.telegram.ui.Components.EmptyTextProgressView$1 */
     class C11621 implements OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
-        }
-
         C11621() {
         }
-    }
 
-    public boolean hasOverlappingRendering() {
-        return false;
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
     }
 
     public EmptyTextProgressView(Context context) {
@@ -57,42 +53,42 @@ public class EmptyTextProgressView extends FrameLayout {
         this.progressBar.setVisibility(4);
     }
 
-    public void setText(String str) {
-        this.textView.setText(str);
+    public void setText(String text) {
+        this.textView.setText(text);
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setProgressBarColor(int i) {
-        this.progressBar.setProgressColor(i);
+    public void setProgressBarColor(int color) {
+        this.progressBar.setProgressColor(color);
     }
 
-    public void setTextSize(int i) {
-        this.textView.setTextSize(1, (float) i);
+    public void setTextSize(int size) {
+        this.textView.setTextSize(1, (float) size);
     }
 
-    public void setShowAtCenter(boolean z) {
-        this.showAtCenter = z;
+    public void setShowAtCenter(boolean value) {
+        this.showAtCenter = value;
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         this.inLayout = true;
-        i3 -= i;
-        i4 -= i2;
-        z = getChildCount();
-        for (boolean z2 = false; z2 < z; z2++) {
-            View childAt = getChildAt(z2);
-            if (childAt.getVisibility() != 8) {
-                int measuredHeight;
-                int measuredWidth = (i3 - childAt.getMeasuredWidth()) / 2;
+        int width = r - l;
+        int height = b - t;
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != 8) {
+                int y;
+                int x = (width - child.getMeasuredWidth()) / 2;
                 if (this.showAtCenter) {
-                    measuredHeight = ((i4 / 2) - childAt.getMeasuredHeight()) / 2;
+                    y = ((height / 2) - child.getMeasuredHeight()) / 2;
                 } else {
-                    measuredHeight = (i4 - childAt.getMeasuredHeight()) / 2;
+                    y = (height - child.getMeasuredHeight()) / 2;
                 }
-                childAt.layout(measuredWidth, measuredHeight, childAt.getMeasuredWidth() + measuredWidth, childAt.getMeasuredHeight() + measuredHeight);
+                child.layout(x, y, child.getMeasuredWidth() + x, child.getMeasuredHeight() + y);
             }
         }
         this.inLayout = false;
@@ -102,5 +98,9 @@ public class EmptyTextProgressView extends FrameLayout {
         if (!this.inLayout) {
             super.requestLayout();
         }
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 }

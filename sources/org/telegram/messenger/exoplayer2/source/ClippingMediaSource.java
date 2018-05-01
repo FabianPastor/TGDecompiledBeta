@@ -23,6 +23,74 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
     private Listener sourceListener;
     private final long startUs;
 
+    private static final class ClippingTimeline extends ForwardingTimeline {
+        private final long endUs;
+        private final long startUs;
+
+        public ClippingTimeline(Timeline timeline, long startUs, long endUs) throws IllegalClippingException {
+            super(timeline);
+            if (timeline.getPeriodCount() != 1) {
+                throw new IllegalClippingException(0);
+            } else if (timeline.getPeriod(0, new Period()).getPositionInWindowUs() != 0) {
+                throw new IllegalClippingException(1);
+            } else {
+                long resolvedEndUs;
+                Window window = timeline.getWindow(0, new Window(), false);
+                if (endUs == Long.MIN_VALUE) {
+                    resolvedEndUs = window.durationUs;
+                } else {
+                    resolvedEndUs = endUs;
+                }
+                if (window.durationUs != C0542C.TIME_UNSET) {
+                    if (resolvedEndUs > window.durationUs) {
+                        resolvedEndUs = window.durationUs;
+                    }
+                    if (startUs != 0 && !window.isSeekable) {
+                        throw new IllegalClippingException(2);
+                    } else if (startUs > resolvedEndUs) {
+                        throw new IllegalClippingException(3);
+                    }
+                }
+                this.startUs = startUs;
+                this.endUs = resolvedEndUs;
+            }
+        }
+
+        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            window = this.timeline.getWindow(0, window, setIds, defaultPositionProjectionUs);
+            window.durationUs = this.endUs != C0542C.TIME_UNSET ? this.endUs - this.startUs : C0542C.TIME_UNSET;
+            if (window.defaultPositionUs != C0542C.TIME_UNSET) {
+                long j;
+                window.defaultPositionUs = Math.max(window.defaultPositionUs, this.startUs);
+                if (this.endUs == C0542C.TIME_UNSET) {
+                    j = window.defaultPositionUs;
+                } else {
+                    j = Math.min(window.defaultPositionUs, this.endUs);
+                }
+                window.defaultPositionUs = j;
+                window.defaultPositionUs -= this.startUs;
+            }
+            long startMs = C0542C.usToMs(this.startUs);
+            if (window.presentationStartTimeMs != C0542C.TIME_UNSET) {
+                window.presentationStartTimeMs += startMs;
+            }
+            if (window.windowStartTimeMs != C0542C.TIME_UNSET) {
+                window.windowStartTimeMs += startMs;
+            }
+            return window;
+        }
+
+        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
+            long j = C0542C.TIME_UNSET;
+            period = this.timeline.getPeriod(0, period, setIds);
+            if (this.endUs != C0542C.TIME_UNSET) {
+                j = this.endUs - this.startUs;
+            }
+            period.durationUs = j;
+            return period;
+        }
+    }
+
     public static final class IllegalClippingException extends IOException {
         public static final int REASON_INVALID_PERIOD_COUNT = 0;
         public static final int REASON_NOT_SEEKABLE_TO_START = 2;
@@ -34,93 +102,28 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         public @interface Reason {
         }
 
-        public IllegalClippingException(int i) {
-            this.reason = i;
+        public IllegalClippingException(int reason) {
+            this.reason = reason;
         }
     }
 
-    private static final class ClippingTimeline extends ForwardingTimeline {
-        private final long endUs;
-        private final long startUs;
-
-        public ClippingTimeline(Timeline timeline, long j, long j2) throws IllegalClippingException {
-            super(timeline);
-            if (timeline.getPeriodCount() != 1) {
-                throw new IllegalClippingException(0);
-            } else if (timeline.getPeriod(0, new Period()).getPositionInWindowUs() != 0) {
-                throw new IllegalClippingException(1);
-            } else {
-                timeline = timeline.getWindow(0, new Window(), false);
-                if (j2 == Long.MIN_VALUE) {
-                    j2 = timeline.durationUs;
-                }
-                if (timeline.durationUs != C0542C.TIME_UNSET) {
-                    if (j2 > timeline.durationUs) {
-                        j2 = timeline.durationUs;
-                    }
-                    if (j != 0 && timeline.isSeekable == null) {
-                        throw new IllegalClippingException(2);
-                    } else if (j > j2) {
-                        throw new IllegalClippingException(3);
-                    }
-                }
-                this.startUs = j;
-                this.endUs = j2;
-            }
-        }
-
-        public Window getWindow(int i, Window window, boolean z, long j) {
-            i = this.timeline.getWindow(0, window, z, j);
-            i.durationUs = this.endUs != -922337203NUM ? this.endUs - this.startUs : C0542C.TIME_UNSET;
-            if (i.defaultPositionUs != -922337203NUM) {
-                i.defaultPositionUs = Math.max(i.defaultPositionUs, this.startUs);
-                if (this.endUs == -922337203NUM) {
-                    window = i.defaultPositionUs;
-                } else {
-                    window = Math.min(i.defaultPositionUs, this.endUs);
-                }
-                i.defaultPositionUs = window;
-                i.defaultPositionUs -= this.startUs;
-            }
-            window = C0542C.usToMs(this.startUs);
-            if (i.presentationStartTimeMs != C0542C.TIME_UNSET) {
-                i.presentationStartTimeMs += window;
-            }
-            if (i.windowStartTimeMs != C0542C.TIME_UNSET) {
-                i.windowStartTimeMs += window;
-            }
-            return i;
-        }
-
-        public Period getPeriod(int i, Period period, boolean z) {
-            i = this.timeline.getPeriod(0, period, z);
-            period = this.endUs;
-            long j = C0542C.TIME_UNSET;
-            if (period != -922337203NUM) {
-                j = this.endUs - this.startUs;
-            }
-            i.durationUs = j;
-            return i;
-        }
+    public ClippingMediaSource(MediaSource mediaSource, long startPositionUs, long endPositionUs) {
+        this(mediaSource, startPositionUs, endPositionUs, true);
     }
 
-    public ClippingMediaSource(MediaSource mediaSource, long j, long j2) {
-        this(mediaSource, j, j2, true);
-    }
-
-    public ClippingMediaSource(MediaSource mediaSource, long j, long j2, boolean z) {
-        Assertions.checkArgument(j >= 0);
+    public ClippingMediaSource(MediaSource mediaSource, long startPositionUs, long endPositionUs, boolean enableInitialDiscontinuity) {
+        Assertions.checkArgument(startPositionUs >= 0);
         this.mediaSource = (MediaSource) Assertions.checkNotNull(mediaSource);
-        this.startUs = j;
-        this.endUs = j2;
-        this.enableInitialDiscontinuity = z;
+        this.startUs = startPositionUs;
+        this.endUs = endPositionUs;
+        this.enableInitialDiscontinuity = enableInitialDiscontinuity;
         this.mediaPeriods = new ArrayList();
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        super.prepareSource(exoPlayer, z, listener);
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        super.prepareSource(player, isTopLevelSource, listener);
         this.sourceListener = listener;
-        prepareChildSource(false, this.mediaSource);
+        prepareChildSource(null, this.mediaSource);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
@@ -130,11 +133,11 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         super.maybeThrowSourceInfoRefreshError();
     }
 
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
-        MediaPeriod clippingMediaPeriod = new ClippingMediaPeriod(this.mediaSource.createPeriod(mediaPeriodId, allocator), this.enableInitialDiscontinuity);
-        this.mediaPeriods.add(clippingMediaPeriod);
-        clippingMediaPeriod.setClipping(this.startUs, this.endUs);
-        return clippingMediaPeriod;
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        ClippingMediaPeriod mediaPeriod = new ClippingMediaPeriod(this.mediaSource.createPeriod(id, allocator), this.enableInitialDiscontinuity);
+        this.mediaPeriods.add(mediaPeriod);
+        mediaPeriod.setClipping(this.startUs, this.endUs);
+        return mediaPeriod;
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
@@ -148,16 +151,16 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         this.sourceListener = null;
     }
 
-    protected void onChildSourceInfoRefreshed(Void voidR, MediaSource mediaSource, Timeline timeline, Object obj) {
+    protected void onChildSourceInfoRefreshed(Void id, MediaSource mediaSource, Timeline timeline, Object manifest) {
         if (this.clippingError == null) {
             try {
-                this.sourceListener.onSourceInfoRefreshed(this, new ClippingTimeline(timeline, this.startUs, this.endUs), obj);
-                MediaSource size = this.mediaPeriods.size();
-                for (mediaSource = null; mediaSource < size; mediaSource++) {
-                    ((ClippingMediaPeriod) this.mediaPeriods.get(mediaSource)).setClipping(this.startUs, this.endUs);
+                this.sourceListener.onSourceInfoRefreshed(this, new ClippingTimeline(timeline, this.startUs, this.endUs), manifest);
+                int count = this.mediaPeriods.size();
+                for (int i = 0; i < count; i++) {
+                    ((ClippingMediaPeriod) this.mediaPeriods.get(i)).setClipping(this.startUs, this.endUs);
                 }
-            } catch (Void voidR2) {
-                this.clippingError = voidR2;
+            } catch (IllegalClippingException e) {
+                this.clippingError = e;
             }
         }
     }

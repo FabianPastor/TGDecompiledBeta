@@ -14,29 +14,29 @@ public class SpannableStringLight extends SpannableString {
     private Object[] mSpansOverride;
     private int num;
 
-    public SpannableStringLight(CharSequence charSequence) {
-        super(charSequence);
+    public SpannableStringLight(CharSequence source) {
+        super(source);
         try {
             this.mSpansOverride = (Object[]) mSpansField.get(this);
             this.mSpanDataOverride = (int[]) mSpanDataField.get(this);
             this.mSpanCountOverride = ((Integer) mSpanCountField.get(this)).intValue();
-        } catch (Throwable th) {
-            FileLog.m3e(th);
+        } catch (Throwable e) {
+            FileLog.m3e(e);
         }
     }
 
-    public void setSpansCount(int i) {
-        i += this.mSpanCountOverride;
-        this.mSpansOverride = new Object[i];
-        this.mSpanDataOverride = new int[(i * 3)];
+    public void setSpansCount(int count) {
+        count += this.mSpanCountOverride;
+        this.mSpansOverride = new Object[count];
+        this.mSpanDataOverride = new int[(count * 3)];
         this.num = this.mSpanCountOverride;
-        this.mSpanCountOverride = i;
+        this.mSpanCountOverride = count;
         try {
             mSpansField.set(this, this.mSpansOverride);
             mSpanDataField.set(this, this.mSpanDataOverride);
             mSpanCountField.set(this, Integer.valueOf(this.mSpanCountOverride));
-        } catch (Throwable th) {
-            FileLog.m3e(th);
+        } catch (Throwable e) {
+            FileLog.m3e(e);
         }
     }
 
@@ -49,8 +49,8 @@ public class SpannableStringLight extends SpannableString {
                 mSpanDataField.setAccessible(true);
                 mSpanCountField = SpannableString.class.getSuperclass().getDeclaredField("mSpanCount");
                 mSpanCountField.setAccessible(true);
-            } catch (Throwable th) {
-                FileLog.m3e(th);
+            } catch (Throwable e) {
+                FileLog.m3e(e);
             }
             fieldsAvailable = true;
         }
@@ -60,15 +60,15 @@ public class SpannableStringLight extends SpannableString {
         return false;
     }
 
-    public void setSpanLight(Object obj, int i, int i2, int i3) {
-        this.mSpansOverride[this.num] = obj;
-        this.mSpanDataOverride[this.num * 3] = i;
-        this.mSpanDataOverride[(this.num * 3) + 1] = i2;
-        this.mSpanDataOverride[(this.num * 3) + 2] = i3;
+    public void setSpanLight(Object what, int start, int end, int flags) {
+        this.mSpansOverride[this.num] = what;
+        this.mSpanDataOverride[this.num * 3] = start;
+        this.mSpanDataOverride[(this.num * 3) + 1] = end;
+        this.mSpanDataOverride[(this.num * 3) + 2] = flags;
         this.num++;
     }
 
-    public void removeSpan(Object obj) {
-        super.removeSpan(obj);
+    public void removeSpan(Object what) {
+        super.removeSpan(what);
     }
 }

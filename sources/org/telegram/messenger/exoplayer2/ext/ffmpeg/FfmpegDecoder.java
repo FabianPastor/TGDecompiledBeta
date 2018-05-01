@@ -32,26 +32,21 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
 
     private native long ffmpegReset(long j, byte[] bArr);
 
-    public FfmpegDecoder(int i, int i2, int i3, String str, List<byte[]> list, boolean z) throws FfmpegDecoderException {
-        super(new DecoderInputBuffer[i], new SimpleOutputBuffer[i2]);
-        this.codecName = FfmpegLibrary.getCodecName(str);
-        this.extraData = getExtraData(str, list);
-        this.encoding = z ? 4 : 2;
-        this.outputBufferSize = z ? OUTPUT_BUFFER_SIZE_32BIT : OUTPUT_BUFFER_SIZE_16BIT;
-        this.nativeContext = ffmpegInitialize(this.codecName, this.extraData, z);
-        if (this.nativeContext == null) {
+    public FfmpegDecoder(int numInputBuffers, int numOutputBuffers, int initialInputBufferSize, String mimeType, List<byte[]> initializationData, boolean outputFloat) throws FfmpegDecoderException {
+        super(new DecoderInputBuffer[numInputBuffers], new SimpleOutputBuffer[numOutputBuffers]);
+        this.codecName = FfmpegLibrary.getCodecName(mimeType);
+        this.extraData = getExtraData(mimeType, initializationData);
+        this.encoding = outputFloat ? 4 : 2;
+        this.outputBufferSize = outputFloat ? OUTPUT_BUFFER_SIZE_32BIT : OUTPUT_BUFFER_SIZE_16BIT;
+        this.nativeContext = ffmpegInitialize(this.codecName, this.extraData, outputFloat);
+        if (this.nativeContext == 0) {
             throw new FfmpegDecoderException("Initialization failed.");
         }
-        setInitialInputBufferSize(i3);
+        setInitialInputBufferSize(initialInputBufferSize);
     }
 
     public String getName() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ffmpeg");
-        stringBuilder.append(FfmpegLibrary.getVersion());
-        stringBuilder.append("-");
-        stringBuilder.append(this.codecName);
-        return stringBuilder.toString();
+        return "ffmpeg" + FfmpegLibrary.getVersion() + "-" + this.codecName;
     }
 
     protected DecoderInputBuffer createInputBuffer() {
@@ -62,37 +57,34 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
         return new SimpleOutputBuffer(this);
     }
 
-    protected FfmpegDecoderException createUnexpectedDecodeException(Throwable th) {
-        return new FfmpegDecoderException("Unexpected decode error", th);
+    protected FfmpegDecoderException createUnexpectedDecodeException(Throwable error) {
+        return new FfmpegDecoderException("Unexpected decode error", error);
     }
 
-    protected FfmpegDecoderException decode(DecoderInputBuffer decoderInputBuffer, SimpleOutputBuffer simpleOutputBuffer, boolean z) {
-        if (z) {
+    protected FfmpegDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
+        if (reset) {
             this.nativeContext = ffmpegReset(this.nativeContext, this.extraData);
             if (this.nativeContext == 0) {
                 return new FfmpegDecoderException("Error resetting (see logcat).");
             }
         }
-        ByteBuffer byteBuffer = decoderInputBuffer.data;
-        decoderInputBuffer = ffmpegDecode(this.nativeContext, byteBuffer, byteBuffer.limit(), simpleOutputBuffer.init(decoderInputBuffer.timeUs, this.outputBufferSize), this.outputBufferSize);
-        if (decoderInputBuffer < null) {
-            z = new StringBuilder();
-            z.append("Error decoding (see logcat). Code: ");
-            z.append(decoderInputBuffer);
-            return new FfmpegDecoderException(z.toString());
+        ByteBuffer inputData = inputBuffer.data;
+        int result = ffmpegDecode(this.nativeContext, inputData, inputData.limit(), outputBuffer.init(inputBuffer.timeUs, this.outputBufferSize), this.outputBufferSize);
+        if (result < 0) {
+            return new FfmpegDecoderException("Error decoding (see logcat). Code: " + result);
         }
         if (!this.hasOutputFormat) {
             this.channelCount = ffmpegGetChannelCount(this.nativeContext);
             this.sampleRate = ffmpegGetSampleRate(this.nativeContext);
-            if (!this.sampleRate && "alac".equals(this.codecName)) {
-                z = new ParsableByteArray(this.extraData);
-                z.setPosition(this.extraData.length - 4);
-                this.sampleRate = z.readUnsignedIntToInt();
+            if (this.sampleRate == 0 && "alac".equals(this.codecName)) {
+                ParsableByteArray parsableExtraData = new ParsableByteArray(this.extraData);
+                parsableExtraData.setPosition(this.extraData.length - 4);
+                this.sampleRate = parsableExtraData.readUnsignedIntToInt();
             }
             this.hasOutputFormat = true;
         }
-        simpleOutputBuffer.data.position(0);
-        simpleOutputBuffer.data.limit(decoderInputBuffer);
+        outputBuffer.data.position(0);
+        outputBuffer.data.limit(result);
         return null;
     }
 
@@ -114,131 +106,52 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
         return this.encoding;
     }
 
-    private static byte[] getExtraData(String str, List<byte[]> list) {
-        byte[] bArr;
-        byte[] bArr2;
-        Object obj;
-        int hashCode = str.hashCode();
-        if (hashCode != -NUM) {
-            if (hashCode != -53558318) {
-                if (hashCode != NUM) {
-                    if (hashCode == NUM) {
-                        if (str.equals(MimeTypes.AUDIO_OPUS) != null) {
-                            str = 2;
-                            switch (str) {
-                                case null:
-                                case 1:
-                                case 2:
-                                    return (byte[]) list.get(0);
-                                case 3:
-                                    bArr = (byte[]) list.get(0);
-                                    bArr2 = (byte[]) list.get(1);
-                                    obj = new byte[((bArr.length + bArr2.length) + 6)];
-                                    obj[0] = (byte) (bArr.length >> 8);
-                                    obj[1] = (byte) (bArr.length & 255);
-                                    System.arraycopy(bArr, 0, obj, 2, bArr.length);
-                                    obj[bArr.length + 2] = null;
-                                    obj[bArr.length + 3] = null;
-                                    obj[bArr.length + 4] = (byte) (bArr2.length >> 8);
-                                    obj[bArr.length + 5] = (byte) (bArr2.length & 255);
-                                    System.arraycopy(bArr2, 0, obj, bArr.length + 6, bArr2.length);
-                                    return obj;
-                                default:
-                                    return null;
-                            }
-                        }
-                    }
-                } else if (str.equals(MimeTypes.AUDIO_ALAC) != null) {
-                    str = 1;
-                    switch (str) {
-                        case null:
-                        case 1:
-                        case 2:
-                            return (byte[]) list.get(0);
-                        case 3:
-                            bArr = (byte[]) list.get(0);
-                            bArr2 = (byte[]) list.get(1);
-                            obj = new byte[((bArr.length + bArr2.length) + 6)];
-                            obj[0] = (byte) (bArr.length >> 8);
-                            obj[1] = (byte) (bArr.length & 255);
-                            System.arraycopy(bArr, 0, obj, 2, bArr.length);
-                            obj[bArr.length + 2] = null;
-                            obj[bArr.length + 3] = null;
-                            obj[bArr.length + 4] = (byte) (bArr2.length >> 8);
-                            obj[bArr.length + 5] = (byte) (bArr2.length & 255);
-                            System.arraycopy(bArr2, 0, obj, bArr.length + 6, bArr2.length);
-                            return obj;
-                        default:
-                            return null;
-                    }
+    private static byte[] getExtraData(String mimeType, List<byte[]> initializationData) {
+        byte b = (byte) -1;
+        switch (mimeType.hashCode()) {
+            case -1003765268:
+                if (mimeType.equals(MimeTypes.AUDIO_VORBIS)) {
+                    b = (byte) 3;
+                    break;
                 }
-            } else if (str.equals(MimeTypes.AUDIO_AAC) != null) {
-                str = null;
-                switch (str) {
-                    case null:
-                    case 1:
-                    case 2:
-                        return (byte[]) list.get(0);
-                    case 3:
-                        bArr = (byte[]) list.get(0);
-                        bArr2 = (byte[]) list.get(1);
-                        obj = new byte[((bArr.length + bArr2.length) + 6)];
-                        obj[0] = (byte) (bArr.length >> 8);
-                        obj[1] = (byte) (bArr.length & 255);
-                        System.arraycopy(bArr, 0, obj, 2, bArr.length);
-                        obj[bArr.length + 2] = null;
-                        obj[bArr.length + 3] = null;
-                        obj[bArr.length + 4] = (byte) (bArr2.length >> 8);
-                        obj[bArr.length + 5] = (byte) (bArr2.length & 255);
-                        System.arraycopy(bArr2, 0, obj, bArr.length + 6, bArr2.length);
-                        return obj;
-                    default:
-                        return null;
+                break;
+            case -53558318:
+                if (mimeType.equals(MimeTypes.AUDIO_AAC)) {
+                    b = (byte) 0;
+                    break;
                 }
-            }
-        } else if (str.equals(MimeTypes.AUDIO_VORBIS) != null) {
-            str = 3;
-            switch (str) {
-                case null:
-                case 1:
-                case 2:
-                    return (byte[]) list.get(0);
-                case 3:
-                    bArr = (byte[]) list.get(0);
-                    bArr2 = (byte[]) list.get(1);
-                    obj = new byte[((bArr.length + bArr2.length) + 6)];
-                    obj[0] = (byte) (bArr.length >> 8);
-                    obj[1] = (byte) (bArr.length & 255);
-                    System.arraycopy(bArr, 0, obj, 2, bArr.length);
-                    obj[bArr.length + 2] = null;
-                    obj[bArr.length + 3] = null;
-                    obj[bArr.length + 4] = (byte) (bArr2.length >> 8);
-                    obj[bArr.length + 5] = (byte) (bArr2.length & 255);
-                    System.arraycopy(bArr2, 0, obj, bArr.length + 6, bArr2.length);
-                    return obj;
-                default:
-                    return null;
-            }
+                break;
+            case 1504470054:
+                if (mimeType.equals(MimeTypes.AUDIO_ALAC)) {
+                    b = (byte) 1;
+                    break;
+                }
+                break;
+            case 1504891608:
+                if (mimeType.equals(MimeTypes.AUDIO_OPUS)) {
+                    b = (byte) 2;
+                    break;
+                }
+                break;
         }
-        str = -1;
-        switch (str) {
-            case null:
-            case 1:
-            case 2:
-                return (byte[]) list.get(0);
-            case 3:
-                bArr = (byte[]) list.get(0);
-                bArr2 = (byte[]) list.get(1);
-                obj = new byte[((bArr.length + bArr2.length) + 6)];
-                obj[0] = (byte) (bArr.length >> 8);
-                obj[1] = (byte) (bArr.length & 255);
-                System.arraycopy(bArr, 0, obj, 2, bArr.length);
-                obj[bArr.length + 2] = null;
-                obj[bArr.length + 3] = null;
-                obj[bArr.length + 4] = (byte) (bArr2.length >> 8);
-                obj[bArr.length + 5] = (byte) (bArr2.length & 255);
-                System.arraycopy(bArr2, 0, obj, bArr.length + 6, bArr2.length);
-                return obj;
+        switch (b) {
+            case (byte) 0:
+            case (byte) 1:
+            case (byte) 2:
+                return (byte[]) initializationData.get(0);
+            case (byte) 3:
+                byte[] header0 = (byte[]) initializationData.get(0);
+                byte[] header1 = (byte[]) initializationData.get(1);
+                byte[] extraData = new byte[((header0.length + header1.length) + 6)];
+                extraData[0] = (byte) (header0.length >> 8);
+                extraData[1] = (byte) (header0.length & 255);
+                System.arraycopy(header0, 0, extraData, 2, header0.length);
+                extraData[header0.length + 2] = (byte) 0;
+                extraData[header0.length + 3] = (byte) 0;
+                extraData[header0.length + 4] = (byte) (header1.length >> 8);
+                extraData[header0.length + 5] = (byte) (header1.length & 255);
+                System.arraycopy(header1, 0, extraData, header0.length + 6, header1.length);
+                return extraData;
             default:
                 return null;
         }

@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -75,12 +76,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
         C21201() {
         }
 
-        public void onItemClick(int i) {
-            if (i == -1) {
+        public void onItemClick(int id) {
+            if (id == -1) {
                 DataAutoDownloadActivity.this.finishFragment();
-            } else if (i == 1) {
-                StringBuilder stringBuilder;
-                int i2 = 0;
+            } else if (id == 1) {
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[0] = DataAutoDownloadActivity.this.mobileDataDownloadMask;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[1] = DataAutoDownloadActivity.this.mobileDataPrivateDownloadMask;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[2] = DataAutoDownloadActivity.this.mobileDataGroupDownloadMask;
@@ -96,35 +95,18 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.mobileMaxSize;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.wifiMaxSize;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.roamingMaxSize;
-                i = MessagesController.getMainSettings(DataAutoDownloadActivity.this.currentAccount).edit();
-                while (i2 < 4) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("mobileDataDownloadMask");
-                    stringBuilder.append(i2 != 0 ? Integer.valueOf(i2) : TtmlNode.ANONYMOUS_REGION_ID);
-                    i.putInt(stringBuilder.toString(), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[i2]);
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("wifiDownloadMask");
-                    stringBuilder.append(i2 != 0 ? Integer.valueOf(i2) : TtmlNode.ANONYMOUS_REGION_ID);
-                    i.putInt(stringBuilder.toString(), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[i2]);
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("roamingDownloadMask");
-                    stringBuilder.append(i2 != 0 ? Integer.valueOf(i2) : TtmlNode.ANONYMOUS_REGION_ID);
-                    i.putInt(stringBuilder.toString(), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[i2]);
-                    i2++;
+                Editor editor = MessagesController.getMainSettings(DataAutoDownloadActivity.this.currentAccount).edit();
+                int a = 0;
+                while (a < 4) {
+                    editor.putInt("mobileDataDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[a]);
+                    editor.putInt("wifiDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[a]);
+                    editor.putInt("roamingDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[a]);
+                    a++;
                 }
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("mobileMaxDownloadSize");
-                stringBuilder.append(DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType));
-                i.putInt(stringBuilder.toString(), DataAutoDownloadActivity.this.mobileMaxSize);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("wifiMaxDownloadSize");
-                stringBuilder.append(DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType));
-                i.putInt(stringBuilder.toString(), DataAutoDownloadActivity.this.wifiMaxSize);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("roamingMaxDownloadSize");
-                stringBuilder.append(DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType));
-                i.putInt(stringBuilder.toString(), DataAutoDownloadActivity.this.roamingMaxSize);
-                i.commit();
+                editor.putInt("mobileMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.mobileMaxSize);
+                editor.putInt("wifiMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.wifiMaxSize);
+                editor.putInt("roamingMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.roamingMaxSize);
+                editor.commit();
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).checkAutodownloadSettings();
                 DataAutoDownloadActivity.this.finishFragment();
             }
@@ -136,18 +118,18 @@ public class DataAutoDownloadActivity extends BaseFragment {
         C21212() {
         }
 
-        public void onItemClick(View view, int i) {
+        public void onItemClick(View view, int position) {
             if (view instanceof TextCheckBoxCell) {
-                int access$3600 = DataAutoDownloadActivity.this.getMaskForRow(i);
-                TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) view;
-                boolean isChecked = textCheckBoxCell.isChecked() ^ 1;
+                int mask = DataAutoDownloadActivity.this.getMaskForRow(position);
+                TextCheckBoxCell textCell = (TextCheckBoxCell) view;
+                boolean isChecked = !textCell.isChecked();
                 if (isChecked) {
-                    access$3600 |= DataAutoDownloadActivity.this.currentType;
+                    mask |= DataAutoDownloadActivity.this.currentType;
                 } else {
-                    access$3600 &= DataAutoDownloadActivity.this.currentType ^ -1;
+                    mask &= DataAutoDownloadActivity.this.currentType ^ -1;
                 }
-                DataAutoDownloadActivity.this.setMaskForRow(i, access$3600);
-                textCheckBoxCell.setChecked(isChecked);
+                DataAutoDownloadActivity.this.setMaskForRow(position, mask);
+                textCell.setChecked(isChecked);
             }
         }
     }
@@ -163,88 +145,80 @@ public class DataAutoDownloadActivity extends BaseFragment {
             return DataAutoDownloadActivity.this.rowCount;
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
             boolean z = false;
-            switch (viewHolder.getItemViewType()) {
+            boolean z2 = true;
+            switch (holder.getItemViewType()) {
                 case 0:
-                    if (i != DataAutoDownloadActivity.this.mobileSection2Row) {
-                        if (i != DataAutoDownloadActivity.this.wifiSection2Row) {
-                            viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                            return;
-                        }
+                    if (position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row) {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        return;
                     }
-                    viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    return;
                 case 1:
+                    TextCheckBoxCell textCell = holder.itemView;
                     String string;
-                    TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) viewHolder.itemView;
-                    if (!(i == DataAutoDownloadActivity.this.mContactsRow || i == DataAutoDownloadActivity.this.wContactsRow)) {
-                        if (i != DataAutoDownloadActivity.this.rContactsRow) {
-                            if (!(i == DataAutoDownloadActivity.this.mPrivateRow || i == DataAutoDownloadActivity.this.wPrivateRow)) {
-                                if (i != DataAutoDownloadActivity.this.rPrivateRow) {
-                                    if (!(i == DataAutoDownloadActivity.this.mChannelsRow || i == DataAutoDownloadActivity.this.wChannelsRow)) {
-                                        if (i != DataAutoDownloadActivity.this.rChannelsRow) {
-                                            if (i == DataAutoDownloadActivity.this.mGroupRow || i == DataAutoDownloadActivity.this.wGroupRow || i == DataAutoDownloadActivity.this.rGroupRow) {
-                                                string = LocaleController.getString("AutodownloadGroupChats", C0446R.string.AutodownloadGroupChats);
-                                                if ((DataAutoDownloadActivity.this.getMaskForRow(i) & DataAutoDownloadActivity.this.currentType) != 0) {
-                                                    z = true;
-                                                }
-                                                textCheckBoxCell.setTextAndCheck(string, z, true);
-                                                return;
-                                            }
-                                            return;
-                                        }
-                                    }
-                                    string = LocaleController.getString("AutodownloadChannels", C0446R.string.AutodownloadChannels);
-                                    i = (DataAutoDownloadActivity.this.getMaskForRow(i) & DataAutoDownloadActivity.this.currentType) != 0 ? 1 : 0;
-                                    if (DataAutoDownloadActivity.this.mSizeRow != -1) {
-                                        z = true;
-                                    }
-                                    textCheckBoxCell.setTextAndCheck(string, i, z);
-                                    return;
-                                }
-                            }
-                            string = LocaleController.getString("AutodownloadPrivateChats", C0446R.string.AutodownloadPrivateChats);
-                            if ((DataAutoDownloadActivity.this.getMaskForRow(i) & DataAutoDownloadActivity.this.currentType) != 0) {
-                                z = true;
-                            }
-                            textCheckBoxCell.setTextAndCheck(string, z, true);
-                            return;
+                    if (position == DataAutoDownloadActivity.this.mContactsRow || position == DataAutoDownloadActivity.this.wContactsRow || position == DataAutoDownloadActivity.this.rContactsRow) {
+                        string = LocaleController.getString("AutodownloadContacts", C0446R.string.AutodownloadContacts);
+                        if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
+                            z = true;
                         }
+                        textCell.setTextAndCheck(string, z, true);
+                        return;
+                    } else if (position == DataAutoDownloadActivity.this.mPrivateRow || position == DataAutoDownloadActivity.this.wPrivateRow || position == DataAutoDownloadActivity.this.rPrivateRow) {
+                        string = LocaleController.getString("AutodownloadPrivateChats", C0446R.string.AutodownloadPrivateChats);
+                        if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
+                            z = true;
+                        }
+                        textCell.setTextAndCheck(string, z, true);
+                        return;
+                    } else if (position == DataAutoDownloadActivity.this.mChannelsRow || position == DataAutoDownloadActivity.this.wChannelsRow || position == DataAutoDownloadActivity.this.rChannelsRow) {
+                        String string2 = LocaleController.getString("AutodownloadChannels", C0446R.string.AutodownloadChannels);
+                        boolean z3 = (DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0;
+                        if (DataAutoDownloadActivity.this.mSizeRow == -1) {
+                            z2 = false;
+                        }
+                        textCell.setTextAndCheck(string2, z3, z2);
+                        return;
+                    } else if (position == DataAutoDownloadActivity.this.mGroupRow || position == DataAutoDownloadActivity.this.wGroupRow || position == DataAutoDownloadActivity.this.rGroupRow) {
+                        string = LocaleController.getString("AutodownloadGroupChats", C0446R.string.AutodownloadGroupChats);
+                        if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
+                            z = true;
+                        }
+                        textCell.setTextAndCheck(string, z, true);
+                        return;
+                    } else {
+                        return;
                     }
-                    string = LocaleController.getString("AutodownloadContacts", C0446R.string.AutodownloadContacts);
-                    if ((DataAutoDownloadActivity.this.getMaskForRow(i) & DataAutoDownloadActivity.this.currentType) != 0) {
-                        z = true;
-                    }
-                    textCheckBoxCell.setTextAndCheck(string, z, true);
-                    return;
                 case 2:
-                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                    if (i == DataAutoDownloadActivity.this.mobileSectionRow) {
+                    HeaderCell headerCell = holder.itemView;
+                    if (position == DataAutoDownloadActivity.this.mobileSectionRow) {
                         headerCell.setText(LocaleController.getString("WhenUsingMobileData", C0446R.string.WhenUsingMobileData));
                         return;
-                    } else if (i == DataAutoDownloadActivity.this.wifiSectionRow) {
+                    } else if (position == DataAutoDownloadActivity.this.wifiSectionRow) {
                         headerCell.setText(LocaleController.getString("WhenConnectedOnWiFi", C0446R.string.WhenConnectedOnWiFi));
                         return;
-                    } else if (i == DataAutoDownloadActivity.this.roamingSectionRow) {
+                    } else if (position == DataAutoDownloadActivity.this.roamingSectionRow) {
                         headerCell.setText(LocaleController.getString("WhenRoaming", C0446R.string.WhenRoaming));
                         return;
                     } else {
                         return;
                     }
                 case 3:
-                    MaxFileSizeCell maxFileSizeCell = (MaxFileSizeCell) viewHolder.itemView;
-                    if (i == DataAutoDownloadActivity.this.mSizeRow) {
-                        maxFileSizeCell.setSize((long) DataAutoDownloadActivity.this.mobileMaxSize, DataAutoDownloadActivity.this.maxSize);
-                        maxFileSizeCell.setTag(Integer.valueOf(0));
+                    MaxFileSizeCell cell = holder.itemView;
+                    if (position == DataAutoDownloadActivity.this.mSizeRow) {
+                        cell.setSize((long) DataAutoDownloadActivity.this.mobileMaxSize, DataAutoDownloadActivity.this.maxSize);
+                        cell.setTag(Integer.valueOf(0));
                         return;
-                    } else if (i == DataAutoDownloadActivity.this.wSizeRow) {
-                        maxFileSizeCell.setSize((long) DataAutoDownloadActivity.this.wifiMaxSize, DataAutoDownloadActivity.this.maxSize);
-                        maxFileSizeCell.setTag(Integer.valueOf(1));
+                    } else if (position == DataAutoDownloadActivity.this.wSizeRow) {
+                        cell.setSize((long) DataAutoDownloadActivity.this.wifiMaxSize, DataAutoDownloadActivity.this.maxSize);
+                        cell.setTag(Integer.valueOf(1));
                         return;
-                    } else if (i == DataAutoDownloadActivity.this.rSizeRow) {
-                        maxFileSizeCell.setSize((long) DataAutoDownloadActivity.this.roamingMaxSize, DataAutoDownloadActivity.this.maxSize);
-                        maxFileSizeCell.setTag(Integer.valueOf(2));
+                    } else if (position == DataAutoDownloadActivity.this.rSizeRow) {
+                        cell.setSize((long) DataAutoDownloadActivity.this.roamingMaxSize, DataAutoDownloadActivity.this.maxSize);
+                        cell.setTag(Integer.valueOf(2));
                         return;
                     } else {
                         return;
@@ -254,69 +228,61 @@ public class DataAutoDownloadActivity extends BaseFragment {
             }
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            viewHolder = viewHolder.getAdapterPosition();
-            return (viewHolder == DataAutoDownloadActivity.this.mSizeRow || viewHolder == DataAutoDownloadActivity.this.rSizeRow || viewHolder == DataAutoDownloadActivity.this.wSizeRow || viewHolder == DataAutoDownloadActivity.this.mobileSectionRow || viewHolder == DataAutoDownloadActivity.this.wifiSectionRow || viewHolder == DataAutoDownloadActivity.this.roamingSectionRow || viewHolder == DataAutoDownloadActivity.this.mobileSection2Row || viewHolder == DataAutoDownloadActivity.this.wifiSection2Row || viewHolder == DataAutoDownloadActivity.this.roamingSection2Row) ? null : true;
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return (position == DataAutoDownloadActivity.this.mSizeRow || position == DataAutoDownloadActivity.this.rSizeRow || position == DataAutoDownloadActivity.this.wSizeRow || position == DataAutoDownloadActivity.this.mobileSectionRow || position == DataAutoDownloadActivity.this.wifiSectionRow || position == DataAutoDownloadActivity.this.roamingSectionRow || position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row || position == DataAutoDownloadActivity.this.roamingSection2Row) ? false : true;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            switch (i) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            switch (viewType) {
                 case 0:
-                    viewGroup = new ShadowSectionCell(this.mContext);
+                    view = new ShadowSectionCell(this.mContext);
                     break;
                 case 1:
-                    viewGroup = new TextCheckBoxCell(this.mContext);
-                    viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view = new TextCheckBoxCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 2:
-                    viewGroup = new HeaderCell(this.mContext);
-                    viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view = new HeaderCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
-                    viewGroup = new MaxFileSizeCell(this.mContext) {
-                        protected void didChangedSizeValue(int i) {
-                            Integer num = (Integer) getTag();
-                            if (num.intValue() == 0) {
-                                DataAutoDownloadActivity.this.mobileMaxSize = i;
-                            } else if (num.intValue() == 1) {
-                                DataAutoDownloadActivity.this.wifiMaxSize = i;
-                            } else if (num.intValue() == 2) {
-                                DataAutoDownloadActivity.this.roamingMaxSize = i;
+                    view = new MaxFileSizeCell(this.mContext) {
+                        protected void didChangedSizeValue(int value) {
+                            Integer tag = (Integer) getTag();
+                            if (tag.intValue() == 0) {
+                                DataAutoDownloadActivity.this.mobileMaxSize = value;
+                            } else if (tag.intValue() == 1) {
+                                DataAutoDownloadActivity.this.wifiMaxSize = value;
+                            } else if (tag.intValue() == 2) {
+                                DataAutoDownloadActivity.this.roamingMaxSize = value;
                             }
                         }
                     };
-                    viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                default:
-                    viewGroup = null;
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
-            viewGroup.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(viewGroup);
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
         }
 
-        public int getItemViewType(int i) {
-            if (!(i == DataAutoDownloadActivity.this.mobileSection2Row || i == DataAutoDownloadActivity.this.wifiSection2Row)) {
-                if (i != DataAutoDownloadActivity.this.roamingSection2Row) {
-                    if (!(i == DataAutoDownloadActivity.this.mobileSectionRow || i == DataAutoDownloadActivity.this.wifiSectionRow)) {
-                        if (i != DataAutoDownloadActivity.this.roamingSectionRow) {
-                            if (!(i == DataAutoDownloadActivity.this.wSizeRow || i == DataAutoDownloadActivity.this.mSizeRow)) {
-                                if (i != DataAutoDownloadActivity.this.rSizeRow) {
-                                    return 1;
-                                }
-                            }
-                            return 3;
-                        }
-                    }
-                    return 2;
-                }
+        public int getItemViewType(int position) {
+            if (position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row || position == DataAutoDownloadActivity.this.roamingSection2Row) {
+                return 0;
             }
-            return 0;
+            if (position == DataAutoDownloadActivity.this.mobileSectionRow || position == DataAutoDownloadActivity.this.wifiSectionRow || position == DataAutoDownloadActivity.this.roamingSectionRow) {
+                return 2;
+            }
+            if (position == DataAutoDownloadActivity.this.wSizeRow || position == DataAutoDownloadActivity.this.mSizeRow || position == DataAutoDownloadActivity.this.rSizeRow) {
+                return 3;
+            }
+            return 1;
         }
     }
 
-    public DataAutoDownloadActivity(int i) {
-        this.currentType = i;
+    public DataAutoDownloadActivity(int type) {
+        this.currentType = type;
         if (this.currentType == 64) {
             this.maxSize = 8388608;
         } else if (this.currentType == 32) {
@@ -448,7 +414,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
@@ -466,91 +432,94 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
-    private int getMaskForRow(int i) {
-        if (i == this.mContactsRow) {
+    private int getMaskForRow(int position) {
+        if (position == this.mContactsRow) {
             return this.mobileDataDownloadMask;
         }
-        if (i == this.mPrivateRow) {
+        if (position == this.mPrivateRow) {
             return this.mobileDataPrivateDownloadMask;
         }
-        if (i == this.mGroupRow) {
+        if (position == this.mGroupRow) {
             return this.mobileDataGroupDownloadMask;
         }
-        if (i == this.mChannelsRow) {
+        if (position == this.mChannelsRow) {
             return this.mobileDataChannelDownloadMask;
         }
-        if (i == this.wContactsRow) {
+        if (position == this.wContactsRow) {
             return this.wifiDownloadMask;
         }
-        if (i == this.wPrivateRow) {
+        if (position == this.wPrivateRow) {
             return this.wifiPrivateDownloadMask;
         }
-        if (i == this.wGroupRow) {
+        if (position == this.wGroupRow) {
             return this.wifiGroupDownloadMask;
         }
-        if (i == this.wChannelsRow) {
+        if (position == this.wChannelsRow) {
             return this.wifiChannelDownloadMask;
         }
-        if (i == this.rContactsRow) {
+        if (position == this.rContactsRow) {
             return this.roamingDownloadMask;
         }
-        if (i == this.rPrivateRow) {
+        if (position == this.rPrivateRow) {
             return this.roamingPrivateDownloadMask;
         }
-        if (i == this.rGroupRow) {
+        if (position == this.rGroupRow) {
             return this.roamingGroupDownloadMask;
         }
-        return i == this.rChannelsRow ? this.roamingChannelDownloadMask : 0;
+        if (position == this.rChannelsRow) {
+            return this.roamingChannelDownloadMask;
+        }
+        return 0;
     }
 
-    private void setMaskForRow(int i, int i2) {
-        if (i == this.mContactsRow) {
-            this.mobileDataDownloadMask = i2;
-        } else if (i == this.mPrivateRow) {
-            this.mobileDataPrivateDownloadMask = i2;
-        } else if (i == this.mGroupRow) {
-            this.mobileDataGroupDownloadMask = i2;
-        } else if (i == this.mChannelsRow) {
-            this.mobileDataChannelDownloadMask = i2;
-        } else if (i == this.wContactsRow) {
-            this.wifiDownloadMask = i2;
-        } else if (i == this.wPrivateRow) {
-            this.wifiPrivateDownloadMask = i2;
-        } else if (i == this.wGroupRow) {
-            this.wifiGroupDownloadMask = i2;
-        } else if (i == this.wChannelsRow) {
-            this.wifiChannelDownloadMask = i2;
-        } else if (i == this.rContactsRow) {
-            this.roamingDownloadMask = i2;
-        } else if (i == this.rPrivateRow) {
-            this.roamingPrivateDownloadMask = i2;
-        } else if (i == this.rGroupRow) {
-            this.roamingGroupDownloadMask = i2;
-        } else if (i == this.rChannelsRow) {
-            this.roamingChannelDownloadMask = i2;
+    private void setMaskForRow(int position, int mask) {
+        if (position == this.mContactsRow) {
+            this.mobileDataDownloadMask = mask;
+        } else if (position == this.mPrivateRow) {
+            this.mobileDataPrivateDownloadMask = mask;
+        } else if (position == this.mGroupRow) {
+            this.mobileDataGroupDownloadMask = mask;
+        } else if (position == this.mChannelsRow) {
+            this.mobileDataChannelDownloadMask = mask;
+        } else if (position == this.wContactsRow) {
+            this.wifiDownloadMask = mask;
+        } else if (position == this.wPrivateRow) {
+            this.wifiPrivateDownloadMask = mask;
+        } else if (position == this.wGroupRow) {
+            this.wifiGroupDownloadMask = mask;
+        } else if (position == this.wChannelsRow) {
+            this.wifiChannelDownloadMask = mask;
+        } else if (position == this.rContactsRow) {
+            this.roamingDownloadMask = mask;
+        } else if (position == this.rPrivateRow) {
+            this.roamingPrivateDownloadMask = mask;
+        } else if (position == this.rGroupRow) {
+            this.roamingGroupDownloadMask = mask;
+        } else if (position == this.rChannelsRow) {
+            this.roamingChannelDownloadMask = mask;
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[18];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckBoxCell.class, MaxFileSizeCell.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{MaxFileSizeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{MaxFileSizeCell.class}, new String[]{"sizeTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareUnchecked);
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareDisabled);
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareBackground);
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareCheck);
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
-        return themeDescriptionArr;
+        r9 = new ThemeDescription[18];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckBoxCell.class, MaxFileSizeCell.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{MaxFileSizeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{MaxFileSizeCell.class}, new String[]{"sizeTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareUnchecked);
+        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareDisabled);
+        r9[15] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareBackground);
+        r9[16] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareCheck);
+        r9[17] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        return r9;
     }
 }

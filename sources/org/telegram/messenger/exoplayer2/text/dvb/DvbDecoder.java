@@ -7,16 +7,16 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 public final class DvbDecoder extends SimpleSubtitleDecoder {
     private final DvbParser parser;
 
-    public DvbDecoder(List<byte[]> list) {
+    public DvbDecoder(List<byte[]> initializationData) {
         super("DvbDecoder");
-        ParsableByteArray parsableByteArray = new ParsableByteArray((byte[]) list.get(0));
-        this.parser = new DvbParser(parsableByteArray.readUnsignedShort(), parsableByteArray.readUnsignedShort());
+        ParsableByteArray data = new ParsableByteArray((byte[]) initializationData.get(0));
+        this.parser = new DvbParser(data.readUnsignedShort(), data.readUnsignedShort());
     }
 
-    protected DvbSubtitle decode(byte[] bArr, int i, boolean z) {
-        if (z) {
+    protected DvbSubtitle decode(byte[] data, int length, boolean reset) {
+        if (reset) {
             this.parser.reset();
         }
-        return new DvbSubtitle(this.parser.decode(bArr, i));
+        return new DvbSubtitle(this.parser.decode(data, length));
     }
 }

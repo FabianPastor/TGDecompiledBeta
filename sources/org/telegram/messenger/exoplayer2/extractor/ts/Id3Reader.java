@@ -22,52 +22,49 @@ public final class Id3Reader implements ElementaryStreamReader {
         this.writingSample = false;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 4);
-        this.output.format(Format.createSampleFormat(trackIdGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        idGenerator.generateNewId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 4);
+        this.output.format(Format.createSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
     }
 
-    public void packetStarted(long j, boolean z) {
-        if (z) {
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        if (dataAlignmentIndicator) {
             this.writingSample = true;
-            this.sampleTimeUs = j;
+            this.sampleTimeUs = pesTimeUs;
             this.sampleSize = 0;
             this.sampleBytesRead = 0;
         }
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
+    public void consume(ParsableByteArray data) {
         if (this.writingSample) {
-            int bytesLeft = parsableByteArray.bytesLeft();
+            int bytesAvailable = data.bytesLeft();
             if (this.sampleBytesRead < 10) {
-                int min = Math.min(bytesLeft, 10 - this.sampleBytesRead);
-                System.arraycopy(parsableByteArray.data, parsableByteArray.getPosition(), this.id3Header.data, this.sampleBytesRead, min);
-                if (this.sampleBytesRead + min == 10) {
+                int headerBytesAvailable = Math.min(bytesAvailable, 10 - this.sampleBytesRead);
+                System.arraycopy(data.data, data.getPosition(), this.id3Header.data, this.sampleBytesRead, headerBytesAvailable);
+                if (this.sampleBytesRead + headerBytesAvailable == 10) {
                     this.id3Header.setPosition(0);
-                    if (73 == this.id3Header.readUnsignedByte() && 68 == this.id3Header.readUnsignedByte()) {
-                        if (51 == this.id3Header.readUnsignedByte()) {
-                            this.id3Header.skipBytes(3);
-                            this.sampleSize = 10 + this.id3Header.readSynchSafeInt();
-                        }
+                    if (73 == this.id3Header.readUnsignedByte() && 68 == this.id3Header.readUnsignedByte() && 51 == this.id3Header.readUnsignedByte()) {
+                        this.id3Header.skipBytes(3);
+                        this.sampleSize = this.id3Header.readSynchSafeInt() + 10;
+                    } else {
+                        Log.w(TAG, "Discarding invalid ID3 tag");
+                        this.writingSample = false;
+                        return;
                     }
-                    Log.w(TAG, "Discarding invalid ID3 tag");
-                    this.writingSample = false;
-                    return;
                 }
             }
-            bytesLeft = Math.min(bytesLeft, this.sampleSize - this.sampleBytesRead);
-            this.output.sampleData(parsableByteArray, bytesLeft);
-            this.sampleBytesRead += bytesLeft;
+            int bytesToWrite = Math.min(bytesAvailable, this.sampleSize - this.sampleBytesRead);
+            this.output.sampleData(data, bytesToWrite);
+            this.sampleBytesRead += bytesToWrite;
         }
     }
 
     public void packetFinished() {
-        if (this.writingSample && this.sampleSize != 0) {
-            if (this.sampleBytesRead == this.sampleSize) {
-                this.output.sampleMetadata(this.sampleTimeUs, 1, this.sampleSize, 0, null);
-                this.writingSample = false;
-            }
+        if (this.writingSample && this.sampleSize != 0 && this.sampleBytesRead == this.sampleSize) {
+            this.output.sampleMetadata(this.sampleTimeUs, 1, this.sampleSize, 0, null);
+            this.writingSample = false;
         }
     }
 }

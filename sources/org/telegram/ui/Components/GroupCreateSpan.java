@@ -19,6 +19,7 @@ import org.telegram.messenger.C0446R;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -49,7 +50,8 @@ public class GroupCreateSpan extends View {
     }
 
     public GroupCreateSpan(Context context, User user, Contact contact) {
-        int dp;
+        int maxNameWidth;
+        String firstName;
         super(context);
         this.rect = new RectF();
         this.colors = new int[6];
@@ -71,43 +73,43 @@ public class GroupCreateSpan extends View {
         this.imageReceiver.setParentView(this);
         this.imageReceiver.setImageCoords(0, 0, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
         if (AndroidUtilities.isTablet()) {
-            dp = AndroidUtilities.dp(366.0f) / 2;
+            maxNameWidth = AndroidUtilities.dp(366.0f) / 2;
         } else {
-            dp = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 2;
+            maxNameWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 2;
         }
         if (user != null) {
-            contact = UserObject.getFirstName(user);
+            firstName = UserObject.getFirstName(user);
         } else if (TextUtils.isEmpty(contact.first_name)) {
-            contact = contact.last_name;
+            firstName = contact.last_name;
         } else {
-            contact = contact.first_name;
+            firstName = contact.first_name;
         }
-        this.nameLayout = new StaticLayout(TextUtils.ellipsize(contact.replace('\n', ' '), textPaint, (float) dp, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        if (this.nameLayout.getLineCount() > null) {
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(firstName.replace('\n', ' '), textPaint, (float) maxNameWidth, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        if (this.nameLayout.getLineCount() > 0) {
             this.textWidth = (int) Math.ceil((double) this.nameLayout.getLineWidth(0));
             this.textX = -this.nameLayout.getLineLeft(0);
         }
-        context = null;
+        FileLocation photo = null;
         if (!(user == null || user.photo == null)) {
-            context = user.photo.photo_small;
+            photo = user.photo.photo_small;
         }
-        this.imageReceiver.setImage(context, null, "50_50", this.avatarDrawable, null, null, 0, null, 1);
+        this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, 1);
         updateColors();
     }
 
     public void updateColors() {
         int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
-        int color2 = Theme.getColor(Theme.key_groupcreate_spanBackground);
-        int color3 = Theme.getColor(Theme.key_groupcreate_spanText);
-        this.colors[0] = Color.red(color2);
+        int back = Theme.getColor(Theme.key_groupcreate_spanBackground);
+        int text = Theme.getColor(Theme.key_groupcreate_spanText);
+        this.colors[0] = Color.red(back);
         this.colors[1] = Color.red(color);
-        this.colors[2] = Color.green(color2);
+        this.colors[2] = Color.green(back);
         this.colors[3] = Color.green(color);
-        this.colors[4] = Color.blue(color2);
+        this.colors[4] = Color.blue(back);
         this.colors[5] = Color.blue(color);
-        textPaint.setColor(color3);
-        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(color3, Mode.MULTIPLY));
-        backPaint.setColor(color2);
+        textPaint.setColor(text);
+        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(text, Mode.MULTIPLY));
+        backPaint.setColor(back);
         this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
     }
 
@@ -143,26 +145,23 @@ public class GroupCreateSpan extends View {
         return this.currentContact;
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(AndroidUtilities.dp(NUM) + this.textWidth, AndroidUtilities.dp(NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(AndroidUtilities.dp(57.0f) + this.textWidth, AndroidUtilities.dp(32.0f));
     }
 
     protected void onDraw(Canvas canvas) {
         if ((this.deleting && this.progress != 1.0f) || !(this.deleting || this.progress == 0.0f)) {
-            long currentTimeMillis = System.currentTimeMillis() - this.lastUpdateTime;
-            long j = 17;
-            if (currentTimeMillis >= 0) {
-                if (currentTimeMillis <= 17) {
-                    j = currentTimeMillis;
-                }
+            long dt = System.currentTimeMillis() - this.lastUpdateTime;
+            if (dt < 0 || dt > 17) {
+                dt = 17;
             }
             if (this.deleting) {
-                this.progress += ((float) j) / 120.0f;
+                this.progress += ((float) dt) / 120.0f;
                 if (this.progress >= 1.0f) {
                     this.progress = 1.0f;
                 }
             } else {
-                this.progress -= ((float) j) / 120.0f;
+                this.progress -= ((float) dt) / 120.0f;
                 if (this.progress < 0.0f) {
                     this.progress = 0.0f;
                 }
@@ -176,7 +175,7 @@ public class GroupCreateSpan extends View {
         this.imageReceiver.draw(canvas);
         if (this.progress != 0.0f) {
             backPaint.setColor(this.avatarDrawable.getColor());
-            backPaint.setAlpha((int) (this.progress * 255.0f));
+            backPaint.setAlpha((int) (255.0f * this.progress));
             canvas.drawCircle((float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
             canvas.save();
             canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f));

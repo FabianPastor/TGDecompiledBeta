@@ -14,114 +14,113 @@ final class CachedContent {
     private long length;
     private boolean locked;
 
-    public CachedContent(DataInputStream dataInputStream) throws IOException {
-        this(dataInputStream.readInt(), dataInputStream.readUTF(), dataInputStream.readLong());
+    public CachedContent(DataInputStream input) throws IOException {
+        this(input.readInt(), input.readUTF(), input.readLong());
     }
 
-    public CachedContent(int i, String str, long j) {
-        this.id = i;
-        this.key = str;
-        this.length = j;
+    public CachedContent(int id, String key, long length) {
+        this.id = id;
+        this.key = key;
+        this.length = length;
         this.cachedSpans = new TreeSet();
     }
 
-    public void writeToStream(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeInt(this.id);
-        dataOutputStream.writeUTF(this.key);
-        dataOutputStream.writeLong(this.length);
+    public void writeToStream(DataOutputStream output) throws IOException {
+        output.writeInt(this.id);
+        output.writeUTF(this.key);
+        output.writeLong(this.length);
     }
 
     public long getLength() {
         return this.length;
     }
 
-    public void setLength(long j) {
-        this.length = j;
+    public void setLength(long length) {
+        this.length = length;
     }
 
     public boolean isLocked() {
         return this.locked;
     }
 
-    public void setLocked(boolean z) {
-        this.locked = z;
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
-    public void addSpan(SimpleCacheSpan simpleCacheSpan) {
-        this.cachedSpans.add(simpleCacheSpan);
+    public void addSpan(SimpleCacheSpan span) {
+        this.cachedSpans.add(span);
     }
 
     public TreeSet<SimpleCacheSpan> getSpans() {
         return this.cachedSpans;
     }
 
-    public SimpleCacheSpan getSpan(long j) {
-        SimpleCacheSpan createLookup = SimpleCacheSpan.createLookup(this.key, j);
-        SimpleCacheSpan simpleCacheSpan = (SimpleCacheSpan) this.cachedSpans.floor(createLookup);
-        if (simpleCacheSpan != null && simpleCacheSpan.position + simpleCacheSpan.length > j) {
-            return simpleCacheSpan;
+    public SimpleCacheSpan getSpan(long position) {
+        SimpleCacheSpan lookupSpan = SimpleCacheSpan.createLookup(this.key, position);
+        SimpleCacheSpan floorSpan = (SimpleCacheSpan) this.cachedSpans.floor(lookupSpan);
+        if (floorSpan != null && floorSpan.position + floorSpan.length > position) {
+            return floorSpan;
         }
-        createLookup = (SimpleCacheSpan) this.cachedSpans.ceiling(createLookup);
-        if (createLookup == null) {
-            j = SimpleCacheSpan.createOpenHole(this.key, j);
+        SimpleCacheSpan createOpenHole;
+        SimpleCacheSpan ceilSpan = (SimpleCacheSpan) this.cachedSpans.ceiling(lookupSpan);
+        if (ceilSpan == null) {
+            createOpenHole = SimpleCacheSpan.createOpenHole(this.key, position);
         } else {
-            j = SimpleCacheSpan.createClosedHole(this.key, j, createLookup.position - j);
+            createOpenHole = SimpleCacheSpan.createClosedHole(this.key, position, ceilSpan.position - position);
         }
-        return j;
+        return createOpenHole;
     }
 
-    public long getCachedBytesLength(long j, long j2) {
-        long j3 = j2;
-        SimpleCacheSpan span = getSpan(j);
+    public long getCachedBytesLength(long position, long length) {
+        SimpleCacheSpan span = getSpan(position);
         if (span.isHoleSpan()) {
-            return -Math.min(span.isOpenEnded() ? Long.MAX_VALUE : span.length, j3);
+            long j;
+            if (span.isOpenEnded()) {
+                j = Long.MAX_VALUE;
+            } else {
+                j = span.length;
+            }
+            return -Math.min(j, length);
         }
-        long j4 = j + j3;
-        long j5 = span.position + span.length;
-        if (j5 < j4) {
-            for (SimpleCacheSpan simpleCacheSpan : this.cachedSpans.tailSet(span, false)) {
-                if (simpleCacheSpan.position > j5) {
-                    break;
+        long queryEndPosition = position + length;
+        long currentEndPosition = span.position + span.length;
+        if (currentEndPosition < queryEndPosition) {
+            for (SimpleCacheSpan next : this.cachedSpans.tailSet(span, false)) {
+                if (next.position <= currentEndPosition) {
+                    currentEndPosition = Math.max(currentEndPosition, next.position + next.length);
+                    if (currentEndPosition >= queryEndPosition) {
+                        break;
+                    }
                 }
-                j5 = Math.max(j5, simpleCacheSpan.position + simpleCacheSpan.length);
-                if (j5 >= j4) {
-                    break;
-                }
-                CachedContent cachedContent = this;
+                break;
             }
         }
-        return Math.min(j5 - j, j3);
+        return Math.min(currentEndPosition - position, length);
     }
 
-    public SimpleCacheSpan touch(SimpleCacheSpan simpleCacheSpan) throws CacheException {
-        Assertions.checkState(this.cachedSpans.remove(simpleCacheSpan));
-        SimpleCacheSpan copyWithUpdatedLastAccessTime = simpleCacheSpan.copyWithUpdatedLastAccessTime(this.id);
-        if (simpleCacheSpan.file.renameTo(copyWithUpdatedLastAccessTime.file)) {
-            this.cachedSpans.add(copyWithUpdatedLastAccessTime);
-            return copyWithUpdatedLastAccessTime;
+    public SimpleCacheSpan touch(SimpleCacheSpan cacheSpan) throws CacheException {
+        Assertions.checkState(this.cachedSpans.remove(cacheSpan));
+        SimpleCacheSpan newCacheSpan = cacheSpan.copyWithUpdatedLastAccessTime(this.id);
+        if (cacheSpan.file.renameTo(newCacheSpan.file)) {
+            this.cachedSpans.add(newCacheSpan);
+            return newCacheSpan;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Renaming of ");
-        stringBuilder.append(simpleCacheSpan.file);
-        stringBuilder.append(" to ");
-        stringBuilder.append(copyWithUpdatedLastAccessTime.file);
-        stringBuilder.append(" failed.");
-        throw new CacheException(stringBuilder.toString());
+        throw new CacheException("Renaming of " + cacheSpan.file + " to " + newCacheSpan.file + " failed.");
     }
 
     public boolean isEmpty() {
         return this.cachedSpans.isEmpty();
     }
 
-    public boolean removeSpan(CacheSpan cacheSpan) {
-        if (!this.cachedSpans.remove(cacheSpan)) {
-            return null;
+    public boolean removeSpan(CacheSpan span) {
+        if (!this.cachedSpans.remove(span)) {
+            return false;
         }
-        cacheSpan.file.delete();
+        span.file.delete();
         return true;
     }
 
     public int headerHashCode() {
-        return (31 * ((this.id * 31) + this.key.hashCode())) + ((int) (this.length ^ (this.length >>> 32)));
+        return (((this.id * 31) + this.key.hashCode()) * 31) + ((int) (this.length ^ (this.length >>> 32)));
     }
 }

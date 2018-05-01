@@ -6,12 +6,12 @@ import java.math.BigDecimal;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class MP4Atom extends MP4Box<RangeInputStream> {
-    public MP4Atom(RangeInputStream rangeInputStream, MP4Box<?> mP4Box, String str) {
-        super(rangeInputStream, mP4Box, str);
+    public MP4Atom(RangeInputStream input, MP4Box<?> parent, String type) {
+        super(input, parent, type);
     }
 
     public long getLength() {
-        return ((RangeInputStream) getInput()).getPosition() + ((RangeInputStream) getInput()).getRemainingLength();
+        return ((RangeInputStream) getInput()).getRemainingLength() + ((RangeInputStream) getInput()).getPosition();
     }
 
     public long getOffset() {
@@ -26,17 +26,14 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         return (getChild() != null ? getChild().getRemaining() : 0) < getRemaining();
     }
 
-    public MP4Atom nextChildUpTo(String str) throws IOException {
+    public MP4Atom nextChildUpTo(String expectedTypeExpression) throws IOException {
         while (getRemaining() > 0) {
-            MP4Atom nextChild = nextChild();
-            if (nextChild.getType().matches(str)) {
-                return nextChild;
+            MP4Atom atom = nextChild();
+            if (atom.getType().matches(expectedTypeExpression)) {
+                return atom;
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("atom type mismatch, not found: ");
-        stringBuilder.append(str);
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("atom type mismatch, not found: " + expectedTypeExpression);
     }
 
     public boolean readBoolean() throws IOException {
@@ -59,10 +56,10 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         return this.data.readLong();
     }
 
-    public byte[] readBytes(int i) throws IOException {
-        i = new byte[i];
-        this.data.readFully(i);
-        return i;
+    public byte[] readBytes(int len) throws IOException {
+        byte[] bytes = new byte[len];
+        this.data.readFully(bytes);
+        return bytes;
     }
 
     public byte[] readBytes() throws IOException {
@@ -70,41 +67,29 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public BigDecimal readShortFixedPoint() throws IOException {
-        byte readByte = this.data.readByte();
-        int readUnsignedByte = this.data.readUnsignedByte();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.valueOf(readByte));
-        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-        stringBuilder.append(String.valueOf(readUnsignedByte));
-        return new BigDecimal(stringBuilder.toString());
+        return new BigDecimal(String.valueOf(this.data.readByte()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedByte()));
     }
 
     public BigDecimal readIntegerFixedPoint() throws IOException {
-        short readShort = this.data.readShort();
-        int readUnsignedShort = this.data.readUnsignedShort();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.valueOf(readShort));
-        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-        stringBuilder.append(String.valueOf(readUnsignedShort));
-        return new BigDecimal(stringBuilder.toString());
+        return new BigDecimal(String.valueOf(this.data.readShort()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedShort()));
     }
 
-    public String readString(int i, String str) throws IOException {
-        String str2 = new String(readBytes(i), str);
-        str = str2.indexOf(0);
-        return str < null ? str2 : str2.substring(0, str);
+    public String readString(int len, String enc) throws IOException {
+        String s = new String(readBytes(len), enc);
+        int end = s.indexOf(0);
+        return end < 0 ? s : s.substring(0, end);
     }
 
-    public String readString(String str) throws IOException {
-        return readString((int) getRemaining(), str);
+    public String readString(String enc) throws IOException {
+        return readString((int) getRemaining(), enc);
     }
 
-    public void skip(int i) throws IOException {
-        int i2 = 0;
-        while (i2 < i) {
-            int skipBytes = this.data.skipBytes(i - i2);
-            if (skipBytes > 0) {
-                i2 += skipBytes;
+    public void skip(int len) throws IOException {
+        int total = 0;
+        while (total < len) {
+            int current = this.data.skipBytes(len - total);
+            if (current > 0) {
+                total += current;
             } else {
                 throw new EOFException();
             }
@@ -119,13 +104,12 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         }
     }
 
-    private StringBuffer appendPath(StringBuffer stringBuffer, MP4Box<?> mP4Box) {
-        if (mP4Box.getParent() != null) {
-            appendPath(stringBuffer, mP4Box.getParent());
-            stringBuffer.append("/");
+    private StringBuffer appendPath(StringBuffer s, MP4Box<?> box) {
+        if (box.getParent() != null) {
+            appendPath(s, box.getParent());
+            s.append("/");
         }
-        stringBuffer.append(mP4Box.getType());
-        return stringBuffer;
+        return s.append(box.getType());
     }
 
     public String getPath() {
@@ -133,15 +117,15 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
-        appendPath(stringBuffer, this);
-        stringBuffer.append("[off=");
-        stringBuffer.append(getOffset());
-        stringBuffer.append(",pos=");
-        stringBuffer.append(getPosition());
-        stringBuffer.append(",len=");
-        stringBuffer.append(getLength());
-        stringBuffer.append("]");
-        return stringBuffer.toString();
+        StringBuffer s = new StringBuffer();
+        appendPath(s, this);
+        s.append("[off=");
+        s.append(getOffset());
+        s.append(",pos=");
+        s.append(getPosition());
+        s.append(",len=");
+        s.append(getLength());
+        s.append("]");
+        return s.toString();
     }
 }

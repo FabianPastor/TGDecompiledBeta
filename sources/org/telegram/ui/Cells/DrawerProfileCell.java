@@ -74,22 +74,22 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
     }
 
-    protected void onMeasure(int i, int i2) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (VERSION.SDK_INT >= 21) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
             return;
         }
         try {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
         } catch (Throwable e) {
-            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(148.0f));
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(148.0f));
             FileLog.m3e(e);
         }
     }
 
     protected void onDraw(Canvas canvas) {
         int color;
-        Drawable cachedWallpaper = Theme.getCachedWallpaper();
+        Drawable backgroundDrawable = Theme.getCachedWallpaper();
         if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadow);
         } else {
@@ -100,7 +100,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        if (!Theme.isCustomTheme() || cachedWallpaper == null) {
+        if (!Theme.isCustomTheme() || backgroundDrawable == null) {
             this.shadowView.setVisibility(4);
             this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
@@ -108,26 +108,29 @@ public class DrawerProfileCell extends FrameLayout {
         }
         this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
         this.shadowView.setVisibility(0);
-        if (cachedWallpaper instanceof ColorDrawable) {
-            cachedWallpaper.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            cachedWallpaper.draw(canvas);
-        } else if (cachedWallpaper instanceof BitmapDrawable) {
-            Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
-            float measuredWidth = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
-            float measuredHeight = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
-            if (measuredWidth < measuredHeight) {
-                measuredWidth = measuredHeight;
+        if (backgroundDrawable instanceof ColorDrawable) {
+            backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            backgroundDrawable.draw(canvas);
+        } else if (backgroundDrawable instanceof BitmapDrawable) {
+            float scale;
+            Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
+            float scaleX = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
+            float scaleY = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
+            if (scaleX < scaleY) {
+                scale = scaleY;
+            } else {
+                scale = scaleX;
             }
-            int measuredWidth2 = (int) (((float) getMeasuredWidth()) / measuredWidth);
-            color = (int) (((float) getMeasuredHeight()) / measuredWidth);
-            int width = (bitmap.getWidth() - measuredWidth2) / 2;
-            int height = (bitmap.getHeight() - color) / 2;
-            this.srcRect.set(width, height, measuredWidth2 + width, color + height);
+            int width = (int) (((float) getMeasuredWidth()) / scale);
+            int height = (int) (((float) getMeasuredHeight()) / scale);
+            int x = (bitmap.getWidth() - width) / 2;
+            int y = (bitmap.getHeight() - height) / 2;
+            this.srcRect.set(x, y, x + width, y + height);
             this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             try {
                 canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
-            } catch (Throwable th) {
-                FileLog.m3e(th);
+            } catch (Throwable e) {
+                FileLog.m3e(e);
             }
         }
     }
@@ -136,41 +139,36 @@ public class DrawerProfileCell extends FrameLayout {
         return this.accountsShowed;
     }
 
-    public void setAccountsShowed(boolean z) {
-        if (this.accountsShowed != z) {
-            this.accountsShowed = z;
+    public void setAccountsShowed(boolean value) {
+        if (this.accountsShowed != value) {
+            this.accountsShowed = value;
             this.arrowView.setImageResource(this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
         }
     }
 
     public void setOnArrowClickListener(final OnClickListener onClickListener) {
         this.arrowView.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                DrawerProfileCell.this.accountsShowed = DrawerProfileCell.this.accountsShowed ^ 1;
+            public void onClick(View v) {
+                DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
                 DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
                 onClickListener.onClick(DrawerProfileCell.this);
             }
         });
     }
 
-    public void setUser(User user, boolean z) {
+    public void setUser(User user, boolean accounts) {
         if (user != null) {
-            TLObject tLObject = null;
+            TLObject photo = null;
             if (user.photo != null) {
-                tLObject = user.photo.photo_small;
+                photo = user.photo.photo_small;
             }
-            this.accountsShowed = z;
+            this.accountsShowed = accounts;
             this.arrowView.setImageResource(this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
-            z = this.phoneTextView;
-            PhoneFormat instance = PhoneFormat.getInstance();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append(user.phone);
-            z.setText(instance.format(stringBuilder.toString()));
+            this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-            this.avatarImageView.setImage(tLObject, "50_50", avatarDrawable);
+            this.avatarImageView.setImage(photo, "50_50", avatarDrawable);
         }
     }
 }

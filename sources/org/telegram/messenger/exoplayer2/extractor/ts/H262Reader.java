@@ -39,8 +39,8 @@ public final class H262Reader implements ElementaryStreamReader {
         public int length;
         public int sequenceExtensionPosition;
 
-        public CsdBuffer(int i) {
-            this.data = new byte[i];
+        public CsdBuffer(int initialCapacity) {
+            this.data = new byte[initialCapacity];
         }
 
         public void reset() {
@@ -49,35 +49,32 @@ public final class H262Reader implements ElementaryStreamReader {
             this.sequenceExtensionPosition = 0;
         }
 
-        public boolean onStartCode(int i, int i2) {
+        public boolean onStartCode(int startCodeValue, int bytesAlreadyPassed) {
             if (this.isFilling) {
-                this.length -= i2;
-                if (this.sequenceExtensionPosition == 0 && i == H262Reader.START_EXTENSION) {
+                this.length -= bytesAlreadyPassed;
+                if (this.sequenceExtensionPosition == 0 && startCodeValue == H262Reader.START_EXTENSION) {
                     this.sequenceExtensionPosition = this.length;
                 } else {
                     this.isFilling = false;
                     return true;
                 }
-            } else if (i == H262Reader.START_SEQUENCE_HEADER) {
+            } else if (startCodeValue == H262Reader.START_SEQUENCE_HEADER) {
                 this.isFilling = true;
             }
             onData(START_CODE, 0, START_CODE.length);
             return false;
         }
 
-        public void onData(byte[] bArr, int i, int i2) {
+        public void onData(byte[] newData, int offset, int limit) {
             if (this.isFilling) {
-                i2 -= i;
-                if (this.data.length < this.length + i2) {
-                    this.data = Arrays.copyOf(this.data, (this.length + i2) * 2);
+                int readLength = limit - offset;
+                if (this.data.length < this.length + readLength) {
+                    this.data = Arrays.copyOf(this.data, (this.length + readLength) * 2);
                 }
-                System.arraycopy(bArr, i, this.data, this.length, i2);
-                this.length += i2;
+                System.arraycopy(newData, offset, this.data, this.length, readLength);
+                this.length += readLength;
             }
         }
-    }
-
-    public void packetFinished() {
     }
 
     public void seek() {
@@ -87,135 +84,97 @@ public final class H262Reader implements ElementaryStreamReader {
         this.startedFirstSample = false;
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.formatId = trackIdGenerator.getFormatId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 2);
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 2);
     }
 
-    public void packetStarted(long j, boolean z) {
-        this.pesTimeUs = j;
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        this.pesTimeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray parsableByteArray) {
-        ParsableByteArray parsableByteArray2 = parsableByteArray;
-        int position = parsableByteArray.getPosition();
-        int limit = parsableByteArray.limit();
-        byte[] bArr = parsableByteArray2.data;
-        this.totalBytesWritten += (long) parsableByteArray.bytesLeft();
-        this.output.sampleData(parsableByteArray2, parsableByteArray.bytesLeft());
+    public void consume(ParsableByteArray data) {
+        int offset = data.getPosition();
+        int limit = data.limit();
+        byte[] dataArray = data.data;
+        this.totalBytesWritten += (long) data.bytesLeft();
+        this.output.sampleData(data, data.bytesLeft());
         while (true) {
-            int findNalUnit = NalUnitUtil.findNalUnit(bArr, position, limit, r0.prefixFlags);
-            if (findNalUnit == limit) {
+            int startCodeOffset = NalUnitUtil.findNalUnit(dataArray, offset, limit, this.prefixFlags);
+            if (startCodeOffset == limit) {
                 break;
             }
-            int i;
-            byte[] bArr2;
-            boolean z;
-            boolean z2;
-            int i2 = findNalUnit + 3;
-            int i3 = parsableByteArray2.data[i2] & 255;
-            if (!r0.hasOutputFormat) {
-                int i4 = findNalUnit - position;
-                if (i4 > 0) {
-                    r0.csdBuffer.onData(bArr, position, findNalUnit);
+            int startCodeValue = data.data[startCodeOffset + 3] & 255;
+            if (!this.hasOutputFormat) {
+                int lengthToStartCode = startCodeOffset - offset;
+                if (lengthToStartCode > 0) {
+                    this.csdBuffer.onData(dataArray, offset, startCodeOffset);
                 }
-                if (r0.csdBuffer.onStartCode(i3, i4 < 0 ? -i4 : 0)) {
-                    Pair parseCsdBuffer = parseCsdBuffer(r0.csdBuffer, r0.formatId);
-                    r0.output.format((Format) parseCsdBuffer.first);
-                    r0.frameDurationUs = ((Long) parseCsdBuffer.second).longValue();
-                    r0.hasOutputFormat = true;
+                if (this.csdBuffer.onStartCode(startCodeValue, lengthToStartCode < 0 ? -lengthToStartCode : 0)) {
+                    Pair<Format, Long> result = parseCsdBuffer(this.csdBuffer, this.formatId);
+                    this.output.format((Format) result.first);
+                    this.frameDurationUs = ((Long) result.second).longValue();
+                    this.hasOutputFormat = true;
                 }
             }
-            if (i3 != 0) {
-                if (i3 != START_SEQUENCE_HEADER) {
-                    if (i3 == START_GROUP) {
-                        r0.sampleIsKeyframe = true;
-                    }
-                    i = limit;
-                    bArr2 = bArr;
-                    position = i2;
-                    limit = i;
-                    bArr = bArr2;
+            if (startCodeValue == 0 || startCodeValue == START_SEQUENCE_HEADER) {
+                int bytesWrittenPastStartCode = limit - startCodeOffset;
+                if (this.startedFirstSample && this.sampleHasPicture && this.hasOutputFormat) {
+                    this.output.sampleMetadata(this.sampleTimeUs, this.sampleIsKeyframe ? 1 : 0, ((int) (this.totalBytesWritten - this.samplePosition)) - bytesWrittenPastStartCode, bytesWrittenPastStartCode, null);
                 }
-            }
-            position = limit - findNalUnit;
-            if (r0.startedFirstSample && r0.sampleHasPicture && r0.hasOutputFormat) {
-                i = limit;
-                bArr2 = bArr;
-                r0.output.sampleMetadata(r0.sampleTimeUs, r0.sampleIsKeyframe, ((int) (r0.totalBytesWritten - r0.samplePosition)) - position, position, null);
-            } else {
-                i = limit;
-                bArr2 = bArr;
-            }
-            if (r0.startedFirstSample) {
-                if (!r0.sampleHasPicture) {
-                    z = false;
-                    z2 = true;
-                    if (i3 == 0) {
-                        z = z2;
-                    }
-                    r0.sampleHasPicture = z;
-                    position = i2;
-                    limit = i;
-                    bArr = bArr2;
+                if (!this.startedFirstSample || this.sampleHasPicture) {
+                    this.samplePosition = this.totalBytesWritten - ((long) bytesWrittenPastStartCode);
+                    long j = this.pesTimeUs != C0542C.TIME_UNSET ? this.pesTimeUs : this.startedFirstSample ? this.sampleTimeUs + this.frameDurationUs : 0;
+                    this.sampleTimeUs = j;
+                    this.sampleIsKeyframe = false;
+                    this.pesTimeUs = C0542C.TIME_UNSET;
+                    this.startedFirstSample = true;
                 }
+                this.sampleHasPicture = startCodeValue == 0;
+            } else if (startCodeValue == START_GROUP) {
+                this.sampleIsKeyframe = true;
             }
-            r0.samplePosition = r0.totalBytesWritten - ((long) position);
-            long j = r0.pesTimeUs != C0542C.TIME_UNSET ? r0.pesTimeUs : r0.startedFirstSample ? r0.sampleTimeUs + r0.frameDurationUs : 0;
-            r0.sampleTimeUs = j;
-            z = false;
-            r0.sampleIsKeyframe = false;
-            r0.pesTimeUs = C0542C.TIME_UNSET;
-            z2 = true;
-            r0.startedFirstSample = true;
-            if (i3 == 0) {
-                z = z2;
-            }
-            r0.sampleHasPicture = z;
-            position = i2;
-            limit = i;
-            bArr = bArr2;
+            offset = startCodeOffset + 3;
         }
-        if (!r0.hasOutputFormat) {
-            r0.csdBuffer.onData(bArr, position, limit);
+        if (!this.hasOutputFormat) {
+            this.csdBuffer.onData(dataArray, offset, limit);
         }
     }
 
-    private static Pair<Format, Long> parseCsdBuffer(CsdBuffer csdBuffer, String str) {
-        float f;
-        CsdBuffer csdBuffer2 = csdBuffer;
-        Object copyOf = Arrays.copyOf(csdBuffer2.data, csdBuffer2.length);
-        int i = copyOf[5] & 255;
-        int i2 = ((copyOf[4] & 255) << 4) | (i >> 4);
-        int i3 = ((i & 15) << 8) | (copyOf[6] & 255);
-        switch ((copyOf[7] & PsExtractor.VIDEO_STREAM_MASK) >> 4) {
+    public void packetFinished() {
+    }
+
+    private static Pair<Format, Long> parseCsdBuffer(CsdBuffer csdBuffer, String formatId) {
+        byte[] csdData = Arrays.copyOf(csdBuffer.data, csdBuffer.length);
+        int secondByte = csdData[5] & 255;
+        int width = ((csdData[4] & 255) << 4) | (secondByte >> 4);
+        int height = ((secondByte & 15) << 8) | (csdData[6] & 255);
+        float pixelWidthHeightRatio = 1.0f;
+        switch ((csdData[7] & PsExtractor.VIDEO_STREAM_MASK) >> 4) {
             case 2:
-                f = ((float) (4 * i3)) / ((float) (3 * i2));
+                pixelWidthHeightRatio = ((float) (height * 4)) / ((float) (width * 3));
                 break;
             case 3:
-                f = ((float) (16 * i3)) / ((float) (9 * i2));
+                pixelWidthHeightRatio = ((float) (height * 16)) / ((float) (width * 9));
                 break;
             case 4:
-                f = ((float) (121 * i3)) / ((float) (100 * i2));
-                break;
-            default:
-                f = 1.0f;
+                pixelWidthHeightRatio = ((float) (height * 121)) / ((float) (width * 100));
                 break;
         }
-        Format createVideoSampleFormat = Format.createVideoSampleFormat(str, MimeTypes.VIDEO_MPEG2, null, -1, -1, i2, i3, -1.0f, Collections.singletonList(copyOf), -1, f, null);
-        long j = 0;
-        int i4 = (copyOf[7] & 15) - 1;
-        if (i4 >= 0 && i4 < FRAME_RATE_VALUES.length) {
-            double d = FRAME_RATE_VALUES[i4];
-            int i5 = csdBuffer2.sequenceExtensionPosition + 9;
-            i4 = (copyOf[i5] & 96) >> 5;
-            i5 = copyOf[i5] & 31;
-            if (i4 != i5) {
-                d *= (((double) i4) + 1.0d) / ((double) (i5 + 1));
+        Format format = Format.createVideoSampleFormat(formatId, MimeTypes.VIDEO_MPEG2, null, -1, -1, width, height, -1.0f, Collections.singletonList(csdData), -1, pixelWidthHeightRatio, null);
+        long frameDurationUs = 0;
+        int frameRateCodeMinusOne = (csdData[7] & 15) - 1;
+        if (frameRateCodeMinusOne >= 0 && frameRateCodeMinusOne < FRAME_RATE_VALUES.length) {
+            double frameRate = FRAME_RATE_VALUES[frameRateCodeMinusOne];
+            int sequenceExtensionPosition = csdBuffer.sequenceExtensionPosition;
+            int frameRateExtensionN = (csdData[sequenceExtensionPosition + 9] & 96) >> 5;
+            int frameRateExtensionD = csdData[sequenceExtensionPosition + 9] & 31;
+            if (frameRateExtensionN != frameRateExtensionD) {
+                frameRate *= (((double) frameRateExtensionN) + 1.0d) / ((double) (frameRateExtensionD + 1));
             }
-            j = (long) (1000000.0d / d);
+            frameDurationUs = (long) (1000000.0d / frameRate);
         }
-        return Pair.create(createVideoSampleFormat, Long.valueOf(j));
+        return Pair.create(format, Long.valueOf(frameDurationUs));
     }
 }

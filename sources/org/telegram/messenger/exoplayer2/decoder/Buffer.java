@@ -19,19 +19,19 @@ public abstract class Buffer {
         return getFlag(1);
     }
 
-    public final void setFlags(int i) {
-        this.flags = i;
+    public final void setFlags(int flags) {
+        this.flags = flags;
     }
 
-    public final void addFlag(int i) {
-        this.flags = i | this.flags;
+    public final void addFlag(int flag) {
+        this.flags |= flag;
     }
 
-    public final void clearFlag(int i) {
-        this.flags = (i ^ -1) & this.flags;
+    public final void clearFlag(int flag) {
+        this.flags &= flag ^ -1;
     }
 
-    protected final boolean getFlag(int i) {
-        return (this.flags & i) == i;
+    protected final boolean getFlag(int flag) {
+        return (this.flags & flag) == flag;
     }
 }

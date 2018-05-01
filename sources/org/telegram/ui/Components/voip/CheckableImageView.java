@@ -13,33 +13,33 @@ public class CheckableImageView extends ImageView implements Checkable {
         this(context, null);
     }
 
-    public CheckableImageView(Context context, AttributeSet attributeSet) {
-        this(context, attributeSet, 0);
+    public CheckableImageView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public CheckableImageView(Context context, AttributeSet attributeSet, int i) {
-        super(context, attributeSet, i);
+    public CheckableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
-    public int[] onCreateDrawableState(int i) {
-        i = super.onCreateDrawableState(i + 1);
+    public int[] onCreateDrawableState(int extraSpace) {
+        int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
         if (isChecked()) {
-            mergeDrawableStates(i, CHECKED_STATE_SET);
+            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
         }
-        return i;
+        return drawableState;
     }
 
     public void toggle() {
-        setChecked(this.mChecked ^ 1);
+        setChecked(!this.mChecked);
     }
 
     public boolean isChecked() {
         return this.mChecked;
     }
 
-    public void setChecked(boolean z) {
-        if (this.mChecked != z) {
-            this.mChecked = z;
+    public void setChecked(boolean checked) {
+        if (this.mChecked != checked) {
+            this.mChecked = checked;
             refreshDrawableState();
         }
     }

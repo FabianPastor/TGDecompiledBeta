@@ -15,63 +15,34 @@ public interface MetadataDecoderFactory {
         }
 
         public boolean supportsFormat(Format format) {
-            format = format.sampleMimeType;
-            if (!(MimeTypes.APPLICATION_ID3.equals(format) || MimeTypes.APPLICATION_EMSG.equals(format))) {
-                if (MimeTypes.APPLICATION_SCTE35.equals(format) == null) {
-                    return null;
-                }
-            }
-            return true;
+            String mimeType = format.sampleMimeType;
+            return MimeTypes.APPLICATION_ID3.equals(mimeType) || MimeTypes.APPLICATION_EMSG.equals(mimeType) || MimeTypes.APPLICATION_SCTE35.equals(mimeType);
         }
 
         public MetadataDecoder createDecoder(Format format) {
-            format = format.sampleMimeType;
-            int hashCode = format.hashCode();
-            if (hashCode != -NUM) {
-                if (hashCode != NUM) {
-                    if (hashCode == NUM) {
-                        if (format.equals(MimeTypes.APPLICATION_SCTE35) != null) {
-                            format = 2;
-                            switch (format) {
-                                case null:
-                                    return new Id3Decoder();
-                                case 1:
-                                    return new EventMessageDecoder();
-                                case 2:
-                                    return new SpliceInfoDecoder();
-                                default:
-                                    throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
-                            }
-                        }
+            String str = format.sampleMimeType;
+            Object obj = -1;
+            switch (str.hashCode()) {
+                case -1248341703:
+                    if (str.equals(MimeTypes.APPLICATION_ID3)) {
+                        obj = null;
+                        break;
                     }
-                } else if (format.equals(MimeTypes.APPLICATION_EMSG) != null) {
-                    format = true;
-                    switch (format) {
-                        case null:
-                            return new Id3Decoder();
-                        case 1:
-                            return new EventMessageDecoder();
-                        case 2:
-                            return new SpliceInfoDecoder();
-                        default:
-                            throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
+                    break;
+                case 1154383568:
+                    if (str.equals(MimeTypes.APPLICATION_EMSG)) {
+                        obj = 1;
+                        break;
                     }
-                }
-            } else if (format.equals(MimeTypes.APPLICATION_ID3) != null) {
-                format = null;
-                switch (format) {
-                    case null:
-                        return new Id3Decoder();
-                    case 1:
-                        return new EventMessageDecoder();
-                    case 2:
-                        return new SpliceInfoDecoder();
-                    default:
-                        throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
-                }
+                    break;
+                case 1652648887:
+                    if (str.equals(MimeTypes.APPLICATION_SCTE35)) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
             }
-            format = -1;
-            switch (format) {
+            switch (obj) {
                 case null:
                     return new Id3Decoder();
                 case 1:

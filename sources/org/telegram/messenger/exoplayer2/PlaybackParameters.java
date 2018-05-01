@@ -8,40 +8,37 @@ public final class PlaybackParameters {
     private final int scaledUsPerMs;
     public final float speed;
 
-    public PlaybackParameters(float f, float f2) {
-        boolean z = false;
-        Assertions.checkArgument(f > 0.0f);
-        if (f2 > 0.0f) {
-            z = true;
+    public PlaybackParameters(float speed, float pitch) {
+        boolean z = true;
+        Assertions.checkArgument(speed > 0.0f);
+        if (pitch <= 0.0f) {
+            z = false;
         }
         Assertions.checkArgument(z);
-        this.speed = f;
-        this.pitch = f2;
-        this.scaledUsPerMs = Math.round(f * 1000.0f);
+        this.speed = speed;
+        this.pitch = pitch;
+        this.scaledUsPerMs = Math.round(1000.0f * speed);
     }
 
-    public long getMediaTimeUsForPlayoutTimeMs(long j) {
-        return j * ((long) this.scaledUsPerMs);
+    public long getMediaTimeUsForPlayoutTimeMs(long timeMs) {
+        return ((long) this.scaledUsPerMs) * timeMs;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                PlaybackParameters playbackParameters = (PlaybackParameters) obj;
-                if (this.speed != playbackParameters.speed || this.pitch != playbackParameters.pitch) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        PlaybackParameters other = (PlaybackParameters) obj;
+        if (this.speed == other.speed && this.pitch == other.pitch) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (527 + Float.floatToRawIntBits(this.speed))) + Float.floatToRawIntBits(this.pitch);
+        return ((Float.floatToRawIntBits(this.speed) + 527) * 31) + Float.floatToRawIntBits(this.pitch);
     }
 }

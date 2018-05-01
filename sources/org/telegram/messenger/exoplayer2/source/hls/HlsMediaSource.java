@@ -44,8 +44,8 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
         private int minLoadableRetryCount;
         private Parser<HlsPlaylist> playlistParser;
 
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory) {
-            this(new DefaultHlsDataSourceFactory(factory));
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this(new DefaultHlsDataSourceFactory(dataSourceFactory));
         }
 
         public Factory(HlsDataSourceFactory hlsDataSourceFactory) {
@@ -55,46 +55,46 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
             this.compositeSequenceableLoaderFactory = new DefaultCompositeSequenceableLoaderFactory();
         }
 
-        public Factory setExtractorFactory(HlsExtractorFactory hlsExtractorFactory) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.extractorFactory = (HlsExtractorFactory) Assertions.checkNotNull(hlsExtractorFactory);
+        public Factory setExtractorFactory(HlsExtractorFactory extractorFactory) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.extractorFactory = (HlsExtractorFactory) Assertions.checkNotNull(extractorFactory);
             return this;
         }
 
-        public Factory setMinLoadableRetryCount(int i) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.minLoadableRetryCount = i;
+        public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.minLoadableRetryCount = minLoadableRetryCount;
             return this;
         }
 
-        public Factory setPlaylistParser(Parser<HlsPlaylist> parser) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.playlistParser = (Parser) Assertions.checkNotNull(parser);
+        public Factory setPlaylistParser(Parser<HlsPlaylist> playlistParser) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.playlistParser = (Parser) Assertions.checkNotNull(playlistParser);
             return this;
         }
 
         public Factory setCompositeSequenceableLoaderFactory(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.compositeSequenceableLoaderFactory = (CompositeSequenceableLoaderFactory) Assertions.checkNotNull(compositeSequenceableLoaderFactory);
             return this;
         }
 
-        public Factory setAllowChunklessPreparation(boolean z) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
-            this.allowChunklessPreparation = z;
+        public Factory setAllowChunklessPreparation(boolean allowChunklessPreparation) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.allowChunklessPreparation = allowChunklessPreparation;
             return this;
         }
 
-        public HlsMediaSource createMediaSource(Uri uri) {
-            return createMediaSource(uri, null, null);
+        public HlsMediaSource createMediaSource(Uri playlistUri) {
+            return createMediaSource(playlistUri, null, null);
         }
 
-        public HlsMediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener) {
+        public HlsMediaSource createMediaSource(Uri playlistUri, Handler eventHandler, MediaSourceEventListener eventListener) {
             this.isCreateCalled = true;
             if (this.playlistParser == null) {
                 this.playlistParser = new HlsPlaylistParser();
             }
-            return new HlsMediaSource(uri, this.hlsDataSourceFactory, this.extractorFactory, this.compositeSequenceableLoaderFactory, this.minLoadableRetryCount, handler, mediaSourceEventListener, this.playlistParser, this.allowChunklessPreparation);
+            return new HlsMediaSource(playlistUri, this.hlsDataSourceFactory, this.extractorFactory, this.compositeSequenceableLoaderFactory, this.minLoadableRetryCount, eventHandler, eventListener, this.playlistParser, this.allowChunklessPreparation);
         }
 
         public int[] getSupportedTypes() {
@@ -107,33 +107,33 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
     }
 
     @Deprecated
-    public HlsMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, Handler handler, MediaSourceEventListener mediaSourceEventListener) {
-        this(uri, factory, 3, handler, mediaSourceEventListener);
+    public HlsMediaSource(Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Handler eventHandler, MediaSourceEventListener eventListener) {
+        this(manifestUri, dataSourceFactory, 3, eventHandler, eventListener);
     }
 
     @Deprecated
-    public HlsMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory factory, int i, Handler handler, MediaSourceEventListener mediaSourceEventListener) {
-        this(uri, new DefaultHlsDataSourceFactory(factory), HlsExtractorFactory.DEFAULT, i, handler, mediaSourceEventListener, new HlsPlaylistParser());
+    public HlsMediaSource(Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener) {
+        this(manifestUri, new DefaultHlsDataSourceFactory(dataSourceFactory), HlsExtractorFactory.DEFAULT, minLoadableRetryCount, eventHandler, eventListener, new HlsPlaylistParser());
     }
 
     @Deprecated
-    public HlsMediaSource(Uri uri, HlsDataSourceFactory hlsDataSourceFactory, HlsExtractorFactory hlsExtractorFactory, int i, Handler handler, MediaSourceEventListener mediaSourceEventListener, Parser<HlsPlaylist> parser) {
-        this(uri, hlsDataSourceFactory, hlsExtractorFactory, new DefaultCompositeSequenceableLoaderFactory(), i, handler, mediaSourceEventListener, parser, false);
+    public HlsMediaSource(Uri manifestUri, HlsDataSourceFactory dataSourceFactory, HlsExtractorFactory extractorFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, Parser<HlsPlaylist> playlistParser) {
+        this(manifestUri, dataSourceFactory, extractorFactory, new DefaultCompositeSequenceableLoaderFactory(), minLoadableRetryCount, eventHandler, eventListener, playlistParser, false);
     }
 
-    private HlsMediaSource(Uri uri, HlsDataSourceFactory hlsDataSourceFactory, HlsExtractorFactory hlsExtractorFactory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int i, Handler handler, MediaSourceEventListener mediaSourceEventListener, Parser<HlsPlaylist> parser, boolean z) {
-        this.manifestUri = uri;
-        this.dataSourceFactory = hlsDataSourceFactory;
-        this.extractorFactory = hlsExtractorFactory;
+    private HlsMediaSource(Uri manifestUri, HlsDataSourceFactory dataSourceFactory, HlsExtractorFactory extractorFactory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, Parser<HlsPlaylist> playlistParser, boolean allowChunklessPreparation) {
+        this.manifestUri = manifestUri;
+        this.dataSourceFactory = dataSourceFactory;
+        this.extractorFactory = extractorFactory;
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
-        this.minLoadableRetryCount = i;
-        this.playlistParser = parser;
-        this.allowChunklessPreparation = z;
-        this.eventDispatcher = new EventDispatcher(handler, mediaSourceEventListener);
+        this.minLoadableRetryCount = minLoadableRetryCount;
+        this.playlistParser = playlistParser;
+        this.allowChunklessPreparation = allowChunklessPreparation;
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        Assertions.checkState(this.sourceListener == null ? true : null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        Assertions.checkState(this.sourceListener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.playlistTracker = new HlsPlaylistTracker(this.manifestUri, this.dataSourceFactory, this.eventDispatcher, this.minLoadableRetryCount, this, this.playlistParser);
         this.sourceListener = listener;
         this.playlistTracker.start();
@@ -143,8 +143,8 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
         this.playlistTracker.maybeThrowPrimaryPlaylistRefreshError();
     }
 
-    public MediaPeriod createPeriod(MediaPeriodId mediaPeriodId, Allocator allocator) {
-        Assertions.checkArgument(mediaPeriodId.periodIndex == null ? true : null);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        Assertions.checkArgument(id.periodIndex == 0);
         return new HlsMediaPeriod(this.extractorFactory, this.playlistTracker, this.dataSourceFactory, this.minLoadableRetryCount, this.eventDispatcher, allocator, this.compositeSequenceableLoaderFactory, this.allowChunklessPreparation);
     }
 
@@ -159,10 +159,10 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
         }
     }
 
-    public void onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist r24) {
+    public void onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist r33) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r2_8 org.telegram.messenger.exoplayer2.Timeline) in PHI: PHI: (r2_11 org.telegram.messenger.exoplayer2.Timeline) = (r2_8 org.telegram.messenger.exoplayer2.Timeline), (r2_10 org.telegram.messenger.exoplayer2.Timeline) binds: {(r2_8 org.telegram.messenger.exoplayer2.Timeline)=B:22:0x005b, (r2_10 org.telegram.messenger.exoplayer2.Timeline)=B:27:0x0079}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) in PHI: PHI: (r3_1 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) = (r3_0 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline), (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) binds: {(r3_0 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:19:0x005f, (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:30:0x00af}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -175,104 +175,123 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
         /*
-        r23 = this;
-        r0 = r23;
-        r1 = r24;
-        r2 = r1.hasProgramDateTime;
-        r5 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
-        if (r2 == 0) goto L_0x0010;
-    L_0x000d:
-        r8 = 0;
-        goto L_0x0011;
-    L_0x0010:
-        r8 = r5;
-    L_0x0011:
-        r2 = r1.hasProgramDateTime;
-        if (r2 == 0) goto L_0x001c;
-    L_0x0015:
-        r10 = r1.startTimeUs;
-        r10 = org.telegram.messenger.exoplayer2.C0542C.usToMs(r10);
-        goto L_0x001d;
-    L_0x001c:
-        r10 = r5;
-    L_0x001d:
-        r12 = r1.startOffsetUs;
-        r2 = r0.playlistTracker;
-        r2 = r2.isLive();
-        if (r2 == 0) goto L_0x0070;
-    L_0x0027:
-        r2 = r1.hasEndTag;
-        if (r2 == 0) goto L_0x0032;
-    L_0x002b:
-        r14 = r1.startTimeUs;
-        r3 = r1.durationUs;
-        r16 = r14 + r3;
-        goto L_0x0034;
-    L_0x0032:
-        r16 = r5;
+        r32 = this;
+        r0 = r33;
+        r10 = r0.hasProgramDateTime;
+        if (r10 == 0) goto L_0x007b;
+    L_0x0006:
+        r4 = 0;
+    L_0x0008:
+        r0 = r33;
+        r10 = r0.hasProgramDateTime;
+        if (r10 == 0) goto L_0x0081;
+    L_0x000e:
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r6 = org.telegram.messenger.exoplayer2.C0542C.usToMs(r10);
+    L_0x0016:
+        r0 = r33;
+        r14 = r0.startOffsetUs;
+        r0 = r32;
+        r10 = r0.playlistTracker;
+        r10 = r10.isLive();
+        if (r10 == 0) goto L_0x00a4;
+    L_0x0024:
+        r0 = r33;
+        r10 = r0.hasEndTag;
+        if (r10 == 0) goto L_0x0087;
+    L_0x002a:
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r0 = r33;
+        r12 = r0.durationUs;
+        r8 = r10 + r12;
     L_0x0034:
-        r2 = r1.segments;
-        r3 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1));
-        if (r3 != 0) goto L_0x0059;
-    L_0x003a:
-        r3 = r2.isEmpty();
-        if (r3 == 0) goto L_0x0043;
-    L_0x0040:
-        r3 = 0;
-        goto L_0x0056;
-    L_0x0043:
-        r3 = 0;
-        r4 = r2.size();
-        r4 = r4 + -3;
-        r3 = java.lang.Math.max(r3, r4);
-        r2 = r2.get(r3);
-        r2 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment) r2;
-        r3 = r2.relativeStartTimeUs;
-    L_0x0056:
-        r18 = r3;
-        goto L_0x005b;
-    L_0x0059:
-        r18 = r12;
-    L_0x005b:
-        r2 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
-        r14 = r1.durationUs;
-        r3 = r1.startTimeUs;
-        r20 = 1;
-        r5 = r1.hasEndTag;
-        r21 = r5 ^ 1;
-        r7 = r2;
-        r12 = r16;
-        r16 = r3;
-        r7.<init>(r8, r10, r12, r14, r16, r18, r20, r21);
-        goto L_0x008f;
-    L_0x0070:
-        r2 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1));
-        if (r2 != 0) goto L_0x0077;
-    L_0x0074:
-        r18 = 0;
-        goto L_0x0079;
-    L_0x0077:
-        r18 = r12;
-    L_0x0079:
-        r2 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
-        r3 = r1.startTimeUs;
-        r5 = r1.durationUs;
-        r12 = r3 + r5;
-        r14 = r1.durationUs;
-        r3 = r1.startTimeUs;
-        r20 = 1;
-        r21 = 0;
-        r7 = r2;
-        r16 = r3;
-        r7.<init>(r8, r10, r12, r14, r16, r18, r20, r21);
-    L_0x008f:
-        r3 = r0.sourceListener;
-        r4 = new org.telegram.messenger.exoplayer2.source.hls.HlsManifest;
-        r5 = r0.playlistTracker;
-        r5 = r5.getMasterPlaylist();
-        r4.<init>(r5, r1);
-        r3.onSourceInfoRefreshed(r0, r2, r4);
+        r0 = r33;
+        r2 = r0.segments;
+        r10 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r10 = (r14 > r10 ? 1 : (r14 == r10 ? 0 : -1));
+        if (r10 != 0) goto L_0x0049;
+    L_0x0041:
+        r10 = r2.isEmpty();
+        if (r10 == 0) goto L_0x008d;
+    L_0x0047:
+        r14 = 0;
+    L_0x0049:
+        r3 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
+        r0 = r33;
+        r10 = r0.durationUs;
+        r0 = r33;
+        r12 = r0.startTimeUs;
+        r16 = 1;
+        r0 = r33;
+        r0 = r0.hasEndTag;
+        r17 = r0;
+        if (r17 != 0) goto L_0x00a1;
+    L_0x005d:
+        r17 = 1;
+    L_0x005f:
+        r3.<init>(r4, r6, r8, r10, r12, r14, r16, r17);
+    L_0x0062:
+        r0 = r32;
+        r10 = r0.sourceListener;
+        r11 = new org.telegram.messenger.exoplayer2.source.hls.HlsManifest;
+        r0 = r32;
+        r12 = r0.playlistTracker;
+        r12 = r12.getMasterPlaylist();
+        r0 = r33;
+        r11.<init>(r12, r0);
+        r0 = r32;
+        r10.onSourceInfoRefreshed(r0, r3, r11);
         return;
+    L_0x007b:
+        r4 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0008;
+    L_0x0081:
+        r6 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0016;
+    L_0x0087:
+        r8 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0034;
+    L_0x008d:
+        r10 = 0;
+        r11 = r2.size();
+        r11 = r11 + -3;
+        r10 = java.lang.Math.max(r10, r11);
+        r10 = r2.get(r10);
+        r10 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment) r10;
+        r14 = r10.relativeStartTimeUs;
+        goto L_0x0049;
+    L_0x00a1:
+        r17 = 0;
+        goto L_0x005f;
+    L_0x00a4:
+        r10 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r10 = (r14 > r10 ? 1 : (r14 == r10 ? 0 : -1));
+        if (r10 != 0) goto L_0x00af;
+    L_0x00ad:
+        r14 = 0;
+    L_0x00af:
+        r3 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r0 = r33;
+        r12 = r0.durationUs;
+        r22 = r10 + r12;
+        r0 = r33;
+        r0 = r0.durationUs;
+        r24 = r0;
+        r0 = r33;
+        r0 = r0.startTimeUs;
+        r26 = r0;
+        r30 = 1;
+        r31 = 0;
+        r17 = r3;
+        r18 = r4;
+        r20 = r6;
+        r28 = r14;
+        r17.<init>(r18, r20, r22, r24, r26, r28, r30, r31);
+        goto L_0x0062;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.hls.HlsMediaSource.onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist):void");
     }

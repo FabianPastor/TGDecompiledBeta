@@ -13,32 +13,32 @@ final class TtmlSubtitle implements Subtitle {
     private final Map<String, TtmlRegion> regionMap;
     private final TtmlNode root;
 
-    public TtmlSubtitle(TtmlNode ttmlNode, Map<String, TtmlStyle> map, Map<String, TtmlRegion> map2) {
-        this.root = ttmlNode;
-        this.regionMap = map2;
-        this.globalStyles = map != null ? Collections.unmodifiableMap(map) : Collections.emptyMap();
-        this.eventTimesUs = ttmlNode.getEventTimesUs();
+    public TtmlSubtitle(TtmlNode root, Map<String, TtmlStyle> globalStyles, Map<String, TtmlRegion> regionMap) {
+        this.root = root;
+        this.regionMap = regionMap;
+        this.globalStyles = globalStyles != null ? Collections.unmodifiableMap(globalStyles) : Collections.emptyMap();
+        this.eventTimesUs = root.getEventTimesUs();
     }
 
-    public int getNextEventTimeIndex(long j) {
-        j = Util.binarySearchCeil(this.eventTimesUs, j, false, false);
-        return j < this.eventTimesUs.length ? j : -1;
+    public int getNextEventTimeIndex(long timeUs) {
+        int index = Util.binarySearchCeil(this.eventTimesUs, timeUs, false, false);
+        return index < this.eventTimesUs.length ? index : -1;
     }
 
     public int getEventTimeCount() {
         return this.eventTimesUs.length;
     }
 
-    public long getEventTime(int i) {
-        return this.eventTimesUs[i];
+    public long getEventTime(int index) {
+        return this.eventTimesUs[index];
     }
 
     TtmlNode getRoot() {
         return this.root;
     }
 
-    public List<Cue> getCues(long j) {
-        return this.root.getCues(j, this.globalStyles, this.regionMap);
+    public List<Cue> getCues(long timeUs) {
+        return this.root.getCues(timeUs, this.globalStyles, this.regionMap);
     }
 
     Map<String, TtmlStyle> getGlobalStyles() {

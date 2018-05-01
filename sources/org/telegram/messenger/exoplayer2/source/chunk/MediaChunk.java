@@ -10,10 +10,10 @@ public abstract class MediaChunk extends Chunk {
 
     public abstract boolean isLoadCompleted();
 
-    public MediaChunk(DataSource dataSource, DataSpec dataSpec, Format format, int i, Object obj, long j, long j2, int i2) {
-        super(dataSource, dataSpec, 1, format, i, obj, j, j2);
-        Assertions.checkNotNull(format);
-        this.chunkIndex = i2;
+    public MediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex) {
+        super(dataSource, dataSpec, 1, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs);
+        Assertions.checkNotNull(trackFormat);
+        this.chunkIndex = chunkIndex;
     }
 
     public int getNextChunkIndex() {

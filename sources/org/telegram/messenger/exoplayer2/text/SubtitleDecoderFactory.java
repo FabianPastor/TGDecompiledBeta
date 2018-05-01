@@ -22,79 +22,84 @@ public interface SubtitleDecoderFactory {
         }
 
         public boolean supportsFormat(Format format) {
-            format = format.sampleMimeType;
-            if (!(MimeTypes.TEXT_VTT.equals(format) || MimeTypes.TEXT_SSA.equals(format) || MimeTypes.APPLICATION_TTML.equals(format) || MimeTypes.APPLICATION_MP4VTT.equals(format) || MimeTypes.APPLICATION_SUBRIP.equals(format) || MimeTypes.APPLICATION_TX3G.equals(format) || MimeTypes.APPLICATION_CEA608.equals(format) || MimeTypes.APPLICATION_MP4CEA608.equals(format) || MimeTypes.APPLICATION_CEA708.equals(format) || MimeTypes.APPLICATION_DVBSUBS.equals(format))) {
-                if (MimeTypes.APPLICATION_PGS.equals(format) == null) {
-                    return null;
-                }
+            String mimeType = format.sampleMimeType;
+            if (MimeTypes.TEXT_VTT.equals(mimeType) || MimeTypes.TEXT_SSA.equals(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType) || MimeTypes.APPLICATION_MP4VTT.equals(mimeType) || MimeTypes.APPLICATION_SUBRIP.equals(mimeType) || MimeTypes.APPLICATION_TX3G.equals(mimeType) || MimeTypes.APPLICATION_CEA608.equals(mimeType) || MimeTypes.APPLICATION_MP4CEA608.equals(mimeType) || MimeTypes.APPLICATION_CEA708.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType)) {
+                return true;
             }
-            return true;
+            return false;
         }
 
-        /* JADX WARNING: inconsistent code. */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
         public SubtitleDecoder createDecoder(Format format) {
-            Object obj;
             String str = format.sampleMimeType;
+            Object obj = -1;
             switch (str.hashCode()) {
                 case -1351681404:
                     if (str.equals(MimeTypes.APPLICATION_DVBSUBS)) {
                         obj = 9;
                         break;
                     }
+                    break;
                 case -1248334819:
                     if (str.equals(MimeTypes.APPLICATION_PGS)) {
                         obj = 10;
                         break;
                     }
+                    break;
                 case -1026075066:
                     if (str.equals(MimeTypes.APPLICATION_MP4VTT)) {
                         obj = 2;
                         break;
                     }
+                    break;
                 case -1004728940:
                     if (str.equals(MimeTypes.TEXT_VTT)) {
                         obj = null;
                         break;
                     }
+                    break;
                 case 691401887:
                     if (str.equals(MimeTypes.APPLICATION_TX3G)) {
                         obj = 5;
                         break;
                     }
+                    break;
                 case 822864842:
                     if (str.equals(MimeTypes.TEXT_SSA)) {
                         obj = 1;
                         break;
                     }
+                    break;
                 case 930165504:
                     if (str.equals(MimeTypes.APPLICATION_MP4CEA608)) {
                         obj = 7;
                         break;
                     }
+                    break;
                 case 1566015601:
                     if (str.equals(MimeTypes.APPLICATION_CEA608)) {
                         obj = 6;
                         break;
                     }
+                    break;
                 case 1566016562:
                     if (str.equals(MimeTypes.APPLICATION_CEA708)) {
                         obj = 8;
                         break;
                     }
+                    break;
                 case 1668750253:
                     if (str.equals(MimeTypes.APPLICATION_SUBRIP)) {
                         obj = 4;
                         break;
                     }
+                    break;
                 case 1693976202:
                     if (str.equals(MimeTypes.APPLICATION_TTML)) {
                         obj = 3;
                         break;
                     }
-                default:
+                    break;
             }
-            obj = -1;
             switch (obj) {
                 case null:
                     return new WebvttDecoder();

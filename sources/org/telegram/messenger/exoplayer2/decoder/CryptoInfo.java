@@ -21,31 +21,41 @@ public final class CryptoInfo {
         private final android.media.MediaCodec.CryptoInfo frameworkCryptoInfo;
         private final Pattern pattern;
 
-        private PatternHolderV24(android.media.MediaCodec.CryptoInfo cryptoInfo) {
-            this.frameworkCryptoInfo = cryptoInfo;
+        private PatternHolderV24(android.media.MediaCodec.CryptoInfo frameworkCryptoInfo) {
+            this.frameworkCryptoInfo = frameworkCryptoInfo;
             this.pattern = new Pattern(0, 0);
         }
 
-        private void set(int i, int i2) {
-            this.pattern.set(i, i2);
+        private void set(int encryptedBlocks, int clearBlocks) {
+            this.pattern.set(encryptedBlocks, clearBlocks);
             this.frameworkCryptoInfo.setPattern(this.pattern);
         }
     }
 
     public CryptoInfo() {
-        this.frameworkCryptoInfo = Util.SDK_INT >= 16 ? newFrameworkCryptoInfoV16() : null;
-        this.patternHolder = Util.SDK_INT >= 24 ? new PatternHolderV24(this.frameworkCryptoInfo) : null;
+        android.media.MediaCodec.CryptoInfo newFrameworkCryptoInfoV16;
+        PatternHolderV24 patternHolderV24 = null;
+        if (Util.SDK_INT >= 16) {
+            newFrameworkCryptoInfoV16 = newFrameworkCryptoInfoV16();
+        } else {
+            newFrameworkCryptoInfoV16 = null;
+        }
+        this.frameworkCryptoInfo = newFrameworkCryptoInfoV16;
+        if (Util.SDK_INT >= 24) {
+            patternHolderV24 = new PatternHolderV24(this.frameworkCryptoInfo);
+        }
+        this.patternHolder = patternHolderV24;
     }
 
-    public void set(int i, int[] iArr, int[] iArr2, byte[] bArr, byte[] bArr2, int i2, int i3, int i4) {
-        this.numSubSamples = i;
-        this.numBytesOfClearData = iArr;
-        this.numBytesOfEncryptedData = iArr2;
-        this.key = bArr;
-        this.iv = bArr2;
-        this.mode = i2;
-        this.encryptedBlocks = i3;
-        this.clearBlocks = i4;
+    public void set(int numSubSamples, int[] numBytesOfClearData, int[] numBytesOfEncryptedData, byte[] key, byte[] iv, int mode, int encryptedBlocks, int clearBlocks) {
+        this.numSubSamples = numSubSamples;
+        this.numBytesOfClearData = numBytesOfClearData;
+        this.numBytesOfEncryptedData = numBytesOfEncryptedData;
+        this.key = key;
+        this.iv = iv;
+        this.mode = mode;
+        this.encryptedBlocks = encryptedBlocks;
+        this.clearBlocks = clearBlocks;
         if (Util.SDK_INT >= 16) {
             updateFrameworkCryptoInfoV16();
         }

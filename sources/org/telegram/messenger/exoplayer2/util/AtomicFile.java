@@ -28,7 +28,7 @@ public final class AtomicFile {
                 flush();
                 try {
                     this.fileOutputStream.getFD().sync();
-                } catch (Throwable e) {
+                } catch (IOException e) {
                     Log.w(AtomicFile.TAG, "Failed to sync file descriptor:", e);
                 }
                 this.fileOutputStream.close();
@@ -39,25 +39,22 @@ public final class AtomicFile {
             this.fileOutputStream.flush();
         }
 
-        public void write(int i) throws IOException {
-            this.fileOutputStream.write(i);
+        public void write(int b) throws IOException {
+            this.fileOutputStream.write(b);
         }
 
-        public void write(byte[] bArr) throws IOException {
-            this.fileOutputStream.write(bArr);
+        public void write(byte[] b) throws IOException {
+            this.fileOutputStream.write(b);
         }
 
-        public void write(byte[] bArr, int i, int i2) throws IOException {
-            this.fileOutputStream.write(bArr, i, i2);
+        public void write(byte[] b, int off, int len) throws IOException {
+            this.fileOutputStream.write(b, off, len);
         }
     }
 
-    public AtomicFile(File file) {
-        this.baseName = file;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(file.getPath());
-        stringBuilder.append(".bak");
-        this.backupName = new File(stringBuilder.toString());
+    public AtomicFile(File baseName) {
+        this.baseName = baseName;
+        this.backupName = new File(baseName.getPath() + ".bak");
     }
 
     public void delete() {
@@ -66,42 +63,29 @@ public final class AtomicFile {
     }
 
     public OutputStream startWrite() throws IOException {
-        StringBuilder stringBuilder;
         if (this.baseName.exists()) {
             if (this.backupName.exists()) {
                 this.baseName.delete();
             } else if (!this.baseName.renameTo(this.backupName)) {
-                String str = TAG;
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append("Couldn't rename file ");
-                stringBuilder2.append(this.baseName);
-                stringBuilder2.append(" to backup file ");
-                stringBuilder2.append(this.backupName);
-                Log.w(str, stringBuilder2.toString());
+                Log.w(TAG, "Couldn't rename file " + this.baseName + " to backup file " + this.backupName);
             }
         }
         try {
             return new AtomicFileOutputStream(this.baseName);
-        } catch (Throwable e) {
+        } catch (FileNotFoundException e) {
             if (this.baseName.getParentFile().mkdirs()) {
                 try {
                     return new AtomicFileOutputStream(this.baseName);
-                } catch (Throwable e2) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("Couldn't create ");
-                    stringBuilder.append(this.baseName);
-                    throw new IOException(stringBuilder.toString(), e2);
+                } catch (FileNotFoundException e2) {
+                    throw new IOException("Couldn't create " + this.baseName, e2);
                 }
             }
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("Couldn't create directory ");
-            stringBuilder.append(this.baseName);
-            throw new IOException(stringBuilder.toString(), e2);
+            throw new IOException("Couldn't create directory " + this.baseName, e);
         }
     }
 
-    public void endWrite(OutputStream outputStream) throws IOException {
-        outputStream.close();
+    public void endWrite(OutputStream str) throws IOException {
+        str.close();
         this.backupName.delete();
     }
 

@@ -6,9 +6,9 @@ import java.io.InputStream;
 public class RangeInputStream extends PositionInputStream {
     private final long endPosition;
 
-    public RangeInputStream(InputStream inputStream, long j, long j2) throws IOException {
-        super(inputStream, j);
-        this.endPosition = j + j2;
+    public RangeInputStream(InputStream delegate, long position, long length) throws IOException {
+        super(delegate, position);
+        this.endPosition = position + length;
     }
 
     public long getRemainingLength() {
@@ -22,20 +22,20 @@ public class RangeInputStream extends PositionInputStream {
         return super.read();
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        if (getPosition() + ((long) i2) > this.endPosition) {
-            i2 = (int) (this.endPosition - getPosition());
-            if (i2 == 0) {
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (getPosition() + ((long) len) > this.endPosition) {
+            len = (int) (this.endPosition - getPosition());
+            if (len == 0) {
                 return -1;
             }
         }
-        return super.read(bArr, i, i2);
+        return super.read(b, off, len);
     }
 
-    public long skip(long j) throws IOException {
-        if (getPosition() + j > this.endPosition) {
-            j = (long) ((int) (this.endPosition - getPosition()));
+    public long skip(long n) throws IOException {
+        if (getPosition() + n > this.endPosition) {
+            n = (long) ((int) (this.endPosition - getPosition()));
         }
-        return super.skip(j);
+        return super.skip(n);
     }
 }

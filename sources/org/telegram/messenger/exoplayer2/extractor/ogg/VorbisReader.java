@@ -2,8 +2,8 @@ package org.telegram.messenger.exoplayer2.extractor.ogg;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ogg.VorbisUtil.CommentHeader;
 import org.telegram.messenger.exoplayer2.extractor.ogg.VorbisUtil.Mode;
 import org.telegram.messenger.exoplayer2.extractor.ogg.VorbisUtil.VorbisIdHeader;
@@ -24,41 +24,29 @@ final class VorbisReader extends StreamReader {
         public final Mode[] modes;
         public final byte[] setupHeaderData;
 
-        public VorbisSetup(VorbisIdHeader vorbisIdHeader, CommentHeader commentHeader, byte[] bArr, Mode[] modeArr, int i) {
-            this.idHeader = vorbisIdHeader;
+        public VorbisSetup(VorbisIdHeader idHeader, CommentHeader commentHeader, byte[] setupHeaderData, Mode[] modes, int iLogModes) {
+            this.idHeader = idHeader;
             this.commentHeader = commentHeader;
-            this.setupHeaderData = bArr;
-            this.modes = modeArr;
-            this.iLogModes = i;
+            this.setupHeaderData = setupHeaderData;
+            this.modes = modes;
+            this.iLogModes = iLogModes;
         }
-    }
-
-    static int readBits(byte b, int i, int i2) {
-        return (b >> i2) & (255 >>> (8 - i));
     }
 
     VorbisReader() {
     }
 
-    public static boolean verifyBitstreamType(org.telegram.messenger.exoplayer2.util.ParsableByteArray r1) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r0 = 1;
-        r1 = org.telegram.messenger.exoplayer2.extractor.ogg.VorbisUtil.verifyVorbisHeaderCapturePattern(r0, r1, r0);	 Catch:{ ParserException -> 0x0006 }
-        return r1;
-    L_0x0006:
-        r1 = 0;
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.extractor.ogg.VorbisReader.verifyBitstreamType(org.telegram.messenger.exoplayer2.util.ParsableByteArray):boolean");
+    public static boolean verifyBitstreamType(ParsableByteArray data) {
+        try {
+            return VorbisUtil.verifyVorbisHeaderCapturePattern(1, data, true);
+        } catch (ParserException e) {
+            return false;
+        }
     }
 
-    protected void reset(boolean z) {
-        super.reset(z);
-        if (z) {
+    protected void reset(boolean headerData) {
+        super.reset(headerData);
+        if (headerData) {
             this.vorbisSetup = null;
             this.vorbisIdHeader = null;
             this.commentHeader = null;
@@ -67,75 +55,83 @@ Error: java.lang.NullPointerException
         this.seenFirstAudioPacket = false;
     }
 
-    protected void onSeekEnd(long j) {
-        super.onSeekEnd(j);
-        int i = (j > 0 ? 1 : (j == 0 ? 0 : -1));
-        j = null;
-        this.seenFirstAudioPacket = i != 0;
-        if (this.vorbisIdHeader != null) {
-            j = this.vorbisIdHeader.blockSize0;
+    protected void onSeekEnd(long currentGranule) {
+        boolean z;
+        int i = 0;
+        super.onSeekEnd(currentGranule);
+        if (currentGranule != 0) {
+            z = true;
+        } else {
+            z = false;
         }
-        this.previousPacketBlockSize = j;
+        this.seenFirstAudioPacket = z;
+        if (this.vorbisIdHeader != null) {
+            i = this.vorbisIdHeader.blockSize0;
+        }
+        this.previousPacketBlockSize = i;
     }
 
-    protected long preparePayload(ParsableByteArray parsableByteArray) {
-        int i = 0;
-        if ((parsableByteArray.data[0] & 1) == 1) {
+    protected long preparePayload(ParsableByteArray packet) {
+        int samplesInPacket = 0;
+        if ((packet.data[0] & 1) == 1) {
             return -1;
         }
-        int decodeBlockSize = decodeBlockSize(parsableByteArray.data[0], this.vorbisSetup);
+        int packetBlockSize = decodeBlockSize(packet.data[0], this.vorbisSetup);
         if (this.seenFirstAudioPacket) {
-            i = (this.previousPacketBlockSize + decodeBlockSize) / 4;
+            samplesInPacket = (this.previousPacketBlockSize + packetBlockSize) / 4;
         }
-        long j = (long) i;
-        appendNumberOfSamples(parsableByteArray, j);
+        appendNumberOfSamples(packet, (long) samplesInPacket);
         this.seenFirstAudioPacket = true;
-        this.previousPacketBlockSize = decodeBlockSize;
-        return j;
+        this.previousPacketBlockSize = packetBlockSize;
+        return (long) samplesInPacket;
     }
 
-    protected boolean readHeaders(ParsableByteArray parsableByteArray, long j, SetupData setupData) throws IOException, InterruptedException {
+    protected boolean readHeaders(ParsableByteArray packet, long position, SetupData setupData) throws IOException, InterruptedException {
         if (this.vorbisSetup != null) {
-            return null;
+            return false;
         }
-        this.vorbisSetup = readSetupHeaders(parsableByteArray);
+        this.vorbisSetup = readSetupHeaders(packet);
         if (this.vorbisSetup == null) {
             return true;
         }
-        List arrayList = new ArrayList();
-        arrayList.add(this.vorbisSetup.idHeader.data);
-        arrayList.add(this.vorbisSetup.setupHeaderData);
-        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_VORBIS, null, this.vorbisSetup.idHeader.bitrateNominal, -1, this.vorbisSetup.idHeader.channels, (int) this.vorbisSetup.idHeader.sampleRate, arrayList, null, 0, null);
+        ArrayList<byte[]> codecInitialisationData = new ArrayList();
+        codecInitialisationData.add(this.vorbisSetup.idHeader.data);
+        codecInitialisationData.add(this.vorbisSetup.setupHeaderData);
+        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_VORBIS, null, this.vorbisSetup.idHeader.bitrateNominal, -1, this.vorbisSetup.idHeader.channels, (int) this.vorbisSetup.idHeader.sampleRate, codecInitialisationData, null, 0, null);
         return true;
     }
 
-    VorbisSetup readSetupHeaders(ParsableByteArray parsableByteArray) throws IOException {
+    VorbisSetup readSetupHeaders(ParsableByteArray scratch) throws IOException {
         if (this.vorbisIdHeader == null) {
-            this.vorbisIdHeader = VorbisUtil.readVorbisIdentificationHeader(parsableByteArray);
+            this.vorbisIdHeader = VorbisUtil.readVorbisIdentificationHeader(scratch);
             return null;
         } else if (this.commentHeader == null) {
-            this.commentHeader = VorbisUtil.readVorbisCommentHeader(parsableByteArray);
+            this.commentHeader = VorbisUtil.readVorbisCommentHeader(scratch);
             return null;
         } else {
-            Object obj = new byte[parsableByteArray.limit()];
-            System.arraycopy(parsableByteArray.data, 0, obj, 0, parsableByteArray.limit());
-            Mode[] readVorbisModes = VorbisUtil.readVorbisModes(parsableByteArray, this.vorbisIdHeader.channels);
-            return new VorbisSetup(this.vorbisIdHeader, this.commentHeader, obj, readVorbisModes, VorbisUtil.iLog(readVorbisModes.length - 1));
+            byte[] setupHeaderData = new byte[scratch.limit()];
+            System.arraycopy(scratch.data, 0, setupHeaderData, 0, scratch.limit());
+            Mode[] modes = VorbisUtil.readVorbisModes(scratch, this.vorbisIdHeader.channels);
+            return new VorbisSetup(this.vorbisIdHeader, this.commentHeader, setupHeaderData, modes, VorbisUtil.iLog(modes.length - 1));
         }
     }
 
-    static void appendNumberOfSamples(ParsableByteArray parsableByteArray, long j) {
-        parsableByteArray.setLimit(parsableByteArray.limit() + 4);
-        parsableByteArray.data[parsableByteArray.limit() - 4] = (byte) ((int) (j & 255));
-        parsableByteArray.data[parsableByteArray.limit() - 3] = (byte) ((int) ((j >>> 8) & 255));
-        parsableByteArray.data[parsableByteArray.limit() - 2] = (byte) ((int) ((j >>> 16) & 255));
-        parsableByteArray.data[parsableByteArray.limit() - 1] = (byte) ((int) ((j >>> 24) & 255));
+    static int readBits(byte src, int length, int leastSignificantBitIndex) {
+        return (src >> leastSignificantBitIndex) & (255 >>> (8 - length));
     }
 
-    private static int decodeBlockSize(byte b, VorbisSetup vorbisSetup) {
-        if (vorbisSetup.modes[readBits(b, vorbisSetup.iLogModes, 1)].blockFlag == (byte) 0) {
-            return vorbisSetup.idHeader.blockSize0;
+    static void appendNumberOfSamples(ParsableByteArray buffer, long packetSampleCount) {
+        buffer.setLimit(buffer.limit() + 4);
+        buffer.data[buffer.limit() - 4] = (byte) ((int) (packetSampleCount & 255));
+        buffer.data[buffer.limit() - 3] = (byte) ((int) ((packetSampleCount >>> 8) & 255));
+        buffer.data[buffer.limit() - 2] = (byte) ((int) ((packetSampleCount >>> 16) & 255));
+        buffer.data[buffer.limit() - 1] = (byte) ((int) ((packetSampleCount >>> 24) & 255));
+    }
+
+    private static int decodeBlockSize(byte firstByteOfAudioPacket, VorbisSetup vorbisSetup) {
+        if (vorbisSetup.modes[readBits(firstByteOfAudioPacket, vorbisSetup.iLogModes, 1)].blockFlag) {
+            return vorbisSetup.idHeader.blockSize1;
         }
-        return vorbisSetup.idHeader.blockSize1;
+        return vorbisSetup.idHeader.blockSize0;
     }
 }

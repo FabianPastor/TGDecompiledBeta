@@ -13,16 +13,16 @@ public final class FrameworkMediaCrypto implements ExoMediaCrypto {
         this(mediaCrypto, false);
     }
 
-    public FrameworkMediaCrypto(MediaCrypto mediaCrypto, boolean z) {
+    public FrameworkMediaCrypto(MediaCrypto mediaCrypto, boolean forceAllowInsecureDecoderComponents) {
         this.mediaCrypto = (MediaCrypto) Assertions.checkNotNull(mediaCrypto);
-        this.forceAllowInsecureDecoderComponents = z;
+        this.forceAllowInsecureDecoderComponents = forceAllowInsecureDecoderComponents;
     }
 
     public MediaCrypto getWrappedMediaCrypto() {
         return this.mediaCrypto;
     }
 
-    public boolean requiresSecureDecoderComponent(String str) {
-        return (this.forceAllowInsecureDecoderComponents || this.mediaCrypto.requiresSecureDecoderComponent(str) == null) ? null : true;
+    public boolean requiresSecureDecoderComponent(String mimeType) {
+        return !this.forceAllowInsecureDecoderComponents && this.mediaCrypto.requiresSecureDecoderComponent(mimeType);
     }
 }

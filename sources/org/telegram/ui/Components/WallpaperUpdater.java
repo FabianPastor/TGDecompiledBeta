@@ -6,6 +6,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.support.v4.content.FileProvider;
@@ -36,32 +37,28 @@ public class WallpaperUpdater {
     public WallpaperUpdater(Activity activity, WallpaperUpdaterDelegate wallpaperUpdaterDelegate) {
         this.parentActivity = activity;
         this.delegate = wallpaperUpdaterDelegate;
-        wallpaperUpdaterDelegate = FileLoader.getDirectory(4);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(Utilities.random.nextInt());
-        stringBuilder.append(".jpg");
-        this.currentWallpaperPath = new File(wallpaperUpdaterDelegate, stringBuilder.toString());
+        this.currentWallpaperPath = new File(FileLoader.getDirectory(4), Utilities.random.nextInt() + ".jpg");
     }
 
-    public void showAlert(final boolean z) {
+    public void showAlert(final boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(z ? new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("SelectColor", C0446R.string.SelectColor), LocaleController.getString("Default", C0446R.string.Default), LocaleController.getString("Cancel", C0446R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("Cancel", C0446R.string.Cancel)}, new OnClickListener() {
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("SelectColor", C0446R.string.SelectColor), LocaleController.getString("Default", C0446R.string.Default), LocaleController.getString("Cancel", C0446R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("Cancel", C0446R.string.Cancel)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     try {
-                        i = new Intent("android.media.action.IMAGE_CAPTURE");
-                        File generatePicturePath = AndroidUtilities.generatePicturePath();
-                        if (generatePicturePath != null) {
+                        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        File image = AndroidUtilities.generatePicturePath();
+                        if (image != null) {
                             if (VERSION.SDK_INT >= 24) {
-                                i.putExtra("output", FileProvider.getUriForFile(WallpaperUpdater.this.parentActivity, "org.telegram.messenger.provider", generatePicturePath));
-                                i.addFlags(2);
-                                i.addFlags(1);
+                                takePictureIntent.putExtra("output", FileProvider.getUriForFile(WallpaperUpdater.this.parentActivity, "org.telegram.messenger.provider", image));
+                                takePictureIntent.addFlags(2);
+                                takePictureIntent.addFlags(1);
                             } else {
-                                i.putExtra("output", Uri.fromFile(generatePicturePath));
+                                takePictureIntent.putExtra("output", Uri.fromFile(image));
                             }
-                            WallpaperUpdater.this.currentPicturePath = generatePicturePath.getAbsolutePath();
+                            WallpaperUpdater.this.currentPicturePath = image.getAbsolutePath();
                         }
-                        WallpaperUpdater.this.parentActivity.startActivityForResult(i, 10);
+                        WallpaperUpdater.this.parentActivity.startActivityForResult(takePictureIntent, 10);
                     } catch (Throwable e) {
                         try {
                             FileLog.m3e(e);
@@ -70,10 +67,10 @@ public class WallpaperUpdater {
                         }
                     }
                 } else if (i == 1) {
-                    dialogInterface = new Intent("android.intent.action.PICK");
-                    dialogInterface.setType("image/*");
-                    WallpaperUpdater.this.parentActivity.startActivityForResult(dialogInterface, 11);
-                } else if (z == null) {
+                    Intent photoPickerIntent = new Intent("android.intent.action.PICK");
+                    photoPickerIntent.setType("image/*");
+                    WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
+                } else if (!fromTheme) {
                 } else {
                     if (i == 2) {
                         WallpaperUpdater.this.delegate.needOpenColorPicker();
@@ -98,80 +95,86 @@ public class WallpaperUpdater {
         return this.currentPicturePath;
     }
 
-    public void setCurrentPicturePath(String str) {
-        this.currentPicturePath = str;
+    public void setCurrentPicturePath(String value) {
+        this.currentPicturePath = value;
     }
 
-    public void onActivityResult(int i, int i2, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Throwable e;
-        if (i2 == -1) {
-            FileOutputStream fileOutputStream = null;
-            if (i == 10) {
-                AndroidUtilities.addMediaToGallery(this.currentPicturePath);
+        Throwable th;
+        if (resultCode != -1) {
+            return;
+        }
+        Point screenSize;
+        Bitmap bitmap;
+        if (requestCode == 10) {
+            AndroidUtilities.addMediaToGallery(this.currentPicturePath);
+            FileOutputStream stream = null;
+            try {
+                screenSize = AndroidUtilities.getRealScreenSize();
+                bitmap = ImageLoader.loadBitmap(this.currentPicturePath, null, (float) screenSize.x, (float) screenSize.y, true);
+                FileOutputStream stream2 = new FileOutputStream(this.currentWallpaperPath);
                 try {
-                    i = AndroidUtilities.getRealScreenSize();
-                    i = ImageLoader.loadBitmap(this.currentPicturePath, null, (float) i.x, (float) i.y, true);
-                    i2 = new FileOutputStream(this.currentWallpaperPath);
-                    try {
-                        i.compress(CompressFormat.JPEG, 87, i2);
-                        this.delegate.didSelectWallpaper(this.currentWallpaperPath, i);
-                        if (i2 != 0) {
-                            try {
-                                i2.close();
-                            } catch (Throwable e2) {
-                                FileLog.m3e(e2);
-                            }
-                        }
-                    } catch (Exception e3) {
-                        e2 = e3;
+                    bitmap.compress(CompressFormat.JPEG, 87, stream2);
+                    this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
+                    if (stream2 != null) {
                         try {
+                            stream2.close();
+                        } catch (Throwable e2) {
                             FileLog.m3e(e2);
-                            if (i2 != 0) {
-                                i2.close();
-                            }
-                            this.currentPicturePath = null;
-                        } catch (Throwable th) {
-                            i = th;
-                            fileOutputStream = i2;
-                            if (fileOutputStream != null) {
-                                try {
-                                    fileOutputStream.close();
-                                } catch (Throwable e4) {
-                                    FileLog.m3e(e4);
-                                }
-                            }
-                            throw i;
+                            stream = stream2;
                         }
                     }
-                } catch (Exception e5) {
-                    e2 = e5;
-                    i2 = 0;
-                    FileLog.m3e(e2);
-                    if (i2 != 0) {
-                        i2.close();
+                    stream = stream2;
+                } catch (Exception e3) {
+                    e2 = e3;
+                    stream = stream2;
+                    try {
+                        FileLog.m3e(e2);
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e22) {
+                                FileLog.m3e(e22);
+                            }
+                        }
+                        this.currentPicturePath = null;
+                    } catch (Throwable th2) {
+                        th = th2;
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e222) {
+                                FileLog.m3e(e222);
+                            }
+                        }
+                        throw th;
                     }
-                    this.currentPicturePath = null;
-                } catch (Throwable th2) {
-                    i = th2;
-                    if (fileOutputStream != null) {
-                        fileOutputStream.close();
+                } catch (Throwable th3) {
+                    th = th3;
+                    stream = stream2;
+                    if (stream != null) {
+                        stream.close();
                     }
-                    throw i;
+                    throw th;
+                }
+            } catch (Exception e4) {
+                e222 = e4;
+                FileLog.m3e(e222);
+                if (stream != null) {
+                    stream.close();
                 }
                 this.currentPicturePath = null;
-            } else {
-                if (i == 11 && intent != null) {
-                    if (intent.getData() != 0) {
-                        try {
-                            i = AndroidUtilities.getRealScreenSize();
-                            i = ImageLoader.loadBitmap(null, intent.getData(), (float) i.x, (float) i.y, true);
-                            i.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
-                            this.delegate.didSelectWallpaper(this.currentWallpaperPath, i);
-                        } catch (Throwable e22) {
-                            FileLog.m3e(e22);
-                        }
-                    }
-                }
+            }
+            this.currentPicturePath = null;
+        } else if (requestCode == 11 && data != null && data.getData() != null) {
+            try {
+                screenSize = AndroidUtilities.getRealScreenSize();
+                bitmap = ImageLoader.loadBitmap(null, data.getData(), (float) screenSize.x, (float) screenSize.y, true);
+                bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
+                this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
+            } catch (Throwable e2222) {
+                FileLog.m3e(e2222);
             }
         }
     }

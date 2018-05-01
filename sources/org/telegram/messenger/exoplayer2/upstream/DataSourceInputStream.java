@@ -33,19 +33,19 @@ public final class DataSourceInputStream extends InputStream {
         return this.singleByteArray[0] & 255;
     }
 
-    public int read(byte[] bArr) throws IOException {
-        return read(bArr, 0, bArr.length);
+    public int read(byte[] buffer) throws IOException {
+        return read(buffer, 0, buffer.length);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        Assertions.checkState(this.closed ^ 1);
+    public int read(byte[] buffer, int offset, int length) throws IOException {
+        Assertions.checkState(!this.closed);
         checkOpened();
-        bArr = this.dataSource.read(bArr, i, i2);
-        if (bArr == -1) {
+        int bytesRead = this.dataSource.read(buffer, offset, length);
+        if (bytesRead == -1) {
             return -1;
         }
-        this.totalBytesRead += (long) bArr;
-        return bArr;
+        this.totalBytesRead += (long) bytesRead;
+        return bytesRead;
     }
 
     public void close() throws IOException {

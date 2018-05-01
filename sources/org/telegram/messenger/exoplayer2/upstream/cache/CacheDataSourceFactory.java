@@ -13,24 +13,24 @@ public final class CacheDataSourceFactory implements Factory {
     private final int flags;
     private final Factory upstreamFactory;
 
-    public CacheDataSourceFactory(Cache cache, Factory factory) {
-        this(cache, factory, 0);
+    public CacheDataSourceFactory(Cache cache, Factory upstreamFactory) {
+        this(cache, upstreamFactory, 0);
     }
 
-    public CacheDataSourceFactory(Cache cache, Factory factory, int i) {
-        this(cache, factory, i, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
+    public CacheDataSourceFactory(Cache cache, Factory upstreamFactory, int flags) {
+        this(cache, upstreamFactory, flags, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
     }
 
-    public CacheDataSourceFactory(Cache cache, Factory factory, int i, long j) {
-        this(cache, factory, new FileDataSourceFactory(), new CacheDataSinkFactory(cache, j), i, null);
+    public CacheDataSourceFactory(Cache cache, Factory upstreamFactory, int flags, long maxCacheFileSize) {
+        this(cache, upstreamFactory, new FileDataSourceFactory(), new CacheDataSinkFactory(cache, maxCacheFileSize), flags, null);
     }
 
-    public CacheDataSourceFactory(Cache cache, Factory factory, Factory factory2, DataSink.Factory factory3, int i, EventListener eventListener) {
+    public CacheDataSourceFactory(Cache cache, Factory upstreamFactory, Factory cacheReadDataSourceFactory, DataSink.Factory cacheWriteDataSinkFactory, int flags, EventListener eventListener) {
         this.cache = cache;
-        this.upstreamFactory = factory;
-        this.cacheReadDataSourceFactory = factory2;
-        this.cacheWriteDataSinkFactory = factory3;
-        this.flags = i;
+        this.upstreamFactory = upstreamFactory;
+        this.cacheReadDataSourceFactory = cacheReadDataSourceFactory;
+        this.cacheWriteDataSinkFactory = cacheWriteDataSinkFactory;
+        this.flags = flags;
         this.eventListener = eventListener;
     }
 

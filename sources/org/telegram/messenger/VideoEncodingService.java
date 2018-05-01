@@ -13,12 +13,12 @@ public class VideoEncodingService extends Service implements NotificationCenterD
     private int currentProgress;
     private String path;
 
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
     public VideoEncodingService() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopEncodingService);
+    }
+
+    public IBinder onBind(Intent arg2) {
+        return null;
     }
 
     public void onDestroy() {
@@ -30,77 +30,76 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         }
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         boolean z = true;
-        String str;
-        if (i == NotificationCenter.FileUploadProgressChanged) {
-            str = (String) objArr[0];
-            if (i2 == this.currentAccount && this.path != 0 && this.path.equals(str) != 0) {
-                Boolean bool = (Boolean) objArr[2];
-                this.currentProgress = (int) (((Float) objArr[1]).floatValue() * NUM);
-                i = this.builder;
-                objArr = this.currentProgress;
+        if (id == NotificationCenter.FileUploadProgressChanged) {
+            String fileName = args[0];
+            if (account == this.currentAccount && this.path != null && this.path.equals(fileName)) {
+                Boolean enc = args[2];
+                this.currentProgress = (int) (args[1].floatValue() * 100.0f);
+                Builder builder = this.builder;
+                int i = this.currentProgress;
                 if (this.currentProgress != 0) {
                     z = false;
                 }
-                i.setProgress(100, objArr, z);
+                builder.setProgress(100, i, z);
                 try {
                     NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
-                } catch (Throwable th) {
-                    FileLog.m3e(th);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
             }
-        } else if (i == NotificationCenter.stopEncodingService) {
-            str = (String) objArr[0];
-            if (((Integer) objArr[1]).intValue() != this.currentAccount) {
+        } else if (id == NotificationCenter.stopEncodingService) {
+            String filepath = args[0];
+            if (((Integer) args[1]).intValue() != this.currentAccount) {
                 return;
             }
-            if (str == null || str.equals(this.path) != 0) {
+            if (filepath == null || filepath.equals(this.path)) {
                 stopSelf();
             }
         }
     }
 
-    public int onStartCommand(Intent intent, int i, int i2) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean z = false;
         this.path = intent.getStringExtra("path");
-        i = this.currentAccount;
+        int oldAccount = this.currentAccount;
         this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
-        if (i != this.currentAccount) {
-            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
+        if (oldAccount != this.currentAccount) {
+            NotificationCenter.getInstance(oldAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
         }
-        i2 = 0;
-        intent = intent.getBooleanExtra("gif", false);
-        if (this.path == 0) {
+        boolean isGif = intent.getBooleanExtra("gif", false);
+        if (this.path == null) {
             stopSelf();
-            return 2;
-        }
-        if (BuildVars.LOGS_ENABLED != 0) {
-            FileLog.m0d("start video service");
-        }
-        if (this.builder == 0) {
-            this.builder = new Builder(ApplicationLoader.applicationContext);
-            this.builder.setSmallIcon(17301640);
-            this.builder.setWhen(System.currentTimeMillis());
-            this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            this.builder.setContentTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-            if (intent != null) {
-                this.builder.setTicker(LocaleController.getString("SendingGif", C0446R.string.SendingGif));
-                this.builder.setContentText(LocaleController.getString("SendingGif", C0446R.string.SendingGif));
-            } else {
-                this.builder.setTicker(LocaleController.getString("SendingVideo", C0446R.string.SendingVideo));
-                this.builder.setContentText(LocaleController.getString("SendingVideo", C0446R.string.SendingVideo));
+        } else {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("start video service");
             }
+            if (this.builder == null) {
+                this.builder = new Builder(ApplicationLoader.applicationContext);
+                this.builder.setSmallIcon(17301640);
+                this.builder.setWhen(System.currentTimeMillis());
+                this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+                this.builder.setContentTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                if (isGif) {
+                    this.builder.setTicker(LocaleController.getString("SendingGif", C0446R.string.SendingGif));
+                    this.builder.setContentText(LocaleController.getString("SendingGif", C0446R.string.SendingGif));
+                } else {
+                    this.builder.setTicker(LocaleController.getString("SendingVideo", C0446R.string.SendingVideo));
+                    this.builder.setContentText(LocaleController.getString("SendingVideo", C0446R.string.SendingVideo));
+                }
+            }
+            this.currentProgress = 0;
+            Builder builder = this.builder;
+            int i = this.currentProgress;
+            if (this.currentProgress == 0) {
+                z = true;
+            }
+            builder.setProgress(100, i, z);
+            startForeground(4, this.builder.build());
+            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         }
-        this.currentProgress = 0;
-        intent = this.builder;
-        int i3 = this.currentProgress;
-        if (this.currentProgress == 0) {
-            i2 = 1;
-        }
-        intent.setProgress(100, i3, i2);
-        startForeground(4, this.builder.build());
-        NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         return 2;
     }
 }

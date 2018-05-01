@@ -21,26 +21,26 @@ public class DecoderInputBuffer extends Buffer {
         return new DecoderInputBuffer(0);
     }
 
-    public DecoderInputBuffer(int i) {
-        this.bufferReplacementMode = i;
+    public DecoderInputBuffer(int bufferReplacementMode) {
+        this.bufferReplacementMode = bufferReplacementMode;
     }
 
-    public void ensureSpaceForWrite(int i) throws IllegalStateException {
+    public void ensureSpaceForWrite(int length) throws IllegalStateException {
         if (this.data == null) {
-            this.data = createReplacementByteBuffer(i);
+            this.data = createReplacementByteBuffer(length);
             return;
         }
         int capacity = this.data.capacity();
         int position = this.data.position();
-        i += position;
-        if (capacity < i) {
-            i = createReplacementByteBuffer(i);
+        int requiredCapacity = position + length;
+        if (capacity < requiredCapacity) {
+            ByteBuffer newData = createReplacementByteBuffer(requiredCapacity);
             if (position > 0) {
                 this.data.position(0);
                 this.data.limit(position);
-                i.put(this.data);
+                newData.put(this.data);
             }
-            this.data = i;
+            this.data = newData;
         }
     }
 
@@ -63,20 +63,13 @@ public class DecoderInputBuffer extends Buffer {
         }
     }
 
-    private ByteBuffer createReplacementByteBuffer(int i) {
+    private ByteBuffer createReplacementByteBuffer(int requiredCapacity) {
         if (this.bufferReplacementMode == 1) {
-            return ByteBuffer.allocate(i);
+            return ByteBuffer.allocate(requiredCapacity);
         }
         if (this.bufferReplacementMode == 2) {
-            return ByteBuffer.allocateDirect(i);
+            return ByteBuffer.allocateDirect(requiredCapacity);
         }
-        int capacity = this.data == null ? 0 : this.data.capacity();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Buffer too small (");
-        stringBuilder.append(capacity);
-        stringBuilder.append(" < ");
-        stringBuilder.append(i);
-        stringBuilder.append(")");
-        throw new IllegalStateException(stringBuilder.toString());
+        throw new IllegalStateException("Buffer too small (" + (this.data == null ? 0 : this.data.capacity()) + " < " + requiredCapacity + ")");
     }
 }

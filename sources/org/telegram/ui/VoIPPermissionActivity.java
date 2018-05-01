@@ -18,27 +18,28 @@ public class VoIPPermissionActivity extends Activity {
         }
     }
 
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
     }
 
-    public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
-        if (i == 101) {
-            if (iArr.length > 0 && iArr[0] == 0) {
-                if (VoIPService.getSharedInstance() != 0) {
-                    VoIPService.getSharedInstance().acceptIncomingCall();
-                }
-                finish();
-                startActivity(new Intent(this, VoIPActivity.class));
-            } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") == 0) {
-                if (VoIPService.getSharedInstance() != 0) {
-                    VoIPService.getSharedInstance().declineIncomingCall();
-                }
-                VoIPHelper.permissionDenied(this, new C17691());
-            } else {
-                finish();
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode != 101) {
+            return;
+        }
+        if (grantResults.length > 0 && grantResults[0] == 0) {
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().acceptIncomingCall();
             }
+            finish();
+            startActivity(new Intent(this, VoIPActivity.class));
+        } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+            finish();
+        } else {
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().declineIncomingCall();
+            }
+            VoIPHelper.permissionDenied(this, new C17691());
         }
     }
 }

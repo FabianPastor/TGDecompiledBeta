@@ -20,8 +20,8 @@ public final class ByteArrayDataSink implements DataSink {
         this.stream.close();
     }
 
-    public void write(byte[] bArr, int i, int i2) throws IOException {
-        this.stream.write(bArr, i, i2);
+    public void write(byte[] buffer, int offset, int length) throws IOException {
+        this.stream.write(buffer, offset, length);
     }
 
     public byte[] getData() {

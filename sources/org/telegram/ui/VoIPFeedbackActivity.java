@@ -17,9 +17,9 @@ public class VoIPFeedbackActivity extends Activity {
         }
     }
 
-    protected void onCreate(Bundle bundle) {
+    protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(524288);
-        super.onCreate(bundle);
+        super.onCreate(savedInstanceState);
         overridePendingTransition(0, 0);
         setContentView(new View(this));
         VoIPHelper.showRateAlert(this, new C17681(), getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0));

@@ -6,19 +6,23 @@ public final class ConditionVariable {
     private boolean isOpen;
 
     public synchronized boolean open() {
-        if (this.isOpen) {
-            return false;
+        boolean z = true;
+        synchronized (this) {
+            if (this.isOpen) {
+                z = false;
+            } else {
+                this.isOpen = true;
+                notifyAll();
+            }
         }
-        this.isOpen = true;
-        notifyAll();
-        return true;
+        return z;
     }
 
     public synchronized boolean close() {
-        boolean z;
-        z = this.isOpen;
+        boolean wasOpen;
+        wasOpen = this.isOpen;
         this.isOpen = false;
-        return z;
+        return wasOpen;
     }
 
     public synchronized void block() throws InterruptedException {
@@ -27,12 +31,12 @@ public final class ConditionVariable {
         }
     }
 
-    public synchronized boolean block(long j) throws InterruptedException {
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        long j2 = elapsedRealtime + j;
-        while (this.isOpen == null && elapsedRealtime < j2) {
-            wait(j2 - elapsedRealtime);
-            elapsedRealtime = SystemClock.elapsedRealtime();
+    public synchronized boolean block(long timeout) throws InterruptedException {
+        long now = SystemClock.elapsedRealtime();
+        long end = now + timeout;
+        while (!this.isOpen && now < end) {
+            wait(end - now);
+            now = SystemClock.elapsedRealtime();
         }
         return this.isOpen;
     }

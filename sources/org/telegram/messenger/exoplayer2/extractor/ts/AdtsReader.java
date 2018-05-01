@@ -49,62 +49,59 @@ public final class AdtsReader implements ElementaryStreamReader {
     private int state;
     private long timeUs;
 
-    public void packetFinished() {
+    public AdtsReader(boolean exposeId3) {
+        this(exposeId3, null);
     }
 
-    public AdtsReader(boolean z) {
-        this(z, null);
-    }
-
-    public AdtsReader(boolean z, String str) {
+    public AdtsReader(boolean exposeId3, String language) {
         this.adtsScratch = new ParsableBitArray(new byte[7]);
         this.id3HeaderBuffer = new ParsableByteArray(Arrays.copyOf(ID3_IDENTIFIER, 10));
         setFindingSampleState();
-        this.exposeId3 = z;
-        this.language = str;
+        this.exposeId3 = exposeId3;
+        this.language = language;
     }
 
     public void seek() {
         setFindingSampleState();
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
-        trackIdGenerator.generateNewId();
-        this.formatId = trackIdGenerator.getFormatId();
-        this.output = extractorOutput.track(trackIdGenerator.getTrackId(), 1);
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
         if (this.exposeId3) {
-            trackIdGenerator.generateNewId();
-            this.id3Output = extractorOutput.track(trackIdGenerator.getTrackId(), 4);
-            this.id3Output.format(Format.createSampleFormat(trackIdGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
+            idGenerator.generateNewId();
+            this.id3Output = extractorOutput.track(idGenerator.getTrackId(), 4);
+            this.id3Output.format(Format.createSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
             return;
         }
         this.id3Output = new DummyTrackOutput();
     }
 
-    public void packetStarted(long j, boolean z) {
-        this.timeUs = j;
+    public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
+        this.timeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray parsableByteArray) throws ParserException {
-        while (parsableByteArray.bytesLeft() > 0) {
+    public void consume(ParsableByteArray data) throws ParserException {
+        while (data.bytesLeft() > 0) {
             switch (this.state) {
                 case 0:
-                    findNextSample(parsableByteArray);
+                    findNextSample(data);
                     break;
                 case 1:
-                    if (!continueRead(parsableByteArray, this.id3HeaderBuffer.data, 10)) {
+                    if (!continueRead(data, this.id3HeaderBuffer.data, 10)) {
                         break;
                     }
                     parseId3Header();
                     break;
                 case 2:
-                    if (!continueRead(parsableByteArray, this.adtsScratch.data, this.hasCrc ? 7 : 5)) {
+                    if (!continueRead(data, this.adtsScratch.data, this.hasCrc ? 7 : 5)) {
                         break;
                     }
                     parseAdtsHeader();
                     break;
                 case 3:
-                    readSample(parsableByteArray);
+                    readSample(data);
                     break;
                 default:
                     break;
@@ -112,11 +109,14 @@ public final class AdtsReader implements ElementaryStreamReader {
         }
     }
 
-    private boolean continueRead(ParsableByteArray parsableByteArray, byte[] bArr, int i) {
-        int min = Math.min(parsableByteArray.bytesLeft(), i - this.bytesRead);
-        parsableByteArray.readBytes(bArr, this.bytesRead, min);
-        this.bytesRead += min;
-        return this.bytesRead == i ? true : null;
+    public void packetFinished() {
+    }
+
+    private boolean continueRead(ParsableByteArray source, byte[] target, int targetLength) {
+        int bytesToRead = Math.min(source.bytesLeft(), targetLength - this.bytesRead);
+        source.readBytes(target, this.bytesRead, bytesToRead);
+        this.bytesRead += bytesToRead;
+        return this.bytesRead == targetLength;
     }
 
     private void setFindingSampleState() {
@@ -132,12 +132,12 @@ public final class AdtsReader implements ElementaryStreamReader {
         this.id3HeaderBuffer.setPosition(0);
     }
 
-    private void setReadingSampleState(TrackOutput trackOutput, long j, int i, int i2) {
+    private void setReadingSampleState(TrackOutput outputToUse, long currentSampleDuration, int priorReadBytes, int sampleSize) {
         this.state = 3;
-        this.bytesRead = i;
-        this.currentOutput = trackOutput;
-        this.currentSampleDuration = j;
-        this.sampleSize = i2;
+        this.bytesRead = priorReadBytes;
+        this.currentOutput = outputToUse;
+        this.currentSampleDuration = currentSampleDuration;
+        this.sampleSize = sampleSize;
     }
 
     private void setReadingAdtsHeaderState() {
@@ -145,42 +145,47 @@ public final class AdtsReader implements ElementaryStreamReader {
         this.bytesRead = 0;
     }
 
-    private void findNextSample(ParsableByteArray parsableByteArray) {
-        byte[] bArr = parsableByteArray.data;
-        int position = parsableByteArray.getPosition();
-        int limit = parsableByteArray.limit();
-        while (position < limit) {
-            int i = position + 1;
-            position = bArr[position] & 255;
-            if (this.matchState != 512 || position < PsExtractor.VIDEO_STREAM_MASK || position == 255) {
-                position |= this.matchState;
-                if (position == 329) {
-                    this.matchState = MATCH_STATE_I;
-                } else if (position == 511) {
-                    this.matchState = 512;
-                } else if (position == 836) {
-                    this.matchState = 1024;
-                } else if (position == 1075) {
-                    setReadingId3HeaderState();
-                    parsableByteArray.setPosition(i);
-                    return;
-                } else if (this.matchState != 256) {
-                    this.matchState = 256;
-                    i--;
+    private void findNextSample(ParsableByteArray pesBuffer) {
+        byte[] adtsData = pesBuffer.data;
+        int position = pesBuffer.getPosition();
+        int endOffset = pesBuffer.limit();
+        int position2 = position;
+        while (position2 < endOffset) {
+            position = position2 + 1;
+            int data = adtsData[position2] & 255;
+            if (this.matchState != 512 || data < PsExtractor.VIDEO_STREAM_MASK || data == 255) {
+                switch (this.matchState | data) {
+                    case 329:
+                        this.matchState = MATCH_STATE_I;
+                        break;
+                    case 511:
+                        this.matchState = 512;
+                        break;
+                    case 836:
+                        this.matchState = 1024;
+                        break;
+                    case 1075:
+                        setReadingId3HeaderState();
+                        pesBuffer.setPosition(position);
+                        return;
+                    default:
+                        if (this.matchState == 256) {
+                            break;
+                        }
+                        this.matchState = 256;
+                        position--;
+                        break;
                 }
-                position = i;
+                position2 = position;
             } else {
-                boolean z = true;
-                if ((position & 1) != 0) {
-                    z = false;
-                }
-                this.hasCrc = z;
+                this.hasCrc = (data & 1) == 0;
                 setReadingAdtsHeaderState();
-                parsableByteArray.setPosition(i);
+                pesBuffer.setPosition(position);
                 return;
             }
         }
-        parsableByteArray.setPosition(position);
+        pesBuffer.setPosition(position2);
+        position = position2;
     }
 
     private void parseId3Header() {
@@ -190,42 +195,36 @@ public final class AdtsReader implements ElementaryStreamReader {
     }
 
     private void parseAdtsHeader() throws ParserException {
-        int readBits;
         this.adtsScratch.setPosition(0);
         if (this.hasOutputFormat) {
-            r6.adtsScratch.skipBits(10);
+            this.adtsScratch.skipBits(10);
         } else {
-            readBits = r6.adtsScratch.readBits(2) + 1;
-            if (readBits != 2) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Detected audio object type: ");
-                stringBuilder.append(readBits);
-                stringBuilder.append(", but assuming AAC LC.");
-                Log.w(str, stringBuilder.toString());
-                readBits = 2;
+            int audioObjectType = this.adtsScratch.readBits(2) + 1;
+            if (audioObjectType != 2) {
+                Log.w(TAG, "Detected audio object type: " + audioObjectType + ", but assuming AAC LC.");
+                audioObjectType = 2;
             }
-            int readBits2 = r6.adtsScratch.readBits(4);
-            r6.adtsScratch.skipBits(1);
-            Object buildAacAudioSpecificConfig = CodecSpecificDataUtil.buildAacAudioSpecificConfig(readBits, readBits2, r6.adtsScratch.readBits(3));
-            Pair parseAacAudioSpecificConfig = CodecSpecificDataUtil.parseAacAudioSpecificConfig(buildAacAudioSpecificConfig);
-            Format createAudioSampleFormat = Format.createAudioSampleFormat(r6.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) parseAacAudioSpecificConfig.second).intValue(), ((Integer) parseAacAudioSpecificConfig.first).intValue(), Collections.singletonList(buildAacAudioSpecificConfig), null, 0, r6.language);
-            r6.sampleDurationUs = NUM / ((long) createAudioSampleFormat.sampleRate);
-            r6.output.format(createAudioSampleFormat);
-            r6.hasOutputFormat = true;
+            int sampleRateIndex = this.adtsScratch.readBits(4);
+            this.adtsScratch.skipBits(1);
+            byte[] audioSpecificConfig = CodecSpecificDataUtil.buildAacAudioSpecificConfig(audioObjectType, sampleRateIndex, this.adtsScratch.readBits(3));
+            Pair<Integer, Integer> audioParams = CodecSpecificDataUtil.parseAacAudioSpecificConfig(audioSpecificConfig);
+            Format format = Format.createAudioSampleFormat(this.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, this.language);
+            this.sampleDurationUs = NUM / ((long) format.sampleRate);
+            this.output.format(format);
+            this.hasOutputFormat = true;
         }
-        r6.adtsScratch.skipBits(4);
-        readBits = (r6.adtsScratch.readBits(13) - 2) - 5;
-        if (r6.hasCrc) {
-            readBits -= 2;
+        this.adtsScratch.skipBits(4);
+        int sampleSize = (this.adtsScratch.readBits(13) - 2) - 5;
+        if (this.hasCrc) {
+            sampleSize -= 2;
         }
-        setReadingSampleState(r6.output, r6.sampleDurationUs, 0, readBits);
+        setReadingSampleState(this.output, this.sampleDurationUs, 0, sampleSize);
     }
 
-    private void readSample(ParsableByteArray parsableByteArray) {
-        int min = Math.min(parsableByteArray.bytesLeft(), this.sampleSize - this.bytesRead);
-        this.currentOutput.sampleData(parsableByteArray, min);
-        this.bytesRead += min;
+    private void readSample(ParsableByteArray data) {
+        int bytesToRead = Math.min(data.bytesLeft(), this.sampleSize - this.bytesRead);
+        this.currentOutput.sampleData(data, bytesToRead);
+        this.bytesRead += bytesToRead;
         if (this.bytesRead == this.sampleSize) {
             this.currentOutput.sampleMetadata(this.timeUs, 1, this.sampleSize, 0, null);
             this.timeUs += this.currentSampleDuration;

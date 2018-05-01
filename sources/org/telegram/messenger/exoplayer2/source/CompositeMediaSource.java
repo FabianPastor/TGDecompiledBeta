@@ -16,35 +16,35 @@ public abstract class CompositeMediaSource<T> implements MediaSource {
     protected CompositeMediaSource() {
     }
 
-    public void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener) {
-        this.player = exoPlayer;
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        this.player = player;
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
-        for (MediaSource maybeThrowSourceInfoRefreshError : this.childSources.values()) {
-            maybeThrowSourceInfoRefreshError.maybeThrowSourceInfoRefreshError();
+        for (MediaSource childSource : this.childSources.values()) {
+            childSource.maybeThrowSourceInfoRefreshError();
         }
     }
 
     public void releaseSource() {
-        for (MediaSource releaseSource : this.childSources.values()) {
-            releaseSource.releaseSource();
+        for (MediaSource childSource : this.childSources.values()) {
+            childSource.releaseSource();
         }
         this.childSources.clear();
         this.player = null;
     }
 
-    protected void prepareChildSource(final T t, final MediaSource mediaSource) {
-        Assertions.checkArgument(this.childSources.containsKey(t) ^ 1);
-        this.childSources.put(t, mediaSource);
+    protected void prepareChildSource(final T id, final MediaSource mediaSource) {
+        Assertions.checkArgument(!this.childSources.containsKey(id));
+        this.childSources.put(id, mediaSource);
         mediaSource.prepareSource(this.player, false, new Listener() {
-            public void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj) {
-                CompositeMediaSource.this.onChildSourceInfoRefreshed(t, mediaSource, timeline, obj);
+            public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
+                CompositeMediaSource.this.onChildSourceInfoRefreshed(id, mediaSource, timeline, manifest);
             }
         });
     }
 
-    protected void releaseChildSource(T t) {
-        ((MediaSource) this.childSources.remove(t)).releaseSource();
+    protected void releaseChildSource(T id) {
+        ((MediaSource) this.childSources.remove(id)).releaseSource();
     }
 }

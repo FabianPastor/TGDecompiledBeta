@@ -12,59 +12,50 @@ public final class WebvttParserUtil {
     private WebvttParserUtil() {
     }
 
-    public static void validateWebvttHeaderLine(ParsableByteArray parsableByteArray) throws SubtitleDecoderException {
-        parsableByteArray = parsableByteArray.readLine();
-        if (parsableByteArray != null) {
-            if (HEADER.matcher(parsableByteArray).matches()) {
-                return;
-            }
+    public static void validateWebvttHeaderLine(ParsableByteArray input) throws SubtitleDecoderException {
+        String line = input.readLine();
+        if (line == null || !HEADER.matcher(line).matches()) {
+            throw new SubtitleDecoderException("Expected WEBVTT. Got " + line);
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Expected WEBVTT. Got ");
-        stringBuilder.append(parsableByteArray);
-        throw new SubtitleDecoderException(stringBuilder.toString());
     }
 
-    public static long parseTimestampUs(String str) throws NumberFormatException {
-        str = str.split("\\.", 2);
-        int i = 0;
-        String[] split = str[0].split(":");
-        long j = 0;
-        while (i < split.length) {
-            i++;
-            j = (j * 60) + Long.parseLong(split[i]);
+    public static long parseTimestampUs(String timestamp) throws NumberFormatException {
+        long value = 0;
+        String[] parts = timestamp.split("\\.", 2);
+        for (String subpart : parts[0].split(":")) {
+            value = (60 * value) + Long.parseLong(subpart);
         }
-        j *= 1000;
-        if (str.length == 2) {
-            j += Long.parseLong(str[1]);
+        value *= 1000;
+        if (parts.length == 2) {
+            value += Long.parseLong(parts[1]);
         }
-        return j * 1000;
+        return 1000 * value;
     }
 
-    public static float parsePercentage(String str) throws NumberFormatException {
-        if (str.endsWith("%")) {
-            return Float.parseFloat(str.substring(0, str.length() - 1)) / 100.0f;
+    public static float parsePercentage(String s) throws NumberFormatException {
+        if (s.endsWith("%")) {
+            return Float.parseFloat(s.substring(0, s.length() - 1)) / 100.0f;
         }
         throw new NumberFormatException("Percentages must end with %");
     }
 
-    public static Matcher findNextCueHeader(ParsableByteArray parsableByteArray) {
+    public static Matcher findNextCueHeader(ParsableByteArray input) {
         while (true) {
-            CharSequence readLine = parsableByteArray.readLine();
-            if (readLine == null) {
+            String line = input.readLine();
+            if (line == null) {
                 return null;
             }
-            if (COMMENT.matcher(readLine).matches()) {
+            if (COMMENT.matcher(line).matches()) {
                 while (true) {
-                    String readLine2 = parsableByteArray.readLine();
-                    if (readLine2 == null || readLine2.isEmpty()) {
+                    line = input.readLine();
+                    if (line == null || line.isEmpty()) {
                         break;
                     }
                 }
             } else {
-                Matcher matcher = WebvttCueParser.CUE_HEADER_PATTERN.matcher(readLine);
-                if (matcher.matches()) {
-                    return matcher;
+                Matcher cueHeaderMatcher = WebvttCueParser.CUE_HEADER_PATTERN.matcher(line);
+                if (cueHeaderMatcher.matches()) {
+                    return cueHeaderMatcher;
                 }
             }
         }

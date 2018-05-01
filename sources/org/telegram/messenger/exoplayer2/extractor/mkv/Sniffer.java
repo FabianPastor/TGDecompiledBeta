@@ -10,79 +10,66 @@ final class Sniffer {
     private int peekLength;
     private final ParsableByteArray scratch = new ParsableByteArray(8);
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        long readUnsignedInt;
-        Sniffer sniffer = this;
-        ExtractorInput extractorInput2 = extractorInput;
-        long length = extractorInput.getLength();
-        long j = 1024;
-        if (length != -1) {
-            if (length <= 1024) {
-                j = length;
-            }
+    public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        long j;
+        long inputLength = input.getLength();
+        if (inputLength == -1 || inputLength > 1024) {
+            j = 1024;
+        } else {
+            j = inputLength;
         }
-        int i = (int) j;
-        extractorInput2.peekFully(sniffer.scratch.data, 0, 4);
-        sniffer.peekLength = 4;
-        for (readUnsignedInt = sniffer.scratch.readUnsignedInt(); readUnsignedInt != 440786851; readUnsignedInt = ((readUnsignedInt << 8) & -256) | ((long) (sniffer.scratch.data[0] & 255))) {
-            int i2 = sniffer.peekLength + 1;
-            sniffer.peekLength = i2;
-            if (i2 == i) {
+        int bytesToSearch = (int) j;
+        input.peekFully(this.scratch.data, 0, 4);
+        long tag = this.scratch.readUnsignedInt();
+        this.peekLength = 4;
+        while (tag != 440786851) {
+            int i = this.peekLength + 1;
+            this.peekLength = i;
+            if (i == bytesToSearch) {
                 return false;
             }
-            extractorInput2.peekFully(sniffer.scratch.data, 0, 1);
+            input.peekFully(this.scratch.data, 0, 1);
+            tag = ((tag << 8) & -256) | ((long) (this.scratch.data[0] & 255));
         }
-        readUnsignedInt = readUint(extractorInput);
-        long j2 = (long) sniffer.peekLength;
-        if (readUnsignedInt != Long.MIN_VALUE) {
-            if (length == -1 || j2 + readUnsignedInt < length) {
-                long j3;
-                while (true) {
-                    j3 = j2 + readUnsignedInt;
-                    if (((long) sniffer.peekLength) >= j3) {
-                        break;
-                    } else if (readUint(extractorInput) == Long.MIN_VALUE) {
-                        return false;
-                    } else {
-                        length = readUint(extractorInput);
-                        if (length < 0) {
-                            break;
-                        } else if (length > 2147483647L) {
-                            break;
-                        } else if (length != 0) {
-                            extractorInput2.advancePeekPosition((int) length);
-                            sniffer.peekLength = (int) (((long) sniffer.peekLength) + length);
-                        }
-                    }
-                }
-                return ((long) sniffer.peekLength) == j3;
+        long headerSize = readUint(input);
+        long headerStart = (long) this.peekLength;
+        if (headerSize == Long.MIN_VALUE || (inputLength != -1 && headerStart + headerSize >= inputLength)) {
+            return false;
+        }
+        while (((long) this.peekLength) < headerStart + headerSize) {
+            if (readUint(input) == Long.MIN_VALUE) {
+                return false;
+            }
+            long size = readUint(input);
+            if (size < 0 || size > 2147483647L) {
+                return false;
+            }
+            if (size != 0) {
+                input.advancePeekPosition((int) size);
+                this.peekLength = (int) (((long) this.peekLength) + size);
             }
         }
-        return false;
+        return ((long) this.peekLength) == headerStart + headerSize;
     }
 
-    private long readUint(ExtractorInput extractorInput) throws IOException, InterruptedException {
-        int i = 0;
-        extractorInput.peekFully(this.scratch.data, 0, 1);
-        int i2 = this.scratch.data[0] & 255;
-        if (i2 == 0) {
+    private long readUint(ExtractorInput input) throws IOException, InterruptedException {
+        input.peekFully(this.scratch.data, 0, 1);
+        int value = this.scratch.data[0] & 255;
+        if (value == 0) {
             return Long.MIN_VALUE;
         }
-        int i3 = 128;
-        int i4 = 0;
-        while ((i2 & i3) == 0) {
-            i3 >>= 1;
-            i4++;
+        int mask = 128;
+        int length = 0;
+        while ((value & mask) == 0) {
+            mask >>= 1;
+            length++;
         }
-        i2 &= i3 ^ -1;
-        extractorInput.peekFully(this.scratch.data, 1, i4);
-        while (i < i4) {
-            i++;
-            i2 = (this.scratch.data[i] & 255) + (i2 << 8);
+        value &= mask ^ -1;
+        input.peekFully(this.scratch.data, 1, length);
+        for (int i = 0; i < length; i++) {
+            value = (value << 8) + (this.scratch.data[i + 1] & 255);
         }
-        this.peekLength += i4 + 1;
-        return (long) i2;
+        this.peekLength += length + 1;
+        return (long) value;
     }
 }

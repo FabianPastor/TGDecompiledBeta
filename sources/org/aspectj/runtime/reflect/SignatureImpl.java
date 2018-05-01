@@ -29,20 +29,20 @@ abstract class SignatureImpl implements Signature {
             makeCache();
         }
 
-        public String get(int i) {
-            String[] array = array();
-            if (array == null) {
-                return 0;
+        public String get(int cacheOffset) {
+            String[] cachedArray = array();
+            if (cachedArray == null) {
+                return null;
             }
-            return array[i];
+            return cachedArray[cacheOffset];
         }
 
-        public void set(int i, String str) {
-            String[] array = array();
-            if (array == null) {
-                array = makeCache();
+        public void set(int cacheOffset, String result) {
+            String[] cachedArray = array();
+            if (cachedArray == null) {
+                cachedArray = makeCache();
             }
-            array[i] = str;
+            cachedArray[cacheOffset] = result;
         }
 
         private String[] array() {
@@ -50,63 +50,40 @@ abstract class SignatureImpl implements Signature {
         }
 
         private String[] makeCache() {
-            Object obj = new String[3];
-            this.toStringCacheRef = new SoftReference(obj);
-            return obj;
+            String[] array = new String[3];
+            this.toStringCacheRef = new SoftReference(array);
+            return array;
         }
     }
 
     protected abstract String createToString(StringMaker stringMaker);
 
-    SignatureImpl(int i, String str, Class cls) {
-        this.modifiers = i;
-        this.name = str;
-        this.declaringType = cls;
+    SignatureImpl(int modifiers, String name, Class declaringType) {
+        this.modifiers = modifiers;
+        this.name = name;
+        this.declaringType = declaringType;
     }
 
-    java.lang.String toString(org.aspectj.runtime.reflect.StringMaker r3) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        r0 = useCache;
-        if (r0 == 0) goto L_0x001d;
-    L_0x0004:
-        r0 = r2.stringCache;
-        if (r0 != 0) goto L_0x0014;
-    L_0x0008:
-        r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl;	 Catch:{ Throwable -> 0x0010 }
-        r0.<init>();	 Catch:{ Throwable -> 0x0010 }
-        r2.stringCache = r0;	 Catch:{ Throwable -> 0x0010 }
-        goto L_0x001d;
-    L_0x0010:
-        r0 = 0;
-        useCache = r0;
-        goto L_0x001d;
-    L_0x0014:
-        r0 = r2.stringCache;
-        r1 = r3.cacheOffset;
-        r0 = r0.get(r1);
-        goto L_0x001e;
-    L_0x001d:
-        r0 = 0;
-    L_0x001e:
-        if (r0 != 0) goto L_0x0024;
-    L_0x0020:
-        r0 = r2.createToString(r3);
-    L_0x0024:
-        r1 = useCache;
-        if (r1 == 0) goto L_0x002f;
-    L_0x0028:
-        r1 = r2.stringCache;
-        r3 = r3.cacheOffset;
-        r1.set(r3, r0);
-    L_0x002f:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.aspectj.runtime.reflect.SignatureImpl.toString(org.aspectj.runtime.reflect.StringMaker):java.lang.String");
+    String toString(StringMaker sm) {
+        String result = null;
+        if (useCache) {
+            if (this.stringCache == null) {
+                try {
+                    this.stringCache = new CacheImpl();
+                } catch (Throwable th) {
+                    useCache = false;
+                }
+            } else {
+                result = this.stringCache.get(sm.cacheOffset);
+            }
+        }
+        if (result == null) {
+            result = createToString(sm);
+        }
+        if (useCache) {
+            this.stringCache.set(sm.cacheOffset, result);
+        }
+        return result;
     }
 
     public final String toString() {
@@ -148,39 +125,40 @@ Error: java.lang.NullPointerException
         return this.lookupClassLoader;
     }
 
-    String extractString(int i) {
-        int indexOf = this.stringRep.indexOf(45);
-        int i2 = 0;
+    String extractString(int n) {
+        int startIndex = 0;
+        int endIndex = this.stringRep.indexOf(45);
+        int n2 = n;
         while (true) {
-            int i3 = i - 1;
-            if (i <= 0) {
+            n = n2 - 1;
+            if (n2 <= 0) {
                 break;
             }
-            i2 = indexOf + 1;
-            indexOf = this.stringRep.indexOf(45, i2);
-            i = i3;
+            startIndex = endIndex + 1;
+            endIndex = this.stringRep.indexOf(45, startIndex);
+            n2 = n;
         }
-        if (indexOf == -1) {
-            indexOf = this.stringRep.length();
+        if (endIndex == -1) {
+            endIndex = this.stringRep.length();
         }
-        return this.stringRep.substring(i2, indexOf);
+        return this.stringRep.substring(startIndex, endIndex);
     }
 
-    int extractInt(int i) {
-        return Integer.parseInt(extractString(i), 16);
+    int extractInt(int n) {
+        return Integer.parseInt(extractString(n), 16);
     }
 
-    Class extractType(int i) {
-        return Factory.makeClass(extractString(i), getLookupClassLoader());
+    Class extractType(int n) {
+        return Factory.makeClass(extractString(n), getLookupClassLoader());
     }
 
-    Class[] extractTypes(int i) {
-        StringTokenizer stringTokenizer = new StringTokenizer(extractString(i), ":");
-        i = stringTokenizer.countTokens();
-        Class[] clsArr = new Class[i];
-        for (int i2 = 0; i2 < i; i2++) {
-            clsArr[i2] = Factory.makeClass(stringTokenizer.nextToken(), getLookupClassLoader());
+    Class[] extractTypes(int n) {
+        StringTokenizer st = new StringTokenizer(extractString(n), ":");
+        int N = st.countTokens();
+        Class[] ret = new Class[N];
+        for (int i = 0; i < N; i++) {
+            ret[i] = Factory.makeClass(st.nextToken(), getLookupClassLoader());
         }
-        return clsArr;
+        return ret;
     }
 }

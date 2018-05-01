@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -20,6 +21,7 @@ public class EditTextSettingsCell extends FrameLayout {
     private EditText textView;
 
     public EditTextSettingsCell(Context context) {
+        int i = 3;
         super(context);
         this.textView = new EditText(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -29,48 +31,47 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setBackgroundDrawable(null);
         this.textView.setPadding(0, 0, 0, 0);
         this.textView.setInputType(this.textView.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
-        context = this.textView;
+        View view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        addView(context, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(NUM) + this.needDivider);
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(NUM);
-        i2 = i / 2;
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        int i = availableWidth / 2;
+        this.textView.measure(MeasureSpec.makeMeasureSpec(availableWidth, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
     public TextView getTextView() {
         return this.textView;
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setText(String str, boolean z) {
-        this.textView.setText(str);
-        this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+    public void setText(String text, boolean divider) {
+        this.textView.setText(text);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setTextAndHint(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        this.textView.setHint(str2);
-        this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+    public void setTextAndHint(String text, String hint, boolean divider) {
+        this.textView.setText(text);
+        this.textView.setHint(hint);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
-        setEnabled(z);
+    public void setEnabled(boolean value, ArrayList<Animator> arrayList) {
+        setEnabled(value);
     }
 
     protected void onDraw(Canvas canvas) {

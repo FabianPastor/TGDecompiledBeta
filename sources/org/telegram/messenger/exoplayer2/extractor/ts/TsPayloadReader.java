@@ -10,15 +10,21 @@ import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public interface TsPayloadReader {
 
+    public interface Factory {
+        SparseArray<TsPayloadReader> createInitialPayloadReaders();
+
+        TsPayloadReader createPayloadReader(int i, EsInfo esInfo);
+    }
+
     public static final class DvbSubtitleInfo {
         public final byte[] initializationData;
         public final String language;
         public final int type;
 
-        public DvbSubtitleInfo(String str, int i, byte[] bArr) {
-            this.language = str;
-            this.type = i;
-            this.initializationData = bArr;
+        public DvbSubtitleInfo(String language, int type, byte[] initializationData) {
+            this.language = language;
+            this.type = type;
+            this.initializationData = initializationData;
         }
     }
 
@@ -28,23 +34,18 @@ public interface TsPayloadReader {
         public final String language;
         public final int streamType;
 
-        public EsInfo(int i, String str, List<DvbSubtitleInfo> list, byte[] bArr) {
-            this.streamType = i;
-            this.language = str;
-            if (list == null) {
-                i = Collections.emptyList();
+        public EsInfo(int streamType, String language, List<DvbSubtitleInfo> dvbSubtitleInfos, byte[] descriptorBytes) {
+            List emptyList;
+            this.streamType = streamType;
+            this.language = language;
+            if (dvbSubtitleInfos == null) {
+                emptyList = Collections.emptyList();
             } else {
-                i = Collections.unmodifiableList(list);
+                emptyList = Collections.unmodifiableList(dvbSubtitleInfos);
             }
-            this.dvbSubtitleInfos = i;
-            this.descriptorBytes = bArr;
+            this.dvbSubtitleInfos = emptyList;
+            this.descriptorBytes = descriptorBytes;
         }
-    }
-
-    public interface Factory {
-        SparseArray<TsPayloadReader> createInitialPayloadReaders();
-
-        TsPayloadReader createPayloadReader(int i, EsInfo esInfo);
     }
 
     public static final class TrackIdGenerator {
@@ -55,31 +56,20 @@ public interface TsPayloadReader {
         private int trackId;
         private final int trackIdIncrement;
 
-        public TrackIdGenerator(int i, int i2) {
-            this(Integer.MIN_VALUE, i, i2);
+        public TrackIdGenerator(int firstTrackId, int trackIdIncrement) {
+            this(Integer.MIN_VALUE, firstTrackId, trackIdIncrement);
         }
 
-        public TrackIdGenerator(int i, int i2, int i3) {
-            if (i != Integer.MIN_VALUE) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(i);
-                stringBuilder.append("/");
-                i = stringBuilder.toString();
-            } else {
-                i = TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            this.formatIdPrefix = i;
-            this.firstTrackId = i2;
-            this.trackIdIncrement = i3;
+        public TrackIdGenerator(int programNumber, int firstTrackId, int trackIdIncrement) {
+            this.formatIdPrefix = programNumber != Integer.MIN_VALUE ? programNumber + "/" : TtmlNode.ANONYMOUS_REGION_ID;
+            this.firstTrackId = firstTrackId;
+            this.trackIdIncrement = trackIdIncrement;
             this.trackId = Integer.MIN_VALUE;
         }
 
         public void generateNewId() {
             this.trackId = this.trackId == Integer.MIN_VALUE ? this.firstTrackId : this.trackId + this.trackIdIncrement;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(this.formatIdPrefix);
-            stringBuilder.append(this.trackId);
-            this.formatId = stringBuilder.toString();
+            this.formatId = this.formatIdPrefix + this.trackId;
         }
 
         public int getTrackId() {

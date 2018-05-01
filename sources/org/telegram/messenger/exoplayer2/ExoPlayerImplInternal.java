@@ -93,10 +93,10 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         public final MediaSource source;
         public final Timeline timeline;
 
-        public MediaSourceRefreshInfo(MediaSource mediaSource, Timeline timeline, Object obj) {
-            this.source = mediaSource;
+        public MediaSourceRefreshInfo(MediaSource source, Timeline timeline, Object manifest) {
+            this.source = source;
             this.timeline = timeline;
-            this.manifest = obj;
+            this.manifest = manifest;
         }
     }
 
@@ -106,31 +106,30 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         public long resolvedPeriodTimeUs;
         public Object resolvedPeriodUid;
 
-        public PendingMessageInfo(PlayerMessage playerMessage) {
-            this.message = playerMessage;
+        public PendingMessageInfo(PlayerMessage message) {
+            this.message = message;
         }
 
-        public void setResolvedPosition(int i, long j, Object obj) {
-            this.resolvedPeriodIndex = i;
-            this.resolvedPeriodTimeUs = j;
-            this.resolvedPeriodUid = obj;
+        public void setResolvedPosition(int periodIndex, long periodTimeUs, Object periodUid) {
+            this.resolvedPeriodIndex = periodIndex;
+            this.resolvedPeriodTimeUs = periodTimeUs;
+            this.resolvedPeriodUid = periodUid;
         }
 
-        public int compareTo(PendingMessageInfo pendingMessageInfo) {
-            int i = 1;
-            if ((this.resolvedPeriodUid == null ? 1 : 0) != (pendingMessageInfo.resolvedPeriodUid == null ? 1 : 0)) {
+        public int compareTo(PendingMessageInfo other) {
+            if ((this.resolvedPeriodUid == null ? 1 : 0) != (other.resolvedPeriodUid == null ? 1 : 0)) {
                 if (this.resolvedPeriodUid != null) {
-                    i = -1;
+                    return -1;
                 }
-                return i;
+                return 1;
             } else if (this.resolvedPeriodUid == null) {
                 return 0;
             } else {
-                int i2 = this.resolvedPeriodIndex - pendingMessageInfo.resolvedPeriodIndex;
-                if (i2 != 0) {
-                    return i2;
+                int comparePeriodIndex = this.resolvedPeriodIndex - other.resolvedPeriodIndex;
+                if (comparePeriodIndex != 0) {
+                    return comparePeriodIndex;
                 }
-                return Util.compareLong(this.resolvedPeriodTimeUs, pendingMessageInfo.resolvedPeriodTimeUs);
+                return Util.compareLong(this.resolvedPeriodTimeUs, other.resolvedPeriodTimeUs);
             }
         }
     }
@@ -145,12 +144,7 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         }
 
         public boolean hasPendingUpdate(PlaybackInfo playbackInfo) {
-            if (playbackInfo == this.lastPlaybackInfo && this.operationAcks <= null) {
-                if (this.positionDiscontinuity == null) {
-                    return null;
-                }
-            }
-            return true;
+            return playbackInfo != this.lastPlaybackInfo || this.operationAcks > 0 || this.positionDiscontinuity;
         }
 
         public void reset(PlaybackInfo playbackInfo) {
@@ -159,18 +153,18 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
             this.positionDiscontinuity = false;
         }
 
-        public void incrementPendingOperationAcks(int i) {
-            this.operationAcks += i;
+        public void incrementPendingOperationAcks(int operationAcks) {
+            this.operationAcks += operationAcks;
         }
 
-        public void setPositionDiscontinuity(int i) {
+        public void setPositionDiscontinuity(int discontinuityReason) {
             boolean z = true;
             if (!this.positionDiscontinuity || this.discontinuityReason == 4) {
                 this.positionDiscontinuity = true;
-                this.discontinuityReason = i;
+                this.discontinuityReason = discontinuityReason;
                 return;
             }
-            if (i != 4) {
+            if (discontinuityReason != 4) {
                 z = false;
             }
             Assertions.checkArgument(z);
@@ -182,33 +176,33 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         public final int windowIndex;
         public final long windowPositionUs;
 
-        public SeekPosition(Timeline timeline, int i, long j) {
+        public SeekPosition(Timeline timeline, int windowIndex, long windowPositionUs) {
             this.timeline = timeline;
-            this.windowIndex = i;
-            this.windowPositionUs = j;
+            this.windowIndex = windowIndex;
+            this.windowPositionUs = windowPositionUs;
         }
     }
 
-    public ExoPlayerImplInternal(Renderer[] rendererArr, TrackSelector trackSelector, TrackSelectorResult trackSelectorResult, LoadControl loadControl, boolean z, int i, boolean z2, Handler handler, ExoPlayer exoPlayer, Clock clock) {
-        this.renderers = rendererArr;
+    public ExoPlayerImplInternal(Renderer[] renderers, TrackSelector trackSelector, TrackSelectorResult emptyTrackSelectorResult, LoadControl loadControl, boolean playWhenReady, int repeatMode, boolean shuffleModeEnabled, Handler eventHandler, ExoPlayer player, Clock clock) {
+        this.renderers = renderers;
         this.trackSelector = trackSelector;
-        this.emptyTrackSelectorResult = trackSelectorResult;
+        this.emptyTrackSelectorResult = emptyTrackSelectorResult;
         this.loadControl = loadControl;
-        this.playWhenReady = z;
-        this.repeatMode = i;
-        this.shuffleModeEnabled = z2;
-        this.eventHandler = handler;
-        this.player = exoPlayer;
+        this.playWhenReady = playWhenReady;
+        this.repeatMode = repeatMode;
+        this.shuffleModeEnabled = shuffleModeEnabled;
+        this.eventHandler = eventHandler;
+        this.player = player;
         this.clock = clock;
         this.backBufferDurationUs = loadControl.getBackBufferDurationUs();
         this.retainBackBufferFromKeyframe = loadControl.retainBackBufferFromKeyframe();
         this.seekParameters = SeekParameters.DEFAULT;
-        this.playbackInfo = new PlaybackInfo(null, 1, trackSelectorResult);
+        this.playbackInfo = new PlaybackInfo(null, C0542C.TIME_UNSET, emptyTrackSelectorResult);
         this.playbackInfoUpdate = new PlaybackInfoUpdate();
-        this.rendererCapabilities = new RendererCapabilities[rendererArr.length];
-        for (loadControl = null; loadControl < rendererArr.length; loadControl++) {
-            rendererArr[loadControl].setIndex(loadControl);
-            this.rendererCapabilities[loadControl] = rendererArr[loadControl].getCapabilities();
+        this.rendererCapabilities = new RendererCapabilities[renderers.length];
+        for (int i = 0; i < renderers.length; i++) {
+            renderers[i].setIndex(i);
+            this.rendererCapabilities[i] = renderers[i].getCapabilities();
         }
         this.mediaClock = new DefaultMediaClock(this, clock);
         this.pendingMessages = new ArrayList();
@@ -221,24 +215,45 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         this.handler = clock.createHandler(this.internalPlaybackThread.getLooper(), this);
     }
 
-    public void prepare(MediaSource mediaSource, boolean z) {
-        this.handler.obtainMessage(0, z, 0, mediaSource).sendToTarget();
+    public void prepare(MediaSource mediaSource, boolean resetPosition) {
+        int i;
+        HandlerWrapper handlerWrapper = this.handler;
+        if (resetPosition) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        handlerWrapper.obtainMessage(0, i, 0, mediaSource).sendToTarget();
     }
 
-    public void setPlayWhenReady(boolean z) {
-        this.handler.obtainMessage(1, z, 0).sendToTarget();
+    public void setPlayWhenReady(boolean playWhenReady) {
+        int i;
+        HandlerWrapper handlerWrapper = this.handler;
+        if (playWhenReady) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        handlerWrapper.obtainMessage(1, i, 0).sendToTarget();
     }
 
-    public void setRepeatMode(int i) {
-        this.handler.obtainMessage(12, i, 0).sendToTarget();
+    public void setRepeatMode(int repeatMode) {
+        this.handler.obtainMessage(12, repeatMode, 0).sendToTarget();
     }
 
-    public void setShuffleModeEnabled(boolean z) {
-        this.handler.obtainMessage(13, z, 0).sendToTarget();
+    public void setShuffleModeEnabled(boolean shuffleModeEnabled) {
+        int i;
+        HandlerWrapper handlerWrapper = this.handler;
+        if (shuffleModeEnabled) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        handlerWrapper.obtainMessage(13, i, 0).sendToTarget();
     }
 
-    public void seekTo(Timeline timeline, int i, long j) {
-        this.handler.obtainMessage(3, new SeekPosition(timeline, i, j)).sendToTarget();
+    public void seekTo(Timeline timeline, int windowIndex, long positionUs) {
+        this.handler.obtainMessage(3, new SeekPosition(timeline, windowIndex, positionUs)).sendToTarget();
     }
 
     public void setPlaybackParameters(PlaybackParameters playbackParameters) {
@@ -249,76 +264,57 @@ final class ExoPlayerImplInternal implements Callback, PlaybackParameterListener
         this.handler.obtainMessage(5, seekParameters).sendToTarget();
     }
 
-    public void stop(boolean z) {
-        this.handler.obtainMessage(6, z, 0).sendToTarget();
+    public void stop(boolean reset) {
+        int i;
+        HandlerWrapper handlerWrapper = this.handler;
+        if (reset) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        handlerWrapper.obtainMessage(6, i, 0).sendToTarget();
     }
 
-    public synchronized void sendMessage(PlayerMessage playerMessage) {
+    public synchronized void sendMessage(PlayerMessage message) {
         if (this.released) {
             Log.w(TAG, "Ignoring messages sent after release.");
-            playerMessage.markAsProcessed(false);
-            return;
+            message.markAsProcessed(false);
+        } else {
+            this.handler.obtainMessage(14, message).sendToTarget();
         }
-        this.handler.obtainMessage(14, playerMessage).sendToTarget();
     }
 
     public synchronized void release() {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r2 = this;
-        monitor-enter(r2);
-        r0 = r2.released;	 Catch:{ all -> 0x0023 }
-        if (r0 == 0) goto L_0x0007;
-    L_0x0005:
-        monitor-exit(r2);
-        return;
-    L_0x0007:
-        r0 = r2.handler;	 Catch:{ all -> 0x0023 }
-        r1 = 7;	 Catch:{ all -> 0x0023 }
-        r0.sendEmptyMessage(r1);	 Catch:{ all -> 0x0023 }
-        r0 = 0;	 Catch:{ all -> 0x0023 }
-    L_0x000e:
-        r1 = r2.released;	 Catch:{ all -> 0x0023 }
-        if (r1 != 0) goto L_0x0018;
-    L_0x0012:
-        r2.wait();	 Catch:{ InterruptedException -> 0x0016 }
-        goto L_0x000e;
-    L_0x0016:
-        r0 = 1;
-        goto L_0x000e;
-    L_0x0018:
-        if (r0 == 0) goto L_0x0021;
-    L_0x001a:
-        r0 = java.lang.Thread.currentThread();	 Catch:{ all -> 0x0023 }
-        r0.interrupt();	 Catch:{ all -> 0x0023 }
-    L_0x0021:
-        monitor-exit(r2);
-        return;
-    L_0x0023:
-        r0 = move-exception;
-        monitor-exit(r2);
-        throw r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.release():void");
+        if (!this.released) {
+            this.handler.sendEmptyMessage(7);
+            boolean wasInterrupted = false;
+            while (!this.released) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    wasInterrupted = true;
+                }
+            }
+            if (wasInterrupted) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public Looper getPlaybackLooper() {
         return this.internalPlaybackThread.getLooper();
     }
 
-    public void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj) {
-        this.handler.obtainMessage(8, new MediaSourceRefreshInfo(mediaSource, timeline, obj)).sendToTarget();
+    public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
+        this.handler.obtainMessage(8, new MediaSourceRefreshInfo(source, timeline, manifest)).sendToTarget();
     }
 
-    public void onPrepared(MediaPeriod mediaPeriod) {
-        this.handler.obtainMessage(9, mediaPeriod).sendToTarget();
+    public void onPrepared(MediaPeriod source) {
+        this.handler.obtainMessage(9, source).sendToTarget();
     }
 
-    public void onContinueLoadingRequested(MediaPeriod mediaPeriod) {
-        this.handler.obtainMessage(10, mediaPeriod).sendToTarget();
+    public void onContinueLoadingRequested(MediaPeriod source) {
+        this.handler.obtainMessage(10, source).sendToTarget();
     }
 
     public void onTrackSelectionsInvalidated() {
@@ -330,89 +326,107 @@ Error: java.lang.NullPointerException
         updateTrackSelectionPlaybackSpeed(playbackParameters.speed);
     }
 
-    public boolean handleMessage(Message message) {
+    public boolean handleMessage(Message msg) {
         try {
-            switch (message.what) {
+            boolean z;
+            switch (msg.what) {
                 case 0:
-                    prepareInternal((MediaSource) message.obj, message.arg1 != null ? 1 : null);
+                    boolean z2;
+                    MediaSource mediaSource = (MediaSource) msg.obj;
+                    if (msg.arg1 != 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
+                    }
+                    prepareInternal(mediaSource, z2);
                     break;
                 case 1:
-                    setPlayWhenReadyInternal(message.arg1 != null ? 1 : null);
+                    if (msg.arg1 != 0) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    setPlayWhenReadyInternal(z);
                     break;
                 case 2:
                     doSomeWork();
                     break;
                 case 3:
-                    seekToInternal((SeekPosition) message.obj);
+                    seekToInternal((SeekPosition) msg.obj);
                     break;
                 case 4:
-                    setPlaybackParametersInternal((PlaybackParameters) message.obj);
+                    setPlaybackParametersInternal((PlaybackParameters) msg.obj);
                     break;
                 case 5:
-                    setSeekParametersInternal((SeekParameters) message.obj);
+                    setSeekParametersInternal((SeekParameters) msg.obj);
                     break;
                 case 6:
-                    stopInternal(message.arg1 != null ? 1 : null, true);
+                    stopInternal(msg.arg1 != 0, true);
                     break;
                 case 7:
                     releaseInternal();
                     return true;
                 case 8:
-                    handleSourceInfoRefreshed((MediaSourceRefreshInfo) message.obj);
+                    handleSourceInfoRefreshed((MediaSourceRefreshInfo) msg.obj);
                     break;
                 case 9:
-                    handlePeriodPrepared((MediaPeriod) message.obj);
+                    handlePeriodPrepared((MediaPeriod) msg.obj);
                     break;
                 case 10:
-                    handleContinueLoadingRequested((MediaPeriod) message.obj);
+                    handleContinueLoadingRequested((MediaPeriod) msg.obj);
                     break;
                 case 11:
                     reselectTracksInternal();
                     break;
                 case 12:
-                    setRepeatModeInternal(message.arg1);
+                    setRepeatModeInternal(msg.arg1);
                     break;
                 case 13:
-                    setShuffleModeEnabledInternal(message.arg1 != null ? 1 : null);
+                    if (msg.arg1 != 0) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    setShuffleModeEnabledInternal(z);
                     break;
                 case 14:
-                    sendMessageInternal((PlayerMessage) message.obj);
+                    sendMessageInternal((PlayerMessage) msg.obj);
                     break;
                 case 15:
-                    sendMessageToTargetThread((PlayerMessage) message.obj);
+                    sendMessageToTargetThread((PlayerMessage) msg.obj);
                     break;
                 default:
                     return false;
             }
             maybeNotifyPlaybackInfoChanged();
-        } catch (Message message2) {
-            Log.e(TAG, "Renderer error.", message2);
+        } catch (ExoPlaybackException e) {
+            Log.e(TAG, "Renderer error.", e);
             stopInternal(false, false);
-            this.eventHandler.obtainMessage(2, message2).sendToTarget();
+            this.eventHandler.obtainMessage(2, e).sendToTarget();
             maybeNotifyPlaybackInfoChanged();
-        } catch (Message message22) {
-            Log.e(TAG, "Source error.", message22);
+        } catch (IOException e2) {
+            Log.e(TAG, "Source error.", e2);
             stopInternal(false, false);
-            this.eventHandler.obtainMessage(2, ExoPlaybackException.createForSource(message22)).sendToTarget();
+            this.eventHandler.obtainMessage(2, ExoPlaybackException.createForSource(e2)).sendToTarget();
             maybeNotifyPlaybackInfoChanged();
-        } catch (Message message222) {
-            Log.e(TAG, "Internal runtime error.", message222);
+        } catch (RuntimeException e3) {
+            Log.e(TAG, "Internal runtime error.", e3);
             stopInternal(false, false);
-            this.eventHandler.obtainMessage(2, ExoPlaybackException.createForUnexpected(message222)).sendToTarget();
+            this.eventHandler.obtainMessage(2, ExoPlaybackException.createForUnexpected(e3)).sendToTarget();
             maybeNotifyPlaybackInfoChanged();
         }
         return true;
     }
 
-    private void setState(int i) {
-        if (this.playbackInfo.playbackState != i) {
-            this.playbackInfo = this.playbackInfo.copyWithPlaybackState(i);
+    private void setState(int state) {
+        if (this.playbackInfo.playbackState != state) {
+            this.playbackInfo = this.playbackInfo.copyWithPlaybackState(state);
         }
     }
 
-    private void setIsLoading(boolean z) {
-        if (this.playbackInfo.isLoading != z) {
-            this.playbackInfo = this.playbackInfo.copyWithIsLoading(z);
+    private void setIsLoading(boolean isLoading) {
+        if (this.playbackInfo.isLoading != isLoading) {
+            this.playbackInfo = this.playbackInfo.copyWithIsLoading(isLoading);
         }
     }
 
@@ -423,9 +437,9 @@ Error: java.lang.NullPointerException
         }
     }
 
-    private void prepareInternal(MediaSource mediaSource, boolean z) {
+    private void prepareInternal(MediaSource mediaSource, boolean resetPosition) {
         this.pendingPrepareCount++;
-        resetInternal(true, z, true);
+        resetInternal(true, resetPosition, true);
         this.loadControl.onPrepared();
         this.mediaSource = mediaSource;
         setState(2);
@@ -433,55 +447,55 @@ Error: java.lang.NullPointerException
         this.handler.sendEmptyMessage(2);
     }
 
-    private void setPlayWhenReadyInternal(boolean z) throws ExoPlaybackException {
+    private void setPlayWhenReadyInternal(boolean playWhenReady) throws ExoPlaybackException {
         this.rebuffering = false;
-        this.playWhenReady = z;
-        if (!z) {
+        this.playWhenReady = playWhenReady;
+        if (!playWhenReady) {
             stopRenderers();
             updatePlaybackPositions();
-        } else if (this.playbackInfo.playbackState) {
+        } else if (this.playbackInfo.playbackState == 3) {
             startRenderers();
             this.handler.sendEmptyMessage(2);
-        } else if (this.playbackInfo.playbackState) {
+        } else if (this.playbackInfo.playbackState == 2) {
             this.handler.sendEmptyMessage(2);
         }
     }
 
-    private void setRepeatModeInternal(int i) throws ExoPlaybackException {
-        this.repeatMode = i;
-        this.queue.setRepeatMode(i);
+    private void setRepeatModeInternal(int repeatMode) throws ExoPlaybackException {
+        this.repeatMode = repeatMode;
+        this.queue.setRepeatMode(repeatMode);
         validateExistingPeriodHolders();
     }
 
-    private void setShuffleModeEnabledInternal(boolean z) throws ExoPlaybackException {
-        this.shuffleModeEnabled = z;
-        this.queue.setShuffleModeEnabled(z);
+    private void setShuffleModeEnabledInternal(boolean shuffleModeEnabled) throws ExoPlaybackException {
+        this.shuffleModeEnabled = shuffleModeEnabled;
+        this.queue.setShuffleModeEnabled(shuffleModeEnabled);
         validateExistingPeriodHolders();
     }
 
     private void validateExistingPeriodHolders() throws ExoPlaybackException {
-        MediaPeriodHolder frontPeriod = this.queue.getFrontPeriod();
-        if (frontPeriod != null) {
+        MediaPeriodHolder lastValidPeriodHolder = this.queue.getFrontPeriod();
+        if (lastValidPeriodHolder != null) {
+            boolean readingPeriodRemoved;
             while (true) {
-                int nextPeriodIndex = this.playbackInfo.timeline.getNextPeriodIndex(frontPeriod.info.id.periodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
-                while (frontPeriod.next != null && !frontPeriod.info.isLastInTimelinePeriod) {
-                    frontPeriod = frontPeriod.next;
+                int nextPeriodIndex = this.playbackInfo.timeline.getNextPeriodIndex(lastValidPeriodHolder.info.id.periodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
+                while (lastValidPeriodHolder.next != null && !lastValidPeriodHolder.info.isLastInTimelinePeriod) {
+                    lastValidPeriodHolder = lastValidPeriodHolder.next;
                 }
-                if (nextPeriodIndex == -1 || frontPeriod.next == null) {
-                    break;
-                } else if (frontPeriod.next.info.id.periodIndex != nextPeriodIndex) {
-                    break;
+                if (nextPeriodIndex == -1 || lastValidPeriodHolder.next == null || lastValidPeriodHolder.next.info.id.periodIndex != nextPeriodIndex) {
+                    readingPeriodRemoved = this.queue.removeAfter(lastValidPeriodHolder);
+                    lastValidPeriodHolder.info = this.queue.getUpdatedMediaPeriodInfo(lastValidPeriodHolder.info);
                 } else {
-                    frontPeriod = frontPeriod.next;
+                    lastValidPeriodHolder = lastValidPeriodHolder.next;
                 }
             }
-            boolean removeAfter = this.queue.removeAfter(frontPeriod);
-            frontPeriod.info = this.queue.getUpdatedMediaPeriodInfo(frontPeriod.info);
-            if (removeAfter && this.queue.hasPlayingPeriod()) {
-                MediaPeriodId mediaPeriodId = this.queue.getPlayingPeriod().info.id;
-                long seekToPeriodPosition = seekToPeriodPosition(mediaPeriodId, this.playbackInfo.positionUs, true);
-                if (seekToPeriodPosition != this.playbackInfo.positionUs) {
-                    this.playbackInfo = this.playbackInfo.fromNewPosition(mediaPeriodId, seekToPeriodPosition, this.playbackInfo.contentPositionUs);
+            readingPeriodRemoved = this.queue.removeAfter(lastValidPeriodHolder);
+            lastValidPeriodHolder.info = this.queue.getUpdatedMediaPeriodInfo(lastValidPeriodHolder.info);
+            if (readingPeriodRemoved && this.queue.hasPlayingPeriod()) {
+                MediaPeriodId periodId = this.queue.getPlayingPeriod().info.id;
+                long newPositionUs = seekToPeriodPosition(periodId, this.playbackInfo.positionUs, true);
+                if (newPositionUs != this.playbackInfo.positionUs) {
+                    this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, newPositionUs, this.playbackInfo.contentPositionUs);
                     this.playbackInfoUpdate.setPositionDiscontinuity(4);
                 }
             }
@@ -502,33 +516,33 @@ Error: java.lang.NullPointerException
 
     private void stopRenderers() throws ExoPlaybackException {
         this.mediaClock.stop();
-        for (Renderer ensureStopped : this.enabledRenderers) {
-            ensureStopped(ensureStopped);
+        for (Renderer renderer : this.enabledRenderers) {
+            ensureStopped(renderer);
         }
     }
 
     private void updatePlaybackPositions() throws ExoPlaybackException {
         if (this.queue.hasPlayingPeriod()) {
             long j;
-            MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-            long readDiscontinuity = playingPeriod.mediaPeriod.readDiscontinuity();
-            if (readDiscontinuity != C0542C.TIME_UNSET) {
-                resetRendererPosition(readDiscontinuity);
-                if (readDiscontinuity != this.playbackInfo.positionUs) {
-                    this.playbackInfo = this.playbackInfo.fromNewPosition(this.playbackInfo.periodId, readDiscontinuity, this.playbackInfo.contentPositionUs);
+            MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+            long periodPositionUs = playingPeriodHolder.mediaPeriod.readDiscontinuity();
+            if (periodPositionUs != C0542C.TIME_UNSET) {
+                resetRendererPosition(periodPositionUs);
+                if (periodPositionUs != this.playbackInfo.positionUs) {
+                    this.playbackInfo = this.playbackInfo.fromNewPosition(this.playbackInfo.periodId, periodPositionUs, this.playbackInfo.contentPositionUs);
                     this.playbackInfoUpdate.setPositionDiscontinuity(4);
                 }
             } else {
                 this.rendererPositionUs = this.mediaClock.syncAndGetPositionUs();
-                long toPeriodTime = playingPeriod.toPeriodTime(this.rendererPositionUs);
-                maybeTriggerPendingMessages(this.playbackInfo.positionUs, toPeriodTime);
-                this.playbackInfo.positionUs = toPeriodTime;
+                periodPositionUs = playingPeriodHolder.toPeriodTime(this.rendererPositionUs);
+                maybeTriggerPendingMessages(this.playbackInfo.positionUs, periodPositionUs);
+                this.playbackInfo.positionUs = periodPositionUs;
             }
             PlaybackInfo playbackInfo = this.playbackInfo;
             if (this.enabledRenderers.length == 0) {
-                j = playingPeriod.info.durationUs;
+                j = playingPeriodHolder.info.durationUs;
             } else {
-                j = playingPeriod.getBufferedPositionUs(true);
+                j = playingPeriodHolder.getBufferedPositionUs(true);
             }
             playbackInfo.bufferedPositionUs = j;
         }
@@ -537,234 +551,200 @@ Error: java.lang.NullPointerException
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void doSomeWork() throws ExoPlaybackException, IOException {
-        long uptimeMillis = this.clock.uptimeMillis();
+        long operationStartTimeMs = this.clock.uptimeMillis();
         updatePeriods();
         if (this.queue.hasPlayingPeriod()) {
-            MediaPeriodHolder playingPeriod = r0.queue.getPlayingPeriod();
+            MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
             TraceUtil.beginSection("doSomeWork");
             updatePlaybackPositions();
-            long elapsedRealtime = SystemClock.elapsedRealtime() * 1000;
-            playingPeriod.mediaPeriod.discardBuffer(r0.playbackInfo.positionUs - r0.backBufferDurationUs, r0.retainBackBufferFromKeyframe);
-            Renderer[] rendererArr = r0.enabledRenderers;
-            int length = rendererArr.length;
-            int i = 0;
-            Object obj = 1;
-            boolean z = true;
-            while (i < length) {
-                Object obj2;
-                Renderer renderer = rendererArr[i];
-                int i2 = length;
-                renderer.render(r0.rendererPositionUs, elapsedRealtime);
-                obj = (obj == null || !renderer.isEnded()) ? null : 1;
-                if (!(renderer.isReady() || renderer.isEnded())) {
-                    if (!rendererWaitingForNextStream(renderer)) {
-                        obj2 = null;
-                        if (obj2 == null) {
-                            renderer.maybeThrowStreamError();
-                        }
-                        z = z && obj2 != null;
-                        i++;
-                        length = i2;
-                    }
-                }
-                obj2 = 1;
-                if (obj2 == null) {
+            long rendererPositionElapsedRealtimeUs = SystemClock.elapsedRealtime() * 1000;
+            playingPeriodHolder.mediaPeriod.discardBuffer(this.playbackInfo.positionUs - this.backBufferDurationUs, this.retainBackBufferFromKeyframe);
+            boolean renderersEnded = true;
+            boolean renderersReadyOrEnded = true;
+            for (Renderer renderer : this.enabledRenderers) {
+                renderer.render(this.rendererPositionUs, rendererPositionElapsedRealtimeUs);
+                renderersEnded = renderersEnded && renderer.isEnded();
+                boolean rendererReadyOrEnded = renderer.isReady() || renderer.isEnded() || rendererWaitingForNextStream(renderer);
+                if (!rendererReadyOrEnded) {
                     renderer.maybeThrowStreamError();
                 }
-                if (!z) {
+                if (renderersReadyOrEnded && rendererReadyOrEnded) {
+                    renderersReadyOrEnded = true;
+                } else {
+                    renderersReadyOrEnded = false;
                 }
-                i++;
-                length = i2;
             }
-            if (!z) {
+            if (!renderersReadyOrEnded) {
                 maybeThrowPeriodPrepareError();
             }
-            elapsedRealtime = playingPeriod.info.durationUs;
-            if (obj != null && ((elapsedRealtime == C0542C.TIME_UNSET || elapsedRealtime <= r0.playbackInfo.positionUs) && playingPeriod.info.isFinal)) {
+            long playingPeriodDurationUs = playingPeriodHolder.info.durationUs;
+            if (renderersEnded && ((playingPeriodDurationUs == C0542C.TIME_UNSET || playingPeriodDurationUs <= this.playbackInfo.positionUs) && playingPeriodHolder.info.isFinal)) {
                 setState(4);
                 stopRenderers();
-            } else if (r0.playbackInfo.playbackState == 2 && shouldTransitionToReadyState(z)) {
+            } else if (this.playbackInfo.playbackState == 2 && shouldTransitionToReadyState(renderersReadyOrEnded)) {
                 setState(3);
-                if (r0.playWhenReady) {
+                if (this.playWhenReady) {
                     startRenderers();
                 }
-            } else if (r0.playbackInfo.playbackState == 3) {
-                if (r0.enabledRenderers.length == 0) {
-                    if (isTimelineReady()) {
+            } else if (this.playbackInfo.playbackState == 3) {
+                if (this.enabledRenderers.length != 0) {
+                    if (!renderersReadyOrEnded) {
                     }
                 }
-                r0.rebuffering = r0.playWhenReady;
+                this.rebuffering = this.playWhenReady;
                 setState(2);
                 stopRenderers();
             }
-            if (r0.playbackInfo.playbackState == 2) {
-                for (Renderer maybeThrowStreamError : r0.enabledRenderers) {
-                    maybeThrowStreamError.maybeThrowStreamError();
+            if (this.playbackInfo.playbackState == 2) {
+                for (Renderer renderer2 : this.enabledRenderers) {
+                    renderer2.maybeThrowStreamError();
                 }
             }
-            if ((r0.playWhenReady && r0.playbackInfo.playbackState == 3) || r0.playbackInfo.playbackState == 2) {
-                scheduleNextWork(uptimeMillis, 10);
-            } else if (r0.enabledRenderers.length == 0 || r0.playbackInfo.playbackState == 4) {
-                r0.handler.removeMessages(2);
+            if ((this.playWhenReady && this.playbackInfo.playbackState == 3) || this.playbackInfo.playbackState == 2) {
+                scheduleNextWork(operationStartTimeMs, 10);
+            } else if (this.enabledRenderers.length == 0 || this.playbackInfo.playbackState == 4) {
+                this.handler.removeMessages(2);
             } else {
-                scheduleNextWork(uptimeMillis, 1000);
+                scheduleNextWork(operationStartTimeMs, 1000);
             }
             TraceUtil.endSection();
             return;
         }
         maybeThrowPeriodPrepareError();
-        scheduleNextWork(uptimeMillis, 10);
+        scheduleNextWork(operationStartTimeMs, 10);
     }
 
-    private void scheduleNextWork(long j, long j2) {
+    private void scheduleNextWork(long thisOperationStartTimeMs, long intervalMs) {
         this.handler.removeMessages(2);
-        this.handler.sendEmptyMessageAtTime(2, j + j2);
+        this.handler.sendEmptyMessageAtTime(2, thisOperationStartTimeMs + intervalMs);
     }
 
     private void seekToInternal(SeekPosition seekPosition) throws ExoPlaybackException {
-        MediaPeriodId mediaPeriodId;
-        int i;
-        long j;
-        long j2;
-        SeekPosition seekPosition2 = seekPosition;
+        MediaPeriodId periodId;
+        long periodPositionUs;
+        long contentPositionUs;
+        boolean seekPositionAdjusted;
         Timeline timeline = this.playbackInfo.timeline;
-        int i2 = 1;
         this.playbackInfoUpdate.incrementPendingOperationAcks(1);
-        Pair resolveSeekPosition = resolveSeekPosition(seekPosition2, true);
-        if (resolveSeekPosition == null) {
-            mediaPeriodId = new MediaPeriodId(getFirstPeriodIndex());
-            i = 1;
-            j = C0542C.TIME_UNSET;
-            j2 = j;
+        Pair<Integer, Long> resolvedSeekPosition = resolveSeekPosition(seekPosition, true);
+        if (resolvedSeekPosition == null) {
+            periodId = new MediaPeriodId(getFirstPeriodIndex());
+            periodPositionUs = C0542C.TIME_UNSET;
+            contentPositionUs = C0542C.TIME_UNSET;
+            seekPositionAdjusted = true;
         } else {
-            int intValue = ((Integer) resolveSeekPosition.first).intValue();
-            long longValue = ((Long) resolveSeekPosition.second).longValue();
-            mediaPeriodId = r1.queue.resolveMediaPeriodIdForAds(intValue, longValue);
-            if (mediaPeriodId.isAd()) {
-                i = 1;
-                j2 = longValue;
-                j = 0;
+            int periodIndex = ((Integer) resolvedSeekPosition.first).intValue();
+            contentPositionUs = ((Long) resolvedSeekPosition.second).longValue();
+            periodId = this.queue.resolveMediaPeriodIdForAds(periodIndex, contentPositionUs);
+            if (periodId.isAd()) {
+                periodPositionUs = 0;
+                seekPositionAdjusted = true;
             } else {
-                j = ((Long) resolveSeekPosition.second).longValue();
-                i = seekPosition2.windowPositionUs == C0542C.TIME_UNSET ? 1 : 0;
-                j2 = longValue;
+                periodPositionUs = ((Long) resolvedSeekPosition.second).longValue();
+                seekPositionAdjusted = seekPosition.windowPositionUs == C0542C.TIME_UNSET;
             }
         }
         try {
-            long j3;
-            if (r1.mediaSource != null) {
-                if (timeline != null) {
-                    if (j == C0542C.TIME_UNSET) {
-                        setState(4);
-                        resetInternal(false, true, false);
-                        j3 = j;
-                        r1.playbackInfo = r1.playbackInfo.fromNewPosition(mediaPeriodId, j3, j2);
-                        if (i != 0) {
-                            r1.playbackInfoUpdate.setPositionDiscontinuity(2);
-                        }
+            if (this.mediaSource == null || timeline == null) {
+                this.pendingInitialSeekPosition = seekPosition;
+            } else if (periodPositionUs == C0542C.TIME_UNSET) {
+                setState(4);
+                resetInternal(false, true, false);
+            } else {
+                long newPeriodPositionUs = periodPositionUs;
+                if (periodId.equals(this.playbackInfo.periodId)) {
+                    MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+                    if (!(playingPeriodHolder == null || newPeriodPositionUs == 0)) {
+                        newPeriodPositionUs = playingPeriodHolder.mediaPeriod.getAdjustedSeekPositionUs(newPeriodPositionUs, this.seekParameters);
                     }
-                    long adjustedSeekPositionUs;
-                    if (mediaPeriodId.equals(r1.playbackInfo.periodId)) {
-                        MediaPeriodHolder playingPeriod = r1.queue.getPlayingPeriod();
-                        adjustedSeekPositionUs = (playingPeriod == null || j == 0) ? j : playingPeriod.mediaPeriod.getAdjustedSeekPositionUs(j, r1.seekParameters);
-                        if (C0542C.usToMs(adjustedSeekPositionUs) == C0542C.usToMs(r1.playbackInfo.positionUs)) {
-                            r1.playbackInfo = r1.playbackInfo.fromNewPosition(mediaPeriodId, r1.playbackInfo.positionUs, j2);
-                            if (i != 0) {
-                                r1.playbackInfoUpdate.setPositionDiscontinuity(2);
-                            }
+                    if (C0542C.usToMs(newPeriodPositionUs) == C0542C.usToMs(this.playbackInfo.positionUs)) {
+                        this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, this.playbackInfo.positionUs, contentPositionUs);
+                        if (seekPositionAdjusted) {
+                            this.playbackInfoUpdate.setPositionDiscontinuity(2);
                             return;
                         }
-                    }
-                    adjustedSeekPositionUs = j;
-                    adjustedSeekPositionUs = seekToPeriodPosition(mediaPeriodId, adjustedSeekPositionUs);
-                    if (j == adjustedSeekPositionUs) {
-                        i2 = 0;
-                    }
-                    i |= i2;
-                    j3 = adjustedSeekPositionUs;
-                    r1.playbackInfo = r1.playbackInfo.fromNewPosition(mediaPeriodId, j3, j2);
-                    if (i != 0) {
-                        r1.playbackInfoUpdate.setPositionDiscontinuity(2);
+                        return;
                     }
                 }
+                newPeriodPositionUs = seekToPeriodPosition(periodId, newPeriodPositionUs);
+                seekPositionAdjusted |= periodPositionUs != newPeriodPositionUs ? 1 : 0;
+                periodPositionUs = newPeriodPositionUs;
             }
-            r1.pendingInitialSeekPosition = seekPosition2;
-            j3 = j;
-            r1.playbackInfo = r1.playbackInfo.fromNewPosition(mediaPeriodId, j3, j2);
-            if (i != 0) {
-                r1.playbackInfoUpdate.setPositionDiscontinuity(2);
+            this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, periodPositionUs, contentPositionUs);
+            if (seekPositionAdjusted) {
+                this.playbackInfoUpdate.setPositionDiscontinuity(2);
             }
         } catch (Throwable th) {
             Throwable th2 = th;
-            r1.playbackInfo = r1.playbackInfo.fromNewPosition(mediaPeriodId, j, j2);
-            if (i != 0) {
-                r1.playbackInfoUpdate.setPositionDiscontinuity(2);
+            this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, periodPositionUs, contentPositionUs);
+            if (seekPositionAdjusted) {
+                this.playbackInfoUpdate.setPositionDiscontinuity(2);
             }
         }
     }
 
-    private long seekToPeriodPosition(MediaPeriodId mediaPeriodId, long j) throws ExoPlaybackException {
-        return seekToPeriodPosition(mediaPeriodId, j, this.queue.getPlayingPeriod() != this.queue.getReadingPeriod());
+    private long seekToPeriodPosition(MediaPeriodId periodId, long periodPositionUs) throws ExoPlaybackException {
+        return seekToPeriodPosition(periodId, periodPositionUs, this.queue.getPlayingPeriod() != this.queue.getReadingPeriod());
     }
 
-    private long seekToPeriodPosition(MediaPeriodId mediaPeriodId, long j, boolean z) throws ExoPlaybackException {
+    private long seekToPeriodPosition(MediaPeriodId periodId, long periodPositionUs, boolean forceDisableRenderers) throws ExoPlaybackException {
         stopRenderers();
         this.rebuffering = false;
         setState(2);
-        MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-        MediaPeriodHolder mediaPeriodHolder = playingPeriod;
-        while (mediaPeriodHolder != null) {
-            if (shouldKeepPeriodHolder(mediaPeriodId, j, mediaPeriodHolder)) {
-                this.queue.removeAfter(mediaPeriodHolder);
+        MediaPeriodHolder oldPlayingPeriodHolder = this.queue.getPlayingPeriod();
+        MediaPeriodHolder newPlayingPeriodHolder = oldPlayingPeriodHolder;
+        while (newPlayingPeriodHolder != null) {
+            if (shouldKeepPeriodHolder(periodId, periodPositionUs, newPlayingPeriodHolder)) {
+                this.queue.removeAfter(newPlayingPeriodHolder);
                 break;
             }
-            mediaPeriodHolder = this.queue.advancePlayingPeriod();
+            newPlayingPeriodHolder = this.queue.advancePlayingPeriod();
         }
-        if (playingPeriod != mediaPeriodHolder || z) {
-            for (Renderer disableRenderer : this.enabledRenderers) {
-                disableRenderer(disableRenderer);
+        if (oldPlayingPeriodHolder != newPlayingPeriodHolder || forceDisableRenderers) {
+            for (Renderer renderer : this.enabledRenderers) {
+                disableRenderer(renderer);
             }
             this.enabledRenderers = new Renderer[0];
-            playingPeriod = null;
+            oldPlayingPeriodHolder = null;
         }
-        if (mediaPeriodHolder != null) {
-            updatePlayingPeriodRenderers(playingPeriod);
-            if (mediaPeriodHolder.hasEnabledTracks != null) {
-                j = mediaPeriodHolder.mediaPeriod.seekToUs(j);
-                mediaPeriodHolder.mediaPeriod.discardBuffer(j - this.backBufferDurationUs, this.retainBackBufferFromKeyframe);
+        if (newPlayingPeriodHolder != null) {
+            updatePlayingPeriodRenderers(oldPlayingPeriodHolder);
+            if (newPlayingPeriodHolder.hasEnabledTracks) {
+                periodPositionUs = newPlayingPeriodHolder.mediaPeriod.seekToUs(periodPositionUs);
+                newPlayingPeriodHolder.mediaPeriod.discardBuffer(periodPositionUs - this.backBufferDurationUs, this.retainBackBufferFromKeyframe);
             }
-            resetRendererPosition(j);
+            resetRendererPosition(periodPositionUs);
             maybeContinueLoading();
         } else {
             this.queue.clear();
-            resetRendererPosition(j);
+            resetRendererPosition(periodPositionUs);
         }
         this.handler.sendEmptyMessage(2);
-        return j;
+        return periodPositionUs;
     }
 
-    private boolean shouldKeepPeriodHolder(MediaPeriodId mediaPeriodId, long j, MediaPeriodHolder mediaPeriodHolder) {
-        if (!(mediaPeriodId.equals(mediaPeriodHolder.info.id) == null || mediaPeriodHolder.prepared == null)) {
-            this.playbackInfo.timeline.getPeriod(mediaPeriodHolder.info.id.periodIndex, this.period);
-            mediaPeriodId = this.period.getAdGroupIndexAfterPositionUs(j);
-            if (mediaPeriodId == -1 || this.period.getAdGroupTimeUs(mediaPeriodId) == mediaPeriodHolder.info.endPositionUs) {
+    private boolean shouldKeepPeriodHolder(MediaPeriodId seekPeriodId, long positionUs, MediaPeriodHolder holder) {
+        if (seekPeriodId.equals(holder.info.id) && holder.prepared) {
+            this.playbackInfo.timeline.getPeriod(holder.info.id.periodIndex, this.period);
+            int nextAdGroupIndex = this.period.getAdGroupIndexAfterPositionUs(positionUs);
+            if (nextAdGroupIndex == -1 || this.period.getAdGroupTimeUs(nextAdGroupIndex) == holder.info.endPositionUs) {
                 return true;
             }
         }
-        return null;
+        return false;
     }
 
-    private void resetRendererPosition(long j) throws ExoPlaybackException {
+    private void resetRendererPosition(long periodPositionUs) throws ExoPlaybackException {
         long toRendererTime;
         if (this.queue.hasPlayingPeriod()) {
-            toRendererTime = this.queue.getPlayingPeriod().toRendererTime(j);
+            toRendererTime = this.queue.getPlayingPeriod().toRendererTime(periodPositionUs);
         } else {
-            toRendererTime = j + 60000000;
+            toRendererTime = 60000000 + periodPositionUs;
         }
         this.rendererPositionUs = toRendererTime;
         this.mediaClock.resetPosition(this.rendererPositionUs);
-        for (Renderer resetPosition : this.enabledRenderers) {
-            resetPosition.resetPosition(this.rendererPositionUs);
+        for (Renderer renderer : this.enabledRenderers) {
+            renderer.resetPosition(this.rendererPositionUs);
         }
     }
 
@@ -776,10 +756,10 @@ Error: java.lang.NullPointerException
         this.seekParameters = seekParameters;
     }
 
-    private void stopInternal(boolean z, boolean z2) {
-        resetInternal(true, z, z);
-        this.playbackInfoUpdate.incrementPendingOperationAcks(this.pendingPrepareCount + z2);
-        this.pendingPrepareCount = false;
+    private void stopInternal(boolean reset, boolean acknowledgeStop) {
+        resetInternal(true, reset, reset);
+        this.playbackInfoUpdate.incrementPendingOperationAcks((acknowledgeStop ? 1 : 0) + this.pendingPrepareCount);
+        this.pendingPrepareCount = 0;
         this.loadControl.onStopped();
         setState(1);
     }
@@ -797,108 +777,130 @@ Error: java.lang.NullPointerException
 
     private int getFirstPeriodIndex() {
         Timeline timeline = this.playbackInfo.timeline;
-        if (timeline != null) {
-            if (!timeline.isEmpty()) {
-                return timeline.getWindow(timeline.getFirstWindowIndex(this.shuffleModeEnabled), this.window).firstPeriodIndex;
-            }
+        if (timeline == null || timeline.isEmpty()) {
+            return 0;
         }
-        return 0;
+        return timeline.getWindow(timeline.getFirstWindowIndex(this.shuffleModeEnabled), this.window).firstPeriodIndex;
     }
 
-    private void resetInternal(boolean z, boolean z2, boolean z3) {
+    private void resetInternal(boolean releaseMediaSource, boolean resetPosition, boolean resetState) {
+        Exception e;
+        MediaPeriodId mediaPeriodId;
+        long j;
+        long j2;
+        TrackSelectorResult trackSelectorResult;
         this.handler.removeMessages(2);
         this.rebuffering = false;
         this.mediaClock.stop();
         this.rendererPositionUs = 60000000;
-        for (Renderer disableRenderer : this.enabledRenderers) {
+        for (Renderer renderer : this.enabledRenderers) {
             try {
-                disableRenderer(disableRenderer);
-            } catch (Throwable e) {
-                Log.e(TAG, "Stop failed.", e);
+                disableRenderer(renderer);
+            } catch (ExoPlaybackException e2) {
+                e = e2;
+            } catch (RuntimeException e3) {
+                e = e3;
             }
         }
-        r1.enabledRenderers = new Renderer[0];
-        r1.queue.clear();
+        this.enabledRenderers = new Renderer[0];
+        this.queue.clear();
         setIsLoading(false);
-        if (z2) {
-            r1.pendingInitialSeekPosition = null;
+        if (resetPosition) {
+            this.pendingInitialSeekPosition = null;
         }
-        if (z3) {
-            r1.queue.setTimeline(null);
-            Iterator it = r1.pendingMessages.iterator();
+        if (resetState) {
+            this.queue.setTimeline(null);
+            Iterator it = this.pendingMessages.iterator();
             while (it.hasNext()) {
                 ((PendingMessageInfo) it.next()).message.markAsProcessed(false);
             }
-            r1.pendingMessages.clear();
-            r1.nextPendingMessageIndex = 0;
+            this.pendingMessages.clear();
+            this.nextPendingMessageIndex = 0;
         }
-        Timeline timeline = z3 ? null : r1.playbackInfo.timeline;
-        Object obj = z3 ? null : r1.playbackInfo.manifest;
-        MediaPeriodId mediaPeriodId = z2 ? new MediaPeriodId(getFirstPeriodIndex()) : r1.playbackInfo.periodId;
-        long j = C0542C.TIME_UNSET;
-        long j2 = z2 ? C0542C.TIME_UNSET : r1.playbackInfo.startPositionUs;
-        if (!z2) {
-            j = r1.playbackInfo.contentPositionUs;
+        Timeline timeline = resetState ? null : this.playbackInfo.timeline;
+        Object obj = resetState ? null : this.playbackInfo.manifest;
+        if (resetPosition) {
+            mediaPeriodId = new MediaPeriodId(getFirstPeriodIndex());
+        } else {
+            mediaPeriodId = this.playbackInfo.periodId;
         }
-        r1.playbackInfo = new PlaybackInfo(timeline, obj, mediaPeriodId, j2, j, r1.playbackInfo.playbackState, false, z3 ? r1.emptyTrackSelectorResult : r1.playbackInfo.trackSelectorResult);
-        if (z && r1.mediaSource != null) {
-            r1.mediaSource.releaseSource();
-            r1.mediaSource = null;
+        if (resetPosition) {
+            j = C0542C.TIME_UNSET;
+        } else {
+            j = this.playbackInfo.startPositionUs;
         }
+        if (resetPosition) {
+            j2 = C0542C.TIME_UNSET;
+        } else {
+            j2 = this.playbackInfo.contentPositionUs;
+        }
+        int i = this.playbackInfo.playbackState;
+        if (resetState) {
+            trackSelectorResult = this.emptyTrackSelectorResult;
+        } else {
+            trackSelectorResult = this.playbackInfo.trackSelectorResult;
+        }
+        this.playbackInfo = new PlaybackInfo(timeline, obj, mediaPeriodId, j, j2, i, false, trackSelectorResult);
+        if (releaseMediaSource && this.mediaSource != null) {
+            this.mediaSource.releaseSource();
+            this.mediaSource = null;
+            return;
+        }
+        return;
+        Log.e(TAG, "Stop failed.", e);
     }
 
-    private void sendMessageInternal(PlayerMessage playerMessage) {
-        if (playerMessage.getPositionMs() == C0542C.TIME_UNSET) {
-            sendMessageToTarget(playerMessage);
+    private void sendMessageInternal(PlayerMessage message) {
+        if (message.getPositionMs() == C0542C.TIME_UNSET) {
+            sendMessageToTarget(message);
         } else if (this.playbackInfo.timeline == null) {
-            this.pendingMessages.add(new PendingMessageInfo(playerMessage));
+            this.pendingMessages.add(new PendingMessageInfo(message));
         } else {
-            PendingMessageInfo pendingMessageInfo = new PendingMessageInfo(playerMessage);
+            PendingMessageInfo pendingMessageInfo = new PendingMessageInfo(message);
             if (resolvePendingMessagePosition(pendingMessageInfo)) {
                 this.pendingMessages.add(pendingMessageInfo);
                 Collections.sort(this.pendingMessages);
                 return;
             }
-            playerMessage.markAsProcessed(false);
+            message.markAsProcessed(false);
         }
     }
 
-    private void sendMessageToTarget(PlayerMessage playerMessage) {
-        if (playerMessage.getHandler().getLooper() == this.handler.getLooper()) {
-            deliverMessage(playerMessage);
+    private void sendMessageToTarget(PlayerMessage message) {
+        if (message.getHandler().getLooper() == this.handler.getLooper()) {
+            deliverMessage(message);
             if (this.playbackInfo.playbackState == 3 || this.playbackInfo.playbackState == 2) {
                 this.handler.sendEmptyMessage(2);
                 return;
             }
             return;
         }
-        this.handler.obtainMessage(15, playerMessage).sendToTarget();
+        this.handler.obtainMessage(15, message).sendToTarget();
     }
 
-    private void sendMessageToTargetThread(final PlayerMessage playerMessage) {
-        playerMessage.getHandler().post(new Runnable() {
+    private void sendMessageToTargetThread(final PlayerMessage message) {
+        message.getHandler().post(new Runnable() {
             public void run() {
-                ExoPlayerImplInternal.this.deliverMessage(playerMessage);
+                ExoPlayerImplInternal.this.deliverMessage(message);
             }
         });
     }
 
-    private void deliverMessage(PlayerMessage playerMessage) {
+    private void deliverMessage(PlayerMessage message) {
         try {
-            playerMessage.getTarget().handleMessage(playerMessage.getType(), playerMessage.getPayload());
+            message.getTarget().handleMessage(message.getType(), message.getPayload());
         } catch (ExoPlaybackException e) {
             this.eventHandler.obtainMessage(2, e).sendToTarget();
-        } catch (Throwable th) {
-            playerMessage.markAsProcessed(true);
+        } finally {
+            message.markAsProcessed(true);
         }
-        playerMessage.markAsProcessed(true);
     }
 
     private void resolvePendingMessagePositions() {
-        for (int size = this.pendingMessages.size() - 1; size >= 0; size--) {
-            if (!resolvePendingMessagePosition((PendingMessageInfo) this.pendingMessages.get(size))) {
-                ((PendingMessageInfo) this.pendingMessages.get(size)).message.markAsProcessed(false);
-                this.pendingMessages.remove(size);
+        for (int i = this.pendingMessages.size() - 1; i >= 0; i--) {
+            if (!resolvePendingMessagePosition((PendingMessageInfo) this.pendingMessages.get(i))) {
+                ((PendingMessageInfo) this.pendingMessages.get(i)).message.markAsProcessed(false);
+                this.pendingMessages.remove(i);
             }
         }
         Collections.sort(this.pendingMessages);
@@ -906,189 +908,69 @@ Error: java.lang.NullPointerException
 
     private boolean resolvePendingMessagePosition(PendingMessageInfo pendingMessageInfo) {
         if (pendingMessageInfo.resolvedPeriodUid == null) {
-            Pair resolveSeekPosition = resolveSeekPosition(new SeekPosition(pendingMessageInfo.message.getTimeline(), pendingMessageInfo.message.getWindowIndex(), C0542C.msToUs(pendingMessageInfo.message.getPositionMs())), false);
-            if (resolveSeekPosition == null) {
+            Pair<Integer, Long> periodPosition = resolveSeekPosition(new SeekPosition(pendingMessageInfo.message.getTimeline(), pendingMessageInfo.message.getWindowIndex(), C0542C.msToUs(pendingMessageInfo.message.getPositionMs())), false);
+            if (periodPosition == null) {
                 return false;
             }
-            pendingMessageInfo.setResolvedPosition(((Integer) resolveSeekPosition.first).intValue(), ((Long) resolveSeekPosition.second).longValue(), this.playbackInfo.timeline.getPeriod(((Integer) resolveSeekPosition.first).intValue(), this.period, true).uid);
+            pendingMessageInfo.setResolvedPosition(((Integer) periodPosition.first).intValue(), ((Long) periodPosition.second).longValue(), this.playbackInfo.timeline.getPeriod(((Integer) periodPosition.first).intValue(), this.period, true).uid);
         } else {
-            int indexOfPeriod = this.playbackInfo.timeline.getIndexOfPeriod(pendingMessageInfo.resolvedPeriodUid);
-            if (indexOfPeriod == -1) {
+            int index = this.playbackInfo.timeline.getIndexOfPeriod(pendingMessageInfo.resolvedPeriodUid);
+            if (index == -1) {
                 return false;
             }
-            pendingMessageInfo.resolvedPeriodIndex = indexOfPeriod;
+            pendingMessageInfo.resolvedPeriodIndex = index;
         }
         return true;
     }
 
-    private void maybeTriggerPendingMessages(long r7, long r9) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limit reached
-	at jadx.core.utils.ErrorsCounter.addError(ErrorsCounter.java:37)
-	at jadx.core.utils.ErrorsCounter.methodError(ErrorsCounter.java:61)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r6 = this;
-        r0 = r6.pendingMessages;
-        r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x00ef;
-    L_0x0008:
-        r0 = r6.playbackInfo;
-        r0 = r0.periodId;
-        r0 = r0.isAd();
-        if (r0 == 0) goto L_0x0014;
-    L_0x0012:
-        goto L_0x00ef;
-    L_0x0014:
-        r0 = r6.playbackInfo;
-        r0 = r0.startPositionUs;
-        r2 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1));
-        if (r2 != 0) goto L_0x0021;
-    L_0x001c:
-        r0 = 1;
-        r2 = r7 - r0;
-        r7 = r2;
-    L_0x0021:
-        r0 = r6.playbackInfo;
-        r0 = r0.periodId;
-        r0 = r0.periodIndex;
-        r1 = r6.nextPendingMessageIndex;
-        r2 = 0;
-        if (r1 <= 0) goto L_0x0039;
-    L_0x002c:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r3 = r3 + -1;
-        r1 = r1.get(r3);
-        r1 = (org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PendingMessageInfo) r1;
-        goto L_0x003a;
-    L_0x0039:
-        r1 = r2;
-    L_0x003a:
-        if (r1 == 0) goto L_0x0061;
-    L_0x003c:
-        r3 = r1.resolvedPeriodIndex;
-        if (r3 > r0) goto L_0x004a;
-    L_0x0040:
-        r3 = r1.resolvedPeriodIndex;
-        if (r3 != r0) goto L_0x0061;
-    L_0x0044:
-        r3 = r1.resolvedPeriodTimeUs;
-        r1 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0061;
-    L_0x004a:
-        r1 = r6.nextPendingMessageIndex;
-        r1 = r1 + -1;
-        r6.nextPendingMessageIndex = r1;
-        r1 = r6.nextPendingMessageIndex;
-        if (r1 <= 0) goto L_0x0039;
-    L_0x0054:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r3 = r3 + -1;
-        r1 = r1.get(r3);
-        r1 = (org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PendingMessageInfo) r1;
-        goto L_0x003a;
-    L_0x0061:
-        r1 = r6.nextPendingMessageIndex;
-        r3 = r6.pendingMessages;
-        r3 = r3.size();
-        if (r1 >= r3) goto L_0x0076;
-    L_0x006b:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r1 = r1.get(r3);
-        r1 = (org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PendingMessageInfo) r1;
-        goto L_0x0077;
-    L_0x0076:
-        r1 = r2;
-    L_0x0077:
-        if (r1 == 0) goto L_0x00a6;
-    L_0x0079:
-        r3 = r1.resolvedPeriodUid;
-        if (r3 == 0) goto L_0x00a6;
-    L_0x007d:
-        r3 = r1.resolvedPeriodIndex;
-        if (r3 < r0) goto L_0x008b;
-    L_0x0081:
-        r3 = r1.resolvedPeriodIndex;
-        if (r3 != r0) goto L_0x00a6;
-    L_0x0085:
-        r3 = r1.resolvedPeriodTimeUs;
-        r5 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
-        if (r5 > 0) goto L_0x00a6;
-    L_0x008b:
-        r1 = r6.nextPendingMessageIndex;
-        r1 = r1 + 1;
-        r6.nextPendingMessageIndex = r1;
-        r1 = r6.nextPendingMessageIndex;
-        r3 = r6.pendingMessages;
-        r3 = r3.size();
-        if (r1 >= r3) goto L_0x0076;
-    L_0x009b:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r1 = r1.get(r3);
-        r1 = (org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PendingMessageInfo) r1;
-        goto L_0x0077;
-    L_0x00a6:
-        if (r1 == 0) goto L_0x00ee;
-    L_0x00a8:
-        r3 = r1.resolvedPeriodUid;
-        if (r3 == 0) goto L_0x00ee;
-    L_0x00ac:
-        r3 = r1.resolvedPeriodIndex;
-        if (r3 != r0) goto L_0x00ee;
-    L_0x00b0:
-        r3 = r1.resolvedPeriodTimeUs;
-        r5 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
-        if (r5 <= 0) goto L_0x00ee;
-    L_0x00b6:
-        r3 = r1.resolvedPeriodTimeUs;
-        r5 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1));
-        if (r5 > 0) goto L_0x00ee;
-    L_0x00bc:
-        r3 = r1.message;
-        r6.sendMessageToTarget(r3);
-        r1 = r1.message;
-        r1 = r1.getDeleteAfterDelivery();
-        if (r1 == 0) goto L_0x00d1;
-    L_0x00c9:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r1.remove(r3);
-        goto L_0x00d7;
-    L_0x00d1:
-        r1 = r6.nextPendingMessageIndex;
-        r1 = r1 + 1;
-        r6.nextPendingMessageIndex = r1;
-    L_0x00d7:
-        r1 = r6.nextPendingMessageIndex;
-        r3 = r6.pendingMessages;
-        r3 = r3.size();
-        if (r1 >= r3) goto L_0x00ec;
-    L_0x00e1:
-        r1 = r6.pendingMessages;
-        r3 = r6.nextPendingMessageIndex;
-        r1 = r1.get(r3);
-        r1 = (org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PendingMessageInfo) r1;
-        goto L_0x00a6;
-    L_0x00ec:
-        r1 = r2;
-        goto L_0x00a6;
-    L_0x00ee:
-        return;
-    L_0x00ef:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.maybeTriggerPendingMessages(long, long):void");
+    private void maybeTriggerPendingMessages(long oldPeriodPositionUs, long newPeriodPositionUs) {
+        if (!this.pendingMessages.isEmpty() && !this.playbackInfo.periodId.isAd()) {
+            PendingMessageInfo previousInfo;
+            PendingMessageInfo nextInfo;
+            if (this.playbackInfo.startPositionUs == oldPeriodPositionUs) {
+                oldPeriodPositionUs--;
+            }
+            int currentPeriodIndex = this.playbackInfo.periodId.periodIndex;
+            if (this.nextPendingMessageIndex > 0) {
+                previousInfo = (PendingMessageInfo) this.pendingMessages.get(this.nextPendingMessageIndex - 1);
+            } else {
+                previousInfo = null;
+            }
+            while (previousInfo != null && (previousInfo.resolvedPeriodIndex > currentPeriodIndex || (previousInfo.resolvedPeriodIndex == currentPeriodIndex && previousInfo.resolvedPeriodTimeUs > oldPeriodPositionUs))) {
+                this.nextPendingMessageIndex--;
+                if (this.nextPendingMessageIndex > 0) {
+                    previousInfo = (PendingMessageInfo) this.pendingMessages.get(this.nextPendingMessageIndex - 1);
+                } else {
+                    previousInfo = null;
+                }
+            }
+            if (this.nextPendingMessageIndex < this.pendingMessages.size()) {
+                nextInfo = (PendingMessageInfo) this.pendingMessages.get(this.nextPendingMessageIndex);
+            } else {
+                nextInfo = null;
+            }
+            while (nextInfo != null && nextInfo.resolvedPeriodUid != null && (nextInfo.resolvedPeriodIndex < currentPeriodIndex || (nextInfo.resolvedPeriodIndex == currentPeriodIndex && nextInfo.resolvedPeriodTimeUs <= oldPeriodPositionUs))) {
+                this.nextPendingMessageIndex++;
+                if (this.nextPendingMessageIndex < this.pendingMessages.size()) {
+                    nextInfo = (PendingMessageInfo) this.pendingMessages.get(this.nextPendingMessageIndex);
+                } else {
+                    nextInfo = null;
+                }
+            }
+            while (nextInfo != null && nextInfo.resolvedPeriodUid != null && nextInfo.resolvedPeriodIndex == currentPeriodIndex && nextInfo.resolvedPeriodTimeUs > oldPeriodPositionUs && nextInfo.resolvedPeriodTimeUs <= newPeriodPositionUs) {
+                sendMessageToTarget(nextInfo.message);
+                if (nextInfo.message.getDeleteAfterDelivery()) {
+                    this.pendingMessages.remove(this.nextPendingMessageIndex);
+                } else {
+                    this.nextPendingMessageIndex++;
+                }
+                if (this.nextPendingMessageIndex < this.pendingMessages.size()) {
+                    nextInfo = (PendingMessageInfo) this.pendingMessages.get(this.nextPendingMessageIndex);
+                } else {
+                    nextInfo = null;
+                }
+            }
+        }
     }
 
     private void ensureStopped(Renderer renderer) throws ExoPlaybackException {
@@ -1105,64 +987,60 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
 
     private void reselectTracksInternal() throws ExoPlaybackException {
         if (this.queue.hasPlayingPeriod()) {
-            float f = this.mediaClock.getPlaybackParameters().speed;
-            MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-            MediaPeriodHolder readingPeriod = this.queue.getReadingPeriod();
-            boolean z = true;
-            while (playingPeriod != null) {
-                if (!playingPeriod.prepared) {
-                    break;
-                } else if (playingPeriod.selectTracks(f)) {
-                    if (z) {
-                        playingPeriod = this.queue.getPlayingPeriod();
-                        boolean[] zArr = new boolean[this.renderers.length];
-                        long applyTrackSelection = playingPeriod.applyTrackSelection(this.playbackInfo.positionUs, this.queue.removeAfter(playingPeriod), zArr);
-                        updateLoadControlTrackSelection(playingPeriod.trackSelectorResult);
-                        if (!(this.playbackInfo.playbackState == 4 || applyTrackSelection == this.playbackInfo.positionUs)) {
-                            this.playbackInfo = this.playbackInfo.fromNewPosition(this.playbackInfo.periodId, applyTrackSelection, this.playbackInfo.contentPositionUs);
+            float playbackSpeed = this.mediaClock.getPlaybackParameters().speed;
+            MediaPeriodHolder periodHolder = this.queue.getPlayingPeriod();
+            MediaPeriodHolder readingPeriodHolder = this.queue.getReadingPeriod();
+            boolean selectionsChangedForReadPeriod = true;
+            while (periodHolder != null && periodHolder.prepared) {
+                if (periodHolder.selectTracks(playbackSpeed)) {
+                    if (selectionsChangedForReadPeriod) {
+                        MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+                        boolean[] streamResetFlags = new boolean[this.renderers.length];
+                        long periodPositionUs = playingPeriodHolder.applyTrackSelection(this.playbackInfo.positionUs, this.queue.removeAfter(playingPeriodHolder), streamResetFlags);
+                        updateLoadControlTrackSelection(playingPeriodHolder.trackSelectorResult);
+                        if (!(this.playbackInfo.playbackState == 4 || periodPositionUs == this.playbackInfo.positionUs)) {
+                            this.playbackInfo = this.playbackInfo.fromNewPosition(this.playbackInfo.periodId, periodPositionUs, this.playbackInfo.contentPositionUs);
                             this.playbackInfoUpdate.setPositionDiscontinuity(4);
-                            resetRendererPosition(applyTrackSelection);
+                            resetRendererPosition(periodPositionUs);
                         }
-                        boolean[] zArr2 = new boolean[this.renderers.length];
-                        int i = 0;
-                        int i2 = i;
-                        while (i < this.renderers.length) {
+                        int enabledRendererCount = 0;
+                        boolean[] rendererWasEnabledFlags = new boolean[this.renderers.length];
+                        for (int i = 0; i < this.renderers.length; i++) {
                             Renderer renderer = this.renderers[i];
-                            zArr2[i] = renderer.getState() != 0;
-                            SampleStream sampleStream = playingPeriod.sampleStreams[i];
+                            rendererWasEnabledFlags[i] = renderer.getState() != 0;
+                            SampleStream sampleStream = playingPeriodHolder.sampleStreams[i];
                             if (sampleStream != null) {
-                                i2++;
+                                enabledRendererCount++;
                             }
-                            if (zArr2[i]) {
+                            if (rendererWasEnabledFlags[i]) {
                                 if (sampleStream != renderer.getStream()) {
                                     disableRenderer(renderer);
-                                } else if (zArr[i]) {
+                                } else if (streamResetFlags[i]) {
                                     renderer.resetPosition(this.rendererPositionUs);
                                 }
                             }
-                            i++;
                         }
-                        this.playbackInfo = this.playbackInfo.copyWithTrackSelectorResult(playingPeriod.trackSelectorResult);
-                        enableRenderers(zArr2, i2);
+                        this.playbackInfo = this.playbackInfo.copyWithTrackSelectorResult(playingPeriodHolder.trackSelectorResult);
+                        enableRenderers(rendererWasEnabledFlags, enabledRendererCount);
                     } else {
-                        this.queue.removeAfter(playingPeriod);
-                        if (playingPeriod.prepared) {
-                            playingPeriod.applyTrackSelection(Math.max(playingPeriod.info.startPositionUs, playingPeriod.toPeriodTime(this.rendererPositionUs)), false);
-                            updateLoadControlTrackSelection(playingPeriod.trackSelectorResult);
+                        this.queue.removeAfter(periodHolder);
+                        if (periodHolder.prepared) {
+                            periodHolder.applyTrackSelection(Math.max(periodHolder.info.startPositionUs, periodHolder.toPeriodTime(this.rendererPositionUs)), false);
+                            updateLoadControlTrackSelection(periodHolder.trackSelectorResult);
                         }
                     }
                     if (this.playbackInfo.playbackState != 4) {
                         maybeContinueLoading();
                         updatePlaybackPositions();
                         this.handler.sendEmptyMessage(2);
+                        return;
                     }
                     return;
-                } else {
-                    if (playingPeriod == readingPeriod) {
-                        z = false;
-                    }
-                    playingPeriod = playingPeriod.next;
                 }
+                if (periodHolder == readingPeriodHolder) {
+                    selectionsChangedForReadPeriod = false;
+                }
+                periodHolder = periodHolder.next;
             }
         }
     }
@@ -1171,186 +1049,194 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
         this.loadControl.onTracksSelected(this.renderers, trackSelectorResult.groups, trackSelectorResult.selections);
     }
 
-    private void updateTrackSelectionPlaybackSpeed(float f) {
-        for (MediaPeriodHolder frontPeriod = this.queue.getFrontPeriod(); frontPeriod != null; frontPeriod = frontPeriod.next) {
-            if (frontPeriod.trackSelectorResult != null) {
-                for (TrackSelection trackSelection : frontPeriod.trackSelectorResult.selections.getAll()) {
+    private void updateTrackSelectionPlaybackSpeed(float playbackSpeed) {
+        for (MediaPeriodHolder periodHolder = this.queue.getFrontPeriod(); periodHolder != null; periodHolder = periodHolder.next) {
+            if (periodHolder.trackSelectorResult != null) {
+                for (TrackSelection trackSelection : periodHolder.trackSelectorResult.selections.getAll()) {
                     if (trackSelection != null) {
-                        trackSelection.onPlaybackSpeed(f);
+                        trackSelection.onPlaybackSpeed(playbackSpeed);
                     }
                 }
             }
         }
     }
 
-    private boolean shouldTransitionToReadyState(boolean z) {
+    private boolean shouldTransitionToReadyState(boolean renderersReadyOrEnded) {
         if (this.enabledRenderers.length == 0) {
             return isTimelineReady();
         }
-        boolean z2 = false;
-        if (!z) {
+        if (!renderersReadyOrEnded) {
             return false;
         }
         if (!this.playbackInfo.isLoading) {
             return true;
         }
-        z = this.queue.getLoadingPeriod();
-        long bufferedPositionUs = z.getBufferedPositionUs(z.info.isFinal ^ true);
-        if (bufferedPositionUs == Long.MIN_VALUE || this.loadControl.shouldStartPlayback(bufferedPositionUs - z.toPeriodTime(this.rendererPositionUs), this.mediaClock.getPlaybackParameters().speed, this.rebuffering)) {
-            z2 = true;
+        boolean z;
+        MediaPeriodHolder loadingHolder = this.queue.getLoadingPeriod();
+        if (loadingHolder.info.isFinal) {
+            z = false;
+        } else {
+            z = true;
         }
-        return z2;
+        long bufferedPositionUs = loadingHolder.getBufferedPositionUs(z);
+        if (bufferedPositionUs == Long.MIN_VALUE || this.loadControl.shouldStartPlayback(bufferedPositionUs - loadingHolder.toPeriodTime(this.rendererPositionUs), this.mediaClock.getPlaybackParameters().speed, this.rebuffering)) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isTimelineReady() {
-        MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-        long j = playingPeriod.info.durationUs;
-        if (j != C0542C.TIME_UNSET && this.playbackInfo.positionUs >= j) {
-            if (playingPeriod.next != null) {
-                if (!playingPeriod.next.prepared) {
-                    if (playingPeriod.next.info.id.isAd()) {
-                    }
-                }
-            }
-            return false;
-        }
-        return true;
+        MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+        long playingPeriodDurationUs = playingPeriodHolder.info.durationUs;
+        return playingPeriodDurationUs == C0542C.TIME_UNSET || this.playbackInfo.positionUs < playingPeriodDurationUs || (playingPeriodHolder.next != null && (playingPeriodHolder.next.prepared || playingPeriodHolder.next.info.id.isAd()));
     }
 
     private void maybeThrowPeriodPrepareError() throws IOException {
-        MediaPeriodHolder loadingPeriod = this.queue.getLoadingPeriod();
-        MediaPeriodHolder readingPeriod = this.queue.getReadingPeriod();
-        if (!(loadingPeriod == null || loadingPeriod.prepared || (readingPeriod != null && readingPeriod.next != loadingPeriod))) {
-            Renderer[] rendererArr = this.enabledRenderers;
-            int length = rendererArr.length;
-            int i = 0;
-            while (i < length) {
-                if (rendererArr[i].hasReadStreamToEnd()) {
-                    i++;
-                } else {
-                    return;
+        MediaPeriodHolder loadingPeriodHolder = this.queue.getLoadingPeriod();
+        MediaPeriodHolder readingPeriodHolder = this.queue.getReadingPeriod();
+        if (loadingPeriodHolder != null && !loadingPeriodHolder.prepared) {
+            if (readingPeriodHolder == null || readingPeriodHolder.next == loadingPeriodHolder) {
+                Renderer[] rendererArr = this.enabledRenderers;
+                int length = rendererArr.length;
+                int i = 0;
+                while (i < length) {
+                    if (rendererArr[i].hasReadStreamToEnd()) {
+                        i++;
+                    } else {
+                        return;
+                    }
                 }
+                loadingPeriodHolder.mediaPeriod.maybeThrowPrepareError();
             }
-            loadingPeriod.mediaPeriod.maybeThrowPrepareError();
         }
     }
 
-    private void handleSourceInfoRefreshed(MediaSourceRefreshInfo mediaSourceRefreshInfo) throws ExoPlaybackException {
-        MediaSourceRefreshInfo mediaSourceRefreshInfo2 = mediaSourceRefreshInfo;
-        if (mediaSourceRefreshInfo2.source == this.mediaSource) {
-            Timeline timeline = r0.playbackInfo.timeline;
-            Timeline timeline2 = mediaSourceRefreshInfo2.timeline;
-            Object obj = mediaSourceRefreshInfo2.manifest;
-            r0.queue.setTimeline(timeline2);
-            r0.playbackInfo = r0.playbackInfo.copyWithTimeline(timeline2, obj);
+    private void handleSourceInfoRefreshed(MediaSourceRefreshInfo sourceRefreshInfo) throws ExoPlaybackException {
+        if (sourceRefreshInfo.source == this.mediaSource) {
+            Timeline oldTimeline = this.playbackInfo.timeline;
+            Timeline timeline = sourceRefreshInfo.timeline;
+            Object manifest = sourceRefreshInfo.manifest;
+            this.queue.setTimeline(timeline);
+            this.playbackInfo = this.playbackInfo.copyWithTimeline(timeline, manifest);
             resolvePendingMessagePositions();
-            long j = C0542C.TIME_UNSET;
-            int intValue;
-            if (timeline == null) {
-                r0.playbackInfoUpdate.incrementPendingOperationAcks(r0.pendingPrepareCount);
-                r0.pendingPrepareCount = 0;
-                Pair resolveSeekPosition;
-                long longValue;
-                MediaPeriodId resolveMediaPeriodIdForAds;
-                if (r0.pendingInitialSeekPosition != null) {
-                    resolveSeekPosition = resolveSeekPosition(r0.pendingInitialSeekPosition, true);
-                    r0.pendingInitialSeekPosition = null;
-                    if (resolveSeekPosition == null) {
-                        handleSourceInfoRefreshEndedPlayback();
-                    } else {
-                        intValue = ((Integer) resolveSeekPosition.first).intValue();
-                        longValue = ((Long) resolveSeekPosition.second).longValue();
-                        resolveMediaPeriodIdForAds = r0.queue.resolveMediaPeriodIdForAds(intValue, longValue);
-                        r0.playbackInfo = r0.playbackInfo.fromNewPosition(resolveMediaPeriodIdForAds, resolveMediaPeriodIdForAds.isAd() ? 0 : longValue, longValue);
-                    }
-                } else if (r0.playbackInfo.startPositionUs == C0542C.TIME_UNSET) {
-                    if (timeline2.isEmpty()) {
-                        handleSourceInfoRefreshEndedPlayback();
-                    } else {
-                        resolveSeekPosition = getPeriodPosition(timeline2, timeline2.getFirstWindowIndex(r0.shuffleModeEnabled), C0542C.TIME_UNSET);
-                        intValue = ((Integer) resolveSeekPosition.first).intValue();
-                        longValue = ((Long) resolveSeekPosition.second).longValue();
-                        resolveMediaPeriodIdForAds = r0.queue.resolveMediaPeriodIdForAds(intValue, longValue);
-                        r0.playbackInfo = r0.playbackInfo.fromNewPosition(resolveMediaPeriodIdForAds, resolveMediaPeriodIdForAds.isAd() ? 0 : longValue, longValue);
-                    }
-                }
-                return;
-            }
-            int i = r0.playbackInfo.periodId.periodIndex;
-            MediaPeriodHolder frontPeriod = r0.queue.getFrontPeriod();
-            if (frontPeriod != null || i < timeline.getPeriodCount()) {
-                int indexOfPeriod = timeline2.getIndexOfPeriod(frontPeriod == null ? timeline.getPeriod(i, r0.period, true).uid : frontPeriod.uid);
-                if (indexOfPeriod == -1) {
-                    intValue = resolveSubsequentPeriod(i, timeline, timeline2);
-                    if (intValue == -1) {
+            int periodIndex;
+            MediaPeriodId periodId;
+            Pair<Integer, Long> defaultPosition;
+            if (oldTimeline == null) {
+                this.playbackInfoUpdate.incrementPendingOperationAcks(this.pendingPrepareCount);
+                this.pendingPrepareCount = 0;
+                if (this.pendingInitialSeekPosition != null) {
+                    Pair<Integer, Long> periodPosition = resolveSeekPosition(this.pendingInitialSeekPosition, true);
+                    this.pendingInitialSeekPosition = null;
+                    if (periodPosition == null) {
                         handleSourceInfoRefreshEndedPlayback();
                         return;
                     }
-                    Pair periodPosition = getPeriodPosition(timeline2, timeline2.getPeriod(intValue, r0.period).windowIndex, C0542C.TIME_UNSET);
-                    int intValue2 = ((Integer) periodPosition.first).intValue();
-                    long longValue2 = ((Long) periodPosition.second).longValue();
-                    timeline2.getPeriod(intValue2, r0.period, true);
-                    if (frontPeriod != null) {
-                        obj = r0.period.uid;
-                        frontPeriod.info = frontPeriod.info.copyWithPeriodIndex(-1);
-                        while (frontPeriod.next != null) {
-                            frontPeriod = frontPeriod.next;
-                            if (frontPeriod.uid.equals(obj)) {
-                                frontPeriod.info = r0.queue.getUpdatedMediaPeriodInfo(frontPeriod.info, intValue2);
-                            } else {
-                                frontPeriod.info = frontPeriod.info.copyWithPeriodIndex(-1);
-                            }
-                        }
+                    periodIndex = ((Integer) periodPosition.first).intValue();
+                    long positionUs = ((Long) periodPosition.second).longValue();
+                    periodId = this.queue.resolveMediaPeriodIdForAds(periodIndex, positionUs);
+                    this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, periodId.isAd() ? 0 : positionUs, positionUs);
+                    return;
+                } else if (this.playbackInfo.startPositionUs != C0542C.TIME_UNSET) {
+                    return;
+                } else {
+                    if (timeline.isEmpty()) {
+                        handleSourceInfoRefreshEndedPlayback();
+                        return;
                     }
-                    MediaPeriodId mediaPeriodId = new MediaPeriodId(intValue2);
-                    r0.playbackInfo = r0.playbackInfo.fromNewPosition(mediaPeriodId, seekToPeriodPosition(mediaPeriodId, longValue2), (long) C0542C.TIME_UNSET);
+                    long j;
+                    defaultPosition = getPeriodPosition(timeline, timeline.getFirstWindowIndex(this.shuffleModeEnabled), C0542C.TIME_UNSET);
+                    periodIndex = ((Integer) defaultPosition.first).intValue();
+                    long startPositionUs = ((Long) defaultPosition.second).longValue();
+                    periodId = this.queue.resolveMediaPeriodIdForAds(periodIndex, startPositionUs);
+                    PlaybackInfo playbackInfo = this.playbackInfo;
+                    if (periodId.isAd()) {
+                        j = 0;
+                    } else {
+                        j = startPositionUs;
+                    }
+                    this.playbackInfo = playbackInfo.fromNewPosition(periodId, j, startPositionUs);
                     return;
                 }
-                if (indexOfPeriod != i) {
-                    r0.playbackInfo = r0.playbackInfo.copyWithPeriodIndex(indexOfPeriod);
+            }
+            int playingPeriodIndex = this.playbackInfo.periodId.periodIndex;
+            MediaPeriodHolder periodHolder = this.queue.getFrontPeriod();
+            if (periodHolder != null || playingPeriodIndex < oldTimeline.getPeriodCount()) {
+                Object playingPeriodUid;
+                if (periodHolder == null) {
+                    playingPeriodUid = oldTimeline.getPeriod(playingPeriodIndex, this.period, true).uid;
+                } else {
+                    playingPeriodUid = periodHolder.uid;
                 }
-                if (r0.playbackInfo.periodId.isAd()) {
-                    MediaPeriodId resolveMediaPeriodIdForAds2 = r0.queue.resolveMediaPeriodIdForAds(indexOfPeriod, r0.playbackInfo.contentPositionUs);
-                    if (!(resolveMediaPeriodIdForAds2.isAd() && resolveMediaPeriodIdForAds2.adIndexInAdGroup == r0.playbackInfo.periodId.adIndexInAdGroup)) {
-                        long seekToPeriodPosition = seekToPeriodPosition(resolveMediaPeriodIdForAds2, r0.playbackInfo.contentPositionUs);
-                        if (resolveMediaPeriodIdForAds2.isAd()) {
-                            j = r0.playbackInfo.contentPositionUs;
+                periodIndex = timeline.getIndexOfPeriod(playingPeriodUid);
+                if (periodIndex == -1) {
+                    int newPeriodIndex = resolveSubsequentPeriod(playingPeriodIndex, oldTimeline, timeline);
+                    if (newPeriodIndex == -1) {
+                        handleSourceInfoRefreshEndedPlayback();
+                        return;
+                    }
+                    defaultPosition = getPeriodPosition(timeline, timeline.getPeriod(newPeriodIndex, this.period).windowIndex, C0542C.TIME_UNSET);
+                    newPeriodIndex = ((Integer) defaultPosition.first).intValue();
+                    long newPositionUs = ((Long) defaultPosition.second).longValue();
+                    timeline.getPeriod(newPeriodIndex, this.period, true);
+                    if (periodHolder != null) {
+                        Object newPeriodUid = this.period.uid;
+                        periodHolder.info = periodHolder.info.copyWithPeriodIndex(-1);
+                        while (periodHolder.next != null) {
+                            periodHolder = periodHolder.next;
+                            if (periodHolder.uid.equals(newPeriodUid)) {
+                                periodHolder.info = this.queue.getUpdatedMediaPeriodInfo(periodHolder.info, newPeriodIndex);
+                            } else {
+                                periodHolder.info = periodHolder.info.copyWithPeriodIndex(-1);
+                            }
                         }
-                        r0.playbackInfo = r0.playbackInfo.fromNewPosition(resolveMediaPeriodIdForAds2, seekToPeriodPosition, j);
+                    }
+                    periodId = new MediaPeriodId(newPeriodIndex);
+                    this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, seekToPeriodPosition(periodId, newPositionUs), (long) C0542C.TIME_UNSET);
+                    return;
+                }
+                if (periodIndex != playingPeriodIndex) {
+                    this.playbackInfo = this.playbackInfo.copyWithPeriodIndex(periodIndex);
+                }
+                if (this.playbackInfo.periodId.isAd()) {
+                    periodId = this.queue.resolveMediaPeriodIdForAds(periodIndex, this.playbackInfo.contentPositionUs);
+                    if (!(periodId.isAd() && periodId.adIndexInAdGroup == this.playbackInfo.periodId.adIndexInAdGroup)) {
+                        this.playbackInfo = this.playbackInfo.fromNewPosition(periodId, seekToPeriodPosition(periodId, this.playbackInfo.contentPositionUs), periodId.isAd() ? this.playbackInfo.contentPositionUs : C0542C.TIME_UNSET);
                         return;
                     }
                 }
-                if (frontPeriod != null) {
-                    MediaPeriodHolder updatePeriodInfo = updatePeriodInfo(frontPeriod, indexOfPeriod);
-                    int i2 = indexOfPeriod;
-                    while (updatePeriodInfo.next != null) {
-                        MediaPeriodHolder mediaPeriodHolder = updatePeriodInfo.next;
-                        i2 = timeline2.getNextPeriodIndex(i2, r0.period, r0.window, r0.repeatMode, r0.shuffleModeEnabled);
-                        if (i2 == -1 || !mediaPeriodHolder.uid.equals(timeline2.getPeriod(i2, r0.period, true).uid)) {
-                            if (r0.queue.removeAfter(updatePeriodInfo)) {
-                                MediaPeriodId mediaPeriodId2 = r0.queue.getPlayingPeriod().info.id;
-                                r0.playbackInfo = r0.playbackInfo.fromNewPosition(mediaPeriodId2, seekToPeriodPosition(mediaPeriodId2, r0.playbackInfo.positionUs, true), r0.playbackInfo.contentPositionUs);
+                if (periodHolder != null) {
+                    periodHolder = updatePeriodInfo(periodHolder, periodIndex);
+                    while (periodHolder.next != null) {
+                        MediaPeriodHolder previousPeriodHolder = periodHolder;
+                        periodHolder = periodHolder.next;
+                        periodIndex = timeline.getNextPeriodIndex(periodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
+                        if (periodIndex != -1) {
+                            if (periodHolder.uid.equals(timeline.getPeriod(periodIndex, this.period, true).uid)) {
+                                periodHolder = updatePeriodInfo(periodHolder, periodIndex);
                             }
                         }
-                        updatePeriodInfo = updatePeriodInfo(mediaPeriodHolder, i2);
+                        if (this.queue.removeAfter(previousPeriodHolder)) {
+                            MediaPeriodId id = this.queue.getPlayingPeriod().info.id;
+                            this.playbackInfo = this.playbackInfo.fromNewPosition(id, seekToPeriodPosition(id, this.playbackInfo.positionUs, true), this.playbackInfo.contentPositionUs);
+                            return;
+                        }
+                        return;
                     }
                 }
             }
         }
     }
 
-    private MediaPeriodHolder updatePeriodInfo(MediaPeriodHolder mediaPeriodHolder, int i) {
+    private MediaPeriodHolder updatePeriodInfo(MediaPeriodHolder periodHolder, int periodIndex) {
         while (true) {
-            mediaPeriodHolder.info = this.queue.getUpdatedMediaPeriodInfo(mediaPeriodHolder.info, i);
-            if (mediaPeriodHolder.info.isLastInTimelinePeriod) {
-                break;
-            } else if (mediaPeriodHolder.next == null) {
-                break;
-            } else {
-                mediaPeriodHolder = mediaPeriodHolder.next;
+            periodHolder.info = this.queue.getUpdatedMediaPeriodInfo(periodHolder.info, periodIndex);
+            if (periodHolder.info.isLastInTimelinePeriod || periodHolder.next == null) {
+                return periodHolder;
             }
+            periodHolder = periodHolder.next;
         }
-        return mediaPeriodHolder;
+        return periodHolder;
     }
 
     private void handleSourceInfoRefreshEndedPlayback() {
@@ -1358,94 +1244,51 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
         resetInternal(false, true, false);
     }
 
-    private int resolveSubsequentPeriod(int i, Timeline timeline, Timeline timeline2) {
-        int periodCount = timeline.getPeriodCount();
-        int i2 = i;
-        i = -1;
-        for (int i3 = 0; i3 < periodCount && i == -1; i3++) {
-            i2 = timeline.getNextPeriodIndex(i2, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
-            if (i2 == -1) {
+    private int resolveSubsequentPeriod(int oldPeriodIndex, Timeline oldTimeline, Timeline newTimeline) {
+        int newPeriodIndex = -1;
+        int maxIterations = oldTimeline.getPeriodCount();
+        for (int i = 0; i < maxIterations && newPeriodIndex == -1; i++) {
+            oldPeriodIndex = oldTimeline.getNextPeriodIndex(oldPeriodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
+            if (oldPeriodIndex == -1) {
                 break;
             }
-            i = timeline2.getIndexOfPeriod(timeline.getPeriod(i2, this.period, true).uid);
+            newPeriodIndex = newTimeline.getIndexOfPeriod(oldTimeline.getPeriod(oldPeriodIndex, this.period, true).uid);
         }
-        return i;
+        return newPeriodIndex;
     }
 
-    private android.util.Pair<java.lang.Integer, java.lang.Long> resolveSeekPosition(org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.SeekPosition r11, boolean r12) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r10 = this;
-        r0 = r10.playbackInfo;
-        r0 = r0.timeline;
-        r1 = r11.timeline;
-        r2 = 0;
-        if (r0 != 0) goto L_0x000a;
-    L_0x0009:
-        return r2;
-    L_0x000a:
-        r3 = r1.isEmpty();
-        if (r3 == 0) goto L_0x0011;
-    L_0x0010:
-        r1 = r0;
-    L_0x0011:
-        r5 = r10.window;	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        r6 = r10.period;	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        r7 = r11.windowIndex;	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        r8 = r11.windowPositionUs;	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        r4 = r1;	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        r3 = r4.getPeriodPosition(r5, r6, r7, r8);	 Catch:{ IndexOutOfBoundsException -> 0x0067 }
-        if (r0 != r1) goto L_0x0021;
-    L_0x0020:
-        return r3;
-    L_0x0021:
-        r11 = r3.first;
-        r11 = (java.lang.Integer) r11;
-        r11 = r11.intValue();
-        r4 = r10.period;
-        r5 = 1;
-        r11 = r1.getPeriod(r11, r4, r5);
-        r11 = r11.uid;
-        r11 = r0.getIndexOfPeriod(r11);
-        r4 = -1;
-        if (r11 == r4) goto L_0x0044;
-    L_0x0039:
-        r11 = java.lang.Integer.valueOf(r11);
-        r12 = r3.second;
-        r11 = android.util.Pair.create(r11, r12);
-        return r11;
-    L_0x0044:
-        if (r12 == 0) goto L_0x0066;
-    L_0x0046:
-        r11 = r3.first;
-        r11 = (java.lang.Integer) r11;
-        r11 = r11.intValue();
-        r11 = r10.resolveSubsequentPeriod(r11, r1, r0);
-        if (r11 == r4) goto L_0x0066;
-    L_0x0054:
-        r12 = r10.period;
-        r11 = r0.getPeriod(r11, r12);
-        r11 = r11.windowIndex;
-        r1 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
-        r11 = r10.getPeriodPosition(r0, r11, r1);
-        return r11;
-    L_0x0066:
-        return r2;
-    L_0x0067:
-        r12 = new org.telegram.messenger.exoplayer2.IllegalSeekPositionException;
-        r1 = r11.windowIndex;
-        r2 = r11.windowPositionUs;
-        r12.<init>(r0, r1, r2);
-        throw r12;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.resolveSeekPosition(org.telegram.messenger.exoplayer2.ExoPlayerImplInternal$SeekPosition, boolean):android.util.Pair<java.lang.Integer, java.lang.Long>");
+    private Pair<Integer, Long> resolveSeekPosition(SeekPosition seekPosition, boolean trySubsequentPeriods) {
+        Timeline timeline = this.playbackInfo.timeline;
+        Timeline seekTimeline = seekPosition.timeline;
+        if (timeline == null) {
+            return null;
+        }
+        if (seekTimeline.isEmpty()) {
+            seekTimeline = timeline;
+        }
+        try {
+            Pair<Integer, Long> periodPosition = seekTimeline.getPeriodPosition(this.window, this.period, seekPosition.windowIndex, seekPosition.windowPositionUs);
+            if (timeline == seekTimeline) {
+                return periodPosition;
+            }
+            int periodIndex = timeline.getIndexOfPeriod(seekTimeline.getPeriod(((Integer) periodPosition.first).intValue(), this.period, true).uid);
+            if (periodIndex != -1) {
+                return Pair.create(Integer.valueOf(periodIndex), periodPosition.second);
+            }
+            if (trySubsequentPeriods) {
+                periodIndex = resolveSubsequentPeriod(((Integer) periodPosition.first).intValue(), seekTimeline, timeline);
+                if (periodIndex != -1) {
+                    return getPeriodPosition(timeline, timeline.getPeriod(periodIndex, this.period).windowIndex, C0542C.TIME_UNSET);
+                }
+            }
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalSeekPositionException(timeline, seekPosition.windowIndex, seekPosition.windowPositionUs);
+        }
     }
 
-    private Pair<Integer, Long> getPeriodPosition(Timeline timeline, int i, long j) {
-        return timeline.getPeriodPosition(this.window, this.period, i, j);
+    private Pair<Integer, Long> getPeriodPosition(Timeline timeline, int windowIndex, long windowPositionUs) {
+        return timeline.getPeriodPosition(this.window, this.period, windowIndex, windowPositionUs);
     }
 
     private void updatePeriods() throws ExoPlaybackException, IOException {
@@ -1454,168 +1297,78 @@ Error: java.lang.NullPointerException
                 this.mediaSource.maybeThrowSourceInfoRefreshError();
                 return;
             }
-            MediaPeriodHolder readingPeriod;
-            int i;
-            MediaPeriodHolder advancePlayingPeriod;
-            int i2;
-            Renderer renderer;
-            SampleStream sampleStream;
-            TrackSelectorResult trackSelectorResult;
-            TrackSelectorResult trackSelectorResult2;
-            int i3;
-            int i4;
-            Renderer renderer2;
-            TrackSelection trackSelection;
-            boolean z;
-            int i5;
-            Object obj;
-            RendererConfiguration rendererConfiguration;
-            Renderer renderer3;
-            SampleStream sampleStream2;
             maybeUpdateLoadingPeriod();
-            MediaPeriodHolder loadingPeriod = this.queue.getLoadingPeriod();
-            int i6 = 0;
-            if (loadingPeriod != null) {
-                if (!loadingPeriod.isFullyBuffered()) {
-                    if (!this.playbackInfo.isLoading) {
-                        maybeContinueLoading();
-                    }
-                    if (!this.queue.hasPlayingPeriod()) {
-                        loadingPeriod = this.queue.getPlayingPeriod();
-                        readingPeriod = this.queue.getReadingPeriod();
-                        i = 0;
-                        while (this.playWhenReady && loadingPeriod != readingPeriod && this.rendererPositionUs >= loadingPeriod.next.rendererPositionOffsetUs) {
-                            if (i != 0) {
-                                maybeNotifyPlaybackInfoChanged();
-                            }
-                            i = loadingPeriod.info.isLastInTimelinePeriod ? 0 : 3;
-                            advancePlayingPeriod = this.queue.advancePlayingPeriod();
-                            updatePlayingPeriodRenderers(loadingPeriod);
-                            this.playbackInfo = this.playbackInfo.fromNewPosition(advancePlayingPeriod.info.id, advancePlayingPeriod.info.startPositionUs, advancePlayingPeriod.info.contentPositionUs);
-                            this.playbackInfoUpdate.setPositionDiscontinuity(i);
-                            updatePlaybackPositions();
-                            i = 1;
-                            loadingPeriod = advancePlayingPeriod;
-                        }
-                        if (readingPeriod.info.isFinal) {
-                            if (readingPeriod.next != null) {
-                                if (!readingPeriod.next.prepared) {
-                                    i2 = 0;
-                                    while (i2 < this.renderers.length) {
-                                        renderer = this.renderers[i2];
-                                        sampleStream = readingPeriod.sampleStreams[i2];
-                                        if (renderer.getStream() != sampleStream) {
-                                            if (sampleStream != null || renderer.hasReadStreamToEnd()) {
-                                                i2++;
-                                            }
-                                        }
-                                        return;
-                                    }
-                                    trackSelectorResult = readingPeriod.trackSelectorResult;
-                                    readingPeriod = this.queue.advanceReadingPeriod();
-                                    trackSelectorResult2 = readingPeriod.trackSelectorResult;
-                                    i3 = readingPeriod.mediaPeriod.readDiscontinuity() == C0542C.TIME_UNSET ? 1 : 0;
-                                    for (i4 = 0; i4 < this.renderers.length; i4++) {
-                                        renderer2 = this.renderers[i4];
-                                        if (!trackSelectorResult.renderersEnabled[i4]) {
-                                            if (i3 != 0) {
-                                                renderer2.setCurrentStreamFinal();
-                                            } else if (!renderer2.isCurrentStreamFinal()) {
-                                                trackSelection = trackSelectorResult2.selections.get(i4);
-                                                z = trackSelectorResult2.renderersEnabled[i4];
-                                                i5 = this.rendererCapabilities[i4].getTrackType() != 5 ? 1 : 0;
-                                                obj = trackSelectorResult.rendererConfigurations[i4];
-                                                rendererConfiguration = trackSelectorResult2.rendererConfigurations[i4];
-                                                if (!z && rendererConfiguration.equals(obj) && i5 == 0) {
-                                                    renderer2.replaceStream(getFormats(trackSelection), readingPeriod.sampleStreams[i4], readingPeriod.getRendererOffset());
-                                                } else {
-                                                    renderer2.setCurrentStreamFinal();
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return;
-                                }
-                            }
-                            return;
-                        }
-                        while (i6 < this.renderers.length) {
-                            renderer3 = this.renderers[i6];
-                            sampleStream2 = readingPeriod.sampleStreams[i6];
-                            if (sampleStream2 != null && renderer3.getStream() == sampleStream2 && renderer3.hasReadStreamToEnd()) {
-                                renderer3.setCurrentStreamFinal();
-                            }
-                            i6++;
-                        }
-                    }
-                }
+            MediaPeriodHolder loadingPeriodHolder = this.queue.getLoadingPeriod();
+            if (loadingPeriodHolder == null || loadingPeriodHolder.isFullyBuffered()) {
+                setIsLoading(false);
+            } else if (!this.playbackInfo.isLoading) {
+                maybeContinueLoading();
             }
-            setIsLoading(false);
-            if (!this.queue.hasPlayingPeriod()) {
-                loadingPeriod = this.queue.getPlayingPeriod();
-                readingPeriod = this.queue.getReadingPeriod();
-                i = 0;
-                while (this.playWhenReady) {
-                    if (i != 0) {
+            if (this.queue.hasPlayingPeriod()) {
+                MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+                MediaPeriodHolder readingPeriodHolder = this.queue.getReadingPeriod();
+                boolean advancedPlayingPeriod = false;
+                while (this.playWhenReady && playingPeriodHolder != readingPeriodHolder && this.rendererPositionUs >= playingPeriodHolder.next.rendererPositionOffsetUs) {
+                    if (advancedPlayingPeriod) {
                         maybeNotifyPlaybackInfoChanged();
                     }
-                    if (loadingPeriod.info.isLastInTimelinePeriod) {
-                    }
-                    advancePlayingPeriod = this.queue.advancePlayingPeriod();
-                    updatePlayingPeriodRenderers(loadingPeriod);
-                    this.playbackInfo = this.playbackInfo.fromNewPosition(advancePlayingPeriod.info.id, advancePlayingPeriod.info.startPositionUs, advancePlayingPeriod.info.contentPositionUs);
-                    this.playbackInfoUpdate.setPositionDiscontinuity(i);
+                    int discontinuityReason = playingPeriodHolder.info.isLastInTimelinePeriod ? 0 : 3;
+                    MediaPeriodHolder oldPlayingPeriodHolder = playingPeriodHolder;
+                    playingPeriodHolder = this.queue.advancePlayingPeriod();
+                    updatePlayingPeriodRenderers(oldPlayingPeriodHolder);
+                    this.playbackInfo = this.playbackInfo.fromNewPosition(playingPeriodHolder.info.id, playingPeriodHolder.info.startPositionUs, playingPeriodHolder.info.contentPositionUs);
+                    this.playbackInfoUpdate.setPositionDiscontinuity(discontinuityReason);
                     updatePlaybackPositions();
-                    i = 1;
-                    loadingPeriod = advancePlayingPeriod;
+                    advancedPlayingPeriod = true;
                 }
-                if (readingPeriod.info.isFinal) {
-                    if (readingPeriod.next != null) {
-                        if (!readingPeriod.next.prepared) {
-                            i2 = 0;
-                            while (i2 < this.renderers.length) {
-                                renderer = this.renderers[i2];
-                                sampleStream = readingPeriod.sampleStreams[i2];
-                                if (renderer.getStream() != sampleStream) {
-                                    if (sampleStream != null) {
-                                    }
-                                    i2++;
-                                }
-                                return;
-                            }
-                            trackSelectorResult = readingPeriod.trackSelectorResult;
-                            readingPeriod = this.queue.advanceReadingPeriod();
-                            trackSelectorResult2 = readingPeriod.trackSelectorResult;
-                            if (readingPeriod.mediaPeriod.readDiscontinuity() == C0542C.TIME_UNSET) {
-                            }
-                            while (i4 < this.renderers.length) {
-                                renderer2 = this.renderers[i4];
-                                if (!trackSelectorResult.renderersEnabled[i4]) {
-                                    if (i3 != 0) {
-                                        renderer2.setCurrentStreamFinal();
-                                    } else if (!renderer2.isCurrentStreamFinal()) {
-                                        trackSelection = trackSelectorResult2.selections.get(i4);
-                                        z = trackSelectorResult2.renderersEnabled[i4];
-                                        if (this.rendererCapabilities[i4].getTrackType() != 5) {
-                                        }
-                                        obj = trackSelectorResult.rendererConfigurations[i4];
-                                        rendererConfiguration = trackSelectorResult2.rendererConfigurations[i4];
-                                        if (!z) {
-                                        }
-                                        renderer2.setCurrentStreamFinal();
-                                    }
-                                }
-                            }
+                int i;
+                Renderer renderer;
+                SampleStream sampleStream;
+                if (readingPeriodHolder.info.isFinal) {
+                    for (i = 0; i < this.renderers.length; i++) {
+                        renderer = this.renderers[i];
+                        sampleStream = readingPeriodHolder.sampleStreams[i];
+                        if (sampleStream != null && renderer.getStream() == sampleStream && renderer.hasReadStreamToEnd()) {
+                            renderer.setCurrentStreamFinal();
+                        }
+                    }
+                } else if (readingPeriodHolder.next != null && readingPeriodHolder.next.prepared) {
+                    i = 0;
+                    while (i < this.renderers.length) {
+                        renderer = this.renderers[i];
+                        sampleStream = readingPeriodHolder.sampleStreams[i];
+                        if (renderer.getStream() != sampleStream) {
+                            return;
+                        }
+                        if (sampleStream == null || renderer.hasReadStreamToEnd()) {
+                            i++;
+                        } else {
                             return;
                         }
                     }
-                    return;
-                }
-                while (i6 < this.renderers.length) {
-                    renderer3 = this.renderers[i6];
-                    sampleStream2 = readingPeriod.sampleStreams[i6];
-                    renderer3.setCurrentStreamFinal();
-                    i6++;
+                    TrackSelectorResult oldTrackSelectorResult = readingPeriodHolder.trackSelectorResult;
+                    readingPeriodHolder = this.queue.advanceReadingPeriod();
+                    TrackSelectorResult newTrackSelectorResult = readingPeriodHolder.trackSelectorResult;
+                    boolean initialDiscontinuity = readingPeriodHolder.mediaPeriod.readDiscontinuity() != C0542C.TIME_UNSET;
+                    for (i = 0; i < this.renderers.length; i++) {
+                        renderer = this.renderers[i];
+                        if (oldTrackSelectorResult.renderersEnabled[i]) {
+                            if (initialDiscontinuity) {
+                                renderer.setCurrentStreamFinal();
+                            } else if (!renderer.isCurrentStreamFinal()) {
+                                TrackSelection newSelection = newTrackSelectorResult.selections.get(i);
+                                boolean newRendererEnabled = newTrackSelectorResult.renderersEnabled[i];
+                                boolean isNoSampleRenderer = this.rendererCapabilities[i].getTrackType() == 5;
+                                RendererConfiguration oldConfig = oldTrackSelectorResult.rendererConfigurations[i];
+                                RendererConfiguration newConfig = newTrackSelectorResult.rendererConfigurations[i];
+                                if (newRendererEnabled && newConfig.equals(oldConfig) && !isNoSampleRenderer) {
+                                    renderer.replaceStream(getFormats(newSelection), readingPeriodHolder.sampleStreams[i], readingPeriodHolder.getRendererOffset());
+                                } else {
+                                    renderer.setCurrentStreamFinal();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1624,20 +1377,20 @@ Error: java.lang.NullPointerException
     private void maybeUpdateLoadingPeriod() throws IOException {
         this.queue.reevaluateBuffer(this.rendererPositionUs);
         if (this.queue.shouldLoadNextMediaPeriod()) {
-            MediaPeriodInfo nextMediaPeriodInfo = this.queue.getNextMediaPeriodInfo(this.rendererPositionUs, this.playbackInfo);
-            if (nextMediaPeriodInfo == null) {
+            MediaPeriodInfo info = this.queue.getNextMediaPeriodInfo(this.rendererPositionUs, this.playbackInfo);
+            if (info == null) {
                 this.mediaSource.maybeThrowSourceInfoRefreshError();
                 return;
             }
-            this.queue.enqueueNextMediaPeriod(this.rendererCapabilities, 60000000, this.trackSelector, this.loadControl.getAllocator(), this.mediaSource, this.playbackInfo.timeline.getPeriod(nextMediaPeriodInfo.id.periodIndex, this.period, true).uid, nextMediaPeriodInfo).prepare(this, nextMediaPeriodInfo.startPositionUs);
+            this.queue.enqueueNextMediaPeriod(this.rendererCapabilities, 60000000, this.trackSelector, this.loadControl.getAllocator(), this.mediaSource, this.playbackInfo.timeline.getPeriod(info.id.periodIndex, this.period, true).uid, info).prepare(this, info.startPositionUs);
             setIsLoading(true);
         }
     }
 
     private void handlePeriodPrepared(MediaPeriod mediaPeriod) throws ExoPlaybackException {
-        if (this.queue.isLoading(mediaPeriod) != null) {
+        if (this.queue.isLoading(mediaPeriod)) {
             updateLoadControlTrackSelection(this.queue.handleLoadingPeriodPrepared(this.mediaClock.getPlaybackParameters().speed));
-            if (this.queue.hasPlayingPeriod() == null) {
+            if (!this.queue.hasPlayingPeriod()) {
                 resetRendererPosition(this.queue.advancePlayingPeriod().info.startPositionUs);
                 updatePlayingPeriodRenderers(null);
             }
@@ -1646,95 +1399,97 @@ Error: java.lang.NullPointerException
     }
 
     private void handleContinueLoadingRequested(MediaPeriod mediaPeriod) {
-        if (this.queue.isLoading(mediaPeriod) != null) {
+        if (this.queue.isLoading(mediaPeriod)) {
             this.queue.reevaluateBuffer(this.rendererPositionUs);
             maybeContinueLoading();
         }
     }
 
     private void maybeContinueLoading() {
-        MediaPeriodHolder loadingPeriod = this.queue.getLoadingPeriod();
-        long nextLoadPositionUs = loadingPeriod.getNextLoadPositionUs();
+        MediaPeriodHolder loadingPeriodHolder = this.queue.getLoadingPeriod();
+        long nextLoadPositionUs = loadingPeriodHolder.getNextLoadPositionUs();
         if (nextLoadPositionUs == Long.MIN_VALUE) {
             setIsLoading(false);
             return;
         }
-        boolean shouldContinueLoading = this.loadControl.shouldContinueLoading(nextLoadPositionUs - loadingPeriod.toPeriodTime(this.rendererPositionUs), this.mediaClock.getPlaybackParameters().speed);
-        setIsLoading(shouldContinueLoading);
-        if (shouldContinueLoading) {
-            loadingPeriod.continueLoading(this.rendererPositionUs);
+        boolean continueLoading = this.loadControl.shouldContinueLoading(nextLoadPositionUs - loadingPeriodHolder.toPeriodTime(this.rendererPositionUs), this.mediaClock.getPlaybackParameters().speed);
+        setIsLoading(continueLoading);
+        if (continueLoading) {
+            loadingPeriodHolder.continueLoading(this.rendererPositionUs);
         }
     }
 
-    private void updatePlayingPeriodRenderers(MediaPeriodHolder mediaPeriodHolder) throws ExoPlaybackException {
-        MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-        if (playingPeriod != null) {
-            if (mediaPeriodHolder != playingPeriod) {
-                boolean[] zArr = new boolean[this.renderers.length];
-                int i = 0;
-                int i2 = i;
-                while (i < this.renderers.length) {
-                    Renderer renderer = this.renderers[i];
-                    zArr[i] = renderer.getState() != 0;
-                    if (playingPeriod.trackSelectorResult.renderersEnabled[i]) {
-                        i2++;
-                    }
-                    if (zArr[i] && (!playingPeriod.trackSelectorResult.renderersEnabled[i] || (renderer.isCurrentStreamFinal() && renderer.getStream() == mediaPeriodHolder.sampleStreams[i]))) {
-                        disableRenderer(renderer);
-                    }
-                    i++;
+    private void updatePlayingPeriodRenderers(MediaPeriodHolder oldPlayingPeriodHolder) throws ExoPlaybackException {
+        MediaPeriodHolder newPlayingPeriodHolder = this.queue.getPlayingPeriod();
+        if (newPlayingPeriodHolder != null && oldPlayingPeriodHolder != newPlayingPeriodHolder) {
+            int enabledRendererCount = 0;
+            boolean[] rendererWasEnabledFlags = new boolean[this.renderers.length];
+            int i = 0;
+            while (i < this.renderers.length) {
+                Renderer renderer = this.renderers[i];
+                rendererWasEnabledFlags[i] = renderer.getState() != 0;
+                if (newPlayingPeriodHolder.trackSelectorResult.renderersEnabled[i]) {
+                    enabledRendererCount++;
                 }
-                this.playbackInfo = this.playbackInfo.copyWithTrackSelectorResult(playingPeriod.trackSelectorResult);
-                enableRenderers(zArr, i2);
+                if (rendererWasEnabledFlags[i] && (!newPlayingPeriodHolder.trackSelectorResult.renderersEnabled[i] || (renderer.isCurrentStreamFinal() && renderer.getStream() == oldPlayingPeriodHolder.sampleStreams[i]))) {
+                    disableRenderer(renderer);
+                }
+                i++;
+            }
+            this.playbackInfo = this.playbackInfo.copyWithTrackSelectorResult(newPlayingPeriodHolder.trackSelectorResult);
+            enableRenderers(rendererWasEnabledFlags, enabledRendererCount);
+        }
+    }
+
+    private void enableRenderers(boolean[] rendererWasEnabledFlags, int totalEnabledRendererCount) throws ExoPlaybackException {
+        this.enabledRenderers = new Renderer[totalEnabledRendererCount];
+        int enabledRendererCount = 0;
+        MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+        for (int i = 0; i < this.renderers.length; i++) {
+            if (playingPeriodHolder.trackSelectorResult.renderersEnabled[i]) {
+                int enabledRendererCount2 = enabledRendererCount + 1;
+                enableRenderer(i, rendererWasEnabledFlags[i], enabledRendererCount);
+                enabledRendererCount = enabledRendererCount2;
             }
         }
     }
 
-    private void enableRenderers(boolean[] zArr, int i) throws ExoPlaybackException {
-        this.enabledRenderers = new Renderer[i];
-        i = this.queue.getPlayingPeriod();
-        int i2 = 0;
-        int i3 = 0;
-        while (i2 < this.renderers.length) {
-            if (i.trackSelectorResult.renderersEnabled[i2]) {
-                int i4 = i3 + 1;
-                enableRenderer(i2, zArr[i2], i3);
-                i3 = i4;
-            }
-            i2++;
-        }
-    }
-
-    private void enableRenderer(int i, boolean z, int i2) throws ExoPlaybackException {
-        MediaPeriodHolder playingPeriod = this.queue.getPlayingPeriod();
-        Renderer renderer = this.renderers[i];
-        this.enabledRenderers[i2] = renderer;
+    private void enableRenderer(int rendererIndex, boolean wasRendererEnabled, int enabledRendererIndex) throws ExoPlaybackException {
+        boolean joining = true;
+        MediaPeriodHolder playingPeriodHolder = this.queue.getPlayingPeriod();
+        Renderer renderer = this.renderers[rendererIndex];
+        this.enabledRenderers[enabledRendererIndex] = renderer;
         if (renderer.getState() == 0) {
-            RendererConfiguration rendererConfiguration = playingPeriod.trackSelectorResult.rendererConfigurations[i];
-            Format[] formats = getFormats(playingPeriod.trackSelectorResult.selections.get(i));
-            i2 = (this.playWhenReady == 0 || this.playbackInfo.playbackState != 3) ? 0 : 1;
-            boolean z2 = (z || i2 == 0) ? false : true;
-            renderer.enable(rendererConfiguration, formats, playingPeriod.sampleStreams[i], this.rendererPositionUs, z2, playingPeriod.getRendererOffset());
+            boolean playing;
+            RendererConfiguration rendererConfiguration = playingPeriodHolder.trackSelectorResult.rendererConfigurations[rendererIndex];
+            Format[] formats = getFormats(playingPeriodHolder.trackSelectorResult.selections.get(rendererIndex));
+            if (this.playWhenReady && this.playbackInfo.playbackState == 3) {
+                playing = true;
+            } else {
+                playing = false;
+            }
+            if (wasRendererEnabled || !playing) {
+                joining = false;
+            }
+            renderer.enable(rendererConfiguration, formats, playingPeriodHolder.sampleStreams[rendererIndex], this.rendererPositionUs, joining, playingPeriodHolder.getRendererOffset());
             this.mediaClock.onRendererEnabled(renderer);
-            if (i2 != 0) {
+            if (playing) {
                 renderer.start();
             }
         }
     }
 
     private boolean rendererWaitingForNextStream(Renderer renderer) {
-        MediaPeriodHolder readingPeriod = this.queue.getReadingPeriod();
-        return (readingPeriod.next == null || !readingPeriod.next.prepared || renderer.hasReadStreamToEnd() == null) ? null : true;
+        MediaPeriodHolder readingPeriodHolder = this.queue.getReadingPeriod();
+        return readingPeriodHolder.next != null && readingPeriodHolder.next.prepared && renderer.hasReadStreamToEnd();
     }
 
-    private static Format[] getFormats(TrackSelection trackSelection) {
-        int i = 0;
-        int length = trackSelection != null ? trackSelection.length() : 0;
-        Format[] formatArr = new Format[length];
-        while (i < length) {
-            formatArr[i] = trackSelection.getFormat(i);
-            i++;
+    private static Format[] getFormats(TrackSelection newSelection) {
+        int length = newSelection != null ? newSelection.length() : 0;
+        Format[] formats = new Format[length];
+        for (int i = 0; i < length; i++) {
+            formats[i] = newSelection.getFormat(i);
         }
-        return formatArr;
+        return formats;
     }
 }

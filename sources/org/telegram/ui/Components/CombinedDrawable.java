@@ -19,41 +19,37 @@ public class CombinedDrawable extends Drawable implements Callback {
     private int offsetY;
     private int top;
 
-    protected boolean onStateChange(int[] iArr) {
-        return true;
-    }
-
-    public CombinedDrawable(Drawable drawable, Drawable drawable2, int i, int i2) {
-        this.background = drawable;
-        this.icon = drawable2;
-        this.left = i;
-        this.top = i2;
-        if (drawable2 != null) {
-            drawable2.setCallback(this);
+    public CombinedDrawable(Drawable backgroundDrawable, Drawable iconDrawable, int leftOffset, int topOffset) {
+        this.background = backgroundDrawable;
+        this.icon = iconDrawable;
+        this.left = leftOffset;
+        this.top = topOffset;
+        if (iconDrawable != null) {
+            iconDrawable.setCallback(this);
         }
     }
 
-    public void setIconSize(int i, int i2) {
-        this.iconWidth = i;
-        this.iconHeight = i2;
+    public void setIconSize(int width, int height) {
+        this.iconWidth = width;
+        this.iconHeight = height;
     }
 
-    public CombinedDrawable(Drawable drawable, Drawable drawable2) {
-        this.background = drawable;
-        this.icon = drawable2;
-        if (drawable2 != null) {
-            drawable2.setCallback(this);
+    public CombinedDrawable(Drawable backgroundDrawable, Drawable iconDrawable) {
+        this.background = backgroundDrawable;
+        this.icon = iconDrawable;
+        if (iconDrawable != null) {
+            iconDrawable.setCallback(this);
         }
     }
 
-    public void setCustomSize(int i, int i2) {
-        this.backWidth = i;
-        this.backHeight = i2;
+    public void setCustomSize(int width, int height) {
+        this.backWidth = width;
+        this.backHeight = height;
     }
 
-    public void setIconOffset(int i, int i2) {
-        this.offsetX = i;
-        this.offsetY = i2;
+    public void setIconOffset(int x, int y) {
+        this.offsetX = x;
+        this.offsetY = y;
     }
 
     public Drawable getIcon() {
@@ -64,8 +60,8 @@ public class CombinedDrawable extends Drawable implements Callback {
         return this.background;
     }
 
-    public void setFullsize(boolean z) {
-        this.fullSize = z;
+    public void setFullsize(boolean value) {
+        this.fullSize = value;
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -76,13 +72,17 @@ public class CombinedDrawable extends Drawable implements Callback {
         return this.icon.isStateful();
     }
 
-    public boolean setState(int[] iArr) {
-        this.icon.setState(iArr);
-        return 1;
+    public boolean setState(int[] stateSet) {
+        this.icon.setState(stateSet);
+        return true;
     }
 
     public int[] getState() {
         return this.icon.getState();
+    }
+
+    protected boolean onStateChange(int[] state) {
+        return true;
     }
 
     public void jumpToCurrentState() {
@@ -100,21 +100,21 @@ public class CombinedDrawable extends Drawable implements Callback {
             if (this.fullSize) {
                 this.icon.setBounds(getBounds());
             } else if (this.iconWidth != 0) {
-                r0 = ((getBounds().centerX() - (this.iconWidth / 2)) + this.left) + this.offsetX;
-                r1 = ((getBounds().centerY() - (this.iconHeight / 2)) + this.top) + this.offsetY;
-                this.icon.setBounds(r0, r1, this.iconWidth + r0, this.iconHeight + r1);
+                x = ((getBounds().centerX() - (this.iconWidth / 2)) + this.left) + this.offsetX;
+                y = ((getBounds().centerY() - (this.iconHeight / 2)) + this.top) + this.offsetY;
+                this.icon.setBounds(x, y, this.iconWidth + x, this.iconHeight + y);
             } else {
-                r0 = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
-                r1 = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
-                this.icon.setBounds(r0, r1, this.icon.getIntrinsicWidth() + r0, this.icon.getIntrinsicHeight() + r1);
+                x = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
+                y = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
+                this.icon.setBounds(x, y, this.icon.getIntrinsicWidth() + x, this.icon.getIntrinsicHeight() + y);
             }
             this.icon.draw(canvas);
         }
     }
 
-    public void setAlpha(int i) {
-        this.icon.setAlpha(i);
-        this.background.setAlpha(i);
+    public void setAlpha(int alpha) {
+        this.icon.setAlpha(alpha);
+        this.background.setAlpha(alpha);
     }
 
     public int getIntrinsicWidth() {
@@ -137,15 +137,15 @@ public class CombinedDrawable extends Drawable implements Callback {
         return this.icon.getOpacity();
     }
 
-    public void invalidateDrawable(Drawable drawable) {
+    public void invalidateDrawable(Drawable who) {
         invalidateSelf();
     }
 
-    public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
-        scheduleSelf(runnable, j);
+    public void scheduleDrawable(Drawable who, Runnable what, long when) {
+        scheduleSelf(what, when);
     }
 
-    public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
-        unscheduleSelf(runnable);
+    public void unscheduleDrawable(Drawable who, Runnable what) {
+        unscheduleSelf(what);
     }
 }

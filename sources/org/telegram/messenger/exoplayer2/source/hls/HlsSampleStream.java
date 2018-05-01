@@ -10,9 +10,9 @@ final class HlsSampleStream implements SampleStream {
     private final HlsSampleStreamWrapper sampleStreamWrapper;
     private final int trackGroupIndex;
 
-    public HlsSampleStream(HlsSampleStreamWrapper hlsSampleStreamWrapper, int i) {
-        this.sampleStreamWrapper = hlsSampleStreamWrapper;
-        this.trackGroupIndex = i;
+    public HlsSampleStream(HlsSampleStreamWrapper sampleStreamWrapper, int trackGroupIndex) {
+        this.sampleStreamWrapper = sampleStreamWrapper;
+        this.trackGroupIndex = trackGroupIndex;
     }
 
     public void unbindSampleQueue() {
@@ -34,29 +34,28 @@ final class HlsSampleStream implements SampleStream {
         throw new SampleQueueMappingException(this.sampleStreamWrapper.getTrackGroups().get(this.trackGroupIndex).getFormat(0).sampleMimeType);
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z) {
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
         if (ensureBoundSampleQueue()) {
-            return this.sampleStreamWrapper.readData(this.sampleQueueIndex, formatHolder, decoderInputBuffer, z);
+            return this.sampleStreamWrapper.readData(this.sampleQueueIndex, formatHolder, buffer, requireFormat);
         }
         return -3;
     }
 
-    public int skipData(long j) {
+    public int skipData(long positionUs) {
         if (ensureBoundSampleQueue()) {
-            return this.sampleStreamWrapper.skipData(this.sampleQueueIndex, j);
+            return this.sampleStreamWrapper.skipData(this.sampleQueueIndex, positionUs);
         }
         return 0;
     }
 
     private boolean ensureBoundSampleQueue() {
-        boolean z = true;
         if (this.sampleQueueIndex != -1) {
             return true;
         }
         this.sampleQueueIndex = this.sampleStreamWrapper.bindSampleQueueToSampleStream(this.trackGroupIndex);
         if (this.sampleQueueIndex == -1) {
-            z = false;
+            return false;
         }
-        return z;
+        return true;
     }
 }

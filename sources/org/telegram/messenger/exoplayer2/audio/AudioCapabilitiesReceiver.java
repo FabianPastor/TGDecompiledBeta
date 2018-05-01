@@ -18,11 +18,11 @@ public final class AudioCapabilitiesReceiver {
         }
 
         public void onReceive(Context context, Intent intent) {
-            if (isInitialStickyBroadcast() == null) {
-                context = AudioCapabilities.getCapabilities(intent);
-                if (context.equals(AudioCapabilitiesReceiver.this.audioCapabilities) == null) {
-                    AudioCapabilitiesReceiver.this.audioCapabilities = context;
-                    AudioCapabilitiesReceiver.this.listener.onAudioCapabilitiesChanged(context);
+            if (!isInitialStickyBroadcast()) {
+                AudioCapabilities newAudioCapabilities = AudioCapabilities.getCapabilities(intent);
+                if (!newAudioCapabilities.equals(AudioCapabilitiesReceiver.this.audioCapabilities)) {
+                    AudioCapabilitiesReceiver.this.audioCapabilities = newAudioCapabilities;
+                    AudioCapabilitiesReceiver.this.listener.onAudioCapabilitiesChanged(newAudioCapabilities);
                 }
             }
         }
@@ -33,19 +33,25 @@ public final class AudioCapabilitiesReceiver {
     }
 
     public AudioCapabilitiesReceiver(Context context, Listener listener) {
+        BroadcastReceiver hdmiAudioPlugBroadcastReceiver;
         this.context = (Context) Assertions.checkNotNull(context);
         this.listener = (Listener) Assertions.checkNotNull(listener);
-        this.receiver = Util.SDK_INT >= 21 ? new HdmiAudioPlugBroadcastReceiver() : null;
+        if (Util.SDK_INT >= 21) {
+            hdmiAudioPlugBroadcastReceiver = new HdmiAudioPlugBroadcastReceiver();
+        } else {
+            hdmiAudioPlugBroadcastReceiver = null;
+        }
+        this.receiver = hdmiAudioPlugBroadcastReceiver;
     }
 
     public AudioCapabilities register() {
-        Intent intent;
+        Intent stickyIntent;
         if (this.receiver == null) {
-            intent = null;
+            stickyIntent = null;
         } else {
-            intent = this.context.registerReceiver(this.receiver, new IntentFilter("android.media.action.HDMI_AUDIO_PLUG"));
+            stickyIntent = this.context.registerReceiver(this.receiver, new IntentFilter("android.media.action.HDMI_AUDIO_PLUG"));
         }
-        this.audioCapabilities = AudioCapabilities.getCapabilities(intent);
+        this.audioCapabilities = AudioCapabilities.getCapabilities(stickyIntent);
         return this.audioCapabilities;
     }
 

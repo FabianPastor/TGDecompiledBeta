@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -30,21 +29,33 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 import net.hockeyapp.android.UpdateFragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,8 +70,10 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
@@ -137,18 +150,38 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     private int waitingForFirstTextureUpload;
     private WebView webView;
 
+    public interface WebPlayerViewDelegate {
+        boolean checkInlinePermissions();
+
+        ViewGroup getTextureViewContainer();
+
+        void onInitFailed();
+
+        void onInlineSurfaceTextureReady();
+
+        void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
+
+        void onSharePressed();
+
+        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
+
+        TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
+
+        void onVideoSizeChanged(float f, int i);
+
+        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
+    }
+
     /* renamed from: org.telegram.ui.Components.WebPlayerView$1 */
     class C13361 implements Runnable {
         C13361() {
         }
 
         public void run() {
-            if (WebPlayerView.this.videoPlayer != null) {
-                if (WebPlayerView.this.videoPlayer.isPlaying()) {
-                    WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
-                    WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000));
-                    AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
-                }
+            if (WebPlayerView.this.videoPlayer != null && WebPlayerView.this.videoPlayer.isPlaying()) {
+                WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
+                WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000));
+                AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
             }
         }
     }
@@ -188,29 +221,29 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
         }
 
-        public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-        }
-
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-        }
-
         C13392() {
         }
 
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        }
+
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        }
+
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
             if (!WebPlayerView.this.changingTextureView) {
                 return true;
             }
             if (WebPlayerView.this.switchingInlineMode) {
                 WebPlayerView.this.waitingForFirstTextureUpload = 2;
             }
-            WebPlayerView.this.textureView.setSurfaceTexture(surfaceTexture);
+            WebPlayerView.this.textureView.setSurfaceTexture(surface);
             WebPlayerView.this.textureView.setVisibility(0);
             WebPlayerView.this.changingTextureView = false;
             return false;
         }
 
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
                 WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C13381());
                 WebPlayerView.this.changedTextureView.invalidate();
@@ -234,12 +267,12 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 try {
                     WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
                     WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
-                } catch (Throwable th) {
+                } catch (Throwable e) {
                     if (WebPlayerView.this.currentBitmap != null) {
                         WebPlayerView.this.currentBitmap.recycle();
                         WebPlayerView.this.currentBitmap = null;
                     }
-                    FileLog.m3e(th);
+                    FileLog.m3e(e);
                 }
                 if (WebPlayerView.this.currentBitmap != null) {
                     WebPlayerView.this.textureImageView.setVisibility(0);
@@ -259,11 +292,27 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
             WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
             WebPlayerView.this.changedTextureView.setVisibility(4);
-            viewGroup = (ViewGroup) WebPlayerView.this.textureView.getParent();
-            if (viewGroup != null) {
-                viewGroup.removeView(WebPlayerView.this.textureView);
+            ViewGroup parent = (ViewGroup) WebPlayerView.this.textureView.getParent();
+            if (parent != null) {
+                parent.removeView(WebPlayerView.this.textureView);
             }
             WebPlayerView.this.controlsView.show(false, false);
+        }
+    }
+
+    public interface CallJavaResultInterface {
+        void jsCallFinished(String str);
+    }
+
+    /* renamed from: org.telegram.ui.Components.WebPlayerView$5 */
+    class C21045 implements CallJavaResultInterface {
+        C21045() {
+        }
+
+        public void jsCallFinished(String value) {
+            if (WebPlayerView.this.currentTask != null && !WebPlayerView.this.currentTask.isCancelled() && (WebPlayerView.this.currentTask instanceof YoutubeVideoTask)) {
+                ((YoutubeVideoTask) WebPlayerView.this.currentTask).onInterfaceResult(value);
+            }
         }
     }
 
@@ -272,12 +321,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         C13416() {
         }
 
-        public void onClick(View view) {
-            if (WebPlayerView.this.initied != null && WebPlayerView.this.changingTextureView == null && WebPlayerView.this.switchingInlineMode == null) {
-                if (WebPlayerView.this.firstFrameRendered != null) {
-                    WebPlayerView.this.inFullscreen = WebPlayerView.this.inFullscreen ^ true;
-                    WebPlayerView.this.updateFullscreenState(true);
-                }
+        public void onClick(View v) {
+            if (WebPlayerView.this.initied && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                WebPlayerView.this.inFullscreen = !WebPlayerView.this.inFullscreen;
+                WebPlayerView.this.updateFullscreenState(true);
             }
         }
     }
@@ -287,20 +334,18 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         C13427() {
         }
 
-        public void onClick(View view) {
-            if (WebPlayerView.this.initied != null) {
-                if (WebPlayerView.this.playVideoUrl != null) {
-                    if (WebPlayerView.this.videoPlayer.isPlayerPrepared() == null) {
-                        WebPlayerView.this.preparePlayer();
-                    }
-                    if (WebPlayerView.this.videoPlayer.isPlaying() != null) {
-                        WebPlayerView.this.videoPlayer.pause();
-                    } else {
-                        WebPlayerView.this.isCompleted = false;
-                        WebPlayerView.this.videoPlayer.play();
-                    }
-                    WebPlayerView.this.updatePlayButton();
+        public void onClick(View v) {
+            if (WebPlayerView.this.initied && WebPlayerView.this.playVideoUrl != null) {
+                if (!WebPlayerView.this.videoPlayer.isPlayerPrepared()) {
+                    WebPlayerView.this.preparePlayer();
                 }
+                if (WebPlayerView.this.videoPlayer.isPlaying()) {
+                    WebPlayerView.this.videoPlayer.pause();
+                } else {
+                    WebPlayerView.this.isCompleted = false;
+                    WebPlayerView.this.videoPlayer.play();
+                }
+                WebPlayerView.this.updatePlayButton();
             }
         }
     }
@@ -310,53 +355,51 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         C13438() {
         }
 
-        public void onClick(View view) {
-            if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissions() != null && WebPlayerView.this.changingTextureView == null && WebPlayerView.this.switchingInlineMode == null) {
-                if (WebPlayerView.this.firstFrameRendered != null) {
-                    WebPlayerView.this.switchingInlineMode = true;
-                    if (WebPlayerView.this.isInline == null) {
-                        WebPlayerView.this.inFullscreen = false;
-                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
-                    } else {
-                        ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();
-                        if (viewGroup != WebPlayerView.this) {
-                            if (viewGroup != null) {
-                                viewGroup.removeView(WebPlayerView.this.aspectRatioFrameLayout);
-                            }
-                            WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
-                            WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight() - AndroidUtilities.dp(10.0f), NUM));
+        public void onClick(View v) {
+            if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissions() && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                WebPlayerView.this.switchingInlineMode = true;
+                if (WebPlayerView.this.isInline) {
+                    ViewGroup parent = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();
+                    if (parent != WebPlayerView.this) {
+                        if (parent != null) {
+                            parent.removeView(WebPlayerView.this.aspectRatioFrameLayout);
                         }
-                        if (WebPlayerView.this.currentBitmap != null) {
-                            WebPlayerView.this.currentBitmap.recycle();
-                            WebPlayerView.this.currentBitmap = null;
-                        }
-                        WebPlayerView.this.changingTextureView = true;
-                        WebPlayerView.this.isInline = false;
-                        WebPlayerView.this.updatePlayButton();
-                        WebPlayerView.this.updateShareButton();
-                        WebPlayerView.this.updateFullscreenButton();
-                        WebPlayerView.this.updateInlineButton();
-                        WebPlayerView.this.textureView.setVisibility(4);
-                        if (WebPlayerView.this.textureViewContainer != null) {
-                            WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.textureView);
-                        } else {
-                            WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
-                        }
-                        viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
-                        if (viewGroup != WebPlayerView.this) {
-                            if (viewGroup != null) {
-                                viewGroup.removeView(WebPlayerView.this.controlsView);
-                            }
-                            if (WebPlayerView.this.textureViewContainer != null) {
-                                WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.controlsView);
-                            } else {
-                                WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
-                            }
-                        }
-                        WebPlayerView.this.controlsView.show(false, false);
-                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
+                        WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
+                        WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight() - AndroidUtilities.dp(10.0f), NUM));
                     }
+                    if (WebPlayerView.this.currentBitmap != null) {
+                        WebPlayerView.this.currentBitmap.recycle();
+                        WebPlayerView.this.currentBitmap = null;
+                    }
+                    WebPlayerView.this.changingTextureView = true;
+                    WebPlayerView.this.isInline = false;
+                    WebPlayerView.this.updatePlayButton();
+                    WebPlayerView.this.updateShareButton();
+                    WebPlayerView.this.updateFullscreenButton();
+                    WebPlayerView.this.updateInlineButton();
+                    WebPlayerView.this.textureView.setVisibility(4);
+                    if (WebPlayerView.this.textureViewContainer != null) {
+                        WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.textureView);
+                    } else {
+                        WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
+                    }
+                    parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                    if (parent != WebPlayerView.this) {
+                        if (parent != null) {
+                            parent.removeView(WebPlayerView.this.controlsView);
+                        }
+                        if (WebPlayerView.this.textureViewContainer != null) {
+                            WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.controlsView);
+                        } else {
+                            WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
+                        }
+                    }
+                    WebPlayerView.this.controlsView.show(false, false);
+                    WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
+                    return;
                 }
+                WebPlayerView.this.inFullscreen = false;
+                WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
             }
         }
     }
@@ -366,7 +409,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         C13449() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (WebPlayerView.this.delegate != null) {
                 WebPlayerView.this.delegate.onSharePressed();
             }
@@ -378,26 +421,25 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private String[] results = new String[2];
         private String videoId;
 
-        public AparatVideoTask(String str) {
-            this.videoId = str;
+        public AparatVideoTask(String vid) {
+            this.videoId = vid;
         }
 
-        protected String doInBackground(Void... voidArr) {
-            voidArr = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "http://www.aparat.com/video/video/embed/vt/frame/showvideo/yes/videohash/%s", new Object[]{this.videoId}));
-            String str = null;
+        protected String doInBackground(Void... voids) {
+            String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "http://www.aparat.com/video/video/embed/vt/frame/showvideo/yes/videohash/%s", new Object[]{this.videoId}));
             if (isCancelled()) {
                 return null;
             }
             try {
-                voidArr = WebPlayerView.aparatFileListPattern.matcher(voidArr);
-                if (voidArr.find()) {
-                    JSONArray jSONArray = new JSONArray(voidArr.group(1));
-                    for (voidArr = null; voidArr < jSONArray.length(); voidArr++) {
-                        JSONArray jSONArray2 = jSONArray.getJSONArray(voidArr);
-                        if (jSONArray2.length() != 0) {
-                            JSONObject jSONObject = jSONArray2.getJSONObject(0);
-                            if (jSONObject.has("file")) {
-                                this.results[0] = jSONObject.getString("file");
+                Matcher filelist = WebPlayerView.aparatFileListPattern.matcher(playerCode);
+                if (filelist.find()) {
+                    JSONArray json = new JSONArray(filelist.group(1));
+                    for (int a = 0; a < json.length(); a++) {
+                        JSONArray array = json.getJSONArray(a);
+                        if (array.length() != 0) {
+                            JSONObject object = array.getJSONObject(0);
+                            if (object.has("file")) {
+                                this.results[0] = object.getString("file");
                                 this.results[1] = "other";
                             }
                         }
@@ -406,30 +448,23 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (isCancelled() == null) {
-                str = this.results[0];
-            }
-            return str;
+            return isCancelled() ? null : this.results[0];
         }
 
-        protected void onPostExecute(String str) {
-            if (str != null) {
+        protected void onPostExecute(String result) {
+            if (result != null) {
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = str;
+                WebPlayerView.this.playVideoUrl = result;
                 WebPlayerView.this.playVideoType = this.results[1];
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
-    }
-
-    public interface CallJavaResultInterface {
-        void jsCallFinished(String str);
     }
 
     private class ControlsView extends FrameLayout {
@@ -483,7 +518,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         public ControlsView(Context context) {
             super(context);
-            setWillNotDraw(null);
+            setWillNotDraw(false);
             this.textPaint = new TextPaint(1);
             this.textPaint.setColor(-1);
             this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
@@ -496,60 +531,57 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             this.imageReceiver = new ImageReceiver(this);
         }
 
-        public void setDuration(int i) {
-            if (this.duration != i && i >= 0) {
-                if (!WebPlayerView.this.isStream) {
-                    this.duration = i;
-                    this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    if (this.durationLayout.getLineCount() > 0) {
-                        this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
-                    }
-                    invalidate();
+        public void setDuration(int value) {
+            if (this.duration != value && value >= 0 && !WebPlayerView.this.isStream) {
+                this.duration = value;
+                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                if (this.durationLayout.getLineCount() > 0) {
+                    this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
                 }
+                invalidate();
             }
         }
 
-        public void setBufferedProgress(int i) {
-            this.bufferedPosition = i;
+        public void setBufferedProgress(int position) {
+            this.bufferedPosition = position;
             invalidate();
         }
 
-        public void setProgress(int i) {
-            if (!this.progressPressed && i >= 0) {
-                if (!WebPlayerView.this.isStream) {
-                    this.progress = i;
-                    this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    invalidate();
-                }
+        public void setProgress(int value) {
+            if (!this.progressPressed && value >= 0 && !WebPlayerView.this.isStream) {
+                this.progress = value;
+                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                invalidate();
             }
         }
 
-        public void show(boolean z, boolean z2) {
-            if (this.isVisible != z) {
-                this.isVisible = z;
-                if (this.currentAnimation) {
+        public void show(boolean value, boolean animated) {
+            if (this.isVisible != value) {
+                this.isVisible = value;
+                if (this.currentAnimation != null) {
                     this.currentAnimation.cancel();
                 }
+                AnimatorSet animatorSet;
                 Animator[] animatorArr;
                 if (this.isVisible) {
-                    if (z2) {
+                    if (animated) {
                         this.currentAnimation = new AnimatorSet();
-                        z2 = this.currentAnimation;
+                        animatorSet = this.currentAnimation;
                         animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
-                        z2.playTogether(animatorArr);
+                        animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
                         this.currentAnimation.addListener(new C13462());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
                     }
-                } else if (z2) {
+                } else if (animated) {
                     this.currentAnimation = new AnimatorSet();
-                    z2 = this.currentAnimation;
+                    animatorSet = this.currentAnimation;
                     animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
-                    z2.playTogether(animatorArr);
+                    animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
                     this.currentAnimation.addListener(new C13473());
                     this.currentAnimation.start();
@@ -567,165 +599,154 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
         }
 
-        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-            if (motionEvent.getAction() != 0) {
-                return super.onInterceptTouchEvent(motionEvent);
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            if (ev.getAction() != 0) {
+                return super.onInterceptTouchEvent(ev);
             }
             if (this.isVisible) {
-                onTouchEvent(motionEvent);
+                onTouchEvent(ev);
                 return this.progressPressed;
             }
             show(true, true);
             return true;
         }
 
-        public void requestDisallowInterceptTouchEvent(boolean z) {
-            super.requestDisallowInterceptTouchEvent(z);
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
             checkNeedHide();
         }
 
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            int dp;
-            int measuredWidth;
-            int measuredHeight;
+        public boolean onTouchEvent(MotionEvent event) {
+            int progressLineX;
+            int progressLineEndX;
+            int i;
+            int progressY;
             if (WebPlayerView.this.inFullscreen) {
-                dp = AndroidUtilities.dp(36.0f) + this.durationWidth;
-                measuredWidth = (getMeasuredWidth() - AndroidUtilities.dp(76.0f)) - this.durationWidth;
-                measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(28.0f);
+                progressLineX = AndroidUtilities.dp(36.0f) + this.durationWidth;
+                progressLineEndX = (getMeasuredWidth() - AndroidUtilities.dp(76.0f)) - this.durationWidth;
+                progressY = getMeasuredHeight() - AndroidUtilities.dp(28.0f);
             } else {
-                measuredWidth = getMeasuredWidth();
-                measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(12.0f);
-                dp = 0;
+                progressLineX = 0;
+                progressLineEndX = getMeasuredWidth();
+                progressY = getMeasuredHeight() - AndroidUtilities.dp(12.0f);
             }
-            int i = (this.duration != 0 ? (int) (((float) (measuredWidth - dp)) * (((float) this.progress) / ((float) this.duration))) : 0) + dp;
-            int y;
-            if (motionEvent.getAction() == 0) {
+            if (this.duration != 0) {
+                i = (int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration)));
+            } else {
+                i = 0;
+            }
+            int progressX = progressLineX + i;
+            int x;
+            if (event.getAction() == 0) {
                 if (!this.isVisible || WebPlayerView.this.isInline || WebPlayerView.this.isStream) {
                     show(true, true);
                 } else if (this.duration != 0) {
-                    dp = (int) motionEvent.getX();
-                    y = (int) motionEvent.getY();
-                    if (dp >= i - AndroidUtilities.dp(10.0f) && dp <= AndroidUtilities.dp(10.0f) + i && y >= r3 - AndroidUtilities.dp(10.0f) && y <= r3 + AndroidUtilities.dp(10.0f)) {
+                    x = (int) event.getX();
+                    int y = (int) event.getY();
+                    if (x >= progressX - AndroidUtilities.dp(10.0f) && x <= AndroidUtilities.dp(10.0f) + progressX && y >= progressY - AndroidUtilities.dp(10.0f) && y <= AndroidUtilities.dp(10.0f) + progressY) {
                         this.progressPressed = true;
-                        this.lastProgressX = dp;
-                        this.currentProgressX = i;
+                        this.lastProgressX = x;
+                        this.currentProgressX = progressX;
                         getParent().requestDisallowInterceptTouchEvent(true);
                         invalidate();
                     }
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.hideRunnable);
-            } else {
-                if (motionEvent.getAction() != 1) {
-                    if (motionEvent.getAction() != 3) {
-                        if (motionEvent.getAction() == 2 && this.progressPressed) {
-                            y = (int) motionEvent.getX();
-                            this.currentProgressX -= this.lastProgressX - y;
-                            this.lastProgressX = y;
-                            if (this.currentProgressX < dp) {
-                                this.currentProgressX = dp;
-                            } else if (this.currentProgressX > measuredWidth) {
-                                this.currentProgressX = measuredWidth;
-                            }
-                            setProgress((int) (((float) (this.duration * 1000)) * (((float) (this.currentProgressX - dp)) / ((float) (measuredWidth - dp)))));
-                            invalidate();
-                        }
-                    }
-                }
+            } else if (event.getAction() == 1 || event.getAction() == 3) {
                 if (WebPlayerView.this.initied && WebPlayerView.this.videoPlayer.isPlaying()) {
                     AndroidUtilities.runOnUIThread(this.hideRunnable, 3000);
                 }
                 if (this.progressPressed) {
                     this.progressPressed = false;
                     if (WebPlayerView.this.initied) {
-                        this.progress = (int) (((float) this.duration) * (((float) (this.currentProgressX - dp)) / ((float) (measuredWidth - dp))));
+                        this.progress = (int) (((float) this.duration) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX))));
                         WebPlayerView.this.videoPlayer.seekTo(((long) this.progress) * 1000);
                     }
                 }
+            } else if (event.getAction() == 2 && this.progressPressed) {
+                x = (int) event.getX();
+                this.currentProgressX -= this.lastProgressX - x;
+                this.lastProgressX = x;
+                if (this.currentProgressX < progressLineX) {
+                    this.currentProgressX = progressLineX;
+                } else if (this.currentProgressX > progressLineEndX) {
+                    this.currentProgressX = progressLineEndX;
+                }
+                setProgress((int) (((float) (this.duration * 1000)) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX)))));
+                invalidate();
             }
-            super.onTouchEvent(motionEvent);
+            super.onTouchEvent(event);
             return true;
         }
 
         protected void onDraw(Canvas canvas) {
-            Canvas canvas2 = canvas;
             if (WebPlayerView.this.drawImage) {
                 if (WebPlayerView.this.firstFrameRendered && WebPlayerView.this.currentAlpha != 0.0f) {
-                    long currentTimeMillis = System.currentTimeMillis();
-                    long access$4900 = currentTimeMillis - WebPlayerView.this.lastUpdateTime;
-                    WebPlayerView.this.lastUpdateTime = currentTimeMillis;
-                    WebPlayerView.this.currentAlpha = WebPlayerView.this.currentAlpha - (((float) access$4900) / 150.0f);
+                    long newTime = System.currentTimeMillis();
+                    long dt = newTime - WebPlayerView.this.lastUpdateTime;
+                    WebPlayerView.this.lastUpdateTime = newTime;
+                    WebPlayerView.this.currentAlpha = WebPlayerView.this.currentAlpha - (((float) dt) / 150.0f);
                     if (WebPlayerView.this.currentAlpha < 0.0f) {
                         WebPlayerView.this.currentAlpha = 0.0f;
                     }
                     invalidate();
                 }
-                r0.imageReceiver.setAlpha(WebPlayerView.this.currentAlpha);
-                r0.imageReceiver.draw(canvas2);
+                this.imageReceiver.setAlpha(WebPlayerView.this.currentAlpha);
+                this.imageReceiver.draw(canvas);
             }
             if (WebPlayerView.this.videoPlayer.isPlayerPrepared() && !WebPlayerView.this.isStream) {
-                int i;
-                int measuredWidth = getMeasuredWidth();
-                int measuredHeight = getMeasuredHeight();
+                int width = getMeasuredWidth();
+                int height = getMeasuredHeight();
                 if (!WebPlayerView.this.isInline) {
-                    i = 10;
-                    if (r0.durationLayout != null) {
+                    if (this.durationLayout != null) {
                         canvas.save();
-                        canvas2.translate((float) ((measuredWidth - AndroidUtilities.dp(58.0f)) - r0.durationWidth), (float) (measuredHeight - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
-                        r0.durationLayout.draw(canvas2);
+                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        this.durationLayout.draw(canvas);
                         canvas.restore();
                     }
-                    if (r0.progressLayout != null) {
+                    if (this.progressLayout != null) {
                         canvas.save();
-                        float dp = (float) AndroidUtilities.dp(18.0f);
-                        if (WebPlayerView.this.inFullscreen) {
-                            i = 6;
-                        }
-                        canvas2.translate(dp, (float) (measuredHeight - AndroidUtilities.dp((float) (29 + i))));
-                        r0.progressLayout.draw(canvas2);
+                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        this.progressLayout.draw(canvas);
                         canvas.restore();
                     }
                 }
-                if (r0.duration != 0) {
-                    int dp2;
-                    float f = 7.0f;
-                    i = 0;
+                if (this.duration != 0) {
+                    int progressLineY;
+                    int progressLineX;
+                    int progressLineEndX;
+                    int cy;
+                    int progressX;
                     if (WebPlayerView.this.isInline) {
-                        dp2 = measuredHeight - AndroidUtilities.dp(3.0f);
-                        measuredHeight -= AndroidUtilities.dp(7.0f);
+                        progressLineY = height - AndroidUtilities.dp(3.0f);
+                        progressLineX = 0;
+                        progressLineEndX = width;
+                        cy = height - AndroidUtilities.dp(7.0f);
                     } else if (WebPlayerView.this.inFullscreen) {
-                        dp2 = measuredHeight - AndroidUtilities.dp(29.0f);
-                        i = AndroidUtilities.dp(36.0f) + r0.durationWidth;
-                        measuredWidth = (measuredWidth - AndroidUtilities.dp(76.0f)) - r0.durationWidth;
-                        measuredHeight -= AndroidUtilities.dp(28.0f);
+                        progressLineY = height - AndroidUtilities.dp(29.0f);
+                        progressLineX = AndroidUtilities.dp(36.0f) + this.durationWidth;
+                        progressLineEndX = (width - AndroidUtilities.dp(76.0f)) - this.durationWidth;
+                        cy = height - AndroidUtilities.dp(28.0f);
                     } else {
-                        dp2 = measuredHeight - AndroidUtilities.dp(13.0f);
-                        measuredHeight -= AndroidUtilities.dp(12.0f);
+                        progressLineY = height - AndroidUtilities.dp(13.0f);
+                        progressLineX = 0;
+                        progressLineEndX = width;
+                        cy = height - AndroidUtilities.dp(12.0f);
                     }
-                    int i2 = measuredWidth;
-                    int i3 = measuredHeight;
-                    int i4 = dp2;
-                    int i5 = i;
                     if (WebPlayerView.this.inFullscreen) {
-                        canvas2.drawRect((float) i5, (float) i4, (float) i2, (float) (AndroidUtilities.dp(3.0f) + i4), r0.progressInnerPaint);
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressLineEndX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
                     }
-                    if (r0.progressPressed) {
-                        measuredWidth = r0.currentProgressX;
+                    if (this.progressPressed) {
+                        progressX = this.currentProgressX;
                     } else {
-                        measuredWidth = ((int) (((float) (i2 - i5)) * (((float) r0.progress) / ((float) r0.duration)))) + i5;
+                        progressX = progressLineX + ((int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration))));
                     }
-                    int i6 = measuredWidth;
-                    if (!(r0.bufferedPosition == 0 || r0.duration == 0)) {
-                        float f2 = (float) i5;
-                        canvas2.drawRect(f2, (float) i4, f2 + (((float) (i2 - i5)) * (((float) r0.bufferedPosition) / ((float) r0.duration))), (float) (AndroidUtilities.dp(3.0f) + i4), WebPlayerView.this.inFullscreen ? r0.progressBufferedPaint : r0.progressInnerPaint);
+                    if (!(this.bufferedPosition == 0 || this.duration == 0)) {
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (((float) (progressLineEndX - progressLineX)) * (((float) this.bufferedPosition) / ((float) this.duration))) + ((float) progressLineX), (float) (AndroidUtilities.dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
                     }
-                    float f3 = (float) i6;
-                    canvas2.drawRect((float) i5, (float) i4, f3, (float) (i4 + AndroidUtilities.dp(3.0f)), r0.progressPaint);
+                    canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
                     if (!WebPlayerView.this.isInline) {
-                        float f4 = (float) i3;
-                        if (!r0.progressPressed) {
-                            f = 5.0f;
-                        }
-                        canvas2.drawCircle(f3, f4, (float) AndroidUtilities.dp(f), r0.progressPaint);
+                        canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
                     }
                 }
             }
@@ -737,86 +758,64 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private String[] results = new String[4];
         private String videoId;
 
-        public CoubVideoTask(String str) {
-            this.videoId = str;
+        public CoubVideoTask(String vid) {
+            this.videoId = vid;
         }
 
-        private java.lang.String decodeUrl(java.lang.String r5) {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-            /*
-            r4 = this;
-            r0 = new java.lang.StringBuilder;
-            r0.<init>(r5);
-            r5 = 0;
-            r1 = r5;
-        L_0x0007:
-            r2 = r0.length();
-            if (r1 >= r2) goto L_0x0021;
-        L_0x000d:
-            r2 = r0.charAt(r1);
-            r3 = java.lang.Character.toLowerCase(r2);
-            if (r2 != r3) goto L_0x001b;
-        L_0x0017:
-            r3 = java.lang.Character.toUpperCase(r2);
-        L_0x001b:
-            r0.setCharAt(r1, r3);
-            r1 = r1 + 1;
-            goto L_0x0007;
-        L_0x0021:
-            r1 = new java.lang.String;	 Catch:{ Exception -> 0x0031 }
-            r0 = r0.toString();	 Catch:{ Exception -> 0x0031 }
-            r5 = android.util.Base64.decode(r0, r5);	 Catch:{ Exception -> 0x0031 }
-            r0 = "UTF-8";	 Catch:{ Exception -> 0x0031 }
-            r1.<init>(r5, r0);	 Catch:{ Exception -> 0x0031 }
-            return r1;
-        L_0x0031:
-            r5 = 0;
-            return r5;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.CoubVideoTask.decodeUrl(java.lang.String):java.lang.String");
+        private String decodeUrl(String input) {
+            StringBuilder source = new StringBuilder(input);
+            for (int a = 0; a < source.length(); a++) {
+                char c = source.charAt(a);
+                char lower = Character.toLowerCase(c);
+                if (c == lower) {
+                    lower = Character.toUpperCase(c);
+                }
+                source.setCharAt(a, lower);
+            }
+            try {
+                return new String(Base64.decode(source.toString(), 0), C0542C.UTF8_NAME);
+            } catch (Exception e) {
+                return null;
+            }
         }
 
-        protected String doInBackground(Void... voidArr) {
-            voidArr = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://coub.com/api/v2/coubs/%s.json", new Object[]{this.videoId}));
-            String str = null;
+        protected String doInBackground(Void... voids) {
+            String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://coub.com/api/v2/coubs/%s.json", new Object[]{this.videoId}));
             if (isCancelled()) {
                 return null;
             }
             try {
-                voidArr = new JSONObject(voidArr).getJSONObject("file_versions").getJSONObject("mobile");
-                String decodeUrl = decodeUrl(voidArr.getString("gifv"));
-                voidArr = voidArr.getJSONArray(MimeTypes.BASE_TYPE_AUDIO).getString(0);
-                if (!(decodeUrl == null || voidArr == null)) {
-                    this.results[0] = decodeUrl;
+                JSONObject json = new JSONObject(playerCode).getJSONObject("file_versions").getJSONObject("mobile");
+                String video = decodeUrl(json.getString("gifv"));
+                String audio = json.getJSONArray(MimeTypes.BASE_TYPE_AUDIO).getString(0);
+                if (!(video == null || audio == null)) {
+                    this.results[0] = video;
                     this.results[1] = "other";
-                    this.results[2] = voidArr;
+                    this.results[2] = audio;
                     this.results[3] = "other";
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (isCancelled() == null) {
-                str = this.results[0];
+            if (isCancelled()) {
+                return null;
             }
-            return str;
+            return this.results[0];
         }
 
-        protected void onPostExecute(String str) {
-            if (str != null) {
+        protected void onPostExecute(String result) {
+            if (result != null) {
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = str;
+                WebPlayerView.this.playVideoUrl = result;
                 WebPlayerView.this.playVideoType = this.results[1];
                 WebPlayerView.this.playAudioUrl = this.results[2];
                 WebPlayerView.this.playAudioType = this.results[3];
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
@@ -828,398 +827,202 @@ Error: java.lang.NullPointerException
         private String jsCode;
         private String[] operators = new String[]{"|", "^", "&", ">>", "<<", "-", "+", "%", "/", "*"};
 
-        public JSExtractor(String str) {
-            this.jsCode = str;
+        public JSExtractor(String js) {
+            this.jsCode = js;
         }
 
-        private void interpretExpression(java.lang.String r11, java.util.HashMap<java.lang.String, java.lang.String> r12, int r13) throws java.lang.Exception {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-            /*
-            r10 = this;
-            r11 = r11.trim();
-            r0 = android.text.TextUtils.isEmpty(r11);
-            if (r0 == 0) goto L_0x000b;
-        L_0x000a:
-            return;
-        L_0x000b:
-            r0 = 0;
-            r1 = r11.charAt(r0);
-            r2 = 40;
-            r3 = 1;
-            if (r1 != r2) goto L_0x0067;
-        L_0x0015:
-            r1 = org.telegram.ui.Components.WebPlayerView.exprParensPattern;
-            r1 = r1.matcher(r11);
-            r4 = r0;
-        L_0x001e:
-            r5 = r1.find();
-            if (r5 == 0) goto L_0x0055;
-        L_0x0024:
-            r5 = r1.group(r0);
-            r6 = 48;
-            r5 = r5.indexOf(r6);
-            if (r5 != r2) goto L_0x0033;
-        L_0x0030:
-            r4 = r4 + 1;
-            goto L_0x001e;
-        L_0x0033:
-            r4 = r4 + -1;
-            if (r4 != 0) goto L_0x001e;
-        L_0x0037:
-            r2 = r1.start();
-            r2 = r11.substring(r3, r2);
-            r10.interpretExpression(r2, r12, r13);
-            r1 = r1.end();
-            r11 = r11.substring(r1);
-            r11 = r11.trim();
-            r1 = android.text.TextUtils.isEmpty(r11);
-            if (r1 == 0) goto L_0x0055;
-        L_0x0054:
-            return;
-        L_0x0055:
-            if (r4 == 0) goto L_0x0067;
-        L_0x0057:
-            r12 = new java.lang.Exception;
-            r13 = "Premature end of parens in %s";
-            r1 = new java.lang.Object[r3];
-            r1[r0] = r11;
-            r11 = java.lang.String.format(r13, r1);
-            r12.<init>(r11);
-            throw r12;
-        L_0x0067:
-            r1 = r0;
-        L_0x0068:
-            r2 = r10.assign_operators;
-            r4 = 3;
-            r5 = 2;
-            r2 = r2.length;
-            if (r1 >= r2) goto L_0x00b9;
-        L_0x006f:
-            r2 = r10.assign_operators;
-            r2 = r2[r1];
-            r6 = java.util.Locale.US;
-            r7 = "(?x)(%s)(?:\\[([^\\]]+?)\\])?\\s*%s(.*)$";
-            r8 = new java.lang.Object[r5];
-            r9 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r8[r0] = r9;
-            r2 = java.util.regex.Pattern.quote(r2);
-            r8[r3] = r2;
-            r2 = java.lang.String.format(r6, r7, r8);
-            r2 = java.util.regex.Pattern.compile(r2);
-            r2 = r2.matcher(r11);
-            r6 = r2.find();
-            if (r6 != 0) goto L_0x0098;
-        L_0x0095:
-            r1 = r1 + 1;
-            goto L_0x0068;
-        L_0x0098:
-            r11 = r2.group(r4);
-            r0 = r13 + -1;
-            r10.interpretExpression(r11, r12, r0);
-            r11 = r2.group(r5);
-            r0 = android.text.TextUtils.isEmpty(r11);
-            if (r0 != 0) goto L_0x00af;
-        L_0x00ab:
-            r10.interpretExpression(r11, r12, r13);
-            goto L_0x00b8;
-        L_0x00af:
-            r11 = r2.group(r3);
-            r13 = "";
-            r12.put(r11, r13);
-        L_0x00b8:
-            return;
-        L_0x00b9:
-            java.lang.Integer.parseInt(r11);	 Catch:{ Exception -> 0x00bd }
-            return;
-        L_0x00bd:
-            r1 = java.util.Locale.US;
-            r2 = "(?!if|return|true|false)(%s)$";
-            r6 = new java.lang.Object[r3];
-            r7 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r6[r0] = r7;
-            r1 = java.lang.String.format(r1, r2, r6);
-            r1 = java.util.regex.Pattern.compile(r1);
-            r1 = r1.matcher(r11);
-            r1 = r1.find();
-            if (r1 == 0) goto L_0x00da;
-        L_0x00d9:
-            return;
-        L_0x00da:
-            r1 = r11.charAt(r0);
-            r2 = 34;
-            if (r1 != r2) goto L_0x00ee;
-        L_0x00e2:
-            r1 = r11.length();
-            r1 = r1 - r3;
-            r1 = r11.charAt(r1);
-            if (r1 != r2) goto L_0x00ee;
-        L_0x00ed:
-            return;
-        L_0x00ee:
-            r1 = new org.json.JSONObject;	 Catch:{ Exception -> 0x00f7 }
-            r1.<init>(r11);	 Catch:{ Exception -> 0x00f7 }
-            r1.toString();	 Catch:{ Exception -> 0x00f7 }
-            return;
-        L_0x00f7:
-            r1 = java.util.Locale.US;
-            r2 = "(%s)\\[(.+)\\]$";
-            r6 = new java.lang.Object[r3];
-            r7 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r6[r0] = r7;
-            r1 = java.lang.String.format(r1, r2, r6);
-            r1 = java.util.regex.Pattern.compile(r1);
-            r1 = r1.matcher(r11);
-            r2 = r1.find();
-            if (r2 == 0) goto L_0x011f;
-        L_0x0113:
-            r1.group(r3);
-            r11 = r1.group(r5);
-            r13 = r13 - r3;
-            r10.interpretExpression(r11, r12, r13);
-            return;
-        L_0x011f:
-            r1 = java.util.Locale.US;
-            r2 = "(%s)(?:\\.([^(]+)|\\[([^]]+)\\])\\s*(?:\\(+([^()]*)\\))?$";
-            r6 = new java.lang.Object[r3];
-            r7 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r6[r0] = r7;
-            r1 = java.lang.String.format(r1, r2, r6);
-            r1 = java.util.regex.Pattern.compile(r1);
-            r1 = r1.matcher(r11);
-            r2 = r1.find();
-            if (r2 == 0) goto L_0x0194;
-        L_0x013b:
-            r2 = r1.group(r3);
-            r5 = r1.group(r5);
-            r4 = r1.group(r4);
-            r6 = android.text.TextUtils.isEmpty(r5);
-            if (r6 == 0) goto L_0x014e;
-        L_0x014d:
-            goto L_0x014f;
-        L_0x014e:
-            r4 = r5;
-        L_0x014f:
-            r5 = "\"";
-            r6 = "";
-            r4.replace(r5, r6);
-            r4 = 4;
-            r1 = r1.group(r4);
-            r4 = r12.get(r2);
-            if (r4 != 0) goto L_0x0164;
-        L_0x0161:
-            r10.extractObject(r2);
-        L_0x0164:
-            if (r1 != 0) goto L_0x0167;
-        L_0x0166:
-            return;
-        L_0x0167:
-            r2 = r11.length();
-            r2 = r2 - r3;
-            r11 = r11.charAt(r2);
-            r2 = 41;
-            if (r11 == r2) goto L_0x017c;
-        L_0x0174:
-            r11 = new java.lang.Exception;
-            r12 = "last char not ')'";
-            r11.<init>(r12);
-            throw r11;
-        L_0x017c:
-            r11 = r1.length();
-            if (r11 == 0) goto L_0x0193;
-        L_0x0182:
-            r11 = ",";
-            r11 = r1.split(r11);
-        L_0x0188:
-            r1 = r11.length;
-            if (r0 >= r1) goto L_0x0193;
-        L_0x018b:
-            r1 = r11[r0];
-            r10.interpretExpression(r1, r12, r13);
-            r0 = r0 + 1;
-            goto L_0x0188;
-        L_0x0193:
-            return;
-        L_0x0194:
-            r1 = java.util.Locale.US;
-            r2 = "(%s)\\[(.+)\\]$";
-            r4 = new java.lang.Object[r3];
-            r6 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r4[r0] = r6;
-            r1 = java.lang.String.format(r1, r2, r4);
-            r1 = java.util.regex.Pattern.compile(r1);
-            r1 = r1.matcher(r11);
-            r2 = r1.find();
-            if (r2 == 0) goto L_0x01c0;
-        L_0x01b0:
-            r11 = r1.group(r3);
-            r12.get(r11);
-            r11 = r1.group(r5);
-            r13 = r13 - r3;
-            r10.interpretExpression(r11, r12, r13);
-            return;
-        L_0x01c0:
-            r1 = r0;
-        L_0x01c1:
-            r2 = r10.operators;
-            r2 = r2.length;
-            if (r1 >= r2) goto L_0x022a;
-        L_0x01c6:
-            r2 = r10.operators;
-            r2 = r2[r1];
-            r4 = java.util.Locale.US;
-            r6 = "(.+?)%s(.+)";
-            r7 = new java.lang.Object[r3];
-            r8 = java.util.regex.Pattern.quote(r2);
-            r7[r0] = r8;
-            r4 = java.lang.String.format(r4, r6, r7);
-            r4 = java.util.regex.Pattern.compile(r4);
-            r4 = r4.matcher(r11);
-            r6 = r4.find();
-            if (r6 != 0) goto L_0x01e9;
-        L_0x01e8:
-            goto L_0x0227;
-        L_0x01e9:
-            r6 = new boolean[r3];
-            r7 = r4.group(r3);
-            r8 = r13 + -1;
-            r10.interpretStatement(r7, r12, r6, r8);
-            r7 = r6[r0];
-            if (r7 == 0) goto L_0x020a;
-        L_0x01f8:
-            r12 = new java.lang.Exception;
-            r13 = "Premature left-side return of %s in %s";
-            r1 = new java.lang.Object[r5];
-            r1[r0] = r2;
-            r1[r3] = r11;
-            r11 = java.lang.String.format(r13, r1);
-            r12.<init>(r11);
-            throw r12;
-        L_0x020a:
-            r4 = r4.group(r5);
-            r10.interpretStatement(r4, r12, r6, r8);
-            r4 = r6[r0];
-            if (r4 == 0) goto L_0x0227;
-        L_0x0215:
-            r12 = new java.lang.Exception;
-            r13 = "Premature right-side return of %s in %s";
-            r1 = new java.lang.Object[r5];
-            r1[r0] = r2;
-            r1[r3] = r11;
-            r11 = java.lang.String.format(r13, r1);
-            r12.<init>(r11);
-            throw r12;
-        L_0x0227:
-            r1 = r1 + 1;
-            goto L_0x01c1;
-        L_0x022a:
-            r12 = java.util.Locale.US;
-            r13 = "^(%s)\\(([a-zA-Z0-9_$,]*)\\)$";
-            r1 = new java.lang.Object[r3];
-            r2 = "[a-zA-Z_$][a-zA-Z_$0-9]*";
-            r1[r0] = r2;
-            r12 = java.lang.String.format(r12, r13, r1);
-            r12 = java.util.regex.Pattern.compile(r12);
-            r12 = r12.matcher(r11);
-            r13 = r12.find();
-            if (r13 == 0) goto L_0x024d;
-        L_0x0246:
-            r12 = r12.group(r3);
-            r10.extractFunction(r12);
-        L_0x024d:
-            r12 = new java.lang.Exception;
-            r13 = "Unsupported JS expression %s";
-            r1 = new java.lang.Object[r3];
-            r1[r0] = r11;
-            r11 = java.lang.String.format(r13, r1);
-            r12.<init>(r11);
-            throw r12;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.JSExtractor.interpretExpression(java.lang.String, java.util.HashMap, int):void");
+        private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            expr = expr.trim();
+            if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
+                if (expr.charAt(0) == '(') {
+                    int parens_count = 0;
+                    matcher = WebPlayerView.exprParensPattern.matcher(expr);
+                    while (matcher.find()) {
+                        if (matcher.group(0).indexOf(48) == 40) {
+                            parens_count++;
+                        } else {
+                            parens_count--;
+                            if (parens_count == 0) {
+                                interpretExpression(expr.substring(1, matcher.start()), localVars, allowRecursion);
+                                String remaining_expr = expr.substring(matcher.end()).trim();
+                                if (!TextUtils.isEmpty(remaining_expr)) {
+                                    expr = remaining_expr;
+                                    if (parens_count != 0) {
+                                        throw new Exception(String.format("Premature end of parens in %s", new Object[]{expr}));
+                                    }
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    if (parens_count != 0) {
+                        throw new Exception(String.format("Premature end of parens in %s", new Object[]{expr}));
+                    }
+                }
+                for (String func : this.assign_operators) {
+                    matcher = Pattern.compile(String.format(Locale.US, "(?x)(%s)(?:\\[([^\\]]+?)\\])?\\s*%s(.*)$", new Object[]{WebPlayerView.exprName, Pattern.quote(func)})).matcher(expr);
+                    if (matcher.find()) {
+                        interpretExpression(matcher.group(3), localVars, allowRecursion - 1);
+                        String index = matcher.group(2);
+                        if (TextUtils.isEmpty(index)) {
+                            localVars.put(matcher.group(1), TtmlNode.ANONYMOUS_REGION_ID);
+                            return;
+                        }
+                        interpretExpression(index, localVars, allowRecursion);
+                        return;
+                    }
+                }
+                try {
+                    Integer.parseInt(expr);
+                } catch (Exception e) {
+                    if (!Pattern.compile(String.format(Locale.US, "(?!if|return|true|false)(%s)$", new Object[]{WebPlayerView.exprName})).matcher(expr).find()) {
+                        if (expr.charAt(0) != '\"' || expr.charAt(expr.length() - 1) != '\"') {
+                            try {
+                                new JSONObject(expr).toString();
+                            } catch (Exception e2) {
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    String val = matcher.group(1);
+                                    interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
+                                    return;
+                                }
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)(?:\\.([^(]+)|\\[([^]]+)\\])\\s*(?:\\(+([^()]*)\\))?$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    String variable = matcher.group(1);
+                                    String m1 = matcher.group(2);
+                                    String m2 = matcher.group(3);
+                                    if (!TextUtils.isEmpty(m1)) {
+                                        m2 = m1;
+                                    }
+                                    String member = m2.replace("\"", TtmlNode.ANONYMOUS_REGION_ID);
+                                    String arg_str = matcher.group(4);
+                                    if (localVars.get(variable) == null) {
+                                        extractObject(variable);
+                                    }
+                                    if (arg_str == null) {
+                                        return;
+                                    }
+                                    if (expr.charAt(expr.length() - 1) != ')') {
+                                        throw new Exception("last char not ')'");
+                                    } else if (arg_str.length() != 0) {
+                                        String[] args = arg_str.split(",");
+                                        for (String interpretExpression : args) {
+                                            interpretExpression(interpretExpression, localVars, allowRecursion);
+                                        }
+                                        return;
+                                    } else {
+                                        return;
+                                    }
+                                }
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    Object val2 = localVars.get(matcher.group(1));
+                                    interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
+                                    return;
+                                }
+                                for (String func2 : this.operators) {
+                                    matcher = Pattern.compile(String.format(Locale.US, "(.+?)%s(.+)", new Object[]{Pattern.quote(func2)})).matcher(expr);
+                                    if (matcher.find()) {
+                                        boolean[] abort = new boolean[1];
+                                        interpretStatement(matcher.group(1), localVars, abort, allowRecursion - 1);
+                                        if (abort[0]) {
+                                            throw new Exception(String.format("Premature left-side return of %s in %s", new Object[]{func2, expr}));
+                                        }
+                                        interpretStatement(matcher.group(2), localVars, abort, allowRecursion - 1);
+                                        if (abort[0]) {
+                                            throw new Exception(String.format("Premature right-side return of %s in %s", new Object[]{func2, expr}));
+                                        }
+                                    }
+                                }
+                                matcher = Pattern.compile(String.format(Locale.US, "^(%s)\\(([a-zA-Z0-9_$,]*)\\)$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    extractFunction(matcher.group(1));
+                                }
+                                throw new Exception(String.format("Unsupported JS expression %s", new Object[]{expr}));
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        private void interpretStatement(String str, HashMap<String, String> hashMap, boolean[] zArr, int i) throws Exception {
-            if (i < 0) {
+        private void interpretStatement(String stmt, HashMap<String, String> localVars, boolean[] abort, int allowRecursion) throws Exception {
+            if (allowRecursion < 0) {
                 throw new Exception("recursion limit reached");
             }
-            zArr[0] = false;
-            str = str.trim();
-            Matcher matcher = WebPlayerView.stmtVarPattern.matcher(str);
+            String expr;
+            abort[0] = false;
+            stmt = stmt.trim();
+            Matcher matcher = WebPlayerView.stmtVarPattern.matcher(stmt);
             if (matcher.find()) {
-                str = str.substring(matcher.group(0).length());
+                expr = stmt.substring(matcher.group(0).length());
             } else {
-                matcher = WebPlayerView.stmtReturnPattern.matcher(str);
+                matcher = WebPlayerView.stmtReturnPattern.matcher(stmt);
                 if (matcher.find()) {
-                    str = str.substring(matcher.group(0).length());
-                    zArr[0] = true;
+                    expr = stmt.substring(matcher.group(0).length());
+                    abort[0] = true;
+                } else {
+                    expr = stmt;
                 }
             }
-            interpretExpression(str, hashMap, i);
+            interpretExpression(expr, localVars, allowRecursion);
         }
 
-        private HashMap<String, Object> extractObject(String str) throws Exception {
-            String str2 = "(?:[a-zA-Z$0-9]+|\"[a-zA-Z$0-9]+\"|'[a-zA-Z$0-9]+')";
-            HashMap<String, Object> hashMap = new HashMap();
-            Matcher matcher = Pattern.compile(String.format(Locale.US, "(?:var\\s+)?%s\\s*=\\s*\\{\\s*((%s\\s*:\\s*function\\(.*?\\)\\s*\\{.*?\\}(?:,\\s*)?)*)\\}\\s*;", new Object[]{Pattern.quote(str), str2})).matcher(this.jsCode);
-            CharSequence charSequence = null;
+        private HashMap<String, Object> extractObject(String objname) throws Exception {
+            String funcName = "(?:[a-zA-Z$0-9]+|\"[a-zA-Z$0-9]+\"|'[a-zA-Z$0-9]+')";
+            HashMap<String, Object> obj = new HashMap();
+            Matcher matcher = Pattern.compile(String.format(Locale.US, "(?:var\\s+)?%s\\s*=\\s*\\{\\s*((%s\\s*:\\s*function\\(.*?\\)\\s*\\{.*?\\}(?:,\\s*)?)*)\\}\\s*;", new Object[]{Pattern.quote(objname), funcName})).matcher(this.jsCode);
+            String fields = null;
             while (matcher.find()) {
-                String group = matcher.group();
-                CharSequence group2 = matcher.group(2);
-                if (TextUtils.isEmpty(group2)) {
-                    charSequence = group2;
-                } else {
-                    if (!this.codeLines.contains(group)) {
+                String code = matcher.group();
+                fields = matcher.group(2);
+                if (!TextUtils.isEmpty(fields)) {
+                    if (!this.codeLines.contains(code)) {
                         this.codeLines.add(matcher.group());
                     }
-                    charSequence = group2;
-                    str = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{str2})).matcher(charSequence);
-                    while (str.find()) {
-                        buildFunction(str.group(2).split(","), str.group(3));
+                    matcher = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{funcName})).matcher(fields);
+                    while (matcher.find()) {
+                        buildFunction(matcher.group(2).split(","), matcher.group(3));
                     }
-                    return hashMap;
+                    return obj;
                 }
             }
-            str = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{str2})).matcher(charSequence);
-            while (str.find()) {
-                buildFunction(str.group(2).split(","), str.group(3));
+            matcher = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{funcName})).matcher(fields);
+            while (matcher.find()) {
+                buildFunction(matcher.group(2).split(","), matcher.group(3));
             }
-            return hashMap;
+            return obj;
         }
 
-        private void buildFunction(String[] strArr, String str) throws Exception {
-            HashMap hashMap = new HashMap();
-            for (Object put : strArr) {
-                hashMap.put(put, TtmlNode.ANONYMOUS_REGION_ID);
+        private void buildFunction(String[] argNames, String funcCode) throws Exception {
+            HashMap<String, String> localVars = new HashMap();
+            for (Object put : argNames) {
+                localVars.put(put, TtmlNode.ANONYMOUS_REGION_ID);
             }
-            strArr = str.split(";");
-            str = new boolean[1];
-            int i = 0;
-            while (i < strArr.length) {
-                interpretStatement(strArr[i], hashMap, str, 100);
-                if (!str[0]) {
-                    i++;
+            String[] stmts = funcCode.split(";");
+            boolean[] abort = new boolean[1];
+            int a = 0;
+            while (a < stmts.length) {
+                interpretStatement(stmts[a], localVars, abort, 100);
+                if (!abort[0]) {
+                    a++;
                 } else {
                     return;
                 }
             }
         }
 
-        private String extractFunction(String str) throws Exception {
+        private String extractFunction(String funcName) throws Exception {
             try {
-                str = Pattern.quote(str);
-                str = Pattern.compile(String.format(Locale.US, "(?x)(?:function\\s+%s|[{;,]\\s*%s\\s*=\\s*function|var\\s+%s\\s*=\\s*function)\\s*\\(([^)]*)\\)\\s*\\{([^}]+)\\}", new Object[]{str, str, str})).matcher(this.jsCode);
-                if (str.find()) {
-                    String group = str.group();
+                String quote = Pattern.quote(funcName);
+                Matcher matcher = Pattern.compile(String.format(Locale.US, "(?x)(?:function\\s+%s|[{;,]\\s*%s\\s*=\\s*function|var\\s+%s\\s*=\\s*function)\\s*\\(([^)]*)\\)\\s*\\{([^}]+)\\}", new Object[]{quote, quote, quote})).matcher(this.jsCode);
+                if (matcher.find()) {
+                    String group = matcher.group();
                     if (!this.codeLines.contains(group)) {
-                        ArrayList arrayList = this.codeLines;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(group);
-                        stringBuilder.append(";");
-                        arrayList.add(stringBuilder.toString());
+                        this.codeLines.add(group + ";");
                     }
-                    buildFunction(str.group(1).split(","), str.group(2));
+                    buildFunction(matcher.group(1).split(","), matcher.group(2));
                 }
             } catch (Throwable e) {
                 this.codeLines.clear();
@@ -1232,13 +1035,13 @@ Error: java.lang.NullPointerException
     public class JavaScriptInterface {
         private final CallJavaResultInterface callJavaResultInterface;
 
-        public JavaScriptInterface(CallJavaResultInterface callJavaResultInterface) {
-            this.callJavaResultInterface = callJavaResultInterface;
+        public JavaScriptInterface(CallJavaResultInterface callJavaResult) {
+            this.callJavaResultInterface = callJavaResult;
         }
 
         @JavascriptInterface
-        public void returnResultToJava(String str) {
-            this.callJavaResultInterface.jsCallFinished(str);
+        public void returnResultToJava(String value) {
+            this.callJavaResultInterface.jsCallFinished(value);
         }
     }
 
@@ -1248,43 +1051,42 @@ Error: java.lang.NullPointerException
         private String[] results = new String[2];
         private String videoId;
 
-        public TwitchClipVideoTask(String str, String str2) {
-            this.videoId = str2;
-            this.currentUrl = str;
+        public TwitchClipVideoTask(String url, String vid) {
+            this.videoId = vid;
+            this.currentUrl = url;
         }
 
-        protected String doInBackground(Void... voidArr) {
-            String str = null;
-            voidArr = WebPlayerView.this.downloadUrlContent(this, this.currentUrl, null, false);
+        protected String doInBackground(Void... voids) {
+            String playerCode = WebPlayerView.this.downloadUrlContent(this, this.currentUrl, null, false);
             if (isCancelled()) {
                 return null;
             }
             try {
-                voidArr = WebPlayerView.twitchClipFilePattern.matcher(voidArr);
-                if (voidArr.find()) {
-                    this.results[0] = new JSONObject(voidArr.group(1)).getJSONArray("quality_options").getJSONObject(0).getString("source");
+                Matcher filelist = WebPlayerView.twitchClipFilePattern.matcher(playerCode);
+                if (filelist.find()) {
+                    this.results[0] = new JSONObject(filelist.group(1)).getJSONArray("quality_options").getJSONObject(0).getString("source");
                     this.results[1] = "other";
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (isCancelled() == null) {
-                str = this.results[0];
+            if (isCancelled()) {
+                return null;
             }
-            return str;
+            return this.results[0];
         }
 
-        protected void onPostExecute(String str) {
-            if (str != null) {
+        protected void onPostExecute(String result) {
+            if (result != null) {
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = str;
+                WebPlayerView.this.playVideoUrl = result;
                 WebPlayerView.this.playVideoType = this.results[1];
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
@@ -1296,62 +1098,48 @@ Error: java.lang.NullPointerException
         private String[] results = new String[2];
         private String videoId;
 
-        public TwitchStreamVideoTask(String str, String str2) {
-            this.videoId = str2;
-            this.currentUrl = str;
+        public TwitchStreamVideoTask(String url, String vid) {
+            this.videoId = vid;
+            this.currentUrl = url;
         }
 
-        protected String doInBackground(Void... voidArr) {
-            voidArr = new HashMap();
-            voidArr.put("Client-ID", "jzkbprff40iqj646a697cyrvl0zt2m6");
-            int indexOf = this.videoId.indexOf(38);
-            if (indexOf > 0) {
-                this.videoId = this.videoId.substring(0, indexOf);
+        protected String doInBackground(Void... voids) {
+            HashMap<String, String> headers = new HashMap();
+            headers.put("Client-ID", "jzkbprff40iqj646a697cyrvl0zt2m6");
+            int idx = this.videoId.indexOf(38);
+            if (idx > 0) {
+                this.videoId = this.videoId.substring(0, idx);
             }
-            String downloadUrlContent = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/kraken/streams/%s?stream_type=all", new Object[]{this.videoId}), voidArr, false);
-            String str = null;
+            String streamCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/kraken/streams/%s?stream_type=all", new Object[]{this.videoId}), headers, false);
             if (isCancelled()) {
                 return null;
             }
             try {
-                new JSONObject(downloadUrlContent).getJSONObject("stream");
-                JSONObject jSONObject = new JSONObject(WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{this.videoId}), voidArr, false));
-                voidArr = URLEncoder.encode(jSONObject.getString("sig"), C0542C.UTF8_NAME);
-                downloadUrlContent = URLEncoder.encode(jSONObject.getString("token"), C0542C.UTF8_NAME);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("https://youtube.googleapis.com/v/");
-                stringBuilder.append(this.videoId);
-                URLEncoder.encode(stringBuilder.toString(), C0542C.UTF8_NAME);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=");
-                stringBuilder.append((int) (Math.random() * 1.0E7d));
-                stringBuilder.append("&sig=");
-                stringBuilder.append(voidArr);
-                stringBuilder.append("&token=");
-                stringBuilder.append(downloadUrlContent);
-                voidArr = stringBuilder.toString();
-                this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, voidArr});
+                JSONObject stream = new JSONObject(streamCode).getJSONObject("stream");
+                JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{this.videoId}), headers, false));
+                String sig = URLEncoder.encode(accessToken.getString("sig"), C0542C.UTF8_NAME);
+                String token = URLEncoder.encode(accessToken.getString("token"), C0542C.UTF8_NAME);
+                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0542C.UTF8_NAME);
+                String params = "allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=" + ((int) (Math.random() * 1.0E7d)) + "&sig=" + sig + "&token=" + token;
+                this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, params});
                 this.results[1] = "hls";
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (isCancelled() == null) {
-                str = this.results[0];
-            }
-            return str;
+            return isCancelled() ? null : this.results[0];
         }
 
-        protected void onPostExecute(String str) {
-            if (str != null) {
+        protected void onPostExecute(String result) {
+            if (result != null) {
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = str;
+                WebPlayerView.this.playVideoUrl = result;
                 WebPlayerView.this.playVideoType = this.results[1];
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
@@ -1362,134 +1150,57 @@ Error: java.lang.NullPointerException
         private String[] results = new String[2];
         private String videoId;
 
-        public VimeoVideoTask(String str) {
-            this.videoId = str;
+        public VimeoVideoTask(String vid) {
+            this.videoId = vid;
         }
 
-        protected java.lang.String doInBackground(java.lang.Void... r7) {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-            /*
-            r6 = this;
-            r7 = org.telegram.ui.Components.WebPlayerView.this;
-            r0 = java.util.Locale.US;
-            r1 = "https://player.vimeo.com/video/%s/config";
-            r2 = 1;
-            r3 = new java.lang.Object[r2];
-            r4 = r6.videoId;
-            r5 = 0;
-            r3[r5] = r4;
-            r0 = java.lang.String.format(r0, r1, r3);
-            r7 = r7.downloadUrlContent(r6, r0);
-            r0 = r6.isCancelled();
-            r1 = 0;
-            if (r0 == 0) goto L_0x001e;
-        L_0x001d:
-            return r1;
-        L_0x001e:
-            r0 = new org.json.JSONObject;	 Catch:{ Exception -> 0x008c }
-            r0.<init>(r7);	 Catch:{ Exception -> 0x008c }
-            r7 = "request";	 Catch:{ Exception -> 0x008c }
-            r7 = r0.getJSONObject(r7);	 Catch:{ Exception -> 0x008c }
-            r0 = "files";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONObject(r0);	 Catch:{ Exception -> 0x008c }
-            r0 = "hls";	 Catch:{ Exception -> 0x008c }
-            r0 = r7.has(r0);	 Catch:{ Exception -> 0x008c }
-            if (r0 == 0) goto L_0x0069;	 Catch:{ Exception -> 0x008c }
-        L_0x0037:
-            r0 = "hls";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONObject(r0);	 Catch:{ Exception -> 0x008c }
-            r0 = r6.results;	 Catch:{ Exception -> 0x0048 }
-            r3 = "url";	 Catch:{ Exception -> 0x0048 }
-            r3 = r7.getString(r3);	 Catch:{ Exception -> 0x0048 }
-            r0[r5] = r3;	 Catch:{ Exception -> 0x0048 }
-            goto L_0x0062;
-        L_0x0048:
-            r0 = "default_cdn";	 Catch:{ Exception -> 0x008c }
-            r0 = r7.getString(r0);	 Catch:{ Exception -> 0x008c }
-            r3 = "cdns";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONObject(r3);	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONObject(r0);	 Catch:{ Exception -> 0x008c }
-            r0 = r6.results;	 Catch:{ Exception -> 0x008c }
-            r3 = "url";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getString(r3);	 Catch:{ Exception -> 0x008c }
-            r0[r5] = r7;	 Catch:{ Exception -> 0x008c }
-        L_0x0062:
-            r7 = r6.results;	 Catch:{ Exception -> 0x008c }
-            r0 = "hls";	 Catch:{ Exception -> 0x008c }
-            r7[r2] = r0;	 Catch:{ Exception -> 0x008c }
-            goto L_0x0090;	 Catch:{ Exception -> 0x008c }
-        L_0x0069:
-            r0 = "progressive";	 Catch:{ Exception -> 0x008c }
-            r0 = r7.has(r0);	 Catch:{ Exception -> 0x008c }
-            if (r0 == 0) goto L_0x0090;	 Catch:{ Exception -> 0x008c }
-        L_0x0071:
-            r0 = r6.results;	 Catch:{ Exception -> 0x008c }
-            r3 = "other";	 Catch:{ Exception -> 0x008c }
-            r0[r2] = r3;	 Catch:{ Exception -> 0x008c }
-            r0 = "progressive";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONArray(r0);	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getJSONObject(r5);	 Catch:{ Exception -> 0x008c }
-            r0 = r6.results;	 Catch:{ Exception -> 0x008c }
-            r2 = "url";	 Catch:{ Exception -> 0x008c }
-            r7 = r7.getString(r2);	 Catch:{ Exception -> 0x008c }
-            r0[r5] = r7;	 Catch:{ Exception -> 0x008c }
-            goto L_0x0090;
-        L_0x008c:
-            r7 = move-exception;
-            org.telegram.messenger.FileLog.m3e(r7);
-        L_0x0090:
-            r7 = r6.isCancelled();
-            if (r7 == 0) goto L_0x0097;
-        L_0x0096:
-            goto L_0x009b;
-        L_0x0097:
-            r7 = r6.results;
-            r1 = r7[r5];
-        L_0x009b:
-            return r1;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.VimeoVideoTask.doInBackground(java.lang.Void[]):java.lang.String");
+        protected String doInBackground(Void... voids) {
+            String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://player.vimeo.com/video/%s/config", new Object[]{this.videoId}));
+            if (isCancelled()) {
+                return null;
+            }
+            try {
+                JSONObject files = new JSONObject(playerCode).getJSONObject("request").getJSONObject("files");
+                if (files.has("hls")) {
+                    JSONObject hls = files.getJSONObject("hls");
+                    try {
+                        this.results[0] = hls.getString(UpdateFragment.FRAGMENT_URL);
+                    } catch (Exception e) {
+                        this.results[0] = hls.getJSONObject("cdns").getJSONObject(hls.getString("default_cdn")).getString(UpdateFragment.FRAGMENT_URL);
+                    }
+                    this.results[1] = "hls";
+                    if (isCancelled()) {
+                        return this.results[0];
+                    }
+                    return null;
+                }
+                if (files.has("progressive")) {
+                    this.results[1] = "other";
+                    this.results[0] = files.getJSONArray("progressive").getJSONObject(0).getString(UpdateFragment.FRAGMENT_URL);
+                }
+                if (isCancelled()) {
+                    return this.results[0];
+                }
+                return null;
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
+            }
         }
 
-        protected void onPostExecute(String str) {
-            if (str != null) {
+        protected void onPostExecute(String result) {
+            if (result != null) {
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = str;
+                WebPlayerView.this.playVideoUrl = result;
                 WebPlayerView.this.playVideoType = this.results[1];
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
-    }
-
-    public interface WebPlayerViewDelegate {
-        boolean checkInlinePermissions();
-
-        ViewGroup getTextureViewContainer();
-
-        void onInitFailed();
-
-        void onInlineSurfaceTextureReady();
-
-        void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
-
-        void onSharePressed();
-
-        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
-
-        TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
-
-        void onVideoSizeChanged(float f, int i);
-
-        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String[]> {
@@ -1499,665 +1210,259 @@ Error: java.lang.NullPointerException
         private String sig;
         private String videoId;
 
-        public YoutubeVideoTask(String str) {
-            this.videoId = str;
+        public YoutubeVideoTask(String vid) {
+            this.videoId = vid;
         }
 
-        protected String[] doInBackground(Void... voidArr) {
-            Throwable th;
-            StringBuilder stringBuilder;
-            WebPlayerView webPlayerView = WebPlayerView.this;
-            StringBuilder stringBuilder2 = new StringBuilder();
-            stringBuilder2.append("https://www.youtube.com/embed/");
-            stringBuilder2.append(this.videoId);
-            CharSequence downloadUrlContent = webPlayerView.downloadUrlContent(this, stringBuilder2.toString());
-            String[] strArr = null;
+        protected String[] doInBackground(Void... voids) {
+            String embedCode = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/embed/" + this.videoId);
             if (isCancelled()) {
                 return null;
             }
-            stringBuilder2 = new StringBuilder();
-            stringBuilder2.append("video_id=");
-            stringBuilder2.append(r1.videoId);
-            stringBuilder2.append("&ps=default&gl=US&hl=en");
-            String stringBuilder3 = stringBuilder2.toString();
+            Matcher matcher;
+            String params = "video_id=" + this.videoId + "&ps=default&gl=US&hl=en";
             try {
-                StringBuilder stringBuilder4 = new StringBuilder();
-                stringBuilder4.append(stringBuilder3);
-                stringBuilder4.append("&eurl=");
-                StringBuilder stringBuilder5 = new StringBuilder();
-                stringBuilder5.append("https://youtube.googleapis.com/v/");
-                stringBuilder5.append(r1.videoId);
-                stringBuilder4.append(URLEncoder.encode(stringBuilder5.toString(), C0542C.UTF8_NAME));
-                stringBuilder3 = stringBuilder4.toString();
+                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0542C.UTF8_NAME);
             } catch (Throwable e) {
-                Throwable e2;
-                FileLog.m3e(e2);
+                FileLog.m3e(e);
             }
-            if (downloadUrlContent != null) {
-                Matcher matcher = WebPlayerView.stsPattern.matcher(downloadUrlContent);
+            if (embedCode != null) {
+                matcher = WebPlayerView.stsPattern.matcher(embedCode);
                 if (matcher.find()) {
-                    stringBuilder5 = new StringBuilder();
-                    stringBuilder5.append(stringBuilder3);
-                    stringBuilder5.append("&sts=");
-                    stringBuilder5.append(downloadUrlContent.substring(matcher.start() + 6, matcher.end()));
-                    stringBuilder3 = stringBuilder5.toString();
+                    params = params + "&sts=" + embedCode.substring(matcher.start() + 6, matcher.end());
                 } else {
-                    stringBuilder4 = new StringBuilder();
-                    stringBuilder4.append(stringBuilder3);
-                    stringBuilder4.append("&sts=");
-                    stringBuilder3 = stringBuilder4.toString();
+                    params = params + "&sts=";
                 }
             }
-            int i = 1;
-            r1.result[1] = "dash";
-            r5 = new String[5];
-            int i2 = 0;
-            r5[0] = TtmlNode.ANONYMOUS_REGION_ID;
-            r5[1] = "&el=leanback";
-            int i3 = 2;
-            r5[2] = "&el=embedded";
-            r5[3] = "&el=detailpage";
-            r5[4] = "&el=vevo";
-            String str = null;
-            int i4 = 0;
-            int i5 = i4;
-            while (i4 < r5.length) {
-                WebPlayerView webPlayerView2 = WebPlayerView.this;
-                StringBuilder stringBuilder6 = new StringBuilder();
-                stringBuilder6.append("https://www.youtube.com/get_video_info?");
-                stringBuilder6.append(stringBuilder3);
-                stringBuilder6.append(r5[i4]);
-                String downloadUrlContent2 = webPlayerView2.downloadUrlContent(r1, stringBuilder6.toString());
+            this.result[1] = "dash";
+            boolean encrypted = false;
+            String otherUrl = null;
+            String[] extra = new String[]{TtmlNode.ANONYMOUS_REGION_ID, "&el=leanback", "&el=embedded", "&el=detailpage", "&el=vevo"};
+            for (String str : extra) {
+                String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params + str);
                 if (isCancelled()) {
-                    return strArr;
+                    return null;
                 }
-                String str2;
-                int i6;
-                String[] strArr2;
-                int i7;
-                String str3;
-                int i8;
-                if (downloadUrlContent2 != null) {
-                    String[] split = downloadUrlContent2.split("&");
-                    str2 = strArr;
-                    i6 = i2;
-                    int i9 = i5;
-                    strArr2 = str;
-                    i5 = i6;
-                    i7 = i5;
-                    while (i5 < split.length) {
-                        if (split[i5].startsWith("dashmpd")) {
-                            strArr = split[i5].split("=");
-                            if (strArr.length == i3) {
+                boolean exists = false;
+                String hls = null;
+                boolean isLive = false;
+                if (videoInfo != null) {
+                    String[] args = videoInfo.split("&");
+                    for (int a = 0; a < args.length; a++) {
+                        String[] args2;
+                        if (args[a].startsWith("dashmpd")) {
+                            exists = true;
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
                                 try {
-                                    r1.result[i2] = URLDecoder.decode(strArr[i], C0542C.UTF8_NAME);
+                                    this.result[0] = URLDecoder.decode(args2[1], C0542C.UTF8_NAME);
+                                } catch (Throwable e2) {
+                                    FileLog.m3e(e2);
+                                }
+                            }
+                        } else if (args[a].startsWith("url_encoded_fmt_stream_map")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
+                                try {
+                                    String[] args3 = URLDecoder.decode(args2[1], C0542C.UTF8_NAME).split("[&,]");
+                                    String currentUrl = null;
+                                    boolean isMp4 = false;
+                                    for (String split : args3) {
+                                        String[] args4 = split.split("=");
+                                        if (args4[0].startsWith("type")) {
+                                            if (URLDecoder.decode(args4[1], C0542C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
+                                                isMp4 = true;
+                                            }
+                                        } else if (args4[0].startsWith(UpdateFragment.FRAGMENT_URL)) {
+                                            currentUrl = URLDecoder.decode(args4[1], C0542C.UTF8_NAME);
+                                        } else if (args4[0].startsWith("itag")) {
+                                            currentUrl = null;
+                                            isMp4 = false;
+                                        }
+                                        if (isMp4 && currentUrl != null) {
+                                            otherUrl = currentUrl;
+                                            break;
+                                        }
+                                    }
                                 } catch (Throwable e22) {
                                     FileLog.m3e(e22);
                                 }
                             }
-                            str3 = stringBuilder3;
-                            i6 = 1;
-                        } else if (split[i5].startsWith("url_encoded_fmt_stream_map")) {
-                            strArr = split[i5].split("=");
-                            if (strArr.length == i3) {
+                        } else if (args[a].startsWith("use_cipher_signature")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2 && args2[1].toLowerCase().equals("true")) {
+                                encrypted = true;
+                            }
+                        } else if (args[a].startsWith("hlsvp")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
                                 try {
-                                    strArr = URLDecoder.decode(strArr[1], C0542C.UTF8_NAME).split("[&,]");
-                                    i = i2;
-                                    i8 = i;
-                                    String str4 = null;
-                                    while (i < strArr.length) {
-                                        String[] split2 = strArr[i].split("=");
-                                        str3 = stringBuilder3;
-                                        try {
-                                            if (split2[0].startsWith("type")) {
-                                                i8 = URLDecoder.decode(split2[1], C0542C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4) ? 1 : i8;
-                                            } else if (split2[0].startsWith(UpdateFragment.FRAGMENT_URL)) {
-                                                str4 = URLDecoder.decode(split2[1], C0542C.UTF8_NAME);
-                                            } else if (split2[0].startsWith("itag")) {
-                                                i8 = 0;
-                                                str4 = null;
-                                            }
-                                            if (i8 != 0 && str4 != null) {
-                                                strArr2 = str4;
-                                                break;
-                                            }
-                                            i++;
-                                            stringBuilder3 = str3;
-                                        } catch (Exception e3) {
-                                            e22 = e3;
-                                        }
-                                    }
-                                } catch (Exception e4) {
-                                    e22 = e4;
-                                    str3 = stringBuilder3;
-                                    FileLog.m3e(e22);
-                                    i5++;
-                                    stringBuilder3 = str3;
-                                    i = 1;
-                                    i2 = 0;
-                                    i3 = 2;
+                                    hls = URLDecoder.decode(args2[1], C0542C.UTF8_NAME);
+                                } catch (Throwable e222) {
+                                    FileLog.m3e(e222);
                                 }
                             }
-                            str3 = stringBuilder3;
-                        } else {
-                            str3 = stringBuilder3;
-                            String[] split3;
-                            if (split[i5].startsWith("use_cipher_signature")) {
-                                split3 = split[i5].split("=");
-                                if (split3.length == 2 && split3[1].toLowerCase().equals("true")) {
-                                    i9 = 1;
-                                }
-                            } else if (split[i5].startsWith("hlsvp")) {
-                                split3 = split[i5].split("=");
-                                if (split3.length == 2) {
-                                    try {
-                                        str2 = URLDecoder.decode(split3[1], C0542C.UTF8_NAME);
-                                    } catch (Throwable e222) {
-                                        FileLog.m3e(e222);
-                                    }
-                                }
-                            } else if (split[i5].startsWith("livestream")) {
-                                split3 = split[i5].split("=");
-                                if (split3.length == 2 && split3[1].toLowerCase().equals("1")) {
-                                    i7 = 1;
-                                }
+                        } else if (args[a].startsWith("livestream")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2 && args2[1].toLowerCase().equals("1")) {
+                                isLive = true;
                             }
                         }
-                        i5++;
-                        stringBuilder3 = str3;
-                        i = 1;
-                        i2 = 0;
-                        i3 = 2;
                     }
-                    str3 = stringBuilder3;
-                    i5 = i9;
-                } else {
-                    str3 = stringBuilder3;
-                    strArr2 = str;
-                    i7 = 0;
-                    str2 = null;
-                    i6 = 0;
                 }
-                if (i7 != 0) {
-                    if (str2 != null && i5 == 0) {
-                        if (!str2.contains("/s/")) {
-                            r1.result[0] = str2;
-                            r1.result[1] = "hls";
-                        }
+                if (isLive) {
+                    if (hls == null || encrypted || hls.contains("/s/")) {
+                        return null;
                     }
-                    return null;
+                    this.result[0] = hls;
+                    this.result[1] = "hls";
                 }
-                if (i6 != 0) {
-                    i = i5;
-                    str = strArr2;
+                if (exists) {
                     break;
                 }
-                i4++;
-                str = strArr2;
-                stringBuilder3 = str3;
-                strArr = null;
-                i = 1;
-                i2 = 0;
-                i3 = 2;
             }
-            i = i5;
-            if (r1.result[0] == null && str != null) {
-                r1.result[0] = str;
-                r1.result[1] = "other";
+            if (this.result[0] == null && otherUrl != null) {
+                this.result[0] = otherUrl;
+                this.result[1] = "other";
             }
-            if (r1.result[0] == null || ((r7 == 0 && !r1.result[0].contains("/s/")) || downloadUrlContent == null)) {
-                r5 = null;
-            } else {
-                int indexOf = r1.result[0].indexOf("/s/");
-                int indexOf2 = r1.result[0].indexOf(47, indexOf + 10);
-                if (indexOf != -1) {
-                    String str5;
-                    String str6;
-                    SharedPreferences sharedPreferences;
-                    String string;
-                    StringBuilder stringBuilder7;
-                    String string2;
-                    Object downloadUrlContent3;
-                    Matcher matcher2;
-                    Editor putString;
-                    if (indexOf2 == -1) {
-                        indexOf2 = r1.result[0].length();
+            if (this.result[0] != null && ((encrypted || this.result[0].contains("/s/")) && embedCode != null)) {
+                encrypted = true;
+                int index = this.result[0].indexOf("/s/");
+                int index2 = this.result[0].indexOf(47, index + 10);
+                if (index != -1) {
+                    if (index2 == -1) {
+                        index2 = this.result[0].length();
                     }
-                    r1.sig = r1.result[0].substring(indexOf, indexOf2);
-                    Matcher matcher3 = WebPlayerView.jsPattern.matcher(downloadUrlContent);
-                    if (matcher3.find()) {
+                    this.sig = this.result[0].substring(index, index2);
+                    String jsUrl = null;
+                    matcher = WebPlayerView.jsPattern.matcher(embedCode);
+                    if (matcher.find()) {
                         try {
-                            Object nextValue = new JSONTokener(matcher3.group(1)).nextValue();
-                            if (nextValue instanceof String) {
-                                str5 = (String) nextValue;
-                                if (str5 != null) {
-                                    matcher3 = WebPlayerView.playerIdPattern.matcher(str5);
-                                    if (matcher3.find()) {
-                                        str6 = null;
-                                    } else {
-                                        stringBuilder2 = new StringBuilder();
-                                        stringBuilder2.append(matcher3.group(1));
-                                        stringBuilder2.append(matcher3.group(2));
-                                        str6 = stringBuilder2.toString();
-                                    }
-                                    sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode", 0);
-                                    if (str6 == null) {
-                                        string = sharedPreferences.getString(str6, null);
-                                        stringBuilder7 = new StringBuilder();
-                                        stringBuilder7.append(str6);
-                                        stringBuilder7.append("n");
-                                        string2 = sharedPreferences.getString(stringBuilder7.toString(), null);
-                                    } else {
-                                        string = null;
-                                        string2 = null;
-                                    }
-                                    if (string != null) {
-                                        if (str5.startsWith("//")) {
-                                            stringBuilder4 = new StringBuilder();
-                                            stringBuilder4.append("https:");
-                                            stringBuilder4.append(str5);
-                                            str5 = stringBuilder4.toString();
-                                        } else if (str5.startsWith("/")) {
-                                            stringBuilder4 = new StringBuilder();
-                                            stringBuilder4.append("https://www.youtube.com");
-                                            stringBuilder4.append(str5);
-                                            str5 = stringBuilder4.toString();
-                                        }
-                                        downloadUrlContent3 = WebPlayerView.this.downloadUrlContent(r1, str5);
-                                        if (isCancelled()) {
-                                            return null;
-                                        }
-                                        r5 = null;
-                                        if (downloadUrlContent3 != null) {
-                                            matcher2 = WebPlayerView.sigPattern.matcher(downloadUrlContent3);
-                                            if (matcher2.find()) {
-                                                i8 = 1;
-                                                matcher2 = WebPlayerView.sigPattern2.matcher(downloadUrlContent3);
-                                                if (matcher2.find()) {
-                                                    string2 = matcher2.group(1);
-                                                }
-                                            } else {
-                                                i8 = 1;
-                                                string2 = matcher2.group(1);
-                                            }
-                                            if (string2 != null) {
-                                                try {
-                                                    str5 = new JSExtractor(downloadUrlContent3).extractFunction(string2);
-                                                    try {
-                                                        if (!(TextUtils.isEmpty(str5) || str6 == null)) {
-                                                            putString = sharedPreferences.edit().putString(str6, str5);
-                                                            stringBuilder5 = new StringBuilder();
-                                                            stringBuilder5.append(str6);
-                                                            stringBuilder5.append("n");
-                                                            putString.putString(stringBuilder5.toString(), string2).commit();
-                                                        }
-                                                        string = str5;
-                                                    } catch (Throwable e2222) {
-                                                        th = e2222;
-                                                        string = str5;
-                                                        FileLog.m3e(th);
-                                                        if (!TextUtils.isEmpty(string)) {
-                                                            if (VERSION.SDK_INT < 21) {
-                                                                stringBuilder = new StringBuilder();
-                                                                stringBuilder.append(string);
-                                                                stringBuilder.append("window.");
-                                                                stringBuilder.append(WebPlayerView.this.interfaceName);
-                                                                stringBuilder.append(".returnResultToJava(");
-                                                                stringBuilder.append(string2);
-                                                                stringBuilder.append("('");
-                                                                stringBuilder.append(r1.sig.substring(3));
-                                                                stringBuilder.append("'));");
-                                                                str6 = stringBuilder.toString();
-                                                            } else {
-                                                                stringBuilder = new StringBuilder();
-                                                                stringBuilder.append(string);
-                                                                stringBuilder.append(string2);
-                                                                stringBuilder.append("('");
-                                                                stringBuilder.append(r1.sig.substring(3));
-                                                                stringBuilder.append("');");
-                                                                str6 = stringBuilder.toString();
-                                                            }
-                                                            try {
-                                                                AndroidUtilities.runOnUIThread(new Runnable() {
-
-                                                                    /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$1$1 */
-                                                                    class C13481 implements ValueCallback<String> {
-                                                                        C13481() {
-                                                                        }
-
-                                                                        public void onReceiveValue(String str) {
-                                                                            String[] access$1300 = YoutubeVideoTask.this.result;
-                                                                            String str2 = YoutubeVideoTask.this.result[0];
-                                                                            CharSequence access$1400 = YoutubeVideoTask.this.sig;
-                                                                            StringBuilder stringBuilder = new StringBuilder();
-                                                                            stringBuilder.append("/signature/");
-                                                                            stringBuilder.append(str.substring(1, str.length() - 1));
-                                                                            access$1300[0] = str2.replace(access$1400, stringBuilder.toString());
-                                                                            YoutubeVideoTask.this.countDownLatch.countDown();
-                                                                        }
-                                                                    }
-
-                                                                    public void run() {
-                                                                        if (VERSION.SDK_INT >= 21) {
-                                                                            WebPlayerView.this.webView.evaluateJavascript(str6, new C13481());
-                                                                            return;
-                                                                        }
-                                                                        try {
-                                                                            StringBuilder stringBuilder = new StringBuilder();
-                                                                            stringBuilder.append("<script>");
-                                                                            stringBuilder.append(str6);
-                                                                            stringBuilder.append("</script>");
-                                                                            String encodeToString = Base64.encodeToString(stringBuilder.toString().getBytes(C0542C.UTF8_NAME), 0);
-                                                                            WebView access$1600 = WebPlayerView.this.webView;
-                                                                            StringBuilder stringBuilder2 = new StringBuilder();
-                                                                            stringBuilder2.append("data:text/html;charset=utf-8;base64,");
-                                                                            stringBuilder2.append(encodeToString);
-                                                                            access$1600.loadUrl(stringBuilder2.toString());
-                                                                        } catch (Throwable e) {
-                                                                            FileLog.m3e(e);
-                                                                        }
-                                                                    }
-                                                                });
-                                                                r1.countDownLatch.await();
-                                                                i = 0;
-                                                            } catch (Throwable e22222) {
-                                                                FileLog.m3e(e22222);
-                                                            }
-                                                            if (!isCancelled()) {
-                                                                if (i == 0) {
-                                                                    strArr = r1.result;
-                                                                    return strArr;
-                                                                }
-                                                            }
-                                                            strArr = r5;
-                                                            return strArr;
-                                                        }
-                                                        i = i8;
-                                                        if (isCancelled()) {
-                                                            if (i == 0) {
-                                                                strArr = r1.result;
-                                                                return strArr;
-                                                            }
-                                                        }
-                                                        strArr = r5;
-                                                        return strArr;
-                                                    }
-                                                } catch (Throwable e222222) {
-                                                    th = e222222;
-                                                    FileLog.m3e(th);
-                                                    if (TextUtils.isEmpty(string)) {
-                                                        if (VERSION.SDK_INT < 21) {
-                                                            stringBuilder = new StringBuilder();
-                                                            stringBuilder.append(string);
-                                                            stringBuilder.append(string2);
-                                                            stringBuilder.append("('");
-                                                            stringBuilder.append(r1.sig.substring(3));
-                                                            stringBuilder.append("');");
-                                                            str6 = stringBuilder.toString();
-                                                        } else {
-                                                            stringBuilder = new StringBuilder();
-                                                            stringBuilder.append(string);
-                                                            stringBuilder.append("window.");
-                                                            stringBuilder.append(WebPlayerView.this.interfaceName);
-                                                            stringBuilder.append(".returnResultToJava(");
-                                                            stringBuilder.append(string2);
-                                                            stringBuilder.append("('");
-                                                            stringBuilder.append(r1.sig.substring(3));
-                                                            stringBuilder.append("'));");
-                                                            str6 = stringBuilder.toString();
-                                                        }
-                                                        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                                        r1.countDownLatch.await();
-                                                        i = 0;
-                                                        if (isCancelled()) {
-                                                            if (i == 0) {
-                                                                strArr = r1.result;
-                                                                return strArr;
-                                                            }
-                                                        }
-                                                        strArr = r5;
-                                                        return strArr;
-                                                    }
-                                                    i = i8;
-                                                    if (isCancelled()) {
-                                                        if (i == 0) {
-                                                            strArr = r1.result;
-                                                            return strArr;
-                                                        }
-                                                    }
-                                                    strArr = r5;
-                                                    return strArr;
-                                                }
-                                            }
-                                            if (TextUtils.isEmpty(string)) {
-                                                if (VERSION.SDK_INT < 21) {
-                                                    stringBuilder = new StringBuilder();
-                                                    stringBuilder.append(string);
-                                                    stringBuilder.append(string2);
-                                                    stringBuilder.append("('");
-                                                    stringBuilder.append(r1.sig.substring(3));
-                                                    stringBuilder.append("');");
-                                                    str6 = stringBuilder.toString();
-                                                } else {
-                                                    stringBuilder = new StringBuilder();
-                                                    stringBuilder.append(string);
-                                                    stringBuilder.append("window.");
-                                                    stringBuilder.append(WebPlayerView.this.interfaceName);
-                                                    stringBuilder.append(".returnResultToJava(");
-                                                    stringBuilder.append(string2);
-                                                    stringBuilder.append("('");
-                                                    stringBuilder.append(r1.sig.substring(3));
-                                                    stringBuilder.append("'));");
-                                                    str6 = stringBuilder.toString();
-                                                }
-                                                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                                r1.countDownLatch.await();
-                                                i = 0;
-                                            }
-                                            i = i8;
-                                        }
-                                    } else {
-                                        r5 = null;
-                                    }
-                                    i8 = 1;
-                                    if (TextUtils.isEmpty(string)) {
-                                        if (VERSION.SDK_INT < 21) {
-                                            stringBuilder = new StringBuilder();
-                                            stringBuilder.append(string);
-                                            stringBuilder.append("window.");
-                                            stringBuilder.append(WebPlayerView.this.interfaceName);
-                                            stringBuilder.append(".returnResultToJava(");
-                                            stringBuilder.append(string2);
-                                            stringBuilder.append("('");
-                                            stringBuilder.append(r1.sig.substring(3));
-                                            stringBuilder.append("'));");
-                                            str6 = stringBuilder.toString();
-                                        } else {
-                                            stringBuilder = new StringBuilder();
-                                            stringBuilder.append(string);
-                                            stringBuilder.append(string2);
-                                            stringBuilder.append("('");
-                                            stringBuilder.append(r1.sig.substring(3));
-                                            stringBuilder.append("');");
-                                            str6 = stringBuilder.toString();
-                                        }
-                                        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                        r1.countDownLatch.await();
-                                        i = 0;
-                                    }
-                                    i = i8;
-                                }
+                            Object value = new JSONTokener(matcher.group(1)).nextValue();
+                            if (value instanceof String) {
+                                jsUrl = (String) value;
                             }
-                        } catch (Throwable e2222222) {
-                            FileLog.m3e(e2222222);
+                        } catch (Throwable e2222) {
+                            FileLog.m3e(e2222);
                         }
                     }
-                    str5 = null;
-                    if (str5 != null) {
-                        matcher3 = WebPlayerView.playerIdPattern.matcher(str5);
-                        if (matcher3.find()) {
-                            str6 = null;
+                    if (jsUrl != null) {
+                        String playerId;
+                        matcher = WebPlayerView.playerIdPattern.matcher(jsUrl);
+                        if (matcher.find()) {
+                            playerId = matcher.group(1) + matcher.group(2);
                         } else {
-                            stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append(matcher3.group(1));
-                            stringBuilder2.append(matcher3.group(2));
-                            str6 = stringBuilder2.toString();
+                            playerId = null;
                         }
-                        sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode", 0);
-                        if (str6 == null) {
-                            string = null;
-                            string2 = null;
-                        } else {
-                            string = sharedPreferences.getString(str6, null);
-                            stringBuilder7 = new StringBuilder();
-                            stringBuilder7.append(str6);
-                            stringBuilder7.append("n");
-                            string2 = sharedPreferences.getString(stringBuilder7.toString(), null);
+                        String functionCode = null;
+                        String functionName = null;
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode", 0);
+                        if (playerId != null) {
+                            functionCode = preferences.getString(playerId, null);
+                            functionName = preferences.getString(playerId + "n", null);
                         }
-                        if (string != null) {
-                            r5 = null;
-                        } else {
-                            if (str5.startsWith("//")) {
-                                stringBuilder4 = new StringBuilder();
-                                stringBuilder4.append("https:");
-                                stringBuilder4.append(str5);
-                                str5 = stringBuilder4.toString();
-                            } else if (str5.startsWith("/")) {
-                                stringBuilder4 = new StringBuilder();
-                                stringBuilder4.append("https://www.youtube.com");
-                                stringBuilder4.append(str5);
-                                str5 = stringBuilder4.toString();
+                        if (functionCode == null) {
+                            if (jsUrl.startsWith("//")) {
+                                jsUrl = "https:" + jsUrl;
+                            } else if (jsUrl.startsWith("/")) {
+                                jsUrl = "https://www.youtube.com" + jsUrl;
                             }
-                            downloadUrlContent3 = WebPlayerView.this.downloadUrlContent(r1, str5);
+                            String jsCode = WebPlayerView.this.downloadUrlContent(this, jsUrl);
                             if (isCancelled()) {
                                 return null;
                             }
-                            r5 = null;
-                            if (downloadUrlContent3 != null) {
-                                matcher2 = WebPlayerView.sigPattern.matcher(downloadUrlContent3);
-                                if (matcher2.find()) {
-                                    i8 = 1;
-                                    matcher2 = WebPlayerView.sigPattern2.matcher(downloadUrlContent3);
-                                    if (matcher2.find()) {
-                                        string2 = matcher2.group(1);
-                                    }
+                            if (jsCode != null) {
+                                matcher = WebPlayerView.sigPattern.matcher(jsCode);
+                                if (matcher.find()) {
+                                    functionName = matcher.group(1);
                                 } else {
-                                    i8 = 1;
-                                    string2 = matcher2.group(1);
-                                }
-                                if (string2 != null) {
-                                    str5 = new JSExtractor(downloadUrlContent3).extractFunction(string2);
-                                    putString = sharedPreferences.edit().putString(str6, str5);
-                                    stringBuilder5 = new StringBuilder();
-                                    stringBuilder5.append(str6);
-                                    stringBuilder5.append("n");
-                                    putString.putString(stringBuilder5.toString(), string2).commit();
-                                    string = str5;
-                                }
-                                if (TextUtils.isEmpty(string)) {
-                                    if (VERSION.SDK_INT < 21) {
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append(string);
-                                        stringBuilder.append(string2);
-                                        stringBuilder.append("('");
-                                        stringBuilder.append(r1.sig.substring(3));
-                                        stringBuilder.append("');");
-                                        str6 = stringBuilder.toString();
-                                    } else {
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append(string);
-                                        stringBuilder.append("window.");
-                                        stringBuilder.append(WebPlayerView.this.interfaceName);
-                                        stringBuilder.append(".returnResultToJava(");
-                                        stringBuilder.append(string2);
-                                        stringBuilder.append("('");
-                                        stringBuilder.append(r1.sig.substring(3));
-                                        stringBuilder.append("'));");
-                                        str6 = stringBuilder.toString();
+                                    matcher = WebPlayerView.sigPattern2.matcher(jsCode);
+                                    if (matcher.find()) {
+                                        functionName = matcher.group(1);
                                     }
-                                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                    r1.countDownLatch.await();
-                                    i = 0;
                                 }
-                                i = i8;
+                                if (functionName != null) {
+                                    try {
+                                        functionCode = new JSExtractor(jsCode).extractFunction(functionName);
+                                        if (!(TextUtils.isEmpty(functionCode) || playerId == null)) {
+                                            preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
+                                        }
+                                    } catch (Throwable e22222) {
+                                        FileLog.m3e(e22222);
+                                    }
+                                }
                             }
                         }
-                        i8 = 1;
-                        if (TextUtils.isEmpty(string)) {
-                            if (VERSION.SDK_INT < 21) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append(string);
-                                stringBuilder.append("window.");
-                                stringBuilder.append(WebPlayerView.this.interfaceName);
-                                stringBuilder.append(".returnResultToJava(");
-                                stringBuilder.append(string2);
-                                stringBuilder.append("('");
-                                stringBuilder.append(r1.sig.substring(3));
-                                stringBuilder.append("'));");
-                                str6 = stringBuilder.toString();
+                        if (!TextUtils.isEmpty(functionCode)) {
+                            if (VERSION.SDK_INT >= 21) {
+                                functionCode = functionCode + functionName + "('" + this.sig.substring(3) + "');";
                             } else {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append(string);
-                                stringBuilder.append(string2);
-                                stringBuilder.append("('");
-                                stringBuilder.append(r1.sig.substring(3));
-                                stringBuilder.append("');");
-                                str6 = stringBuilder.toString();
+                                functionCode = functionCode + "window." + WebPlayerView.this.interfaceName + ".returnResultToJava(" + functionName + "('" + this.sig.substring(3) + "'));";
                             }
-                            AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                            r1.countDownLatch.await();
-                            i = 0;
+                            try {
+                                final String str2 = functionCode;
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+
+                                    /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$1$1 */
+                                    class C13481 implements ValueCallback<String> {
+                                        C13481() {
+                                        }
+
+                                        public void onReceiveValue(String value) {
+                                            YoutubeVideoTask.this.result[0] = YoutubeVideoTask.this.result[0].replace(YoutubeVideoTask.this.sig, "/signature/" + value.substring(1, value.length() - 1));
+                                            YoutubeVideoTask.this.countDownLatch.countDown();
+                                        }
+                                    }
+
+                                    public void run() {
+                                        if (VERSION.SDK_INT >= 21) {
+                                            WebPlayerView.this.webView.evaluateJavascript(str2, new C13481());
+                                            return;
+                                        }
+                                        try {
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + str2 + "</script>").getBytes(C0542C.UTF8_NAME), 0));
+                                        } catch (Throwable e) {
+                                            FileLog.m3e(e);
+                                        }
+                                    }
+                                });
+                                this.countDownLatch.await();
+                                encrypted = false;
+                            } catch (Throwable e222222) {
+                                FileLog.m3e(e222222);
+                            }
                         }
-                        i = i8;
                     }
                 }
-                r5 = null;
-                i8 = 1;
-                i = i8;
             }
-            if (isCancelled()) {
-                if (i == 0) {
-                    strArr = r1.result;
-                    return strArr;
-                }
+            if (isCancelled() || encrypted) {
+                return null;
             }
-            strArr = r5;
-            return strArr;
+            return this.result;
         }
 
-        private void onInterfaceResult(String str) {
-            String[] strArr = this.result;
-            String str2 = this.result[0];
-            CharSequence charSequence = this.sig;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("/signature/");
-            stringBuilder.append(str);
-            strArr[0] = str2.replace(charSequence, stringBuilder.toString());
+        private void onInterfaceResult(String value) {
+            this.result[0] = this.result[0].replace(this.sig, "/signature/" + value);
             this.countDownLatch.countDown();
         }
 
-        protected void onPostExecute(String[] strArr) {
-            if (strArr[0] != null) {
+        protected void onPostExecute(String[] result) {
+            if (result[0] != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("start play youtube video ");
-                    stringBuilder.append(strArr[1]);
-                    stringBuilder.append(" ");
-                    stringBuilder.append(strArr[0]);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("start play youtube video " + result[1] + " " + result[0]);
                 }
                 WebPlayerView.this.initied = true;
-                WebPlayerView.this.playVideoUrl = strArr[0];
-                WebPlayerView.this.playVideoType = strArr[1];
-                if (WebPlayerView.this.playVideoType.equals("hls") != null) {
+                WebPlayerView.this.playVideoUrl = result[0];
+                WebPlayerView.this.playVideoType = result[1];
+                if (WebPlayerView.this.playVideoType.equals("hls")) {
                     WebPlayerView.this.isStream = true;
                 }
-                if (WebPlayerView.this.isAutoplay != null) {
+                if (WebPlayerView.this.isAutoplay) {
                     WebPlayerView.this.preparePlayer();
                 }
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
-            } else if (isCancelled() == null) {
+            } else if (!isCancelled()) {
                 WebPlayerView.this.onInitFailed();
             }
         }
@@ -2170,303 +1475,190 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.WebPlayerView$5 */
-    class C21045 implements CallJavaResultInterface {
-        C21045() {
-        }
+    protected String downloadUrlContent(AsyncTask parentTask, String url) {
+        return downloadUrlContent(parentTask, url, null, true);
+    }
 
-        public void jsCallFinished(String str) {
-            if (WebPlayerView.this.currentTask != null && !WebPlayerView.this.currentTask.isCancelled() && (WebPlayerView.this.currentTask instanceof YoutubeVideoTask)) {
-                ((YoutubeVideoTask) WebPlayerView.this.currentTask).onInterfaceResult(str);
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    protected String downloadUrlContent(AsyncTask parentTask, String url, HashMap<String, String> headers, boolean tryGzip) {
+        Throwable e;
+        boolean canRetry = true;
+        InputStream httpConnectionStream = null;
+        boolean done = false;
+        StringBuilder result = null;
+        URLConnection httpConnection = null;
+        URL downloadUrl;
+        try {
+            downloadUrl = new URL(url);
+            httpConnection = downloadUrl.openConnection();
+            httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+            if (tryGzip) {
+                httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
+            }
+            httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+            httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+            if (headers != null) {
+                for (Entry<String, String> entry : headers.entrySet()) {
+                    httpConnection.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
+                }
+            }
+            httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+            httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+            if (httpConnection instanceof HttpURLConnection) {
+                HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
+                httpURLConnection.setInstanceFollowRedirects(true);
+                int status = httpURLConnection.getResponseCode();
+                if (status == 302 || status == 301 || status == 303) {
+                    String newUrl = httpURLConnection.getHeaderField("Location");
+                    String cookies = httpURLConnection.getHeaderField("Set-Cookie");
+                    downloadUrl = new URL(newUrl);
+                    httpConnection = downloadUrl.openConnection();
+                    httpConnection.setRequestProperty("Cookie", cookies);
+                    httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+                    if (tryGzip) {
+                        httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
+                    }
+                    httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+                    httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                    httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+                    if (headers != null) {
+                        for (Entry<String, String> entry2 : headers.entrySet()) {
+                            httpConnection.addRequestProperty((String) entry2.getKey(), (String) entry2.getValue());
+                        }
+                    }
+                }
+            }
+            httpConnection.connect();
+            if (tryGzip) {
+                httpConnectionStream = new GZIPInputStream(httpConnection.getInputStream());
+            } else {
+                httpConnectionStream = httpConnection.getInputStream();
+            }
+        } catch (Exception e2) {
+            if (httpConnectionStream != null) {
+                try {
+                    httpConnectionStream.close();
+                } catch (Exception e3) {
+                }
+            }
+            httpConnection = downloadUrl.openConnection();
+            httpConnection.connect();
+            httpConnectionStream = httpConnection.getInputStream();
+        } catch (Throwable e4) {
+            if (e4 instanceof SocketTimeoutException) {
+                if (ConnectionsManager.isNetworkOnline()) {
+                    canRetry = false;
+                }
+            } else if (e4 instanceof UnknownHostException) {
+                canRetry = false;
+            } else if (e4 instanceof SocketException) {
+                if (e4.getMessage() != null && e4.getMessage().contains("ECONNRESET")) {
+                    canRetry = false;
+                }
+            } else if (e4 instanceof FileNotFoundException) {
+                canRetry = false;
+            }
+            FileLog.m3e(e4);
+        }
+        if (canRetry) {
+            if (httpConnection != null) {
+                try {
+                    if (httpConnection instanceof HttpURLConnection) {
+                        int code = ((HttpURLConnection) httpConnection).getResponseCode();
+                        if (code != 200) {
+                            if (code != 202) {
+                            }
+                        }
+                    }
+                } catch (Throwable e42) {
+                    FileLog.m3e(e42);
+                }
+            }
+            if (httpConnectionStream != null) {
+                try {
+                    byte[] data = new byte[32768];
+                    StringBuilder result2 = null;
+                    while (!parentTask.isCancelled()) {
+                        try {
+                            try {
+                                int read = httpConnectionStream.read(data);
+                                if (read > 0) {
+                                    if (result2 == null) {
+                                        result = new StringBuilder();
+                                    } else {
+                                        result = result2;
+                                    }
+                                    try {
+                                        result.append(new String(data, 0, read, C0542C.UTF8_NAME));
+                                        result2 = result;
+                                    } catch (Exception e5) {
+                                        e42 = e5;
+                                    }
+                                } else if (read == -1) {
+                                    done = true;
+                                    result = result2;
+                                } else {
+                                    result = result2;
+                                }
+                            } catch (Exception e6) {
+                                e42 = e6;
+                                result = result2;
+                            }
+                        } catch (Throwable th) {
+                            e42 = th;
+                            result = result2;
+                        }
+                    }
+                    result = result2;
+                } catch (Throwable th2) {
+                    e42 = th2;
+                    FileLog.m3e(e42);
+                    if (httpConnectionStream != null) {
+                        try {
+                            httpConnectionStream.close();
+                        } catch (Throwable e422) {
+                            FileLog.m3e(e422);
+                        }
+                    }
+                    if (done) {
+                        return null;
+                    }
+                    return result.toString();
+                }
+            }
+            if (httpConnectionStream != null) {
+                httpConnectionStream.close();
             }
         }
-    }
-
-    protected String downloadUrlContent(AsyncTask asyncTask, String str) {
-        return downloadUrlContent(asyncTask, str, null, true);
-    }
-
-    protected java.lang.String downloadUrlContent(android.os.AsyncTask r9, java.lang.String r10, java.util.HashMap<java.lang.String, java.lang.String> r11, boolean r12) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r8 = this;
-        r0 = 1;
-        r1 = 0;
-        r2 = 0;
-        r3 = new java.net.URL;	 Catch:{ Throwable -> 0x010f }
-        r3.<init>(r10);	 Catch:{ Throwable -> 0x010f }
-        r10 = r3.openConnection();	 Catch:{ Throwable -> 0x010f }
-        r4 = "User-Agent";	 Catch:{ Throwable -> 0x010d }
-        r5 = "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)";	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r4, r5);	 Catch:{ Throwable -> 0x010d }
-        if (r12 == 0) goto L_0x001c;	 Catch:{ Throwable -> 0x010d }
-    L_0x0015:
-        r4 = "Accept-Encoding";	 Catch:{ Throwable -> 0x010d }
-        r5 = "gzip, deflate";	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r4, r5);	 Catch:{ Throwable -> 0x010d }
-    L_0x001c:
-        r4 = "Accept-Language";	 Catch:{ Throwable -> 0x010d }
-        r5 = "en-us,en;q=0.5";	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r4, r5);	 Catch:{ Throwable -> 0x010d }
-        r4 = "Accept";	 Catch:{ Throwable -> 0x010d }
-        r5 = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r4, r5);	 Catch:{ Throwable -> 0x010d }
-        r4 = "Accept-Charset";	 Catch:{ Throwable -> 0x010d }
-        r5 = "ISO-8859-1,utf-8;q=0.7,*;q=0.7";	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r4, r5);	 Catch:{ Throwable -> 0x010d }
-        if (r11 == 0) goto L_0x0057;	 Catch:{ Throwable -> 0x010d }
-    L_0x0033:
-        r4 = r11.entrySet();	 Catch:{ Throwable -> 0x010d }
-        r4 = r4.iterator();	 Catch:{ Throwable -> 0x010d }
-    L_0x003b:
-        r5 = r4.hasNext();	 Catch:{ Throwable -> 0x010d }
-        if (r5 == 0) goto L_0x0057;	 Catch:{ Throwable -> 0x010d }
-    L_0x0041:
-        r5 = r4.next();	 Catch:{ Throwable -> 0x010d }
-        r5 = (java.util.Map.Entry) r5;	 Catch:{ Throwable -> 0x010d }
-        r6 = r5.getKey();	 Catch:{ Throwable -> 0x010d }
-        r6 = (java.lang.String) r6;	 Catch:{ Throwable -> 0x010d }
-        r5 = r5.getValue();	 Catch:{ Throwable -> 0x010d }
-        r5 = (java.lang.String) r5;	 Catch:{ Throwable -> 0x010d }
-        r10.addRequestProperty(r6, r5);	 Catch:{ Throwable -> 0x010d }
-        goto L_0x003b;	 Catch:{ Throwable -> 0x010d }
-    L_0x0057:
-        r4 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;	 Catch:{ Throwable -> 0x010d }
-        r10.setConnectTimeout(r4);	 Catch:{ Throwable -> 0x010d }
-        r10.setReadTimeout(r4);	 Catch:{ Throwable -> 0x010d }
-        r4 = r10 instanceof java.net.HttpURLConnection;	 Catch:{ Throwable -> 0x010d }
-        if (r4 == 0) goto L_0x00e4;	 Catch:{ Throwable -> 0x010d }
-    L_0x0063:
-        r4 = r10;	 Catch:{ Throwable -> 0x010d }
-        r4 = (java.net.HttpURLConnection) r4;	 Catch:{ Throwable -> 0x010d }
-        r4.setInstanceFollowRedirects(r0);	 Catch:{ Throwable -> 0x010d }
-        r5 = r4.getResponseCode();	 Catch:{ Throwable -> 0x010d }
-        r6 = 302; // 0x12e float:4.23E-43 double:1.49E-321;	 Catch:{ Throwable -> 0x010d }
-        if (r5 == r6) goto L_0x0079;	 Catch:{ Throwable -> 0x010d }
-    L_0x0071:
-        r6 = 301; // 0x12d float:4.22E-43 double:1.487E-321;	 Catch:{ Throwable -> 0x010d }
-        if (r5 == r6) goto L_0x0079;	 Catch:{ Throwable -> 0x010d }
-    L_0x0075:
-        r6 = 303; // 0x12f float:4.25E-43 double:1.497E-321;	 Catch:{ Throwable -> 0x010d }
-        if (r5 != r6) goto L_0x00e4;	 Catch:{ Throwable -> 0x010d }
-    L_0x0079:
-        r3 = "Location";	 Catch:{ Throwable -> 0x010d }
-        r3 = r4.getHeaderField(r3);	 Catch:{ Throwable -> 0x010d }
-        r5 = "Set-Cookie";	 Catch:{ Throwable -> 0x010d }
-        r4 = r4.getHeaderField(r5);	 Catch:{ Throwable -> 0x010d }
-        r5 = new java.net.URL;	 Catch:{ Throwable -> 0x010d }
-        r5.<init>(r3);	 Catch:{ Throwable -> 0x010d }
-        r3 = r5.openConnection();	 Catch:{ Throwable -> 0x010d }
-        r10 = "Cookie";	 Catch:{ Throwable -> 0x00e1 }
-        r3.setRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-        r10 = "User-Agent";	 Catch:{ Throwable -> 0x00e1 }
-        r4 = "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)";	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-        if (r12 == 0) goto L_0x00a3;	 Catch:{ Throwable -> 0x00e1 }
-    L_0x009c:
-        r10 = "Accept-Encoding";	 Catch:{ Throwable -> 0x00e1 }
-        r4 = "gzip, deflate";	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-    L_0x00a3:
-        r10 = "Accept-Language";	 Catch:{ Throwable -> 0x00e1 }
-        r4 = "en-us,en;q=0.5";	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-        r10 = "Accept";	 Catch:{ Throwable -> 0x00e1 }
-        r4 = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-        r10 = "Accept-Charset";	 Catch:{ Throwable -> 0x00e1 }
-        r4 = "ISO-8859-1,utf-8;q=0.7,*;q=0.7";	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r10, r4);	 Catch:{ Throwable -> 0x00e1 }
-        if (r11 == 0) goto L_0x00de;	 Catch:{ Throwable -> 0x00e1 }
-    L_0x00ba:
-        r10 = r11.entrySet();	 Catch:{ Throwable -> 0x00e1 }
-        r10 = r10.iterator();	 Catch:{ Throwable -> 0x00e1 }
-    L_0x00c2:
-        r11 = r10.hasNext();	 Catch:{ Throwable -> 0x00e1 }
-        if (r11 == 0) goto L_0x00de;	 Catch:{ Throwable -> 0x00e1 }
-    L_0x00c8:
-        r11 = r10.next();	 Catch:{ Throwable -> 0x00e1 }
-        r11 = (java.util.Map.Entry) r11;	 Catch:{ Throwable -> 0x00e1 }
-        r4 = r11.getKey();	 Catch:{ Throwable -> 0x00e1 }
-        r4 = (java.lang.String) r4;	 Catch:{ Throwable -> 0x00e1 }
-        r11 = r11.getValue();	 Catch:{ Throwable -> 0x00e1 }
-        r11 = (java.lang.String) r11;	 Catch:{ Throwable -> 0x00e1 }
-        r3.addRequestProperty(r4, r11);	 Catch:{ Throwable -> 0x00e1 }
-        goto L_0x00c2;
-    L_0x00de:
-        r10 = r3;
-        r3 = r5;
-        goto L_0x00e4;
-    L_0x00e1:
-        r11 = move-exception;
-        r10 = r3;
-        goto L_0x0111;
-    L_0x00e4:
-        r10.connect();	 Catch:{ Throwable -> 0x010d }
-        if (r12 == 0) goto L_0x0107;
-    L_0x00e9:
-        r11 = new java.util.zip.GZIPInputStream;	 Catch:{ Exception -> 0x00f3 }
-        r12 = r10.getInputStream();	 Catch:{ Exception -> 0x00f3 }
-        r11.<init>(r12);	 Catch:{ Exception -> 0x00f3 }
-        goto L_0x010b;
-    L_0x00f3:
-        r11 = r3.openConnection();	 Catch:{ Throwable -> 0x010d }
-        r11.connect();	 Catch:{ Throwable -> 0x0102 }
-        r10 = r11.getInputStream();	 Catch:{ Throwable -> 0x0102 }
-        r7 = r11;
-        r11 = r10;
-        r10 = r7;
-        goto L_0x010b;
-    L_0x0102:
-        r10 = move-exception;
-        r7 = r11;
-        r11 = r10;
-        r10 = r7;
-        goto L_0x0111;
-    L_0x0107:
-        r11 = r10.getInputStream();	 Catch:{ Throwable -> 0x010d }
-    L_0x010b:
-        r12 = r0;
-        goto L_0x0143;
-    L_0x010d:
-        r11 = move-exception;
-        goto L_0x0111;
-    L_0x010f:
-        r11 = move-exception;
-        r10 = r1;
-    L_0x0111:
-        r12 = r11 instanceof java.net.SocketTimeoutException;
-        if (r12 == 0) goto L_0x011d;
-    L_0x0115:
-        r12 = org.telegram.tgnet.ConnectionsManager.isNetworkOnline();
-        if (r12 == 0) goto L_0x013e;
-    L_0x011b:
-        r12 = r2;
-        goto L_0x013f;
-    L_0x011d:
-        r12 = r11 instanceof java.net.UnknownHostException;
-        if (r12 == 0) goto L_0x0122;
-    L_0x0121:
-        goto L_0x011b;
-    L_0x0122:
-        r12 = r11 instanceof java.net.SocketException;
-        if (r12 == 0) goto L_0x0139;
-    L_0x0126:
-        r12 = r11.getMessage();
-        if (r12 == 0) goto L_0x013e;
-    L_0x012c:
-        r12 = r11.getMessage();
-        r3 = "ECONNRESET";
-        r12 = r12.contains(r3);
-        if (r12 == 0) goto L_0x013e;
-    L_0x0138:
-        goto L_0x011b;
-    L_0x0139:
-        r12 = r11 instanceof java.io.FileNotFoundException;
-        if (r12 == 0) goto L_0x013e;
-    L_0x013d:
-        goto L_0x011b;
-    L_0x013e:
-        r12 = r0;
-    L_0x013f:
-        org.telegram.messenger.FileLog.m3e(r11);
-        r11 = r1;
-    L_0x0143:
-        if (r12 == 0) goto L_0x01a2;
-    L_0x0145:
-        if (r10 == 0) goto L_0x015c;
-    L_0x0147:
-        r12 = r10 instanceof java.net.HttpURLConnection;	 Catch:{ Exception -> 0x0158 }
-        if (r12 == 0) goto L_0x015c;	 Catch:{ Exception -> 0x0158 }
-    L_0x014b:
-        r10 = (java.net.HttpURLConnection) r10;	 Catch:{ Exception -> 0x0158 }
-        r10 = r10.getResponseCode();	 Catch:{ Exception -> 0x0158 }
-        r12 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
-        if (r10 == r12) goto L_0x015c;
-    L_0x0155:
-        r12 = 202; // 0xca float:2.83E-43 double:1.0E-321;
-        goto L_0x015c;
-    L_0x0158:
-        r10 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r10);
-    L_0x015c:
-        if (r11 == 0) goto L_0x0196;
-    L_0x015e:
-        r10 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
-        r10 = new byte[r10];	 Catch:{ Throwable -> 0x0190 }
-        r12 = r1;
-    L_0x0164:
-        r3 = r9.isCancelled();	 Catch:{ Throwable -> 0x018e }
-        if (r3 == 0) goto L_0x016b;
-    L_0x016a:
-        goto L_0x0197;
-    L_0x016b:
-        r3 = r11.read(r10);	 Catch:{ Exception -> 0x0189 }
-        if (r3 <= 0) goto L_0x0184;	 Catch:{ Exception -> 0x0189 }
-    L_0x0171:
-        if (r12 != 0) goto L_0x0179;	 Catch:{ Exception -> 0x0189 }
-    L_0x0173:
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0189 }
-        r4.<init>();	 Catch:{ Exception -> 0x0189 }
-        r12 = r4;	 Catch:{ Exception -> 0x0189 }
-    L_0x0179:
-        r4 = new java.lang.String;	 Catch:{ Exception -> 0x0189 }
-        r5 = "UTF-8";	 Catch:{ Exception -> 0x0189 }
-        r4.<init>(r10, r2, r3, r5);	 Catch:{ Exception -> 0x0189 }
-        r12.append(r4);	 Catch:{ Exception -> 0x0189 }
-        goto L_0x0164;
-    L_0x0184:
-        r9 = -1;
-        if (r3 != r9) goto L_0x0197;
-    L_0x0187:
-        r2 = r0;
-        goto L_0x0197;
-    L_0x0189:
-        r9 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r9);	 Catch:{ Throwable -> 0x018e }
-        goto L_0x0197;
-    L_0x018e:
-        r9 = move-exception;
-        goto L_0x0192;
-    L_0x0190:
-        r9 = move-exception;
-        r12 = r1;
-    L_0x0192:
-        org.telegram.messenger.FileLog.m3e(r9);
-        goto L_0x0197;
-    L_0x0196:
-        r12 = r1;
-    L_0x0197:
-        if (r11 == 0) goto L_0x01a3;
-    L_0x0199:
-        r11.close();	 Catch:{ Throwable -> 0x019d }
-        goto L_0x01a3;
-    L_0x019d:
-        r9 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r9);
-        goto L_0x01a3;
-    L_0x01a2:
-        r12 = r1;
-    L_0x01a3:
-        if (r2 == 0) goto L_0x01a9;
-    L_0x01a5:
-        r1 = r12.toString();
-    L_0x01a9:
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.downloadUrlContent(android.os.AsyncTask, java.lang.String, java.util.HashMap, boolean):java.lang.String");
+        if (done) {
+            return result.toString();
+        }
+        return null;
+        FileLog.m3e(e422);
+        if (httpConnectionStream != null) {
+            httpConnectionStream.close();
+        }
+        if (done) {
+            return result.toString();
+        }
+        return null;
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    public WebPlayerView(Context context, boolean z, boolean z2, WebPlayerViewDelegate webPlayerViewDelegate) {
+    public WebPlayerView(Context context, boolean allowInline, boolean allowShare, WebPlayerViewDelegate webPlayerViewDelegate) {
+        boolean z;
         super(context);
         int i = lastContainerId;
         lastContainerId = i + 1;
         this.fragment_container_id = i;
-        this.allowInlineAnimation = VERSION.SDK_INT >= 21;
+        if (VERSION.SDK_INT >= 21) {
+            z = true;
+        } else {
+            z = false;
+        }
+        this.allowInlineAnimation = z;
         this.backgroundPaint = new Paint();
         this.progressRunnable = new C13361();
         this.surfaceTextureListener = new C13392();
@@ -2475,16 +1667,16 @@ Error: java.lang.NullPointerException
         this.delegate = webPlayerViewDelegate;
         this.backgroundPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context) {
-            protected void onMeasure(int i, int i2) {
-                super.onMeasure(i, i2);
-                if (WebPlayerView.this.textureViewContainer != 0) {
-                    i = WebPlayerView.this.textureView.getLayoutParams();
-                    i.width = getMeasuredWidth();
-                    i.height = getMeasuredHeight();
-                    if (WebPlayerView.this.textureImageView != 0) {
-                        i = WebPlayerView.this.textureImageView.getLayoutParams();
-                        i.width = getMeasuredWidth();
-                        i.height = getMeasuredHeight();
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                if (WebPlayerView.this.textureViewContainer != null) {
+                    LayoutParams layoutParams = WebPlayerView.this.textureView.getLayoutParams();
+                    layoutParams.width = getMeasuredWidth();
+                    layoutParams.height = getMeasuredHeight();
+                    if (WebPlayerView.this.textureImageView != null) {
+                        layoutParams = WebPlayerView.this.textureImageView.getLayoutParams();
+                        layoutParams.width = getMeasuredWidth();
+                        layoutParams.height = getMeasuredHeight();
                     }
                 }
             }
@@ -2493,9 +1685,9 @@ Error: java.lang.NullPointerException
         this.interfaceName = "JavaScriptInterface";
         this.webView = new WebView(context);
         this.webView.addJavascriptInterface(new JavaScriptInterface(new C21045()), this.interfaceName);
-        webPlayerViewDelegate = this.webView.getSettings();
-        webPlayerViewDelegate.setJavaScriptEnabled(true);
-        webPlayerViewDelegate.setDefaultTextEncodingName("utf-8");
+        WebSettings webSettings = this.webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
         this.textureViewContainer = this.delegate.getTextureViewContainer();
         this.textureView = new TextureView(context);
         this.textureView.setPivotX(0.0f);
@@ -2505,7 +1697,7 @@ Error: java.lang.NullPointerException
         } else {
             this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
         }
-        if (!(this.allowInlineAnimation == null || this.textureViewContainer == null)) {
+        if (this.allowInlineAnimation && this.textureViewContainer != null) {
             this.textureImageView = new ImageView(context);
             this.textureImageView.setBackgroundColor(-65536);
             this.textureImageView.setPivotX(0.0f);
@@ -2533,16 +1725,16 @@ Error: java.lang.NullPointerException
         this.playButton.setScaleType(ScaleType.CENTER);
         this.controlsView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
         this.playButton.setOnClickListener(new C13427());
-        if (z) {
+        if (allowInline) {
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new C13438());
         }
-        if (z2) {
+        if (allowShare) {
             this.shareButton = new ImageView(context);
             this.shareButton.setScaleType(ScaleType.CENTER);
-            this.shareButton.setImageResource(true);
+            this.shareButton.setImageResource(C0446R.drawable.ic_share_video);
             this.controlsView.addView(this.shareButton, LayoutHelper.createFrame(56, 48, 53));
             this.shareButton.setOnClickListener(new C13449());
         }
@@ -2564,19 +1756,19 @@ Error: java.lang.NullPointerException
             try {
                 this.currentBitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
                 this.changedTextureView.getBitmap(this.currentBitmap);
-            } catch (Throwable th) {
+            } catch (Throwable e) {
                 if (this.currentBitmap != null) {
                     this.currentBitmap.recycle();
                     this.currentBitmap = null;
                 }
-                FileLog.m3e(th);
+                FileLog.m3e(e);
             }
             if (this.currentBitmap != null) {
                 this.textureImageView.setVisibility(0);
                 this.textureImageView.setImageBitmap(this.currentBitmap);
-            } else {
-                this.textureImageView.setImageDrawable(null);
+                return;
             }
+            this.textureImageView.setImageDrawable(null);
         }
     }
 
@@ -2584,22 +1776,22 @@ Error: java.lang.NullPointerException
         return this.currentYoutubeId;
     }
 
-    public void onStateChanged(boolean z, int i) {
-        if (i != 2) {
+    public void onStateChanged(boolean playWhenReady, int playbackState) {
+        if (playbackState != 2) {
             if (this.videoPlayer.getDuration() != C0542C.TIME_UNSET) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
                 this.controlsView.setDuration(0);
             }
         }
-        if (i == 4 || i == 1 || !this.videoPlayer.isPlaying()) {
+        if (playbackState == 4 || playbackState == 1 || !this.videoPlayer.isPlaying()) {
             this.delegate.onPlayStateChanged(this, false);
         } else {
             this.delegate.onPlayStateChanged(this, true);
         }
-        if (this.videoPlayer.isPlaying() && i != 4) {
+        if (this.videoPlayer.isPlaying() && playbackState != 4) {
             updatePlayButton();
-        } else if (i == 4) {
+        } else if (playbackState == 4) {
             this.isCompleted = true;
             this.videoPlayer.pause();
             this.videoPlayer.seekTo(0);
@@ -2612,24 +1804,22 @@ Error: java.lang.NullPointerException
         canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(10.0f)), this.backgroundPaint);
     }
 
-    public void onError(Exception exception) {
-        FileLog.m3e((Throwable) exception);
+    public void onError(Exception e) {
+        FileLog.m3e((Throwable) e);
         onInitFailed();
     }
 
-    public void onVideoSizeChanged(int i, int i2, int i3, float f) {
+    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
         if (this.aspectRatioFrameLayout != null) {
-            if (i3 != 90) {
-                if (i3 != 270) {
-                    int i4 = i2;
-                    i2 = i;
-                    i = i4;
-                }
+            if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                int temp = width;
+                width = height;
+                height = temp;
             }
-            i = i == 0 ? NUM : (((float) i2) * f) / ((float) i);
-            this.aspectRatioFrameLayout.setAspectRatio(i, i3);
-            if (this.inFullscreen != 0) {
-                this.delegate.onVideoSizeChanged(i, i3);
+            float ratio = height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height);
+            this.aspectRatioFrameLayout.setAspectRatio(ratio, unappliedRotationDegrees);
+            if (this.inFullscreen) {
+                this.delegate.onVideoSizeChanged(ratio, unappliedRotationDegrees);
             }
         }
     }
@@ -2672,30 +1862,28 @@ Error: java.lang.NullPointerException
         }
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        i3 -= i;
-        z = (i3 - this.aspectRatioFrameLayout.getMeasuredWidth()) / 2;
-        i4 -= i2;
-        i2 = ((i4 - AndroidUtilities.dp(10.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
-        this.aspectRatioFrameLayout.layout(z, i2, this.aspectRatioFrameLayout.getMeasuredWidth() + z, this.aspectRatioFrameLayout.getMeasuredHeight() + i2);
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int x = ((r - l) - this.aspectRatioFrameLayout.getMeasuredWidth()) / 2;
+        int y = (((b - t) - AndroidUtilities.dp(10.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
+        this.aspectRatioFrameLayout.layout(x, y, this.aspectRatioFrameLayout.getMeasuredWidth() + x, this.aspectRatioFrameLayout.getMeasuredHeight() + y);
         if (this.controlsView.getParent() == this) {
             this.controlsView.layout(0, 0, this.controlsView.getMeasuredWidth(), this.controlsView.getMeasuredHeight());
         }
-        i3 = (i3 - this.progressView.getMeasuredWidth()) / 2;
-        i4 = (i4 - this.progressView.getMeasuredHeight()) / 2;
-        this.progressView.layout(i3, i4, this.progressView.getMeasuredWidth() + i3, this.progressView.getMeasuredHeight() + i4);
+        x = ((r - l) - this.progressView.getMeasuredWidth()) / 2;
+        y = ((b - t) - this.progressView.getMeasuredHeight()) / 2;
+        this.progressView.layout(x, y, this.progressView.getMeasuredWidth() + x, this.progressView.getMeasuredHeight() + y);
         this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(10.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        i = MeasureSpec.getSize(i);
-        i2 = MeasureSpec.getSize(i2);
-        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2 - AndroidUtilities.dp(10.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - AndroidUtilities.dp(10.0f), NUM));
         if (this.controlsView.getParent() == this) {
-            this.controlsView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+            this.controlsView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
         }
         this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
-        setMeasuredDimension(i, i2);
+        setMeasuredDimension(width, height);
     }
 
     private void updatePlayButton() {
@@ -2722,25 +1910,25 @@ Error: java.lang.NullPointerException
         }
     }
 
-    public void onAudioFocusChange(int i) {
-        if (i == -1) {
-            if (this.videoPlayer.isPlaying() != 0) {
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == -1) {
+            if (this.videoPlayer.isPlaying()) {
                 this.videoPlayer.pause();
                 updatePlayButton();
             }
             this.hasAudioFocus = false;
             this.audioFocus = 0;
-        } else if (i == 1) {
+        } else if (focusChange == 1) {
             this.audioFocus = 2;
-            if (this.resumeAudioOnFocusGain != 0) {
+            if (this.resumeAudioOnFocusGain) {
                 this.resumeAudioOnFocusGain = false;
                 this.videoPlayer.play();
             }
-        } else if (i == -3) {
+        } else if (focusChange == -3) {
             this.audioFocus = 1;
-        } else if (i == -2) {
+        } else if (focusChange == -2) {
             this.audioFocus = 0;
-            if (this.videoPlayer.isPlaying() != 0) {
+            if (this.videoPlayer.isPlaying()) {
                 this.resumeAudioOnFocusGain = true;
                 this.videoPlayer.pause();
                 updatePlayButton();
@@ -2749,33 +1937,24 @@ Error: java.lang.NullPointerException
     }
 
     private void updateFullscreenButton() {
-        if (this.videoPlayer.isPlayerPrepared()) {
-            if (!this.isInline) {
-                this.fullscreenButton.setVisibility(0);
-                if (this.inFullscreen) {
-                    this.fullscreenButton.setImageResource(C0446R.drawable.ic_outfullscreen);
-                    this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
-                } else {
-                    this.fullscreenButton.setImageResource(C0446R.drawable.ic_gofullscreen);
-                    this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
-                }
-                return;
-            }
+        if (!this.videoPlayer.isPlayerPrepared() || this.isInline) {
+            this.fullscreenButton.setVisibility(8);
+            return;
         }
-        this.fullscreenButton.setVisibility(8);
+        this.fullscreenButton.setVisibility(0);
+        if (this.inFullscreen) {
+            this.fullscreenButton.setImageResource(C0446R.drawable.ic_outfullscreen);
+            this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
+            return;
+        }
+        this.fullscreenButton.setImageResource(C0446R.drawable.ic_gofullscreen);
+        this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
     }
 
     private void updateShareButton() {
         if (this.shareButton != null) {
-            int i;
             ImageView imageView = this.shareButton;
-            if (!this.isInline) {
-                if (this.videoPlayer.isPlayerPrepared()) {
-                    i = 0;
-                    imageView.setVisibility(i);
-                }
-            }
-            i = 8;
+            int i = (this.isInline || !this.videoPlayer.isPlayerPrepared()) ? 8 : 0;
             imageView.setVisibility(i);
         }
     }
@@ -2830,10 +2009,11 @@ Error: java.lang.NullPointerException
         this.controlsView.show(true, true);
     }
 
-    private void updateFullscreenState(boolean z) {
+    private void updateFullscreenState(boolean byButton) {
         if (this.textureView != null) {
             updateFullscreenButton();
             ViewGroup viewGroup;
+            ViewGroup parent;
             if (this.textureViewContainer == null) {
                 this.changingTextureView = true;
                 if (!this.inFullscreen) {
@@ -2849,10 +2029,10 @@ Error: java.lang.NullPointerException
                         viewGroup.removeView(this.controlsView);
                     }
                 } else {
-                    ViewGroup viewGroup2 = (ViewGroup) this.controlsView.getParent();
-                    if (viewGroup2 != this) {
-                        if (viewGroup2 != null) {
-                            viewGroup2.removeView(this.controlsView);
+                    parent = (ViewGroup) this.controlsView.getParent();
+                    if (parent != this) {
+                        if (parent != null) {
+                            parent.removeView(this.controlsView);
                         }
                         if (this.textureViewContainer != null) {
                             this.textureViewContainer.addView(this.controlsView);
@@ -2861,32 +2041,32 @@ Error: java.lang.NullPointerException
                         }
                     }
                 }
-                this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), z);
+                this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
                 this.changedTextureView.setVisibility(4);
-                if (this.inFullscreen && this.changedTextureView) {
-                    ViewGroup viewGroup3 = (ViewGroup) this.textureView.getParent();
-                    if (viewGroup3 != null) {
-                        viewGroup3.removeView(this.textureView);
+                if (this.inFullscreen && this.changedTextureView != null) {
+                    parent = (ViewGroup) this.textureView.getParent();
+                    if (parent != null) {
+                        parent.removeView(this.textureView);
                     }
                 }
                 this.controlsView.checkNeedHide();
-            } else {
-                if (this.inFullscreen) {
-                    viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
-                    if (viewGroup != null) {
-                        viewGroup.removeView(this.aspectRatioFrameLayout);
-                    }
-                } else {
-                    viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
-                    if (viewGroup != this) {
-                        if (viewGroup != null) {
-                            viewGroup.removeView(this.aspectRatioFrameLayout);
-                        }
-                        addView(this.aspectRatioFrameLayout, 0);
-                    }
-                }
-                this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), z);
+                return;
             }
+            if (this.inFullscreen) {
+                viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
+                if (viewGroup != null) {
+                    viewGroup.removeView(this.aspectRatioFrameLayout);
+                }
+            } else {
+                parent = (ViewGroup) this.aspectRatioFrameLayout.getParent();
+                if (parent != this) {
+                    if (parent != null) {
+                        parent.removeView(this.aspectRatioFrameLayout);
+                    }
+                    addView(this.aspectRatioFrameLayout, 0);
+                }
+            }
+            this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
         }
     }
 
@@ -2903,12 +2083,7 @@ Error: java.lang.NullPointerException
     }
 
     public boolean isInline() {
-        if (!this.isInline) {
-            if (!this.switchingInlineMode) {
-                return false;
-            }
-        }
-        return true;
+        return this.isInline || this.switchingInlineMode;
     }
 
     public void enterFullscreen() {
@@ -2923,6325 +2098,206 @@ Error: java.lang.NullPointerException
         return this.inFullscreen;
     }
 
-    public boolean loadVideo(String str, Photo photo, String str2, boolean z) {
-        String str3;
-        String str4;
-        String str5;
-        String group;
-        String group2;
-        String group3;
-        String str6;
-        PhotoSize closestPhotoSizeWithSize;
-        AsyncTask youtubeVideoTask;
-        AsyncTask twitchClipVideoTask;
-        String str7 = str;
-        Photo photo2 = photo;
+    public boolean loadVideo(String url, Photo thumb, String originalUrl, boolean autoplay) {
+        String youtubeId = null;
+        String vimeoId = null;
+        String coubId = null;
+        String twitchClipId = null;
+        String twitchStreamId = null;
+        String mp4File = null;
+        String aparatId = null;
         this.seekToTime = -1;
-        if (str7 == null) {
-            str3 = null;
-            str4 = str3;
-            str5 = str4;
-        } else if (str7.endsWith(".mp4")) {
-            str4 = str7;
-            str3 = null;
-            str5 = str3;
-        } else {
-            Matcher matcher;
-            Matcher matcher2;
-            Matcher matcher3;
-            Matcher matcher4;
-            Matcher matcher5;
-            if (str2 != null) {
-                try {
-                    Uri parse = Uri.parse(str2);
-                    str4 = parse.getQueryParameter("t");
-                    if (str4 == null) {
-                        str4 = parse.getQueryParameter("time_continue");
-                    }
-                    if (str4 != null) {
-                        if (str4.contains("m")) {
-                            String[] split = str4.split("m");
-                            r1.seekToTime = (Utilities.parseInt(split[0]).intValue() * 60) + Utilities.parseInt(split[1]).intValue();
-                        } else {
-                            r1.seekToTime = Utilities.parseInt(str4).intValue();
-                        }
-                    }
-                } catch (Throwable e) {
+        if (url != null) {
+            if (url.endsWith(".mp4")) {
+                mp4File = url;
+            } else {
+                Matcher matcher;
+                String id;
+                if (originalUrl != null) {
                     try {
+                        Uri uri = Uri.parse(originalUrl);
+                        String t = uri.getQueryParameter("t");
+                        if (t == null) {
+                            t = uri.getQueryParameter("time_continue");
+                        }
+                        if (t != null) {
+                            if (t.contains("m")) {
+                                String[] args = t.split("m");
+                                this.seekToTime = (Utilities.parseInt(args[0]).intValue() * 60) + Utilities.parseInt(args[1]).intValue();
+                            } else {
+                                this.seekToTime = Utilities.parseInt(t).intValue();
+                            }
+                        }
+                    } catch (Throwable e) {
                         FileLog.m3e(e);
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
                     }
                 }
-            }
-            Matcher matcher6 = youtubeIdRegex.matcher(str7);
-            str3 = matcher6.find() ? matcher6.group(1) : null;
-            if (str3 != null) {
-                if (str3 == null) {
+                try {
+                    matcher = youtubeIdRegex.matcher(url);
+                    id = null;
+                    if (matcher.find()) {
+                        id = matcher.group(1);
+                    }
+                    if (id != null) {
+                        youtubeId = id;
+                    }
+                } catch (Throwable e2) {
+                    FileLog.m3e(e2);
+                }
+                if (youtubeId == null) {
                     try {
-                        matcher = vimeoIdRegex.matcher(str7);
-                        str4 = matcher.find() ? matcher.group(3) : null;
-                        if (str4 != null) {
-                            if (str4 == null) {
-                                try {
-                                    matcher2 = aparatIdRegex.matcher(str7);
-                                    str5 = matcher2.find() ? matcher2.group(1) : null;
-                                    if (str5 != null) {
-                                        if (str5 == null) {
-                                            try {
-                                                matcher3 = twitchClipIdRegex.matcher(str7);
-                                                group = matcher3.find() ? matcher3.group(1) : null;
-                                                if (group != null) {
-                                                    if (group == null) {
-                                                        try {
-                                                            matcher4 = twitchStreamIdRegex.matcher(str7);
-                                                            group2 = matcher4.find() ? matcher4.group(1) : null;
-                                                            if (group2 != null) {
-                                                                if (group2 == null) {
-                                                                    try {
-                                                                        matcher5 = coubIdRegex.matcher(str7);
-                                                                        group3 = matcher5.find() ? matcher5.group(1) : null;
-                                                                        if (group3 == null) {
-                                                                            group3 = null;
-                                                                        }
-                                                                        str6 = group2;
-                                                                        group2 = group;
-                                                                        group = str5;
-                                                                        str5 = str4;
-                                                                        str4 = null;
-                                                                    } catch (Throwable e22) {
-                                                                        FileLog.m3e(e22);
-                                                                    }
-                                                                    r1.initied = false;
-                                                                    r1.isCompleted = false;
-                                                                    r1.isAutoplay = z;
-                                                                    r1.playVideoUrl = null;
-                                                                    r1.playAudioUrl = null;
-                                                                    destroy();
-                                                                    r1.firstFrameRendered = false;
-                                                                    r1.currentAlpha = 1.0f;
-                                                                    if (r1.currentTask != null) {
-                                                                        r1.currentTask.cancel(true);
-                                                                        r1.currentTask = null;
-                                                                    }
-                                                                    updateFullscreenButton();
-                                                                    updateShareButton();
-                                                                    updateInlineButton();
-                                                                    updatePlayButton();
-                                                                    if (photo2 != null) {
-                                                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                                        if (closestPhotoSizeWithSize != null) {
-                                                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                                            r1.drawImage = true;
-                                                                        }
-                                                                    } else {
-                                                                        r1.drawImage = false;
-                                                                    }
-                                                                    if (r1.progressAnimation != null) {
-                                                                        r1.progressAnimation.cancel();
-                                                                        r1.progressAnimation = null;
-                                                                    }
-                                                                    r1.isLoading = true;
-                                                                    r1.controlsView.setProgress(0);
-                                                                    if (!(str3 == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
-                                                                        r1.currentYoutubeId = str3;
-                                                                        str3 = null;
-                                                                    }
-                                                                    if (str4 != null) {
-                                                                        r1.initied = true;
-                                                                        r1.playVideoUrl = str4;
-                                                                        r1.playVideoType = "other";
-                                                                        if (r1.isAutoplay) {
-                                                                            preparePlayer();
-                                                                        }
-                                                                        showProgress(false, false);
-                                                                        r1.controlsView.show(true, true);
-                                                                    } else {
-                                                                        if (str3 != null) {
-                                                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = youtubeVideoTask;
-                                                                        } else if (str5 != null) {
-                                                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = youtubeVideoTask;
-                                                                        } else if (group3 != null) {
-                                                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = youtubeVideoTask;
-                                                                            r1.isStream = true;
-                                                                        } else if (group != null) {
-                                                                            youtubeVideoTask = new AparatVideoTask(group);
-                                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = youtubeVideoTask;
-                                                                        } else if (group2 != null) {
-                                                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = twitchClipVideoTask;
-                                                                        } else if (str6 != null) {
-                                                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                            r1.currentTask = twitchClipVideoTask;
-                                                                            r1.isStream = true;
-                                                                        }
-                                                                        r1.controlsView.show(false, false);
-                                                                        showProgress(true, false);
-                                                                    }
-                                                                    if (str3 == null && str5 == null && group3 == null && group == null && str4 == null && group2 == null) {
-                                                                        if (str6 == null) {
-                                                                            r1.controlsView.setVisibility(8);
-                                                                            return false;
-                                                                        }
-                                                                    }
-                                                                    r1.controlsView.setVisibility(0);
-                                                                    return true;
-                                                                }
-                                                                group3 = null;
-                                                                str6 = group2;
-                                                                group2 = group;
-                                                                group = str5;
-                                                                str5 = str4;
-                                                                str4 = group3;
-                                                                r1.initied = false;
-                                                                r1.isCompleted = false;
-                                                                r1.isAutoplay = z;
-                                                                r1.playVideoUrl = null;
-                                                                r1.playAudioUrl = null;
-                                                                destroy();
-                                                                r1.firstFrameRendered = false;
-                                                                r1.currentAlpha = 1.0f;
-                                                                if (r1.currentTask != null) {
-                                                                    r1.currentTask.cancel(true);
-                                                                    r1.currentTask = null;
-                                                                }
-                                                                updateFullscreenButton();
-                                                                updateShareButton();
-                                                                updateInlineButton();
-                                                                updatePlayButton();
-                                                                if (photo2 != null) {
-                                                                    r1.drawImage = false;
-                                                                } else {
-                                                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                                    if (closestPhotoSizeWithSize != null) {
-                                                                        if (photo2 != null) {
-                                                                        }
-                                                                        if (photo2 != null) {
-                                                                        }
-                                                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                                        r1.drawImage = true;
-                                                                    }
-                                                                }
-                                                                if (r1.progressAnimation != null) {
-                                                                    r1.progressAnimation.cancel();
-                                                                    r1.progressAnimation = null;
-                                                                }
-                                                                r1.isLoading = true;
-                                                                r1.controlsView.setProgress(0);
-                                                                r1.currentYoutubeId = str3;
-                                                                str3 = null;
-                                                                if (str4 != null) {
-                                                                    if (str3 != null) {
-                                                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = youtubeVideoTask;
-                                                                    } else if (str5 != null) {
-                                                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = youtubeVideoTask;
-                                                                    } else if (group3 != null) {
-                                                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = youtubeVideoTask;
-                                                                        r1.isStream = true;
-                                                                    } else if (group != null) {
-                                                                        youtubeVideoTask = new AparatVideoTask(group);
-                                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = youtubeVideoTask;
-                                                                    } else if (group2 != null) {
-                                                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = twitchClipVideoTask;
-                                                                    } else if (str6 != null) {
-                                                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                        r1.currentTask = twitchClipVideoTask;
-                                                                        r1.isStream = true;
-                                                                    }
-                                                                    r1.controlsView.show(false, false);
-                                                                    showProgress(true, false);
-                                                                } else {
-                                                                    r1.initied = true;
-                                                                    r1.playVideoUrl = str4;
-                                                                    r1.playVideoType = "other";
-                                                                    if (r1.isAutoplay) {
-                                                                        preparePlayer();
-                                                                    }
-                                                                    showProgress(false, false);
-                                                                    r1.controlsView.show(true, true);
-                                                                }
-                                                                if (str6 == null) {
-                                                                    r1.controlsView.setVisibility(8);
-                                                                    return false;
-                                                                }
-                                                                r1.controlsView.setVisibility(0);
-                                                                return true;
-                                                            }
-                                                        } catch (Throwable e222) {
-                                                            FileLog.m3e(e222);
-                                                        }
-                                                    }
-                                                    group2 = null;
-                                                    if (group2 == null) {
-                                                        matcher5 = coubIdRegex.matcher(str7);
-                                                        if (matcher5.find()) {
-                                                        }
-                                                        if (group3 == null) {
-                                                            group3 = null;
-                                                        }
-                                                        str6 = group2;
-                                                        group2 = group;
-                                                        group = str5;
-                                                        str5 = str4;
-                                                        str4 = null;
-                                                        r1.initied = false;
-                                                        r1.isCompleted = false;
-                                                        r1.isAutoplay = z;
-                                                        r1.playVideoUrl = null;
-                                                        r1.playAudioUrl = null;
-                                                        destroy();
-                                                        r1.firstFrameRendered = false;
-                                                        r1.currentAlpha = 1.0f;
-                                                        if (r1.currentTask != null) {
-                                                            r1.currentTask.cancel(true);
-                                                            r1.currentTask = null;
-                                                        }
-                                                        updateFullscreenButton();
-                                                        updateShareButton();
-                                                        updateInlineButton();
-                                                        updatePlayButton();
-                                                        if (photo2 != null) {
-                                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                            if (closestPhotoSizeWithSize != null) {
-                                                                if (photo2 != null) {
-                                                                }
-                                                                if (photo2 != null) {
-                                                                }
-                                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                                r1.drawImage = true;
-                                                            }
-                                                        } else {
-                                                            r1.drawImage = false;
-                                                        }
-                                                        if (r1.progressAnimation != null) {
-                                                            r1.progressAnimation.cancel();
-                                                            r1.progressAnimation = null;
-                                                        }
-                                                        r1.isLoading = true;
-                                                        r1.controlsView.setProgress(0);
-                                                        r1.currentYoutubeId = str3;
-                                                        str3 = null;
-                                                        if (str4 != null) {
-                                                            r1.initied = true;
-                                                            r1.playVideoUrl = str4;
-                                                            r1.playVideoType = "other";
-                                                            if (r1.isAutoplay) {
-                                                                preparePlayer();
-                                                            }
-                                                            showProgress(false, false);
-                                                            r1.controlsView.show(true, true);
-                                                        } else {
-                                                            if (str3 != null) {
-                                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = youtubeVideoTask;
-                                                            } else if (str5 != null) {
-                                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = youtubeVideoTask;
-                                                            } else if (group3 != null) {
-                                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = youtubeVideoTask;
-                                                                r1.isStream = true;
-                                                            } else if (group != null) {
-                                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = youtubeVideoTask;
-                                                            } else if (group2 != null) {
-                                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = twitchClipVideoTask;
-                                                            } else if (str6 != null) {
-                                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                                r1.currentTask = twitchClipVideoTask;
-                                                                r1.isStream = true;
-                                                            }
-                                                            r1.controlsView.show(false, false);
-                                                            showProgress(true, false);
-                                                        }
-                                                        if (str6 == null) {
-                                                            r1.controlsView.setVisibility(0);
-                                                            return true;
-                                                        }
-                                                        r1.controlsView.setVisibility(8);
-                                                        return false;
-                                                    }
-                                                    group3 = null;
-                                                    str6 = group2;
-                                                    group2 = group;
-                                                    group = str5;
-                                                    str5 = str4;
-                                                    str4 = group3;
-                                                    r1.initied = false;
-                                                    r1.isCompleted = false;
-                                                    r1.isAutoplay = z;
-                                                    r1.playVideoUrl = null;
-                                                    r1.playAudioUrl = null;
-                                                    destroy();
-                                                    r1.firstFrameRendered = false;
-                                                    r1.currentAlpha = 1.0f;
-                                                    if (r1.currentTask != null) {
-                                                        r1.currentTask.cancel(true);
-                                                        r1.currentTask = null;
-                                                    }
-                                                    updateFullscreenButton();
-                                                    updateShareButton();
-                                                    updateInlineButton();
-                                                    updatePlayButton();
-                                                    if (photo2 != null) {
-                                                        r1.drawImage = false;
-                                                    } else {
-                                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                        if (closestPhotoSizeWithSize != null) {
-                                                            if (photo2 != null) {
-                                                            }
-                                                            if (photo2 != null) {
-                                                            }
-                                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                            r1.drawImage = true;
-                                                        }
-                                                    }
-                                                    if (r1.progressAnimation != null) {
-                                                        r1.progressAnimation.cancel();
-                                                        r1.progressAnimation = null;
-                                                    }
-                                                    r1.isLoading = true;
-                                                    r1.controlsView.setProgress(0);
-                                                    r1.currentYoutubeId = str3;
-                                                    str3 = null;
-                                                    if (str4 != null) {
-                                                        if (str3 != null) {
-                                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (str5 != null) {
-                                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (group3 != null) {
-                                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                            r1.isStream = true;
-                                                        } else if (group != null) {
-                                                            youtubeVideoTask = new AparatVideoTask(group);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (group2 != null) {
-                                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = twitchClipVideoTask;
-                                                        } else if (str6 != null) {
-                                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = twitchClipVideoTask;
-                                                            r1.isStream = true;
-                                                        }
-                                                        r1.controlsView.show(false, false);
-                                                        showProgress(true, false);
-                                                    } else {
-                                                        r1.initied = true;
-                                                        r1.playVideoUrl = str4;
-                                                        r1.playVideoType = "other";
-                                                        if (r1.isAutoplay) {
-                                                            preparePlayer();
-                                                        }
-                                                        showProgress(false, false);
-                                                        r1.controlsView.show(true, true);
-                                                    }
-                                                    if (str6 == null) {
-                                                        r1.controlsView.setVisibility(8);
-                                                        return false;
-                                                    }
-                                                    r1.controlsView.setVisibility(0);
-                                                    return true;
-                                                }
-                                            } catch (Throwable e2222) {
-                                                FileLog.m3e(e2222);
-                                            }
-                                        }
-                                        group = null;
-                                        if (group == null) {
-                                            matcher4 = twitchStreamIdRegex.matcher(str7);
-                                            if (matcher4.find()) {
-                                            }
-                                            if (group2 != null) {
-                                                if (group2 == null) {
-                                                    matcher5 = coubIdRegex.matcher(str7);
-                                                    if (matcher5.find()) {
-                                                    }
-                                                    if (group3 == null) {
-                                                        group3 = null;
-                                                    }
-                                                    str6 = group2;
-                                                    group2 = group;
-                                                    group = str5;
-                                                    str5 = str4;
-                                                    str4 = null;
-                                                    r1.initied = false;
-                                                    r1.isCompleted = false;
-                                                    r1.isAutoplay = z;
-                                                    r1.playVideoUrl = null;
-                                                    r1.playAudioUrl = null;
-                                                    destroy();
-                                                    r1.firstFrameRendered = false;
-                                                    r1.currentAlpha = 1.0f;
-                                                    if (r1.currentTask != null) {
-                                                        r1.currentTask.cancel(true);
-                                                        r1.currentTask = null;
-                                                    }
-                                                    updateFullscreenButton();
-                                                    updateShareButton();
-                                                    updateInlineButton();
-                                                    updatePlayButton();
-                                                    if (photo2 != null) {
-                                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                        if (closestPhotoSizeWithSize != null) {
-                                                            if (photo2 != null) {
-                                                            }
-                                                            if (photo2 != null) {
-                                                            }
-                                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                            r1.drawImage = true;
-                                                        }
-                                                    } else {
-                                                        r1.drawImage = false;
-                                                    }
-                                                    if (r1.progressAnimation != null) {
-                                                        r1.progressAnimation.cancel();
-                                                        r1.progressAnimation = null;
-                                                    }
-                                                    r1.isLoading = true;
-                                                    r1.controlsView.setProgress(0);
-                                                    r1.currentYoutubeId = str3;
-                                                    str3 = null;
-                                                    if (str4 != null) {
-                                                        r1.initied = true;
-                                                        r1.playVideoUrl = str4;
-                                                        r1.playVideoType = "other";
-                                                        if (r1.isAutoplay) {
-                                                            preparePlayer();
-                                                        }
-                                                        showProgress(false, false);
-                                                        r1.controlsView.show(true, true);
-                                                    } else {
-                                                        if (str3 != null) {
-                                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (str5 != null) {
-                                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (group3 != null) {
-                                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                            r1.isStream = true;
-                                                        } else if (group != null) {
-                                                            youtubeVideoTask = new AparatVideoTask(group);
-                                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = youtubeVideoTask;
-                                                        } else if (group2 != null) {
-                                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = twitchClipVideoTask;
-                                                        } else if (str6 != null) {
-                                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                            r1.currentTask = twitchClipVideoTask;
-                                                            r1.isStream = true;
-                                                        }
-                                                        r1.controlsView.show(false, false);
-                                                        showProgress(true, false);
-                                                    }
-                                                    if (str6 == null) {
-                                                        r1.controlsView.setVisibility(0);
-                                                        return true;
-                                                    }
-                                                    r1.controlsView.setVisibility(8);
-                                                    return false;
-                                                }
-                                                group3 = null;
-                                                str6 = group2;
-                                                group2 = group;
-                                                group = str5;
-                                                str5 = str4;
-                                                str4 = group3;
-                                                r1.initied = false;
-                                                r1.isCompleted = false;
-                                                r1.isAutoplay = z;
-                                                r1.playVideoUrl = null;
-                                                r1.playAudioUrl = null;
-                                                destroy();
-                                                r1.firstFrameRendered = false;
-                                                r1.currentAlpha = 1.0f;
-                                                if (r1.currentTask != null) {
-                                                    r1.currentTask.cancel(true);
-                                                    r1.currentTask = null;
-                                                }
-                                                updateFullscreenButton();
-                                                updateShareButton();
-                                                updateInlineButton();
-                                                updatePlayButton();
-                                                if (photo2 != null) {
-                                                    r1.drawImage = false;
-                                                } else {
-                                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                    if (closestPhotoSizeWithSize != null) {
-                                                        if (photo2 != null) {
-                                                        }
-                                                        if (photo2 != null) {
-                                                        }
-                                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                        r1.drawImage = true;
-                                                    }
-                                                }
-                                                if (r1.progressAnimation != null) {
-                                                    r1.progressAnimation.cancel();
-                                                    r1.progressAnimation = null;
-                                                }
-                                                r1.isLoading = true;
-                                                r1.controlsView.setProgress(0);
-                                                r1.currentYoutubeId = str3;
-                                                str3 = null;
-                                                if (str4 != null) {
-                                                    if (str3 != null) {
-                                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (str5 != null) {
-                                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group3 != null) {
-                                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                        r1.isStream = true;
-                                                    } else if (group != null) {
-                                                        youtubeVideoTask = new AparatVideoTask(group);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group2 != null) {
-                                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                    } else if (str6 != null) {
-                                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                        r1.isStream = true;
-                                                    }
-                                                    r1.controlsView.show(false, false);
-                                                    showProgress(true, false);
-                                                } else {
-                                                    r1.initied = true;
-                                                    r1.playVideoUrl = str4;
-                                                    r1.playVideoType = "other";
-                                                    if (r1.isAutoplay) {
-                                                        preparePlayer();
-                                                    }
-                                                    showProgress(false, false);
-                                                    r1.controlsView.show(true, true);
-                                                }
-                                                if (str6 == null) {
-                                                    r1.controlsView.setVisibility(8);
-                                                    return false;
-                                                }
-                                                r1.controlsView.setVisibility(0);
-                                                return true;
-                                            }
-                                        }
-                                        group2 = null;
-                                        if (group2 == null) {
-                                            matcher5 = coubIdRegex.matcher(str7);
-                                            if (matcher5.find()) {
-                                            }
-                                            if (group3 == null) {
-                                                group3 = null;
-                                            }
-                                            str6 = group2;
-                                            group2 = group;
-                                            group = str5;
-                                            str5 = str4;
-                                            str4 = null;
-                                            r1.initied = false;
-                                            r1.isCompleted = false;
-                                            r1.isAutoplay = z;
-                                            r1.playVideoUrl = null;
-                                            r1.playAudioUrl = null;
-                                            destroy();
-                                            r1.firstFrameRendered = false;
-                                            r1.currentAlpha = 1.0f;
-                                            if (r1.currentTask != null) {
-                                                r1.currentTask.cancel(true);
-                                                r1.currentTask = null;
-                                            }
-                                            updateFullscreenButton();
-                                            updateShareButton();
-                                            updateInlineButton();
-                                            updatePlayButton();
-                                            if (photo2 != null) {
-                                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                if (closestPhotoSizeWithSize != null) {
-                                                    if (photo2 != null) {
-                                                    }
-                                                    if (photo2 != null) {
-                                                    }
-                                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                    r1.drawImage = true;
-                                                }
-                                            } else {
-                                                r1.drawImage = false;
-                                            }
-                                            if (r1.progressAnimation != null) {
-                                                r1.progressAnimation.cancel();
-                                                r1.progressAnimation = null;
-                                            }
-                                            r1.isLoading = true;
-                                            r1.controlsView.setProgress(0);
-                                            r1.currentYoutubeId = str3;
-                                            str3 = null;
-                                            if (str4 != null) {
-                                                r1.initied = true;
-                                                r1.playVideoUrl = str4;
-                                                r1.playVideoType = "other";
-                                                if (r1.isAutoplay) {
-                                                    preparePlayer();
-                                                }
-                                                showProgress(false, false);
-                                                r1.controlsView.show(true, true);
-                                            } else {
-                                                if (str3 != null) {
-                                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (str5 != null) {
-                                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group3 != null) {
-                                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                    r1.isStream = true;
-                                                } else if (group != null) {
-                                                    youtubeVideoTask = new AparatVideoTask(group);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group2 != null) {
-                                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                } else if (str6 != null) {
-                                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                    r1.isStream = true;
-                                                }
-                                                r1.controlsView.show(false, false);
-                                                showProgress(true, false);
-                                            }
-                                            if (str6 == null) {
-                                                r1.controlsView.setVisibility(0);
-                                                return true;
-                                            }
-                                            r1.controlsView.setVisibility(8);
-                                            return false;
-                                        }
-                                        group3 = null;
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = group3;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            r1.drawImage = false;
-                                        } else {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        } else {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(8);
-                                            return false;
-                                        }
-                                        r1.controlsView.setVisibility(0);
-                                        return true;
-                                    }
-                                } catch (Throwable e22222) {
-                                    FileLog.m3e(e22222);
-                                }
-                            }
-                            str5 = null;
-                            if (str5 == null) {
-                                matcher3 = twitchClipIdRegex.matcher(str7);
-                                if (matcher3.find()) {
-                                }
-                                if (group != null) {
-                                    if (group == null) {
-                                        matcher4 = twitchStreamIdRegex.matcher(str7);
-                                        if (matcher4.find()) {
-                                        }
-                                        if (group2 != null) {
-                                            if (group2 == null) {
-                                                matcher5 = coubIdRegex.matcher(str7);
-                                                if (matcher5.find()) {
-                                                }
-                                                if (group3 == null) {
-                                                    group3 = null;
-                                                }
-                                                str6 = group2;
-                                                group2 = group;
-                                                group = str5;
-                                                str5 = str4;
-                                                str4 = null;
-                                                r1.initied = false;
-                                                r1.isCompleted = false;
-                                                r1.isAutoplay = z;
-                                                r1.playVideoUrl = null;
-                                                r1.playAudioUrl = null;
-                                                destroy();
-                                                r1.firstFrameRendered = false;
-                                                r1.currentAlpha = 1.0f;
-                                                if (r1.currentTask != null) {
-                                                    r1.currentTask.cancel(true);
-                                                    r1.currentTask = null;
-                                                }
-                                                updateFullscreenButton();
-                                                updateShareButton();
-                                                updateInlineButton();
-                                                updatePlayButton();
-                                                if (photo2 != null) {
-                                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                    if (closestPhotoSizeWithSize != null) {
-                                                        if (photo2 != null) {
-                                                        }
-                                                        if (photo2 != null) {
-                                                        }
-                                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                        r1.drawImage = true;
-                                                    }
-                                                } else {
-                                                    r1.drawImage = false;
-                                                }
-                                                if (r1.progressAnimation != null) {
-                                                    r1.progressAnimation.cancel();
-                                                    r1.progressAnimation = null;
-                                                }
-                                                r1.isLoading = true;
-                                                r1.controlsView.setProgress(0);
-                                                r1.currentYoutubeId = str3;
-                                                str3 = null;
-                                                if (str4 != null) {
-                                                    r1.initied = true;
-                                                    r1.playVideoUrl = str4;
-                                                    r1.playVideoType = "other";
-                                                    if (r1.isAutoplay) {
-                                                        preparePlayer();
-                                                    }
-                                                    showProgress(false, false);
-                                                    r1.controlsView.show(true, true);
-                                                } else {
-                                                    if (str3 != null) {
-                                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (str5 != null) {
-                                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group3 != null) {
-                                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                        r1.isStream = true;
-                                                    } else if (group != null) {
-                                                        youtubeVideoTask = new AparatVideoTask(group);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group2 != null) {
-                                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                    } else if (str6 != null) {
-                                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                        r1.isStream = true;
-                                                    }
-                                                    r1.controlsView.show(false, false);
-                                                    showProgress(true, false);
-                                                }
-                                                if (str6 == null) {
-                                                    r1.controlsView.setVisibility(0);
-                                                    return true;
-                                                }
-                                                r1.controlsView.setVisibility(8);
-                                                return false;
-                                            }
-                                            group3 = null;
-                                            str6 = group2;
-                                            group2 = group;
-                                            group = str5;
-                                            str5 = str4;
-                                            str4 = group3;
-                                            r1.initied = false;
-                                            r1.isCompleted = false;
-                                            r1.isAutoplay = z;
-                                            r1.playVideoUrl = null;
-                                            r1.playAudioUrl = null;
-                                            destroy();
-                                            r1.firstFrameRendered = false;
-                                            r1.currentAlpha = 1.0f;
-                                            if (r1.currentTask != null) {
-                                                r1.currentTask.cancel(true);
-                                                r1.currentTask = null;
-                                            }
-                                            updateFullscreenButton();
-                                            updateShareButton();
-                                            updateInlineButton();
-                                            updatePlayButton();
-                                            if (photo2 != null) {
-                                                r1.drawImage = false;
-                                            } else {
-                                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                if (closestPhotoSizeWithSize != null) {
-                                                    if (photo2 != null) {
-                                                    }
-                                                    if (photo2 != null) {
-                                                    }
-                                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                    r1.drawImage = true;
-                                                }
-                                            }
-                                            if (r1.progressAnimation != null) {
-                                                r1.progressAnimation.cancel();
-                                                r1.progressAnimation = null;
-                                            }
-                                            r1.isLoading = true;
-                                            r1.controlsView.setProgress(0);
-                                            r1.currentYoutubeId = str3;
-                                            str3 = null;
-                                            if (str4 != null) {
-                                                if (str3 != null) {
-                                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (str5 != null) {
-                                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group3 != null) {
-                                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                    r1.isStream = true;
-                                                } else if (group != null) {
-                                                    youtubeVideoTask = new AparatVideoTask(group);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group2 != null) {
-                                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                } else if (str6 != null) {
-                                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                    r1.isStream = true;
-                                                }
-                                                r1.controlsView.show(false, false);
-                                                showProgress(true, false);
-                                            } else {
-                                                r1.initied = true;
-                                                r1.playVideoUrl = str4;
-                                                r1.playVideoType = "other";
-                                                if (r1.isAutoplay) {
-                                                    preparePlayer();
-                                                }
-                                                showProgress(false, false);
-                                                r1.controlsView.show(true, true);
-                                            }
-                                            if (str6 == null) {
-                                                r1.controlsView.setVisibility(8);
-                                                return false;
-                                            }
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                    }
-                                    group2 = null;
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group = null;
-                            if (group == null) {
-                                matcher4 = twitchStreamIdRegex.matcher(str7);
-                                if (matcher4.find()) {
-                                }
-                                if (group2 != null) {
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group2 = null;
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
+                        matcher = vimeoIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(3);
+                        }
+                        if (id != null) {
+                            vimeoId = id;
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
+                    }
+                }
+                if (vimeoId == null) {
+                    try {
+                        matcher = aparatIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            aparatId = id;
+                        }
+                    } catch (Throwable e222) {
+                        FileLog.m3e(e222);
+                    }
+                }
+                if (aparatId == null) {
+                    try {
+                        matcher = twitchClipIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            twitchClipId = id;
+                        }
+                    } catch (Throwable e2222) {
+                        FileLog.m3e(e2222);
+                    }
+                }
+                if (twitchClipId == null) {
+                    try {
+                        matcher = twitchStreamIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            twitchStreamId = id;
+                        }
+                    } catch (Throwable e22222) {
+                        FileLog.m3e(e22222);
+                    }
+                }
+                if (twitchStreamId == null) {
+                    try {
+                        matcher = coubIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            coubId = id;
                         }
                     } catch (Throwable e222222) {
                         FileLog.m3e(e222222);
                     }
                 }
-                str4 = null;
-                if (str4 == null) {
-                    matcher2 = aparatIdRegex.matcher(str7);
-                    if (matcher2.find()) {
-                    }
-                    if (str5 != null) {
-                        if (str5 == null) {
-                            matcher3 = twitchClipIdRegex.matcher(str7);
-                            if (matcher3.find()) {
-                            }
-                            if (group != null) {
-                                if (group == null) {
-                                    matcher4 = twitchStreamIdRegex.matcher(str7);
-                                    if (matcher4.find()) {
-                                    }
-                                    if (group2 != null) {
-                                        if (group2 == null) {
-                                            matcher5 = coubIdRegex.matcher(str7);
-                                            if (matcher5.find()) {
-                                            }
-                                            if (group3 == null) {
-                                                group3 = null;
-                                            }
-                                            str6 = group2;
-                                            group2 = group;
-                                            group = str5;
-                                            str5 = str4;
-                                            str4 = null;
-                                            r1.initied = false;
-                                            r1.isCompleted = false;
-                                            r1.isAutoplay = z;
-                                            r1.playVideoUrl = null;
-                                            r1.playAudioUrl = null;
-                                            destroy();
-                                            r1.firstFrameRendered = false;
-                                            r1.currentAlpha = 1.0f;
-                                            if (r1.currentTask != null) {
-                                                r1.currentTask.cancel(true);
-                                                r1.currentTask = null;
-                                            }
-                                            updateFullscreenButton();
-                                            updateShareButton();
-                                            updateInlineButton();
-                                            updatePlayButton();
-                                            if (photo2 != null) {
-                                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                if (closestPhotoSizeWithSize != null) {
-                                                    if (photo2 != null) {
-                                                    }
-                                                    if (photo2 != null) {
-                                                    }
-                                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                    r1.drawImage = true;
-                                                }
-                                            } else {
-                                                r1.drawImage = false;
-                                            }
-                                            if (r1.progressAnimation != null) {
-                                                r1.progressAnimation.cancel();
-                                                r1.progressAnimation = null;
-                                            }
-                                            r1.isLoading = true;
-                                            r1.controlsView.setProgress(0);
-                                            r1.currentYoutubeId = str3;
-                                            str3 = null;
-                                            if (str4 != null) {
-                                                r1.initied = true;
-                                                r1.playVideoUrl = str4;
-                                                r1.playVideoType = "other";
-                                                if (r1.isAutoplay) {
-                                                    preparePlayer();
-                                                }
-                                                showProgress(false, false);
-                                                r1.controlsView.show(true, true);
-                                            } else {
-                                                if (str3 != null) {
-                                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (str5 != null) {
-                                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group3 != null) {
-                                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                    r1.isStream = true;
-                                                } else if (group != null) {
-                                                    youtubeVideoTask = new AparatVideoTask(group);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group2 != null) {
-                                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                } else if (str6 != null) {
-                                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                    r1.isStream = true;
-                                                }
-                                                r1.controlsView.show(false, false);
-                                                showProgress(true, false);
-                                            }
-                                            if (str6 == null) {
-                                                r1.controlsView.setVisibility(0);
-                                                return true;
-                                            }
-                                            r1.controlsView.setVisibility(8);
-                                            return false;
-                                        }
-                                        group3 = null;
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = group3;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            r1.drawImage = false;
-                                        } else {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        } else {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(8);
-                                            return false;
-                                        }
-                                        r1.controlsView.setVisibility(0);
-                                        return true;
-                                    }
-                                }
-                                group2 = null;
-                                if (group2 == null) {
-                                    matcher5 = coubIdRegex.matcher(str7);
-                                    if (matcher5.find()) {
-                                    }
-                                    if (group3 == null) {
-                                        group3 = null;
-                                    }
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = null;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    } else {
-                                        r1.drawImage = false;
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    } else {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(0);
-                                        return true;
-                                    }
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                group3 = null;
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = group3;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    r1.drawImage = false;
-                                } else {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                } else {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                        }
-                        group = null;
-                        if (group == null) {
-                            matcher4 = twitchStreamIdRegex.matcher(str7);
-                            if (matcher4.find()) {
-                            }
-                            if (group2 != null) {
-                                if (group2 == null) {
-                                    matcher5 = coubIdRegex.matcher(str7);
-                                    if (matcher5.find()) {
-                                    }
-                                    if (group3 == null) {
-                                        group3 = null;
-                                    }
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = null;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    } else {
-                                        r1.drawImage = false;
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    } else {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(0);
-                                        return true;
-                                    }
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                group3 = null;
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = group3;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    r1.drawImage = false;
-                                } else {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                } else {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                        }
-                        group2 = null;
-                        if (group2 == null) {
-                            matcher5 = coubIdRegex.matcher(str7);
-                            if (matcher5.find()) {
-                            }
-                            if (group3 == null) {
-                                group3 = null;
-                            }
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = null;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            } else {
-                                r1.drawImage = false;
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            } else {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        group3 = null;
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = group3;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            r1.drawImage = false;
-                        } else {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        } else {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        r1.controlsView.setVisibility(0);
-                        return true;
-                    }
-                }
-                str5 = null;
-                if (str5 == null) {
-                    matcher3 = twitchClipIdRegex.matcher(str7);
-                    if (matcher3.find()) {
-                    }
-                    if (group != null) {
-                        if (group == null) {
-                            matcher4 = twitchStreamIdRegex.matcher(str7);
-                            if (matcher4.find()) {
-                            }
-                            if (group2 != null) {
-                                if (group2 == null) {
-                                    matcher5 = coubIdRegex.matcher(str7);
-                                    if (matcher5.find()) {
-                                    }
-                                    if (group3 == null) {
-                                        group3 = null;
-                                    }
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = null;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    } else {
-                                        r1.drawImage = false;
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    } else {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(0);
-                                        return true;
-                                    }
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                group3 = null;
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = group3;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    r1.drawImage = false;
-                                } else {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                } else {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(8);
-                                    return false;
-                                }
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                        }
-                        group2 = null;
-                        if (group2 == null) {
-                            matcher5 = coubIdRegex.matcher(str7);
-                            if (matcher5.find()) {
-                            }
-                            if (group3 == null) {
-                                group3 = null;
-                            }
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = null;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            } else {
-                                r1.drawImage = false;
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            } else {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        group3 = null;
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = group3;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            r1.drawImage = false;
-                        } else {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        } else {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        r1.controlsView.setVisibility(0);
-                        return true;
-                    }
-                }
-                group = null;
-                if (group == null) {
-                    matcher4 = twitchStreamIdRegex.matcher(str7);
-                    if (matcher4.find()) {
-                    }
-                    if (group2 != null) {
-                        if (group2 == null) {
-                            matcher5 = coubIdRegex.matcher(str7);
-                            if (matcher5.find()) {
-                            }
-                            if (group3 == null) {
-                                group3 = null;
-                            }
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = null;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            } else {
-                                r1.drawImage = false;
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            } else {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        group3 = null;
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = group3;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            r1.drawImage = false;
-                        } else {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        } else {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(8);
-                            return false;
-                        }
-                        r1.controlsView.setVisibility(0);
-                        return true;
-                    }
-                }
-                group2 = null;
-                if (group2 == null) {
-                    matcher5 = coubIdRegex.matcher(str7);
-                    if (matcher5.find()) {
-                    }
-                    if (group3 == null) {
-                        group3 = null;
-                    }
-                    str6 = group2;
-                    group2 = group;
-                    group = str5;
-                    str5 = str4;
-                    str4 = null;
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = z;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo2 != null) {
-                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                        if (closestPhotoSizeWithSize != null) {
-                            if (photo2 != null) {
-                            }
-                            if (photo2 != null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    } else {
-                        r1.drawImage = false;
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = str3;
-                    str3 = null;
-                    if (str4 != null) {
-                        r1.initied = true;
-                        r1.playVideoUrl = str4;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    } else {
-                        if (str3 != null) {
-                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (str5 != null) {
-                            youtubeVideoTask = new VimeoVideoTask(str5);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group3 != null) {
-                            youtubeVideoTask = new CoubVideoTask(group3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                            r1.isStream = true;
-                        } else if (group != null) {
-                            youtubeVideoTask = new AparatVideoTask(group);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group2 != null) {
-                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                        } else if (str6 != null) {
-                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                            r1.isStream = true;
-                        }
-                        r1.controlsView.show(false, false);
-                        showProgress(true, false);
-                    }
-                    if (str6 == null) {
-                        r1.controlsView.setVisibility(0);
-                        return true;
-                    }
-                    r1.controlsView.setVisibility(8);
-                    return false;
-                }
-                group3 = null;
-                str6 = group2;
-                group2 = group;
-                group = str5;
-                str5 = str4;
-                str4 = group3;
-                r1.initied = false;
-                r1.isCompleted = false;
-                r1.isAutoplay = z;
-                r1.playVideoUrl = null;
-                r1.playAudioUrl = null;
-                destroy();
-                r1.firstFrameRendered = false;
-                r1.currentAlpha = 1.0f;
-                if (r1.currentTask != null) {
-                    r1.currentTask.cancel(true);
-                    r1.currentTask = null;
-                }
-                updateFullscreenButton();
-                updateShareButton();
-                updateInlineButton();
-                updatePlayButton();
-                if (photo2 != null) {
-                    r1.drawImage = false;
-                } else {
-                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                    if (closestPhotoSizeWithSize != null) {
-                        if (photo2 != null) {
-                        }
-                        if (photo2 != null) {
-                        }
-                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                        r1.drawImage = true;
-                    }
-                }
-                if (r1.progressAnimation != null) {
-                    r1.progressAnimation.cancel();
-                    r1.progressAnimation = null;
-                }
-                r1.isLoading = true;
-                r1.controlsView.setProgress(0);
-                r1.currentYoutubeId = str3;
-                str3 = null;
-                if (str4 != null) {
-                    if (str3 != null) {
-                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (str5 != null) {
-                        youtubeVideoTask = new VimeoVideoTask(str5);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (group3 != null) {
-                        youtubeVideoTask = new CoubVideoTask(group3);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                        r1.isStream = true;
-                    } else if (group != null) {
-                        youtubeVideoTask = new AparatVideoTask(group);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (group2 != null) {
-                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = twitchClipVideoTask;
-                    } else if (str6 != null) {
-                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = twitchClipVideoTask;
-                        r1.isStream = true;
-                    }
-                    r1.controlsView.show(false, false);
-                    showProgress(true, false);
-                } else {
-                    r1.initied = true;
-                    r1.playVideoUrl = str4;
-                    r1.playVideoType = "other";
-                    if (r1.isAutoplay) {
-                        preparePlayer();
-                    }
-                    showProgress(false, false);
-                    r1.controlsView.show(true, true);
-                }
-                if (str6 == null) {
-                    r1.controlsView.setVisibility(8);
-                    return false;
-                }
-                r1.controlsView.setVisibility(0);
-                return true;
             }
-            str3 = null;
-            if (str3 == null) {
-                matcher = vimeoIdRegex.matcher(str7);
-                if (matcher.find()) {
-                }
-                if (str4 != null) {
-                    if (str4 == null) {
-                        matcher2 = aparatIdRegex.matcher(str7);
-                        if (matcher2.find()) {
-                        }
-                        if (str5 != null) {
-                            if (str5 == null) {
-                                matcher3 = twitchClipIdRegex.matcher(str7);
-                                if (matcher3.find()) {
-                                }
-                                if (group != null) {
-                                    if (group == null) {
-                                        matcher4 = twitchStreamIdRegex.matcher(str7);
-                                        if (matcher4.find()) {
-                                        }
-                                        if (group2 != null) {
-                                            if (group2 == null) {
-                                                matcher5 = coubIdRegex.matcher(str7);
-                                                if (matcher5.find()) {
-                                                }
-                                                if (group3 == null) {
-                                                    group3 = null;
-                                                }
-                                                str6 = group2;
-                                                group2 = group;
-                                                group = str5;
-                                                str5 = str4;
-                                                str4 = null;
-                                                r1.initied = false;
-                                                r1.isCompleted = false;
-                                                r1.isAutoplay = z;
-                                                r1.playVideoUrl = null;
-                                                r1.playAudioUrl = null;
-                                                destroy();
-                                                r1.firstFrameRendered = false;
-                                                r1.currentAlpha = 1.0f;
-                                                if (r1.currentTask != null) {
-                                                    r1.currentTask.cancel(true);
-                                                    r1.currentTask = null;
-                                                }
-                                                updateFullscreenButton();
-                                                updateShareButton();
-                                                updateInlineButton();
-                                                updatePlayButton();
-                                                if (photo2 != null) {
-                                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                    if (closestPhotoSizeWithSize != null) {
-                                                        if (photo2 != null) {
-                                                        }
-                                                        if (photo2 != null) {
-                                                        }
-                                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                        r1.drawImage = true;
-                                                    }
-                                                } else {
-                                                    r1.drawImage = false;
-                                                }
-                                                if (r1.progressAnimation != null) {
-                                                    r1.progressAnimation.cancel();
-                                                    r1.progressAnimation = null;
-                                                }
-                                                r1.isLoading = true;
-                                                r1.controlsView.setProgress(0);
-                                                r1.currentYoutubeId = str3;
-                                                str3 = null;
-                                                if (str4 != null) {
-                                                    r1.initied = true;
-                                                    r1.playVideoUrl = str4;
-                                                    r1.playVideoType = "other";
-                                                    if (r1.isAutoplay) {
-                                                        preparePlayer();
-                                                    }
-                                                    showProgress(false, false);
-                                                    r1.controlsView.show(true, true);
-                                                } else {
-                                                    if (str3 != null) {
-                                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (str5 != null) {
-                                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group3 != null) {
-                                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                        r1.isStream = true;
-                                                    } else if (group != null) {
-                                                        youtubeVideoTask = new AparatVideoTask(group);
-                                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = youtubeVideoTask;
-                                                    } else if (group2 != null) {
-                                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                    } else if (str6 != null) {
-                                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                        r1.currentTask = twitchClipVideoTask;
-                                                        r1.isStream = true;
-                                                    }
-                                                    r1.controlsView.show(false, false);
-                                                    showProgress(true, false);
-                                                }
-                                                if (str6 == null) {
-                                                    r1.controlsView.setVisibility(0);
-                                                    return true;
-                                                }
-                                                r1.controlsView.setVisibility(8);
-                                                return false;
-                                            }
-                                            group3 = null;
-                                            str6 = group2;
-                                            group2 = group;
-                                            group = str5;
-                                            str5 = str4;
-                                            str4 = group3;
-                                            r1.initied = false;
-                                            r1.isCompleted = false;
-                                            r1.isAutoplay = z;
-                                            r1.playVideoUrl = null;
-                                            r1.playAudioUrl = null;
-                                            destroy();
-                                            r1.firstFrameRendered = false;
-                                            r1.currentAlpha = 1.0f;
-                                            if (r1.currentTask != null) {
-                                                r1.currentTask.cancel(true);
-                                                r1.currentTask = null;
-                                            }
-                                            updateFullscreenButton();
-                                            updateShareButton();
-                                            updateInlineButton();
-                                            updatePlayButton();
-                                            if (photo2 != null) {
-                                                r1.drawImage = false;
-                                            } else {
-                                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                                if (closestPhotoSizeWithSize != null) {
-                                                    if (photo2 != null) {
-                                                    }
-                                                    if (photo2 != null) {
-                                                    }
-                                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                    r1.drawImage = true;
-                                                }
-                                            }
-                                            if (r1.progressAnimation != null) {
-                                                r1.progressAnimation.cancel();
-                                                r1.progressAnimation = null;
-                                            }
-                                            r1.isLoading = true;
-                                            r1.controlsView.setProgress(0);
-                                            r1.currentYoutubeId = str3;
-                                            str3 = null;
-                                            if (str4 != null) {
-                                                if (str3 != null) {
-                                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (str5 != null) {
-                                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group3 != null) {
-                                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                    r1.isStream = true;
-                                                } else if (group != null) {
-                                                    youtubeVideoTask = new AparatVideoTask(group);
-                                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = youtubeVideoTask;
-                                                } else if (group2 != null) {
-                                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                } else if (str6 != null) {
-                                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                    r1.currentTask = twitchClipVideoTask;
-                                                    r1.isStream = true;
-                                                }
-                                                r1.controlsView.show(false, false);
-                                                showProgress(true, false);
-                                            } else {
-                                                r1.initied = true;
-                                                r1.playVideoUrl = str4;
-                                                r1.playVideoType = "other";
-                                                if (r1.isAutoplay) {
-                                                    preparePlayer();
-                                                }
-                                                showProgress(false, false);
-                                                r1.controlsView.show(true, true);
-                                            }
-                                            if (str6 == null) {
-                                                r1.controlsView.setVisibility(8);
-                                                return false;
-                                            }
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                    }
-                                    group2 = null;
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group = null;
-                            if (group == null) {
-                                matcher4 = twitchStreamIdRegex.matcher(str7);
-                                if (matcher4.find()) {
-                                }
-                                if (group2 != null) {
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group2 = null;
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    str5 = null;
-                    if (str5 == null) {
-                        matcher3 = twitchClipIdRegex.matcher(str7);
-                        if (matcher3.find()) {
-                        }
-                        if (group != null) {
-                            if (group == null) {
-                                matcher4 = twitchStreamIdRegex.matcher(str7);
-                                if (matcher4.find()) {
-                                }
-                                if (group2 != null) {
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group2 = null;
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    group = null;
-                    if (group == null) {
-                        matcher4 = twitchStreamIdRegex.matcher(str7);
-                        if (matcher4.find()) {
-                        }
-                        if (group2 != null) {
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    group2 = null;
-                    if (group2 == null) {
-                        matcher5 = coubIdRegex.matcher(str7);
-                        if (matcher5.find()) {
-                        }
-                        if (group3 == null) {
-                            group3 = null;
-                        }
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = null;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        } else {
-                            r1.drawImage = false;
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        } else {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    group3 = null;
-                    str6 = group2;
-                    group2 = group;
-                    group = str5;
-                    str5 = str4;
-                    str4 = group3;
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = z;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo2 != null) {
-                        r1.drawImage = false;
-                    } else {
-                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                        if (closestPhotoSizeWithSize != null) {
-                            if (photo2 != null) {
-                            }
-                            if (photo2 != null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = str3;
-                    str3 = null;
-                    if (str4 != null) {
-                        if (str3 != null) {
-                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (str5 != null) {
-                            youtubeVideoTask = new VimeoVideoTask(str5);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group3 != null) {
-                            youtubeVideoTask = new CoubVideoTask(group3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                            r1.isStream = true;
-                        } else if (group != null) {
-                            youtubeVideoTask = new AparatVideoTask(group);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group2 != null) {
-                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                        } else if (str6 != null) {
-                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                            r1.isStream = true;
-                        }
-                        r1.controlsView.show(false, false);
-                        showProgress(true, false);
-                    } else {
-                        r1.initied = true;
-                        r1.playVideoUrl = str4;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    }
-                    if (str6 == null) {
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-            }
-            str4 = null;
-            if (str4 == null) {
-                matcher2 = aparatIdRegex.matcher(str7);
-                if (matcher2.find()) {
-                }
-                if (str5 != null) {
-                    if (str5 == null) {
-                        matcher3 = twitchClipIdRegex.matcher(str7);
-                        if (matcher3.find()) {
-                        }
-                        if (group != null) {
-                            if (group == null) {
-                                matcher4 = twitchStreamIdRegex.matcher(str7);
-                                if (matcher4.find()) {
-                                }
-                                if (group2 != null) {
-                                    if (group2 == null) {
-                                        matcher5 = coubIdRegex.matcher(str7);
-                                        if (matcher5.find()) {
-                                        }
-                                        if (group3 == null) {
-                                            group3 = null;
-                                        }
-                                        str6 = group2;
-                                        group2 = group;
-                                        group = str5;
-                                        str5 = str4;
-                                        str4 = null;
-                                        r1.initied = false;
-                                        r1.isCompleted = false;
-                                        r1.isAutoplay = z;
-                                        r1.playVideoUrl = null;
-                                        r1.playAudioUrl = null;
-                                        destroy();
-                                        r1.firstFrameRendered = false;
-                                        r1.currentAlpha = 1.0f;
-                                        if (r1.currentTask != null) {
-                                            r1.currentTask.cancel(true);
-                                            r1.currentTask = null;
-                                        }
-                                        updateFullscreenButton();
-                                        updateShareButton();
-                                        updateInlineButton();
-                                        updatePlayButton();
-                                        if (photo2 != null) {
-                                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                            if (closestPhotoSizeWithSize != null) {
-                                                if (photo2 != null) {
-                                                }
-                                                if (photo2 != null) {
-                                                }
-                                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                                r1.drawImage = true;
-                                            }
-                                        } else {
-                                            r1.drawImage = false;
-                                        }
-                                        if (r1.progressAnimation != null) {
-                                            r1.progressAnimation.cancel();
-                                            r1.progressAnimation = null;
-                                        }
-                                        r1.isLoading = true;
-                                        r1.controlsView.setProgress(0);
-                                        r1.currentYoutubeId = str3;
-                                        str3 = null;
-                                        if (str4 != null) {
-                                            r1.initied = true;
-                                            r1.playVideoUrl = str4;
-                                            r1.playVideoType = "other";
-                                            if (r1.isAutoplay) {
-                                                preparePlayer();
-                                            }
-                                            showProgress(false, false);
-                                            r1.controlsView.show(true, true);
-                                        } else {
-                                            if (str3 != null) {
-                                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (str5 != null) {
-                                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group3 != null) {
-                                                youtubeVideoTask = new CoubVideoTask(group3);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                                r1.isStream = true;
-                                            } else if (group != null) {
-                                                youtubeVideoTask = new AparatVideoTask(group);
-                                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = youtubeVideoTask;
-                                            } else if (group2 != null) {
-                                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                            } else if (str6 != null) {
-                                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                                r1.currentTask = twitchClipVideoTask;
-                                                r1.isStream = true;
-                                            }
-                                            r1.controlsView.show(false, false);
-                                            showProgress(true, false);
-                                        }
-                                        if (str6 == null) {
-                                            r1.controlsView.setVisibility(0);
-                                            return true;
-                                        }
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    group3 = null;
-                                    str6 = group2;
-                                    group2 = group;
-                                    group = str5;
-                                    str5 = str4;
-                                    str4 = group3;
-                                    r1.initied = false;
-                                    r1.isCompleted = false;
-                                    r1.isAutoplay = z;
-                                    r1.playVideoUrl = null;
-                                    r1.playAudioUrl = null;
-                                    destroy();
-                                    r1.firstFrameRendered = false;
-                                    r1.currentAlpha = 1.0f;
-                                    if (r1.currentTask != null) {
-                                        r1.currentTask.cancel(true);
-                                        r1.currentTask = null;
-                                    }
-                                    updateFullscreenButton();
-                                    updateShareButton();
-                                    updateInlineButton();
-                                    updatePlayButton();
-                                    if (photo2 != null) {
-                                        r1.drawImage = false;
-                                    } else {
-                                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                        if (closestPhotoSizeWithSize != null) {
-                                            if (photo2 != null) {
-                                            }
-                                            if (photo2 != null) {
-                                            }
-                                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                            r1.drawImage = true;
-                                        }
-                                    }
-                                    if (r1.progressAnimation != null) {
-                                        r1.progressAnimation.cancel();
-                                        r1.progressAnimation = null;
-                                    }
-                                    r1.isLoading = true;
-                                    r1.controlsView.setProgress(0);
-                                    r1.currentYoutubeId = str3;
-                                    str3 = null;
-                                    if (str4 != null) {
-                                        if (str3 != null) {
-                                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (str5 != null) {
-                                            youtubeVideoTask = new VimeoVideoTask(str5);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group3 != null) {
-                                            youtubeVideoTask = new CoubVideoTask(group3);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                            r1.isStream = true;
-                                        } else if (group != null) {
-                                            youtubeVideoTask = new AparatVideoTask(group);
-                                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = youtubeVideoTask;
-                                        } else if (group2 != null) {
-                                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                        } else if (str6 != null) {
-                                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                            r1.currentTask = twitchClipVideoTask;
-                                            r1.isStream = true;
-                                        }
-                                        r1.controlsView.show(false, false);
-                                        showProgress(true, false);
-                                    } else {
-                                        r1.initied = true;
-                                        r1.playVideoUrl = str4;
-                                        r1.playVideoType = "other";
-                                        if (r1.isAutoplay) {
-                                            preparePlayer();
-                                        }
-                                        showProgress(false, false);
-                                        r1.controlsView.show(true, true);
-                                    }
-                                    if (str6 == null) {
-                                        r1.controlsView.setVisibility(8);
-                                        return false;
-                                    }
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                            }
-                            group2 = null;
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    group = null;
-                    if (group == null) {
-                        matcher4 = twitchStreamIdRegex.matcher(str7);
-                        if (matcher4.find()) {
-                        }
-                        if (group2 != null) {
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    group2 = null;
-                    if (group2 == null) {
-                        matcher5 = coubIdRegex.matcher(str7);
-                        if (matcher5.find()) {
-                        }
-                        if (group3 == null) {
-                            group3 = null;
-                        }
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = null;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        } else {
-                            r1.drawImage = false;
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        } else {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    group3 = null;
-                    str6 = group2;
-                    group2 = group;
-                    group = str5;
-                    str5 = str4;
-                    str4 = group3;
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = z;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo2 != null) {
-                        r1.drawImage = false;
-                    } else {
-                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                        if (closestPhotoSizeWithSize != null) {
-                            if (photo2 != null) {
-                            }
-                            if (photo2 != null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = str3;
-                    str3 = null;
-                    if (str4 != null) {
-                        if (str3 != null) {
-                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (str5 != null) {
-                            youtubeVideoTask = new VimeoVideoTask(str5);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group3 != null) {
-                            youtubeVideoTask = new CoubVideoTask(group3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                            r1.isStream = true;
-                        } else if (group != null) {
-                            youtubeVideoTask = new AparatVideoTask(group);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group2 != null) {
-                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                        } else if (str6 != null) {
-                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                            r1.isStream = true;
-                        }
-                        r1.controlsView.show(false, false);
-                        showProgress(true, false);
-                    } else {
-                        r1.initied = true;
-                        r1.playVideoUrl = str4;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    }
-                    if (str6 == null) {
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-            }
-            str5 = null;
-            if (str5 == null) {
-                matcher3 = twitchClipIdRegex.matcher(str7);
-                if (matcher3.find()) {
-                }
-                if (group != null) {
-                    if (group == null) {
-                        matcher4 = twitchStreamIdRegex.matcher(str7);
-                        if (matcher4.find()) {
-                        }
-                        if (group2 != null) {
-                            if (group2 == null) {
-                                matcher5 = coubIdRegex.matcher(str7);
-                                if (matcher5.find()) {
-                                }
-                                if (group3 == null) {
-                                    group3 = null;
-                                }
-                                str6 = group2;
-                                group2 = group;
-                                group = str5;
-                                str5 = str4;
-                                str4 = null;
-                                r1.initied = false;
-                                r1.isCompleted = false;
-                                r1.isAutoplay = z;
-                                r1.playVideoUrl = null;
-                                r1.playAudioUrl = null;
-                                destroy();
-                                r1.firstFrameRendered = false;
-                                r1.currentAlpha = 1.0f;
-                                if (r1.currentTask != null) {
-                                    r1.currentTask.cancel(true);
-                                    r1.currentTask = null;
-                                }
-                                updateFullscreenButton();
-                                updateShareButton();
-                                updateInlineButton();
-                                updatePlayButton();
-                                if (photo2 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                    if (closestPhotoSizeWithSize != null) {
-                                        if (photo2 != null) {
-                                        }
-                                        if (photo2 != null) {
-                                        }
-                                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                        r1.drawImage = true;
-                                    }
-                                } else {
-                                    r1.drawImage = false;
-                                }
-                                if (r1.progressAnimation != null) {
-                                    r1.progressAnimation.cancel();
-                                    r1.progressAnimation = null;
-                                }
-                                r1.isLoading = true;
-                                r1.controlsView.setProgress(0);
-                                r1.currentYoutubeId = str3;
-                                str3 = null;
-                                if (str4 != null) {
-                                    r1.initied = true;
-                                    r1.playVideoUrl = str4;
-                                    r1.playVideoType = "other";
-                                    if (r1.isAutoplay) {
-                                        preparePlayer();
-                                    }
-                                    showProgress(false, false);
-                                    r1.controlsView.show(true, true);
-                                } else {
-                                    if (str3 != null) {
-                                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (str5 != null) {
-                                        youtubeVideoTask = new VimeoVideoTask(str5);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group3 != null) {
-                                        youtubeVideoTask = new CoubVideoTask(group3);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                        r1.isStream = true;
-                                    } else if (group != null) {
-                                        youtubeVideoTask = new AparatVideoTask(group);
-                                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = youtubeVideoTask;
-                                    } else if (group2 != null) {
-                                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                    } else if (str6 != null) {
-                                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                        r1.currentTask = twitchClipVideoTask;
-                                        r1.isStream = true;
-                                    }
-                                    r1.controlsView.show(false, false);
-                                    showProgress(true, false);
-                                }
-                                if (str6 == null) {
-                                    r1.controlsView.setVisibility(0);
-                                    return true;
-                                }
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            group3 = null;
-                            str6 = group2;
-                            group2 = group;
-                            group = str5;
-                            str5 = str4;
-                            str4 = group3;
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = z;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo2 != null) {
-                                r1.drawImage = false;
-                            } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                                if (closestPhotoSizeWithSize != null) {
-                                    if (photo2 != null) {
-                                    }
-                                    if (photo2 != null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = str3;
-                            str3 = null;
-                            if (str4 != null) {
-                                if (str3 != null) {
-                                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (str5 != null) {
-                                    youtubeVideoTask = new VimeoVideoTask(str5);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group3 != null) {
-                                    youtubeVideoTask = new CoubVideoTask(group3);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                    r1.isStream = true;
-                                } else if (group != null) {
-                                    youtubeVideoTask = new AparatVideoTask(group);
-                                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = youtubeVideoTask;
-                                } else if (group2 != null) {
-                                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                } else if (str6 != null) {
-                                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = twitchClipVideoTask;
-                                    r1.isStream = true;
-                                }
-                                r1.controlsView.show(false, false);
-                                showProgress(true, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = str4;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (str6 == null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                    }
-                    group2 = null;
-                    if (group2 == null) {
-                        matcher5 = coubIdRegex.matcher(str7);
-                        if (matcher5.find()) {
-                        }
-                        if (group3 == null) {
-                            group3 = null;
-                        }
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = null;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        } else {
-                            r1.drawImage = false;
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        } else {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    group3 = null;
-                    str6 = group2;
-                    group2 = group;
-                    group = str5;
-                    str5 = str4;
-                    str4 = group3;
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = z;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo2 != null) {
-                        r1.drawImage = false;
-                    } else {
-                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                        if (closestPhotoSizeWithSize != null) {
-                            if (photo2 != null) {
-                            }
-                            if (photo2 != null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = str3;
-                    str3 = null;
-                    if (str4 != null) {
-                        if (str3 != null) {
-                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (str5 != null) {
-                            youtubeVideoTask = new VimeoVideoTask(str5);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group3 != null) {
-                            youtubeVideoTask = new CoubVideoTask(group3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                            r1.isStream = true;
-                        } else if (group != null) {
-                            youtubeVideoTask = new AparatVideoTask(group);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group2 != null) {
-                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                        } else if (str6 != null) {
-                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                            r1.isStream = true;
-                        }
-                        r1.controlsView.show(false, false);
-                        showProgress(true, false);
-                    } else {
-                        r1.initied = true;
-                        r1.playVideoUrl = str4;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    }
-                    if (str6 == null) {
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-            }
-            group = null;
-            if (group == null) {
-                matcher4 = twitchStreamIdRegex.matcher(str7);
-                if (matcher4.find()) {
-                }
-                if (group2 != null) {
-                    if (group2 == null) {
-                        matcher5 = coubIdRegex.matcher(str7);
-                        if (matcher5.find()) {
-                        }
-                        if (group3 == null) {
-                            group3 = null;
-                        }
-                        str6 = group2;
-                        group2 = group;
-                        group = str5;
-                        str5 = str4;
-                        str4 = null;
-                        r1.initied = false;
-                        r1.isCompleted = false;
-                        r1.isAutoplay = z;
-                        r1.playVideoUrl = null;
-                        r1.playAudioUrl = null;
-                        destroy();
-                        r1.firstFrameRendered = false;
-                        r1.currentAlpha = 1.0f;
-                        if (r1.currentTask != null) {
-                            r1.currentTask.cancel(true);
-                            r1.currentTask = null;
-                        }
-                        updateFullscreenButton();
-                        updateShareButton();
-                        updateInlineButton();
-                        updatePlayButton();
-                        if (photo2 != null) {
-                            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                            if (closestPhotoSizeWithSize != null) {
-                                if (photo2 != null) {
-                                }
-                                if (photo2 != null) {
-                                }
-                                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                                r1.drawImage = true;
-                            }
-                        } else {
-                            r1.drawImage = false;
-                        }
-                        if (r1.progressAnimation != null) {
-                            r1.progressAnimation.cancel();
-                            r1.progressAnimation = null;
-                        }
-                        r1.isLoading = true;
-                        r1.controlsView.setProgress(0);
-                        r1.currentYoutubeId = str3;
-                        str3 = null;
-                        if (str4 != null) {
-                            r1.initied = true;
-                            r1.playVideoUrl = str4;
-                            r1.playVideoType = "other";
-                            if (r1.isAutoplay) {
-                                preparePlayer();
-                            }
-                            showProgress(false, false);
-                            r1.controlsView.show(true, true);
-                        } else {
-                            if (str3 != null) {
-                                youtubeVideoTask = new YoutubeVideoTask(str3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (str5 != null) {
-                                youtubeVideoTask = new VimeoVideoTask(str5);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group3 != null) {
-                                youtubeVideoTask = new CoubVideoTask(group3);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                                r1.isStream = true;
-                            } else if (group != null) {
-                                youtubeVideoTask = new AparatVideoTask(group);
-                                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = youtubeVideoTask;
-                            } else if (group2 != null) {
-                                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                            } else if (str6 != null) {
-                                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                r1.currentTask = twitchClipVideoTask;
-                                r1.isStream = true;
-                            }
-                            r1.controlsView.show(false, false);
-                            showProgress(true, false);
-                        }
-                        if (str6 == null) {
-                            r1.controlsView.setVisibility(0);
-                            return true;
-                        }
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    group3 = null;
-                    str6 = group2;
-                    group2 = group;
-                    group = str5;
-                    str5 = str4;
-                    str4 = group3;
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = z;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo2 != null) {
-                        r1.drawImage = false;
-                    } else {
-                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                        if (closestPhotoSizeWithSize != null) {
-                            if (photo2 != null) {
-                            }
-                            if (photo2 != null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = str3;
-                    str3 = null;
-                    if (str4 != null) {
-                        if (str3 != null) {
-                            youtubeVideoTask = new YoutubeVideoTask(str3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (str5 != null) {
-                            youtubeVideoTask = new VimeoVideoTask(str5);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group3 != null) {
-                            youtubeVideoTask = new CoubVideoTask(group3);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                            r1.isStream = true;
-                        } else if (group != null) {
-                            youtubeVideoTask = new AparatVideoTask(group);
-                            youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = youtubeVideoTask;
-                        } else if (group2 != null) {
-                            twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                        } else if (str6 != null) {
-                            twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                            twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = twitchClipVideoTask;
-                            r1.isStream = true;
-                        }
-                        r1.controlsView.show(false, false);
-                        showProgress(true, false);
-                    } else {
-                        r1.initied = true;
-                        r1.playVideoUrl = str4;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    }
-                    if (str6 == null) {
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-            }
-            group2 = null;
-            if (group2 == null) {
-                matcher5 = coubIdRegex.matcher(str7);
-                if (matcher5.find()) {
-                }
-                if (group3 == null) {
-                    group3 = null;
-                }
-                str6 = group2;
-                group2 = group;
-                group = str5;
-                str5 = str4;
-                str4 = null;
-                r1.initied = false;
-                r1.isCompleted = false;
-                r1.isAutoplay = z;
-                r1.playVideoUrl = null;
-                r1.playAudioUrl = null;
-                destroy();
-                r1.firstFrameRendered = false;
-                r1.currentAlpha = 1.0f;
-                if (r1.currentTask != null) {
-                    r1.currentTask.cancel(true);
-                    r1.currentTask = null;
-                }
-                updateFullscreenButton();
-                updateShareButton();
-                updateInlineButton();
-                updatePlayButton();
-                if (photo2 != null) {
-                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                    if (closestPhotoSizeWithSize != null) {
-                        if (photo2 != null) {
-                        }
-                        if (photo2 != null) {
-                        }
-                        r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                        r1.drawImage = true;
-                    }
-                } else {
-                    r1.drawImage = false;
-                }
-                if (r1.progressAnimation != null) {
-                    r1.progressAnimation.cancel();
-                    r1.progressAnimation = null;
-                }
-                r1.isLoading = true;
-                r1.controlsView.setProgress(0);
-                r1.currentYoutubeId = str3;
-                str3 = null;
-                if (str4 != null) {
-                    r1.initied = true;
-                    r1.playVideoUrl = str4;
-                    r1.playVideoType = "other";
-                    if (r1.isAutoplay) {
-                        preparePlayer();
-                    }
-                    showProgress(false, false);
-                    r1.controlsView.show(true, true);
-                } else {
-                    if (str3 != null) {
-                        youtubeVideoTask = new YoutubeVideoTask(str3);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (str5 != null) {
-                        youtubeVideoTask = new VimeoVideoTask(str5);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (group3 != null) {
-                        youtubeVideoTask = new CoubVideoTask(group3);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                        r1.isStream = true;
-                    } else if (group != null) {
-                        youtubeVideoTask = new AparatVideoTask(group);
-                        youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = youtubeVideoTask;
-                    } else if (group2 != null) {
-                        twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = twitchClipVideoTask;
-                    } else if (str6 != null) {
-                        twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                        twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        r1.currentTask = twitchClipVideoTask;
-                        r1.isStream = true;
-                    }
-                    r1.controlsView.show(false, false);
-                    showProgress(true, false);
-                }
-                if (str6 == null) {
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-                r1.controlsView.setVisibility(8);
-                return false;
-            }
-            group3 = null;
-            str6 = group2;
-            group2 = group;
-            group = str5;
-            str5 = str4;
-            str4 = group3;
-            r1.initied = false;
-            r1.isCompleted = false;
-            r1.isAutoplay = z;
-            r1.playVideoUrl = null;
-            r1.playAudioUrl = null;
-            destroy();
-            r1.firstFrameRendered = false;
-            r1.currentAlpha = 1.0f;
-            if (r1.currentTask != null) {
-                r1.currentTask.cancel(true);
-                r1.currentTask = null;
-            }
-            updateFullscreenButton();
-            updateShareButton();
-            updateInlineButton();
-            updatePlayButton();
-            if (photo2 != null) {
-                r1.drawImage = false;
-            } else {
-                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-                if (closestPhotoSizeWithSize != null) {
-                    if (photo2 != null) {
-                    }
-                    if (photo2 != null) {
-                    }
-                    r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                    r1.drawImage = true;
-                }
-            }
-            if (r1.progressAnimation != null) {
-                r1.progressAnimation.cancel();
-                r1.progressAnimation = null;
-            }
-            r1.isLoading = true;
-            r1.controlsView.setProgress(0);
-            r1.currentYoutubeId = str3;
-            str3 = null;
-            if (str4 != null) {
-                if (str3 != null) {
-                    youtubeVideoTask = new YoutubeVideoTask(str3);
-                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = youtubeVideoTask;
-                } else if (str5 != null) {
-                    youtubeVideoTask = new VimeoVideoTask(str5);
-                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = youtubeVideoTask;
-                } else if (group3 != null) {
-                    youtubeVideoTask = new CoubVideoTask(group3);
-                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = youtubeVideoTask;
-                    r1.isStream = true;
-                } else if (group != null) {
-                    youtubeVideoTask = new AparatVideoTask(group);
-                    youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = youtubeVideoTask;
-                } else if (group2 != null) {
-                    twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = twitchClipVideoTask;
-                } else if (str6 != null) {
-                    twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                    twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    r1.currentTask = twitchClipVideoTask;
-                    r1.isStream = true;
-                }
-                r1.controlsView.show(false, false);
-                showProgress(true, false);
-            } else {
-                r1.initied = true;
-                r1.playVideoUrl = str4;
-                r1.playVideoType = "other";
-                if (r1.isAutoplay) {
-                    preparePlayer();
-                }
-                showProgress(false, false);
-                r1.controlsView.show(true, true);
-            }
-            if (str6 == null) {
-                r1.controlsView.setVisibility(8);
-                return false;
-            }
-            r1.controlsView.setVisibility(0);
-            return true;
         }
-        group = str5;
-        group2 = group;
-        group3 = group2;
-        str6 = group3;
-        r1.initied = false;
-        r1.isCompleted = false;
-        r1.isAutoplay = z;
-        r1.playVideoUrl = null;
-        r1.playAudioUrl = null;
+        this.initied = false;
+        this.isCompleted = false;
+        this.isAutoplay = autoplay;
+        this.playVideoUrl = null;
+        this.playAudioUrl = null;
         destroy();
-        r1.firstFrameRendered = false;
-        r1.currentAlpha = 1.0f;
-        if (r1.currentTask != null) {
-            r1.currentTask.cancel(true);
-            r1.currentTask = null;
+        this.firstFrameRendered = false;
+        this.currentAlpha = 1.0f;
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
         }
         updateFullscreenButton();
         updateShareButton();
         updateInlineButton();
         updatePlayButton();
-        if (photo2 != null) {
-            closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo2.sizes, 80, true);
-            if (closestPhotoSizeWithSize != null) {
-                if (photo2 != null) {
-                }
-                if (photo2 != null) {
-                }
-                r1.controlsView.imageReceiver.setImage(null, null, photo2 != null ? closestPhotoSizeWithSize.location : null, photo2 != null ? "80_80_b" : null, 0, null, 1);
-                r1.drawImage = true;
+        if (thumb != null) {
+            PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(thumb.sizes, 80, true);
+            if (photoSize != null) {
+                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, 1);
+                this.drawImage = true;
             }
         } else {
-            r1.drawImage = false;
+            this.drawImage = false;
         }
-        if (r1.progressAnimation != null) {
-            r1.progressAnimation.cancel();
-            r1.progressAnimation = null;
+        if (this.progressAnimation != null) {
+            this.progressAnimation.cancel();
+            this.progressAnimation = null;
         }
-        r1.isLoading = true;
-        r1.controlsView.setProgress(0);
-        r1.currentYoutubeId = str3;
-        str3 = null;
-        if (str4 != null) {
-            r1.initied = true;
-            r1.playVideoUrl = str4;
-            r1.playVideoType = "other";
-            if (r1.isAutoplay) {
+        this.isLoading = true;
+        this.controlsView.setProgress(0);
+        if (!(youtubeId == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
+            this.currentYoutubeId = youtubeId;
+            youtubeId = null;
+        }
+        if (mp4File != null) {
+            this.initied = true;
+            this.playVideoUrl = mp4File;
+            this.playVideoType = "other";
+            if (this.isAutoplay) {
                 preparePlayer();
             }
             showProgress(false, false);
-            r1.controlsView.show(true, true);
+            this.controlsView.show(true, true);
         } else {
-            if (str3 != null) {
-                youtubeVideoTask = new YoutubeVideoTask(str3);
+            AsyncTask youtubeVideoTask;
+            if (youtubeId != null) {
+                youtubeVideoTask = new YoutubeVideoTask(youtubeId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = youtubeVideoTask;
-            } else if (str5 != null) {
-                youtubeVideoTask = new VimeoVideoTask(str5);
+                this.currentTask = youtubeVideoTask;
+            } else if (vimeoId != null) {
+                youtubeVideoTask = new VimeoVideoTask(vimeoId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = youtubeVideoTask;
-            } else if (group3 != null) {
-                youtubeVideoTask = new CoubVideoTask(group3);
+                this.currentTask = youtubeVideoTask;
+            } else if (coubId != null) {
+                youtubeVideoTask = new CoubVideoTask(coubId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = youtubeVideoTask;
-                r1.isStream = true;
-            } else if (group != null) {
-                youtubeVideoTask = new AparatVideoTask(group);
+                this.currentTask = youtubeVideoTask;
+                this.isStream = true;
+            } else if (aparatId != null) {
+                youtubeVideoTask = new AparatVideoTask(aparatId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = youtubeVideoTask;
-            } else if (group2 != null) {
-                twitchClipVideoTask = new TwitchClipVideoTask(str7, group2);
-                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = twitchClipVideoTask;
-            } else if (str6 != null) {
-                twitchClipVideoTask = new TwitchStreamVideoTask(str7, str6);
-                twitchClipVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = twitchClipVideoTask;
-                r1.isStream = true;
+                this.currentTask = youtubeVideoTask;
+            } else if (twitchClipId != null) {
+                youtubeVideoTask = new TwitchClipVideoTask(url, twitchClipId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (twitchStreamId != null) {
+                youtubeVideoTask = new TwitchStreamVideoTask(url, twitchStreamId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+                this.isStream = true;
             }
-            r1.controlsView.show(false, false);
+            this.controlsView.show(false, false);
             showProgress(true, false);
         }
-        if (str6 == null) {
-            r1.controlsView.setVisibility(0);
-            return true;
+        if (youtubeId == null && vimeoId == null && coubId == null && aparatId == null && mp4File == null && twitchClipId == null && twitchStreamId == null) {
+            this.controlsView.setVisibility(8);
+            return false;
         }
-        r1.controlsView.setVisibility(8);
-        return false;
+        this.controlsView.setVisibility(0);
+        return true;
     }
 
     public View getAspectRatioView() {
@@ -9269,24 +2325,24 @@ Error: java.lang.NullPointerException
         this.webView.stopLoading();
     }
 
-    private void showProgress(boolean z, boolean z2) {
-        float f = 0.0f;
-        if (z2) {
-            if (this.progressAnimation) {
+    private void showProgress(boolean show, boolean animated) {
+        float f = 1.0f;
+        if (animated) {
+            if (this.progressAnimation != null) {
                 this.progressAnimation.cancel();
             }
             this.progressAnimation = new AnimatorSet();
-            z2 = this.progressAnimation;
+            AnimatorSet animatorSet = this.progressAnimation;
             Animator[] animatorArr = new Animator[1];
             RadialProgressView radialProgressView = this.progressView;
             String str = "alpha";
             float[] fArr = new float[1];
-            if (z) {
-                f = 1.0f;
+            if (!show) {
+                f = 0.0f;
             }
             fArr[0] = f;
             animatorArr[0] = ObjectAnimator.ofFloat(radialProgressView, str, fArr);
-            z2.playTogether(animatorArr);
+            animatorSet.playTogether(animatorArr);
             this.progressAnimation.setDuration(150);
             this.progressAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -9296,10 +2352,10 @@ Error: java.lang.NullPointerException
             this.progressAnimation.start();
             return;
         }
-        z2 = this.progressView;
-        if (z) {
-            f = 1.0f;
+        RadialProgressView radialProgressView2 = this.progressView;
+        if (!show) {
+            f = 0.0f;
         }
-        z2.setAlpha(f);
+        radialProgressView2.setAlpha(f);
     }
 }

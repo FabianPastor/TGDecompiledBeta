@@ -17,7 +17,7 @@ public class BetterRatingView extends View {
     private OnRatingChangeListener listener;
     private int numStars = 5;
     private Paint paint = new Paint();
-    private int selectedRating = null;
+    private int selectedRating = 0;
 
     public interface OnRatingChangeListener {
         void onRatingChanged(int i);
@@ -27,7 +27,7 @@ public class BetterRatingView extends View {
         super(context);
     }
 
-    protected void onMeasure(int i, int i2) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension((this.numStars * AndroidUtilities.dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.dp(16.0f)), AndroidUtilities.dp(32.0f));
     }
 
@@ -40,21 +40,21 @@ public class BetterRatingView extends View {
         }
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        float dp = (float) AndroidUtilities.dp(-8.0f);
-        for (int i = 0; i < this.numStars; i++) {
-            if (motionEvent.getX() > dp && motionEvent.getX() < ((float) AndroidUtilities.dp(48.0f)) + dp) {
-                int i2 = i + 1;
-                if (this.selectedRating != i2) {
-                    this.selectedRating = i2;
-                    if (this.listener != null) {
-                        this.listener.onRatingChanged(this.selectedRating);
-                    }
-                    invalidate();
-                    return true;
+    public boolean onTouchEvent(MotionEvent event) {
+        float offset = (float) AndroidUtilities.dp(-8.0f);
+        int i = 0;
+        while (i < this.numStars) {
+            if (event.getX() <= offset || event.getX() >= ((float) AndroidUtilities.dp(48.0f)) + offset || this.selectedRating == i + 1) {
+                offset += (float) AndroidUtilities.dp(48.0f);
+                i++;
+            } else {
+                this.selectedRating = i + 1;
+                if (this.listener != null) {
+                    this.listener.onRatingChanged(this.selectedRating);
                 }
+                invalidate();
+                return true;
             }
-            dp += (float) AndroidUtilities.dp(48.0f);
         }
         return true;
     }
@@ -63,7 +63,7 @@ public class BetterRatingView extends View {
         return this.selectedRating;
     }
 
-    public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
-        this.listener = onRatingChangeListener;
+    public void setOnRatingChangeListener(OnRatingChangeListener l) {
+        this.listener = l;
     }
 }

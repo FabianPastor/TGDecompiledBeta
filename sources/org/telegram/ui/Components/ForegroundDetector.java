@@ -6,13 +6,14 @@ import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 @SuppressLint({"NewApi"})
 public class ForegroundDetector implements ActivityLifecycleCallbacks {
-    private static ForegroundDetector Instance;
+    private static ForegroundDetector Instance = null;
     private long enterBackgroundTime = 0;
     private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList();
     private int refs;
@@ -22,21 +23,6 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         void onBecameBackground();
 
         void onBecameForeground();
-    }
-
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-    }
-
-    public void onActivityDestroyed(Activity activity) {
-    }
-
-    public void onActivityPaused(Activity activity) {
-    }
-
-    public void onActivityResumed(Activity activity) {
-    }
-
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
     }
 
     public static ForegroundDetector getInstance() {
@@ -65,19 +51,19 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
     }
 
     public void onActivityStarted(Activity activity) {
-        activity = this.refs + 1;
-        this.refs = activity;
-        if (activity == 1) {
+        int i = this.refs + 1;
+        this.refs = i;
+        if (i == 1) {
             if (System.currentTimeMillis() - this.enterBackgroundTime < 200) {
-                this.wasInBackground = null;
+                this.wasInBackground = false;
             }
-            if (BuildVars.LOGS_ENABLED != null) {
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("switch to foreground");
             }
-            activity = this.listeners.iterator();
-            while (activity.hasNext()) {
+            Iterator it = this.listeners.iterator();
+            while (it.hasNext()) {
                 try {
-                    ((Listener) activity.next()).onBecameForeground();
+                    ((Listener) it.next()).onBecameForeground();
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -85,8 +71,8 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         }
     }
 
-    public boolean isWasInBackground(boolean z) {
-        if (z && VERSION.SDK_INT >= true && System.currentTimeMillis() - this.enterBackgroundTime < 200) {
+    public boolean isWasInBackground(boolean reset) {
+        if (reset && VERSION.SDK_INT >= 21 && System.currentTimeMillis() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -97,22 +83,37 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
     }
 
     public void onActivityStopped(Activity activity) {
-        activity = this.refs - 1;
-        this.refs = activity;
-        if (activity == null) {
+        int i = this.refs - 1;
+        this.refs = i;
+        if (i == 0) {
             this.enterBackgroundTime = System.currentTimeMillis();
             this.wasInBackground = true;
-            if (BuildVars.LOGS_ENABLED != null) {
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("switch to background");
             }
-            activity = this.listeners.iterator();
-            while (activity.hasNext()) {
+            Iterator it = this.listeners.iterator();
+            while (it.hasNext()) {
                 try {
-                    ((Listener) activity.next()).onBecameBackground();
+                    ((Listener) it.next()).onBecameBackground();
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
             }
         }
+    }
+
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    }
+
+    public void onActivityResumed(Activity activity) {
+    }
+
+    public void onActivityPaused(Activity activity) {
+    }
+
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    }
+
+    public void onActivityDestroyed(Activity activity) {
     }
 }

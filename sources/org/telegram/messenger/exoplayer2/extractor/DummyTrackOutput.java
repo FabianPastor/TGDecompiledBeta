@@ -10,21 +10,21 @@ public final class DummyTrackOutput implements TrackOutput {
     public void format(Format format) {
     }
 
-    public void sampleMetadata(long j, int i, int i2, int i3, CryptoData cryptoData) {
-    }
-
-    public int sampleData(ExtractorInput extractorInput, int i, boolean z) throws IOException, InterruptedException {
-        extractorInput = extractorInput.skip(i);
-        if (extractorInput != -1) {
-            return extractorInput;
+    public int sampleData(ExtractorInput input, int length, boolean allowEndOfInput) throws IOException, InterruptedException {
+        int bytesSkipped = input.skip(length);
+        if (bytesSkipped != -1) {
+            return bytesSkipped;
         }
-        if (z) {
+        if (allowEndOfInput) {
             return -1;
         }
         throw new EOFException();
     }
 
-    public void sampleData(ParsableByteArray parsableByteArray, int i) {
-        parsableByteArray.skipBytes(i);
+    public void sampleData(ParsableByteArray data, int length) {
+        data.skipBytes(length);
+    }
+
+    public void sampleMetadata(long timeUs, int flags, int size, int offset, CryptoData cryptoData) {
     }
 }

@@ -17,11 +17,11 @@ class JoinPointImpl implements ProceedingJoinPoint {
         Signature signature;
         SourceLocation sourceLocation;
 
-        public StaticPartImpl(int i, String str, Signature signature, SourceLocation sourceLocation) {
-            this.kind = str;
+        public StaticPartImpl(int id, String kind, Signature signature, SourceLocation sourceLocation) {
+            this.kind = kind;
             this.signature = signature;
             this.sourceLocation = sourceLocation;
-            this.id = i;
+            this.id = id;
         }
 
         public String getKind() {
@@ -32,13 +32,13 @@ class JoinPointImpl implements ProceedingJoinPoint {
             return this.signature;
         }
 
-        String toString(StringMaker stringMaker) {
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(stringMaker.makeKindName(getKind()));
-            stringBuffer.append("(");
-            stringBuffer.append(((SignatureImpl) getSignature()).toString(stringMaker));
-            stringBuffer.append(")");
-            return stringBuffer.toString();
+        String toString(StringMaker sm) {
+            StringBuffer buf = new StringBuffer();
+            buf.append(sm.makeKindName(getKind()));
+            buf.append("(");
+            buf.append(((SignatureImpl) getSignature()).toString(sm));
+            buf.append(")");
+            return buf.toString();
         }
 
         public final String toString() {
@@ -46,11 +46,11 @@ class JoinPointImpl implements ProceedingJoinPoint {
         }
     }
 
-    public JoinPointImpl(StaticPart staticPart, Object obj, Object obj2, Object[] objArr) {
+    public JoinPointImpl(StaticPart staticPart, Object _this, Object target, Object[] args) {
         this.staticPart = staticPart;
-        this._this = obj;
-        this.target = obj2;
-        this.args = objArr;
+        this._this = _this;
+        this.target = target;
+        this.args = args;
     }
 
     public Object getTarget() {

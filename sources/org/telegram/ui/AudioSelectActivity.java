@@ -63,6 +63,37 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
     private View shadow;
 
+    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
+    class C19211 extends ActionBarMenuOnItemClick {
+        C19211() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                AudioSelectActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
+    class C19222 implements OnItemClickListener {
+        C19222() {
+        }
+
+        public void onItemClick(View view, int position) {
+            AudioCell audioCell = (AudioCell) view;
+            AudioEntry audioEntry = audioCell.getAudioEntry();
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
+                AudioSelectActivity.this.selectedAudios.remove(audioEntry.id);
+                audioCell.setChecked(false);
+            } else {
+                AudioSelectActivity.this.selectedAudios.put(audioEntry.id, audioEntry);
+                audioCell.setChecked(true);
+            }
+            AudioSelectActivity.this.updateBottomLayoutCount();
+        }
+    }
+
     /* renamed from: org.telegram.ui.AudioSelectActivity$3 */
     class C08343 implements OnClickListener {
         C08343() {
@@ -80,11 +111,11 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
         public void onClick(View view) {
             if (AudioSelectActivity.this.delegate != null) {
-                view = new ArrayList();
-                for (int i = 0; i < AudioSelectActivity.this.selectedAudios.size(); i++) {
-                    view.add(((AudioEntry) AudioSelectActivity.this.selectedAudios.valueAt(i)).messageObject);
+                ArrayList<MessageObject> audios = new ArrayList();
+                for (int a = 0; a < AudioSelectActivity.this.selectedAudios.size(); a++) {
+                    audios.add(((AudioEntry) AudioSelectActivity.this.selectedAudios.valueAt(a)).messageObject);
                 }
-                AudioSelectActivity.this.delegate.didSelectAudio(view);
+                AudioSelectActivity.this.delegate.didSelectAudio(audios);
             }
             AudioSelectActivity.this.finishFragment();
         }
@@ -96,152 +127,90 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
 
         public void run() {
-            Throwable e;
-            Throwable th;
-            C08375 c08375 = this;
-            String[] strArr = new String[6];
-            strArr[0] = "_id";
-            boolean z = true;
-            strArr[1] = "artist";
-            strArr[2] = "title";
-            strArr[3] = "_data";
-            int i = 4;
-            strArr[4] = "duration";
-            int i2 = 5;
-            strArr[5] = "album";
-            final ArrayList arrayList = new ArrayList();
+            String[] projection = new String[]{"_id", "artist", "title", "_data", "duration", "album"};
+            ArrayList<AudioEntry> newAudioEntries = new ArrayList();
             Cursor cursor = null;
-            Cursor query;
             try {
-                query = ApplicationLoader.applicationContext.getContentResolver().query(Media.EXTERNAL_CONTENT_URI, strArr, "is_music != 0", null, "title");
-                int i3 = -NUM;
-                while (query.moveToNext()) {
-                    try {
-                        AudioEntry audioEntry = new AudioEntry();
-                        audioEntry.id = (long) query.getInt(0);
-                        audioEntry.author = query.getString(z);
-                        audioEntry.title = query.getString(2);
-                        audioEntry.path = query.getString(3);
-                        audioEntry.duration = (int) (query.getLong(i) / 1000);
-                        audioEntry.genre = query.getString(i2);
-                        File file = new File(audioEntry.path);
-                        Message tL_message = new TL_message();
-                        tL_message.out = z;
-                        tL_message.id = i3;
-                        tL_message.to_id = new TL_peerUser();
-                        Peer peer = tL_message.to_id;
-                        int clientUserId = UserConfig.getInstance(AudioSelectActivity.this.currentAccount).getClientUserId();
-                        tL_message.from_id = clientUserId;
-                        peer.user_id = clientUserId;
-                        tL_message.date = (int) (System.currentTimeMillis() / 1000);
-                        tL_message.message = TtmlNode.ANONYMOUS_REGION_ID;
-                        tL_message.attachPath = audioEntry.path;
-                        tL_message.media = new TL_messageMediaDocument();
-                        MessageMedia messageMedia = tL_message.media;
-                        messageMedia.flags |= 3;
-                        tL_message.media.document = new TL_document();
-                        tL_message.flags |= 768;
-                        String fileExtension = FileLoader.getFileExtension(file);
-                        tL_message.media.document.id = 0;
-                        tL_message.media.document.access_hash = 0;
-                        tL_message.media.document.date = tL_message.date;
-                        Document document = tL_message.media.document;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("audio/");
-                        if (fileExtension.length() <= 0) {
-                            fileExtension = "mp3";
-                        }
-                        stringBuilder.append(fileExtension);
-                        document.mime_type = stringBuilder.toString();
-                        tL_message.media.document.size = (int) file.length();
-                        tL_message.media.document.thumb = new TL_photoSizeEmpty();
-                        tL_message.media.document.thumb.type = "s";
-                        tL_message.media.document.dc_id = 0;
-                        TL_documentAttributeAudio tL_documentAttributeAudio = new TL_documentAttributeAudio();
-                        tL_documentAttributeAudio.duration = audioEntry.duration;
-                        tL_documentAttributeAudio.title = audioEntry.title;
-                        tL_documentAttributeAudio.performer = audioEntry.author;
-                        tL_documentAttributeAudio.flags |= 3;
-                        tL_message.media.document.attributes.add(tL_documentAttributeAudio);
-                        TL_documentAttributeFilename tL_documentAttributeFilename = new TL_documentAttributeFilename();
-                        tL_documentAttributeFilename.file_name = file.getName();
-                        tL_message.media.document.attributes.add(tL_documentAttributeFilename);
-                        audioEntry.messageObject = new MessageObject(AudioSelectActivity.this.currentAccount, tL_message, false);
-                        arrayList.add(audioEntry);
-                        i3--;
-                        z = true;
-                        i = 4;
-                        i2 = 5;
-                    } catch (Exception e2) {
-                        e = e2;
-                        cursor = query;
-                    } catch (Throwable e3) {
-                        th = e3;
+                cursor = ApplicationLoader.applicationContext.getContentResolver().query(Media.EXTERNAL_CONTENT_URI, projection, "is_music != 0", null, "title");
+                int id = -NUM;
+                while (cursor.moveToNext()) {
+                    AudioEntry audioEntry = new AudioEntry();
+                    audioEntry.id = (long) cursor.getInt(0);
+                    audioEntry.author = cursor.getString(1);
+                    audioEntry.title = cursor.getString(2);
+                    audioEntry.path = cursor.getString(3);
+                    audioEntry.duration = (int) (cursor.getLong(4) / 1000);
+                    audioEntry.genre = cursor.getString(5);
+                    File file = new File(audioEntry.path);
+                    Message message = new TL_message();
+                    message.out = true;
+                    message.id = id;
+                    message.to_id = new TL_peerUser();
+                    Peer peer = message.to_id;
+                    int clientUserId = UserConfig.getInstance(AudioSelectActivity.this.currentAccount).getClientUserId();
+                    message.from_id = clientUserId;
+                    peer.user_id = clientUserId;
+                    message.date = (int) (System.currentTimeMillis() / 1000);
+                    message.message = TtmlNode.ANONYMOUS_REGION_ID;
+                    message.attachPath = audioEntry.path;
+                    message.media = new TL_messageMediaDocument();
+                    MessageMedia messageMedia = message.media;
+                    messageMedia.flags |= 3;
+                    message.media.document = new TL_document();
+                    message.flags |= 768;
+                    String ext = FileLoader.getFileExtension(file);
+                    message.media.document.id = 0;
+                    message.media.document.access_hash = 0;
+                    message.media.document.date = message.date;
+                    Document document = message.media.document;
+                    StringBuilder append = new StringBuilder().append("audio/");
+                    if (ext.length() <= 0) {
+                        ext = "mp3";
                     }
+                    document.mime_type = append.append(ext).toString();
+                    message.media.document.size = (int) file.length();
+                    message.media.document.thumb = new TL_photoSizeEmpty();
+                    message.media.document.thumb.type = "s";
+                    message.media.document.dc_id = 0;
+                    TL_documentAttributeAudio attributeAudio = new TL_documentAttributeAudio();
+                    attributeAudio.duration = audioEntry.duration;
+                    attributeAudio.title = audioEntry.title;
+                    attributeAudio.performer = audioEntry.author;
+                    attributeAudio.flags |= 3;
+                    message.media.document.attributes.add(attributeAudio);
+                    TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
+                    fileName.file_name = file.getName();
+                    message.media.document.attributes.add(fileName);
+                    audioEntry.messageObject = new MessageObject(AudioSelectActivity.this.currentAccount, message, false);
+                    newAudioEntries.add(audioEntry);
+                    id--;
                 }
-                if (query != null) {
-                    query.close();
+                if (cursor != null) {
+                    cursor.close();
                 }
-            } catch (Exception e4) {
-                e3 = e4;
-                try {
-                    FileLog.m3e(e3);
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            AudioSelectActivity.this.audioEntries = arrayList;
-                            AudioSelectActivity.this.progressView.showTextView();
-                            AudioSelectActivity.this.listViewAdapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (Throwable e32) {
-                    th = e32;
-                    query = cursor;
-                    if (query != null) {
-                        query.close();
-                    }
-                    throw th;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Throwable th) {
+                if (cursor != null) {
+                    cursor.close();
                 }
             }
-            AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+            final ArrayList<AudioEntry> arrayList = newAudioEntries;
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    AudioSelectActivity.this.audioEntries = arrayList;
+                    AudioSelectActivity.this.progressView.showTextView();
+                    AudioSelectActivity.this.listViewAdapter.notifyDataSetChanged();
+                }
+            });
         }
     }
 
     public interface AudioSelectActivityDelegate {
         void didSelectAudio(ArrayList<MessageObject> arrayList);
-    }
-
-    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
-    class C19211 extends ActionBarMenuOnItemClick {
-        C19211() {
-        }
-
-        public void onItemClick(int i) {
-            if (i == -1) {
-                AudioSelectActivity.this.finishFragment();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
-    class C19222 implements OnItemClickListener {
-        C19222() {
-        }
-
-        public void onItemClick(View view, int i) {
-            AudioCell audioCell = (AudioCell) view;
-            i = audioCell.getAudioEntry();
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(i.id) >= 0) {
-                AudioSelectActivity.this.selectedAudios.remove(i.id);
-                audioCell.setChecked(0);
-            } else {
-                AudioSelectActivity.this.selectedAudios.put(i.id, i);
-                audioCell.setChecked(1);
-            }
-            AudioSelectActivity.this.updateBottomLayoutCount();
-        }
     }
 
     private class ListAdapter extends SelectionAdapter {
@@ -257,18 +226,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return true;
-        }
-
         public ListAdapter(Context context) {
             this.mContext = context;
         }
@@ -281,22 +238,39 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             return AudioSelectActivity.this.audioEntries.get(i);
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            viewGroup = new AudioCell(this.mContext);
-            viewGroup.setDelegate(new C19231());
-            return new Holder(viewGroup);
+        public long getItemId(int i) {
+            return (long) i;
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            AudioEntry audioEntry = (AudioEntry) AudioSelectActivity.this.audioEntries.get(i);
-            AudioCell audioCell = (AudioCell) viewHolder.itemView;
-            AudioEntry audioEntry2 = (AudioEntry) AudioSelectActivity.this.audioEntries.get(i);
-            boolean z = true;
-            i = i != AudioSelectActivity.this.audioEntries.size() - 1 ? 1 : 0;
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            AudioCell view = new AudioCell(this.mContext);
+            view.setDelegate(new C19231());
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z;
+            boolean z2 = true;
+            AudioEntry audioEntry = (AudioEntry) AudioSelectActivity.this.audioEntries.get(position);
+            AudioCell audioCell = (AudioCell) holder.itemView;
+            AudioEntry audioEntry2 = (AudioEntry) AudioSelectActivity.this.audioEntries.get(position);
+            if (position != AudioSelectActivity.this.audioEntries.size() - 1) {
+                z = true;
+            } else {
                 z = false;
             }
-            audioCell.setAudio(audioEntry2, i, z);
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
+                z2 = false;
+            }
+            audioCell.setAudio(audioEntry2, z, z2);
+        }
+
+        public int getItemViewType(int i) {
+            return 0;
         }
     }
 
@@ -318,13 +292,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
         int i = 1;
+        this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0446R.string.AttachMusic));
         this.actionBar.setActionBarMenuOnItemClick(new C19211());
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         this.progressView = new EmptyTextProgressView(context);
         this.progressView.setText(LocaleController.getString("NoAudio", C0446R.string.NoAudio));
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
@@ -347,10 +321,10 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
         this.bottomLayout.cancelButton.setOnClickListener(new C08343());
         this.bottomLayout.doneButton.setOnClickListener(new C08354());
-        View view = new View(context);
-        view.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-        if (this.loadingAudio != null) {
+        View shadow = new View(context);
+        shadow.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
+        frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        if (this.loadingAudio) {
             this.progressView.showProgress();
         } else {
             this.progressView.showTextView();
@@ -359,10 +333,10 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.closeChats) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
-        } else if (i == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != 0) {
+        } else if (id == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
         }
     }
@@ -384,24 +358,24 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[24];
-        r1[7] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r1[8] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
-        r1[9] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
-        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"genreTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"authorTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"timeTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        r1[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{AudioCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_musicPicker_checkbox);
-        r1[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{AudioCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_musicPicker_checkboxCheck);
-        r1[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{AudioCell.class}, new String[]{"playButton"}, null, null, null, Theme.key_musicPicker_buttonIcon);
-        r1[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{AudioCell.class}, new String[]{"playButton"}, null, null, null, Theme.key_musicPicker_buttonBackground);
-        r1[18] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        r1[19] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PickerBottomLayout.class}, new String[]{"cancelButton"}, null, null, null, Theme.key_picker_enabledButton);
-        r1[20] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonTextView"}, null, null, null, Theme.key_picker_enabledButton);
-        r1[21] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonTextView"}, null, null, null, Theme.key_picker_disabledButton);
-        r1[22] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonBadgeTextView"}, null, null, null, Theme.key_picker_badgeText);
-        r1[23] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonBadgeTextView"}, null, null, null, Theme.key_picker_badge);
-        return r1;
+        r9 = new ThemeDescription[24];
+        r9[7] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[8] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        r9[9] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"genreTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"authorTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{AudioCell.class}, new String[]{"timeTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        r9[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{AudioCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_musicPicker_checkbox);
+        r9[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{AudioCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_musicPicker_checkboxCheck);
+        r9[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{AudioCell.class}, new String[]{"playButton"}, null, null, null, Theme.key_musicPicker_buttonIcon);
+        r9[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{AudioCell.class}, new String[]{"playButton"}, null, null, null, Theme.key_musicPicker_buttonBackground);
+        r9[18] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[19] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PickerBottomLayout.class}, new String[]{"cancelButton"}, null, null, null, Theme.key_picker_enabledButton);
+        r9[20] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonTextView"}, null, null, null, Theme.key_picker_enabledButton);
+        r9[21] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonTextView"}, null, null, null, Theme.key_picker_disabledButton);
+        r9[22] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonBadgeTextView"}, null, null, null, Theme.key_picker_badgeText);
+        r9[23] = new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{PickerBottomLayout.class}, new String[]{"doneButtonBadgeTextView"}, null, null, null, Theme.key_picker_badge);
+        return r9;
     }
 }

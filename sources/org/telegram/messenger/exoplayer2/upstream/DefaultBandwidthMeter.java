@@ -26,18 +26,18 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
         this(null, null);
     }
 
-    public DefaultBandwidthMeter(Handler handler, EventListener eventListener) {
-        this(handler, eventListener, 2000);
+    public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener) {
+        this(eventHandler, eventListener, 2000);
     }
 
-    public DefaultBandwidthMeter(Handler handler, EventListener eventListener, int i) {
-        this(handler, eventListener, i, Clock.DEFAULT);
+    public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight) {
+        this(eventHandler, eventListener, maxWeight, Clock.DEFAULT);
     }
 
-    public DefaultBandwidthMeter(Handler handler, EventListener eventListener, int i, Clock clock) {
-        this.eventHandler = handler;
+    public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight, Clock clock) {
+        this.eventHandler = eventHandler;
         this.eventListener = eventListener;
-        this.slidingPercentile = new SlidingPercentile(i);
+        this.slidingPercentile = new SlidingPercentile(maxWeight);
         this.clock = clock;
         this.bitrateEstimate = -1;
     }
@@ -46,48 +46,47 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
         return this.bitrateEstimate;
     }
 
-    public synchronized void onTransferStart(Object obj, DataSpec dataSpec) {
-        if (this.streamCount == null) {
+    public synchronized void onTransferStart(Object source, DataSpec dataSpec) {
+        if (this.streamCount == 0) {
             this.sampleStartTimeMs = this.clock.elapsedRealtime();
         }
         this.streamCount++;
     }
 
-    public synchronized void onBytesTransferred(Object obj, int i) {
-        this.sampleBytesTransferred += (long) i;
+    public synchronized void onBytesTransferred(Object source, int bytes) {
+        this.sampleBytesTransferred += (long) bytes;
     }
 
-    public synchronized void onTransferEnd(Object obj) {
-        Assertions.checkState(this.streamCount > null ? 1 : null);
-        long elapsedRealtime = this.clock.elapsedRealtime();
-        int i = (int) (elapsedRealtime - this.sampleStartTimeMs);
-        long j = (long) i;
-        this.totalElapsedTimeMs += j;
+    public synchronized void onTransferEnd(Object source) {
+        Assertions.checkState(this.streamCount > 0);
+        long nowMs = this.clock.elapsedRealtime();
+        int sampleElapsedTimeMs = (int) (nowMs - this.sampleStartTimeMs);
+        this.totalElapsedTimeMs += (long) sampleElapsedTimeMs;
         this.totalBytesTransferred += this.sampleBytesTransferred;
-        if (i > 0) {
-            this.slidingPercentile.addSample((int) Math.sqrt((double) this.sampleBytesTransferred), (float) ((this.sampleBytesTransferred * 8000) / j));
+        if (sampleElapsedTimeMs > 0) {
+            this.slidingPercentile.addSample((int) Math.sqrt((double) this.sampleBytesTransferred), (float) ((this.sampleBytesTransferred * 8000) / ((long) sampleElapsedTimeMs)));
             if (this.totalElapsedTimeMs >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS || this.totalBytesTransferred >= 524288) {
-                obj = this.slidingPercentile.getPercentile(0.5f);
-                this.bitrateEstimate = Float.isNaN(obj) ? -1 : (long) obj;
+                float bitrateEstimateFloat = this.slidingPercentile.getPercentile(0.5f);
+                this.bitrateEstimate = Float.isNaN(bitrateEstimateFloat) ? -1 : (long) bitrateEstimateFloat;
             }
         }
-        notifyBandwidthSample(i, this.sampleBytesTransferred, this.bitrateEstimate);
-        obj = this.streamCount - 1;
-        this.streamCount = obj;
-        if (obj > null) {
-            this.sampleStartTimeMs = elapsedRealtime;
+        notifyBandwidthSample(sampleElapsedTimeMs, this.sampleBytesTransferred, this.bitrateEstimate);
+        int i = this.streamCount - 1;
+        this.streamCount = i;
+        if (i > 0) {
+            this.sampleStartTimeMs = nowMs;
         }
         this.sampleBytesTransferred = 0;
     }
 
-    private void notifyBandwidthSample(int i, long j, long j2) {
+    private void notifyBandwidthSample(int elapsedMs, long bytes, long bitrate) {
         if (this.eventHandler != null && this.eventListener != null) {
-            final int i2 = i;
-            final long j3 = j;
-            final long j4 = j2;
+            final int i = elapsedMs;
+            final long j = bytes;
+            final long j2 = bitrate;
             this.eventHandler.post(new Runnable() {
                 public void run() {
-                    DefaultBandwidthMeter.this.eventListener.onBandwidthSample(i2, j3, j4);
+                    DefaultBandwidthMeter.this.eventListener.onBandwidthSample(i, j, j2);
                 }
             });
         }

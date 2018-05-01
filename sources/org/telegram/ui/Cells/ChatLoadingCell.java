@@ -25,11 +25,11 @@ public class ChatLoadingCell extends FrameLayout {
         this.frameLayout.addView(this.progressBar, LayoutHelper.createFrame(32, 32, 17));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
     }
 
-    public void setProgressVisible(boolean z) {
-        this.frameLayout.setVisibility(z ? false : true);
+    public void setProgressVisible(boolean value) {
+        this.frameLayout.setVisibility(value ? 0 : 4);
     }
 }

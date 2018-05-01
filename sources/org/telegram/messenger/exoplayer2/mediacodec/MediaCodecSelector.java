@@ -10,8 +10,8 @@ public interface MediaCodecSelector {
         C18481() {
         }
 
-        public MediaCodecInfo getDecoderInfo(String str, boolean z) throws DecoderQueryException {
-            return MediaCodecUtil.getDecoderInfo(str, z);
+        public MediaCodecInfo getDecoderInfo(String mimeType, boolean requiresSecureDecoder) throws DecoderQueryException {
+            return MediaCodecUtil.getDecoderInfo(mimeType, requiresSecureDecoder);
         }
 
         public MediaCodecInfo getPassthroughDecoderInfo() throws DecoderQueryException {

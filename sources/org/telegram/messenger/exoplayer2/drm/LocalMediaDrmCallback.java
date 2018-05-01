@@ -9,15 +9,15 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 public final class LocalMediaDrmCallback implements MediaDrmCallback {
     private final byte[] keyResponse;
 
-    public LocalMediaDrmCallback(byte[] bArr) {
-        this.keyResponse = (byte[]) Assertions.checkNotNull(bArr);
+    public LocalMediaDrmCallback(byte[] keyResponse) {
+        this.keyResponse = (byte[]) Assertions.checkNotNull(keyResponse);
     }
 
-    public byte[] executeProvisionRequest(UUID uuid, ProvisionRequest provisionRequest) throws IOException {
+    public byte[] executeProvisionRequest(UUID uuid, ProvisionRequest request) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    public byte[] executeKeyRequest(UUID uuid, KeyRequest keyRequest) throws Exception {
+    public byte[] executeKeyRequest(UUID uuid, KeyRequest request) throws Exception {
         return this.keyResponse;
     }
 }

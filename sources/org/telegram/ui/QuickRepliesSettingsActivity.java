@@ -46,8 +46,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         C22671() {
         }
 
-        public void onItemClick(int i) {
-            if (i == -1) {
+        public void onItemClick(int id) {
+            if (id == -1) {
                 QuickRepliesSettingsActivity.this.finishFragment();
             }
         }
@@ -55,10 +55,10 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$2 */
     class C22682 implements OnItemClickListener {
-        public void onItemClick(View view, int i) {
+        C22682() {
         }
 
-        C22682() {
+        public void onItemClick(View view, int position) {
         }
     }
 
@@ -73,114 +73,100 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             return QuickRepliesSettingsActivity.this.rowCount;
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType != 4) {
-                switch (itemViewType) {
-                    case 0:
-                        TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                        textInfoPrivacyCell.setText(LocaleController.getString("VoipQuickRepliesExplain", C0446R.string.VoipQuickRepliesExplain));
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    TextInfoPrivacyCell cell = holder.itemView;
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    cell.setText(LocaleController.getString("VoipQuickRepliesExplain", C0446R.string.VoipQuickRepliesExplain));
+                    return;
+                case 1:
+                    TextSettingsCell textCell = holder.itemView;
+                    return;
+                case 2:
+                    HeaderCell headerCell = holder.itemView;
+                    if (position == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
+                        headerCell.setText(LocaleController.getString("VoipQuickReplies", C0446R.string.VoipQuickReplies));
                         return;
-                    case 1:
-                        TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                        return;
-                    case 2:
-                        HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                        if (i == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
-                            headerCell.setText(LocaleController.getString("VoipQuickReplies", C0446R.string.VoipQuickReplies));
-                            return;
-                        }
-                        return;
-                    default:
-                        switch (itemViewType) {
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                EditTextSettingsCell editTextSettingsCell = (EditTextSettingsCell) viewHolder.itemView;
-                                String str = null;
-                                if (i == QuickRepliesSettingsActivity.this.reply1Row) {
-                                    str = "quick_reply_msg1";
-                                    i = LocaleController.getString("QuickReplyDefault1", C0446R.string.QuickReplyDefault1);
-                                } else if (i == QuickRepliesSettingsActivity.this.reply2Row) {
-                                    str = "quick_reply_msg2";
-                                    i = LocaleController.getString("QuickReplyDefault2", C0446R.string.QuickReplyDefault2);
-                                } else if (i == QuickRepliesSettingsActivity.this.reply3Row) {
-                                    str = "quick_reply_msg3";
-                                    i = LocaleController.getString("QuickReplyDefault3", C0446R.string.QuickReplyDefault3);
-                                } else if (i == QuickRepliesSettingsActivity.this.reply4Row) {
-                                    str = "quick_reply_msg4";
-                                    i = LocaleController.getString("QuickReplyDefault4", C0446R.string.QuickReplyDefault4);
-                                } else {
-                                    i = 0;
-                                }
-                                editTextSettingsCell.setTextAndHint(QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getString(str, TtmlNode.ANONYMOUS_REGION_ID), i, true);
-                                return;
-                            default:
-                                return;
-                        }
-                }
+                    }
+                    return;
+                case 4:
+                    holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", C0446R.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
+                    return;
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                    EditTextSettingsCell textCell2 = holder.itemView;
+                    String settingsKey = null;
+                    String defValue = null;
+                    if (position == QuickRepliesSettingsActivity.this.reply1Row) {
+                        settingsKey = "quick_reply_msg1";
+                        defValue = LocaleController.getString("QuickReplyDefault1", C0446R.string.QuickReplyDefault1);
+                    } else if (position == QuickRepliesSettingsActivity.this.reply2Row) {
+                        settingsKey = "quick_reply_msg2";
+                        defValue = LocaleController.getString("QuickReplyDefault2", C0446R.string.QuickReplyDefault2);
+                    } else if (position == QuickRepliesSettingsActivity.this.reply3Row) {
+                        settingsKey = "quick_reply_msg3";
+                        defValue = LocaleController.getString("QuickReplyDefault3", C0446R.string.QuickReplyDefault3);
+                    } else if (position == QuickRepliesSettingsActivity.this.reply4Row) {
+                        settingsKey = "quick_reply_msg4";
+                        defValue = LocaleController.getString("QuickReplyDefault4", C0446R.string.QuickReplyDefault4);
+                    }
+                    textCell2.setTextAndHint(QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getString(settingsKey, TtmlNode.ANONYMOUS_REGION_ID), defValue, true);
+                    return;
+                default:
+                    return;
             }
-            ((TextCheckCell) viewHolder.itemView).setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", C0446R.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
         }
 
-        public boolean isEnabled(ViewHolder viewHolder) {
-            viewHolder = viewHolder.getAdapterPosition();
-            if (!(viewHolder == QuickRepliesSettingsActivity.this.reply1Row || viewHolder == QuickRepliesSettingsActivity.this.reply2Row || viewHolder == QuickRepliesSettingsActivity.this.reply3Row)) {
-                if (viewHolder != QuickRepliesSettingsActivity.this.reply4Row) {
-                    return null;
-                }
-            }
-            return true;
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return position == QuickRepliesSettingsActivity.this.reply1Row || position == QuickRepliesSettingsActivity.this.reply2Row || position == QuickRepliesSettingsActivity.this.reply3Row || position == QuickRepliesSettingsActivity.this.reply4Row;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            if (i != 4) {
-                switch (i) {
-                    case 0:
-                        viewGroup = new TextInfoPrivacyCell(this.mContext);
-                        break;
-                    case 1:
-                        viewGroup = new TextSettingsCell(this.mContext);
-                        viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                        break;
-                    case 2:
-                        viewGroup = new HeaderCell(this.mContext);
-                        viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                        break;
-                    default:
-                        switch (i) {
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                viewGroup = new EditTextSettingsCell(this.mContext);
-                                viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                                QuickRepliesSettingsActivity.this.textCells[i - 9] = (EditTextSettingsCell) viewGroup;
-                                break;
-                            default:
-                                viewGroup = null;
-                                break;
-                        }
-                }
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            switch (viewType) {
+                case 0:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    break;
+                case 1:
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 2:
+                    view = new HeaderCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 4:
+                    view = new TextCheckCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                    view = new EditTextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    QuickRepliesSettingsActivity.this.textCells[viewType - 9] = (EditTextSettingsCell) view;
+                    break;
             }
-            viewGroup = new TextCheckCell(this.mContext);
-            viewGroup.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            viewGroup.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(viewGroup);
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
         }
 
-        public int getItemViewType(int i) {
-            if (i == QuickRepliesSettingsActivity.this.explanationRow) {
+        public int getItemViewType(int position) {
+            if (position == QuickRepliesSettingsActivity.this.explanationRow) {
                 return 0;
             }
-            if (!(i == QuickRepliesSettingsActivity.this.reply1Row || i == QuickRepliesSettingsActivity.this.reply2Row || i == QuickRepliesSettingsActivity.this.reply3Row)) {
-                if (i != QuickRepliesSettingsActivity.this.reply4Row) {
-                    return i == QuickRepliesSettingsActivity.this.sectionHeaderRow ? 2 : 1;
-                }
+            if (position == QuickRepliesSettingsActivity.this.reply1Row || position == QuickRepliesSettingsActivity.this.reply2Row || position == QuickRepliesSettingsActivity.this.reply3Row || position == QuickRepliesSettingsActivity.this.reply4Row) {
+                return (position - QuickRepliesSettingsActivity.this.reply1Row) + 9;
             }
-            return 9 + (i - QuickRepliesSettingsActivity.this.reply1Row);
+            if (position == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
+                return 2;
+            }
+            return 1;
         }
     }
 
@@ -217,7 +203,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = this.fragmentView;
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
@@ -230,26 +216,18 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        int i = 0;
-        Editor edit = getParentActivity().getSharedPreferences("mainconfig", 0).edit();
-        while (i < this.textCells.length) {
+        Editor editor = getParentActivity().getSharedPreferences("mainconfig", 0).edit();
+        for (int i = 0; i < this.textCells.length; i++) {
             if (this.textCells[i] != null) {
-                Object charSequence = this.textCells[i].getTextView().getText().toString();
-                if (TextUtils.isEmpty(charSequence)) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("quick_reply_msg");
-                    stringBuilder.append(i + 1);
-                    edit.remove(stringBuilder.toString());
+                String text = this.textCells[i].getTextView().getText().toString();
+                if (TextUtils.isEmpty(text)) {
+                    editor.remove("quick_reply_msg" + (i + 1));
                 } else {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("quick_reply_msg");
-                    stringBuilder2.append(i + 1);
-                    edit.putString(stringBuilder2.toString(), charSequence);
+                    editor.putString("quick_reply_msg" + (i + 1), text);
                 }
             }
-            i++;
         }
-        edit.commit();
+        editor.commit();
     }
 
     public void onResume() {

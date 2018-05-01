@@ -46,75 +46,71 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
             this(bandwidthMeter, AdaptiveTrackSelection.DEFAULT_MAX_INITIAL_BITRATE, 10000, 25000, 25000, 0.75f, 0.75f, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS, Clock.DEFAULT);
         }
 
-        public Factory(BandwidthMeter bandwidthMeter, int i, int i2, int i3, int i4, float f) {
-            this(bandwidthMeter, i, i2, i3, i4, f, 0.75f, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS, Clock.DEFAULT);
+        public Factory(BandwidthMeter bandwidthMeter, int maxInitialBitrate, int minDurationForQualityIncreaseMs, int maxDurationForQualityDecreaseMs, int minDurationToRetainAfterDiscardMs, float bandwidthFraction) {
+            this(bandwidthMeter, maxInitialBitrate, minDurationForQualityIncreaseMs, maxDurationForQualityDecreaseMs, minDurationToRetainAfterDiscardMs, bandwidthFraction, 0.75f, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS, Clock.DEFAULT);
         }
 
-        public Factory(BandwidthMeter bandwidthMeter, int i, int i2, int i3, int i4, float f, float f2, long j, Clock clock) {
+        public Factory(BandwidthMeter bandwidthMeter, int maxInitialBitrate, int minDurationForQualityIncreaseMs, int maxDurationForQualityDecreaseMs, int minDurationToRetainAfterDiscardMs, float bandwidthFraction, float bufferedFractionToLiveEdgeForQualityIncrease, long minTimeBetweenBufferReevaluationMs, Clock clock) {
             this.bandwidthMeter = bandwidthMeter;
-            this.maxInitialBitrate = i;
-            this.minDurationForQualityIncreaseMs = i2;
-            this.maxDurationForQualityDecreaseMs = i3;
-            this.minDurationToRetainAfterDiscardMs = i4;
-            this.bandwidthFraction = f;
-            this.bufferedFractionToLiveEdgeForQualityIncrease = f2;
-            this.minTimeBetweenBufferReevaluationMs = j;
+            this.maxInitialBitrate = maxInitialBitrate;
+            this.minDurationForQualityIncreaseMs = minDurationForQualityIncreaseMs;
+            this.maxDurationForQualityDecreaseMs = maxDurationForQualityDecreaseMs;
+            this.minDurationToRetainAfterDiscardMs = minDurationToRetainAfterDiscardMs;
+            this.bandwidthFraction = bandwidthFraction;
+            this.bufferedFractionToLiveEdgeForQualityIncrease = bufferedFractionToLiveEdgeForQualityIncrease;
+            this.minTimeBetweenBufferReevaluationMs = minTimeBetweenBufferReevaluationMs;
             this.clock = clock;
         }
 
-        public AdaptiveTrackSelection createTrackSelection(TrackGroup trackGroup, int... iArr) {
-            return new AdaptiveTrackSelection(trackGroup, iArr, this.bandwidthMeter, this.maxInitialBitrate, (long) this.minDurationForQualityIncreaseMs, (long) this.maxDurationForQualityDecreaseMs, (long) this.minDurationToRetainAfterDiscardMs, this.bandwidthFraction, this.bufferedFractionToLiveEdgeForQualityIncrease, this.minTimeBetweenBufferReevaluationMs, this.clock);
+        public AdaptiveTrackSelection createTrackSelection(TrackGroup group, int... tracks) {
+            return new AdaptiveTrackSelection(group, tracks, this.bandwidthMeter, this.maxInitialBitrate, (long) this.minDurationForQualityIncreaseMs, (long) this.maxDurationForQualityDecreaseMs, (long) this.minDurationToRetainAfterDiscardMs, this.bandwidthFraction, this.bufferedFractionToLiveEdgeForQualityIncrease, this.minTimeBetweenBufferReevaluationMs, this.clock);
         }
     }
 
-    public Object getSelectionData() {
-        return null;
+    public AdaptiveTrackSelection(TrackGroup group, int[] tracks, BandwidthMeter bandwidthMeter) {
+        this(group, tracks, bandwidthMeter, DEFAULT_MAX_INITIAL_BITRATE, 10000, 25000, 25000, 0.75f, 0.75f, DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS, Clock.DEFAULT);
     }
 
-    public AdaptiveTrackSelection(TrackGroup trackGroup, int[] iArr, BandwidthMeter bandwidthMeter) {
-        this(trackGroup, iArr, bandwidthMeter, DEFAULT_MAX_INITIAL_BITRATE, 10000, 25000, 25000, 0.75f, 0.75f, DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS, Clock.DEFAULT);
-    }
-
-    public AdaptiveTrackSelection(TrackGroup trackGroup, int[] iArr, BandwidthMeter bandwidthMeter, int i, long j, long j2, long j3, float f, float f2, long j4, Clock clock) {
-        super(trackGroup, iArr);
+    public AdaptiveTrackSelection(TrackGroup group, int[] tracks, BandwidthMeter bandwidthMeter, int maxInitialBitrate, long minDurationForQualityIncreaseMs, long maxDurationForQualityDecreaseMs, long minDurationToRetainAfterDiscardMs, float bandwidthFraction, float bufferedFractionToLiveEdgeForQualityIncrease, long minTimeBetweenBufferReevaluationMs, Clock clock) {
+        super(group, tracks);
         this.bandwidthMeter = bandwidthMeter;
-        this.maxInitialBitrate = i;
-        this.minDurationForQualityIncreaseUs = j * 1000;
-        this.maxDurationForQualityDecreaseUs = j2 * 1000;
-        this.minDurationToRetainAfterDiscardUs = j3 * 1000;
-        this.bandwidthFraction = f;
-        this.bufferedFractionToLiveEdgeForQualityIncrease = f2;
-        this.minTimeBetweenBufferReevaluationMs = j4;
+        this.maxInitialBitrate = maxInitialBitrate;
+        this.minDurationForQualityIncreaseUs = 1000 * minDurationForQualityIncreaseMs;
+        this.maxDurationForQualityDecreaseUs = 1000 * maxDurationForQualityDecreaseMs;
+        this.minDurationToRetainAfterDiscardUs = 1000 * minDurationToRetainAfterDiscardMs;
+        this.bandwidthFraction = bandwidthFraction;
+        this.bufferedFractionToLiveEdgeForQualityIncrease = bufferedFractionToLiveEdgeForQualityIncrease;
+        this.minTimeBetweenBufferReevaluationMs = minTimeBetweenBufferReevaluationMs;
         this.clock = clock;
         this.playbackSpeed = 1.0f;
-        this.selectedIndex = determineIdealSelectedIndex(0);
+        this.selectedIndex = determineIdealSelectedIndex(Long.MIN_VALUE);
         this.reason = 1;
-        this.lastBufferEvaluationMs = 1;
+        this.lastBufferEvaluationMs = C0542C.TIME_UNSET;
     }
 
     public void enable() {
         this.lastBufferEvaluationMs = C0542C.TIME_UNSET;
     }
 
-    public void onPlaybackSpeed(float f) {
-        this.playbackSpeed = f;
+    public void onPlaybackSpeed(float playbackSpeed) {
+        this.playbackSpeed = playbackSpeed;
     }
 
-    public void updateSelectedTrack(long j, long j2, long j3) {
-        j = this.clock.elapsedRealtime();
-        int i = this.selectedIndex;
-        this.selectedIndex = determineIdealSelectedIndex(j);
-        if (this.selectedIndex != i) {
-            if (isBlacklisted(i, j) == null) {
-                j = getFormat(i);
-                Format format = getFormat(this.selectedIndex);
-                if (format.bitrate > j.bitrate && j2 < minDurationForQualityIncreaseUs(j3)) {
-                    this.selectedIndex = i;
-                } else if (format.bitrate < j.bitrate && j2 >= this.maxDurationForQualityDecreaseUs) {
-                    this.selectedIndex = i;
+    public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
+        long nowMs = this.clock.elapsedRealtime();
+        int currentSelectedIndex = this.selectedIndex;
+        this.selectedIndex = determineIdealSelectedIndex(nowMs);
+        if (this.selectedIndex != currentSelectedIndex) {
+            if (!isBlacklisted(currentSelectedIndex, nowMs)) {
+                Format currentFormat = getFormat(currentSelectedIndex);
+                Format selectedFormat = getFormat(this.selectedIndex);
+                if (selectedFormat.bitrate > currentFormat.bitrate && bufferedDurationUs < minDurationForQualityIncreaseUs(availableDurationUs)) {
+                    this.selectedIndex = currentSelectedIndex;
+                } else if (selectedFormat.bitrate < currentFormat.bitrate && bufferedDurationUs >= this.maxDurationForQualityDecreaseUs) {
+                    this.selectedIndex = currentSelectedIndex;
                 }
             }
-            if (this.selectedIndex != i) {
+            if (this.selectedIndex != currentSelectedIndex) {
                 this.reason = 3;
             }
         }
@@ -128,51 +124,53 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
         return this.reason;
     }
 
-    public int evaluateQueueSize(long j, List<? extends MediaChunk> list) {
-        long elapsedRealtime = this.clock.elapsedRealtime();
-        if (this.lastBufferEvaluationMs != C0542C.TIME_UNSET && elapsedRealtime - this.lastBufferEvaluationMs < this.minTimeBetweenBufferReevaluationMs) {
-            return list.size();
+    public Object getSelectionData() {
+        return null;
+    }
+
+    public int evaluateQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
+        long nowMs = this.clock.elapsedRealtime();
+        if (this.lastBufferEvaluationMs != C0542C.TIME_UNSET && nowMs - this.lastBufferEvaluationMs < this.minTimeBetweenBufferReevaluationMs) {
+            return queue.size();
         }
-        this.lastBufferEvaluationMs = elapsedRealtime;
-        int i = 0;
-        if (list.isEmpty()) {
+        this.lastBufferEvaluationMs = nowMs;
+        if (queue.isEmpty()) {
             return 0;
         }
-        int size = list.size();
-        if (Util.getPlayoutDurationForMediaDuration(((MediaChunk) list.get(size - 1)).startTimeUs - j, this.playbackSpeed) < this.minDurationToRetainAfterDiscardUs) {
-            return size;
+        int queueSize = queue.size();
+        if (Util.getPlayoutDurationForMediaDuration(((MediaChunk) queue.get(queueSize - 1)).startTimeUs - playbackPositionUs, this.playbackSpeed) < this.minDurationToRetainAfterDiscardUs) {
+            return queueSize;
         }
-        Format format = getFormat(determineIdealSelectedIndex(elapsedRealtime));
-        while (i < size) {
-            MediaChunk mediaChunk = (MediaChunk) list.get(i);
-            Format format2 = mediaChunk.trackFormat;
-            if (Util.getPlayoutDurationForMediaDuration(mediaChunk.startTimeUs - j, this.playbackSpeed) >= this.minDurationToRetainAfterDiscardUs && format2.bitrate < format.bitrate && format2.height != -1 && format2.height < 720 && format2.width != -1 && format2.width < 1280 && format2.height < format.height) {
+        Format idealFormat = getFormat(determineIdealSelectedIndex(nowMs));
+        for (int i = 0; i < queueSize; i++) {
+            MediaChunk chunk = (MediaChunk) queue.get(i);
+            Format format = chunk.trackFormat;
+            if (Util.getPlayoutDurationForMediaDuration(chunk.startTimeUs - playbackPositionUs, this.playbackSpeed) >= this.minDurationToRetainAfterDiscardUs && format.bitrate < idealFormat.bitrate && format.height != -1 && format.height < 720 && format.width != -1 && format.width < 1280 && format.height < idealFormat.height) {
                 return i;
             }
-            i++;
         }
-        return size;
+        return queueSize;
     }
 
-    private int determineIdealSelectedIndex(long j) {
+    private int determineIdealSelectedIndex(long nowMs) {
         long bitrateEstimate = this.bandwidthMeter.getBitrateEstimate();
-        bitrateEstimate = bitrateEstimate == -1 ? (long) this.maxInitialBitrate : (long) (((float) bitrateEstimate) * this.bandwidthFraction);
+        long effectiveBitrate = bitrateEstimate == -1 ? (long) this.maxInitialBitrate : (long) (((float) bitrateEstimate) * this.bandwidthFraction);
+        int lowestBitrateNonBlacklistedIndex = 0;
         int i = 0;
-        int i2 = 0;
         while (i < this.length) {
-            if (j == Long.MIN_VALUE || !isBlacklisted(i, j)) {
-                if (((long) Math.round(((float) getFormat(i).bitrate) * this.playbackSpeed)) <= bitrateEstimate) {
+            if (nowMs == Long.MIN_VALUE || !isBlacklisted(i, nowMs)) {
+                if (((long) Math.round(((float) getFormat(i).bitrate) * this.playbackSpeed)) <= effectiveBitrate) {
                     return i;
                 }
-                i2 = i;
+                lowestBitrateNonBlacklistedIndex = i;
             }
             i++;
         }
-        return i2;
+        return lowestBitrateNonBlacklistedIndex;
     }
 
-    private long minDurationForQualityIncreaseUs(long j) {
-        Object obj = (j == C0542C.TIME_UNSET || j > this.minDurationForQualityIncreaseUs) ? null : 1;
-        return obj != null ? (long) (((float) j) * this.bufferedFractionToLiveEdgeForQualityIncrease) : this.minDurationForQualityIncreaseUs;
+    private long minDurationForQualityIncreaseUs(long availableDurationUs) {
+        boolean isAvailableDurationTooShort = availableDurationUs != C0542C.TIME_UNSET && availableDurationUs <= this.minDurationForQualityIncreaseUs;
+        return isAvailableDurationTooShort ? (long) (((float) availableDurationUs) * this.bufferedFractionToLiveEdgeForQualityIncrease) : this.minDurationForQualityIncreaseUs;
     }
 }

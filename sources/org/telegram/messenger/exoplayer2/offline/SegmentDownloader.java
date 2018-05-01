@@ -31,17 +31,17 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
         public final DataSpec dataSpec;
         public final long startTimeUs;
 
-        public Segment(long j, DataSpec dataSpec) {
-            this.startTimeUs = j;
+        public Segment(long startTimeUs, DataSpec dataSpec) {
+            this.startTimeUs = startTimeUs;
             this.dataSpec = dataSpec;
         }
 
-        public int compareTo(Segment segment) {
-            long j = this.startTimeUs - segment.startTimeUs;
-            if (j == 0) {
-                return null;
+        public int compareTo(Segment other) {
+            long startOffsetDiff = this.startTimeUs - other.startTimeUs;
+            if (startOffsetDiff == 0) {
+                return 0;
             }
-            return j < 0 ? -1 : 1;
+            return startOffsetDiff < 0 ? -1 : 1;
         }
     }
 
@@ -51,12 +51,12 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
 
     protected abstract List<Segment> getSegments(DataSource dataSource, M m, K[] kArr, boolean z) throws InterruptedException, IOException;
 
-    public SegmentDownloader(Uri uri, DownloaderConstructorHelper downloaderConstructorHelper) {
-        this.manifestUri = uri;
-        this.cache = downloaderConstructorHelper.getCache();
-        this.dataSource = downloaderConstructorHelper.buildCacheDataSource(null);
-        this.offlineDataSource = downloaderConstructorHelper.buildCacheDataSource(true);
-        this.priorityTaskManager = downloaderConstructorHelper.getPriorityTaskManager();
+    public SegmentDownloader(Uri manifestUri, DownloaderConstructorHelper constructorHelper) {
+        this.manifestUri = manifestUri;
+        this.cache = constructorHelper.getCache();
+        this.dataSource = constructorHelper.buildCacheDataSource(false);
+        this.offlineDataSource = constructorHelper.buildCacheDataSource(true);
+        this.priorityTaskManager = constructorHelper.getPriorityTaskManager();
         resetCounters();
     }
 
@@ -64,50 +64,46 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
         return getManifestIfNeeded(false);
     }
 
-    public final void selectRepresentations(K[] kArr) {
-        this.keys = kArr != null ? (Object[]) kArr.clone() : null;
+    public final void selectRepresentations(K[] keys) {
+        this.keys = keys != null ? (Object[]) keys.clone() : null;
         resetCounters();
     }
 
-    public final void init() throws java.lang.InterruptedException, java.io.IOException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r1 = this;
-        r0 = 1;
-        r1.getManifestIfNeeded(r0);	 Catch:{ IOException -> 0x000d }
-        r1.initStatus(r0);	 Catch:{ IOException -> 0x0008, IOException -> 0x0008 }
-        return;
-    L_0x0008:
-        r0 = move-exception;
-        r1.resetCounters();
-        throw r0;
-    L_0x000d:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.offline.SegmentDownloader.init():void");
+    public final void init() throws InterruptedException, IOException {
+        try {
+            Exception e;
+            getManifestIfNeeded(true);
+            try {
+                initStatus(true);
+                return;
+            } catch (IOException e2) {
+                e = e2;
+            } catch (InterruptedException e3) {
+                e = e3;
+            }
+            resetCounters();
+            throw e;
+        } catch (IOException e4) {
+        }
     }
 
-    public final synchronized void download(ProgressListener progressListener) throws IOException, InterruptedException {
+    public final synchronized void download(ProgressListener listener) throws IOException, InterruptedException {
         this.priorityTaskManager.add(C0542C.PRIORITY_DOWNLOAD);
-        int i = 0;
         try {
             getManifestIfNeeded(false);
-            List initStatus = initStatus(false);
-            notifyListener(progressListener);
-            Collections.sort(initStatus);
-            byte[] bArr = new byte[131072];
+            List<Segment> segments = initStatus(false);
+            notifyListener(listener);
+            Collections.sort(segments);
+            byte[] buffer = new byte[131072];
             CachingCounters cachingCounters = new CachingCounters();
-            while (i < initStatus.size()) {
-                CacheUtil.cache(((Segment) initStatus.get(i)).dataSpec, this.cache, this.dataSource, bArr, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, cachingCounters, true);
+            for (int i = 0; i < segments.size(); i++) {
+                CacheUtil.cache(((Segment) segments.get(i)).dataSpec, this.cache, this.dataSource, buffer, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, cachingCounters, true);
                 this.downloadedBytes += cachingCounters.newlyCachedBytes;
                 this.downloadedSegments++;
-                notifyListener(progressListener);
-                i++;
+                notifyListener(listener);
             }
-        } finally {
+            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
+        } catch (Throwable th) {
             this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
         }
     }
@@ -125,64 +121,37 @@ Error: java.lang.NullPointerException
     }
 
     public float getDownloadPercentage() {
-        int i = this.totalSegments;
-        int i2 = this.downloadedSegments;
-        if (i != -1) {
-            if (i2 != -1) {
-                float f = 100.0f;
-                if (i != 0) {
-                    f = (((float) i2) * 100.0f) / ((float) i);
-                }
-                return f;
-            }
+        int totalSegments = this.totalSegments;
+        int downloadedSegments = this.downloadedSegments;
+        if (totalSegments == -1 || downloadedSegments == -1) {
+            return Float.NaN;
         }
-        return Float.NaN;
+        if (totalSegments != 0) {
+            return (100.0f * ((float) downloadedSegments)) / ((float) totalSegments);
+        }
+        return 100.0f;
     }
 
-    public final void remove() throws java.lang.InterruptedException {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-*/
-        /*
-        r4 = this;
-        r0 = 1;
-        r4.getManifestIfNeeded(r0);	 Catch:{ IOException -> 0x0004 }
-    L_0x0004:
-        r4.resetCounters();
-        r1 = r4.manifest;
-        if (r1 == 0) goto L_0x0031;
-    L_0x000b:
-        r1 = 0;
-        r2 = r4.offlineDataSource;	 Catch:{ IOException -> 0x0015 }
-        r3 = r4.manifest;	 Catch:{ IOException -> 0x0015 }
-        r0 = r4.getAllSegments(r2, r3, r0);	 Catch:{ IOException -> 0x0015 }
-        goto L_0x0016;
-    L_0x0015:
-        r0 = r1;
-    L_0x0016:
-        if (r0 == 0) goto L_0x002f;
-    L_0x0018:
-        r2 = 0;
-    L_0x0019:
-        r3 = r0.size();
-        if (r2 >= r3) goto L_0x002f;
-    L_0x001f:
-        r3 = r0.get(r2);
-        r3 = (org.telegram.messenger.exoplayer2.offline.SegmentDownloader.Segment) r3;
-        r3 = r3.dataSpec;
-        r3 = r3.uri;
-        r4.remove(r3);
-        r2 = r2 + 1;
-        goto L_0x0019;
-    L_0x002f:
-        r4.manifest = r1;
-    L_0x0031:
-        r0 = r4.manifestUri;
-        r4.remove(r0);
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.offline.SegmentDownloader.remove():void");
+    public final void remove() throws InterruptedException {
+        try {
+            getManifestIfNeeded(true);
+        } catch (IOException e) {
+        }
+        resetCounters();
+        if (this.manifest != null) {
+            List<Segment> segments = null;
+            try {
+                segments = getAllSegments(this.offlineDataSource, this.manifest, true);
+            } catch (IOException e2) {
+            }
+            if (segments != null) {
+                for (int i = 0; i < segments.size(); i++) {
+                    remove(((Segment) segments.get(i)).dataSpec.uri);
+                }
+            }
+            this.manifest = null;
+        }
+        remove(this.manifestUri);
     }
 
     private void resetCounters() {
@@ -195,42 +164,43 @@ Error: java.lang.NullPointerException
         CacheUtil.remove(this.cache, CacheUtil.generateKey(uri));
     }
 
-    private void notifyListener(ProgressListener progressListener) {
-        if (progressListener != null) {
-            progressListener.onDownloadProgress(this, getDownloadPercentage(), this.downloadedBytes);
+    private void notifyListener(ProgressListener listener) {
+        if (listener != null) {
+            listener.onDownloadProgress(this, getDownloadPercentage(), this.downloadedBytes);
         }
     }
 
-    private synchronized List<Segment> initStatus(boolean z) throws IOException, InterruptedException {
-        DataSource dataSource = getDataSource(z);
+    private synchronized List<Segment> initStatus(boolean offline) throws IOException, InterruptedException {
+        List<Segment> segments;
+        DataSource dataSource = getDataSource(offline);
         if (this.keys == null || this.keys.length <= 0) {
-            z = getAllSegments(dataSource, this.manifest, z);
+            segments = getAllSegments(dataSource, this.manifest, offline);
         } else {
-            z = getSegments(dataSource, this.manifest, this.keys, z);
+            segments = getSegments(dataSource, this.manifest, this.keys, offline);
         }
         CachingCounters cachingCounters = new CachingCounters();
-        this.totalSegments = z.size();
+        this.totalSegments = segments.size();
         this.downloadedSegments = 0;
         this.downloadedBytes = 0;
-        for (int size = z.size() - 1; size >= 0; size--) {
-            CacheUtil.getCached(((Segment) z.get(size)).dataSpec, this.cache, cachingCounters);
+        for (int i = segments.size() - 1; i >= 0; i--) {
+            CacheUtil.getCached(((Segment) segments.get(i)).dataSpec, this.cache, cachingCounters);
             this.downloadedBytes += cachingCounters.alreadyCachedBytes;
             if (cachingCounters.alreadyCachedBytes == cachingCounters.contentLength) {
                 this.downloadedSegments++;
-                z.remove(size);
+                segments.remove(i);
             }
         }
-        return z;
+        return segments;
     }
 
-    private M getManifestIfNeeded(boolean z) throws IOException {
+    private M getManifestIfNeeded(boolean offline) throws IOException {
         if (this.manifest == null) {
-            this.manifest = getManifest(getDataSource(z), this.manifestUri);
+            this.manifest = getManifest(getDataSource(offline), this.manifestUri);
         }
         return this.manifest;
     }
 
-    private DataSource getDataSource(boolean z) {
-        return z ? this.offlineDataSource : this.dataSource;
+    private DataSource getDataSource(boolean offline) {
+        return offline ? this.offlineDataSource : this.dataSource;
     }
 }

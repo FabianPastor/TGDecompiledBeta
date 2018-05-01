@@ -23,68 +23,74 @@ final class OpusReader extends StreamReader {
     OpusReader() {
     }
 
-    public static boolean verifyBitstreamType(ParsableByteArray parsableByteArray) {
-        if (parsableByteArray.bytesLeft() < OPUS_SIGNATURE.length) {
+    public static boolean verifyBitstreamType(ParsableByteArray data) {
+        if (data.bytesLeft() < OPUS_SIGNATURE.length) {
             return false;
         }
-        byte[] bArr = new byte[OPUS_SIGNATURE.length];
-        parsableByteArray.readBytes(bArr, 0, OPUS_SIGNATURE.length);
-        return Arrays.equals(bArr, OPUS_SIGNATURE);
+        byte[] header = new byte[OPUS_SIGNATURE.length];
+        data.readBytes(header, 0, OPUS_SIGNATURE.length);
+        return Arrays.equals(header, OPUS_SIGNATURE);
     }
 
-    protected void reset(boolean z) {
-        super.reset(z);
-        if (z) {
+    protected void reset(boolean headerData) {
+        super.reset(headerData);
+        if (headerData) {
             this.headerRead = false;
         }
     }
 
-    protected long preparePayload(ParsableByteArray parsableByteArray) {
-        return convertTimeToGranule(getPacketDurationUs(parsableByteArray.data));
+    protected long preparePayload(ParsableByteArray packet) {
+        return convertTimeToGranule(getPacketDurationUs(packet.data));
     }
 
-    protected boolean readHeaders(ParsableByteArray parsableByteArray, long j, SetupData setupData) throws IOException, InterruptedException {
-        boolean z = true;
-        if (this.headerRead == null) {
-            parsableByteArray = Arrays.copyOf(parsableByteArray.data, parsableByteArray.limit());
-            int i = parsableByteArray[9] & 255;
-            j = ((parsableByteArray[11] & 255) << 8) | (parsableByteArray[10] & 255);
-            List arrayList = new ArrayList(3);
-            arrayList.add(parsableByteArray);
-            putNativeOrderLong(arrayList, j);
-            putNativeOrderLong(arrayList, DEFAULT_SEEK_PRE_ROLL_SAMPLES);
-            setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_OPUS, null, -1, -1, i, SAMPLE_RATE, arrayList, null, 0, null);
-            this.headerRead = true;
-            return true;
+    protected boolean readHeaders(ParsableByteArray packet, long position, SetupData setupData) throws IOException, InterruptedException {
+        if (this.headerRead) {
+            boolean z = packet.readInt() == OPUS_CODE;
+            packet.setPosition(0);
+            return z;
         }
-        if (parsableByteArray.readInt() != OPUS_CODE) {
-            z = false;
-        }
-        parsableByteArray.setPosition(0);
-        return z;
+        byte[] metadata = Arrays.copyOf(packet.data, packet.limit());
+        int channelCount = metadata[9] & 255;
+        int preskip = ((metadata[11] & 255) << 8) | (metadata[10] & 255);
+        List<byte[]> initializationData = new ArrayList(3);
+        initializationData.add(metadata);
+        putNativeOrderLong(initializationData, preskip);
+        putNativeOrderLong(initializationData, DEFAULT_SEEK_PRE_ROLL_SAMPLES);
+        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_OPUS, null, -1, -1, channelCount, SAMPLE_RATE, initializationData, null, 0, null);
+        this.headerRead = true;
+        return true;
     }
 
-    private void putNativeOrderLong(List<byte[]> list, int i) {
-        list.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong((((long) i) * C0542C.NANOS_PER_SECOND) / 48000).array());
+    private void putNativeOrderLong(List<byte[]> initializationData, int samples) {
+        initializationData.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong((((long) samples) * C0542C.NANOS_PER_SECOND) / 48000).array());
     }
 
-    private long getPacketDurationUs(byte[] bArr) {
-        int i = bArr[0] & 255;
-        switch (i & 3) {
+    private long getPacketDurationUs(byte[] packet) {
+        int frames;
+        int toc = packet[0] & 255;
+        switch (toc & 3) {
             case 0:
-                bArr = 1;
+                frames = 1;
                 break;
             case 1:
             case 2:
-                bArr = 2;
+                frames = 2;
                 break;
             default:
-                bArr = bArr[1] & 63;
+                frames = packet[1] & 63;
                 break;
         }
-        i >>= 3;
-        int i2 = i & 3;
-        i = i >= 16 ? DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS << i2 : i >= 12 ? 10000 << (i2 & 1) : i2 == 3 ? 60000 : 10000 << i2;
-        return (long) (bArr * i);
+        int config = toc >> 3;
+        int length = config & 3;
+        if (config >= 16) {
+            length = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS << length;
+        } else if (config >= 12) {
+            length = 10000 << (length & 1);
+        } else if (length == 3) {
+            length = 60000;
+        } else {
+            length = 10000 << length;
+        }
+        return (long) (frames * length);
     }
 }

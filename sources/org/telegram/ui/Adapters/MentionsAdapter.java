@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Build.VERSION;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -120,14 +121,6 @@ public class MentionsAdapter extends SelectionAdapter {
     private String searchingContextQuery;
     private String searchingContextUsername;
 
-    public interface MentionsAdapterDelegate {
-        void needChangePanelVisibility(boolean z);
-
-        void onContextClick(BotInlineResult botInlineResult);
-
-        void onContextSearch(boolean z);
-    }
-
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
     class C18931 implements LocationProviderDelegate {
         C18931() {
@@ -161,17 +154,25 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    static /* synthetic */ int access$3104(MentionsAdapter mentionsAdapter) {
-        int i = mentionsAdapter.channelLastReqId + 1;
-        mentionsAdapter.channelLastReqId = i;
+    public interface MentionsAdapterDelegate {
+        void needChangePanelVisibility(boolean z);
+
+        void onContextClick(BotInlineResult botInlineResult);
+
+        void onContextSearch(boolean z);
+    }
+
+    static /* synthetic */ int access$3104(MentionsAdapter x0) {
+        int i = x0.channelLastReqId + 1;
+        x0.channelLastReqId = i;
         return i;
     }
 
-    public MentionsAdapter(Context context, boolean z, long j, MentionsAdapterDelegate mentionsAdapterDelegate) {
+    public MentionsAdapter(Context context, boolean darkTheme, long did, MentionsAdapterDelegate mentionsAdapterDelegate) {
         this.mContext = context;
         this.delegate = mentionsAdapterDelegate;
-        this.isDarkTheme = z;
-        this.dialog_id = j;
+        this.isDarkTheme = darkTheme;
+        this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new C18953());
     }
@@ -199,18 +200,18 @@ public class MentionsAdapter extends SelectionAdapter {
         this.noUserName = false;
     }
 
-    public void setParentFragment(ChatActivity chatActivity) {
-        this.parentFragment = chatActivity;
+    public void setParentFragment(ChatActivity fragment) {
+        this.parentFragment = fragment;
     }
 
-    public void setChatInfo(ChatFull chatFull) {
+    public void setChatInfo(ChatFull chatInfo) {
         this.currentAccount = UserConfig.selectedAccount;
-        this.info = chatFull;
-        if (!(this.inlineMediaEnabled != null || this.foundContextBot == null || this.parentFragment == null)) {
-            chatFull = this.parentFragment.getCurrentChat();
-            if (chatFull != null) {
-                this.inlineMediaEnabled = ChatObject.canSendStickers(chatFull);
-                if (this.inlineMediaEnabled != null) {
+        this.info = chatInfo;
+        if (!(this.inlineMediaEnabled || this.foundContextBot == null || this.parentFragment == null)) {
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (chat != null) {
+                this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
+                if (this.inlineMediaEnabled) {
                     this.searchResultUsernames = null;
                     notifyDataSetChanged();
                     this.delegate.needChangePanelVisibility(false);
@@ -223,20 +224,20 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    public void setNeedUsernames(boolean z) {
-        this.needUsernames = z;
+    public void setNeedUsernames(boolean value) {
+        this.needUsernames = value;
     }
 
-    public void setNeedBotContext(boolean z) {
-        this.needBotContext = z;
+    public void setNeedBotContext(boolean value) {
+        this.needBotContext = value;
     }
 
-    public void setBotInfo(SparseArray<BotInfo> sparseArray) {
-        this.botInfo = sparseArray;
+    public void setBotInfo(SparseArray<BotInfo> info) {
+        this.botInfo = info;
     }
 
-    public void setBotsCount(int i) {
-        this.botsCount = i;
+    public void setBotsCount(int count) {
+        this.botsCount = count;
     }
 
     public void clearRecentHashtags() {
@@ -273,51 +274,43 @@ public class MentionsAdapter extends SelectionAdapter {
         } else {
             this.foundContextBot = user;
             if (this.parentFragment != null) {
-                user = this.parentFragment.getCurrentChat();
-                if (user != null) {
-                    this.inlineMediaEnabled = ChatObject.canSendStickers(user);
-                    if (this.inlineMediaEnabled == null) {
+                Chat chat = this.parentFragment.getCurrentChat();
+                if (chat != null) {
+                    this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
+                    if (!this.inlineMediaEnabled) {
                         notifyDataSetChanged();
                         this.delegate.needChangePanelVisibility(true);
                         return;
                     }
                 }
             }
-            if (this.foundContextBot.bot_inline_geo != null) {
-                user = MessagesController.getNotificationsSettings(this.currentAccount);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("inlinegeo_");
-                stringBuilder.append(this.foundContextBot.id);
-                if (user.getBoolean(stringBuilder.toString(), false) != null || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
+            if (this.foundContextBot.bot_inline_geo) {
+                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
                     checkLocationPermissionsOrStart();
                 } else {
-                    user = this.foundContextBot;
+                    final User foundContextBotFinal = this.foundContextBot;
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
                     builder.setTitle(LocaleController.getString("ShareYouLocationTitle", C0446R.string.ShareYouLocationTitle));
                     builder.setMessage(LocaleController.getString("ShareYouLocationInline", C0446R.string.ShareYouLocationInline));
-                    final boolean[] zArr = new boolean[1];
+                    final boolean[] buttonClicked = new boolean[1];
                     builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            zArr[0] = 1;
-                            if (user != null) {
-                                dialogInterface = MessagesController.getNotificationsSettings(MentionsAdapter.this.currentAccount).edit();
-                                StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append("inlinegeo_");
-                                stringBuilder.append(user.id);
-                                dialogInterface.putBoolean(stringBuilder.toString(), true).commit();
+                            buttonClicked[0] = true;
+                            if (foundContextBotFinal != null) {
+                                MessagesController.getNotificationsSettings(MentionsAdapter.this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
                                 MentionsAdapter.this.checkLocationPermissionsOrStart();
                             }
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), new OnClickListener() {
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            zArr[0] = true;
+                        public void onClick(DialogInterface dialog, int which) {
+                            buttonClicked[0] = true;
                             MentionsAdapter.this.onLocationUnavailable();
                         }
                     });
                     this.parentFragment.showDialog(builder.create(), new OnDismissListener() {
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            if (zArr[0] == null) {
+                        public void onDismiss(DialogInterface dialog) {
+                            if (!buttonClicked[0]) {
                                 MentionsAdapter.this.onLocationUnavailable();
                             }
                         }
@@ -327,22 +320,22 @@ public class MentionsAdapter extends SelectionAdapter {
         }
         if (this.foundContextBot == null) {
             this.noUserName = true;
-        } else {
-            if (this.delegate != null) {
-                this.delegate.onContextSearch(true);
-            }
-            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, TtmlNode.ANONYMOUS_REGION_ID);
+            return;
         }
+        if (this.delegate != null) {
+            this.delegate.onContextSearch(true);
+        }
+        searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, TtmlNode.ANONYMOUS_REGION_ID);
     }
 
-    private void searchForContextBot(String str, String str2) {
-        if (this.foundContextBot == null || this.foundContextBot.username == null || !this.foundContextBot.username.equals(str) || this.searchingContextQuery == null || !this.searchingContextQuery.equals(str2)) {
+    private void searchForContextBot(String username, String query) {
+        if (this.foundContextBot == null || this.foundContextBot.username == null || !this.foundContextBot.username.equals(username) || this.searchingContextQuery == null || !this.searchingContextQuery.equals(query)) {
             this.searchResultBotContext = null;
             this.searchResultBotContextById = null;
             this.searchResultBotContextSwitch = null;
             notifyDataSetChanged();
             if (this.foundContextBot != null) {
-                if (this.inlineMediaEnabled || str == null || str2 == null) {
+                if (this.inlineMediaEnabled || username == null || query == null) {
                     this.delegate.needChangePanelVisibility(false);
                 } else {
                     return;
@@ -352,7 +345,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 AndroidUtilities.cancelRunOnUIThread(this.contextQueryRunnable);
                 this.contextQueryRunnable = null;
             }
-            if (TextUtils.isEmpty(str) || !(this.searchingContextUsername == null || this.searchingContextUsername.equals(str))) {
+            if (TextUtils.isEmpty(username) || !(this.searchingContextUsername == null || this.searchingContextUsername.equals(username))) {
                 if (this.contextUsernameReqid != 0) {
                     ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextUsernameReqid, true);
                     this.contextUsernameReqid = 0;
@@ -370,36 +363,35 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (this.delegate != null) {
                     this.delegate.onContextSearch(false);
                 }
-                if (str != null) {
-                    if (str.length() == 0) {
-                    }
+                if (username == null || username.length() == 0) {
+                    return;
                 }
-                return;
             }
-            if (str2 == null) {
-                if (this.contextQueryReqid != null) {
+            if (query == null) {
+                if (this.contextQueryReqid != 0) {
                     ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
                     this.contextQueryReqid = 0;
                 }
                 this.searchingContextQuery = null;
                 if (this.delegate != null) {
                     this.delegate.onContextSearch(false);
+                    return;
                 }
                 return;
             }
             if (this.delegate != null) {
                 if (this.foundContextBot != null) {
                     this.delegate.onContextSearch(true);
-                } else if (str.equals("gif")) {
+                } else if (username.equals("gif")) {
                     this.searchingContextUsername = "gif";
                     this.delegate.onContextSearch(false);
                 }
             }
-            final MessagesController instance = MessagesController.getInstance(this.currentAccount);
-            final MessagesStorage instance2 = MessagesStorage.getInstance(this.currentAccount);
-            this.searchingContextQuery = str2;
-            final String str3 = str2;
-            final String str4 = str;
+            final MessagesController messagesController = MessagesController.getInstance(this.currentAccount);
+            final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
+            this.searchingContextQuery = query;
+            final String str = query;
+            final String str2 = username;
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
@@ -407,23 +399,20 @@ public class MentionsAdapter extends SelectionAdapter {
                     C18961() {
                     }
 
-                    public void run(final TLObject tLObject, final TL_error tL_error) {
+                    public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                if (MentionsAdapter.this.searchingContextUsername != null) {
-                                    if (MentionsAdapter.this.searchingContextUsername.equals(str4)) {
-                                        User user = null;
-                                        if (tL_error == null) {
-                                            TL_contacts_resolvedPeer tL_contacts_resolvedPeer = (TL_contacts_resolvedPeer) tLObject;
-                                            if (!tL_contacts_resolvedPeer.users.isEmpty()) {
-                                                User user2 = (User) tL_contacts_resolvedPeer.users.get(0);
-                                                instance.putUser(user2, false);
-                                                instance2.putUsersAndChats(tL_contacts_resolvedPeer.users, null, true, true);
-                                                user = user2;
-                                            }
+                                if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(str2)) {
+                                    User user = null;
+                                    if (error == null) {
+                                        TL_contacts_resolvedPeer res = response;
+                                        if (!res.users.isEmpty()) {
+                                            user = (User) res.users.get(0);
+                                            messagesController.putUser(user, false);
+                                            messagesStorage.putUsersAndChats(res.users, null, true, true);
                                         }
-                                        MentionsAdapter.this.processFoundUser(user);
                                     }
+                                    MentionsAdapter.this.processFoundUser(user);
                                 }
                             }
                         });
@@ -433,21 +422,18 @@ public class MentionsAdapter extends SelectionAdapter {
                 public void run() {
                     if (MentionsAdapter.this.contextQueryRunnable == this) {
                         MentionsAdapter.this.contextQueryRunnable = null;
-                        if (MentionsAdapter.this.foundContextBot == null) {
-                            if (!MentionsAdapter.this.noUserName) {
-                                MentionsAdapter.this.searchingContextUsername = str4;
-                                TLObject userOrChat = instance.getUserOrChat(MentionsAdapter.this.searchingContextUsername);
-                                if (userOrChat instanceof User) {
-                                    MentionsAdapter.this.processFoundUser((User) userOrChat);
-                                } else {
-                                    userOrChat = new TL_contacts_resolveUsername();
-                                    userOrChat.username = MentionsAdapter.this.searchingContextUsername;
-                                    MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(userOrChat, new C18961());
-                                }
+                        if (MentionsAdapter.this.foundContextBot == null && !MentionsAdapter.this.noUserName) {
+                            MentionsAdapter.this.searchingContextUsername = str2;
+                            TLObject object = messagesController.getUserOrChat(MentionsAdapter.this.searchingContextUsername);
+                            if (object instanceof User) {
+                                MentionsAdapter.this.processFoundUser((User) object);
+                                return;
                             }
-                        }
-                        if (!MentionsAdapter.this.noUserName) {
-                            MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str3, TtmlNode.ANONYMOUS_REGION_ID);
+                            TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
+                            req.username = MentionsAdapter.this.searchingContextUsername;
+                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C18961());
+                        } else if (!MentionsAdapter.this.noUserName) {
+                            MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, TtmlNode.ANONYMOUS_REGION_ID);
                         }
                     }
                 }
@@ -466,768 +452,516 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     private void checkLocationPermissionsOrStart() {
-        if (this.parentFragment != null) {
-            if (this.parentFragment.getParentActivity() != null) {
-                if (VERSION.SDK_INT < 23 || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
-                    if (this.foundContextBot != null && this.foundContextBot.bot_inline_geo) {
-                        this.locationProvider.start();
-                    }
-                    return;
-                }
+        if (this.parentFragment != null && this.parentFragment.getParentActivity() != null) {
+            if (VERSION.SDK_INT >= 23 && this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != 0) {
                 this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
+            } else if (this.foundContextBot != null && this.foundContextBot.bot_inline_geo) {
+                this.locationProvider.start();
             }
         }
     }
 
-    public void setSearchingMentions(boolean z) {
-        this.isSearchingMentions = z;
+    public void setSearchingMentions(boolean value) {
+        this.isSearchingMentions = value;
     }
 
     public String getBotCaption() {
         if (this.foundContextBot != null) {
             return this.foundContextBot.bot_inline_placeholder;
         }
-        return (this.searchingContextUsername == null || !this.searchingContextUsername.equals("gif")) ? null : "Search GIFs";
+        if (this.searchingContextUsername == null || !this.searchingContextUsername.equals("gif")) {
+            return null;
+        }
+        return "Search GIFs";
     }
 
     public void searchForContextBotForNextOffset() {
-        if (!(this.contextQueryReqid != 0 || this.nextQueryOffset == null || this.nextQueryOffset.length() == 0 || this.foundContextBot == null)) {
-            if (this.searchingContextQuery != null) {
-                searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, this.nextQueryOffset);
-            }
+        if (this.contextQueryReqid == 0 && this.nextQueryOffset != null && this.nextQueryOffset.length() != 0 && this.foundContextBot != null && this.searchingContextQuery != null) {
+            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, this.nextQueryOffset);
         }
     }
 
-    private void searchForContextBotResults(boolean z, User user, String str, String str2) {
-        User user2 = user;
-        String str3 = str;
-        String str4 = str2;
+    private void searchForContextBotResults(boolean cache, User user, String query, String offset) {
         if (this.contextQueryReqid != 0) {
-            ConnectionsManager.getInstance(r8.currentAccount).cancelRequest(r8.contextQueryReqid, true);
-            r8.contextQueryReqid = 0;
+            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
+            this.contextQueryReqid = 0;
         }
-        if (r8.inlineMediaEnabled) {
-            if (str3 != null) {
-                if (user2 != null) {
-                    if (!user2.bot_inline_geo || r8.lastKnownLocation != null) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(r8.dialog_id);
-                        stringBuilder.append("_");
-                        stringBuilder.append(str3);
-                        stringBuilder.append("_");
-                        stringBuilder.append(str4);
-                        stringBuilder.append("_");
-                        stringBuilder.append(r8.dialog_id);
-                        stringBuilder.append("_");
-                        stringBuilder.append(user2.id);
-                        stringBuilder.append("_");
-                        Object valueOf = (!user2.bot_inline_geo || r8.lastKnownLocation == null || r8.lastKnownLocation.getLatitude() == -1000.0d) ? TtmlNode.ANONYMOUS_REGION_ID : Double.valueOf(r8.lastKnownLocation.getLatitude() + r8.lastKnownLocation.getLongitude());
-                        stringBuilder.append(valueOf);
-                        String stringBuilder2 = stringBuilder.toString();
-                        MessagesStorage instance = MessagesStorage.getInstance(r8.currentAccount);
-                        final String str5 = str3;
-                        final boolean z2 = z;
-                        final User user3 = user2;
-                        final String str6 = str4;
-                        C18978 c18978 = r0;
-                        final MessagesStorage messagesStorage = instance;
-                        MessagesStorage messagesStorage2 = instance;
-                        final String str7 = stringBuilder2;
-                        C18978 c189782 = new RequestDelegate() {
-                            public void run(final TLObject tLObject, TL_error tL_error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (MentionsAdapter.this.searchingContextQuery != null) {
-                                            if (str5.equals(MentionsAdapter.this.searchingContextQuery)) {
-                                                boolean z = false;
-                                                MentionsAdapter.this.contextQueryReqid = 0;
-                                                if (z2 && tLObject == null) {
-                                                    MentionsAdapter.this.searchForContextBotResults(false, user3, str5, str6);
-                                                } else if (MentionsAdapter.this.delegate != null) {
-                                                    MentionsAdapter.this.delegate.onContextSearch(false);
-                                                }
-                                                if (tLObject != null) {
-                                                    MentionsAdapterDelegate access$1700;
-                                                    TL_messages_botResults tL_messages_botResults = (TL_messages_botResults) tLObject;
-                                                    if (!(z2 || tL_messages_botResults.cache_time == 0)) {
-                                                        messagesStorage.saveBotCache(str7, tL_messages_botResults);
-                                                    }
-                                                    MentionsAdapter.this.nextQueryOffset = tL_messages_botResults.next_offset;
-                                                    if (MentionsAdapter.this.searchResultBotContextById == null) {
-                                                        MentionsAdapter.this.searchResultBotContextById = new HashMap();
-                                                        MentionsAdapter.this.searchResultBotContextSwitch = tL_messages_botResults.switch_pm;
-                                                    }
-                                                    int i = 0;
-                                                    while (i < tL_messages_botResults.results.size()) {
-                                                        BotInlineResult botInlineResult = (BotInlineResult) tL_messages_botResults.results.get(i);
-                                                        if (MentionsAdapter.this.searchResultBotContextById.containsKey(botInlineResult.id) || (!(botInlineResult.document instanceof TL_document) && !(botInlineResult.photo instanceof TL_photo) && botInlineResult.content == null && (botInlineResult.send_message instanceof TL_botInlineMessageMediaAuto))) {
-                                                            tL_messages_botResults.results.remove(i);
-                                                            i--;
-                                                        }
-                                                        botInlineResult.query_id = tL_messages_botResults.query_id;
-                                                        MentionsAdapter.this.searchResultBotContextById.put(botInlineResult.id, botInlineResult);
-                                                        i++;
-                                                    }
-                                                    if (MentionsAdapter.this.searchResultBotContext != null) {
-                                                        if (str6.length() != 0) {
-                                                            MentionsAdapter.this.searchResultBotContext.addAll(tL_messages_botResults.results);
-                                                            if (tL_messages_botResults.results.isEmpty()) {
-                                                                MentionsAdapter.this.nextQueryOffset = TtmlNode.ANONYMOUS_REGION_ID;
-                                                            }
-                                                            i = 1;
-                                                            MentionsAdapter.this.searchResultHashtags = null;
-                                                            MentionsAdapter.this.searchResultUsernames = null;
-                                                            MentionsAdapter.this.searchResultUsernamesMap = null;
-                                                            MentionsAdapter.this.searchResultCommands = null;
-                                                            MentionsAdapter.this.searchResultSuggestions = null;
-                                                            MentionsAdapter.this.searchResultCommandsHelp = null;
-                                                            MentionsAdapter.this.searchResultCommandsUsers = null;
-                                                            if (i == 0) {
-                                                                i = MentionsAdapter.this.searchResultBotContextSwitch == null ? 1 : 0;
-                                                                MentionsAdapter.this.notifyItemChanged(((MentionsAdapter.this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i) - 1);
-                                                                MentionsAdapter.this.notifyItemRangeInserted((MentionsAdapter.this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i, tL_messages_botResults.results.size());
-                                                            } else {
-                                                                MentionsAdapter.this.notifyDataSetChanged();
-                                                            }
-                                                            access$1700 = MentionsAdapter.this.delegate;
-                                                            if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
-                                                                z = true;
-                                                            }
-                                                            access$1700.needChangePanelVisibility(z);
-                                                        }
-                                                    }
-                                                    MentionsAdapter.this.searchResultBotContext = tL_messages_botResults.results;
-                                                    MentionsAdapter.this.contextMedia = tL_messages_botResults.gallery;
-                                                    i = false;
-                                                    MentionsAdapter.this.searchResultHashtags = null;
-                                                    MentionsAdapter.this.searchResultUsernames = null;
-                                                    MentionsAdapter.this.searchResultUsernamesMap = null;
-                                                    MentionsAdapter.this.searchResultCommands = null;
-                                                    MentionsAdapter.this.searchResultSuggestions = null;
-                                                    MentionsAdapter.this.searchResultCommandsHelp = null;
-                                                    MentionsAdapter.this.searchResultCommandsUsers = null;
-                                                    if (i == 0) {
-                                                        MentionsAdapter.this.notifyDataSetChanged();
-                                                    } else {
-                                                        if (MentionsAdapter.this.searchResultBotContextSwitch == null) {
-                                                        }
-                                                        MentionsAdapter.this.notifyItemChanged(((MentionsAdapter.this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i) - 1);
-                                                        MentionsAdapter.this.notifyItemRangeInserted((MentionsAdapter.this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i, tL_messages_botResults.results.size());
-                                                    }
-                                                    access$1700 = MentionsAdapter.this.delegate;
-                                                    z = true;
-                                                    access$1700.needChangePanelVisibility(z);
-                                                }
+        if (this.inlineMediaEnabled) {
+            if (query == null || user == null) {
+                this.searchingContextQuery = null;
+            } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
+                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.id).append("_");
+                Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? TtmlNode.ANONYMOUS_REGION_ID : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
+                final String key = append.append(valueOf).toString();
+                final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
+                final String str = query;
+                final boolean z = cache;
+                final User user2 = user;
+                final String str2 = offset;
+                RequestDelegate requestDelegate = new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                boolean z = false;
+                                if (MentionsAdapter.this.searchingContextQuery != null && str.equals(MentionsAdapter.this.searchingContextQuery)) {
+                                    MentionsAdapter.this.contextQueryReqid = 0;
+                                    if (z && response == null) {
+                                        MentionsAdapter.this.searchForContextBotResults(false, user2, str, str2);
+                                    } else if (MentionsAdapter.this.delegate != null) {
+                                        MentionsAdapter.this.delegate.onContextSearch(false);
+                                    }
+                                    if (response != null) {
+                                        TL_messages_botResults res = response;
+                                        if (!(z || res.cache_time == 0)) {
+                                            messagesStorage.saveBotCache(key, res);
+                                        }
+                                        MentionsAdapter.this.nextQueryOffset = res.next_offset;
+                                        if (MentionsAdapter.this.searchResultBotContextById == null) {
+                                            MentionsAdapter.this.searchResultBotContextById = new HashMap();
+                                            MentionsAdapter.this.searchResultBotContextSwitch = res.switch_pm;
+                                        }
+                                        int a = 0;
+                                        while (a < res.results.size()) {
+                                            BotInlineResult result = (BotInlineResult) res.results.get(a);
+                                            if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
+                                                res.results.remove(a);
+                                                a--;
+                                            }
+                                            result.query_id = res.query_id;
+                                            MentionsAdapter.this.searchResultBotContextById.put(result.id, result);
+                                            a++;
+                                        }
+                                        boolean added = false;
+                                        if (MentionsAdapter.this.searchResultBotContext == null || str2.length() == 0) {
+                                            MentionsAdapter.this.searchResultBotContext = res.results;
+                                            MentionsAdapter.this.contextMedia = res.gallery;
+                                        } else {
+                                            added = true;
+                                            MentionsAdapter.this.searchResultBotContext.addAll(res.results);
+                                            if (res.results.isEmpty()) {
+                                                MentionsAdapter.this.nextQueryOffset = TtmlNode.ANONYMOUS_REGION_ID;
                                             }
                                         }
+                                        MentionsAdapter.this.searchResultHashtags = null;
+                                        MentionsAdapter.this.searchResultUsernames = null;
+                                        MentionsAdapter.this.searchResultUsernamesMap = null;
+                                        MentionsAdapter.this.searchResultCommands = null;
+                                        MentionsAdapter.this.searchResultSuggestions = null;
+                                        MentionsAdapter.this.searchResultCommandsHelp = null;
+                                        MentionsAdapter.this.searchResultCommandsUsers = null;
+                                        if (added) {
+                                            int i;
+                                            boolean hasTop = MentionsAdapter.this.searchResultBotContextSwitch != null;
+                                            MentionsAdapter mentionsAdapter = MentionsAdapter.this;
+                                            int size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
+                                            if (hasTop) {
+                                                i = 1;
+                                            } else {
+                                                i = 0;
+                                            }
+                                            mentionsAdapter.notifyItemChanged((i + size) - 1);
+                                            mentionsAdapter = MentionsAdapter.this;
+                                            size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
+                                            if (hasTop) {
+                                                i = 1;
+                                            } else {
+                                                i = 0;
+                                            }
+                                            mentionsAdapter.notifyItemRangeInserted(i + size, res.results.size());
+                                        } else {
+                                            MentionsAdapter.this.notifyDataSetChanged();
+                                        }
+                                        MentionsAdapterDelegate access$1700 = MentionsAdapter.this.delegate;
+                                        if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
+                                            z = true;
+                                        }
+                                        access$1700.needChangePanelVisibility(z);
                                     }
-                                });
+                                }
                             }
-                        };
-                        if (z) {
-                            messagesStorage2.getBotCache(stringBuilder2, c18978);
-                        } else {
-                            TLObject tL_messages_getInlineBotResults = new TL_messages_getInlineBotResults();
-                            tL_messages_getInlineBotResults.bot = MessagesController.getInstance(r8.currentAccount).getInputUser(user2);
-                            tL_messages_getInlineBotResults.query = str3;
-                            tL_messages_getInlineBotResults.offset = str4;
-                            if (!(!user2.bot_inline_geo || r8.lastKnownLocation == null || r8.lastKnownLocation.getLatitude() == -1000.0d)) {
-                                tL_messages_getInlineBotResults.flags |= 1;
-                                tL_messages_getInlineBotResults.geo_point = new TL_inputGeoPoint();
-                                tL_messages_getInlineBotResults.geo_point.lat = r8.lastKnownLocation.getLatitude();
-                                tL_messages_getInlineBotResults.geo_point._long = r8.lastKnownLocation.getLongitude();
-                            }
-                            int i = (int) r8.dialog_id;
-                            long j = r8.dialog_id;
-                            if (i != 0) {
-                                tL_messages_getInlineBotResults.peer = MessagesController.getInstance(r8.currentAccount).getInputPeer(i);
-                            } else {
-                                tL_messages_getInlineBotResults.peer = new TL_inputPeerEmpty();
-                            }
-                            r8.contextQueryReqid = ConnectionsManager.getInstance(r8.currentAccount).sendRequest(tL_messages_getInlineBotResults, c18978, 2);
-                        }
-                        return;
+                        });
                     }
+                };
+                if (cache) {
+                    messagesStorage.getBotCache(key, requestDelegate);
                     return;
                 }
+                TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
+                req.bot = MessagesController.getInstance(this.currentAccount).getInputUser(user);
+                req.query = query;
+                req.offset = offset;
+                if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
+                    req.flags |= 1;
+                    req.geo_point = new TL_inputGeoPoint();
+                    req.geo_point.lat = this.lastKnownLocation.getLatitude();
+                    req.geo_point._long = this.lastKnownLocation.getLongitude();
+                }
+                int lower_id = (int) this.dialog_id;
+                int high_id = (int) (this.dialog_id >> 32);
+                if (lower_id != 0) {
+                    req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_id);
+                } else {
+                    req.peer = new TL_inputPeerEmpty();
+                }
+                this.contextQueryReqid = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, requestDelegate, 2);
             }
-            r8.searchingContextQuery = null;
-            return;
-        }
-        if (r8.delegate != null) {
-            r8.delegate.onContextSearch(false);
+        } else if (this.delegate != null) {
+            this.delegate.onContextSearch(false);
         }
     }
 
-    public void searchUsernameOrHashtag(String str, int i, ArrayList<MessageObject> arrayList, boolean z) {
-        String str2 = str;
-        int i2 = i;
-        ArrayList<MessageObject> arrayList2 = arrayList;
-        boolean z2 = z;
-        boolean z3 = false;
+    public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects, boolean usernameOnly) {
         if (this.channelReqId != 0) {
-            ConnectionsManager.getInstance(r0.currentAccount).cancelRequest(r0.channelReqId, true);
-            r0.channelReqId = 0;
+            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.channelReqId, true);
+            this.channelReqId = 0;
         }
-        if (r0.searchGlobalRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(r0.searchGlobalRunnable);
-            r0.searchGlobalRunnable = null;
+        if (this.searchGlobalRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.searchGlobalRunnable);
+            this.searchGlobalRunnable = null;
         }
-        if (TextUtils.isEmpty(str)) {
+        if (TextUtils.isEmpty(text)) {
             searchForContextBot(null, null);
-            r0.delegate.needChangePanelVisibility(false);
-            r0.lastText = null;
+            this.delegate.needChangePanelVisibility(false);
+            this.lastText = null;
             return;
         }
-        int i3;
-        int i4 = str.length() > 0 ? i2 - 1 : i2;
-        r0.lastText = null;
-        r0.lastUsernameOnly = z2;
-        StringBuilder stringBuilder = new StringBuilder();
-        char c = '9';
-        if (!z2 && r0.needBotContext && str2.charAt(0) == '@') {
-            String substring;
-            String str3;
-            int indexOf = str2.indexOf(32);
-            int length = str.length();
-            if (indexOf > 0) {
-                String substring2 = str2.substring(1, indexOf);
-                substring = str2.substring(indexOf + 1);
-                str3 = substring2;
-            } else if (str2.charAt(length - 1) == 't' && str2.charAt(length - 2) == 'o' && str2.charAt(length - 3) == 'b') {
-                str3 = str2.substring(1);
-                substring = TtmlNode.ANONYMOUS_REGION_ID;
+        int a;
+        char ch;
+        int searchPostion = position;
+        if (text.length() > 0) {
+            searchPostion--;
+        }
+        this.lastText = null;
+        this.lastUsernameOnly = usernameOnly;
+        StringBuilder result = new StringBuilder();
+        int foundType = -1;
+        boolean hasIllegalUsernameCharacters = false;
+        if (!usernameOnly && this.needBotContext && text.charAt(0) == '@') {
+            int index = text.indexOf(32);
+            int len = text.length();
+            String username = null;
+            String query = null;
+            if (index > 0) {
+                username = text.substring(1, index);
+                query = text.substring(index + 1);
+            } else if (text.charAt(len - 1) == 't' && text.charAt(len - 2) == 'o' && text.charAt(len - 3) == 'b') {
+                username = text.substring(1);
+                query = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
                 searchForContextBot(null, null);
-                str3 = null;
-                substring = str3;
             }
-            if (str3 == null || str3.length() < 1) {
-                str3 = TtmlNode.ANONYMOUS_REGION_ID;
+            if (username == null || username.length() < 1) {
+                username = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
-                i3 = 1;
-                while (i3 < str3.length()) {
-                    char charAt = str3.charAt(i3);
-                    if ((charAt < '0' || charAt > r15) && ((charAt < 'a' || charAt > 'z') && ((charAt < 'A' || charAt > 'Z') && charAt != '_'))) {
-                        str3 = TtmlNode.ANONYMOUS_REGION_ID;
+                for (a = 1; a < username.length(); a++) {
+                    ch = username.charAt(a);
+                    if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
+                        username = TtmlNode.ANONYMOUS_REGION_ID;
                         break;
-                    } else {
-                        i3++;
-                        c = '9';
                     }
                 }
             }
-            searchForContextBot(str3, substring);
+            searchForContextBot(username, query);
         } else {
             searchForContextBot(null, null);
         }
-        if (r0.foundContextBot == null) {
-            boolean z4;
-            boolean z5;
-            int i5;
-            boolean z6;
-            final ArrayList arrayList3;
-            final String toLowerCase;
-            boolean z7;
-            ArrayList arrayList4;
-            final SparseArray sparseArray;
-            SparseArray sparseArray2;
-            ArrayList arrayList5;
-            int i6;
-            User user;
-            Chat currentChat;
-            int i7;
-            User user2;
-            Runnable c07949;
-            ArrayList hashtags;
-            HashtagObject hashtagObject;
-            ArrayList arrayList6;
-            String toLowerCase2;
-            BotInfo botInfo;
-            int i8;
-            TL_botCommand tL_botCommand;
-            StringBuilder stringBuilder2;
-            Object[] suggestion;
-            EmojiSuggestion emojiSuggestion;
-            MentionsAdapterDelegate mentionsAdapterDelegate;
-            final MessagesController instance = MessagesController.getInstance(r0.currentAccount);
-            if (z2) {
-                stringBuilder.append(str2.substring(1));
-                r0.resultStartPosition = 0;
-                r0.resultLength = stringBuilder.length();
-                z4 = false;
-                z5 = z4;
+        if (this.foundContextBot == null) {
+            MessagesController messagesController = MessagesController.getInstance(this.currentAccount);
+            int dogPostion = -1;
+            if (usernameOnly) {
+                result.append(text.substring(1));
+                this.resultStartPosition = 0;
+                this.resultLength = result.length();
+                foundType = 0;
             } else {
-                z5 = false;
-                while (i4 >= 0) {
-                    if (i4 < str.length()) {
-                        c = str2.charAt(i4);
-                        if (i4 != 0) {
-                            i3 = i4 - 1;
-                            if (str2.charAt(i3) != ' ') {
-                                if (str2.charAt(i3) != '\n') {
-                                    if (c >= '0') {
-                                        if (c > '9') {
-                                            stringBuilder.insert(0, c);
+                a = searchPostion;
+                while (a >= 0) {
+                    if (a < text.length()) {
+                        ch = text.charAt(a);
+                        if (a == 0 || text.charAt(a - 1) == ' ' || text.charAt(a - 1) == '\n') {
+                            if (ch != '@') {
+                                if (ch != '#') {
+                                    if (a != 0 || this.botInfo == null || ch != '/') {
+                                        if (ch == ':' && result.length() > 0) {
+                                            foundType = 3;
+                                            this.resultStartPosition = a;
+                                            this.resultLength = result.length() + 1;
+                                            break;
                                         }
                                     }
-                                    if (c >= 'a') {
-                                        if (c > 'z') {
-                                        }
-                                        stringBuilder.insert(0, c);
-                                    }
-                                    if (c < 'A' || c > 'Z') {
-                                        if (c != '_') {
-                                            z5 = true;
-                                        }
-                                        stringBuilder.insert(0, c);
-                                    }
-                                    stringBuilder.insert(0, c);
+                                    foundType = 2;
+                                    this.resultStartPosition = a;
+                                    this.resultLength = result.length() + 1;
+                                    break;
+                                } else if (this.searchAdapterHelper.loadRecentHashtags()) {
+                                    foundType = 1;
+                                    this.resultStartPosition = a;
+                                    this.resultLength = result.length() + 1;
+                                    result.insert(0, ch);
+                                } else {
+                                    this.lastText = text;
+                                    this.lastPosition = position;
+                                    this.messages = messageObjects;
+                                    this.delegate.needChangePanelVisibility(false);
+                                    return;
+                                }
+                            } else if (this.needUsernames || (this.needBotContext && a == 0)) {
+                                if (this.info != null || a == 0) {
+                                    dogPostion = a;
+                                    foundType = 0;
+                                    this.resultStartPosition = a;
+                                    this.resultLength = result.length() + 1;
+                                } else {
+                                    this.lastText = text;
+                                    this.lastPosition = position;
+                                    this.messages = messageObjects;
+                                    this.delegate.needChangePanelVisibility(false);
+                                    return;
                                 }
                             }
                         }
-                        if (c != '@') {
-                            if (c != '#') {
-                                if (i4 != 0 || r0.botInfo == null || c != '/') {
-                                    if (c == ':' && stringBuilder.length() > 0) {
-                                        r0.resultStartPosition = i4;
-                                        r0.resultLength = stringBuilder.length() + 1;
-                                        z4 = true;
-                                        break;
-                                    }
-                                }
-                                r0.resultStartPosition = i4;
-                                r0.resultLength = stringBuilder.length() + 1;
-                                z4 = true;
-                                break;
-                            } else if (r0.searchAdapterHelper.loadRecentHashtags()) {
-                                r0.resultStartPosition = i4;
-                                r0.resultLength = stringBuilder.length() + 1;
-                                stringBuilder.insert(0, c);
-                                z4 = true;
-                            } else {
-                                r0.lastText = str2;
-                                r0.lastPosition = i2;
-                                r0.messages = arrayList2;
-                                r0.delegate.needChangePanelVisibility(false);
-                                return;
+                        if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
+                            hasIllegalUsernameCharacters = true;
+                        }
+                        result.insert(0, ch);
+                    }
+                    a--;
+                }
+            }
+            if (foundType == -1) {
+                this.delegate.needChangePanelVisibility(false);
+            } else if (foundType == 0) {
+                User user;
+                Chat chat;
+                ArrayList<Integer> users = new ArrayList();
+                for (a = 0; a < Math.min(100, messageObjects.size()); a++) {
+                    int from_id = ((MessageObject) messageObjects.get(a)).messageOwner.from_id;
+                    if (!users.contains(Integer.valueOf(from_id))) {
+                        users.add(Integer.valueOf(from_id));
+                    }
+                }
+                String usernameString = result.toString().toLowerCase();
+                boolean hasSpace = usernameString.indexOf(32) >= 0;
+                ArrayList<User> newResult = new ArrayList();
+                SparseArray<User> newResultsHashMap = new SparseArray();
+                SparseArray<User> newMap = new SparseArray();
+                ArrayList<TL_topPeer> inlineBots = DataQuery.getInstance(this.currentAccount).inlineBots;
+                if (!usernameOnly && this.needBotContext && dogPostion == 0 && !inlineBots.isEmpty()) {
+                    int count = 0;
+                    for (a = 0; a < inlineBots.size(); a++) {
+                        user = messagesController.getUser(Integer.valueOf(((TL_topPeer) inlineBots.get(a)).peer.user_id));
+                        if (user != null) {
+                            if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
+                                newResult.add(user);
+                                newResultsHashMap.put(user.id, user);
+                                count++;
                             }
-                        } else if (r0.needUsernames || (r0.needBotContext && i4 == 0)) {
-                            if (r0.info != null || i4 == 0) {
-                                r0.resultStartPosition = i4;
-                                r0.resultLength = stringBuilder.length() + 1;
-                                i5 = i4;
-                                z4 = false;
-                                z6 = true;
-                                if (z4 != z6) {
-                                    r0.delegate.needChangePanelVisibility(false);
+                            if (count == 5) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (this.parentFragment != null) {
+                    chat = this.parentFragment.getCurrentChat();
+                } else if (this.info != null) {
+                    chat = messagesController.getChat(Integer.valueOf(this.info.id));
+                } else {
+                    chat = null;
+                }
+                if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
+                    for (a = 0; a < this.info.participants.participants.size(); a++) {
+                        user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
+                        if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
+                            if (newResultsHashMap.indexOfKey(user.id) < 0) {
+                                if (usernameString.length() == 0) {
+                                    if (!user.deleted) {
+                                        newResult.add(user);
+                                    }
+                                } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
+                                } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
+                                } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
+                                } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
                                 }
-                                if (!z4) {
-                                    arrayList3 = new ArrayList();
-                                    for (i2 = 0; i2 < Math.min(100, arrayList.size()); i2++) {
-                                        i4 = ((MessageObject) arrayList2.get(i2)).messageOwner.from_id;
-                                        if (!arrayList3.contains(Integer.valueOf(i4))) {
-                                            arrayList3.add(Integer.valueOf(i4));
-                                        }
-                                    }
-                                    toLowerCase = stringBuilder.toString().toLowerCase();
-                                    z7 = toLowerCase.indexOf(32) < 0;
-                                    arrayList4 = new ArrayList();
-                                    sparseArray = new SparseArray();
-                                    sparseArray2 = new SparseArray();
-                                    arrayList5 = DataQuery.getInstance(r0.currentAccount).inlineBots;
-                                    if (!z2 && r0.needBotContext && r17 == 0 && !arrayList5.isEmpty()) {
-                                        i3 = 0;
-                                        i6 = i3;
-                                        while (i3 < arrayList5.size()) {
-                                            user = instance.getUser(Integer.valueOf(((TL_topPeer) arrayList5.get(i3)).peer.user_id));
-                                            if (user == null) {
-                                                if (user.username != null && user.username.length() > 0 && ((toLowerCase.length() > 0 && user.username.toLowerCase().startsWith(toLowerCase)) || toLowerCase.length() == 0)) {
-                                                    arrayList4.add(user);
-                                                    sparseArray.put(user.id, user);
-                                                    i6++;
-                                                }
-                                                if (i6 == 5) {
-                                                    break;
-                                                }
-                                            }
-                                            i3++;
-                                        }
-                                    }
-                                    currentChat = r0.parentFragment == null ? r0.parentFragment.getCurrentChat() : r0.info == null ? instance.getChat(Integer.valueOf(r0.info.id)) : null;
-                                    if (!(currentChat == null || r0.info == null || r0.info.participants == null || (ChatObject.isChannel(currentChat) && !currentChat.megagroup))) {
-                                        while (i7 < r0.info.participants.participants.size()) {
-                                            user2 = instance.getUser(Integer.valueOf(((ChatParticipant) r0.info.participants.participants.get(i7)).user_id));
-                                            if (user2 != null && (z2 || !UserObject.isUserSelf(user2))) {
-                                                if (sparseArray.indexOfKey(user2.id) >= 0) {
-                                                    if (toLowerCase.length() != 0) {
-                                                        if (!user2.deleted) {
-                                                            arrayList4.add(user2);
-                                                        }
-                                                    } else if (user2.username == null && user2.username.length() > 0 && user2.username.toLowerCase().startsWith(toLowerCase)) {
-                                                        arrayList4.add(user2);
-                                                        sparseArray2.put(user2.id, user2);
-                                                    } else if (user2.first_name == null && user2.first_name.length() > 0 && user2.first_name.toLowerCase().startsWith(toLowerCase)) {
-                                                        arrayList4.add(user2);
-                                                        sparseArray2.put(user2.id, user2);
-                                                    } else if (user2.last_name == null && user2.last_name.length() > 0 && user2.last_name.toLowerCase().startsWith(toLowerCase)) {
-                                                        arrayList4.add(user2);
-                                                        sparseArray2.put(user2.id, user2);
-                                                    } else if (z7 && ContactsController.formatName(user2.first_name, user2.last_name).toLowerCase().startsWith(toLowerCase)) {
-                                                        arrayList4.add(user2);
-                                                        sparseArray2.put(user2.id, user2);
-                                                    }
-                                                }
-                                            }
-                                            i7++;
-                                        }
-                                    }
-                                    r0.searchResultHashtags = null;
-                                    r0.searchResultCommands = null;
-                                    r0.searchResultCommandsHelp = null;
-                                    r0.searchResultCommandsUsers = null;
-                                    r0.searchResultSuggestions = null;
-                                    r0.searchResultUsernames = arrayList4;
-                                    r0.searchResultUsernamesMap = sparseArray2;
-                                    if (currentChat != null && currentChat.megagroup && toLowerCase.length() > 0) {
-                                        c07949 = new Runnable() {
+                            }
+                        }
+                    }
+                }
+                this.searchResultHashtags = null;
+                this.searchResultCommands = null;
+                this.searchResultCommandsHelp = null;
+                this.searchResultCommandsUsers = null;
+                this.searchResultSuggestions = null;
+                this.searchResultUsernames = newResult;
+                this.searchResultUsernamesMap = newMap;
+                if (chat != null && chat.megagroup && usernameString.length() > 0) {
+                    final String str = usernameString;
+                    final MessagesController messagesController2 = messagesController;
+                    C07949 c07949 = new Runnable() {
+                        public void run() {
+                            if (MentionsAdapter.this.searchGlobalRunnable == this) {
+                                TL_channels_getParticipants req = new TL_channels_getParticipants();
+                                req.channel = MessagesController.getInputChannel(chat);
+                                req.limit = 20;
+                                req.offset = 0;
+                                req.filter = new TL_channelParticipantsSearch();
+                                req.filter.f32q = str;
+                                final int currentReqId = MentionsAdapter.access$3104(MentionsAdapter.this);
+                                MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new RequestDelegate() {
+                                    public void run(final TLObject response, final TL_error error) {
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                if (MentionsAdapter.this.searchGlobalRunnable == this) {
-                                                    TLObject tL_channels_getParticipants = new TL_channels_getParticipants();
-                                                    tL_channels_getParticipants.channel = MessagesController.getInputChannel(currentChat);
-                                                    tL_channels_getParticipants.limit = 20;
-                                                    tL_channels_getParticipants.offset = 0;
-                                                    tL_channels_getParticipants.filter = new TL_channelParticipantsSearch();
-                                                    tL_channels_getParticipants.filter.f32q = toLowerCase;
-                                                    final int access$3104 = MentionsAdapter.access$3104(MentionsAdapter.this);
-                                                    MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(tL_channels_getParticipants, new RequestDelegate() {
-                                                        public void run(final TLObject tLObject, final TL_error tL_error) {
-                                                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                                                public void run() {
-                                                                    if (!(MentionsAdapter.this.channelReqId == 0 || access$3104 != MentionsAdapter.this.channelLastReqId || MentionsAdapter.this.searchResultUsernamesMap == null || MentionsAdapter.this.searchResultUsernames == null || tL_error != null)) {
-                                                                        TL_channels_channelParticipants tL_channels_channelParticipants = (TL_channels_channelParticipants) tLObject;
-                                                                        instance.putUsers(tL_channels_channelParticipants.users, false);
-                                                                        if (!tL_channels_channelParticipants.participants.isEmpty()) {
-                                                                            int clientUserId = UserConfig.getInstance(MentionsAdapter.this.currentAccount).getClientUserId();
-                                                                            for (int i = 0; i < tL_channels_channelParticipants.participants.size(); i++) {
-                                                                                ChannelParticipant channelParticipant = (ChannelParticipant) tL_channels_channelParticipants.participants.get(i);
-                                                                                if (MentionsAdapter.this.searchResultUsernamesMap.indexOfKey(channelParticipant.user_id) < 0) {
-                                                                                    if (MentionsAdapter.this.isSearchingMentions || channelParticipant.user_id != clientUserId) {
-                                                                                        User user = instance.getUser(Integer.valueOf(channelParticipant.user_id));
-                                                                                        if (user != null) {
-                                                                                            MentionsAdapter.this.searchResultUsernames.add(user);
-                                                                                        } else {
-                                                                                            return;
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            MentionsAdapter.this.notifyDataSetChanged();
-                                                                        }
-                                                                    }
-                                                                    MentionsAdapter.this.channelReqId = 0;
+                                                if (!(MentionsAdapter.this.channelReqId == 0 || currentReqId != MentionsAdapter.this.channelLastReqId || MentionsAdapter.this.searchResultUsernamesMap == null || MentionsAdapter.this.searchResultUsernames == null || error != null)) {
+                                                    TL_channels_channelParticipants res = response;
+                                                    messagesController2.putUsers(res.users, false);
+                                                    if (!res.participants.isEmpty()) {
+                                                        int currentUserId = UserConfig.getInstance(MentionsAdapter.this.currentAccount).getClientUserId();
+                                                        for (int a = 0; a < res.participants.size(); a++) {
+                                                            ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
+                                                            if (MentionsAdapter.this.searchResultUsernamesMap.indexOfKey(participant.user_id) < 0 && (MentionsAdapter.this.isSearchingMentions || participant.user_id != currentUserId)) {
+                                                                User user = messagesController2.getUser(Integer.valueOf(participant.user_id));
+                                                                if (user != null) {
+                                                                    MentionsAdapter.this.searchResultUsernames.add(user);
+                                                                } else {
+                                                                    return;
                                                                 }
-                                                            });
+                                                            }
                                                         }
-                                                    });
-                                                }
-                                            }
-                                        };
-                                        r0.searchGlobalRunnable = c07949;
-                                        AndroidUtilities.runOnUIThread(c07949, 200);
-                                    }
-                                    Collections.sort(r0.searchResultUsernames, new Comparator<User>() {
-                                        public int compare(User user, User user2) {
-                                            int i = 0;
-                                            if (sparseArray.indexOfKey(user.id) >= 0 && sparseArray.indexOfKey(user2.id) >= 0) {
-                                                return 0;
-                                            }
-                                            if (sparseArray.indexOfKey(user.id) >= 0) {
-                                                return -1;
-                                            }
-                                            if (sparseArray.indexOfKey(user2.id) >= 0) {
-                                                return 1;
-                                            }
-                                            user = arrayList3.indexOf(Integer.valueOf(user.id));
-                                            user2 = arrayList3.indexOf(Integer.valueOf(user2.id));
-                                            if (user != -1 && user2 != -1) {
-                                                if (user < user2) {
-                                                    i = -1;
-                                                } else if (user != user2) {
-                                                    i = 1;
-                                                }
-                                                return i;
-                                            } else if (user != -1 && user2 == -1) {
-                                                return -1;
-                                            } else {
-                                                if (user != -1 || user2 == -1) {
-                                                    return 0;
-                                                }
-                                                return 1;
-                                            }
-                                        }
-                                    });
-                                    notifyDataSetChanged();
-                                    r0.delegate.needChangePanelVisibility(arrayList4.isEmpty() ^ true);
-                                } else if (z4) {
-                                    arrayList3 = new ArrayList();
-                                    toLowerCase = stringBuilder.toString().toLowerCase();
-                                    hashtags = r0.searchAdapterHelper.getHashtags();
-                                    while (i7 < hashtags.size()) {
-                                        hashtagObject = (HashtagObject) hashtags.get(i7);
-                                        if (!(hashtagObject == null || hashtagObject.hashtag == null || !hashtagObject.hashtag.startsWith(toLowerCase))) {
-                                            arrayList3.add(hashtagObject.hashtag);
-                                        }
-                                        i7++;
-                                    }
-                                    r0.searchResultHashtags = arrayList3;
-                                    r0.searchResultUsernames = null;
-                                    r0.searchResultUsernamesMap = null;
-                                    r0.searchResultCommands = null;
-                                    r0.searchResultCommandsHelp = null;
-                                    r0.searchResultCommandsUsers = null;
-                                    r0.searchResultSuggestions = null;
-                                    notifyDataSetChanged();
-                                    r0.delegate.needChangePanelVisibility(arrayList3.isEmpty() ^ true);
-                                } else if (z4) {
-                                    arrayList3 = new ArrayList();
-                                    arrayList6 = new ArrayList();
-                                    hashtags = new ArrayList();
-                                    toLowerCase2 = stringBuilder.toString().toLowerCase();
-                                    for (i4 = 0; i4 < r0.botInfo.size(); i4++) {
-                                        botInfo = (BotInfo) r0.botInfo.valueAt(i4);
-                                        for (i8 = 0; i8 < botInfo.commands.size(); i8++) {
-                                            tL_botCommand = (TL_botCommand) botInfo.commands.get(i8);
-                                            if (!(tL_botCommand == null || tL_botCommand.command == null || !tL_botCommand.command.startsWith(toLowerCase2))) {
-                                                stringBuilder2 = new StringBuilder();
-                                                stringBuilder2.append("/");
-                                                stringBuilder2.append(tL_botCommand.command);
-                                                arrayList3.add(stringBuilder2.toString());
-                                                arrayList6.add(tL_botCommand.description);
-                                                hashtags.add(instance.getUser(Integer.valueOf(botInfo.user_id)));
-                                            }
-                                        }
-                                    }
-                                    r0.searchResultHashtags = null;
-                                    r0.searchResultUsernames = null;
-                                    r0.searchResultUsernamesMap = null;
-                                    r0.searchResultSuggestions = null;
-                                    r0.searchResultCommands = arrayList3;
-                                    r0.searchResultCommandsHelp = arrayList6;
-                                    r0.searchResultCommandsUsers = hashtags;
-                                    notifyDataSetChanged();
-                                    r0.delegate.needChangePanelVisibility(arrayList3.isEmpty() ^ true);
-                                } else if (z4) {
-                                    if (z5) {
-                                        suggestion = Emoji.getSuggestion(stringBuilder.toString());
-                                        if (suggestion != null) {
-                                            r0.searchResultSuggestions = new ArrayList();
-                                            for (Object obj : suggestion) {
-                                                emojiSuggestion = (EmojiSuggestion) obj;
-                                                emojiSuggestion.emoji = emojiSuggestion.emoji.replace("\ufe0f", TtmlNode.ANONYMOUS_REGION_ID);
-                                                r0.searchResultSuggestions.add(emojiSuggestion);
-                                            }
-                                            Emoji.loadRecentEmoji();
-                                            Collections.sort(r0.searchResultSuggestions, new Comparator<EmojiSuggestion>() {
-                                                public int compare(EmojiSuggestion emojiSuggestion, EmojiSuggestion emojiSuggestion2) {
-                                                    emojiSuggestion = (Integer) Emoji.emojiUseHistory.get(emojiSuggestion.emoji);
-                                                    if (emojiSuggestion == null) {
-                                                        emojiSuggestion = Integer.valueOf(0);
+                                                        MentionsAdapter.this.notifyDataSetChanged();
                                                     }
-                                                    emojiSuggestion2 = (Integer) Emoji.emojiUseHistory.get(emojiSuggestion2.emoji);
-                                                    if (emojiSuggestion2 == null) {
-                                                        emojiSuggestion2 = Integer.valueOf(0);
-                                                    }
-                                                    return emojiSuggestion2.compareTo(emojiSuggestion);
                                                 }
-                                            });
-                                        }
-                                        r0.searchResultHashtags = null;
-                                        r0.searchResultUsernames = null;
-                                        r0.searchResultUsernamesMap = null;
-                                        r0.searchResultCommands = null;
-                                        r0.searchResultCommandsHelp = null;
-                                        r0.searchResultCommandsUsers = null;
-                                        notifyDataSetChanged();
-                                        mentionsAdapterDelegate = r0.delegate;
-                                        if (r0.searchResultSuggestions != null) {
-                                            z3 = true;
-                                        }
-                                        mentionsAdapterDelegate.needChangePanelVisibility(z3);
-                                    } else {
-                                        r0.delegate.needChangePanelVisibility(false);
+                                                MentionsAdapter.this.channelReqId = 0;
+                                            }
+                                        });
                                     }
-                                }
-                                return;
-                            }
-                            r0.lastText = str2;
-                            r0.lastPosition = i2;
-                            r0.messages = arrayList2;
-                            r0.delegate.needChangePanelVisibility(false);
-                            return;
-                        }
-                        if (c >= '0') {
-                            if (c > '9') {
-                                stringBuilder.insert(0, c);
+                                });
                             }
                         }
-                        if (c >= 'a') {
-                            if (c > 'z') {
-                            }
-                            stringBuilder.insert(0, c);
-                        }
-                        if (c != '_') {
-                            z5 = true;
-                        }
-                        stringBuilder.insert(0, c);
-                    }
-                    i4--;
-                }
-                z4 = true;
-            }
-            z6 = true;
-            i5 = -1;
-            if (z4 != z6) {
-                if (!z4) {
-                    arrayList3 = new ArrayList();
-                    for (i2 = 0; i2 < Math.min(100, arrayList.size()); i2++) {
-                        i4 = ((MessageObject) arrayList2.get(i2)).messageOwner.from_id;
-                        if (!arrayList3.contains(Integer.valueOf(i4))) {
-                            arrayList3.add(Integer.valueOf(i4));
-                        }
-                    }
-                    toLowerCase = stringBuilder.toString().toLowerCase();
-                    if (toLowerCase.indexOf(32) < 0) {
-                    }
-                    arrayList4 = new ArrayList();
-                    sparseArray = new SparseArray();
-                    sparseArray2 = new SparseArray();
-                    arrayList5 = DataQuery.getInstance(r0.currentAccount).inlineBots;
-                    i3 = 0;
-                    i6 = i3;
-                    while (i3 < arrayList5.size()) {
-                        user = instance.getUser(Integer.valueOf(((TL_topPeer) arrayList5.get(i3)).peer.user_id));
-                        if (user == null) {
-                            arrayList4.add(user);
-                            sparseArray.put(user.id, user);
-                            i6++;
-                            if (i6 == 5) {
-                                break;
-                            }
-                        }
-                        i3++;
-                    }
-                    if (r0.parentFragment == null) {
-                        if (r0.info == null) {
-                        }
-                    }
-                    while (i7 < r0.info.participants.participants.size()) {
-                        user2 = instance.getUser(Integer.valueOf(((ChatParticipant) r0.info.participants.participants.get(i7)).user_id));
-                        if (sparseArray.indexOfKey(user2.id) >= 0) {
-                            if (toLowerCase.length() != 0) {
-                                if (user2.username == null) {
-                                }
-                                if (user2.first_name == null) {
-                                }
-                                if (user2.last_name == null) {
-                                }
-                                arrayList4.add(user2);
-                                sparseArray2.put(user2.id, user2);
-                            } else if (!user2.deleted) {
-                                arrayList4.add(user2);
-                            }
-                        }
-                        i7++;
-                    }
-                    r0.searchResultHashtags = null;
-                    r0.searchResultCommands = null;
-                    r0.searchResultCommandsHelp = null;
-                    r0.searchResultCommandsUsers = null;
-                    r0.searchResultSuggestions = null;
-                    r0.searchResultUsernames = arrayList4;
-                    r0.searchResultUsernamesMap = sparseArray2;
-                    c07949 = /* anonymous class already generated */;
-                    r0.searchGlobalRunnable = c07949;
+                    };
+                    this.searchGlobalRunnable = c07949;
                     AndroidUtilities.runOnUIThread(c07949, 200);
-                    Collections.sort(r0.searchResultUsernames, /* anonymous class already generated */);
-                    notifyDataSetChanged();
-                    r0.delegate.needChangePanelVisibility(arrayList4.isEmpty() ^ true);
-                } else if (z4) {
-                    arrayList3 = new ArrayList();
-                    toLowerCase = stringBuilder.toString().toLowerCase();
-                    hashtags = r0.searchAdapterHelper.getHashtags();
-                    while (i7 < hashtags.size()) {
-                        hashtagObject = (HashtagObject) hashtags.get(i7);
-                        arrayList3.add(hashtagObject.hashtag);
-                        i7++;
-                    }
-                    r0.searchResultHashtags = arrayList3;
-                    r0.searchResultUsernames = null;
-                    r0.searchResultUsernamesMap = null;
-                    r0.searchResultCommands = null;
-                    r0.searchResultCommandsHelp = null;
-                    r0.searchResultCommandsUsers = null;
-                    r0.searchResultSuggestions = null;
-                    notifyDataSetChanged();
-                    r0.delegate.needChangePanelVisibility(arrayList3.isEmpty() ^ true);
-                } else if (z4) {
-                    arrayList3 = new ArrayList();
-                    arrayList6 = new ArrayList();
-                    hashtags = new ArrayList();
-                    toLowerCase2 = stringBuilder.toString().toLowerCase();
-                    for (i4 = 0; i4 < r0.botInfo.size(); i4++) {
-                        botInfo = (BotInfo) r0.botInfo.valueAt(i4);
-                        for (i8 = 0; i8 < botInfo.commands.size(); i8++) {
-                            tL_botCommand = (TL_botCommand) botInfo.commands.get(i8);
-                            stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append("/");
-                            stringBuilder2.append(tL_botCommand.command);
-                            arrayList3.add(stringBuilder2.toString());
-                            arrayList6.add(tL_botCommand.description);
-                            hashtags.add(instance.getUser(Integer.valueOf(botInfo.user_id)));
+                }
+                final SparseArray<User> sparseArray = newResultsHashMap;
+                final ArrayList<Integer> arrayList = users;
+                Collections.sort(this.searchResultUsernames, new Comparator<User>() {
+                    public int compare(User lhs, User rhs) {
+                        if (sparseArray.indexOfKey(lhs.id) >= 0 && sparseArray.indexOfKey(rhs.id) >= 0) {
+                            return 0;
                         }
-                    }
-                    r0.searchResultHashtags = null;
-                    r0.searchResultUsernames = null;
-                    r0.searchResultUsernamesMap = null;
-                    r0.searchResultSuggestions = null;
-                    r0.searchResultCommands = arrayList3;
-                    r0.searchResultCommandsHelp = arrayList6;
-                    r0.searchResultCommandsUsers = hashtags;
-                    notifyDataSetChanged();
-                    r0.delegate.needChangePanelVisibility(arrayList3.isEmpty() ^ true);
-                } else if (z4) {
-                    if (z5) {
-                        r0.delegate.needChangePanelVisibility(false);
-                    } else {
-                        suggestion = Emoji.getSuggestion(stringBuilder.toString());
-                        if (suggestion != null) {
-                            r0.searchResultSuggestions = new ArrayList();
-                            while (i2 < suggestion.length) {
-                                emojiSuggestion = (EmojiSuggestion) obj;
-                                emojiSuggestion.emoji = emojiSuggestion.emoji.replace("\ufe0f", TtmlNode.ANONYMOUS_REGION_ID);
-                                r0.searchResultSuggestions.add(emojiSuggestion);
+                        if (sparseArray.indexOfKey(lhs.id) >= 0) {
+                            return -1;
+                        }
+                        if (sparseArray.indexOfKey(rhs.id) >= 0) {
+                            return 1;
+                        }
+                        int lhsNum = arrayList.indexOf(Integer.valueOf(lhs.id));
+                        int rhsNum = arrayList.indexOf(Integer.valueOf(rhs.id));
+                        if (lhsNum == -1 || rhsNum == -1) {
+                            if (lhsNum != -1 && rhsNum == -1) {
+                                return -1;
                             }
-                            Emoji.loadRecentEmoji();
-                            Collections.sort(r0.searchResultSuggestions, /* anonymous class already generated */);
+                            if (lhsNum != -1 || rhsNum == -1) {
+                                return 0;
+                            }
+                            return 1;
+                        } else if (lhsNum >= rhsNum) {
+                            return lhsNum == rhsNum ? 0 : 1;
+                        } else {
+                            return -1;
                         }
-                        r0.searchResultHashtags = null;
-                        r0.searchResultUsernames = null;
-                        r0.searchResultUsernamesMap = null;
-                        r0.searchResultCommands = null;
-                        r0.searchResultCommandsHelp = null;
-                        r0.searchResultCommandsUsers = null;
-                        notifyDataSetChanged();
-                        mentionsAdapterDelegate = r0.delegate;
-                        if (r0.searchResultSuggestions != null) {
-                            z3 = true;
-                        }
-                        mentionsAdapterDelegate.needChangePanelVisibility(z3);
+                    }
+                });
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(!newResult.isEmpty());
+            } else if (foundType == 1) {
+                newResult = new ArrayList();
+                String hashtagString = result.toString().toLowerCase();
+                ArrayList<HashtagObject> hashtags = this.searchAdapterHelper.getHashtags();
+                for (a = 0; a < hashtags.size(); a++) {
+                    HashtagObject hashtagObject = (HashtagObject) hashtags.get(a);
+                    if (!(hashtagObject == null || hashtagObject.hashtag == null || !hashtagObject.hashtag.startsWith(hashtagString))) {
+                        newResult.add(hashtagObject.hashtag);
                     }
                 }
-                return;
+                this.searchResultHashtags = newResult;
+                this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
+                this.searchResultCommands = null;
+                this.searchResultCommandsHelp = null;
+                this.searchResultCommandsUsers = null;
+                this.searchResultSuggestions = null;
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(!newResult.isEmpty());
+            } else if (foundType == 2) {
+                newResult = new ArrayList();
+                ArrayList<String> newResultHelp = new ArrayList();
+                ArrayList<User> newResultUsers = new ArrayList();
+                String command = result.toString().toLowerCase();
+                for (int b = 0; b < this.botInfo.size(); b++) {
+                    BotInfo info = (BotInfo) this.botInfo.valueAt(b);
+                    for (a = 0; a < info.commands.size(); a++) {
+                        TL_botCommand botCommand = (TL_botCommand) info.commands.get(a);
+                        if (!(botCommand == null || botCommand.command == null || !botCommand.command.startsWith(command))) {
+                            newResult.add("/" + botCommand.command);
+                            newResultHelp.add(botCommand.description);
+                            newResultUsers.add(messagesController.getUser(Integer.valueOf(info.user_id)));
+                        }
+                    }
+                }
+                this.searchResultHashtags = null;
+                this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
+                this.searchResultSuggestions = null;
+                this.searchResultCommands = newResult;
+                this.searchResultCommandsHelp = newResultHelp;
+                this.searchResultCommandsUsers = newResultUsers;
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(!newResult.isEmpty());
+            } else if (foundType != 3) {
+            } else {
+                if (hasIllegalUsernameCharacters) {
+                    this.delegate.needChangePanelVisibility(false);
+                    return;
+                }
+                Object[] suggestions = Emoji.getSuggestion(result.toString());
+                if (suggestions != null) {
+                    this.searchResultSuggestions = new ArrayList();
+                    for (EmojiSuggestion suggestion : suggestions) {
+                        suggestion.emoji = suggestion.emoji.replace("\ufe0f", TtmlNode.ANONYMOUS_REGION_ID);
+                        this.searchResultSuggestions.add(suggestion);
+                    }
+                    Emoji.loadRecentEmoji();
+                    Collections.sort(this.searchResultSuggestions, new Comparator<EmojiSuggestion>() {
+                        public int compare(EmojiSuggestion o1, EmojiSuggestion o2) {
+                            Integer n1 = (Integer) Emoji.emojiUseHistory.get(o1.emoji);
+                            if (n1 == null) {
+                                n1 = Integer.valueOf(0);
+                            }
+                            Integer n2 = (Integer) Emoji.emojiUseHistory.get(o2.emoji);
+                            if (n2 == null) {
+                                n2 = Integer.valueOf(0);
+                            }
+                            return n2.compareTo(n1);
+                        }
+                    });
+                }
+                this.searchResultHashtags = null;
+                this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
+                this.searchResultCommands = null;
+                this.searchResultCommandsHelp = null;
+                this.searchResultCommandsUsers = null;
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(this.searchResultSuggestions != null);
             }
-            r0.delegate.needChangePanelVisibility(false);
         }
     }
 
@@ -1253,7 +987,7 @@ public class MentionsAdapter extends SelectionAdapter {
             if (this.searchResultBotContextSwitch == null) {
                 i = 0;
             }
-            return size + i;
+            return i + size;
         } else if (this.searchResultUsernames != null) {
             return this.searchResultUsernames.size();
         } else {
@@ -1263,30 +997,32 @@ public class MentionsAdapter extends SelectionAdapter {
             if (this.searchResultCommands != null) {
                 return this.searchResultCommands.size();
             }
-            if (this.searchResultSuggestions != null) {
-                return this.searchResultSuggestions.size();
-            }
-            return 0;
+            return this.searchResultSuggestions != null ? this.searchResultSuggestions.size() : 0;
         }
     }
 
-    public int getItemViewType(int i) {
+    public int getItemViewType(int position) {
         if (this.foundContextBot != null && !this.inlineMediaEnabled) {
             return 3;
         }
-        if (this.searchResultBotContext != null) {
-            return (i != 0 || this.searchResultBotContextSwitch == 0) ? 1 : 2;
-        } else {
+        if (this.searchResultBotContext == null) {
             return 0;
         }
+        if (position != 0 || this.searchResultBotContextSwitch == null) {
+            return 1;
+        }
+        return 2;
     }
 
-    public void addHashtagsFromMessage(CharSequence charSequence) {
-        this.searchAdapterHelper.addHashtagsFromMessage(charSequence);
+    public void addHashtagsFromMessage(CharSequence message) {
+        this.searchAdapterHelper.addHashtagsFromMessage(message);
     }
 
     public int getItemPosition(int i) {
-        return (this.searchResultBotContext == null || this.searchResultBotContextSwitch == null) ? i : i - 1;
+        if (this.searchResultBotContext == null || this.searchResultBotContextSwitch == null) {
+            return i;
+        }
+        return i - 1;
     }
 
     public Object getItem(int i) {
@@ -1297,60 +1033,44 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
                 i--;
             }
-            if (i >= 0) {
-                if (i < this.searchResultBotContext.size()) {
-                    return this.searchResultBotContext.get(i);
-                }
+            if (i < 0 || i >= this.searchResultBotContext.size()) {
+                return null;
             }
-            return null;
+            return this.searchResultBotContext.get(i);
         } else if (this.searchResultUsernames != null) {
-            if (i >= 0) {
-                if (i < this.searchResultUsernames.size()) {
-                    return this.searchResultUsernames.get(i);
-                }
+            if (i < 0 || i >= this.searchResultUsernames.size()) {
+                return null;
             }
-            return null;
+            return this.searchResultUsernames.get(i);
         } else if (this.searchResultHashtags != null) {
-            if (i >= 0) {
-                if (i < this.searchResultHashtags.size()) {
-                    return this.searchResultHashtags.get(i);
-                }
+            if (i < 0 || i >= this.searchResultHashtags.size()) {
+                return null;
             }
-            return null;
+            return this.searchResultHashtags.get(i);
         } else if (this.searchResultSuggestions != null) {
-            if (i >= 0) {
-                if (i < this.searchResultSuggestions.size()) {
-                    return this.searchResultSuggestions.get(i);
-                }
+            if (i < 0 || i >= this.searchResultSuggestions.size()) {
+                return null;
             }
+            return this.searchResultSuggestions.get(i);
+        } else if (this.searchResultCommands == null || i < 0 || i >= this.searchResultCommands.size()) {
             return null;
         } else {
-            if (this.searchResultCommands != null && i >= 0) {
-                if (i < this.searchResultCommands.size()) {
-                    if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TL_channelFull))) {
-                        return this.searchResultCommands.get(i);
-                    }
-                    if (this.searchResultCommandsUsers.get(i) != null) {
-                        String str = "%s@%s";
-                        Object[] objArr = new Object[2];
-                        objArr[0] = this.searchResultCommands.get(i);
-                        objArr[1] = this.searchResultCommandsUsers.get(i) != null ? ((User) this.searchResultCommandsUsers.get(i)).username : TtmlNode.ANONYMOUS_REGION_ID;
-                        return String.format(str, objArr);
-                    }
-                    return String.format("%s", new Object[]{this.searchResultCommands.get(i)});
-                }
+            if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TL_channelFull))) {
+                return this.searchResultCommands.get(i);
             }
-            return null;
+            if (this.searchResultCommandsUsers.get(i) != null) {
+                String str = "%s@%s";
+                Object[] objArr = new Object[2];
+                objArr[0] = this.searchResultCommands.get(i);
+                objArr[1] = this.searchResultCommandsUsers.get(i) != null ? ((User) this.searchResultCommandsUsers.get(i)).username : TtmlNode.ANONYMOUS_REGION_ID;
+                return String.format(str, objArr);
+            }
+            return String.format("%s", new Object[]{this.searchResultCommands.get(i)});
         }
     }
 
     public boolean isLongClickEnabled() {
-        if (this.searchResultHashtags == null) {
-            if (this.searchResultCommands == null) {
-                return false;
-            }
-        }
-        return true;
+        return (this.searchResultHashtags == null && this.searchResultCommands == null) ? false : true;
     }
 
     public boolean isBotCommands() {
@@ -1369,90 +1089,93 @@ public class MentionsAdapter extends SelectionAdapter {
         return this.contextMedia;
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
-        if (this.foundContextBot != null) {
-            if (this.inlineMediaEnabled == null) {
-                return null;
-            }
-        }
-        return true;
+    public boolean isEnabled(ViewHolder holder) {
+        return this.foundContextBot == null || this.inlineMediaEnabled;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        switch (i) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
             case 0:
-                viewGroup = new MentionCell(this.mContext);
-                ((MentionCell) viewGroup).setIsDarkTheme(this.isDarkTheme);
+                view = new MentionCell(this.mContext);
+                ((MentionCell) view).setIsDarkTheme(this.isDarkTheme);
                 break;
             case 1:
-                viewGroup = new ContextLinkCell(this.mContext);
-                ((ContextLinkCell) viewGroup).setDelegate(new ContextLinkCellDelegate() {
-                    public void didPressedImage(ContextLinkCell contextLinkCell) {
-                        MentionsAdapter.this.delegate.onContextClick(contextLinkCell.getResult());
+                view = new ContextLinkCell(this.mContext);
+                ((ContextLinkCell) view).setDelegate(new ContextLinkCellDelegate() {
+                    public void didPressedImage(ContextLinkCell cell) {
+                        MentionsAdapter.this.delegate.onContextClick(cell.getResult());
                     }
                 });
                 break;
             case 2:
-                viewGroup = new BotSwitchCell(this.mContext);
+                view = new BotSwitchCell(this.mContext);
                 break;
             default:
-                viewGroup = new TextView(this.mContext);
-                viewGroup.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-                viewGroup.setTextSize(1, 14.0f);
-                viewGroup.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+                View textView = new TextView(this.mContext);
+                textView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+                textView.setTextSize(1, 14.0f);
+                textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+                view = textView;
                 break;
         }
-        return new Holder(viewGroup);
+        return new Holder(view);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        boolean z = false;
-        if (viewHolder.getItemViewType() == 3) {
-            TextView textView = (TextView) viewHolder.itemView;
-            i = this.parentFragment.getCurrentChat();
-            if (i == 0) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        boolean z = true;
+        if (holder.getItemViewType() == 3) {
+            TextView textView = holder.itemView;
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (chat == null) {
                 return;
             }
-            if (AndroidUtilities.isBannedForever(i.banned_rights.until_date)) {
+            if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
                 textView.setText(LocaleController.getString("AttachInlineRestrictedForever", C0446R.string.AttachInlineRestrictedForever));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0446R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) i.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0446R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
-            int i2 = this.searchResultBotContextSwitch != null ? 1 : false;
-            if (viewHolder.getItemViewType() != 2) {
-                if (i2 != 0) {
-                    i--;
+            boolean hasTop;
+            if (this.searchResultBotContextSwitch != null) {
+                hasTop = true;
+            } else {
+                hasTop = false;
+            }
+            if (holder.getItemViewType() != 2) {
+                if (hasTop) {
+                    position--;
                 }
-                ContextLinkCell contextLinkCell = (ContextLinkCell) viewHolder.itemView;
-                BotInlineResult botInlineResult = (BotInlineResult) this.searchResultBotContext.get(i);
+                ContextLinkCell contextLinkCell = (ContextLinkCell) holder.itemView;
+                BotInlineResult botInlineResult = (BotInlineResult) this.searchResultBotContext.get(position);
                 boolean z2 = this.contextMedia;
-                boolean z3 = i != this.searchResultBotContext.size() - 1;
-                if (i2 != 0 && i == 0) {
-                    z = true;
+                boolean z3 = position != this.searchResultBotContext.size() + -1;
+                if (!(hasTop && position == 0)) {
+                    z = false;
                 }
                 contextLinkCell.setLink(botInlineResult, z2, z3, z);
-            } else if (i2 != 0) {
-                ((BotSwitchCell) viewHolder.itemView).setText(this.searchResultBotContextSwitch.text);
+            } else if (hasTop) {
+                ((BotSwitchCell) holder.itemView).setText(this.searchResultBotContextSwitch.text);
             }
         } else if (this.searchResultUsernames != null) {
-            ((MentionCell) viewHolder.itemView).setUser((User) this.searchResultUsernames.get(i));
+            ((MentionCell) holder.itemView).setUser((User) this.searchResultUsernames.get(position));
         } else if (this.searchResultHashtags != null) {
-            ((MentionCell) viewHolder.itemView).setText((String) this.searchResultHashtags.get(i));
+            ((MentionCell) holder.itemView).setText((String) this.searchResultHashtags.get(position));
         } else if (this.searchResultSuggestions != null) {
-            ((MentionCell) viewHolder.itemView).setEmojiSuggestion((EmojiSuggestion) this.searchResultSuggestions.get(i));
+            ((MentionCell) holder.itemView).setEmojiSuggestion((EmojiSuggestion) this.searchResultSuggestions.get(position));
         } else if (this.searchResultCommands != null) {
-            ((MentionCell) viewHolder.itemView).setBotCommand((String) this.searchResultCommands.get(i), (String) this.searchResultCommandsHelp.get(i), this.searchResultCommandsUsers != null ? (User) this.searchResultCommandsUsers.get(i) : 0);
+            ((MentionCell) holder.itemView).setBotCommand((String) this.searchResultCommands.get(position), (String) this.searchResultCommandsHelp.get(position), this.searchResultCommandsUsers != null ? (User) this.searchResultCommandsUsers.get(position) : null);
         }
     }
 
-    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        if (i == 2 && this.foundContextBot != 0 && this.foundContextBot.bot_inline_geo != 0) {
-            if (iArr.length <= 0 || iArr[0] != 0) {
-                onLocationUnavailable();
-            } else {
-                this.locationProvider.start();
-            }
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode != 2 || this.foundContextBot == null || !this.foundContextBot.bot_inline_geo) {
+            return;
+        }
+        if (grantResults.length <= 0 || grantResults[0] != 0) {
+            onLocationUnavailable();
+        } else {
+            this.locationProvider.start();
         }
     }
 }

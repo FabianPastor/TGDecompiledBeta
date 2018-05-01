@@ -14,18 +14,18 @@ public final class AudioAttributes {
         private int flags = 0;
         private int usage = 1;
 
-        public Builder setContentType(int i) {
-            this.contentType = i;
+        public Builder setContentType(int contentType) {
+            this.contentType = contentType;
             return this;
         }
 
-        public Builder setFlags(int i) {
-            this.flags = i;
+        public Builder setFlags(int flags) {
+            this.flags = flags;
             return this;
         }
 
-        public Builder setUsage(int i) {
-            this.usage = i;
+        public Builder setUsage(int usage) {
+            this.usage = usage;
             return this;
         }
 
@@ -34,10 +34,10 @@ public final class AudioAttributes {
         }
     }
 
-    private AudioAttributes(int i, int i2, int i3) {
-        this.contentType = i;
-        this.flags = i2;
-        this.usage = i3;
+    private AudioAttributes(int contentType, int flags, int usage) {
+        this.contentType = contentType;
+        this.flags = flags;
+        this.usage = usage;
     }
 
     @TargetApi(21)
@@ -49,23 +49,20 @@ public final class AudioAttributes {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                AudioAttributes audioAttributes = (AudioAttributes) obj;
-                if (this.contentType != audioAttributes.contentType || this.flags != audioAttributes.flags || this.usage != audioAttributes.usage) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        AudioAttributes other = (AudioAttributes) obj;
+        if (this.contentType == other.contentType && this.flags == other.flags && this.usage == other.usage) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (((527 + this.contentType) * 31) + this.flags)) + this.usage;
+        return ((((this.contentType + 527) * 31) + this.flags) * 31) + this.usage;
     }
 }

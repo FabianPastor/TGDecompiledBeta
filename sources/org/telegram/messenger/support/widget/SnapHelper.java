@@ -21,21 +21,21 @@ public abstract class SnapHelper extends OnFlingListener {
 
     /* renamed from: org.telegram.messenger.support.widget.SnapHelper$1 */
     class C18741 extends OnScrollListener {
-        boolean mScrolled = null;
+        boolean mScrolled = false;
 
         C18741() {
         }
 
-        public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-            super.onScrollStateChanged(recyclerView, i);
-            if (i == 0 && this.mScrolled != null) {
-                this.mScrolled = null;
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == 0 && this.mScrolled) {
+                this.mScrolled = false;
                 SnapHelper.this.snapToTargetExistingView();
             }
         }
 
-        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-            if (i != 0 || i2 != 0) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dx != 0 || dy != 0) {
                 this.mScrolled = true;
             }
         }
@@ -47,17 +47,16 @@ public abstract class SnapHelper extends OnFlingListener {
 
     public abstract int findTargetSnapPosition(LayoutManager layoutManager, int i, int i2);
 
-    public boolean onFling(int i, int i2) {
+    public boolean onFling(int velocityX, int velocityY) {
         LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
-        boolean z = false;
         if (layoutManager == null || this.mRecyclerView.getAdapter() == null) {
             return false;
         }
         int minFlingVelocity = this.mRecyclerView.getMinFlingVelocity();
-        if ((Math.abs(i2) > minFlingVelocity || Math.abs(i) > minFlingVelocity) && snapFromFling(layoutManager, i, i2) != 0) {
-            z = true;
+        if ((Math.abs(velocityY) > minFlingVelocity || Math.abs(velocityX) > minFlingVelocity) && snapFromFling(layoutManager, velocityX, velocityY)) {
+            return true;
         }
-        return z;
+        return false;
     }
 
     public void attachToRecyclerView(RecyclerView recyclerView) throws IllegalStateException {
@@ -87,28 +86,28 @@ public abstract class SnapHelper extends OnFlingListener {
         this.mRecyclerView.setOnFlingListener(null);
     }
 
-    public int[] calculateScrollDistance(int i, int i2) {
-        r0 = new int[2];
-        this.mGravityScroller.fling(0, 0, i, i2, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID);
-        r0[0] = this.mGravityScroller.getFinalX();
-        r0[1] = this.mGravityScroller.getFinalY();
-        return r0;
+    public int[] calculateScrollDistance(int velocityX, int velocityY) {
+        outDist = new int[2];
+        this.mGravityScroller.fling(0, 0, velocityX, velocityY, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID);
+        outDist[0] = this.mGravityScroller.getFinalX();
+        outDist[1] = this.mGravityScroller.getFinalY();
+        return outDist;
     }
 
-    private boolean snapFromFling(LayoutManager layoutManager, int i, int i2) {
+    private boolean snapFromFling(LayoutManager layoutManager, int velocityX, int velocityY) {
         if (!(layoutManager instanceof ScrollVectorProvider)) {
             return false;
         }
-        SmoothScroller createScroller = createScroller(layoutManager);
-        if (createScroller == null) {
+        SmoothScroller smoothScroller = createScroller(layoutManager);
+        if (smoothScroller == null) {
             return false;
         }
-        i = findTargetSnapPosition(layoutManager, i, i2);
-        if (i == -1) {
+        int targetPosition = findTargetSnapPosition(layoutManager, velocityX, velocityY);
+        if (targetPosition == -1) {
             return false;
         }
-        createScroller.setTargetPosition(i);
-        layoutManager.startSmoothScroll(createScroller);
+        smoothScroller.setTargetPosition(targetPosition);
+        layoutManager.startSmoothScroll(smoothScroller);
         return true;
     }
 
@@ -116,11 +115,11 @@ public abstract class SnapHelper extends OnFlingListener {
         if (this.mRecyclerView != null) {
             LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
             if (layoutManager != null) {
-                View findSnapView = findSnapView(layoutManager);
-                if (findSnapView != null) {
-                    int[] calculateDistanceToFinalSnap = calculateDistanceToFinalSnap(layoutManager, findSnapView);
-                    if (!(calculateDistanceToFinalSnap[0] == 0 && calculateDistanceToFinalSnap[1] == 0)) {
-                        this.mRecyclerView.smoothScrollBy(calculateDistanceToFinalSnap[0], calculateDistanceToFinalSnap[1]);
+                View snapView = findSnapView(layoutManager);
+                if (snapView != null) {
+                    int[] snapDistance = calculateDistanceToFinalSnap(layoutManager, snapView);
+                    if (snapDistance[0] != 0 || snapDistance[1] != 0) {
+                        this.mRecyclerView.smoothScrollBy(snapDistance[0], snapDistance[1]);
                     }
                 }
             }
@@ -133,25 +132,25 @@ public abstract class SnapHelper extends OnFlingListener {
 
     @Deprecated
     protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
-        if ((layoutManager instanceof ScrollVectorProvider) == null) {
-            return null;
-        }
-        return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
-            protected void onTargetFound(View view, State state, Action action) {
-                if (SnapHelper.this.mRecyclerView != null) {
-                    view = SnapHelper.this.calculateDistanceToFinalSnap(SnapHelper.this.mRecyclerView.getLayoutManager(), view);
-                    state = view[null];
-                    view = view[1];
-                    int calculateTimeForDeceleration = calculateTimeForDeceleration(Math.max(Math.abs(state), Math.abs(view)));
-                    if (calculateTimeForDeceleration > 0) {
-                        action.update(state, view, calculateTimeForDeceleration, this.mDecelerateInterpolator);
+        if (layoutManager instanceof ScrollVectorProvider) {
+            return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
+                protected void onTargetFound(View targetView, State state, Action action) {
+                    if (SnapHelper.this.mRecyclerView != null) {
+                        int[] snapDistances = SnapHelper.this.calculateDistanceToFinalSnap(SnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
+                        int dx = snapDistances[0];
+                        int dy = snapDistances[1];
+                        int time = calculateTimeForDeceleration(Math.max(Math.abs(dx), Math.abs(dy)));
+                        if (time > 0) {
+                            action.update(dx, dy, time, this.mDecelerateInterpolator);
+                        }
                     }
                 }
-            }
 
-            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                return SnapHelper.MILLISECONDS_PER_INCH / ((float) displayMetrics.densityDpi);
-            }
-        };
+                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                    return SnapHelper.MILLISECONDS_PER_INCH / ((float) displayMetrics.densityDpi);
+                }
+            };
+        }
+        return null;
     }
 }

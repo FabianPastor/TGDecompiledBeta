@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
+import android.os.RemoteException;
 import android.support.v4.util.ArrayMap;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import org.telegram.messenger.support.customtabs.ICustomTabsService.Stub;
 
 public abstract class CustomTabsService extends Service {
@@ -23,84 +25,57 @@ public abstract class CustomTabsService extends Service {
     private Stub mBinder = new C23201();
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Result {
-    }
-
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
     class C23201 extends Stub {
         C23201() {
         }
 
-        public boolean warmup(long j) {
-            return CustomTabsService.this.warmup(j);
+        public boolean warmup(long flags) {
+            return CustomTabsService.this.warmup(flags);
         }
 
-        public boolean newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback r6) {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-            /*
-            r5 = this;
-            r0 = new org.telegram.messenger.support.customtabs.CustomTabsSessionToken;
-            r0.<init>(r6);
-            r1 = 0;
-            r2 = new org.telegram.messenger.support.customtabs.CustomTabsService$1$1;	 Catch:{ RemoteException -> 0x0031 }
-            r2.<init>(r0);	 Catch:{ RemoteException -> 0x0031 }
-            r3 = org.telegram.messenger.support.customtabs.CustomTabsService.this;	 Catch:{ RemoteException -> 0x0031 }
-            r3 = r3.mDeathRecipientMap;	 Catch:{ RemoteException -> 0x0031 }
-            monitor-enter(r3);	 Catch:{ RemoteException -> 0x0031 }
-            r4 = r6.asBinder();	 Catch:{ all -> 0x002e }
-            r4.linkToDeath(r2, r1);	 Catch:{ all -> 0x002e }
-            r4 = org.telegram.messenger.support.customtabs.CustomTabsService.this;	 Catch:{ all -> 0x002e }
-            r4 = r4.mDeathRecipientMap;	 Catch:{ all -> 0x002e }
-            r6 = r6.asBinder();	 Catch:{ all -> 0x002e }
-            r4.put(r6, r2);	 Catch:{ all -> 0x002e }
-            monitor-exit(r3);	 Catch:{ all -> 0x002e }
-            r6 = org.telegram.messenger.support.customtabs.CustomTabsService.this;	 Catch:{ RemoteException -> 0x0031 }
-            r6 = r6.newSession(r0);	 Catch:{ RemoteException -> 0x0031 }
-            return r6;
-        L_0x002e:
-            r6 = move-exception;
-            monitor-exit(r3);	 Catch:{ all -> 0x002e }
-            throw r6;	 Catch:{ RemoteException -> 0x0031 }
-        L_0x0031:
-            return r1;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.customtabs.CustomTabsService.1.newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback):boolean");
+        public boolean newSession(ICustomTabsCallback callback) {
+            boolean z = false;
+            final CustomTabsSessionToken sessionToken = new CustomTabsSessionToken(callback);
+            try {
+                DeathRecipient deathRecipient = new DeathRecipient() {
+                    public void binderDied() {
+                        CustomTabsService.this.cleanUpSession(sessionToken);
+                    }
+                };
+                synchronized (CustomTabsService.this.mDeathRecipientMap) {
+                    callback.asBinder().linkToDeath(deathRecipient, 0);
+                    CustomTabsService.this.mDeathRecipientMap.put(callback.asBinder(), deathRecipient);
+                }
+                z = CustomTabsService.this.newSession(sessionToken);
+            } catch (RemoteException e) {
+            }
+            return z;
         }
 
-        public boolean mayLaunchUrl(ICustomTabsCallback iCustomTabsCallback, Uri uri, Bundle bundle, List<Bundle> list) {
-            return CustomTabsService.this.mayLaunchUrl(new CustomTabsSessionToken(iCustomTabsCallback), uri, bundle, list);
+        public boolean mayLaunchUrl(ICustomTabsCallback callback, Uri url, Bundle extras, List<Bundle> otherLikelyBundles) {
+            return CustomTabsService.this.mayLaunchUrl(new CustomTabsSessionToken(callback), url, extras, otherLikelyBundles);
         }
 
-        public Bundle extraCommand(String str, Bundle bundle) {
-            return CustomTabsService.this.extraCommand(str, bundle);
+        public Bundle extraCommand(String commandName, Bundle args) {
+            return CustomTabsService.this.extraCommand(commandName, args);
         }
 
-        public boolean updateVisuals(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) {
-            return CustomTabsService.this.updateVisuals(new CustomTabsSessionToken(iCustomTabsCallback), bundle);
+        public boolean updateVisuals(ICustomTabsCallback callback, Bundle bundle) {
+            return CustomTabsService.this.updateVisuals(new CustomTabsSessionToken(callback), bundle);
         }
 
-        public boolean requestPostMessageChannel(ICustomTabsCallback iCustomTabsCallback, Uri uri) {
-            return CustomTabsService.this.requestPostMessageChannel(new CustomTabsSessionToken(iCustomTabsCallback), uri);
+        public boolean requestPostMessageChannel(ICustomTabsCallback callback, Uri postMessageOrigin) {
+            return CustomTabsService.this.requestPostMessageChannel(new CustomTabsSessionToken(callback), postMessageOrigin);
         }
 
-        public int postMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) {
-            return CustomTabsService.this.postMessage(new CustomTabsSessionToken(iCustomTabsCallback), str, bundle);
+        public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) {
+            return CustomTabsService.this.postMessage(new CustomTabsSessionToken(callback), message, extras);
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Result {
     }
 
     protected abstract Bundle extraCommand(String str, Bundle bundle);
@@ -121,43 +96,16 @@ Error: java.lang.NullPointerException
         return this.mBinder;
     }
 
-    protected boolean cleanUpSession(org.telegram.messenger.support.customtabs.CustomTabsSessionToken r4) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r3 = this;
-        r0 = 0;
-        r1 = r3.mDeathRecipientMap;	 Catch:{ NoSuchElementException -> 0x001e }
-        monitor-enter(r1);	 Catch:{ NoSuchElementException -> 0x001e }
-        r4 = r4.getCallbackBinder();	 Catch:{ all -> 0x001b }
-        r2 = r3.mDeathRecipientMap;	 Catch:{ all -> 0x001b }
-        r2 = r2.get(r4);	 Catch:{ all -> 0x001b }
-        r2 = (android.os.IBinder.DeathRecipient) r2;	 Catch:{ all -> 0x001b }
-        r4.unlinkToDeath(r2, r0);	 Catch:{ all -> 0x001b }
-        r2 = r3.mDeathRecipientMap;	 Catch:{ all -> 0x001b }
-        r2.remove(r4);	 Catch:{ all -> 0x001b }
-        monitor-exit(r1);	 Catch:{ all -> 0x001b }
-        r4 = 1;	 Catch:{ all -> 0x001b }
-        return r4;	 Catch:{ all -> 0x001b }
-    L_0x001b:
-        r4 = move-exception;	 Catch:{ all -> 0x001b }
-        monitor-exit(r1);	 Catch:{ all -> 0x001b }
-        throw r4;	 Catch:{ NoSuchElementException -> 0x001e }
-    L_0x001e:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.customtabs.CustomTabsService.cleanUpSession(org.telegram.messenger.support.customtabs.CustomTabsSessionToken):boolean");
+    protected boolean cleanUpSession(CustomTabsSessionToken sessionToken) {
+        try {
+            synchronized (this.mDeathRecipientMap) {
+                IBinder binder = sessionToken.getCallbackBinder();
+                binder.unlinkToDeath((DeathRecipient) this.mDeathRecipientMap.get(binder), 0);
+                this.mDeathRecipientMap.remove(binder);
+            }
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }

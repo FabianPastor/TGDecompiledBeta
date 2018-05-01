@@ -1,5 +1,6 @@
 package org.telegram.ui.Components.Paint.Views;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -50,7 +51,7 @@ public class ColorPicker extends FrameLayout {
         C12201() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (ColorPicker.this.delegate != null) {
                 ColorPicker.this.delegate.onSettingsPressed();
             }
@@ -62,7 +63,7 @@ public class ColorPicker extends FrameLayout {
         C12212() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (ColorPicker.this.delegate != null) {
                 ColorPicker.this.delegate.onUndoPressed();
             }
@@ -102,9 +103,9 @@ public class ColorPicker extends FrameLayout {
         setLocation(this.location);
     }
 
-    public void setUndoEnabled(boolean z) {
-        this.undoButton.setAlpha(z ? 1.0f : 0.3f);
-        this.undoButton.setEnabled(z);
+    public void setUndoEnabled(boolean enabled) {
+        this.undoButton.setAlpha(enabled ? 1.0f : 0.3f);
+        this.undoButton.setEnabled(enabled);
     }
 
     public void setDelegate(ColorPickerDelegate colorPickerDelegate) {
@@ -115,8 +116,8 @@ public class ColorPicker extends FrameLayout {
         return this.settingsButton;
     }
 
-    public void setSettingsButtonImage(int i) {
-        this.settingsButton.setImageResource(i);
+    public void setSettingsButtonImage(int resId) {
+        this.settingsButton.setImageResource(resId);
     }
 
     public Swatch getSwatch() {
@@ -128,137 +129,124 @@ public class ColorPicker extends FrameLayout {
         setWeight(swatch.brushWeight);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int colorForLocation(float f) {
-        if (f <= 0.0f) {
+    public int colorForLocation(float location) {
+        if (location <= 0.0f) {
             return COLORS[0];
         }
-        int i = 1;
-        if (f >= 1.0f) {
+        if (location >= 1.0f) {
             return COLORS[COLORS.length - 1];
         }
-        int i2;
-        float f2;
-        while (true) {
-            i2 = -1;
-            if (i >= LOCATIONS.length) {
+        int leftIndex = -1;
+        int rightIndex = -1;
+        for (int i = 1; i < LOCATIONS.length; i++) {
+            if (LOCATIONS[i] > location) {
+                leftIndex = i - 1;
+                rightIndex = i;
                 break;
-            } else if (LOCATIONS[i] > f) {
-                break;
-            } else {
-                i++;
             }
-            f2 = LOCATIONS[i2];
-            return interpolateColors(COLORS[i2], COLORS[i], (f - f2) / (LOCATIONS[i] - f2));
         }
-        i = -1;
-        f2 = LOCATIONS[i2];
-        return interpolateColors(COLORS[i2], COLORS[i], (f - f2) / (LOCATIONS[i] - f2));
+        float leftLocation = LOCATIONS[leftIndex];
+        return interpolateColors(COLORS[leftIndex], COLORS[rightIndex], (location - leftLocation) / (LOCATIONS[rightIndex] - leftLocation));
     }
 
-    private int interpolateColors(int i, int i2, float f) {
-        f = Math.min(Math.max(f, 0.0f), 1.0f);
-        int red = Color.red(i);
-        int red2 = Color.red(i2);
-        int green = Color.green(i);
-        int green2 = Color.green(i2);
-        i = Color.blue(i);
-        return Color.argb(255, Math.min(255, (int) (((float) red) + (((float) (red2 - red)) * f))), Math.min(255, (int) (((float) green) + (((float) (green2 - green)) * f))), Math.min(255, (int) (((float) i) + (((float) (Color.blue(i2) - i)) * f))));
+    private int interpolateColors(int leftColor, int rightColor, float factor) {
+        factor = Math.min(Math.max(factor, 0.0f), 1.0f);
+        int r1 = Color.red(leftColor);
+        int r2 = Color.red(rightColor);
+        int g1 = Color.green(leftColor);
+        int g2 = Color.green(rightColor);
+        int b1 = Color.blue(leftColor);
+        return Color.argb(255, Math.min(255, (int) (((float) r1) + (((float) (r2 - r1)) * factor))), Math.min(255, (int) (((float) g1) + (((float) (g2 - g1)) * factor))), Math.min(255, (int) (((float) b1) + (((float) (Color.blue(rightColor) - b1)) * factor))));
     }
 
-    public void setLocation(float f) {
-        this.location = f;
-        f = colorForLocation(f);
-        this.swatchPaint.setColor(f);
-        float[] fArr = new float[3];
-        Color.colorToHSV(f, fArr);
-        if (((double) fArr[0]) >= 0.001d || ((double) fArr[1]) >= 0.001d || fArr[2] <= 0.92f) {
-            this.swatchStrokePaint.setColor(f);
+    public void setLocation(float value) {
+        this.location = value;
+        int color = colorForLocation(value);
+        this.swatchPaint.setColor(color);
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        if (((double) hsv[0]) >= 0.001d || ((double) hsv[1]) >= 0.001d || hsv[2] <= 0.92f) {
+            this.swatchStrokePaint.setColor(color);
         } else {
-            f = (int) ((1.0f - (((fArr[2] - 0.92f) / 0.08f) * 0.22f)) * 255.0f);
-            this.swatchStrokePaint.setColor(Color.rgb(f, f, f));
+            int c = (int) ((1.0f - (((hsv[2] - 0.92f) / 0.08f) * 0.22f)) * 255.0f);
+            this.swatchStrokePaint.setColor(Color.rgb(c, c, c));
         }
         invalidate();
     }
 
-    public void setWeight(float f) {
-        this.weight = f;
+    public void setWeight(float value) {
+        this.weight = value;
         invalidate();
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getPointerCount() > 1) {
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() > 1) {
             return false;
         }
-        float x = motionEvent.getX() - this.rectF.left;
-        float y = motionEvent.getY() - this.rectF.top;
+        float x = event.getX() - this.rectF.left;
+        float y = event.getY() - this.rectF.top;
         if (!this.interacting && y < ((float) (-AndroidUtilities.dp(10.0f)))) {
             return false;
         }
-        motionEvent = motionEvent.getActionMasked();
-        if (!(motionEvent == 3 || motionEvent == 1)) {
-            if (motionEvent != 6) {
-                if (motionEvent == null || motionEvent == 2) {
-                    if (this.interacting == null) {
-                        this.interacting = true;
-                        if (this.delegate != null) {
-                            this.delegate.onBeganColorPicking();
-                        }
-                    }
-                    setLocation(Math.max(0.0f, Math.min(1.0f, x / this.rectF.width())));
-                    setDragging(true, true);
-                    if (y < ((float) (-AndroidUtilities.dp(10.0f)))) {
-                        this.changingWeight = true;
-                        setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
-                    }
-                    if (this.delegate != null) {
-                        this.delegate.onColorValueChanged();
-                    }
-                    return true;
-                }
-                return false;
+        int action = event.getActionMasked();
+        if (action == 3 || action == 1 || action == 6) {
+            if (this.interacting && this.delegate != null) {
+                this.delegate.onFinishedColorPicking();
+                getContext().getSharedPreferences("paint", 0).edit().putFloat("last_color_location", this.location).commit();
             }
+            this.interacting = false;
+            this.wasChangingWeight = this.changingWeight;
+            this.changingWeight = false;
+            setDragging(false, true);
+            return false;
+        } else if (action != 0 && action != 2) {
+            return false;
+        } else {
+            if (!this.interacting) {
+                this.interacting = true;
+                if (this.delegate != null) {
+                    this.delegate.onBeganColorPicking();
+                }
+            }
+            setLocation(Math.max(0.0f, Math.min(1.0f, x / this.rectF.width())));
+            setDragging(true, true);
+            if (y < ((float) (-AndroidUtilities.dp(10.0f)))) {
+                this.changingWeight = true;
+                setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
+            }
+            if (this.delegate != null) {
+                this.delegate.onColorValueChanged();
+            }
+            return true;
         }
-        if (!(this.interacting == null || this.delegate == null)) {
-            this.delegate.onFinishedColorPicking();
-            getContext().getSharedPreferences("paint", 0).edit().putFloat("last_color_location", this.location).commit();
-        }
-        this.interacting = false;
-        this.wasChangingWeight = this.changingWeight;
-        this.changingWeight = false;
-        setDragging(false, true);
-        return false;
     }
 
     @SuppressLint({"DrawAllocation"})
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        i3 -= i;
-        i4 -= i2;
-        this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.dp(56.0f), 0.0f, (float) (i3 - AndroidUtilities.dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
-        z = i4 - AndroidUtilities.dp(true);
-        this.rectF.set((float) AndroidUtilities.dp(56.0f), (float) z, (float) (i3 - AndroidUtilities.dp(56.0f)), (float) (z + AndroidUtilities.dp(12.0f)));
-        this.settingsButton.layout(i3 - this.settingsButton.getMeasuredWidth(), i4 - AndroidUtilities.dp(52.0f), i3, i4);
-        this.undoButton.layout(0, i4 - AndroidUtilities.dp(52.0f), this.settingsButton.getMeasuredWidth(), i4);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        int width = right - left;
+        int height = bottom - top;
+        this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.dp(56.0f), 0.0f, (float) (width - AndroidUtilities.dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
+        int y = height - AndroidUtilities.dp(32.0f);
+        this.rectF.set((float) AndroidUtilities.dp(56.0f), (float) y, (float) (width - AndroidUtilities.dp(56.0f)), (float) (AndroidUtilities.dp(12.0f) + y));
+        this.settingsButton.layout(width - this.settingsButton.getMeasuredWidth(), height - AndroidUtilities.dp(52.0f), width, height);
+        this.undoButton.layout(0, height - AndroidUtilities.dp(52.0f), this.settingsButton.getMeasuredWidth(), height);
     }
 
     protected void onDraw(Canvas canvas) {
         canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.gradientPaint);
-        int width = (int) (this.rectF.left + (this.rectF.width() * this.location));
-        int centerY = (int) ((this.rectF.centerY() + (this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f))))) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));
-        int dp = (int) (((float) AndroidUtilities.dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
-        this.shadowDrawable.setBounds(width - dp, centerY - dp, width + dp, dp + centerY);
+        int cx = (int) (this.rectF.left + (this.rectF.width() * this.location));
+        int cy = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f)))) + this.rectF.centerY()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));
+        int side = (int) (((float) AndroidUtilities.dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
+        this.shadowDrawable.setBounds(cx - side, cy - side, cx + side, cy + side);
         this.shadowDrawable.draw(canvas);
-        float floor = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.dp(4.0f)) + (((float) (AndroidUtilities.dp(19.0f) - AndroidUtilities.dp(4.0f))) * this.weight))))) * (this.draggingFactor + 1.0f)) / 2.0f;
-        float f = (float) width;
-        float f2 = (float) centerY;
-        canvas.drawCircle(f, f2, ((float) (AndroidUtilities.dp(22.0f) / 2)) * (this.draggingFactor + 1.0f), this.backgroundPaint);
-        canvas.drawCircle(f, f2, floor, this.swatchPaint);
-        canvas.drawCircle(f, f2, floor - ((float) AndroidUtilities.dp(0.5f)), this.swatchStrokePaint);
+        float swatchRadius = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.dp(4.0f)) + (((float) (AndroidUtilities.dp(19.0f) - AndroidUtilities.dp(4.0f))) * this.weight))))) * (this.draggingFactor + 1.0f)) / 2.0f;
+        canvas.drawCircle((float) cx, (float) cy, ((float) (AndroidUtilities.dp(22.0f) / 2)) * (this.draggingFactor + 1.0f), this.backgroundPaint);
+        canvas.drawCircle((float) cx, (float) cy, swatchRadius, this.swatchPaint);
+        canvas.drawCircle((float) cx, (float) cy, swatchRadius - ((float) AndroidUtilities.dp(0.5f)), this.swatchStrokePaint);
     }
 
-    private void setDraggingFactor(float f) {
-        this.draggingFactor = f;
+    private void setDraggingFactor(float factor) {
+        this.draggingFactor = factor;
         invalidate();
     }
 
@@ -266,22 +254,22 @@ public class ColorPicker extends FrameLayout {
         return this.draggingFactor;
     }
 
-    private void setDragging(boolean z, boolean z2) {
-        if (this.dragging != z) {
-            this.dragging = z;
-            z = this.dragging ? true : false;
-            if (z2) {
-                z = ObjectAnimator.ofFloat(this, "draggingFactor", new float[]{this.draggingFactor, z});
-                z.setInterpolator(this.interpolator);
-                z2 = true;
+    private void setDragging(boolean value, boolean animated) {
+        if (this.dragging != value) {
+            this.dragging = value;
+            float target = this.dragging ? 1.0f : 0.0f;
+            if (animated) {
+                Animator a = ObjectAnimator.ofFloat(this, "draggingFactor", new float[]{this.draggingFactor, target});
+                a.setInterpolator(this.interpolator);
+                int duration = 300;
                 if (this.wasChangingWeight) {
-                    z2 = (int) (((float) 300) + (this.weight * 75.0f));
+                    duration = (int) (((float) 300) + (this.weight * 75.0f));
                 }
-                z.setDuration((long) z2);
-                z.start();
-            } else {
-                setDraggingFactor(z);
+                a.setDuration((long) duration);
+                a.start();
+                return;
             }
+            setDraggingFactor(target);
         }
     }
 }

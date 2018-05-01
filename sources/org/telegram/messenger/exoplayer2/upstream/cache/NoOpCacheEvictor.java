@@ -4,15 +4,15 @@ public final class NoOpCacheEvictor implements CacheEvictor {
     public void onCacheInitialized() {
     }
 
-    public void onSpanAdded(Cache cache, CacheSpan cacheSpan) {
+    public void onStartFile(Cache cache, String key, long position, long maxLength) {
     }
 
-    public void onSpanRemoved(Cache cache, CacheSpan cacheSpan) {
+    public void onSpanAdded(Cache cache, CacheSpan span) {
     }
 
-    public void onSpanTouched(Cache cache, CacheSpan cacheSpan, CacheSpan cacheSpan2) {
+    public void onSpanRemoved(Cache cache, CacheSpan span) {
     }
 
-    public void onStartFile(Cache cache, String str, long j, long j2) {
+    public void onSpanTouched(Cache cache, CacheSpan oldSpan, CacheSpan newSpan) {
     }
 }

@@ -25,13 +25,11 @@ public class TextureRenderer {
     private int muSTMatrixHandle;
     private int rotationAngle;
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public TextureRenderer(int i) {
-        this.rotationAngle = i;
-        i = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
-        this.mTriangleVertices = ByteBuffer.allocateDirect(i.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        this.mTriangleVertices.put(i).position(0);
+    public TextureRenderer(int rotation) {
+        this.rotationAngle = rotation;
+        float[] mTriangleVerticesData = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+        this.mTriangleVertices = ByteBuffer.allocateDirect(mTriangleVerticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        this.mTriangleVertices.put(mTriangleVerticesData).position(0);
         Matrix.setIdentityM(this.mSTMatrix, 0);
     }
 
@@ -39,17 +37,17 @@ public class TextureRenderer {
         return this.mTextureID;
     }
 
-    public void drawFrame(SurfaceTexture surfaceTexture, boolean z) {
+    public void drawFrame(SurfaceTexture st, boolean invert) {
         checkGlError("onDrawFrame start");
-        surfaceTexture.getTransformMatrix(this.mSTMatrix);
-        if (z) {
+        st.getTransformMatrix(this.mSTMatrix);
+        if (invert) {
             this.mSTMatrix[5] = -this.mSTMatrix[5];
             this.mSTMatrix[13] = 1.0f - this.mSTMatrix[13];
         }
         GLES20.glUseProgram(this.mProgram);
         checkGlError("glUseProgram");
-        GLES20.glActiveTexture(true);
-        GLES20.glBindTexture(true, this.mTextureID);
+        GLES20.glActiveTexture(33984);
+        GLES20.glBindTexture(36197, this.mTextureID);
         this.mTriangleVertices.position(0);
         GLES20.glVertexAttribPointer(this.maPositionHandle, 3, 5126, false, 20, this.mTriangleVertices);
         checkGlError("glVertexAttribPointer maPosition");
@@ -62,7 +60,7 @@ public class TextureRenderer {
         checkGlError("glEnableVertexAttribArray maTextureHandle");
         GLES20.glUniformMatrix4fv(this.muSTMatrixHandle, 1, false, this.mSTMatrix, 0);
         GLES20.glUniformMatrix4fv(this.muMVPMatrixHandle, 1, false, this.mMVPMatrix, 0);
-        GLES20.glDrawArrays(5, 0, true);
+        GLES20.glDrawArrays(5, 0, 4);
         checkGlError("glDrawArrays");
         GLES20.glFinish();
     }
@@ -92,9 +90,9 @@ public class TextureRenderer {
         if (this.muSTMatrixHandle == -1) {
             throw new RuntimeException("Could not get attrib location for uSTMatrix");
         }
-        int[] iArr = new int[1];
-        GLES20.glGenTextures(1, iArr, 0);
-        this.mTextureID = iArr[0];
+        int[] textures = new int[1];
+        GLES20.glGenTextures(1, textures, 0);
+        this.mTextureID = textures[0];
         GLES20.glBindTexture(36197, this.mTextureID);
         checkGlError("glBindTexture mTextureID");
         GLES20.glTexParameteri(36197, 10241, 9729);
@@ -108,61 +106,52 @@ public class TextureRenderer {
         }
     }
 
-    private int loadShader(int i, String str) {
-        int glCreateShader = GLES20.glCreateShader(i);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("glCreateShader type=");
-        stringBuilder.append(i);
-        checkGlError(stringBuilder.toString());
-        GLES20.glShaderSource(glCreateShader, str);
-        GLES20.glCompileShader(glCreateShader);
-        i = new int[1];
-        GLES20.glGetShaderiv(glCreateShader, 35713, i, 0);
-        if (i[0] != 0) {
-            return glCreateShader;
+    private int loadShader(int shaderType, String source) {
+        int shader = GLES20.glCreateShader(shaderType);
+        checkGlError("glCreateShader type=" + shaderType);
+        GLES20.glShaderSource(shader, source);
+        GLES20.glCompileShader(shader);
+        int[] compiled = new int[1];
+        GLES20.glGetShaderiv(shader, 35713, compiled, 0);
+        if (compiled[0] != 0) {
+            return shader;
         }
-        GLES20.glDeleteShader(glCreateShader);
+        GLES20.glDeleteShader(shader);
         return 0;
     }
 
-    private int createProgram(String str, String str2) {
-        str = loadShader(35633, str);
-        int i = 0;
-        if (str == null) {
+    private int createProgram(String vertexSource, String fragmentSource) {
+        int vertexShader = loadShader(35633, vertexSource);
+        if (vertexShader == 0) {
             return 0;
         }
-        str2 = loadShader(35632, str2);
-        if (str2 == null) {
+        int pixelShader = loadShader(35632, fragmentSource);
+        if (pixelShader == 0) {
             return 0;
         }
-        int glCreateProgram = GLES20.glCreateProgram();
+        int program = GLES20.glCreateProgram();
         checkGlError("glCreateProgram");
-        if (glCreateProgram == 0) {
+        if (program == 0) {
             return 0;
         }
-        GLES20.glAttachShader(glCreateProgram, str);
+        GLES20.glAttachShader(program, vertexShader);
         checkGlError("glAttachShader");
-        GLES20.glAttachShader(glCreateProgram, str2);
+        GLES20.glAttachShader(program, pixelShader);
         checkGlError("glAttachShader");
-        GLES20.glLinkProgram(glCreateProgram);
-        str2 = new int[1];
-        GLES20.glGetProgramiv(glCreateProgram, 35714, str2, 0);
-        if (str2[0] != 1) {
-            GLES20.glDeleteProgram(glCreateProgram);
-        } else {
-            i = glCreateProgram;
+        GLES20.glLinkProgram(program);
+        int[] linkStatus = new int[1];
+        GLES20.glGetProgramiv(program, 35714, linkStatus, 0);
+        if (linkStatus[0] == 1) {
+            return program;
         }
-        return i;
+        GLES20.glDeleteProgram(program);
+        return 0;
     }
 
-    public void checkGlError(String str) {
-        int glGetError = GLES20.glGetError();
-        if (glGetError != 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(str);
-            stringBuilder.append(": glError ");
-            stringBuilder.append(glGetError);
-            throw new RuntimeException(stringBuilder.toString());
+    public void checkGlError(String op) {
+        int error = GLES20.glGetError();
+        if (error != 0) {
+            throw new RuntimeException(op + ": glError " + error);
         }
     }
 }

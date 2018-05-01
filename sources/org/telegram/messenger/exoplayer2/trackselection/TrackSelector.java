@@ -15,8 +15,8 @@ public abstract class TrackSelector {
 
     public abstract TrackSelectorResult selectTracks(RendererCapabilities[] rendererCapabilitiesArr, TrackGroupArray trackGroupArray) throws ExoPlaybackException;
 
-    public final void init(InvalidationListener invalidationListener) {
-        this.listener = invalidationListener;
+    public final void init(InvalidationListener listener) {
+        this.listener = listener;
     }
 
     protected final void invalidate() {

@@ -9,29 +9,29 @@ public abstract class SubtitleOutputBuffer extends OutputBuffer implements Subti
 
     public abstract void release();
 
-    public void setContent(long j, Subtitle subtitle, long j2) {
-        this.timeUs = j;
+    public void setContent(long timeUs, Subtitle subtitle, long subsampleOffsetUs) {
+        this.timeUs = timeUs;
         this.subtitle = subtitle;
-        if (j2 == Long.MAX_VALUE) {
-            j2 = this.timeUs;
+        if (subsampleOffsetUs == Long.MAX_VALUE) {
+            subsampleOffsetUs = this.timeUs;
         }
-        this.subsampleOffsetUs = j2;
+        this.subsampleOffsetUs = subsampleOffsetUs;
     }
 
     public int getEventTimeCount() {
         return this.subtitle.getEventTimeCount();
     }
 
-    public long getEventTime(int i) {
-        return this.subtitle.getEventTime(i) + this.subsampleOffsetUs;
+    public long getEventTime(int index) {
+        return this.subtitle.getEventTime(index) + this.subsampleOffsetUs;
     }
 
-    public int getNextEventTimeIndex(long j) {
-        return this.subtitle.getNextEventTimeIndex(j - this.subsampleOffsetUs);
+    public int getNextEventTimeIndex(long timeUs) {
+        return this.subtitle.getNextEventTimeIndex(timeUs - this.subsampleOffsetUs);
     }
 
-    public List<Cue> getCues(long j) {
-        return this.subtitle.getCues(j - this.subsampleOffsetUs);
+    public List<Cue> getCues(long timeUs) {
+        return this.subtitle.getCues(timeUs - this.subsampleOffsetUs);
     }
 
     public void clear() {

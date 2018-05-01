@@ -8,16 +8,16 @@ final class TtmlRegion {
     public final float position;
     public final float width;
 
-    public TtmlRegion(String str) {
-        this(str, Float.MIN_VALUE, Float.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE);
+    public TtmlRegion(String id) {
+        this(id, Float.MIN_VALUE, Float.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE);
     }
 
-    public TtmlRegion(String str, float f, float f2, int i, int i2, float f3) {
-        this.id = str;
-        this.position = f;
-        this.line = f2;
-        this.lineType = i;
-        this.lineAnchor = i2;
-        this.width = f3;
+    public TtmlRegion(String id, float position, float line, int lineType, int lineAnchor, float width) {
+        this.id = id;
+        this.position = position;
+        this.line = line;
+        this.lineType = lineType;
+        this.lineAnchor = lineAnchor;
+        this.width = width;
     }
 }

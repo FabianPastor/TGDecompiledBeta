@@ -1,11 +1,9 @@
 package org.telegram.messenger;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Base64;
 import java.io.File;
-import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
 import org.telegram.tgnet.TLRPC.User;
@@ -48,117 +46,123 @@ public class UserConfig {
     public TL_account_tmpPassword tmpPassword;
     public int totalDialogsLoadCount = 0;
 
-    public static UserConfig getInstance(int i) {
-        UserConfig userConfig = Instance[i];
-        if (userConfig == null) {
+    public static UserConfig getInstance(int num) {
+        UserConfig localInstance = Instance[num];
+        if (localInstance == null) {
             synchronized (UserConfig.class) {
-                userConfig = Instance[i];
-                if (userConfig == null) {
-                    UserConfig[] userConfigArr = Instance;
-                    UserConfig userConfig2 = new UserConfig(i);
-                    userConfigArr[i] = userConfig2;
-                    userConfig = userConfig2;
+                try {
+                    localInstance = Instance[num];
+                    if (localInstance == null) {
+                        UserConfig[] userConfigArr = Instance;
+                        UserConfig localInstance2 = new UserConfig(num);
+                        try {
+                            userConfigArr[num] = localInstance2;
+                            localInstance = localInstance2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            localInstance = localInstance2;
+                            throw th2;
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    throw th2;
                 }
             }
         }
-        return userConfig;
+        return localInstance;
     }
 
     public static int getActivatedAccountsCount() {
-        int i = 0;
-        int i2 = 0;
-        while (i < 3) {
-            if (getInstance(i).isClientActivated()) {
-                i2++;
+        int count = 0;
+        for (int a = 0; a < 3; a++) {
+            if (getInstance(a).isClientActivated()) {
+                count++;
             }
-            i++;
         }
-        return i2;
+        return count;
     }
 
-    public UserConfig(int i) {
-        this.currentAccount = i;
+    public UserConfig(int instance) {
+        this.currentAccount = instance;
     }
 
     public int getNewMessageId() {
-        int i;
+        int id;
         synchronized (this.sync) {
-            i = this.lastSendMessageId;
+            id = this.lastSendMessageId;
             this.lastSendMessageId--;
         }
-        return i;
+        return id;
     }
 
-    public void saveConfig(boolean z) {
-        saveConfig(z, null);
+    public void saveConfig(boolean withFile) {
+        saveConfig(withFile, null);
     }
 
-    public void saveConfig(boolean z, File file) {
+    public void saveConfig(boolean withFile, File oldFile) {
         synchronized (this.sync) {
             try {
-                SharedPreferences sharedPreferences;
+                SharedPreferences preferences;
+                SerializedData data;
                 if (this.currentAccount == 0) {
-                    sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
                 } else {
-                    Context context = ApplicationLoader.applicationContext;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("userconfig");
-                    stringBuilder.append(this.currentAccount);
-                    sharedPreferences = context.getSharedPreferences(stringBuilder.toString(), 0);
+                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
                 }
-                Editor edit = sharedPreferences.edit();
+                Editor editor = preferences.edit();
                 if (this.currentAccount == 0) {
-                    edit.putInt("selectedAccount", selectedAccount);
+                    editor.putInt("selectedAccount", selectedAccount);
                 }
-                edit.putBoolean("registeredForPush", this.registeredForPush);
-                edit.putInt("lastSendMessageId", this.lastSendMessageId);
-                edit.putInt("contactsSavedCount", this.contactsSavedCount);
-                edit.putInt("lastBroadcastId", this.lastBroadcastId);
-                edit.putBoolean("blockedUsersLoaded", this.blockedUsersLoaded);
-                edit.putInt("lastContactsSyncTime", this.lastContactsSyncTime);
-                edit.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
-                edit.putBoolean("draftsLoaded", this.draftsLoaded);
-                edit.putBoolean("pinnedDialogsLoaded", this.pinnedDialogsLoaded);
-                edit.putInt("ratingLoadTime", this.ratingLoadTime);
-                edit.putInt("botRatingLoadTime", this.botRatingLoadTime);
-                edit.putBoolean("contactsReimported", this.contactsReimported);
-                edit.putInt("loginTime", this.loginTime);
-                edit.putBoolean("syncContacts", this.syncContacts);
-                edit.putInt("3migrateOffsetId", this.migrateOffsetId);
+                editor.putBoolean("registeredForPush", this.registeredForPush);
+                editor.putInt("lastSendMessageId", this.lastSendMessageId);
+                editor.putInt("contactsSavedCount", this.contactsSavedCount);
+                editor.putInt("lastBroadcastId", this.lastBroadcastId);
+                editor.putBoolean("blockedUsersLoaded", this.blockedUsersLoaded);
+                editor.putInt("lastContactsSyncTime", this.lastContactsSyncTime);
+                editor.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
+                editor.putBoolean("draftsLoaded", this.draftsLoaded);
+                editor.putBoolean("pinnedDialogsLoaded", this.pinnedDialogsLoaded);
+                editor.putInt("ratingLoadTime", this.ratingLoadTime);
+                editor.putInt("botRatingLoadTime", this.botRatingLoadTime);
+                editor.putBoolean("contactsReimported", this.contactsReimported);
+                editor.putInt("loginTime", this.loginTime);
+                editor.putBoolean("syncContacts", this.syncContacts);
+                editor.putInt("3migrateOffsetId", this.migrateOffsetId);
                 if (this.migrateOffsetId != -1) {
-                    edit.putInt("3migrateOffsetDate", this.migrateOffsetDate);
-                    edit.putInt("3migrateOffsetUserId", this.migrateOffsetUserId);
-                    edit.putInt("3migrateOffsetChatId", this.migrateOffsetChatId);
-                    edit.putInt("3migrateOffsetChannelId", this.migrateOffsetChannelId);
-                    edit.putLong("3migrateOffsetAccess", this.migrateOffsetAccess);
+                    editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
+                    editor.putInt("3migrateOffsetUserId", this.migrateOffsetUserId);
+                    editor.putInt("3migrateOffsetChatId", this.migrateOffsetChatId);
+                    editor.putInt("3migrateOffsetChannelId", this.migrateOffsetChannelId);
+                    editor.putLong("3migrateOffsetAccess", this.migrateOffsetAccess);
                 }
-                edit.putInt("2totalDialogsLoadCount", this.totalDialogsLoadCount);
-                edit.putInt("2dialogsLoadOffsetId", this.dialogsLoadOffsetId);
-                edit.putInt("2dialogsLoadOffsetDate", this.dialogsLoadOffsetDate);
-                edit.putInt("2dialogsLoadOffsetUserId", this.dialogsLoadOffsetUserId);
-                edit.putInt("2dialogsLoadOffsetChatId", this.dialogsLoadOffsetChatId);
-                edit.putInt("2dialogsLoadOffsetChannelId", this.dialogsLoadOffsetChannelId);
-                edit.putLong("2dialogsLoadOffsetAccess", this.dialogsLoadOffsetAccess);
+                editor.putInt("2totalDialogsLoadCount", this.totalDialogsLoadCount);
+                editor.putInt("2dialogsLoadOffsetId", this.dialogsLoadOffsetId);
+                editor.putInt("2dialogsLoadOffsetDate", this.dialogsLoadOffsetDate);
+                editor.putInt("2dialogsLoadOffsetUserId", this.dialogsLoadOffsetUserId);
+                editor.putInt("2dialogsLoadOffsetChatId", this.dialogsLoadOffsetChatId);
+                editor.putInt("2dialogsLoadOffsetChannelId", this.dialogsLoadOffsetChannelId);
+                editor.putLong("2dialogsLoadOffsetAccess", this.dialogsLoadOffsetAccess);
                 SharedConfig.saveConfig();
                 if (this.tmpPassword != null) {
-                    AbstractSerializedData serializedData = new SerializedData();
-                    this.tmpPassword.serializeToStream(serializedData);
-                    edit.putString("tmpPassword", Base64.encodeToString(serializedData.toByteArray(), 0));
-                    serializedData.cleanup();
+                    data = new SerializedData();
+                    this.tmpPassword.serializeToStream(data);
+                    editor.putString("tmpPassword", Base64.encodeToString(data.toByteArray(), 0));
+                    data.cleanup();
                 } else {
-                    edit.remove("tmpPassword");
+                    editor.remove("tmpPassword");
                 }
                 if (this.currentUser == null) {
-                    edit.remove("user");
-                } else if (z) {
-                    z = new SerializedData();
-                    this.currentUser.serializeToStream(z);
-                    edit.putString("user", Base64.encodeToString(z.toByteArray(), 0));
-                    z.cleanup();
+                    editor.remove("user");
+                } else if (withFile) {
+                    data = new SerializedData();
+                    this.currentUser.serializeToStream(data);
+                    editor.putString("user", Base64.encodeToString(data.toByteArray(), 0));
+                    data.cleanup();
                 }
-                edit.commit();
-                if (file != null) {
-                    file.delete();
+                editor.commit();
+                if (oldFile != null) {
+                    oldFile.delete();
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
@@ -202,62 +206,59 @@ public class UserConfig {
             if (this.configLoaded) {
                 return;
             }
-            SharedPreferences sharedPreferences;
+            SharedPreferences preferences;
+            byte[] bytes;
             if (this.currentAccount == 0) {
-                sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
-                selectedAccount = sharedPreferences.getInt("selectedAccount", 0);
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+                selectedAccount = preferences.getInt("selectedAccount", 0);
             } else {
-                Context context = ApplicationLoader.applicationContext;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("userconfig");
-                stringBuilder.append(this.currentAccount);
-                sharedPreferences = context.getSharedPreferences(stringBuilder.toString(), 0);
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
             }
-            this.registeredForPush = sharedPreferences.getBoolean("registeredForPush", false);
-            this.lastSendMessageId = sharedPreferences.getInt("lastSendMessageId", -210000);
-            this.contactsSavedCount = sharedPreferences.getInt("contactsSavedCount", 0);
-            this.lastBroadcastId = sharedPreferences.getInt("lastBroadcastId", -1);
-            this.blockedUsersLoaded = sharedPreferences.getBoolean("blockedUsersLoaded", false);
-            this.lastContactsSyncTime = sharedPreferences.getInt("lastContactsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 82800);
-            this.lastHintsSyncTime = sharedPreferences.getInt("lastHintsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 90000);
-            this.draftsLoaded = sharedPreferences.getBoolean("draftsLoaded", false);
-            this.pinnedDialogsLoaded = sharedPreferences.getBoolean("pinnedDialogsLoaded", false);
-            this.contactsReimported = sharedPreferences.getBoolean("contactsReimported", false);
-            this.ratingLoadTime = sharedPreferences.getInt("ratingLoadTime", 0);
-            this.botRatingLoadTime = sharedPreferences.getInt("botRatingLoadTime", 0);
-            this.loginTime = sharedPreferences.getInt("loginTime", this.currentAccount);
-            this.syncContacts = sharedPreferences.getBoolean("syncContacts", this.syncContacts);
-            this.migrateOffsetId = sharedPreferences.getInt("3migrateOffsetId", 0);
+            this.registeredForPush = preferences.getBoolean("registeredForPush", false);
+            this.lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
+            this.contactsSavedCount = preferences.getInt("contactsSavedCount", 0);
+            this.lastBroadcastId = preferences.getInt("lastBroadcastId", -1);
+            this.blockedUsersLoaded = preferences.getBoolean("blockedUsersLoaded", false);
+            this.lastContactsSyncTime = preferences.getInt("lastContactsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 82800);
+            this.lastHintsSyncTime = preferences.getInt("lastHintsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 90000);
+            this.draftsLoaded = preferences.getBoolean("draftsLoaded", false);
+            this.pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
+            this.contactsReimported = preferences.getBoolean("contactsReimported", false);
+            this.ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
+            this.botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
+            this.loginTime = preferences.getInt("loginTime", this.currentAccount);
+            this.syncContacts = preferences.getBoolean("syncContacts", this.syncContacts);
+            this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
             if (this.migrateOffsetId != -1) {
-                this.migrateOffsetDate = sharedPreferences.getInt("3migrateOffsetDate", 0);
-                this.migrateOffsetUserId = sharedPreferences.getInt("3migrateOffsetUserId", 0);
-                this.migrateOffsetChatId = sharedPreferences.getInt("3migrateOffsetChatId", 0);
-                this.migrateOffsetChannelId = sharedPreferences.getInt("3migrateOffsetChannelId", 0);
-                this.migrateOffsetAccess = sharedPreferences.getLong("3migrateOffsetAccess", 0);
+                this.migrateOffsetDate = preferences.getInt("3migrateOffsetDate", 0);
+                this.migrateOffsetUserId = preferences.getInt("3migrateOffsetUserId", 0);
+                this.migrateOffsetChatId = preferences.getInt("3migrateOffsetChatId", 0);
+                this.migrateOffsetChannelId = preferences.getInt("3migrateOffsetChannelId", 0);
+                this.migrateOffsetAccess = preferences.getLong("3migrateOffsetAccess", 0);
             }
-            this.dialogsLoadOffsetId = sharedPreferences.getInt("2dialogsLoadOffsetId", -1);
-            this.totalDialogsLoadCount = sharedPreferences.getInt("2totalDialogsLoadCount", 0);
-            this.dialogsLoadOffsetDate = sharedPreferences.getInt("2dialogsLoadOffsetDate", -1);
-            this.dialogsLoadOffsetUserId = sharedPreferences.getInt("2dialogsLoadOffsetUserId", -1);
-            this.dialogsLoadOffsetChatId = sharedPreferences.getInt("2dialogsLoadOffsetChatId", -1);
-            this.dialogsLoadOffsetChannelId = sharedPreferences.getInt("2dialogsLoadOffsetChannelId", -1);
-            this.dialogsLoadOffsetAccess = sharedPreferences.getLong("2dialogsLoadOffsetAccess", -1);
-            String string = sharedPreferences.getString("tmpPassword", null);
+            this.dialogsLoadOffsetId = preferences.getInt("2dialogsLoadOffsetId", -1);
+            this.totalDialogsLoadCount = preferences.getInt("2totalDialogsLoadCount", 0);
+            this.dialogsLoadOffsetDate = preferences.getInt("2dialogsLoadOffsetDate", -1);
+            this.dialogsLoadOffsetUserId = preferences.getInt("2dialogsLoadOffsetUserId", -1);
+            this.dialogsLoadOffsetChatId = preferences.getInt("2dialogsLoadOffsetChatId", -1);
+            this.dialogsLoadOffsetChannelId = preferences.getInt("2dialogsLoadOffsetChannelId", -1);
+            this.dialogsLoadOffsetAccess = preferences.getLong("2dialogsLoadOffsetAccess", -1);
+            String string = preferences.getString("tmpPassword", null);
             if (string != null) {
-                byte[] decode = Base64.decode(string, 0);
-                if (decode != null) {
-                    AbstractSerializedData serializedData = new SerializedData(decode);
-                    this.tmpPassword = TL_account_tmpPassword.TLdeserialize(serializedData, serializedData.readInt32(false), false);
-                    serializedData.cleanup();
+                bytes = Base64.decode(string, 0);
+                if (bytes != null) {
+                    SerializedData data = new SerializedData(bytes);
+                    this.tmpPassword = TL_account_tmpPassword.TLdeserialize(data, data.readInt32(false), false);
+                    data.cleanup();
                 }
             }
-            String string2 = sharedPreferences.getString("user", null);
-            if (string2 != null) {
-                byte[] decode2 = Base64.decode(string2, 0);
-                if (decode2 != null) {
-                    AbstractSerializedData serializedData2 = new SerializedData(decode2);
-                    this.currentUser = User.TLdeserialize(serializedData2, serializedData2.readInt32(false), false);
-                    serializedData2.cleanup();
+            string = preferences.getString("user", null);
+            if (string != null) {
+                bytes = Base64.decode(string, 0);
+                if (bytes != null) {
+                    data = new SerializedData(bytes);
+                    this.currentUser = User.TLdeserialize(data, data.readInt32(false), false);
+                    data.cleanup();
                 }
             }
             if (this.currentUser != null) {
@@ -269,7 +270,6 @@ public class UserConfig {
 
     public void clearConfig() {
         this.currentUser = null;
-        boolean z = false;
         this.clientUserId = 0;
         this.registeredForPush = false;
         this.contactsSavedCount = 0;
@@ -298,13 +298,14 @@ public class UserConfig {
         this.loginTime = (int) (System.currentTimeMillis() / 1000);
         this.lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         this.lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;
-        for (int i = 0; i < 3; i++) {
-            if (getInstance(i).isClientActivated()) {
-                z = true;
+        boolean hasActivated = false;
+        for (int a = 0; a < 3; a++) {
+            if (getInstance(a).isClientActivated()) {
+                hasActivated = true;
                 break;
             }
         }
-        if (!z) {
+        if (!hasActivated) {
             SharedConfig.clearConfig();
         }
         saveConfig(true);

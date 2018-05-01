@@ -5,9 +5,9 @@ public final class IllegalSeekPositionException extends IllegalStateException {
     public final Timeline timeline;
     public final int windowIndex;
 
-    public IllegalSeekPositionException(Timeline timeline, int i, long j) {
+    public IllegalSeekPositionException(Timeline timeline, int windowIndex, long positionMs) {
         this.timeline = timeline;
-        this.windowIndex = i;
-        this.positionMs = j;
+        this.windowIndex = windowIndex;
+        this.positionMs = positionMs;
     }
 }

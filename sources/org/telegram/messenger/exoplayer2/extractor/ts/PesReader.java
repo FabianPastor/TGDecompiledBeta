@@ -27,17 +27,17 @@ public final class PesReader implements TsPayloadReader {
     private boolean ptsFlag;
     private final ElementaryStreamReader reader;
     private boolean seenFirstDts;
-    private int state = null;
+    private int state = 0;
     private long timeUs;
     private TimestampAdjuster timestampAdjuster;
 
-    public PesReader(ElementaryStreamReader elementaryStreamReader) {
-        this.reader = elementaryStreamReader;
+    public PesReader(ElementaryStreamReader reader) {
+        this.reader = reader;
     }
 
-    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
+    public void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.timestampAdjuster = timestampAdjuster;
-        this.reader.createTracks(extractorOutput, trackIdGenerator);
+        this.reader.createTracks(extractorOutput, idGenerator);
     }
 
     public final void seek() {
@@ -47,72 +47,61 @@ public final class PesReader implements TsPayloadReader {
         this.reader.seek();
     }
 
-    public final void consume(ParsableByteArray parsableByteArray, boolean z) throws ParserException {
-        if (z) {
+    public final void consume(ParsableByteArray data, boolean payloadUnitStartIndicator) throws ParserException {
+        if (payloadUnitStartIndicator) {
             switch (this.state) {
-                case false:
-                case true:
-                    break;
-                case true:
+                case 2:
                     Log.w(TAG, "Unexpected start indicator reading extended header");
                     break;
-                case true:
-                    if (!this.payloadSize) {
-                        z = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Unexpected start indicator: expected ");
-                        stringBuilder.append(this.payloadSize);
-                        stringBuilder.append(" more bytes");
-                        Log.w(z, stringBuilder.toString());
+                case 3:
+                    if (this.payloadSize != -1) {
+                        Log.w(TAG, "Unexpected start indicator: expected " + this.payloadSize + " more bytes");
                     }
                     this.reader.packetFinished();
-                    break;
-                default:
                     break;
             }
             setState(1);
         }
-        while (parsableByteArray.bytesLeft() <= false) {
-            int i = 0;
+        while (data.bytesLeft() > 0) {
             switch (this.state) {
-                case false:
-                    parsableByteArray.skipBytes(parsableByteArray.bytesLeft());
+                case 0:
+                    data.skipBytes(data.bytesLeft());
                     break;
-                case true:
-                    if (!continueRead(parsableByteArray, this.pesScratch.data, 9)) {
+                case 1:
+                    if (!continueRead(data, this.pesScratch.data, 9)) {
                         break;
                     }
-                    if (parseHeader()) {
-                        i = 2;
-                    }
-                    setState(i);
+                    setState(parseHeader() ? 2 : 0);
                     break;
-                case true:
-                    if (continueRead(parsableByteArray, this.pesScratch.data, Math.min(true, this.extendedHeaderLength)) && continueRead(parsableByteArray, false, this.extendedHeaderLength)) {
+                case 2:
+                    if (continueRead(data, this.pesScratch.data, Math.min(10, this.extendedHeaderLength)) && continueRead(data, null, this.extendedHeaderLength)) {
                         parseHeaderExtension();
                         this.reader.packetStarted(this.timeUs, this.dataAlignmentIndicator);
-                        setState(true);
+                        setState(3);
                         break;
                     }
-                case true:
-                    z = parsableByteArray.bytesLeft();
-                    if (this.payloadSize != -1) {
-                        i = z - this.payloadSize;
+                case 3:
+                    int padding;
+                    int readLength = data.bytesLeft();
+                    if (this.payloadSize == -1) {
+                        padding = 0;
+                    } else {
+                        padding = readLength - this.payloadSize;
                     }
-                    if (i > 0) {
-                        z -= i;
-                        parsableByteArray.setLimit(parsableByteArray.getPosition() + z);
+                    if (padding > 0) {
+                        readLength -= padding;
+                        data.setLimit(data.getPosition() + readLength);
                     }
-                    this.reader.consume(parsableByteArray);
+                    this.reader.consume(data);
                     if (this.payloadSize == -1) {
                         break;
                     }
-                    this.payloadSize -= z;
-                    if (!this.payloadSize) {
-                        this.reader.packetFinished();
-                        setState(1);
+                    this.payloadSize -= readLength;
+                    if (this.payloadSize != 0) {
                         break;
                     }
+                    this.reader.packetFinished();
+                    setState(1);
                     break;
                 default:
                     break;
@@ -120,43 +109,38 @@ public final class PesReader implements TsPayloadReader {
         }
     }
 
-    private void setState(int i) {
-        this.state = i;
+    private void setState(int state) {
+        this.state = state;
         this.bytesRead = 0;
     }
 
-    private boolean continueRead(ParsableByteArray parsableByteArray, byte[] bArr, int i) {
-        int min = Math.min(parsableByteArray.bytesLeft(), i - this.bytesRead);
-        boolean z = true;
-        if (min <= 0) {
+    private boolean continueRead(ParsableByteArray source, byte[] target, int targetLength) {
+        int bytesToRead = Math.min(source.bytesLeft(), targetLength - this.bytesRead);
+        if (bytesToRead <= 0) {
             return true;
         }
-        if (bArr == null) {
-            parsableByteArray.skipBytes(min);
+        if (target == null) {
+            source.skipBytes(bytesToRead);
         } else {
-            parsableByteArray.readBytes(bArr, this.bytesRead, min);
+            source.readBytes(target, this.bytesRead, bytesToRead);
         }
-        this.bytesRead += min;
-        if (this.bytesRead != i) {
-            z = false;
+        this.bytesRead += bytesToRead;
+        if (this.bytesRead != targetLength) {
+            return false;
         }
-        return z;
+        return true;
     }
 
     private boolean parseHeader() {
         this.pesScratch.setPosition(0);
-        int readBits = this.pesScratch.readBits(24);
-        if (readBits != 1) {
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unexpected start code prefix: ");
-            stringBuilder.append(readBits);
-            Log.w(str, stringBuilder.toString());
+        int startCodePrefix = this.pesScratch.readBits(24);
+        if (startCodePrefix != 1) {
+            Log.w(TAG, "Unexpected start code prefix: " + startCodePrefix);
             this.payloadSize = -1;
             return false;
         }
         this.pesScratch.skipBits(8);
-        readBits = this.pesScratch.readBits(16);
+        int packetLength = this.pesScratch.readBits(16);
         this.pesScratch.skipBits(5);
         this.dataAlignmentIndicator = this.pesScratch.readBit();
         this.pesScratch.skipBits(2);
@@ -164,10 +148,10 @@ public final class PesReader implements TsPayloadReader {
         this.dtsFlag = this.pesScratch.readBit();
         this.pesScratch.skipBits(6);
         this.extendedHeaderLength = this.pesScratch.readBits(8);
-        if (readBits == 0) {
+        if (packetLength == 0) {
             this.payloadSize = -1;
         } else {
-            this.payloadSize = ((readBits + 6) - 9) - this.extendedHeaderLength;
+            this.payloadSize = ((packetLength + 6) - 9) - this.extendedHeaderLength;
         }
         return true;
     }
@@ -177,24 +161,24 @@ public final class PesReader implements TsPayloadReader {
         this.timeUs = C0542C.TIME_UNSET;
         if (this.ptsFlag) {
             this.pesScratch.skipBits(4);
-            long readBits = ((long) this.pesScratch.readBits(3)) << 30;
+            long pts = ((long) this.pesScratch.readBits(3)) << 30;
             this.pesScratch.skipBits(1);
-            long readBits2 = readBits | ((long) (this.pesScratch.readBits(15) << 15));
+            pts |= (long) (this.pesScratch.readBits(15) << 15);
             this.pesScratch.skipBits(1);
-            long readBits3 = readBits2 | ((long) this.pesScratch.readBits(15));
+            pts |= (long) this.pesScratch.readBits(15);
             this.pesScratch.skipBits(1);
             if (!this.seenFirstDts && this.dtsFlag) {
                 this.pesScratch.skipBits(4);
-                long readBits4 = ((long) this.pesScratch.readBits(3)) << 30;
+                long dts = ((long) this.pesScratch.readBits(3)) << 30;
                 this.pesScratch.skipBits(1);
-                long readBits5 = readBits4 | ((long) (this.pesScratch.readBits(15) << 15));
+                dts |= (long) (this.pesScratch.readBits(15) << 15);
                 this.pesScratch.skipBits(1);
-                long readBits6 = readBits5 | ((long) this.pesScratch.readBits(15));
+                dts |= (long) this.pesScratch.readBits(15);
                 this.pesScratch.skipBits(1);
-                this.timestampAdjuster.adjustTsTimestamp(readBits6);
+                this.timestampAdjuster.adjustTsTimestamp(dts);
                 this.seenFirstDts = true;
             }
-            this.timeUs = this.timestampAdjuster.adjustTsTimestamp(readBits3);
+            this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts);
         }
     }
 }

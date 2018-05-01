@@ -24,32 +24,22 @@ public class BackDrawable extends Drawable {
     private boolean rotated = true;
     private int rotatedColor = -9079435;
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public BackDrawable(boolean z) {
+    public BackDrawable(boolean close) {
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.alwaysClose = z;
+        this.alwaysClose = close;
     }
 
-    public void setColor(int i) {
-        this.color = i;
+    public void setColor(int value) {
+        this.color = value;
         invalidateSelf();
     }
 
-    public void setRotatedColor(int i) {
-        this.rotatedColor = i;
+    public void setRotatedColor(int value) {
+        this.rotatedColor = value;
         invalidateSelf();
     }
 
-    public void setRotation(float f, boolean z) {
+    public void setRotation(float rotation, boolean animated) {
         this.lastFrameTime = 0;
         if (this.currentRotation == 1.0f) {
             this.reverseAngle = true;
@@ -57,31 +47,30 @@ public class BackDrawable extends Drawable {
             this.reverseAngle = false;
         }
         this.lastFrameTime = 0;
-        if (z) {
-            if (this.currentRotation < f) {
+        if (animated) {
+            if (this.currentRotation < rotation) {
                 this.currentAnimationTime = (int) (this.currentRotation * this.animationTime);
             } else {
                 this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * this.animationTime);
             }
             this.lastFrameTime = System.currentTimeMillis();
-            this.finalRotation = f;
+            this.finalRotation = rotation;
         } else {
-            this.currentRotation = f;
-            this.finalRotation = f;
+            this.currentRotation = rotation;
+            this.finalRotation = rotation;
         }
         invalidateSelf();
     }
 
-    public void setAnimationTime(float f) {
-        this.animationTime = f;
+    public void setAnimationTime(float value) {
+        this.animationTime = value;
     }
 
-    public void setRotated(boolean z) {
-        this.rotated = z;
+    public void setRotated(boolean value) {
+        this.rotated = value;
     }
 
     public void draw(Canvas canvas) {
-        float f;
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
                 this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
@@ -96,32 +85,34 @@ public class BackDrawable extends Drawable {
             this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
-        int i = 0;
-        int red = this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0;
-        int green = this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0;
-        if (this.rotated) {
-            i = (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation);
-        }
-        this.paint.setColor(Color.rgb(Color.red(this.color) + red, Color.green(this.color) + green, Color.blue(this.color) + i));
+        this.paint.setColor(Color.rgb(Color.red(this.color) + (this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0), Color.green(this.color) + (this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0), Color.blue(this.color) + (this.rotated ? (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation) : 0)));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        float f2 = this.currentRotation;
+        float rotation = this.currentRotation;
         if (this.alwaysClose) {
-            canvas.rotate(135.0f + (this.currentRotation * ((float) (this.reverseAngle ? -180 : 180))));
-            f = 1.0f;
+            canvas.rotate((((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation) + 135.0f);
+            rotation = 1.0f;
         } else {
-            canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -225 : TsExtractor.TS_STREAM_TYPE_E_AC3)));
-            f = f2;
+            canvas.rotate(((float) (this.reverseAngle ? -225 : TsExtractor.TS_STREAM_TYPE_E_AC3)) * this.currentRotation);
         }
-        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * f), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
-        float f3 = (float) (-AndroidUtilities.dp(0.5f));
-        float dp = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * f);
-        Canvas canvas2 = canvas;
-        float dp2 = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * f);
-        float dp3 = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * f);
-        canvas2.drawLine(dp2, -f3, dp3, -dp, this.paint);
-        canvas2.drawLine(dp2, f3, dp3, dp, this.paint);
+        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * rotation), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        float startYDiff = (float) (-AndroidUtilities.dp(0.5f));
+        float endYDiff = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * rotation);
+        float startXDiff = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * rotation);
+        float endXDiff = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * rotation);
+        canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, this.paint);
+        canvas.drawLine(startXDiff, startYDiff, endXDiff, endYDiff, this.paint);
         canvas.restore();
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

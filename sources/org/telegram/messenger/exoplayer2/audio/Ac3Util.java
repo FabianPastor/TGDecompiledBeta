@@ -32,299 +32,286 @@ public final class Ac3Util {
         public final int sampleRate;
         public final int streamType;
 
-        private Ac3SyncFrameInfo(String str, int i, int i2, int i3, int i4, int i5) {
-            this.mimeType = str;
-            this.streamType = i;
-            this.channelCount = i2;
-            this.sampleRate = i3;
-            this.frameSize = i4;
-            this.sampleCount = i5;
+        private Ac3SyncFrameInfo(String mimeType, int streamType, int channelCount, int sampleRate, int frameSize, int sampleCount) {
+            this.mimeType = mimeType;
+            this.streamType = streamType;
+            this.channelCount = channelCount;
+            this.sampleRate = sampleRate;
+            this.frameSize = frameSize;
+            this.sampleCount = sampleCount;
         }
+    }
+
+    public static Format parseAc3AnnexFFormat(ParsableByteArray data, String trackId, String language, DrmInitData drmInitData) {
+        int sampleRate = SAMPLE_RATE_BY_FSCOD[(data.readUnsignedByte() & PsExtractor.AUDIO_STREAM) >> 6];
+        int nextByte = data.readUnsignedByte();
+        int channelCount = CHANNEL_COUNT_BY_ACMOD[(nextByte & 56) >> 3];
+        if ((nextByte & 4) != 0) {
+            channelCount++;
+        }
+        return Format.createAudioSampleFormat(trackId, MimeTypes.AUDIO_AC3, null, -1, -1, channelCount, sampleRate, null, drmInitData, 0, language);
+    }
+
+    public static Format parseEAc3AnnexFFormat(ParsableByteArray data, String trackId, String language, DrmInitData drmInitData) {
+        data.skipBytes(2);
+        int sampleRate = SAMPLE_RATE_BY_FSCOD[(data.readUnsignedByte() & PsExtractor.AUDIO_STREAM) >> 6];
+        int nextByte = data.readUnsignedByte();
+        int channelCount = CHANNEL_COUNT_BY_ACMOD[(nextByte & 14) >> 1];
+        if ((nextByte & 1) != 0) {
+            channelCount++;
+        }
+        if (((data.readUnsignedByte() & 30) >> 1) > 0 && (data.readUnsignedByte() & 2) != 0) {
+            channelCount += 2;
+        }
+        String mimeType = MimeTypes.AUDIO_E_AC3;
+        if (data.bytesLeft() > 0 && (data.readUnsignedByte() & 1) != 0) {
+            mimeType = MimeTypes.AUDIO_E_AC3_JOC;
+        }
+        return Format.createAudioSampleFormat(trackId, mimeType, null, -1, -1, channelCount, sampleRate, null, drmInitData, 0, language);
+    }
+
+    public static Ac3SyncFrameInfo parseAc3SyncframeInfo(ParsableBitArray data) {
+        int frameSize;
+        int sampleRate;
+        int sampleCount;
+        int channelCount;
+        String mimeType;
+        int initialPosition = data.getPosition();
+        data.skipBits(40);
+        boolean isEac3 = data.readBits(5) == 16;
+        data.setPosition(initialPosition);
+        int streamType = -1;
+        int fscod;
+        int acmod;
+        if (isEac3) {
+            int numblkscod;
+            int audioBlocks;
+            data.skipBits(16);
+            streamType = data.readBits(2);
+            data.skipBits(3);
+            frameSize = (data.readBits(11) + 1) * 2;
+            fscod = data.readBits(2);
+            if (fscod == 3) {
+                numblkscod = 3;
+                sampleRate = SAMPLE_RATE_BY_FSCOD2[data.readBits(2)];
+                audioBlocks = 6;
+            } else {
+                numblkscod = data.readBits(2);
+                audioBlocks = BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[numblkscod];
+                sampleRate = SAMPLE_RATE_BY_FSCOD[fscod];
+            }
+            sampleCount = audioBlocks * 256;
+            acmod = data.readBits(3);
+            boolean lfeon = data.readBit();
+            channelCount = CHANNEL_COUNT_BY_ACMOD[acmod] + (lfeon ? 1 : 0);
+            data.skipBits(10);
+            if (data.readBit()) {
+                data.skipBits(8);
+            }
+            if (acmod == 0) {
+                data.skipBits(5);
+                if (data.readBit()) {
+                    data.skipBits(8);
+                }
+            }
+            if (streamType == 1 && data.readBit()) {
+                data.skipBits(16);
+            }
+            if (data.readBit()) {
+                if (acmod > 2) {
+                    data.skipBits(2);
+                }
+                if ((acmod & 1) != 0 && acmod > 2) {
+                    data.skipBits(6);
+                }
+                if ((acmod & 4) != 0) {
+                    data.skipBits(6);
+                }
+                if (lfeon && data.readBit()) {
+                    data.skipBits(5);
+                }
+                if (streamType == 0) {
+                    if (data.readBit()) {
+                        data.skipBits(6);
+                    }
+                    if (acmod == 0 && data.readBit()) {
+                        data.skipBits(6);
+                    }
+                    if (data.readBit()) {
+                        data.skipBits(6);
+                    }
+                    int mixdef = data.readBits(2);
+                    if (mixdef == 1) {
+                        data.skipBits(5);
+                    } else if (mixdef == 2) {
+                        data.skipBits(12);
+                    } else if (mixdef == 3) {
+                        int mixdeflen = data.readBits(5);
+                        if (data.readBit()) {
+                            data.skipBits(5);
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                data.skipBits(4);
+                            }
+                            if (data.readBit()) {
+                                if (data.readBit()) {
+                                    data.skipBits(4);
+                                }
+                                if (data.readBit()) {
+                                    data.skipBits(4);
+                                }
+                            }
+                        }
+                        if (data.readBit()) {
+                            data.skipBits(5);
+                            if (data.readBit()) {
+                                data.skipBits(7);
+                                if (data.readBit()) {
+                                    data.skipBits(8);
+                                }
+                            }
+                        }
+                        data.skipBits((mixdeflen + 2) * 8);
+                        data.byteAlign();
+                    }
+                    if (acmod < 2) {
+                        if (data.readBit()) {
+                            data.skipBits(14);
+                        }
+                        if (acmod == 0 && data.readBit()) {
+                            data.skipBits(14);
+                        }
+                    }
+                    if (data.readBit()) {
+                        if (numblkscod == 0) {
+                            data.skipBits(5);
+                        } else {
+                            for (int blk = 0; blk < audioBlocks; blk++) {
+                                if (data.readBit()) {
+                                    data.skipBits(5);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (data.readBit()) {
+                data.skipBits(5);
+                if (acmod == 2) {
+                    data.skipBits(4);
+                }
+                if (acmod >= 6) {
+                    data.skipBits(2);
+                }
+                if (data.readBit()) {
+                    data.skipBits(8);
+                }
+                if (acmod == 0 && data.readBit()) {
+                    data.skipBits(8);
+                }
+                if (fscod < 3) {
+                    data.skipBit();
+                }
+            }
+            if (streamType == 0 && numblkscod != 3) {
+                data.skipBit();
+            }
+            if (streamType == 2 && (numblkscod == 3 || data.readBit())) {
+                data.skipBits(6);
+            }
+            mimeType = MimeTypes.AUDIO_E_AC3;
+            if (data.readBit() && data.readBits(6) == 1 && data.readBits(8) == 1) {
+                mimeType = MimeTypes.AUDIO_E_AC3_JOC;
+            }
+        } else {
+            mimeType = MimeTypes.AUDIO_AC3;
+            data.skipBits(32);
+            fscod = data.readBits(2);
+            frameSize = getAc3SyncframeSize(fscod, data.readBits(6));
+            data.skipBits(8);
+            acmod = data.readBits(3);
+            if (!((acmod & 1) == 0 || acmod == 1)) {
+                data.skipBits(2);
+            }
+            if ((acmod & 4) != 0) {
+                data.skipBits(2);
+            }
+            if (acmod == 2) {
+                data.skipBits(2);
+            }
+            sampleRate = SAMPLE_RATE_BY_FSCOD[fscod];
+            sampleCount = AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
+            channelCount = CHANNEL_COUNT_BY_ACMOD[acmod] + (data.readBit() ? 1 : 0);
+        }
+        return new Ac3SyncFrameInfo(mimeType, streamType, channelCount, sampleRate, frameSize, sampleCount);
+    }
+
+    public static int parseAc3SyncframeSize(byte[] data) {
+        if (data.length < 5) {
+            return -1;
+        }
+        return getAc3SyncframeSize((data[4] & PsExtractor.AUDIO_STREAM) >> 6, data[4] & 63);
     }
 
     public static int getAc3SyncframeAudioSampleCount() {
         return AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
     }
 
-    public static Format parseAc3AnnexFFormat(ParsableByteArray parsableByteArray, String str, String str2, DrmInitData drmInitData) {
-        int i = SAMPLE_RATE_BY_FSCOD[(parsableByteArray.readUnsignedByte() & PsExtractor.AUDIO_STREAM) >> 6];
-        int readUnsignedByte = parsableByteArray.readUnsignedByte();
-        int i2 = CHANNEL_COUNT_BY_ACMOD[(readUnsignedByte & 56) >> 3];
-        if ((readUnsignedByte & 4) != 0) {
-            i2++;
-        }
-        return Format.createAudioSampleFormat(str, MimeTypes.AUDIO_AC3, null, -1, -1, i2, i, null, drmInitData, 0, str2);
-    }
-
-    public static Format parseEAc3AnnexFFormat(ParsableByteArray parsableByteArray, String str, String str2, DrmInitData drmInitData) {
-        ParsableByteArray parsableByteArray2 = parsableByteArray;
-        parsableByteArray2.skipBytes(2);
-        int i = SAMPLE_RATE_BY_FSCOD[(parsableByteArray2.readUnsignedByte() & PsExtractor.AUDIO_STREAM) >> 6];
-        int readUnsignedByte = parsableByteArray2.readUnsignedByte();
-        int i2 = CHANNEL_COUNT_BY_ACMOD[(readUnsignedByte & 14) >> 1];
-        if ((readUnsignedByte & 1) != 0) {
-            i2++;
-        }
-        if (((parsableByteArray2.readUnsignedByte() & 30) >> 1) > 0 && (2 & parsableByteArray2.readUnsignedByte()) != 0) {
-            i2 += 2;
-        }
-        int i3 = i2;
-        String str3 = MimeTypes.AUDIO_E_AC3;
-        if (parsableByteArray2.bytesLeft() > 0 && (parsableByteArray2.readUnsignedByte() & 1) != 0) {
-            str3 = MimeTypes.AUDIO_E_AC3_JOC;
-        }
-        return Format.createAudioSampleFormat(str, str3, null, -1, -1, i3, i, null, drmInitData, 0, str2);
-    }
-
-    public static Ac3SyncFrameInfo parseAc3SyncframeInfo(ParsableBitArray parsableBitArray) {
+    public static int parseEAc3SyncframeAudioSampleCount(ByteBuffer buffer) {
         int i;
-        int i2;
-        int i3;
-        int i4;
-        String str;
-        int i5;
-        ParsableBitArray parsableBitArray2 = parsableBitArray;
-        int position = parsableBitArray.getPosition();
-        parsableBitArray2.skipBits(40);
-        int i6 = parsableBitArray2.readBits(5) == 16 ? 1 : 0;
-        parsableBitArray2.setPosition(position);
-        int readBits;
-        int readBits2;
-        String str2;
-        if (i6 != 0) {
-            int i7;
-            int i8;
-            parsableBitArray2.skipBits(16);
-            position = parsableBitArray2.readBits(2);
-            parsableBitArray2.skipBits(3);
-            i6 = (parsableBitArray2.readBits(11) + 1) * 2;
-            int readBits3 = parsableBitArray2.readBits(2);
-            if (readBits3 == 3) {
-                i7 = 6;
-                i = SAMPLE_RATE_BY_FSCOD2[parsableBitArray2.readBits(2)];
-                i8 = 3;
-            } else {
-                i8 = parsableBitArray2.readBits(2);
-                i7 = BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[i8];
-                i = SAMPLE_RATE_BY_FSCOD[readBits3];
-            }
-            i2 = 256 * i7;
-            readBits = parsableBitArray2.readBits(3);
-            boolean readBit = parsableBitArray.readBit();
-            i3 = CHANNEL_COUNT_BY_ACMOD[readBits] + readBit;
-            parsableBitArray2.skipBits(10);
-            if (parsableBitArray.readBit()) {
-                parsableBitArray2.skipBits(8);
-            }
-            if (readBits == 0) {
-                parsableBitArray2.skipBits(5);
-                if (parsableBitArray.readBit()) {
-                    parsableBitArray2.skipBits(8);
-                }
-            }
-            if (position == 1 && parsableBitArray.readBit()) {
-                parsableBitArray2.skipBits(16);
-            }
-            if (parsableBitArray.readBit()) {
-                if (readBits > 2) {
-                    parsableBitArray2.skipBits(2);
-                }
-                if ((readBits & 1) != 0 && readBits > 2) {
-                    parsableBitArray2.skipBits(6);
-                }
-                if ((readBits & 4) != 0) {
-                    parsableBitArray2.skipBits(6);
-                }
-                if (readBit && parsableBitArray.readBit()) {
-                    parsableBitArray2.skipBits(5);
-                }
-                if (position == 0) {
-                    if (parsableBitArray.readBit()) {
-                        parsableBitArray2.skipBits(6);
-                    }
-                    if (readBits == 0 && parsableBitArray.readBit()) {
-                        parsableBitArray2.skipBits(6);
-                    }
-                    if (parsableBitArray.readBit()) {
-                        parsableBitArray2.skipBits(6);
-                    }
-                    readBits2 = parsableBitArray2.readBits(2);
-                    if (readBits2 == 1) {
-                        parsableBitArray2.skipBits(5);
-                    } else if (readBits2 == 2) {
-                        parsableBitArray2.skipBits(12);
-                    } else if (readBits2 == 3) {
-                        readBits2 = parsableBitArray2.readBits(5);
-                        if (parsableBitArray.readBit()) {
-                            parsableBitArray2.skipBits(5);
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(4);
-                            }
-                            if (parsableBitArray.readBit()) {
-                                if (parsableBitArray.readBit()) {
-                                    parsableBitArray2.skipBits(4);
-                                }
-                                if (parsableBitArray.readBit()) {
-                                    parsableBitArray2.skipBits(4);
-                                }
-                            }
-                        }
-                        if (parsableBitArray.readBit()) {
-                            parsableBitArray2.skipBits(5);
-                            if (parsableBitArray.readBit()) {
-                                parsableBitArray2.skipBits(7);
-                                if (parsableBitArray.readBit()) {
-                                    parsableBitArray2.skipBits(8);
-                                }
-                            }
-                        }
-                        parsableBitArray2.skipBits((readBits2 + 2) * 8);
-                        parsableBitArray.byteAlign();
-                    }
-                    if (readBits < 2) {
-                        if (parsableBitArray.readBit()) {
-                            parsableBitArray2.skipBits(14);
-                        }
-                        if (readBits == 0 && parsableBitArray.readBit()) {
-                            parsableBitArray2.skipBits(14);
-                        }
-                    }
-                    if (parsableBitArray.readBit()) {
-                        if (i8 == 0) {
-                            parsableBitArray2.skipBits(5);
-                        } else {
-                            for (readBits2 = 0; readBits2 < i7; readBits2++) {
-                                if (parsableBitArray.readBit()) {
-                                    parsableBitArray2.skipBits(5);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            int i9;
-            if (parsableBitArray.readBit()) {
-                parsableBitArray2.skipBits(5);
-                if (readBits == 2) {
-                    parsableBitArray2.skipBits(4);
-                }
-                if (readBits >= 6) {
-                    parsableBitArray2.skipBits(2);
-                }
-                if (parsableBitArray.readBit()) {
-                    parsableBitArray2.skipBits(8);
-                }
-                if (readBits == 0 && parsableBitArray.readBit()) {
-                    parsableBitArray2.skipBits(8);
-                }
-                i9 = 3;
-                if (readBits3 < 3) {
-                    parsableBitArray.skipBit();
-                }
-            } else {
-                i9 = 3;
-            }
-            if (position == 0 && i8 != r2) {
-                parsableBitArray.skipBit();
-            }
-            if (position == 2 && (i8 == r2 || parsableBitArray.readBit())) {
-                parsableBitArray2.skipBits(6);
-            }
-            str2 = MimeTypes.AUDIO_E_AC3;
-            if (parsableBitArray.readBit() && parsableBitArray2.readBits(6) == 1 && parsableBitArray2.readBits(8) == 1) {
-                str2 = MimeTypes.AUDIO_E_AC3_JOC;
-            }
-            i4 = position;
-            str = str2;
-            i5 = i6;
+        if (((buffer.get(buffer.position() + 4) & PsExtractor.AUDIO_STREAM) >> 6) == 3) {
+            i = 6;
         } else {
-            str2 = MimeTypes.AUDIO_AC3;
-            parsableBitArray2.skipBits(32);
-            i6 = parsableBitArray2.readBits(2);
-            readBits = getAc3SyncframeSize(i6, parsableBitArray2.readBits(6));
-            parsableBitArray2.skipBits(8);
-            readBits2 = parsableBitArray2.readBits(3);
-            if (!((readBits2 & 1) == 0 || readBits2 == 1)) {
-                parsableBitArray2.skipBits(2);
-            }
-            if ((readBits2 & 4) != 0) {
-                parsableBitArray2.skipBits(2);
-            }
-            if (readBits2 == 2) {
-                parsableBitArray2.skipBits(2);
-            }
-            i = SAMPLE_RATE_BY_FSCOD[i6];
-            i2 = AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
-            i3 = CHANNEL_COUNT_BY_ACMOD[readBits2] + parsableBitArray.readBit();
-            i4 = -1;
-            str = str2;
-            i5 = readBits;
+            i = BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[(buffer.get(buffer.position() + 4) & 48) >> 4];
         }
-        return new Ac3SyncFrameInfo(str, i4, i3, i, i5, i2);
+        return i * 256;
     }
 
-    public static int parseAc3SyncframeSize(byte[] bArr) {
-        if (bArr.length < 5) {
+    public static int parseTrueHdSyncframeAudioSampleCount(byte[] syncframe) {
+        if (syncframe[4] == (byte) -8 && syncframe[5] == (byte) 114 && syncframe[6] == (byte) 111 && syncframe[7] == (byte) -70) {
+            return 40 << (syncframe[8] & 7);
+        }
+        return 0;
+    }
+
+    public static int parseTrueHdSyncframeAudioSampleCount(ByteBuffer buffer) {
+        if (buffer.getInt(buffer.position() + 4) != -NUM) {
+            return 0;
+        }
+        return 40 << (buffer.get(buffer.position() + 8) & 7);
+    }
+
+    private static int getAc3SyncframeSize(int fscod, int frmsizecod) {
+        int halfFrmsizecod = frmsizecod / 2;
+        if (fscod < 0 || fscod >= SAMPLE_RATE_BY_FSCOD.length || frmsizecod < 0 || halfFrmsizecod >= SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1.length) {
             return -1;
         }
-        return getAc3SyncframeSize((bArr[4] & PsExtractor.AUDIO_STREAM) >> 6, bArr[4] & 63);
-    }
-
-    public static int parseEAc3SyncframeAudioSampleCount(ByteBuffer byteBuffer) {
-        int i = 6;
-        if (((byteBuffer.get(byteBuffer.position() + 4) & PsExtractor.AUDIO_STREAM) >> 6) != 3) {
-            i = BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[(byteBuffer.get(byteBuffer.position() + 4) & 48) >> 4];
+        int sampleRate = SAMPLE_RATE_BY_FSCOD[fscod];
+        if (sampleRate == 44100) {
+            return (SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1[halfFrmsizecod] + (frmsizecod % 2)) * 2;
         }
-        return 256 * i;
-    }
-
-    public static int parseTrueHdSyncframeAudioSampleCount(byte[] bArr) {
-        if (bArr[4] == (byte) -8 && bArr[5] == (byte) 114 && bArr[6] == (byte) 111) {
-            if (bArr[7] == (byte) -70) {
-                return 40 << (bArr[8] & 7);
-            }
+        int bitrate = BITRATE_BY_HALF_FRMSIZECOD[halfFrmsizecod];
+        if (sampleRate == 32000) {
+            return bitrate * 6;
         }
-        return null;
-    }
-
-    public static int parseTrueHdSyncframeAudioSampleCount(ByteBuffer byteBuffer) {
-        if (byteBuffer.getInt(byteBuffer.position() + 4) != -NUM) {
-            return null;
-        }
-        return 40 << (byteBuffer.get(byteBuffer.position() + 8) & 7);
-    }
-
-    private static int getAc3SyncframeSize(int i, int i2) {
-        int i3 = i2 / 2;
-        if (i >= 0 && i < SAMPLE_RATE_BY_FSCOD.length && i2 >= 0) {
-            if (i3 < SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1.length) {
-                i = SAMPLE_RATE_BY_FSCOD[i];
-                if (i == 44100) {
-                    return 2 * (SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1[i3] + (i2 % 2));
-                }
-                i2 = BITRATE_BY_HALF_FRMSIZECOD[i3];
-                return i == 32000 ? 6 * i2 : 4 * i2;
-            }
-        }
-        return -1;
+        return bitrate * 4;
     }
 
     private Ac3Util() {

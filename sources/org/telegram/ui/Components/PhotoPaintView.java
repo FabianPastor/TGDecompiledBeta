@@ -15,7 +15,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.os.Looper;
-import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,14 +30,10 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.face.Face;
-import com.google.android.gms.vision.face.FaceDetector;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.C0446R;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
@@ -115,58 +110,6 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private FrameLayout toolsView;
     private UndoStore undoStore;
 
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$4 */
-    class C12564 implements OnClickListener {
-        C12564() {
-        }
-
-        public void onClick(View view) {
-            PhotoPaintView.this.closeTextEnter(true);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$7 */
-    class C12587 implements OnClickListener {
-        C12587() {
-        }
-
-        public void onClick(View view) {
-            PhotoPaintView.this.selectEntity(null);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
-    class C12598 implements OnClickListener {
-        C12598() {
-        }
-
-        public void onClick(View view) {
-            PhotoPaintView.this.openStickersView();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$9 */
-    class C12609 implements OnClickListener {
-        C12609() {
-        }
-
-        public void onClick(View view) {
-            PhotoPaintView.this.createText();
-        }
-    }
-
-    private class StickerPosition {
-        private float angle;
-        private Point position;
-        private float scale;
-
-        StickerPosition(Point point, float f, float f2) {
-            this.position = point;
-            this.scale = f;
-            this.angle = f2;
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
     class C20711 implements UndoStoreDelegate {
         C20711() {
@@ -188,16 +131,16 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
         }
 
-        public void onFinishedDrawing(boolean z) {
+        public void onFinishedDrawing(boolean moved) {
             PhotoPaintView.this.colorPicker.setUndoEnabled(PhotoPaintView.this.undoStore.canUndo());
         }
 
         public boolean shouldDraw() {
-            boolean z = PhotoPaintView.this.currentEntityView == null;
-            if (!z) {
+            boolean draw = PhotoPaintView.this.currentEntityView == null;
+            if (!draw) {
                 PhotoPaintView.this.selectEntity(null);
             }
-            return z;
+            return draw;
         }
     }
 
@@ -216,6 +159,16 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
 
         public void onEntityDeselect() {
             PhotoPaintView.this.selectEntity(null);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$4 */
+    class C12564 implements OnClickListener {
+        C12564() {
+        }
+
+        public void onClick(View v) {
+            PhotoPaintView.this.closeTextEnter(true);
         }
     }
 
@@ -256,10 +209,52 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         }
     }
 
-    public PhotoPaintView(Context context, Bitmap bitmap, int i) {
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$7 */
+    class C12587 implements OnClickListener {
+        C12587() {
+        }
+
+        public void onClick(View v) {
+            PhotoPaintView.this.selectEntity(null);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
+    class C12598 implements OnClickListener {
+        C12598() {
+        }
+
+        public void onClick(View v) {
+            PhotoPaintView.this.openStickersView();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$9 */
+    class C12609 implements OnClickListener {
+        C12609() {
+        }
+
+        public void onClick(View v) {
+            PhotoPaintView.this.createText();
+        }
+    }
+
+    private class StickerPosition {
+        private float angle;
+        private Point position;
+        private float scale;
+
+        StickerPosition(Point position, float scale, float angle) {
+            this.position = position;
+            this.scale = scale;
+            this.angle = angle;
+        }
+    }
+
+    public PhotoPaintView(Context context, Bitmap bitmap, int rotation) {
         super(context);
         this.bitmapToEdit = bitmap;
-        this.orientation = i;
+        this.orientation = rotation;
         this.undoStore = new UndoStore();
         this.undoStore.setDelegate(new C20711());
         this.curtainView = new FrameLayout(context);
@@ -288,7 +283,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.textDimView.setVisibility(8);
         this.textDimView.setOnClickListener(new C12564());
         this.selectionContainerView = new FrameLayout(context) {
-            public boolean onTouchEvent(MotionEvent motionEvent) {
+            public boolean onTouchEvent(MotionEvent event) {
                 return false;
             }
         };
@@ -323,26 +318,26 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.paintButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(this.paintButton, LayoutHelper.createFrame(54, -1.0f, 17, 0.0f, 0.0f, 56.0f, 0.0f));
         this.paintButton.setOnClickListener(new C12587());
-        bitmap = new ImageView(context);
-        bitmap.setScaleType(ScaleType.CENTER);
-        bitmap.setImageResource(C0446R.drawable.photo_sticker);
-        bitmap.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        this.toolsView.addView(bitmap, LayoutHelper.createFrame(54, -1, 17));
-        bitmap.setOnClickListener(new C12598());
-        bitmap = new ImageView(context);
-        bitmap.setScaleType(ScaleType.CENTER);
-        bitmap.setImageResource(C0446R.drawable.photo_paint_text);
-        bitmap.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        this.toolsView.addView(bitmap, LayoutHelper.createFrame(54, -1.0f, 17, 56.0f, 0.0f, 0.0f, 0.0f));
-        bitmap.setOnClickListener(new C12609());
+        ImageView stickerButton = new ImageView(context);
+        stickerButton.setScaleType(ScaleType.CENTER);
+        stickerButton.setImageResource(C0446R.drawable.photo_sticker);
+        stickerButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.toolsView.addView(stickerButton, LayoutHelper.createFrame(54, -1, 17));
+        stickerButton.setOnClickListener(new C12598());
+        ImageView textButton = new ImageView(context);
+        textButton.setScaleType(ScaleType.CENTER);
+        textButton.setImageResource(C0446R.drawable.photo_paint_text);
+        textButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.toolsView.addView(textButton, LayoutHelper.createFrame(54, -1.0f, 17, 56.0f, 0.0f, 0.0f, 0.0f));
+        textButton.setOnClickListener(new C12609());
         this.colorPicker.setUndoEnabled(false);
         setCurrentSwatch(this.colorPicker.getSwatch(), false);
         updateSettingsButton();
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (this.currentEntityView != null) {
-            if (this.editingText != null) {
+            if (this.editingText) {
                 closeTextEnter(true);
             } else {
                 selectEntity(null);
@@ -355,50 +350,38 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         if (this.paintingSize != null) {
             return this.paintingSize;
         }
-        float height = (float) (isSidewardOrientation() ? this.bitmapToEdit.getHeight() : this.bitmapToEdit.getWidth());
-        float width = (float) (isSidewardOrientation() ? this.bitmapToEdit.getWidth() : this.bitmapToEdit.getHeight());
-        Size size = new Size(height, width);
+        float width = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
+        float height = isSidewardOrientation() ? (float) this.bitmapToEdit.getWidth() : (float) this.bitmapToEdit.getHeight();
+        Size size = new Size(width, height);
         size.width = 1280.0f;
-        size.height = (float) Math.floor((double) ((size.width * width) / height));
+        size.height = (float) Math.floor((double) ((size.width * height) / width));
         if (size.height > 1280.0f) {
             size.height = 1280.0f;
-            size.width = (float) Math.floor((double) ((size.height * height) / width));
+            size.width = (float) Math.floor((double) ((size.height * width) / height));
         }
         this.paintingSize = size;
         return size;
     }
 
     private boolean isSidewardOrientation() {
-        if (this.orientation % 360 != 90) {
-            if (this.orientation % 360 != 270) {
-                return false;
-            }
-        }
-        return true;
+        return this.orientation % 360 == 90 || this.orientation % 360 == 270;
     }
 
     private void updateSettingsButton() {
-        EntityView entityView = this.currentEntityView;
-        int i = C0446R.drawable.photo_paint_brush;
-        if (entityView != null) {
-            int i2;
+        int resource = C0446R.drawable.photo_paint_brush;
+        if (this.currentEntityView != null) {
             if (this.currentEntityView instanceof StickerView) {
-                i2 = C0446R.drawable.photo_flip;
-            } else {
-                if (this.currentEntityView instanceof TextPaintView) {
-                    i2 = C0446R.drawable.photo_outline;
-                }
-                this.paintButton.setImageResource(C0446R.drawable.photo_paint);
-                this.paintButton.setColorFilter(null);
+                resource = C0446R.drawable.photo_flip;
+            } else if (this.currentEntityView instanceof TextPaintView) {
+                resource = C0446R.drawable.photo_outline;
             }
-            i = i2;
             this.paintButton.setImageResource(C0446R.drawable.photo_paint);
             this.paintButton.setColorFilter(null);
         } else {
             this.paintButton.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.paintButton.setImageResource(C0446R.drawable.photo_paint);
         }
-        this.colorPicker.setSettingsButtonImage(i);
+        this.colorPicker.setSettingsButtonImage(resource);
     }
 
     public void init() {
@@ -412,9 +395,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.selectionContainerView.setVisibility(8);
         this.queue.postRunnable(new Runnable() {
             public void run() {
-                Looper myLooper = Looper.myLooper();
-                if (myLooper != null) {
-                    myLooper.quit();
+                Looper looper = Looper.myLooper();
+                if (looper != null) {
+                    looper.quit();
                 }
             }
         });
@@ -437,75 +420,68 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private boolean hasChanges() {
-        if (!this.undoStore.canUndo()) {
-            if (this.entitiesView.entitiesCount() <= 0) {
-                return false;
-            }
-        }
-        return true;
+        return this.undoStore.canUndo() || this.entitiesView.entitiesCount() > 0;
     }
 
     public Bitmap getBitmap() {
-        Bitmap resultBitmap = this.renderView.getResultBitmap();
-        if (resultBitmap != null && this.entitiesView.entitiesCount() > 0) {
-            Canvas canvas = new Canvas(resultBitmap);
+        Bitmap bitmap = this.renderView.getResultBitmap();
+        if (bitmap != null && this.entitiesView.entitiesCount() > 0) {
+            Canvas canvas = new Canvas(bitmap);
             for (int i = 0; i < this.entitiesView.getChildCount(); i++) {
-                View childAt = this.entitiesView.getChildAt(i);
+                View v = this.entitiesView.getChildAt(i);
                 canvas.save();
-                if (childAt instanceof EntityView) {
-                    EntityView entityView = (EntityView) childAt;
-                    canvas.translate(entityView.getPosition().f24x, entityView.getPosition().f25y);
-                    canvas.scale(childAt.getScaleX(), childAt.getScaleY());
-                    canvas.rotate(childAt.getRotation());
-                    canvas.translate((float) ((-entityView.getWidth()) / 2), (float) ((-entityView.getHeight()) / 2));
-                    if (childAt instanceof TextPaintView) {
-                        Bitmap createBitmap = Bitmaps.createBitmap(childAt.getWidth(), childAt.getHeight(), Config.ARGB_8888);
-                        Canvas canvas2 = new Canvas(createBitmap);
-                        childAt.draw(canvas2);
-                        canvas.drawBitmap(createBitmap, null, new Rect(0, 0, createBitmap.getWidth(), createBitmap.getHeight()), null);
+                if (v instanceof EntityView) {
+                    EntityView entity = (EntityView) v;
+                    canvas.translate(entity.getPosition().f24x, entity.getPosition().f25y);
+                    canvas.scale(v.getScaleX(), v.getScaleY());
+                    canvas.rotate(v.getRotation());
+                    canvas.translate((float) ((-entity.getWidth()) / 2), (float) ((-entity.getHeight()) / 2));
+                    if (v instanceof TextPaintView) {
+                        Bitmap b = Bitmaps.createBitmap(v.getWidth(), v.getHeight(), Config.ARGB_8888);
+                        Canvas c = new Canvas(b);
+                        v.draw(c);
+                        canvas.drawBitmap(b, null, new Rect(0, 0, b.getWidth(), b.getHeight()), null);
                         try {
-                            canvas2.setBitmap(null);
+                            c.setBitmap(null);
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
-                        createBitmap.recycle();
+                        b.recycle();
                     } else {
-                        childAt.draw(canvas);
+                        v.draw(canvas);
                     }
                 }
                 canvas.restore();
             }
         }
-        return resultBitmap;
+        return bitmap;
     }
 
-    public void maybeShowDismissalAlert(PhotoViewer photoViewer, Activity activity, final Runnable runnable) {
+    public void maybeShowDismissalAlert(PhotoViewer photoViewer, Activity parentActivity, final Runnable okRunnable) {
         if (this.editingText) {
-            closeTextEnter(null);
+            closeTextEnter(false);
         } else if (this.pickingSticker) {
             closeStickersView();
-        } else {
-            if (!hasChanges()) {
-                runnable.run();
-            } else if (activity != null) {
-                Builder builder = new Builder((Context) activity);
-                builder.setMessage(LocaleController.getString("DiscardChanges", C0446R.string.DiscardChanges));
-                builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        runnable.run();
-                    }
-                });
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-                photoViewer.showAlertDialog(builder);
-            }
+        } else if (!hasChanges()) {
+            okRunnable.run();
+        } else if (parentActivity != null) {
+            Builder builder = new Builder((Context) parentActivity);
+            builder.setMessage(LocaleController.getString("DiscardChanges", C0446R.string.DiscardChanges));
+            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    okRunnable.run();
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+            photoViewer.showAlertDialog(builder);
         }
     }
 
-    private void setCurrentSwatch(Swatch swatch, boolean z) {
+    private void setCurrentSwatch(Swatch swatch, boolean updateInterface) {
         this.renderView.setColor(swatch.color);
         this.renderView.setBrushSize(swatch.brushWeight);
-        if (z) {
+        if (updateInterface) {
             this.colorPicker.setSwatch(swatch);
         }
         if (this.currentEntityView instanceof TextPaintView) {
@@ -513,45 +489,50 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         }
     }
 
-    private void setDimVisibility(final boolean z) {
-        Animator ofFloat;
-        if (z) {
+    private void setDimVisibility(final boolean visible) {
+        Animator animator;
+        if (visible) {
             this.dimView.setVisibility(0);
-            ofFloat = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{0.0f, 1.0f});
+            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{0.0f, 1.0f});
         } else {
-            ofFloat = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{1.0f, 0.0f});
+            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{1.0f, 0.0f});
         }
-        ofFloat.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (z == null) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (!visible) {
                     PhotoPaintView.this.dimView.setVisibility(8);
                 }
             }
         });
-        ofFloat.setDuration(200);
-        ofFloat.start();
+        animator.setDuration(200);
+        animator.start();
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void setTextDimVisibility(final boolean z, EntityView entityView) {
-        if (z && entityView != null) {
-            ViewGroup viewGroup = (ViewGroup) entityView.getParent();
+    private void setTextDimVisibility(final boolean visible, EntityView view) {
+        boolean z;
+        Animator animator;
+        if (visible && view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
             if (this.textDimView.getParent() != null) {
                 ((EntitiesContainerView) this.textDimView.getParent()).removeView(this.textDimView);
             }
-            viewGroup.addView(this.textDimView, viewGroup.indexOfChild(entityView));
+            parent.addView(this.textDimView, parent.indexOfChild(view));
         }
-        entityView.setSelectionVisibility(z ^ 1);
-        if (z) {
-            this.textDimView.setVisibility(0);
-            entityView = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{0.0f, 1.0f});
+        if (visible) {
+            z = false;
         } else {
-            entityView = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{1.0f, 0.0f});
+            z = true;
         }
-        entityView.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (z == null) {
+        view.setSelectionVisibility(z);
+        if (visible) {
+            this.textDimView.setVisibility(0);
+            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{0.0f, 1.0f});
+        } else {
+            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{1.0f, 0.0f});
+        }
+        animator.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (!visible) {
                     PhotoPaintView.this.textDimView.setVisibility(8);
                     if (PhotoPaintView.this.textDimView.getParent() != null) {
                         ((EntitiesContainerView) PhotoPaintView.this.textDimView.getParent()).removeView(PhotoPaintView.this.textDimView);
@@ -559,77 +540,77 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 }
             }
         });
-        entityView.setDuration(200);
-        entityView.start();
+        animator.setDuration(200);
+        animator.start();
     }
 
-    protected void onMeasure(int i, int i2) {
-        float height;
-        int size = MeasureSpec.getSize(i);
-        i2 = MeasureSpec.getSize(i2);
-        setMeasuredDimension(size, i2);
-        int currentActionBarHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        float bitmapW;
+        float bitmapH;
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        setMeasuredDimension(width, height);
+        int maxHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f);
         if (this.bitmapToEdit != null) {
-            height = (float) (isSidewardOrientation() != 0 ? this.bitmapToEdit.getHeight() : this.bitmapToEdit.getWidth());
-            i2 = (float) (isSidewardOrientation() ? this.bitmapToEdit.getWidth() : this.bitmapToEdit.getHeight());
+            bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
+            bitmapH = isSidewardOrientation() ? (float) this.bitmapToEdit.getWidth() : (float) this.bitmapToEdit.getHeight();
         } else {
-            height = (float) size;
-            i2 = (float) ((i2 - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f));
+            bitmapW = (float) width;
+            bitmapH = (float) ((height - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f));
         }
-        float f = (float) size;
-        float floor = (float) Math.floor((double) ((f * i2) / height));
-        float f2 = (float) currentActionBarHeight;
-        if (floor > f2) {
-            f = (float) Math.floor((double) ((height * f2) / i2));
-            floor = f2;
+        float renderWidth = (float) width;
+        float renderHeight = (float) Math.floor((double) ((renderWidth * bitmapH) / bitmapW));
+        if (renderHeight > ((float) maxHeight)) {
+            renderHeight = (float) maxHeight;
+            renderWidth = (float) Math.floor((double) ((renderHeight * bitmapW) / bitmapH));
         }
-        this.renderView.measure(MeasureSpec.makeMeasureSpec((int) f, NUM), MeasureSpec.makeMeasureSpec((int) floor, NUM));
+        this.renderView.measure(MeasureSpec.makeMeasureSpec((int) renderWidth, NUM), MeasureSpec.makeMeasureSpec((int) renderHeight, NUM));
         this.entitiesView.measure(MeasureSpec.makeMeasureSpec((int) this.paintingSize.width, NUM), MeasureSpec.makeMeasureSpec((int) this.paintingSize.height, NUM));
-        this.dimView.measure(i, MeasureSpec.makeMeasureSpec(currentActionBarHeight, Integer.MIN_VALUE));
-        this.selectionContainerView.measure(i, MeasureSpec.makeMeasureSpec(currentActionBarHeight, NUM));
-        this.colorPicker.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(currentActionBarHeight, NUM));
-        this.toolsView.measure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-        if (this.stickersView != 0) {
-            this.stickersView.measure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, NUM));
+        this.dimView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, Integer.MIN_VALUE));
+        this.selectionContainerView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, NUM));
+        this.colorPicker.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(maxHeight, NUM));
+        this.toolsView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        if (this.stickersView != null) {
+            this.stickersView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, NUM));
         }
     }
 
-    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        float height;
-        i3 -= i;
-        i4 -= i2;
-        z = VERSION.SDK_INT >= true ? AndroidUtilities.statusBarHeight : false;
-        i2 = ActionBar.getCurrentActionBarHeight();
-        int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + z;
-        int dp = (AndroidUtilities.displaySize.y - i2) - AndroidUtilities.dp(48.0f);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        float bitmapW;
+        float bitmapH;
+        int width = right - left;
+        int height = bottom - top;
+        int status = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+        int actionBarHeight = ActionBar.getCurrentActionBarHeight();
+        int actionBarHeight2 = ActionBar.getCurrentActionBarHeight() + status;
+        int maxHeight = (AndroidUtilities.displaySize.y - actionBarHeight) - AndroidUtilities.dp(48.0f);
         if (this.bitmapToEdit != null) {
-            height = (float) (isSidewardOrientation() != 0 ? this.bitmapToEdit.getHeight() : this.bitmapToEdit.getWidth());
-            i2 = (float) (isSidewardOrientation() ? this.bitmapToEdit.getWidth() : this.bitmapToEdit.getHeight());
+            bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
+            bitmapH = isSidewardOrientation() ? (float) this.bitmapToEdit.getWidth() : (float) this.bitmapToEdit.getHeight();
         } else {
-            height = (float) i3;
-            i2 = (float) ((i4 - i2) - AndroidUtilities.dp(48.0f));
+            bitmapW = (float) width;
+            bitmapH = (float) ((height - actionBarHeight) - AndroidUtilities.dp(48.0f));
         }
-        float f = (float) i3;
-        float f2 = (float) dp;
-        if (((float) Math.floor((double) ((f * i2) / height))) > f2) {
-            f = (float) Math.floor((double) ((f2 * height) / i2));
+        float renderWidth = (float) width;
+        if (((float) Math.floor((double) ((renderWidth * bitmapH) / bitmapW))) > ((float) maxHeight)) {
+            renderWidth = (float) Math.floor((double) ((((float) maxHeight) * bitmapW) / bitmapH));
         }
-        i2 = (int) Math.ceil((double) ((i3 - this.renderView.getMeasuredWidth()) / 2));
-        int dp2 = ((((((i4 - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + currentActionBarHeight) - ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.dp(8.0f);
-        this.renderView.layout(i2, dp2, this.renderView.getMeasuredWidth() + i2, this.renderView.getMeasuredHeight() + dp2);
-        f /= this.paintingSize.width;
-        this.entitiesView.setScaleX(f);
-        this.entitiesView.setScaleY(f);
-        this.entitiesView.layout(i2, dp2, this.entitiesView.getMeasuredWidth() + i2, this.entitiesView.getMeasuredHeight() + dp2);
-        this.dimView.layout(0, z, this.dimView.getMeasuredWidth(), this.dimView.getMeasuredHeight() + z);
-        this.selectionContainerView.layout(0, z, this.selectionContainerView.getMeasuredWidth(), this.selectionContainerView.getMeasuredHeight() + z);
-        this.colorPicker.layout(0, currentActionBarHeight, this.colorPicker.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + currentActionBarHeight);
-        this.toolsView.layout(0, i4 - this.toolsView.getMeasuredHeight(), this.toolsView.getMeasuredWidth(), i4);
-        this.curtainView.layout(0, 0, i3, dp);
-        if (this.stickersView != 0) {
-            this.stickersView.layout(0, z, this.stickersView.getMeasuredWidth(), this.stickersView.getMeasuredHeight() + z);
+        int x = (int) Math.ceil((double) ((width - this.renderView.getMeasuredWidth()) / 2));
+        int y = ((((((height - actionBarHeight2) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + actionBarHeight2) - ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.dp(8.0f);
+        this.renderView.layout(x, y, this.renderView.getMeasuredWidth() + x, this.renderView.getMeasuredHeight() + y);
+        float scale = renderWidth / this.paintingSize.width;
+        this.entitiesView.setScaleX(scale);
+        this.entitiesView.setScaleY(scale);
+        this.entitiesView.layout(x, y, this.entitiesView.getMeasuredWidth() + x, this.entitiesView.getMeasuredHeight() + y);
+        this.dimView.layout(0, status, this.dimView.getMeasuredWidth(), this.dimView.getMeasuredHeight() + status);
+        this.selectionContainerView.layout(0, status, this.selectionContainerView.getMeasuredWidth(), this.selectionContainerView.getMeasuredHeight() + status);
+        this.colorPicker.layout(0, actionBarHeight2, this.colorPicker.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + actionBarHeight2);
+        this.toolsView.layout(0, height - this.toolsView.getMeasuredHeight(), this.toolsView.getMeasuredWidth(), height);
+        this.curtainView.layout(0, 0, width, maxHeight);
+        if (this.stickersView != null) {
+            this.stickersView.layout(0, status, this.stickersView.getMeasuredWidth(), this.stickersView.getMeasuredHeight() + status);
         }
-        if (this.currentEntityView) {
+        if (this.currentEntityView != null) {
             this.currentEntityView.updateSelectionView();
             this.currentEntityView.setOffset(this.entitiesView.getLeft() - this.selectionContainerView.getLeft(), this.entitiesView.getTop() - this.selectionContainerView.getTop());
         }
@@ -645,7 +626,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     public boolean allowInteraction(EntityView entityView) {
-        return this.editingText ^ 1;
+        return !this.editingText;
     }
 
     private Point centerPositionForEntity() {
@@ -655,59 +636,58 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
 
     private Point startPositionRelativeToEntity(EntityView entityView) {
         if (entityView != null) {
-            entityView = entityView.getPosition();
-            return new Point(entityView.f24x + 200.0f, entityView.f25y + NUM);
+            Point position = entityView.getPosition();
+            return new Point(position.f24x + 200.0f, position.f25y + 200.0f);
         }
-        entityView = centerPositionForEntity();
+        position = centerPositionForEntity();
         while (true) {
-            int i = 0;
-            int i2 = 0;
-            while (i < this.entitiesView.getChildCount()) {
-                View childAt = this.entitiesView.getChildAt(i);
-                if (childAt instanceof EntityView) {
-                    Point position = ((EntityView) childAt).getPosition();
-                    if (((float) Math.sqrt(Math.pow((double) (position.f24x - entityView.f24x), 2.0d) + Math.pow((double) (position.f25y - entityView.f25y), 2.0d))) < 100.0f) {
-                        i2 = 1;
+            boolean occupied = false;
+            for (int index = 0; index < this.entitiesView.getChildCount(); index++) {
+                View view = this.entitiesView.getChildAt(index);
+                if (view instanceof EntityView) {
+                    Point location = ((EntityView) view).getPosition();
+                    if (((float) Math.sqrt(Math.pow((double) (location.f24x - position.f24x), 2.0d) + Math.pow((double) (location.f25y - position.f25y), 2.0d))) < 100.0f) {
+                        occupied = true;
                     }
                 }
-                i++;
             }
-            if (i2 == 0) {
-                return entityView;
+            if (!occupied) {
+                return position;
             }
-            Object point = new Point(entityView.f24x + 200.0f, entityView.f25y + NUM);
+            position = new Point(position.f24x + 200.0f, position.f25y + 200.0f);
         }
     }
 
     public ArrayList<InputDocument> getMasks() {
-        int childCount = this.entitiesView.getChildCount();
-        ArrayList<InputDocument> arrayList = null;
-        for (int i = 0; i < childCount; i++) {
-            View childAt = this.entitiesView.getChildAt(i);
-            if (childAt instanceof StickerView) {
-                Document sticker = ((StickerView) childAt).getSticker();
-                if (arrayList == null) {
-                    arrayList = new ArrayList();
+        ArrayList<InputDocument> result = null;
+        int count = this.entitiesView.getChildCount();
+        for (int a = 0; a < count; a++) {
+            View child = this.entitiesView.getChildAt(a);
+            if (child instanceof StickerView) {
+                Document document = ((StickerView) child).getSticker();
+                if (result == null) {
+                    result = new ArrayList();
                 }
-                TL_inputDocument tL_inputDocument = new TL_inputDocument();
-                tL_inputDocument.id = sticker.id;
-                tL_inputDocument.access_hash = sticker.access_hash;
-                arrayList.add(tL_inputDocument);
+                TL_inputDocument inputDocument = new TL_inputDocument();
+                inputDocument.id = document.id;
+                inputDocument.access_hash = document.access_hash;
+                result.add(inputDocument);
             }
         }
-        return arrayList;
+        return result;
     }
 
     private boolean selectEntity(EntityView entityView) {
-        boolean z;
-        if (this.currentEntityView == null) {
-            z = false;
-        } else if (this.currentEntityView == entityView) {
-            if (this.editingText == null) {
-                showMenuForEntity(this.currentEntityView);
+        boolean changed;
+        boolean z = false;
+        if (this.currentEntityView != null) {
+            if (this.currentEntityView == entityView) {
+                if (!this.editingText) {
+                    showMenuForEntity(this.currentEntityView);
+                }
+                changed = false;
+                return true;
             }
-            return true;
-        } else {
             this.currentEntityView.deselect();
             z = true;
         }
@@ -715,12 +695,13 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         if (this.currentEntityView != null) {
             this.currentEntityView.select(this.selectionContainerView);
             this.entitiesView.bringViewToFront(this.currentEntityView);
-            if ((this.currentEntityView instanceof TextPaintView) != null) {
+            if (this.currentEntityView instanceof TextPaintView) {
                 setCurrentSwatch(((TextPaintView) this.currentEntityView).getSwatch(), true);
             }
             z = true;
         }
         updateSettingsButton();
+        changed = z;
         return z;
     }
 
@@ -740,16 +721,18 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private void duplicateSelectedEntity() {
         if (this.currentEntityView != null) {
             EntityView entityView = null;
-            Point startPositionRelativeToEntity = startPositionRelativeToEntity(this.currentEntityView);
+            Point position = startPositionRelativeToEntity(this.currentEntityView);
             if (this.currentEntityView instanceof StickerView) {
-                entityView = new StickerView(getContext(), (StickerView) this.currentEntityView, startPositionRelativeToEntity);
-                entityView.setDelegate(this);
-                this.entitiesView.addView(entityView);
+                EntityView newStickerView = new StickerView(getContext(), (StickerView) this.currentEntityView, position);
+                newStickerView.setDelegate(this);
+                this.entitiesView.addView(newStickerView);
+                entityView = newStickerView;
             } else if (this.currentEntityView instanceof TextPaintView) {
-                entityView = new TextPaintView(getContext(), (TextPaintView) this.currentEntityView, startPositionRelativeToEntity);
-                entityView.setDelegate(this);
-                entityView.setMaxWidth((int) (getPaintingSize().width - 20.0f));
-                this.entitiesView.addView(entityView, LayoutHelper.createFrame(-2, -2.0f));
+                EntityView newTextPaintView = new TextPaintView(getContext(), (TextPaintView) this.currentEntityView, position);
+                newTextPaintView.setDelegate(this);
+                newTextPaintView.setMaxWidth((int) (getPaintingSize().width - 20.0f));
+                this.entitiesView.addView(newTextPaintView, LayoutHelper.createFrame(-2, -2.0f));
+                entityView = newTextPaintView;
             }
             registerRemovalUndo(entityView);
             selectEntity(entityView);
@@ -763,42 +746,40 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             if (this.stickersView == null) {
                 this.stickersView = new StickerMasksView(getContext());
                 this.stickersView.setListener(new Listener() {
-                    public void onTypeChanged() {
+                    public void onStickerSelected(Document sticker) {
+                        PhotoPaintView.this.closeStickersView();
+                        PhotoPaintView.this.createSticker(sticker);
                     }
 
-                    public void onStickerSelected(Document document) {
-                        PhotoPaintView.this.closeStickersView();
-                        PhotoPaintView.this.createSticker(document);
+                    public void onTypeChanged() {
                     }
                 });
                 addView(this.stickersView, LayoutHelper.createFrame(-1, -1, 51));
             }
             this.stickersView.setVisibility(0);
-            Animator ofFloat = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{0.0f, 1.0f});
-            ofFloat.setDuration(200);
-            ofFloat.start();
+            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{0.0f, 1.0f});
+            a.setDuration(200);
+            a.start();
         }
     }
 
     private void closeStickersView() {
-        if (this.stickersView != null) {
-            if (this.stickersView.getVisibility() == 0) {
-                this.pickingSticker = false;
-                Animator ofFloat = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{1.0f, 0.0f});
-                ofFloat.setDuration(200);
-                ofFloat.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        PhotoPaintView.this.stickersView.setVisibility(8);
-                    }
-                });
-                ofFloat.start();
-            }
+        if (this.stickersView != null && this.stickersView.getVisibility() == 0) {
+            this.pickingSticker = false;
+            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{1.0f, 0.0f});
+            a.setDuration(200);
+            a.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    PhotoPaintView.this.stickersView.setVisibility(8);
+                }
+            });
+            a.start();
         }
     }
 
     private Size baseStickerSize() {
-        float floor = (float) Math.floor(((double) getPaintingSize().width) * 0.5d);
-        return new Size(floor, floor);
+        float side = (float) Math.floor(((double) getPaintingSize().width) * 0.5d);
+        return new Size(side, side);
     }
 
     private void registerRemovalUndo(final EntityView entityView) {
@@ -809,13 +790,13 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         });
     }
 
-    private void createSticker(Document document) {
-        StickerPosition calculateStickerPosition = calculateStickerPosition(document);
-        View stickerView = new StickerView(getContext(), calculateStickerPosition.position, calculateStickerPosition.angle, calculateStickerPosition.scale, baseStickerSize(), document);
-        stickerView.setDelegate(this);
-        this.entitiesView.addView(stickerView);
-        registerRemovalUndo(stickerView);
-        selectEntity(stickerView);
+    private void createSticker(Document sticker) {
+        StickerPosition position = calculateStickerPosition(sticker);
+        StickerView view = new StickerView(getContext(), position.position, position.angle, position.scale, baseStickerSize(), sticker);
+        view.setDelegate(this);
+        this.entitiesView.addView(view);
+        registerRemovalUndo(view);
+        selectEntity(view);
     }
 
     private void mirrorSticker() {
@@ -829,90 +810,86 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private void createText() {
-        Swatch swatch = this.colorPicker.getSwatch();
-        Swatch swatch2 = new Swatch(-1, 1.0f, swatch.brushWeight);
-        Swatch swatch3 = new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, swatch.brushWeight);
-        if (this.selectedStroke) {
-            swatch2 = swatch3;
+        Swatch currentSwatch = this.colorPicker.getSwatch();
+        Swatch whiteSwatch = new Swatch(-1, 1.0f, currentSwatch.brushWeight);
+        Swatch blackSwatch = new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, currentSwatch.brushWeight);
+        if (!this.selectedStroke) {
+            blackSwatch = whiteSwatch;
         }
-        setCurrentSwatch(swatch2, true);
-        View textPaintView = new TextPaintView(getContext(), startPositionRelativeToEntity(null), baseFontSize(), TtmlNode.ANONYMOUS_REGION_ID, this.colorPicker.getSwatch(), this.selectedStroke);
-        textPaintView.setDelegate(this);
-        textPaintView.setMaxWidth((int) (getPaintingSize().width - 20.0f));
-        this.entitiesView.addView(textPaintView, LayoutHelper.createFrame(-2, -2.0f));
-        registerRemovalUndo(textPaintView);
-        selectEntity(textPaintView);
+        setCurrentSwatch(blackSwatch, true);
+        TextPaintView view = new TextPaintView(getContext(), startPositionRelativeToEntity(null), baseFontSize(), TtmlNode.ANONYMOUS_REGION_ID, this.colorPicker.getSwatch(), this.selectedStroke);
+        view.setDelegate(this);
+        view.setMaxWidth((int) (getPaintingSize().width - 20.0f));
+        this.entitiesView.addView(view, LayoutHelper.createFrame(-2, -2.0f));
+        registerRemovalUndo(view);
+        selectEntity(view);
         editSelectedTextEntity();
     }
 
     private void editSelectedTextEntity() {
-        if (this.currentEntityView instanceof TextPaintView) {
-            if (!this.editingText) {
-                this.curtainView.setVisibility(0);
-                TextPaintView textPaintView = (TextPaintView) this.currentEntityView;
-                this.initialText = textPaintView.getText();
-                this.editingText = true;
-                this.editedTextPosition = textPaintView.getPosition();
-                this.editedTextRotation = textPaintView.getRotation();
-                this.editedTextScale = textPaintView.getScale();
-                textPaintView.setPosition(centerPositionForEntity());
-                textPaintView.setRotation(0.0f);
-                textPaintView.setScale(1.0f);
-                this.toolsView.setVisibility(8);
-                setTextDimVisibility(true, textPaintView);
-                textPaintView.beginEditing();
-                ((InputMethodManager) ApplicationLoader.applicationContext.getSystemService("input_method")).toggleSoftInputFromWindow(textPaintView.getFocusedView().getWindowToken(), 2, 0);
-            }
+        if ((this.currentEntityView instanceof TextPaintView) && !this.editingText) {
+            this.curtainView.setVisibility(0);
+            TextPaintView textPaintView = this.currentEntityView;
+            this.initialText = textPaintView.getText();
+            this.editingText = true;
+            this.editedTextPosition = textPaintView.getPosition();
+            this.editedTextRotation = textPaintView.getRotation();
+            this.editedTextScale = textPaintView.getScale();
+            textPaintView.setPosition(centerPositionForEntity());
+            textPaintView.setRotation(0.0f);
+            textPaintView.setScale(1.0f);
+            this.toolsView.setVisibility(8);
+            setTextDimVisibility(true, textPaintView);
+            textPaintView.beginEditing();
+            ((InputMethodManager) ApplicationLoader.applicationContext.getSystemService("input_method")).toggleSoftInputFromWindow(textPaintView.getFocusedView().getWindowToken(), 2, 0);
         }
     }
 
-    public void closeTextEnter(boolean z) {
-        if (this.editingText) {
-            if (this.currentEntityView instanceof TextPaintView) {
-                TextPaintView textPaintView = (TextPaintView) this.currentEntityView;
-                this.toolsView.setVisibility(0);
-                AndroidUtilities.hideKeyboard(textPaintView.getFocusedView());
-                textPaintView.getFocusedView().clearFocus();
-                textPaintView.endEditing();
-                if (!z) {
-                    textPaintView.setText(this.initialText);
-                }
-                if (textPaintView.getText().trim().length()) {
-                    textPaintView.setPosition(this.editedTextPosition);
-                    textPaintView.setRotation(this.editedTextRotation);
-                    textPaintView.setScale(this.editedTextScale);
-                    this.editedTextPosition = null;
-                    this.editedTextRotation = 0.0f;
-                    this.editedTextScale = 0.0f;
-                } else {
-                    this.entitiesView.removeView(textPaintView);
-                    selectEntity(null);
-                }
-                setTextDimVisibility(false, textPaintView);
-                this.editingText = false;
-                this.initialText = null;
-                this.curtainView.setVisibility(8);
+    public void closeTextEnter(boolean apply) {
+        if (this.editingText && (this.currentEntityView instanceof TextPaintView)) {
+            TextPaintView textPaintView = this.currentEntityView;
+            this.toolsView.setVisibility(0);
+            AndroidUtilities.hideKeyboard(textPaintView.getFocusedView());
+            textPaintView.getFocusedView().clearFocus();
+            textPaintView.endEditing();
+            if (!apply) {
+                textPaintView.setText(this.initialText);
             }
+            if (textPaintView.getText().trim().length() == 0) {
+                this.entitiesView.removeView(textPaintView);
+                selectEntity(null);
+            } else {
+                textPaintView.setPosition(this.editedTextPosition);
+                textPaintView.setRotation(this.editedTextRotation);
+                textPaintView.setScale(this.editedTextScale);
+                this.editedTextPosition = null;
+                this.editedTextRotation = 0.0f;
+                this.editedTextScale = 0.0f;
+            }
+            setTextDimVisibility(false, textPaintView);
+            this.editingText = false;
+            this.initialText = null;
+            this.curtainView.setVisibility(8);
         }
     }
 
-    private void setBrush(int i) {
+    private void setBrush(int brush) {
         RenderView renderView = this.renderView;
         Brush[] brushArr = this.brushes;
-        this.currentBrush = i;
-        renderView.setBrush(brushArr[i]);
+        this.currentBrush = brush;
+        renderView.setBrush(brushArr[brush]);
     }
 
-    private void setStroke(boolean z) {
-        this.selectedStroke = z;
+    private void setStroke(boolean stroke) {
+        this.selectedStroke = stroke;
         if (this.currentEntityView instanceof TextPaintView) {
-            Swatch swatch = this.colorPicker.getSwatch();
-            if (z && swatch.color == -1) {
-                setCurrentSwatch(new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, swatch.brushWeight), true);
-            } else if (!z && swatch.color == Theme.ACTION_BAR_VIDEO_EDIT_COLOR) {
-                setCurrentSwatch(new Swatch(-1, 1.0f, swatch.brushWeight), true);
+            Swatch currentSwatch = this.colorPicker.getSwatch();
+            if (stroke && currentSwatch.color == -1) {
+                setCurrentSwatch(new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, currentSwatch.brushWeight), true);
+            } else if (!stroke && currentSwatch.color == Theme.ACTION_BAR_VIDEO_EDIT_COLOR) {
+                setCurrentSwatch(new Swatch(-1, 1.0f, currentSwatch.brushWeight), true);
             }
-            ((TextPaintView) this.currentEntityView).setStroke(z);
+            ((TextPaintView) this.currentEntityView).setStroke(stroke);
         }
     }
 
@@ -924,9 +901,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 C12531() {
                 }
 
-                public void onClick(View view) {
+                public void onClick(View v) {
                     PhotoPaintView.this.removeEntity(entityView);
-                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                         PhotoPaintView.this.popupWindow.dismiss(true);
                     }
                 }
@@ -937,9 +914,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 C12542() {
                 }
 
-                public void onClick(View view) {
+                public void onClick(View v) {
                     PhotoPaintView.this.editSelectedTextEntity();
-                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                         PhotoPaintView.this.popupWindow.dismiss(true);
                     }
                 }
@@ -950,190 +927,209 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 C12553() {
                 }
 
-                public void onClick(View view) {
+                public void onClick(View v) {
                     PhotoPaintView.this.duplicateSelectedEntity();
-                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+                    if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                         PhotoPaintView.this.popupWindow.dismiss(true);
                     }
                 }
             }
 
             public void run() {
-                View linearLayout = new LinearLayout(PhotoPaintView.this.getContext());
-                linearLayout.setOrientation(0);
-                View textView = new TextView(PhotoPaintView.this.getContext());
-                textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
-                textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                textView.setGravity(16);
-                textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
-                textView.setTextSize(1, 18.0f);
-                textView.setTag(Integer.valueOf(0));
-                textView.setText(LocaleController.getString("PaintDelete", C0446R.string.PaintDelete));
-                textView.setOnClickListener(new C12531());
-                linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
+                LinearLayout parent = new LinearLayout(PhotoPaintView.this.getContext());
+                parent.setOrientation(0);
+                TextView deleteView = new TextView(PhotoPaintView.this.getContext());
+                deleteView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                deleteView.setGravity(16);
+                deleteView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
+                deleteView.setTextSize(1, 18.0f);
+                deleteView.setTag(Integer.valueOf(0));
+                deleteView.setText(LocaleController.getString("PaintDelete", C0446R.string.PaintDelete));
+                deleteView.setOnClickListener(new C12531());
+                parent.addView(deleteView, LayoutHelper.createLinear(-2, 48));
                 if (entityView instanceof TextPaintView) {
-                    textView = new TextView(PhotoPaintView.this.getContext());
-                    textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
-                    textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                    textView.setGravity(16);
-                    textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
-                    textView.setTextSize(1, 18.0f);
-                    textView.setTag(Integer.valueOf(1));
-                    textView.setText(LocaleController.getString("PaintEdit", C0446R.string.PaintEdit));
-                    textView.setOnClickListener(new C12542());
-                    linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
+                    TextView editView = new TextView(PhotoPaintView.this.getContext());
+                    editView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                    editView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                    editView.setGravity(16);
+                    editView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+                    editView.setTextSize(1, 18.0f);
+                    editView.setTag(Integer.valueOf(1));
+                    editView.setText(LocaleController.getString("PaintEdit", C0446R.string.PaintEdit));
+                    editView.setOnClickListener(new C12542());
+                    parent.addView(editView, LayoutHelper.createLinear(-2, 48));
                 }
-                textView = new TextView(PhotoPaintView.this.getContext());
-                textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
-                textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                textView.setGravity(16);
-                textView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
-                textView.setTextSize(1, 18.0f);
-                textView.setTag(Integer.valueOf(2));
-                textView.setText(LocaleController.getString("PaintDuplicate", C0446R.string.PaintDuplicate));
-                textView.setOnClickListener(new C12553());
-                linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
-                PhotoPaintView.this.popupLayout.addView(linearLayout);
-                LayoutParams layoutParams = (LayoutParams) linearLayout.getLayoutParams();
-                layoutParams.width = -2;
-                layoutParams.height = -2;
-                linearLayout.setLayoutParams(layoutParams);
+                TextView duplicateView = new TextView(PhotoPaintView.this.getContext());
+                duplicateView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                duplicateView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                duplicateView.setGravity(16);
+                duplicateView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
+                duplicateView.setTextSize(1, 18.0f);
+                duplicateView.setTag(Integer.valueOf(2));
+                duplicateView.setText(LocaleController.getString("PaintDuplicate", C0446R.string.PaintDuplicate));
+                duplicateView.setOnClickListener(new C12553());
+                parent.addView(duplicateView, LayoutHelper.createLinear(-2, 48));
+                PhotoPaintView.this.popupLayout.addView(parent);
+                LayoutParams params = (LayoutParams) parent.getLayoutParams();
+                params.width = -2;
+                params.height = -2;
+                parent.setLayoutParams(params);
             }
         }, entityView, 17, (int) ((entityView.getPosition().f24x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().f25y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.dp(32.0f));
     }
 
-    private FrameLayout buttonForBrush(final int i, int i2, boolean z) {
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        frameLayout.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                PhotoPaintView.this.setBrush(i);
-                if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+    private FrameLayout buttonForBrush(final int brush, int resource, boolean selected) {
+        FrameLayout button = new FrameLayout(getContext());
+        button.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                PhotoPaintView.this.setBrush(brush);
+                if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                     PhotoPaintView.this.popupWindow.dismiss(true);
                 }
             }
         });
-        i = new ImageView(getContext());
-        i.setImageResource(i2);
-        frameLayout.addView(i, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
-        if (z) {
-            i = new ImageView(getContext());
-            i.setImageResource(C0446R.drawable.ic_ab_done);
-            i.setScaleType(ScaleType.CENTER);
-            frameLayout.addView(i, LayoutHelper.createFrame(50, true));
+        ImageView preview = new ImageView(getContext());
+        preview.setImageResource(resource);
+        button.addView(preview, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
+        if (selected) {
+            ImageView check = new ImageView(getContext());
+            check.setImageResource(C0446R.drawable.ic_ab_done);
+            check.setScaleType(ScaleType.CENTER);
+            button.addView(check, LayoutHelper.createFrame(50, -1.0f));
         }
-        return frameLayout;
+        return button;
     }
 
     private void showBrushSettings() {
         showPopup(new Runnable() {
             public void run() {
-                boolean z = false;
-                View access$2500 = PhotoPaintView.this.buttonForBrush(0, C0446R.drawable.paint_radial_preview, PhotoPaintView.this.currentBrush == 0);
-                PhotoPaintView.this.popupLayout.addView(access$2500);
-                LayoutParams layoutParams = (LayoutParams) access$2500.getLayoutParams();
-                layoutParams.width = -1;
-                layoutParams.height = AndroidUtilities.dp(52.0f);
-                access$2500.setLayoutParams(layoutParams);
-                access$2500 = PhotoPaintView.this.buttonForBrush(1, C0446R.drawable.paint_elliptical_preview, PhotoPaintView.this.currentBrush == 1);
-                PhotoPaintView.this.popupLayout.addView(access$2500);
-                layoutParams = (LayoutParams) access$2500.getLayoutParams();
-                layoutParams.width = -1;
-                layoutParams.height = AndroidUtilities.dp(52.0f);
-                access$2500.setLayoutParams(layoutParams);
+                boolean z;
+                boolean z2 = true;
                 PhotoPaintView photoPaintView = PhotoPaintView.this;
-                if (PhotoPaintView.this.currentBrush == 2) {
+                if (PhotoPaintView.this.currentBrush == 0) {
                     z = true;
+                } else {
+                    z = false;
                 }
-                access$2500 = photoPaintView.buttonForBrush(2, C0446R.drawable.paint_neon_preview, z);
-                PhotoPaintView.this.popupLayout.addView(access$2500);
-                layoutParams = (LayoutParams) access$2500.getLayoutParams();
+                View radial = photoPaintView.buttonForBrush(0, C0446R.drawable.paint_radial_preview, z);
+                PhotoPaintView.this.popupLayout.addView(radial);
+                LayoutParams layoutParams = (LayoutParams) radial.getLayoutParams();
                 layoutParams.width = -1;
                 layoutParams.height = AndroidUtilities.dp(52.0f);
-                access$2500.setLayoutParams(layoutParams);
+                radial.setLayoutParams(layoutParams);
+                photoPaintView = PhotoPaintView.this;
+                if (PhotoPaintView.this.currentBrush == 1) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                View elliptical = photoPaintView.buttonForBrush(1, C0446R.drawable.paint_elliptical_preview, z);
+                PhotoPaintView.this.popupLayout.addView(elliptical);
+                layoutParams = (LayoutParams) elliptical.getLayoutParams();
+                layoutParams.width = -1;
+                layoutParams.height = AndroidUtilities.dp(52.0f);
+                elliptical.setLayoutParams(layoutParams);
+                PhotoPaintView photoPaintView2 = PhotoPaintView.this;
+                if (PhotoPaintView.this.currentBrush != 2) {
+                    z2 = false;
+                }
+                View neon = photoPaintView2.buttonForBrush(2, C0446R.drawable.paint_neon_preview, z2);
+                PhotoPaintView.this.popupLayout.addView(neon);
+                layoutParams = (LayoutParams) neon.getLayoutParams();
+                layoutParams.width = -1;
+                layoutParams.height = AndroidUtilities.dp(52.0f);
+                neon.setLayoutParams(layoutParams);
             }
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    private FrameLayout buttonForText(final boolean z, String str, boolean z2) {
-        FrameLayout anonymousClass20 = new FrameLayout(getContext()) {
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+    private FrameLayout buttonForText(final boolean stroke, String text, boolean selected) {
+        int i = Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
+        FrameLayout button = new FrameLayout(getContext()) {
+            public boolean onInterceptTouchEvent(MotionEvent ev) {
                 return true;
             }
         };
-        anonymousClass20.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        anonymousClass20.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                PhotoPaintView.this.setStroke(z);
-                if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+        button.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                PhotoPaintView.this.setStroke(stroke);
+                if (PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                     PhotoPaintView.this.popupWindow.dismiss(true);
                 }
             }
         });
-        View editTextOutline = new EditTextOutline(getContext());
-        editTextOutline.setBackgroundColor(0);
-        editTextOutline.setEnabled(false);
-        editTextOutline.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-        int i = Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
-        editTextOutline.setTextColor(z ? -1 : Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-        if (!z) {
+        EditTextOutline textView = new EditTextOutline(getContext());
+        textView.setBackgroundColor(0);
+        textView.setEnabled(false);
+        textView.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+        textView.setTextColor(stroke ? -1 : Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+        if (!stroke) {
             i = 0;
         }
-        editTextOutline.setStrokeColor(i);
-        editTextOutline.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
-        editTextOutline.setTextSize(1, 18.0f);
-        editTextOutline.setTypeface(null, 1);
-        editTextOutline.setTag(Boolean.valueOf(z));
-        editTextOutline.setText(str);
-        anonymousClass20.addView(editTextOutline, LayoutHelper.createFrame(-2, -2.0f, 19, 46.0f, 0.0f, 16.0f, 0.0f));
-        if (z2) {
-            z = new ImageView(getContext());
-            z.setImageResource(C0446R.drawable.ic_ab_done);
-            z.setScaleType(ScaleType.CENTER);
-            anonymousClass20.addView(z, LayoutHelper.createFrame(50, true));
+        textView.setStrokeColor(i);
+        textView.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
+        textView.setTextSize(1, 18.0f);
+        textView.setTypeface(null, 1);
+        textView.setTag(Boolean.valueOf(stroke));
+        textView.setText(text);
+        button.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 19, 46.0f, 0.0f, 16.0f, 0.0f));
+        if (selected) {
+            ImageView check = new ImageView(getContext());
+            check.setImageResource(C0446R.drawable.ic_ab_done);
+            check.setScaleType(ScaleType.CENTER);
+            button.addView(check, LayoutHelper.createFrame(50, -1.0f));
         }
-        return anonymousClass20;
+        return button;
     }
 
     private void showTextSettings() {
         showPopup(new Runnable() {
             public void run() {
-                View access$2800 = PhotoPaintView.this.buttonForText(true, LocaleController.getString("PaintOutlined", C0446R.string.PaintOutlined), PhotoPaintView.this.selectedStroke);
-                PhotoPaintView.this.popupLayout.addView(access$2800);
-                LayoutParams layoutParams = (LayoutParams) access$2800.getLayoutParams();
+                boolean z = true;
+                View outline = PhotoPaintView.this.buttonForText(true, LocaleController.getString("PaintOutlined", C0446R.string.PaintOutlined), PhotoPaintView.this.selectedStroke);
+                PhotoPaintView.this.popupLayout.addView(outline);
+                LayoutParams layoutParams = (LayoutParams) outline.getLayoutParams();
                 layoutParams.width = -1;
                 layoutParams.height = AndroidUtilities.dp(48.0f);
-                access$2800.setLayoutParams(layoutParams);
-                access$2800 = PhotoPaintView.this.buttonForText(false, LocaleController.getString("PaintRegular", C0446R.string.PaintRegular), true ^ PhotoPaintView.this.selectedStroke);
-                PhotoPaintView.this.popupLayout.addView(access$2800);
-                layoutParams = (LayoutParams) access$2800.getLayoutParams();
+                outline.setLayoutParams(layoutParams);
+                PhotoPaintView photoPaintView = PhotoPaintView.this;
+                String string = LocaleController.getString("PaintRegular", C0446R.string.PaintRegular);
+                if (PhotoPaintView.this.selectedStroke) {
+                    z = false;
+                }
+                View regular = photoPaintView.buttonForText(false, string, z);
+                PhotoPaintView.this.popupLayout.addView(regular);
+                layoutParams = (LayoutParams) regular.getLayoutParams();
                 layoutParams.width = -1;
                 layoutParams.height = AndroidUtilities.dp(48.0f);
-                access$2800.setLayoutParams(layoutParams);
+                regular.setLayoutParams(layoutParams);
             }
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    private void showPopup(Runnable runnable, View view, int i, int i2, int i3) {
+    private void showPopup(Runnable setupRunnable, View parent, int gravity, int x, int y) {
         if (this.popupWindow == null || !this.popupWindow.isShowing()) {
             if (this.popupLayout == null) {
                 this.popupRect = new Rect();
                 this.popupLayout = new ActionBarPopupWindowLayout(getContext());
                 this.popupLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new OnTouchListener() {
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        if (motionEvent.getActionMasked() == 0 && PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
-                            view.getHitRect(PhotoPaintView.this.popupRect);
-                            if (PhotoPaintView.this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY()) == null) {
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == 0 && PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
+                            v.getHitRect(PhotoPaintView.this.popupRect);
+                            if (!PhotoPaintView.this.popupRect.contains((int) event.getX(), (int) event.getY())) {
                                 PhotoPaintView.this.popupWindow.dismiss();
                             }
                         }
-                        return null;
+                        return false;
                     }
                 });
                 this.popupLayout.setDispatchKeyEventListener(new OnDispatchKeyEventListener() {
                     public void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == null && PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing() != null) {
+                        if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && PhotoPaintView.this.popupWindow != null && PhotoPaintView.this.popupWindow.isShowing()) {
                             PhotoPaintView.this.popupWindow.dismiss();
                         }
                     }
@@ -1141,7 +1137,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 this.popupLayout.setShowedFromBotton(true);
             }
             this.popupLayout.removeInnerViews();
-            runnable.run();
+            setupRunnable.run();
             if (this.popupWindow == null) {
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
@@ -1159,7 +1155,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
             this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
-            this.popupWindow.showAtLocation(view, i, i2, i3);
+            this.popupWindow.showAtLocation(parent, gravity, x, y);
             this.popupWindow.startAnimation();
             return;
         }
@@ -1167,14 +1163,15 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private int getFrameRotation() {
-        int i = this.orientation;
-        if (i == 90) {
-            return 1;
-        }
-        if (i != 180) {
-            return i != 270 ? 0 : 3;
-        } else {
-            return 2;
+        switch (this.orientation) {
+            case 90:
+                return 1;
+            case 180:
+                return 2;
+            case 270:
+                return 3;
+            default:
+                return 0;
         }
     }
 
@@ -1183,143 +1180,182 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             /* JADX WARNING: inconsistent code. */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
-                Throwable th;
-                Throwable th2;
-                FaceDetector build;
-                try {
-                    int i = 0;
-                    build = new FaceDetector.Builder(PhotoPaintView.this.getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
-                    try {
-                        if (build.isOperational()) {
-                            try {
-                                SparseArray detect = build.detect(new Frame.Builder().setBitmap(PhotoPaintView.this.bitmapToEdit).setRotation(PhotoPaintView.this.getFrameRotation()).build());
-                                ArrayList arrayList = new ArrayList();
-                                Size access$3200 = PhotoPaintView.this.getPaintingSize();
-                                while (i < detect.size()) {
-                                    PhotoFace photoFace = new PhotoFace((Face) detect.get(detect.keyAt(i)), PhotoPaintView.this.bitmapToEdit, access$3200, PhotoPaintView.this.isSidewardOrientation());
-                                    if (photoFace.isSufficient()) {
-                                        arrayList.add(photoFace);
-                                    }
-                                    i++;
-                                }
-                                PhotoPaintView.this.faces = arrayList;
-                                if (build != null) {
-                                    build.release();
-                                }
-                                return;
-                            } catch (Throwable th3) {
-                                FileLog.m3e(th3);
-                                if (build != null) {
-                                    build.release();
-                                }
-                                return;
-                            }
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("face detection is not operational");
-                        }
-                        if (build != null) {
-                            build.release();
-                        }
-                    } catch (Exception e) {
-                        th3 = e;
-                        try {
-                            FileLog.m3e(th3);
-                        } catch (Throwable th4) {
-                            th3 = th4;
-                            if (build != null) {
-                                build.release();
-                            }
-                            throw th3;
-                        }
-                    }
-                } catch (Throwable e2) {
-                    th2 = e2;
-                    build = null;
-                    th3 = th2;
-                    FileLog.m3e(th3);
-                } catch (Throwable e22) {
-                    th2 = e22;
-                    build = null;
-                    th3 = th2;
-                    if (build != null) {
-                        build.release();
-                    }
-                    throw th3;
-                }
+                /* JADX: method processing error */
+/*
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x0034 in list [B:8:0x0031]
+	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
+	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+	at jadx.core.ProcessClass.process(ProcessClass.java:34)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+*/
+                /*
+                r12 = this;
+                r3 = 0;
+                r10 = new com.google.android.gms.vision.face.FaceDetector$Builder;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.getContext();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.<init>(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setMode(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setLandmarkType(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 0;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setTrackingEnabled(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r3 = r10.build();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r3.isOperational();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 != 0) goto L_0x0035;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0025:
+                r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 == 0) goto L_0x002f;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0029:
+                r10 = "face detection is not operational";	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.m1e(r10);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x002f:
+                if (r3 == 0) goto L_0x0034;
+            L_0x0031:
+                r3.release();
+            L_0x0034:
+                return;
+            L_0x0035:
+                r10 = new com.google.android.gms.vision.Frame$Builder;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.<init>();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.bitmapToEdit;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setBitmap(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.getFrameRotation();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setRotation(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r5 = r10.build();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r4 = r3.detect(r5);	 Catch:{ Throwable -> 0x008f }
+                r8 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r8.<init>();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r9 = r10.getPaintingSize();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r6 = 0;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0062:
+                r10 = r4.size();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r6 >= r10) goto L_0x0099;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0068:
+                r7 = r4.keyAt(r6);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r1 = r4.get(r7);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r1 = (com.google.android.gms.vision.face.Face) r1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r2 = new org.telegram.ui.Components.Paint.PhotoFace;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.bitmapToEdit;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.isSidewardOrientation();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r2.<init>(r1, r10, r9, r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r2.isSufficient();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 == 0) goto L_0x008c;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0089:
+                r8.add(r2);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x008c:
+                r6 = r6 + 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                goto L_0x0062;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x008f:
+                r0 = move-exception;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.m3e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
+            L_0x0095:
+                r3.release();
+                goto L_0x0034;
+            L_0x0099:
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.faces = r8;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
+            L_0x00a0:
+                r3.release();
+                goto L_0x0034;
+            L_0x00a4:
+                r0 = move-exception;
+                org.telegram.messenger.FileLog.m3e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
+            L_0x00aa:
+                r3.release();
+                goto L_0x0034;
+            L_0x00ae:
+                r10 = move-exception;
+                if (r3 == 0) goto L_0x00b4;
+            L_0x00b1:
+                r3.release();
+            L_0x00b4:
+                throw r10;
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.26.run():void");
             }
         });
     }
 
     private StickerPosition calculateStickerPosition(Document document) {
-        TL_maskCoords tL_maskCoords;
-        PhotoPaintView photoPaintView = this;
-        Document document2 = document;
-        for (int i = 0; i < document2.attributes.size(); i++) {
-            DocumentAttribute documentAttribute = (DocumentAttribute) document2.attributes.get(i);
-            if (documentAttribute instanceof TL_documentAttributeSticker) {
-                tL_maskCoords = documentAttribute.mask_coords;
+        TL_maskCoords maskCoords = null;
+        for (int a = 0; a < document.attributes.size(); a++) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeSticker) {
+                maskCoords = attribute.mask_coords;
                 break;
             }
         }
-        tL_maskCoords = null;
-        StickerPosition stickerPosition = new StickerPosition(centerPositionForEntity(), 0.75f, 0.0f);
-        if (!(tL_maskCoords == null || photoPaintView.faces == null)) {
-            if (photoPaintView.faces.size() != 0) {
-                int i2 = tL_maskCoords.f46n;
-                PhotoFace randomFaceWithVacantAnchor = getRandomFaceWithVacantAnchor(i2, document2.id, tL_maskCoords);
-                if (randomFaceWithVacantAnchor == null) {
-                    return stickerPosition;
-                }
-                Point pointForAnchor = randomFaceWithVacantAnchor.getPointForAnchor(i2);
-                float widthForAnchor = randomFaceWithVacantAnchor.getWidthForAnchor(i2);
-                float angle = randomFaceWithVacantAnchor.getAngle();
-                double toRadians = (double) ((float) Math.toRadians((double) angle));
-                double d = 1.5707963267948966d - toRadians;
-                double d2 = (double) widthForAnchor;
-                float cos = (float) ((Math.cos(d) * d2) * tL_maskCoords.f47x);
-                toRadians += 1.5707963267948966d;
-                return new StickerPosition(new Point((pointForAnchor.f24x + ((float) ((Math.sin(d) * d2) * tL_maskCoords.f47x))) + ((float) ((Math.cos(toRadians) * d2) * tL_maskCoords.f48y)), (pointForAnchor.f25y + cos) + ((float) ((Math.sin(toRadians) * d2) * tL_maskCoords.f48y))), (float) (((double) (widthForAnchor / baseStickerSize().width)) * tL_maskCoords.zoom), angle);
-            }
+        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), 0.75f, 0.0f);
+        if (maskCoords == null || this.faces == null || this.faces.size() == 0) {
+            return defaultPosition;
         }
-        return stickerPosition;
+        int anchor = maskCoords.f46n;
+        PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document.id, maskCoords);
+        if (face == null) {
+            return defaultPosition;
+        }
+        Point referencePoint = face.getPointForAnchor(anchor);
+        float referenceWidth = face.getWidthForAnchor(anchor);
+        float angle = face.getAngle();
+        float scale = (float) (((double) (referenceWidth / baseStickerSize().width)) * maskCoords.zoom);
+        float radAngle = (float) Math.toRadians((double) angle);
+        float yCompX = (float) ((Math.cos(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f48y);
+        float yCompY = (float) ((Math.sin(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f48y);
+        float x = (referencePoint.f24x + ((float) ((Math.sin(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f47x))) + yCompX;
+        return new StickerPosition(new Point(x, (referencePoint.f25y + ((float) ((Math.cos(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f47x))) + yCompY), scale, angle);
     }
 
-    private PhotoFace getRandomFaceWithVacantAnchor(int i, long j, TL_maskCoords tL_maskCoords) {
-        if (i >= 0 && i <= 3) {
-            if (!this.faces.isEmpty()) {
-                int size = this.faces.size();
-                int nextInt = Utilities.random.nextInt(size);
-                for (int i2 = size; i2 > 0; i2--) {
-                    PhotoFace photoFace = (PhotoFace) this.faces.get(nextInt);
-                    if (!isFaceAnchorOccupied(photoFace, i, j, tL_maskCoords)) {
-                        return photoFace;
-                    }
-                    nextInt = (nextInt + 1) % size;
-                }
-                return null;
+    private PhotoFace getRandomFaceWithVacantAnchor(int anchor, long documentId, TL_maskCoords maskCoords) {
+        if (anchor < 0 || anchor > 3 || this.faces.isEmpty()) {
+            return null;
+        }
+        int count = this.faces.size();
+        int i = Utilities.random.nextInt(count);
+        for (int remaining = count; remaining > 0; remaining--) {
+            PhotoFace face = (PhotoFace) this.faces.get(i);
+            if (!isFaceAnchorOccupied(face, anchor, documentId, maskCoords)) {
+                return face;
             }
+            i = (i + 1) % count;
         }
         return null;
     }
 
-    private boolean isFaceAnchorOccupied(PhotoFace photoFace, int i, long j, TL_maskCoords tL_maskCoords) {
-        tL_maskCoords = photoFace.getPointForAnchor(i);
-        if (tL_maskCoords == null) {
+    private boolean isFaceAnchorOccupied(PhotoFace face, int anchor, long documentId, TL_maskCoords maskCoords) {
+        Point anchorPoint = face.getPointForAnchor(anchor);
+        if (anchorPoint == null) {
             return true;
         }
-        photoFace = photoFace.getWidthForAnchor(0) * 1.1f;
-        for (int i2 = 0; i2 < this.entitiesView.getChildCount(); i2++) {
-            View childAt = this.entitiesView.getChildAt(i2);
-            if (childAt instanceof StickerView) {
-                StickerView stickerView = (StickerView) childAt;
-                if (stickerView.getAnchor() == i) {
-                    Point position = stickerView.getPosition();
-                    float hypot = (float) Math.hypot((double) (position.f24x - tL_maskCoords.f24x), (double) (position.f25y - tL_maskCoords.f25y));
-                    if ((j == stickerView.getSticker().id || this.faces.size() > 1) && hypot < photoFace) {
+        float minDistance = face.getWidthForAnchor(0) * 1.1f;
+        for (int index = 0; index < this.entitiesView.getChildCount(); index++) {
+            View view = this.entitiesView.getChildAt(index);
+            if (view instanceof StickerView) {
+                StickerView stickerView = (StickerView) view;
+                if (stickerView.getAnchor() == anchor) {
+                    Point location = stickerView.getPosition();
+                    float distance = (float) Math.hypot((double) (location.f24x - anchorPoint.f24x), (double) (location.f25y - anchorPoint.f25y));
+                    if ((documentId == stickerView.getSticker().id || this.faces.size() > 1) && distance < minDistance) {
                         return true;
                     }
                 }
+                continue;
             }
         }
         return false;

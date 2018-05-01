@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
@@ -21,6 +22,7 @@ import org.telegram.messenger.exoplayer2.source.chunk.Chunk;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifest;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class PlayerEmsgHandler implements Callback {
     private static final int EMSG_MANIFEST_EXPIRED = 2;
@@ -38,22 +40,22 @@ public final class PlayerEmsgHandler implements Callback {
     private final PlayerEmsgCallback playerEmsgCallback;
     private boolean released;
 
-    private static final class ManifestExpiryEventInfo {
-        public final long eventTimeUs;
-        public final long manifestPublishTimeMsInEmsg;
-
-        public ManifestExpiryEventInfo(long j, long j2) {
-            this.eventTimeUs = j;
-            this.manifestPublishTimeMsInEmsg = j2;
-        }
-    }
-
     public interface PlayerEmsgCallback {
         void onDashLiveMediaPresentationEndSignalEncountered();
 
         void onDashManifestPublishTimeExpired(long j);
 
         void onDashManifestRefreshRequested();
+    }
+
+    private static final class ManifestExpiryEventInfo {
+        public final long eventTimeUs;
+        public final long manifestPublishTimeMsInEmsg;
+
+        public ManifestExpiryEventInfo(long eventTimeUs, long manifestPublishTimeMsInEmsg) {
+            this.eventTimeUs = eventTimeUs;
+            this.manifestPublishTimeMsInEmsg = manifestPublishTimeMsInEmsg;
+        }
     }
 
     public final class PlayerTrackEmsgHandler implements TrackOutput {
@@ -69,21 +71,21 @@ public final class PlayerEmsgHandler implements Callback {
             this.sampleQueue.format(format);
         }
 
-        public int sampleData(ExtractorInput extractorInput, int i, boolean z) throws IOException, InterruptedException {
-            return this.sampleQueue.sampleData(extractorInput, i, z);
+        public int sampleData(ExtractorInput input, int length, boolean allowEndOfInput) throws IOException, InterruptedException {
+            return this.sampleQueue.sampleData(input, length, allowEndOfInput);
         }
 
-        public void sampleData(ParsableByteArray parsableByteArray, int i) {
-            this.sampleQueue.sampleData(parsableByteArray, i);
+        public void sampleData(ParsableByteArray data, int length) {
+            this.sampleQueue.sampleData(data, length);
         }
 
-        public void sampleMetadata(long j, int i, int i2, int i3, CryptoData cryptoData) {
-            this.sampleQueue.sampleMetadata(j, i, i2, i3, cryptoData);
+        public void sampleMetadata(long timeUs, int flags, int size, int offset, CryptoData encryptionData) {
+            this.sampleQueue.sampleMetadata(timeUs, flags, size, offset, encryptionData);
             parseAndDiscardSamples();
         }
 
-        public boolean maybeRefreshManifestBeforeLoadingNextChunk(long j) {
-            return PlayerEmsgHandler.this.maybeRefreshManifestBeforeLoadingNextChunk(j);
+        public boolean maybeRefreshManifestBeforeLoadingNextChunk(long presentationPositionUs) {
+            return PlayerEmsgHandler.this.maybeRefreshManifestBeforeLoadingNextChunk(presentationPositionUs);
         }
 
         public void onChunkLoadCompleted(Chunk chunk) {
@@ -100,12 +102,12 @@ public final class PlayerEmsgHandler implements Callback {
 
         private void parseAndDiscardSamples() {
             while (this.sampleQueue.hasNextSample()) {
-                MetadataInputBuffer dequeueSample = dequeueSample();
-                if (dequeueSample != null) {
-                    long j = dequeueSample.timeUs;
-                    EventMessage eventMessage = (EventMessage) PlayerEmsgHandler.this.decoder.decode(dequeueSample).get(0);
+                MetadataInputBuffer inputBuffer = dequeueSample();
+                if (inputBuffer != null) {
+                    long eventTimeUs = inputBuffer.timeUs;
+                    EventMessage eventMessage = (EventMessage) PlayerEmsgHandler.this.decoder.decode(inputBuffer).get(0);
                     if (PlayerEmsgHandler.isPlayerEmsgEvent(eventMessage.schemeIdUri, eventMessage.value)) {
-                        parsePlayerEmsgEvent(j, eventMessage);
+                        parsePlayerEmsgEvent(eventTimeUs, eventMessage);
                     }
                 }
             }
@@ -121,13 +123,13 @@ public final class PlayerEmsgHandler implements Callback {
             return this.buffer;
         }
 
-        private void parsePlayerEmsgEvent(long j, EventMessage eventMessage) {
-            long access$100 = PlayerEmsgHandler.getManifestPublishTimeMsInEmsg(eventMessage);
-            if (access$100 != C0542C.TIME_UNSET) {
-                if (PlayerEmsgHandler.isMessageSignalingMediaPresentationEnded(eventMessage) != null) {
+        private void parsePlayerEmsgEvent(long eventTimeUs, EventMessage eventMessage) {
+            long manifestPublishTimeMsInEmsg = PlayerEmsgHandler.getManifestPublishTimeMsInEmsg(eventMessage);
+            if (manifestPublishTimeMsInEmsg != C0542C.TIME_UNSET) {
+                if (PlayerEmsgHandler.isMessageSignalingMediaPresentationEnded(eventMessage)) {
                     onMediaPresentationEndedMessageEncountered();
                 } else {
-                    onManifestExpiredMessageEncountered(j, access$100);
+                    onManifestExpiredMessageEncountered(eventTimeUs, manifestPublishTimeMsInEmsg);
                 }
             }
         }
@@ -136,45 +138,47 @@ public final class PlayerEmsgHandler implements Callback {
             PlayerEmsgHandler.this.handler.sendMessage(PlayerEmsgHandler.this.handler.obtainMessage(1));
         }
 
-        private void onManifestExpiredMessageEncountered(long j, long j2) {
-            PlayerEmsgHandler.this.handler.sendMessage(PlayerEmsgHandler.this.handler.obtainMessage(2, new ManifestExpiryEventInfo(j, j2)));
+        private void onManifestExpiredMessageEncountered(long eventTimeUs, long manifestPublishTimeMsInEmsg) {
+            PlayerEmsgHandler.this.handler.sendMessage(PlayerEmsgHandler.this.handler.obtainMessage(2, new ManifestExpiryEventInfo(eventTimeUs, manifestPublishTimeMsInEmsg)));
         }
     }
 
-    public PlayerEmsgHandler(DashManifest dashManifest, PlayerEmsgCallback playerEmsgCallback, Allocator allocator) {
-        this.manifest = dashManifest;
+    public PlayerEmsgHandler(DashManifest manifest, PlayerEmsgCallback playerEmsgCallback, Allocator allocator) {
+        this.manifest = manifest;
         this.playerEmsgCallback = playerEmsgCallback;
         this.allocator = allocator;
     }
 
-    public void updateManifest(DashManifest dashManifest) {
+    public void updateManifest(DashManifest newManifest) {
         this.isWaitingForManifestRefresh = false;
         this.expiredManifestPublishTimeUs = C0542C.TIME_UNSET;
-        this.manifest = dashManifest;
+        this.manifest = newManifest;
         removePreviouslyExpiredManifestPublishTimeValues();
     }
 
-    boolean maybeRefreshManifestBeforeLoadingNextChunk(long j) {
+    boolean maybeRefreshManifestBeforeLoadingNextChunk(long presentationPositionUs) {
         if (!this.manifest.dynamic) {
             return false;
         }
-        boolean z = true;
         if (this.isWaitingForManifestRefresh) {
             return true;
         }
-        if (!this.dynamicMediaPresentationEnded) {
-            Entry ceilingExpiryEntryForPublishTime = ceilingExpiryEntryForPublishTime(this.manifest.publishTimeMs);
-            if (ceilingExpiryEntryForPublishTime == null || ((Long) ceilingExpiryEntryForPublishTime.getValue()).longValue() >= j) {
-                z = false;
-            } else {
-                this.expiredManifestPublishTimeUs = ((Long) ceilingExpiryEntryForPublishTime.getKey()).longValue();
+        boolean manifestRefreshNeeded = false;
+        if (this.dynamicMediaPresentationEnded) {
+            manifestRefreshNeeded = true;
+        } else {
+            Entry<Long, Long> expiredEntry = ceilingExpiryEntryForPublishTime(this.manifest.publishTimeMs);
+            if (expiredEntry != null && ((Long) expiredEntry.getValue()).longValue() < presentationPositionUs) {
+                this.expiredManifestPublishTimeUs = ((Long) expiredEntry.getKey()).longValue();
                 notifyManifestPublishTimeExpired();
+                manifestRefreshNeeded = true;
             }
         }
-        if (z) {
-            maybeNotifyDashManifestRefreshNeeded();
+        if (!manifestRefreshNeeded) {
+            return manifestRefreshNeeded;
         }
-        return z;
+        maybeNotifyDashManifestRefreshNeeded();
+        return manifestRefreshNeeded;
     }
 
     boolean maybeRefreshManifestOnLoadingError(Chunk chunk) {
@@ -184,8 +188,13 @@ public final class PlayerEmsgHandler implements Callback {
         if (this.isWaitingForManifestRefresh) {
             return true;
         }
-        chunk = (this.lastLoadedChunkEndTimeUs == C0542C.TIME_UNSET || this.lastLoadedChunkEndTimeUs >= chunk.startTimeUs) ? null : 1;
-        if (chunk == null) {
+        boolean isAfterForwardSeek;
+        if (this.lastLoadedChunkEndTimeUs == C0542C.TIME_UNSET || this.lastLoadedChunkEndTimeUs >= chunk.startTimeUs) {
+            isAfterForwardSeek = false;
+        } else {
+            isAfterForwardSeek = true;
+        }
+        if (!isAfterForwardSeek) {
             return false;
         }
         maybeNotifyDashManifestRefreshNeeded();
@@ -198,8 +207,8 @@ public final class PlayerEmsgHandler implements Callback {
         }
     }
 
-    public static boolean isPlayerEmsgEvent(String str, String str2) {
-        return ("urn:mpeg:dash:event:2012".equals(str) == null || ("1".equals(str2) == null && "2".equals(str2) == null && "3".equals(str2) == null)) ? null : true;
+    public static boolean isPlayerEmsgEvent(String schemeIdUri, String value) {
+        return "urn:mpeg:dash:event:2012".equals(schemeIdUri) && ("1".equals(value) || "2".equals(value) || "3".equals(value));
     }
 
     public PlayerTrackEmsgHandler newPlayerTrackEmsgHandler() {
@@ -220,19 +229,19 @@ public final class PlayerEmsgHandler implements Callback {
                 handleMediaPresentationEndedMessageEncountered();
                 return true;
             case 2:
-                ManifestExpiryEventInfo manifestExpiryEventInfo = (ManifestExpiryEventInfo) message.obj;
-                handleManifestExpiredMessage(manifestExpiryEventInfo.eventTimeUs, manifestExpiryEventInfo.manifestPublishTimeMsInEmsg);
+                ManifestExpiryEventInfo messageObj = message.obj;
+                handleManifestExpiredMessage(messageObj.eventTimeUs, messageObj.manifestPublishTimeMsInEmsg);
                 return true;
             default:
-                return null;
+                return false;
         }
     }
 
-    private void handleManifestExpiredMessage(long j, long j2) {
-        if (!this.manifestPublishTimeToExpiryTimeUs.containsKey(Long.valueOf(j2))) {
-            this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(j2), Long.valueOf(j));
-        } else if (((Long) this.manifestPublishTimeToExpiryTimeUs.get(Long.valueOf(j2))).longValue() > j) {
-            this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(j2), Long.valueOf(j));
+    private void handleManifestExpiredMessage(long eventTimeUs, long manifestPublishTimeMsInEmsg) {
+        if (!this.manifestPublishTimeToExpiryTimeUs.containsKey(Long.valueOf(manifestPublishTimeMsInEmsg))) {
+            this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(manifestPublishTimeMsInEmsg), Long.valueOf(eventTimeUs));
+        } else if (((Long) this.manifestPublishTimeToExpiryTimeUs.get(Long.valueOf(manifestPublishTimeMsInEmsg))).longValue() > eventTimeUs) {
+            this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(manifestPublishTimeMsInEmsg), Long.valueOf(eventTimeUs));
         }
     }
 
@@ -241,15 +250,15 @@ public final class PlayerEmsgHandler implements Callback {
         notifySourceMediaPresentationEnded();
     }
 
-    private Entry<Long, Long> ceilingExpiryEntryForPublishTime(long j) {
+    private Entry<Long, Long> ceilingExpiryEntryForPublishTime(long publishTimeMs) {
         if (this.manifestPublishTimeToExpiryTimeUs.isEmpty()) {
-            return 0;
+            return null;
         }
-        return this.manifestPublishTimeToExpiryTimeUs.ceilingEntry(Long.valueOf(j));
+        return this.manifestPublishTimeToExpiryTimeUs.ceilingEntry(Long.valueOf(publishTimeMs));
     }
 
     private void removePreviouslyExpiredManifestPublishTimeValues() {
-        Iterator it = this.manifestPublishTimeToExpiryTimeUs.entrySet().iterator();
+        Iterator<Entry<Long, Long>> it = this.manifestPublishTimeToExpiryTimeUs.entrySet().iterator();
         while (it.hasNext()) {
             if (((Long) ((Entry) it.next()).getKey()).longValue() < this.manifest.publishTimeMs) {
                 it.remove();
@@ -273,35 +282,15 @@ public final class PlayerEmsgHandler implements Callback {
         }
     }
 
-    private static long getManifestPublishTimeMsInEmsg(org.telegram.messenger.exoplayer2.metadata.emsg.EventMessage r2) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r0 = new java.lang.String;	 Catch:{ ParserException -> 0x000c }
-        r2 = r2.messageData;	 Catch:{ ParserException -> 0x000c }
-        r0.<init>(r2);	 Catch:{ ParserException -> 0x000c }
-        r0 = org.telegram.messenger.exoplayer2.util.Util.parseXsDateTime(r0);	 Catch:{ ParserException -> 0x000c }
-        return r0;
-    L_0x000c:
-        r0 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.dash.PlayerEmsgHandler.getManifestPublishTimeMsInEmsg(org.telegram.messenger.exoplayer2.metadata.emsg.EventMessage):long");
+    private static long getManifestPublishTimeMsInEmsg(EventMessage eventMessage) {
+        try {
+            return Util.parseXsDateTime(new String(eventMessage.messageData));
+        } catch (ParserException e) {
+            return C0542C.TIME_UNSET;
+        }
     }
 
     private static boolean isMessageSignalingMediaPresentationEnded(EventMessage eventMessage) {
-        return (eventMessage.presentationTimeUs == 0 && eventMessage.durationMs == 0) ? true : null;
+        return eventMessage.presentationTimeUs == 0 && eventMessage.durationMs == 0;
     }
 }

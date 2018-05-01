@@ -2,10 +2,12 @@ package org.telegram.messenger.support.customtabsclient.shared;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,104 +32,58 @@ public class CustomTabsHelper {
         if (sPackageNameToUse != null) {
             return sPackageNameToUse;
         }
-        PackageManager packageManager = context.getPackageManager();
-        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.example.com"));
-        ResolveInfo resolveActivity = packageManager.resolveActivity(intent, 0);
-        Object obj = resolveActivity != null ? resolveActivity.activityInfo.packageName : null;
-        List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
-        List arrayList = new ArrayList();
-        for (ResolveInfo resolveInfo : queryIntentActivities) {
-            Intent intent2 = new Intent();
-            intent2.setAction("android.support.customtabs.action.CustomTabsService");
-            intent2.setPackage(resolveInfo.activityInfo.packageName);
-            if (packageManager.resolveService(intent2, 0) != null) {
-                arrayList.add(resolveInfo.activityInfo.packageName);
+        PackageManager pm = context.getPackageManager();
+        Intent activityIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.example.com"));
+        ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
+        String defaultViewHandlerPackageName = null;
+        if (defaultViewHandlerInfo != null) {
+            defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName;
+        }
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
+        List<String> packagesSupportingCustomTabs = new ArrayList();
+        for (ResolveInfo info : resolvedActivityList) {
+            Intent serviceIntent = new Intent();
+            serviceIntent.setAction("android.support.customtabs.action.CustomTabsService");
+            serviceIntent.setPackage(info.activityInfo.packageName);
+            if (pm.resolveService(serviceIntent, 0) != null) {
+                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
             }
         }
-        if (arrayList.isEmpty()) {
+        if (packagesSupportingCustomTabs.isEmpty()) {
             sPackageNameToUse = null;
-        } else if (arrayList.size() == 1) {
-            sPackageNameToUse = (String) arrayList.get(0);
-        } else if (!TextUtils.isEmpty(obj) && hasSpecializedHandlerIntents(context, intent) == null && arrayList.contains(obj) != null) {
-            sPackageNameToUse = obj;
-        } else if (arrayList.contains(STABLE_PACKAGE) != null) {
+        } else if (packagesSupportingCustomTabs.size() == 1) {
+            sPackageNameToUse = (String) packagesSupportingCustomTabs.get(0);
+        } else if (!TextUtils.isEmpty(defaultViewHandlerPackageName) && !hasSpecializedHandlerIntents(context, activityIntent) && packagesSupportingCustomTabs.contains(defaultViewHandlerPackageName)) {
+            sPackageNameToUse = defaultViewHandlerPackageName;
+        } else if (packagesSupportingCustomTabs.contains(STABLE_PACKAGE)) {
             sPackageNameToUse = STABLE_PACKAGE;
-        } else if (arrayList.contains(BETA_PACKAGE) != null) {
+        } else if (packagesSupportingCustomTabs.contains(BETA_PACKAGE)) {
             sPackageNameToUse = BETA_PACKAGE;
-        } else if (arrayList.contains(DEV_PACKAGE) != null) {
+        } else if (packagesSupportingCustomTabs.contains(DEV_PACKAGE)) {
             sPackageNameToUse = DEV_PACKAGE;
-        } else if (arrayList.contains(LOCAL_PACKAGE) != null) {
+        } else if (packagesSupportingCustomTabs.contains(LOCAL_PACKAGE)) {
             sPackageNameToUse = LOCAL_PACKAGE;
         }
         return sPackageNameToUse;
     }
 
-    private static boolean hasSpecializedHandlerIntents(android.content.Context r3, android.content.Intent r4) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r0 = 0;
-        r3 = r3.getPackageManager();	 Catch:{ RuntimeException -> 0x003e }
-        r1 = 64;	 Catch:{ RuntimeException -> 0x003e }
-        r3 = r3.queryIntentActivities(r4, r1);	 Catch:{ RuntimeException -> 0x003e }
-        if (r3 == 0) goto L_0x003d;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x000d:
-        r4 = r3.size();	 Catch:{ RuntimeException -> 0x003e }
-        if (r4 != 0) goto L_0x0014;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0013:
-        goto L_0x003d;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0014:
-        r3 = r3.iterator();	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0018:
-        r4 = r3.hasNext();	 Catch:{ RuntimeException -> 0x003e }
-        if (r4 == 0) goto L_0x0045;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x001e:
-        r4 = r3.next();	 Catch:{ RuntimeException -> 0x003e }
-        r4 = (android.content.pm.ResolveInfo) r4;	 Catch:{ RuntimeException -> 0x003e }
-        r1 = r4.filter;	 Catch:{ RuntimeException -> 0x003e }
-        if (r1 != 0) goto L_0x0029;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0028:
-        goto L_0x0018;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0029:
-        r2 = r1.countDataAuthorities();	 Catch:{ RuntimeException -> 0x003e }
-        if (r2 == 0) goto L_0x0018;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x002f:
-        r1 = r1.countDataPaths();	 Catch:{ RuntimeException -> 0x003e }
-        if (r1 != 0) goto L_0x0036;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0035:
-        goto L_0x0018;	 Catch:{ RuntimeException -> 0x003e }
-    L_0x0036:
-        r4 = r4.activityInfo;	 Catch:{ RuntimeException -> 0x003e }
-        if (r4 != 0) goto L_0x003b;
-    L_0x003a:
-        goto L_0x0018;
-    L_0x003b:
-        r3 = 1;
-        return r3;
-    L_0x003d:
-        return r0;
-    L_0x003e:
-        r3 = "CustomTabsHelper";
-        r4 = "Runtime exception while getting specialized handlers";
-        android.util.Log.e(r3, r4);
-    L_0x0045:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper.hasSpecializedHandlerIntents(android.content.Context, android.content.Intent):boolean");
+    private static boolean hasSpecializedHandlerIntents(Context context, Intent intent) {
+        try {
+            List<ResolveInfo> handlers = context.getPackageManager().queryIntentActivities(intent, 64);
+            if (handlers == null || handlers.size() == 0) {
+                return false;
+            }
+            for (ResolveInfo resolveInfo : handlers) {
+                IntentFilter filter = resolveInfo.filter;
+                if (filter != null && filter.countDataAuthorities() != 0 && filter.countDataPaths() != 0 && resolveInfo.activityInfo != null) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Runtime exception while getting specialized handlers");
+            return false;
+        }
     }
 
     public static String[] getPackages() {

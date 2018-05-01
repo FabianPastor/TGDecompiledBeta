@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateInterpolator;
@@ -31,40 +32,40 @@ public class StickerCell extends FrameLayout {
         addView(this.imageView, LayoutHelper.createFrame(66, 66.0f, 1, 0.0f, 5.0f, 0.0f, 0.0f));
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(NUM) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
-    public void setPressed(boolean z) {
-        if (this.imageView.getImageReceiver().getPressed() != z) {
-            this.imageView.getImageReceiver().setPressed(z);
+    public void setPressed(boolean pressed) {
+        if (this.imageView.getImageReceiver().getPressed() != pressed) {
+            this.imageView.getImageReceiver().setPressed(pressed ? 1 : 0);
             this.imageView.invalidate();
         }
-        super.setPressed(z);
+        super.setPressed(pressed);
     }
 
-    public void setSticker(Document document, int i) {
+    public void setSticker(Document document, int side) {
         if (!(document == null || document.thumb == null)) {
             this.imageView.setImage(document.thumb.location, null, "webp", null);
         }
         this.sticker = document;
-        if (i == -1) {
+        if (side == -1) {
             setBackgroundResource(C0446R.drawable.stickers_back_left);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
-        } else if (i == 0) {
+        } else if (side == 0) {
             setBackgroundResource(C0446R.drawable.stickers_back_center);
             setPadding(0, 0, 0, 0);
-        } else if (i == 1) {
+        } else if (side == 1) {
             setBackgroundResource(C0446R.drawable.stickers_back_right);
             setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
-        } else if (i == 2) {
+        } else if (side == 2) {
             setBackgroundResource(C0446R.drawable.stickers_back_all);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
-        document = getBackground();
-        if (document != null) {
-            document.setAlpha(230);
-            document.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_stickersHintPanel), Mode.MULTIPLY));
+        Drawable background = getBackground();
+        if (background != null) {
+            background.setAlpha(230);
+            background.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_stickersHintPanel), Mode.MULTIPLY));
         }
     }
 
@@ -72,8 +73,8 @@ public class StickerCell extends FrameLayout {
         return this.sticker;
     }
 
-    public void setScaled(boolean z) {
-        this.scaled = z;
+    public void setScaled(boolean value) {
+        this.scaled = value;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -82,20 +83,20 @@ public class StickerCell extends FrameLayout {
         return this.imageView.getImageReceiver().getBitmap() != null;
     }
 
-    protected boolean drawChild(Canvas canvas, View view, long j) {
-        canvas = super.drawChild(canvas, view, j);
-        if (view == this.imageView && (!(this.scaled == null || this.scale == NUM) || (this.scaled == null && this.scale != NUM))) {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j2 = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
-            if (this.scaled == null || this.scale == NUM) {
-                this.scale += ((float) j2) / 400.0f;
-                if (this.scale > NUM) {
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (child == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f))) {
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastUpdateTime;
+            this.lastUpdateTime = newTime;
+            if (!this.scaled || this.scale == 0.8f) {
+                this.scale += ((float) dt) / 400.0f;
+                if (this.scale > 1.0f) {
                     this.scale = 1.0f;
                 }
             } else {
-                this.scale -= ((float) j2) / NUM;
-                if (this.scale < NUM) {
+                this.scale -= ((float) dt) / 400.0f;
+                if (this.scale < 0.8f) {
                     this.scale = 0.8f;
                 }
             }
@@ -104,6 +105,6 @@ public class StickerCell extends FrameLayout {
             this.imageView.invalidate();
             invalidate();
         }
-        return canvas;
+        return result;
     }
 }

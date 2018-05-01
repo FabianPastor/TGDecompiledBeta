@@ -17,106 +17,110 @@ public interface IPostMessageService extends IInterface {
         private static class Proxy implements IPostMessageService {
             private IBinder mRemote;
 
-            public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
-            }
-
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder remote) {
+                this.mRemote = remote;
             }
 
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            public void onMessageChannelReady(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public String getInterfaceDescriptor() {
+                return Stub.DESCRIPTOR;
+            }
+
+            public void onMessageChannelReady(ICustomTabsCallback callback, Bundle extras) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    if (extras != null) {
+                        _data.writeInt(1);
+                        extras.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
+                    this.mRemote.transact(2, _data, _reply, 0);
+                    _reply.readException();
                 } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
 
-            public void onPostMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+            public void onPostMessage(ICustomTabsCallback callback, String message, Bundle extras) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
-                    obtain.writeString(str);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
+                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    _data.writeString(message);
+                    if (extras != null) {
+                        _data.writeInt(1);
+                        extras.writeToParcel(_data, 0);
                     } else {
-                        obtain.writeInt(0);
+                        _data.writeInt(0);
                     }
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
+                    this.mRemote.transact(3, _data, _reply, 0);
+                    _reply.readException();
                 } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
+                    _reply.recycle();
+                    _data.recycle();
                 }
             }
-        }
-
-        public IBinder asBinder() {
-            return this;
         }
 
         public Stub() {
             attachInterface(this, DESCRIPTOR);
         }
 
-        public static IPostMessageService asInterface(IBinder iBinder) {
-            if (iBinder == null) {
+        public static IPostMessageService asInterface(IBinder obj) {
+            if (obj == null) {
                 return null;
             }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface(DESCRIPTOR);
-            IPostMessageService proxy = (queryLocalInterface == null || !(queryLocalInterface instanceof IPostMessageService)) ? new Proxy(iBinder) : (IPostMessageService) queryLocalInterface;
-            return proxy;
+            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            return (iin == null || !(iin instanceof IPostMessageService)) ? new Proxy(obj) : (IPostMessageService) iin;
         }
 
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            if (i != NUM) {
-                Bundle bundle = null;
-                switch (i) {
-                    case 2:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        onMessageChannelReady(i, bundle);
-                        parcel2.writeNoException();
-                        return true;
-                    case 3:
-                        parcel.enforceInterface(DESCRIPTOR);
-                        i = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
-                        i2 = parcel.readString();
-                        if (parcel.readInt() != 0) {
-                            bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                        }
-                        onPostMessage(i, i2, bundle);
-                        parcel2.writeNoException();
-                        return true;
-                    default:
-                        return super.onTransact(i, parcel, parcel2, i2);
-                }
+        public IBinder asBinder() {
+            return this;
+        }
+
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+            ICustomTabsCallback _arg0;
+            switch (code) {
+                case 2:
+                    Bundle _arg11;
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    if (data.readInt() != 0) {
+                        _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg11 = null;
+                    }
+                    onMessageChannelReady(_arg0, _arg11);
+                    reply.writeNoException();
+                    return true;
+                case 3:
+                    Bundle _arg2;
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    String _arg1 = data.readString();
+                    if (data.readInt() != 0) {
+                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg2 = null;
+                    }
+                    onPostMessage(_arg0, _arg1, _arg2);
+                    reply.writeNoException();
+                    return true;
+                case 1598968902:
+                    reply.writeString(DESCRIPTOR);
+                    return true;
+                default:
+                    return super.onTransact(code, data, reply, flags);
             }
-            parcel2.writeString(DESCRIPTOR);
-            return true;
         }
     }
 

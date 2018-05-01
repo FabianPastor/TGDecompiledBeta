@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,38 +49,38 @@ public class SearchAdapter extends SelectionAdapter {
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
     class C18991 implements SearchAdapterHelperDelegate {
-        public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-        }
-
         C18991() {
         }
 
         public void onDataSetChanged() {
             SearchAdapter.this.notifyDataSetChanged();
         }
+
+        public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+        }
     }
 
-    public SearchAdapter(Context context, SparseArray<User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, int i) {
+    public SearchAdapter(Context context, SparseArray<User> arg1, boolean usernameSearch, boolean mutual, boolean chats, boolean bots, int searchChannelId) {
         this.mContext = context;
-        this.ignoreUsers = sparseArray;
-        this.onlyMutual = z2;
-        this.allowUsernameSearch = z;
-        this.allowChats = z3;
-        this.allowBots = z4;
-        this.channelId = i;
+        this.ignoreUsers = arg1;
+        this.onlyMutual = mutual;
+        this.allowUsernameSearch = usernameSearch;
+        this.allowChats = chats;
+        this.allowBots = bots;
+        this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new C18991());
     }
 
-    public void setCheckedMap(SparseArray<?> sparseArray) {
-        this.checkedMap = sparseArray;
+    public void setCheckedMap(SparseArray<?> map) {
+        this.checkedMap = map;
     }
 
-    public void setUseUserCell(boolean z) {
-        this.useUserCell = z;
+    public void setUseUserCell(boolean value) {
+        this.useUserCell = value;
     }
 
-    public void searchDialogs(final String str) {
+    public void searchDialogs(final String query) {
         try {
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
@@ -87,10 +88,10 @@ public class SearchAdapter extends SelectionAdapter {
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        if (str == null) {
+        if (query == null) {
             this.searchResult.clear();
             this.searchResultNames.clear();
-            if (this.allowUsernameSearch != null) {
+            if (this.allowUsernameSearch) {
                 this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, true, this.channelId, false);
             }
             notifyDataSetChanged();
@@ -105,294 +106,216 @@ public class SearchAdapter extends SelectionAdapter {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                SearchAdapter.this.processSearch(str);
+                SearchAdapter.this.processSearch(query);
             }
         }, 200, 300);
     }
 
-    private void processSearch(final String str) {
+    private void processSearch(final String query) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (SearchAdapter.this.allowUsernameSearch) {
-                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(str, true, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true, SearchAdapter.this.channelId, false);
+                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true, SearchAdapter.this.channelId, false);
                 }
-                final int i = UserConfig.selectedAccount;
-                final ArrayList arrayList = new ArrayList();
-                arrayList.addAll(ContactsController.getInstance(i).contacts);
+                final int currentAccount = UserConfig.selectedAccount;
+                final ArrayList<TL_contact> contactsCopy = new ArrayList();
+                contactsCopy.addAll(ContactsController.getInstance(currentAccount).contacts);
                 Utilities.searchQueue.postRunnable(new Runnable() {
                     public void run() {
-                        String toLowerCase = str.trim().toLowerCase();
-                        if (toLowerCase.length() == 0) {
+                        String search1 = query.trim().toLowerCase();
+                        if (search1.length() == 0) {
                             SearchAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
                             return;
                         }
-                        String translitString = LocaleController.getInstance().getTranslitString(toLowerCase);
-                        if (toLowerCase.equals(translitString) || translitString.length() == 0) {
-                            translitString = null;
+                        String search2 = LocaleController.getInstance().getTranslitString(search1);
+                        if (search1.equals(search2) || search2.length() == 0) {
+                            search2 = null;
                         }
-                        int i = 0;
-                        String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
-                        strArr[0] = toLowerCase;
-                        if (translitString != null) {
-                            strArr[1] = translitString;
+                        String[] search = new String[((search2 != null ? 1 : 0) + 1)];
+                        search[0] = search1;
+                        if (search2 != null) {
+                            search[1] = search2;
                         }
-                        ArrayList arrayList = new ArrayList();
-                        ArrayList arrayList2 = new ArrayList();
-                        int i2 = 0;
-                        while (i2 < arrayList.size()) {
-                            User user = MessagesController.getInstance(i).getUser(Integer.valueOf(((TL_contact) arrayList.get(i2)).user_id));
-                            if (user.id != UserConfig.getInstance(i).getClientUserId()) {
-                                if (!SearchAdapter.this.onlyMutual || user.mutual_contact) {
-                                    String toLowerCase2 = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-                                    String translitString2 = LocaleController.getInstance().getTranslitString(toLowerCase2);
-                                    if (toLowerCase2.equals(translitString2)) {
-                                        translitString2 = null;
+                        ArrayList<User> resultArray = new ArrayList();
+                        ArrayList<CharSequence> resultArrayNames = new ArrayList();
+                        for (int a = 0; a < contactsCopy.size(); a++) {
+                            User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
+                            if (user.id != UserConfig.getInstance(currentAccount).getClientUserId() && (!SearchAdapter.this.onlyMutual || user.mutual_contact)) {
+                                String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                                String tName = LocaleController.getInstance().getTranslitString(name);
+                                if (name.equals(tName)) {
+                                    tName = null;
+                                }
+                                int found = 0;
+                                int length = search.length;
+                                int i = 0;
+                                while (i < length) {
+                                    String q = search[i];
+                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                                        found = 1;
+                                    } else if (user.username != null && user.username.startsWith(q)) {
+                                        found = 2;
                                     }
-                                    int length = strArr.length;
-                                    int i3 = i;
-                                    int i4 = i3;
-                                    while (i3 < length) {
-                                        StringBuilder stringBuilder;
-                                        String stringBuilder2;
-                                        StringBuilder stringBuilder3;
-                                        String str = strArr[i3];
-                                        if (!toLowerCase2.startsWith(str)) {
-                                            StringBuilder stringBuilder4 = new StringBuilder();
-                                            stringBuilder4.append(" ");
-                                            stringBuilder4.append(str);
-                                            if (!toLowerCase2.contains(stringBuilder4.toString())) {
-                                                if (translitString2 != null) {
-                                                    if (!translitString2.startsWith(str)) {
-                                                        stringBuilder = new StringBuilder();
-                                                        stringBuilder.append(" ");
-                                                        stringBuilder.append(str);
-                                                        if (translitString2.contains(stringBuilder.toString())) {
-                                                        }
-                                                    }
-                                                }
-                                                if (user.username != null && user.username.startsWith(str)) {
-                                                    i4 = 2;
-                                                }
-                                                if (i4 == 0) {
-                                                    if (i4 != 1) {
-                                                        arrayList2.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str));
-                                                    } else {
-                                                        stringBuilder = new StringBuilder();
-                                                        stringBuilder.append("@");
-                                                        stringBuilder.append(user.username);
-                                                        stringBuilder2 = stringBuilder.toString();
-                                                        stringBuilder3 = new StringBuilder();
-                                                        stringBuilder3.append("@");
-                                                        stringBuilder3.append(str);
-                                                        arrayList2.add(AndroidUtilities.generateSearchName(stringBuilder2, null, stringBuilder3.toString()));
-                                                    }
-                                                    arrayList.add(user);
-                                                } else {
-                                                    i3++;
-                                                }
-                                            }
-                                        }
-                                        i4 = 1;
-                                        if (i4 == 0) {
-                                            i3++;
+                                    if (found != 0) {
+                                        if (found == 1) {
+                                            resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
                                         } else {
-                                            if (i4 != 1) {
-                                                stringBuilder = new StringBuilder();
-                                                stringBuilder.append("@");
-                                                stringBuilder.append(user.username);
-                                                stringBuilder2 = stringBuilder.toString();
-                                                stringBuilder3 = new StringBuilder();
-                                                stringBuilder3.append("@");
-                                                stringBuilder3.append(str);
-                                                arrayList2.add(AndroidUtilities.generateSearchName(stringBuilder2, null, stringBuilder3.toString()));
-                                            } else {
-                                                arrayList2.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str));
-                                            }
-                                            arrayList.add(user);
+                                            resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
                                         }
+                                        resultArray.add(user);
+                                    } else {
+                                        i++;
                                     }
                                 }
                             }
-                            i2++;
-                            i = 0;
                         }
-                        SearchAdapter.this.updateSearchResults(arrayList, arrayList2);
+                        SearchAdapter.this.updateSearchResults(resultArray, resultArrayNames);
                     }
                 });
             }
         });
     }
 
-    private void updateSearchResults(final ArrayList<User> arrayList, final ArrayList<CharSequence> arrayList2) {
+    private void updateSearchResults(final ArrayList<User> users, final ArrayList<CharSequence> names) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                SearchAdapter.this.searchResult = arrayList;
-                SearchAdapter.this.searchResultNames = arrayList2;
+                SearchAdapter.this.searchResult = users;
+                SearchAdapter.this.searchResultNames = names;
                 SearchAdapter.this.notifyDataSetChanged();
             }
         });
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
-        return viewHolder.getAdapterPosition() != this.searchResult.size() ? true : null;
+    public boolean isEnabled(ViewHolder holder) {
+        return holder.getAdapterPosition() != this.searchResult.size();
     }
 
     public int getItemCount() {
-        int size = this.searchResult.size();
-        int size2 = this.searchAdapterHelper.getGlobalSearch().size();
-        return size2 != 0 ? size + (size2 + 1) : size;
+        int count = this.searchResult.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
+        if (globalCount != 0) {
+            return count + (globalCount + 1);
+        }
+        return count;
     }
 
     public boolean isGlobalSearch(int i) {
-        int size = this.searchResult.size();
-        return (i < 0 || i >= size) && i > size && i <= this.searchAdapterHelper.getGlobalSearch().size() + size;
+        int localCount = this.searchResult.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
+        if ((i < 0 || i >= localCount) && i > localCount && i <= globalCount + localCount) {
+            return true;
+        }
+        return false;
     }
 
     public TLObject getItem(int i) {
-        int size = this.searchResult.size();
-        int size2 = this.searchAdapterHelper.getGlobalSearch().size();
-        if (i < 0 || i >= size) {
-            return (i <= size || i > size2 + size) ? 0 : (TLObject) this.searchAdapterHelper.getGlobalSearch().get((i - size) - 1);
-        } else {
+        int localCount = this.searchResult.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
+        if (i >= 0 && i < localCount) {
             return (TLObject) this.searchResult.get(i);
         }
-    }
-
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        if (i != 0) {
-            viewGroup = new GraySectionCell(this.mContext);
-            ((GraySectionCell) viewGroup).setText(LocaleController.getString("GlobalSearch", C0446R.string.GlobalSearch));
-        } else if (this.useUserCell != null) {
-            viewGroup = new UserCell(this.mContext, 1, 1, false);
-            if (this.checkedMap != 0) {
-                ((UserCell) viewGroup).setChecked(false, false);
-            }
-        } else {
-            viewGroup = new ProfileSearchCell(this.mContext);
+        if (i <= localCount || i > globalCount + localCount) {
+            return null;
         }
-        return new Holder(viewGroup);
+        return (TLObject) this.searchAdapterHelper.getGlobalSearch().get((i - localCount) - 1);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        if (viewHolder.getItemViewType() == 0) {
-            TLObject item = getItem(i);
-            if (item != null) {
-                CharSequence charSequence;
-                int i2;
-                CharSequence charSequence2;
-                CharSequence charSequence3;
-                UserCell userCell;
-                ProfileSearchCell profileSearchCell;
-                boolean z = false;
-                if (item instanceof User) {
-                    User user = (User) item;
-                    charSequence = user.username;
-                    i2 = user.id;
-                } else if (item instanceof Chat) {
-                    Chat chat = (Chat) item;
-                    charSequence = chat.username;
-                    i2 = chat.id;
-                } else {
-                    charSequence = null;
-                    i2 = 0;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
+            case 0:
+                if (!this.useUserCell) {
+                    view = new ProfileSearchCell(this.mContext);
+                    break;
                 }
-                boolean z2 = true;
-                if (i < this.searchResult.size()) {
-                    charSequence2 = (CharSequence) this.searchResultNames.get(i);
-                    if (!(charSequence2 == null || charSequence == null || charSequence.length() <= 0)) {
-                        String charSequence4 = charSequence2.toString();
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("@");
-                        stringBuilder.append(charSequence);
-                        if (charSequence4.startsWith(stringBuilder.toString())) {
-                            charSequence3 = charSequence2;
-                        }
+                view = new UserCell(this.mContext, 1, 1, false);
+                if (this.checkedMap != null) {
+                    ((UserCell) view).setChecked(false, false);
+                    break;
+                }
+                break;
+            default:
+                view = new GraySectionCell(this.mContext);
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0446R.string.GlobalSearch));
+                break;
+        }
+        return new Holder(view);
+    }
+
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if (holder.getItemViewType() == 0) {
+            TLObject object = getItem(position);
+            if (object != null) {
+                int id = 0;
+                String un = null;
+                if (object instanceof User) {
+                    un = ((User) object).username;
+                    id = ((User) object).id;
+                } else if (object instanceof Chat) {
+                    un = ((Chat) object).username;
+                    id = ((Chat) object).id;
+                }
+                CharSequence username = null;
+                CharSequence name = null;
+                if (position < this.searchResult.size()) {
+                    name = (CharSequence) this.searchResultNames.get(position);
+                    if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
+                        username = name;
+                        name = null;
                     }
-                    charSequence3 = null;
-                    if (this.useUserCell) {
-                        userCell = (UserCell) viewHolder.itemView;
-                        userCell.setData(item, charSequence2, charSequence3, 0);
-                        if (this.checkedMap == 0) {
-                            if (this.checkedMap.indexOfKey(i2) >= 0) {
-                                z2 = false;
-                            }
-                            userCell.setChecked(z2, false);
-                            return;
-                        }
-                        return;
+                } else if (position > this.searchResult.size() && un != null) {
+                    String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
+                    if (foundUserName.startsWith("@")) {
+                        foundUserName = foundUserName.substring(1);
                     }
-                    profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                    profileSearchCell.setData(item, null, charSequence2, charSequence3, false, false);
-                    if (!(i == getItemCount() - 1 || i == this.searchResult.size() - 1)) {
-                        z = true;
-                    }
-                    profileSearchCell.useSeparator = z;
-                } else if (i <= this.searchResult.size() || charSequence == null) {
-                    charSequence2 = null;
-                    charSequence3 = charSequence2;
-                    if (this.useUserCell) {
-                        profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                        profileSearchCell.setData(item, null, charSequence2, charSequence3, false, false);
-                        z = true;
-                        profileSearchCell.useSeparator = z;
-                    }
-                    userCell = (UserCell) viewHolder.itemView;
-                    userCell.setData(item, charSequence2, charSequence3, 0);
-                    if (this.checkedMap == 0) {
-                        if (this.checkedMap.indexOfKey(i2) >= 0) {
-                            z2 = false;
-                        }
-                        userCell.setChecked(z2, false);
-                        return;
-                    }
-                    return;
-                } else {
-                    String lastFoundUsername = this.searchAdapterHelper.getLastFoundUsername();
-                    if (lastFoundUsername.startsWith("@")) {
-                        lastFoundUsername = lastFoundUsername.substring(1);
-                    }
+                    Object username2;
                     try {
-                        charSequence3 = new SpannableStringBuilder();
-                        charSequence3.append("@");
-                        charSequence3.append(charSequence);
-                        int indexOf = charSequence.toLowerCase().indexOf(lastFoundUsername);
-                        if (indexOf != -1) {
-                            int length = lastFoundUsername.length();
-                            if (indexOf == 0) {
-                                length++;
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                        spannableStringBuilder.append("@");
+                        spannableStringBuilder.append(un);
+                        int index = un.toLowerCase().indexOf(foundUserName);
+                        if (index != -1) {
+                            int len = foundUserName.length();
+                            if (index == 0) {
+                                len++;
                             } else {
-                                indexOf++;
+                                index++;
                             }
-                            charSequence3.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), indexOf, length + indexOf, 33);
+                            spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
                         }
+                        username2 = spannableStringBuilder;
                     } catch (Throwable e) {
+                        username2 = un;
                         FileLog.m3e(e);
-                        charSequence2 = null;
-                        charSequence3 = charSequence;
                     }
                 }
-                charSequence2 = null;
+                boolean z;
                 if (this.useUserCell) {
-                    userCell = (UserCell) viewHolder.itemView;
-                    userCell.setData(item, charSequence2, charSequence3, 0);
-                    if (this.checkedMap == 0) {
-                        if (this.checkedMap.indexOfKey(i2) >= 0) {
-                            z2 = false;
+                    UserCell userCell = (UserCell) holder.itemView;
+                    userCell.setData(object, name, username, 0);
+                    if (this.checkedMap != null) {
+                        if (this.checkedMap.indexOfKey(id) >= 0) {
+                            z = true;
+                        } else {
+                            z = false;
                         }
-                        userCell.setChecked(z2, false);
+                        userCell.setChecked(z, false);
                         return;
                     }
                     return;
                 }
-                profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                profileSearchCell.setData(item, null, charSequence2, charSequence3, false, false);
-                z = true;
+                ProfileSearchCell profileSearchCell = holder.itemView;
+                profileSearchCell.setData(object, null, name, username, false, false);
+                z = (position == getItemCount() + -1 || position == this.searchResult.size() - 1) ? false : true;
                 profileSearchCell.useSeparator = z;
             }
         }
     }
 
     public int getItemViewType(int i) {
-        return i == this.searchResult.size() ? 1 : 0;
+        if (i == this.searchResult.size()) {
+            return 1;
+        }
+        return 0;
     }
 }

@@ -8,18 +8,18 @@ public final class TrackGroupArray {
     public final int length;
     private final TrackGroup[] trackGroups;
 
-    public TrackGroupArray(TrackGroup... trackGroupArr) {
-        this.trackGroups = trackGroupArr;
-        this.length = trackGroupArr.length;
+    public TrackGroupArray(TrackGroup... trackGroups) {
+        this.trackGroups = trackGroups;
+        this.length = trackGroups.length;
     }
 
-    public TrackGroup get(int i) {
-        return this.trackGroups[i];
+    public TrackGroup get(int index) {
+        return this.trackGroups[index];
     }
 
-    public int indexOf(TrackGroup trackGroup) {
+    public int indexOf(TrackGroup group) {
         for (int i = 0; i < this.length; i++) {
-            if (this.trackGroups[i] == trackGroup) {
+            if (this.trackGroups[i] == group) {
                 return i;
             }
         }
@@ -38,18 +38,15 @@ public final class TrackGroupArray {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                TrackGroupArray trackGroupArray = (TrackGroupArray) obj;
-                if (this.length != trackGroupArray.length || Arrays.equals(this.trackGroups, trackGroupArray.trackGroups) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TrackGroupArray other = (TrackGroupArray) obj;
+        if (this.length == other.length && Arrays.equals(this.trackGroups, other.trackGroups)) {
+            return true;
         }
         return false;
     }

@@ -14,43 +14,25 @@ final class SeiReader {
     private final List<Format> closedCaptionFormats;
     private final TrackOutput[] outputs;
 
-    public SeiReader(List<Format> list) {
-        this.closedCaptionFormats = list;
-        this.outputs = new TrackOutput[list.size()];
+    public SeiReader(List<Format> closedCaptionFormats) {
+        this.closedCaptionFormats = closedCaptionFormats;
+        this.outputs = new TrackOutput[closedCaptionFormats.size()];
     }
 
-    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         for (int i = 0; i < this.outputs.length; i++) {
-            boolean z;
-            StringBuilder stringBuilder;
-            trackIdGenerator.generateNewId();
-            TrackOutput track = extractorOutput.track(trackIdGenerator.getTrackId(), 3);
-            Format format = (Format) this.closedCaptionFormats.get(i);
-            String str = format.sampleMimeType;
-            if (!MimeTypes.APPLICATION_CEA608.equals(str)) {
-                if (!MimeTypes.APPLICATION_CEA708.equals(str)) {
-                    z = false;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("Invalid closed caption mime type provided: ");
-                    stringBuilder.append(str);
-                    Assertions.checkArgument(z, stringBuilder.toString());
-                    track.format(Format.createTextSampleFormat(format.id == null ? format.id : trackIdGenerator.getFormatId(), str, null, -1, format.selectionFlags, format.language, format.accessibilityChannel, null));
-                    this.outputs[i] = track;
-                }
-            }
-            z = true;
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("Invalid closed caption mime type provided: ");
-            stringBuilder.append(str);
-            Assertions.checkArgument(z, stringBuilder.toString());
-            if (format.id == null) {
-            }
-            track.format(Format.createTextSampleFormat(format.id == null ? format.id : trackIdGenerator.getFormatId(), str, null, -1, format.selectionFlags, format.language, format.accessibilityChannel, null));
-            this.outputs[i] = track;
+            idGenerator.generateNewId();
+            TrackOutput output = extractorOutput.track(idGenerator.getTrackId(), 3);
+            Format channelFormat = (Format) this.closedCaptionFormats.get(i);
+            String channelMimeType = channelFormat.sampleMimeType;
+            boolean z = MimeTypes.APPLICATION_CEA608.equals(channelMimeType) || MimeTypes.APPLICATION_CEA708.equals(channelMimeType);
+            Assertions.checkArgument(z, "Invalid closed caption mime type provided: " + channelMimeType);
+            output.format(Format.createTextSampleFormat(channelFormat.id != null ? channelFormat.id : idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
+            this.outputs[i] = output;
         }
     }
 
-    public void consume(long j, ParsableByteArray parsableByteArray) {
-        CeaUtil.consume(j, parsableByteArray, this.outputs);
+    public void consume(long pesTimeUs, ParsableByteArray seiBuffer) {
+        CeaUtil.consume(pesTimeUs, seiBuffer, this.outputs);
     }
 }

@@ -1,6 +1,13 @@
 package org.telegram.messenger.audioinfo;
 
 import android.graphics.Bitmap;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import org.telegram.messenger.audioinfo.m4a.M4AInfo;
+import org.telegram.messenger.audioinfo.mp3.MP3Info;
 
 public abstract class AudioInfo {
     protected String album;
@@ -109,74 +116,22 @@ public abstract class AudioInfo {
         return this.smallCover;
     }
 
-    public static org.telegram.messenger.audioinfo.AudioInfo getAudioInfo(java.io.File r5) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r0 = 12;
-        r1 = 0;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x0058 }
-        r2 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0058 }
-        r3 = "r";	 Catch:{ Exception -> 0x0058 }
-        r2.<init>(r5, r3);	 Catch:{ Exception -> 0x0058 }
-        r3 = 0;	 Catch:{ Exception -> 0x0058 }
-        r4 = 8;	 Catch:{ Exception -> 0x0058 }
-        r2.readFully(r0, r3, r4);	 Catch:{ Exception -> 0x0058 }
-        r2.close();	 Catch:{ Exception -> 0x0058 }
-        r2 = new java.io.BufferedInputStream;	 Catch:{ Exception -> 0x0058 }
-        r3 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0058 }
-        r3.<init>(r5);	 Catch:{ Exception -> 0x0058 }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x0058 }
-        r3 = 4;	 Catch:{ Exception -> 0x0058 }
-        r3 = r0[r3];	 Catch:{ Exception -> 0x0058 }
-        r4 = 102; // 0x66 float:1.43E-43 double:5.04E-322;	 Catch:{ Exception -> 0x0058 }
-        if (r3 != r4) goto L_0x0041;	 Catch:{ Exception -> 0x0058 }
-    L_0x0026:
-        r3 = 5;	 Catch:{ Exception -> 0x0058 }
-        r3 = r0[r3];	 Catch:{ Exception -> 0x0058 }
-        r4 = 116; // 0x74 float:1.63E-43 double:5.73E-322;	 Catch:{ Exception -> 0x0058 }
-        if (r3 != r4) goto L_0x0041;	 Catch:{ Exception -> 0x0058 }
-    L_0x002d:
-        r3 = 6;	 Catch:{ Exception -> 0x0058 }
-        r3 = r0[r3];	 Catch:{ Exception -> 0x0058 }
-        r4 = 121; // 0x79 float:1.7E-43 double:6.0E-322;	 Catch:{ Exception -> 0x0058 }
-        if (r3 != r4) goto L_0x0041;	 Catch:{ Exception -> 0x0058 }
-    L_0x0034:
-        r3 = 7;	 Catch:{ Exception -> 0x0058 }
-        r0 = r0[r3];	 Catch:{ Exception -> 0x0058 }
-        r3 = 112; // 0x70 float:1.57E-43 double:5.53E-322;	 Catch:{ Exception -> 0x0058 }
-        if (r0 != r3) goto L_0x0041;	 Catch:{ Exception -> 0x0058 }
-    L_0x003b:
-        r5 = new org.telegram.messenger.audioinfo.m4a.M4AInfo;	 Catch:{ Exception -> 0x0058 }
-        r5.<init>(r2);	 Catch:{ Exception -> 0x0058 }
-        return r5;	 Catch:{ Exception -> 0x0058 }
-    L_0x0041:
-        r0 = r5.getAbsolutePath();	 Catch:{ Exception -> 0x0058 }
-        r3 = "mp3";	 Catch:{ Exception -> 0x0058 }
-        r0 = r0.endsWith(r3);	 Catch:{ Exception -> 0x0058 }
-        if (r0 == 0) goto L_0x0057;	 Catch:{ Exception -> 0x0058 }
-    L_0x004d:
-        r0 = new org.telegram.messenger.audioinfo.mp3.MP3Info;	 Catch:{ Exception -> 0x0058 }
-        r3 = r5.length();	 Catch:{ Exception -> 0x0058 }
-        r0.<init>(r2, r3);	 Catch:{ Exception -> 0x0058 }
-        return r0;
-    L_0x0057:
-        return r1;
-    L_0x0058:
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(java.io.File):org.telegram.messenger.audioinfo.AudioInfo");
+    public static AudioInfo getAudioInfo(File file) {
+        try {
+            byte[] header = new byte[12];
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            randomAccessFile.readFully(header, 0, 8);
+            randomAccessFile.close();
+            InputStream input = new BufferedInputStream(new FileInputStream(file));
+            if (header[4] == (byte) 102 && header[5] == (byte) 116 && header[6] == (byte) 121 && header[7] == (byte) 112) {
+                return new M4AInfo(input);
+            }
+            if (file.getAbsolutePath().endsWith("mp3")) {
+                return new MP3Info(input, file.length());
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

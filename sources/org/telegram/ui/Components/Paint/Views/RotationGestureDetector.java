@@ -27,32 +27,32 @@ public class RotationGestureDetector {
         return this.startAngle;
     }
 
-    public RotationGestureDetector(OnRotationGestureListener onRotationGestureListener) {
-        this.mListener = onRotationGestureListener;
+    public RotationGestureDetector(OnRotationGestureListener listener) {
+        this.mListener = listener;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getPointerCount() != 2) {
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() != 2) {
             return false;
         }
-        switch (motionEvent.getActionMasked()) {
+        switch (event.getActionMasked()) {
             case 0:
             case 5:
-                this.sX = motionEvent.getX(0);
-                this.sY = motionEvent.getY(0);
-                this.fX = motionEvent.getX(1);
-                this.fY = motionEvent.getY(1);
+                this.sX = event.getX(0);
+                this.sY = event.getY(0);
+                this.fX = event.getX(1);
+                this.fY = event.getY(1);
                 break;
             case 1:
             case 3:
                 this.startAngle = Float.NaN;
                 break;
             case 2:
-                float x = motionEvent.getX(0);
-                float y = motionEvent.getY(0);
-                this.angle = angleBetweenLines(this.fX, this.fY, this.sX, this.sY, motionEvent.getX(1), motionEvent.getY(1), x, y);
+                float nsX = event.getX(0);
+                float nsY = event.getY(0);
+                this.angle = angleBetweenLines(this.fX, this.fY, this.sX, this.sY, event.getX(1), event.getY(1), nsX, nsY);
                 if (this.mListener != null) {
-                    if (Float.isNaN(this.startAngle) == null) {
+                    if (!Float.isNaN(this.startAngle)) {
                         this.mListener.onRotation(this);
                         break;
                     }
@@ -68,17 +68,18 @@ public class RotationGestureDetector {
                     break;
                 }
                 break;
-            default:
-                break;
         }
         return true;
     }
 
-    private float angleBetweenLines(float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8) {
-        f = ((float) Math.toDegrees((double) (((float) Math.atan2((double) (f2 - f4), (double) (f - f3))) - ((float) Math.atan2((double) (f6 - f8), (double) (f5 - f7)))))) % 360.0f;
-        if (f < -180.0f) {
-            f += 360.0f;
+    private float angleBetweenLines(float fX, float fY, float sX, float sY, float nfX, float nfY, float nsX, float nsY) {
+        float angle = ((float) Math.toDegrees((double) (((float) Math.atan2((double) (fY - sY), (double) (fX - sX))) - ((float) Math.atan2((double) (nfY - nsY), (double) (nfX - nsX)))))) % 360.0f;
+        if (angle < -180.0f) {
+            angle += 360.0f;
         }
-        return f > 180.0f ? f - 360.0f : f;
+        if (angle > 180.0f) {
+            return angle - 360.0f;
+        }
+        return angle;
     }
 }

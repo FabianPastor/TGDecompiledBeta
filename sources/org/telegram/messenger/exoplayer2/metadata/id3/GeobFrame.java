@@ -18,61 +18,70 @@ public final class GeobFrame extends Id3Frame {
         C05841() {
         }
 
-        public GeobFrame createFromParcel(Parcel parcel) {
-            return new GeobFrame(parcel);
+        public GeobFrame createFromParcel(Parcel in) {
+            return new GeobFrame(in);
         }
 
-        public GeobFrame[] newArray(int i) {
-            return new GeobFrame[i];
+        public GeobFrame[] newArray(int size) {
+            return new GeobFrame[size];
         }
     }
 
-    public GeobFrame(String str, String str2, String str3, byte[] bArr) {
+    public GeobFrame(String mimeType, String filename, String description, byte[] data) {
         super(ID);
-        this.mimeType = str;
-        this.filename = str2;
-        this.description = str3;
-        this.data = bArr;
+        this.mimeType = mimeType;
+        this.filename = filename;
+        this.description = description;
+        this.data = data;
     }
 
-    GeobFrame(Parcel parcel) {
+    GeobFrame(Parcel in) {
         super(ID);
-        this.mimeType = parcel.readString();
-        this.filename = parcel.readString();
-        this.description = parcel.readString();
-        this.data = parcel.createByteArray();
+        this.mimeType = in.readString();
+        this.filename = in.readString();
+        this.description = in.readString();
+        this.data = in.createByteArray();
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                GeobFrame geobFrame = (GeobFrame) obj;
-                if (!Util.areEqual(this.mimeType, geobFrame.mimeType) || !Util.areEqual(this.filename, geobFrame.filename) || !Util.areEqual(this.description, geobFrame.description) || Arrays.equals(this.data, geobFrame.data) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        GeobFrame other = (GeobFrame) obj;
+        if (Util.areEqual(this.mimeType, other.mimeType) && Util.areEqual(this.filename, other.filename) && Util.areEqual(this.description, other.description) && Arrays.equals(this.data, other.data)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int hashCode = (((527 + (this.mimeType != null ? this.mimeType.hashCode() : 0)) * 31) + (this.filename != null ? this.filename.hashCode() : 0)) * 31;
+        if (this.mimeType != null) {
+            hashCode = this.mimeType.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        int i2 = (hashCode + 527) * 31;
+        if (this.filename != null) {
+            hashCode = this.filename.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (i2 + hashCode) * 31;
         if (this.description != null) {
             i = this.description.hashCode();
         }
-        return (31 * (hashCode + i)) + Arrays.hashCode(this.data);
+        return ((hashCode + i) * 31) + Arrays.hashCode(this.data);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.mimeType);
-        parcel.writeString(this.filename);
-        parcel.writeString(this.description);
-        parcel.writeByteArray(this.data);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mimeType);
+        dest.writeString(this.filename);
+        dest.writeString(this.description);
+        dest.writeByteArray(this.data);
     }
 }

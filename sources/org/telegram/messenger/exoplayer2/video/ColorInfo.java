@@ -18,78 +18,65 @@ public final class ColorInfo implements Parcelable {
         C06281() {
         }
 
-        public ColorInfo createFromParcel(Parcel parcel) {
-            return new ColorInfo(parcel);
+        public ColorInfo createFromParcel(Parcel in) {
+            return new ColorInfo(in);
         }
 
-        public ColorInfo[] newArray(int i) {
+        public ColorInfo[] newArray(int size) {
             return new ColorInfo[0];
         }
+    }
+
+    public ColorInfo(int colorSpace, int colorRange, int colorTransfer, byte[] hdrStaticInfo) {
+        this.colorSpace = colorSpace;
+        this.colorRange = colorRange;
+        this.colorTransfer = colorTransfer;
+        this.hdrStaticInfo = hdrStaticInfo;
+    }
+
+    ColorInfo(Parcel in) {
+        this.colorSpace = in.readInt();
+        this.colorRange = in.readInt();
+        this.colorTransfer = in.readInt();
+        this.hdrStaticInfo = in.readInt() != 0 ? in.createByteArray() : null;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ColorInfo other = (ColorInfo) obj;
+        if (this.colorSpace == other.colorSpace && this.colorRange == other.colorRange && this.colorTransfer == other.colorTransfer && Arrays.equals(this.hdrStaticInfo, other.hdrStaticInfo)) {
+            return true;
+        }
+        return false;
+    }
+
+    public String toString() {
+        return "ColorInfo(" + this.colorSpace + ", " + this.colorRange + ", " + this.colorTransfer + ", " + (this.hdrStaticInfo != null) + ")";
+    }
+
+    public int hashCode() {
+        if (this.hashCode == 0) {
+            this.hashCode = ((((((this.colorSpace + 527) * 31) + this.colorRange) * 31) + this.colorTransfer) * 31) + Arrays.hashCode(this.hdrStaticInfo);
+        }
+        return this.hashCode;
     }
 
     public int describeContents() {
         return 0;
     }
 
-    public ColorInfo(int i, int i2, int i3, byte[] bArr) {
-        this.colorSpace = i;
-        this.colorRange = i2;
-        this.colorTransfer = i3;
-        this.hdrStaticInfo = bArr;
-    }
-
-    ColorInfo(Parcel parcel) {
-        this.colorSpace = parcel.readInt();
-        this.colorRange = parcel.readInt();
-        this.colorTransfer = parcel.readInt();
-        this.hdrStaticInfo = (parcel.readInt() != 0 ? 1 : null) != null ? parcel.createByteArray() : null;
-    }
-
-    public boolean equals(Object obj) {
-        boolean z = true;
-        if (this == obj) {
-            return true;
-        }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ColorInfo colorInfo = (ColorInfo) obj;
-                if (this.colorSpace != colorInfo.colorSpace || this.colorRange != colorInfo.colorRange || this.colorTransfer != colorInfo.colorTransfer || Arrays.equals(this.hdrStaticInfo, colorInfo.hdrStaticInfo) == null) {
-                    z = false;
-                }
-                return z;
-            }
-        }
-        return false;
-    }
-
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ColorInfo(");
-        stringBuilder.append(this.colorSpace);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.colorRange);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.colorTransfer);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.hdrStaticInfo != null);
-        stringBuilder.append(")");
-        return stringBuilder.toString();
-    }
-
-    public int hashCode() {
-        if (this.hashCode == 0) {
-            this.hashCode = (31 * (((((527 + this.colorSpace) * 31) + this.colorRange) * 31) + this.colorTransfer)) + Arrays.hashCode(this.hdrStaticInfo);
-        }
-        return this.hashCode;
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(this.colorSpace);
-        parcel.writeInt(this.colorRange);
-        parcel.writeInt(this.colorTransfer);
-        parcel.writeInt(this.hdrStaticInfo != 0 ? 1 : 0);
-        if (this.hdrStaticInfo != 0) {
-            parcel.writeByteArray(this.hdrStaticInfo);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.colorSpace);
+        dest.writeInt(this.colorRange);
+        dest.writeInt(this.colorTransfer);
+        dest.writeInt(this.hdrStaticInfo != null ? 1 : 0);
+        if (this.hdrStaticInfo != null) {
+            dest.writeByteArray(this.hdrStaticInfo);
         }
     }
 }

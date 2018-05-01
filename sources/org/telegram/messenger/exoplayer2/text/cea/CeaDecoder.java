@@ -26,24 +26,20 @@ abstract class CeaDecoder implements SubtitleDecoder {
 
     protected abstract boolean isNewSubtitleDataAvailable();
 
-    public void release() {
-    }
-
     public CeaDecoder() {
-        int i = 0;
-        for (int i2 = 0; i2 < 10; i2++) {
+        int i;
+        for (i = 0; i < 10; i++) {
             this.availableInputBuffers.add(new SubtitleInputBuffer());
         }
         this.availableOutputBuffers = new LinkedList();
-        while (i < 2) {
+        for (i = 0; i < 2; i++) {
             this.availableOutputBuffers.add(new CeaOutputBuffer(this));
-            i++;
         }
         this.queuedInputBuffers = new PriorityQueue();
     }
 
-    public void setPositionUs(long j) {
-        this.playbackPositionUs = j;
+    public void setPositionUs(long positionUs) {
+        this.playbackPositionUs = positionUs;
     }
 
     public SubtitleInputBuffer dequeueInputBuffer() throws SubtitleDecoderException {
@@ -55,12 +51,12 @@ abstract class CeaDecoder implements SubtitleDecoder {
         return this.dequeuedInputBuffer;
     }
 
-    public void queueInputBuffer(SubtitleInputBuffer subtitleInputBuffer) throws SubtitleDecoderException {
-        Assertions.checkArgument(subtitleInputBuffer == this.dequeuedInputBuffer);
-        if (subtitleInputBuffer.isDecodeOnly()) {
-            releaseInputBuffer(subtitleInputBuffer);
+    public void queueInputBuffer(SubtitleInputBuffer inputBuffer) throws SubtitleDecoderException {
+        Assertions.checkArgument(inputBuffer == this.dequeuedInputBuffer);
+        if (inputBuffer.isDecodeOnly()) {
+            releaseInputBuffer(inputBuffer);
         } else {
-            this.queuedInputBuffers.add(subtitleInputBuffer);
+            this.queuedInputBuffers.add(inputBuffer);
         }
         this.dequeuedInputBuffer = null;
     }
@@ -70,36 +66,36 @@ abstract class CeaDecoder implements SubtitleDecoder {
             return null;
         }
         while (!this.queuedInputBuffers.isEmpty() && ((SubtitleInputBuffer) this.queuedInputBuffers.peek()).timeUs <= this.playbackPositionUs) {
-            SubtitleInputBuffer subtitleInputBuffer = (SubtitleInputBuffer) this.queuedInputBuffers.poll();
-            if (subtitleInputBuffer.isEndOfStream()) {
-                SubtitleOutputBuffer subtitleOutputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
-                subtitleOutputBuffer.addFlag(4);
-                releaseInputBuffer(subtitleInputBuffer);
-                return subtitleOutputBuffer;
+            SubtitleInputBuffer inputBuffer = (SubtitleInputBuffer) this.queuedInputBuffers.poll();
+            if (inputBuffer.isEndOfStream()) {
+                SubtitleOutputBuffer outputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
+                outputBuffer.addFlag(4);
+                releaseInputBuffer(inputBuffer);
+                return outputBuffer;
             }
-            decode(subtitleInputBuffer);
+            decode(inputBuffer);
             if (isNewSubtitleDataAvailable()) {
-                Subtitle createSubtitle = createSubtitle();
-                if (!subtitleInputBuffer.isDecodeOnly()) {
-                    subtitleOutputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
-                    subtitleOutputBuffer.setContent(subtitleInputBuffer.timeUs, createSubtitle, Long.MAX_VALUE);
-                    releaseInputBuffer(subtitleInputBuffer);
-                    return subtitleOutputBuffer;
+                Subtitle subtitle = createSubtitle();
+                if (!inputBuffer.isDecodeOnly()) {
+                    outputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
+                    outputBuffer.setContent(inputBuffer.timeUs, subtitle, Long.MAX_VALUE);
+                    releaseInputBuffer(inputBuffer);
+                    return outputBuffer;
                 }
             }
-            releaseInputBuffer(subtitleInputBuffer);
+            releaseInputBuffer(inputBuffer);
         }
         return null;
     }
 
-    private void releaseInputBuffer(SubtitleInputBuffer subtitleInputBuffer) {
-        subtitleInputBuffer.clear();
-        this.availableInputBuffers.add(subtitleInputBuffer);
+    private void releaseInputBuffer(SubtitleInputBuffer inputBuffer) {
+        inputBuffer.clear();
+        this.availableInputBuffers.add(inputBuffer);
     }
 
-    protected void releaseOutputBuffer(SubtitleOutputBuffer subtitleOutputBuffer) {
-        subtitleOutputBuffer.clear();
-        this.availableOutputBuffers.add(subtitleOutputBuffer);
+    protected void releaseOutputBuffer(SubtitleOutputBuffer outputBuffer) {
+        outputBuffer.clear();
+        this.availableOutputBuffers.add(outputBuffer);
     }
 
     public void flush() {
@@ -111,5 +107,8 @@ abstract class CeaDecoder implements SubtitleDecoder {
             releaseInputBuffer(this.dequeuedInputBuffer);
             this.dequeuedInputBuffer = null;
         }
+    }
+
+    public void release() {
     }
 }

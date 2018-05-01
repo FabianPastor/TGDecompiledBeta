@@ -18,13 +18,6 @@ public final class DummyDataSource implements DataSource {
         }
     }
 
-    public void close() throws IOException {
-    }
-
-    public Uri getUri() {
-        return null;
-    }
-
     private DummyDataSource() {
     }
 
@@ -32,7 +25,14 @@ public final class DummyDataSource implements DataSource {
         throw new IOException("Dummy source");
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
         throw new UnsupportedOperationException();
+    }
+
+    public Uri getUri() {
+        return null;
+    }
+
+    public void close() throws IOException {
     }
 }

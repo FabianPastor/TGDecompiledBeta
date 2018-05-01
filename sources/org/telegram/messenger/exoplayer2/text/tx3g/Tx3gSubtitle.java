@@ -10,14 +10,6 @@ final class Tx3gSubtitle implements Subtitle {
     public static final Tx3gSubtitle EMPTY = new Tx3gSubtitle();
     private final List<Cue> cues;
 
-    public int getEventTimeCount() {
-        return 1;
-    }
-
-    public int getNextEventTimeIndex(long j) {
-        return j < 0 ? 0 : -1;
-    }
-
     public Tx3gSubtitle(Cue cue) {
         this.cues = Collections.singletonList(cue);
     }
@@ -26,12 +18,20 @@ final class Tx3gSubtitle implements Subtitle {
         this.cues = Collections.emptyList();
     }
 
-    public long getEventTime(int i) {
-        Assertions.checkArgument(i == 0 ? 1 : 0);
+    public int getNextEventTimeIndex(long timeUs) {
+        return timeUs < 0 ? 0 : -1;
+    }
+
+    public int getEventTimeCount() {
+        return 1;
+    }
+
+    public long getEventTime(int index) {
+        Assertions.checkArgument(index == 0);
         return 0;
     }
 
-    public List<Cue> getCues(long j) {
-        return j >= 0 ? this.cues : Collections.emptyList();
+    public List<Cue> getCues(long timeUs) {
+        return timeUs >= 0 ? this.cues : Collections.emptyList();
     }
 }

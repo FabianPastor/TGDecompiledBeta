@@ -27,7 +27,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         C08911() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (PhotoPickerSearchCell.this.delegate != null) {
                 PhotoPickerSearchCell.this.delegate.didPressedSearchButton(0);
             }
@@ -39,7 +39,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         C08922() {
         }
 
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (PhotoPickerSearchCell.this.delegate != null) {
                 PhotoPickerSearchCell.this.delegate.didPressedSearchButton(1);
             }
@@ -83,18 +83,18 @@ public class PhotoPickerSearchCell extends LinearLayout {
             addView(this.textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 51.0f, 26.0f, 4.0f, 0.0f));
         }
 
-        public boolean onTouchEvent(MotionEvent motionEvent) {
+        public boolean onTouchEvent(MotionEvent event) {
             if (VERSION.SDK_INT >= 21) {
-                this.selector.drawableHotspotChanged(motionEvent.getX(), motionEvent.getY());
+                this.selector.drawableHotspotChanged(event.getX(), event.getY());
             }
-            return super.onTouchEvent(motionEvent);
+            return super.onTouchEvent(event);
         }
     }
 
-    public PhotoPickerSearchCell(Context context, boolean z) {
+    public PhotoPickerSearchCell(Context context, boolean allowGifs) {
         super(context);
         setOrientation(0);
-        View searchButton = new SearchButton(context);
+        SearchButton searchButton = new SearchButton(context);
         searchButton.textView1.setText(LocaleController.getString("SearchImages", C0446R.string.SearchImages));
         searchButton.textView2.setText(LocaleController.getString("SearchImagesInfo", C0446R.string.SearchImagesInfo));
         searchButton.imageView.setImageResource(C0446R.drawable.search_web);
@@ -106,37 +106,37 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         searchButton.setOnClickListener(new C08911());
-        searchButton = new FrameLayout(context);
-        searchButton.setBackgroundColor(0);
-        addView(searchButton);
-        layoutParams = (LayoutParams) searchButton.getLayoutParams();
+        FrameLayout frameLayout = new FrameLayout(context);
+        frameLayout.setBackgroundColor(0);
+        addView(frameLayout);
+        layoutParams = (LayoutParams) frameLayout.getLayoutParams();
         layoutParams.topMargin = AndroidUtilities.dp(4.0f);
         layoutParams.height = AndroidUtilities.dp(48.0f);
         layoutParams.width = AndroidUtilities.dp(4.0f);
-        searchButton.setLayoutParams(layoutParams);
+        frameLayout.setLayoutParams(layoutParams);
         searchButton = new SearchButton(context);
         searchButton.textView1.setText(LocaleController.getString("SearchGifs", C0446R.string.SearchGifs));
         searchButton.textView2.setText("GIPHY");
         searchButton.imageView.setImageResource(C0446R.drawable.search_gif);
         addView(searchButton);
-        LayoutParams layoutParams2 = (LayoutParams) searchButton.getLayoutParams();
-        layoutParams2.weight = 0.5f;
-        layoutParams2.topMargin = AndroidUtilities.dp(4.0f);
-        layoutParams2.height = AndroidUtilities.dp(48.0f);
-        layoutParams2.width = 0;
-        searchButton.setLayoutParams(layoutParams2);
-        if (z) {
+        layoutParams = (LayoutParams) searchButton.getLayoutParams();
+        layoutParams.weight = 0.5f;
+        layoutParams.topMargin = AndroidUtilities.dp(4.0f);
+        layoutParams.height = AndroidUtilities.dp(48.0f);
+        layoutParams.width = 0;
+        searchButton.setLayoutParams(layoutParams);
+        if (allowGifs) {
             searchButton.setOnClickListener(new C08922());
         } else {
             searchButton.setAlpha(0.5f);
         }
     }
 
-    public void setDelegate(PhotoPickerSearchCellDelegate photoPickerSearchCellDelegate) {
-        this.delegate = photoPickerSearchCellDelegate;
+    public void setDelegate(PhotoPickerSearchCellDelegate delegate) {
+        this.delegate = delegate;
     }
 
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
     }
 }

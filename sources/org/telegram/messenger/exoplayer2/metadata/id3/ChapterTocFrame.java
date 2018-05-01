@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.metadata.id3;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -20,40 +19,44 @@ public final class ChapterTocFrame extends Id3Frame {
         C05821() {
         }
 
-        public ChapterTocFrame createFromParcel(Parcel parcel) {
-            return new ChapterTocFrame(parcel);
+        public ChapterTocFrame createFromParcel(Parcel in) {
+            return new ChapterTocFrame(in);
         }
 
-        public ChapterTocFrame[] newArray(int i) {
-            return new ChapterTocFrame[i];
+        public ChapterTocFrame[] newArray(int size) {
+            return new ChapterTocFrame[size];
         }
     }
 
-    public ChapterTocFrame(String str, boolean z, boolean z2, String[] strArr, Id3Frame[] id3FrameArr) {
+    public ChapterTocFrame(String elementId, boolean isRoot, boolean isOrdered, String[] children, Id3Frame[] subFrames) {
         super(ID);
-        this.elementId = str;
-        this.isRoot = z;
-        this.isOrdered = z2;
-        this.children = strArr;
-        this.subFrames = id3FrameArr;
+        this.elementId = elementId;
+        this.isRoot = isRoot;
+        this.isOrdered = isOrdered;
+        this.children = children;
+        this.subFrames = subFrames;
     }
 
-    ChapterTocFrame(Parcel parcel) {
+    ChapterTocFrame(Parcel in) {
+        boolean z;
+        boolean z2 = true;
         super(ID);
-        this.elementId = parcel.readString();
-        int i = 0;
-        boolean z = true;
-        this.isRoot = parcel.readByte() != (byte) 0;
-        if (parcel.readByte() == (byte) 0) {
+        this.elementId = in.readString();
+        if (in.readByte() != (byte) 0) {
+            z = true;
+        } else {
             z = false;
         }
-        this.isOrdered = z;
-        this.children = parcel.createStringArray();
-        int readInt = parcel.readInt();
-        this.subFrames = new Id3Frame[readInt];
-        while (i < readInt) {
-            this.subFrames[i] = (Id3Frame) parcel.readParcelable(Id3Frame.class.getClassLoader());
-            i++;
+        this.isRoot = z;
+        if (in.readByte() == (byte) 0) {
+            z2 = false;
+        }
+        this.isOrdered = z2;
+        this.children = in.createStringArray();
+        int subFrameCount = in.readInt();
+        this.subFrames = new Id3Frame[subFrameCount];
+        for (int i = 0; i < subFrameCount; i++) {
+            this.subFrames[i] = (Id3Frame) in.readParcelable(Id3Frame.class.getClassLoader());
         }
     }
 
@@ -61,39 +64,62 @@ public final class ChapterTocFrame extends Id3Frame {
         return this.subFrames.length;
     }
 
-    public Id3Frame getSubFrame(int i) {
-        return this.subFrames[i];
+    public Id3Frame getSubFrame(int index) {
+        return this.subFrames[index];
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ChapterTocFrame chapterTocFrame = (ChapterTocFrame) obj;
-                if (this.isRoot != chapterTocFrame.isRoot || this.isOrdered != chapterTocFrame.isOrdered || !Util.areEqual(this.elementId, chapterTocFrame.elementId) || !Arrays.equals(this.children, chapterTocFrame.children) || Arrays.equals(this.subFrames, chapterTocFrame.subFrames) == null) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChapterTocFrame other = (ChapterTocFrame) obj;
+        if (this.isRoot == other.isRoot && this.isOrdered == other.isOrdered && Util.areEqual(this.elementId, other.elementId) && Arrays.equals(this.children, other.children) && Arrays.equals(this.subFrames, other.subFrames)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * (((527 + this.isRoot) * 31) + this.isOrdered)) + (this.elementId != null ? this.elementId.hashCode() : 0);
+        int i;
+        int i2 = 1;
+        int i3 = 0;
+        if (this.isRoot) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        i = (i + 527) * 31;
+        if (!this.isOrdered) {
+            i2 = 0;
+        }
+        i = (i + i2) * 31;
+        if (this.elementId != null) {
+            i3 = this.elementId.hashCode();
+        }
+        return i + i3;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.elementId);
-        parcel.writeByte((byte) this.isRoot);
-        parcel.writeByte((byte) this.isOrdered);
-        parcel.writeStringArray(this.children);
-        parcel.writeInt(this.subFrames.length);
-        for (Parcelable writeParcelable : this.subFrames) {
-            parcel.writeParcelable(writeParcelable, 0);
+    public void writeToParcel(Parcel dest, int flags) {
+        int i;
+        int i2 = 1;
+        dest.writeString(this.elementId);
+        if (this.isRoot) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        dest.writeByte((byte) i);
+        if (!this.isOrdered) {
+            i2 = 0;
+        }
+        dest.writeByte((byte) i2);
+        dest.writeStringArray(this.children);
+        dest.writeInt(this.subFrames.length);
+        for (Id3Frame subFrame : this.subFrames) {
+            dest.writeParcelable(subFrame, 0);
         }
     }
 }

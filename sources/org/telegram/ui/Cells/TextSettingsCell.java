@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,6 +26,9 @@ public class TextSettingsCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextSettingsCell(Context context) {
+        int i;
+        int i2;
+        int i3 = 3;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 16.0f);
@@ -32,26 +36,43 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        TextView textView = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i2 = 3;
+        } else {
+            i2 = 5;
+        }
+        textView.setGravity(i2 | 16);
+        view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
         this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
-        context = this.valueImageView;
+        view = this.valueImageView;
         if (!LocaleController.isRTL) {
-            i = 5;
+            i3 = 5;
         }
-        addView(context, LayoutHelper.createFrame(-2, -2.0f, i | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
     protected void onAttachedToWindow() {
@@ -60,18 +81,20 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 
-    protected void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(NUM) + this.needDivider);
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(NUM);
-        i2 = i / 2;
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        int width = availableWidth / 2;
         if (this.valueImageView.getVisibility() == 0) {
-            this.valueImageView.measure(MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+            this.valueImageView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
         }
         if (this.valueTextView.getVisibility() == 0) {
-            this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-            i = (i - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(NUM);
+            this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+            width = (availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f);
+        } else {
+            width = availableWidth;
         }
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
     public TextView getTextView() {
@@ -82,88 +105,109 @@ public class TextSettingsCell extends FrameLayout {
         return this.valueTextView;
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setTextValueColor(int i) {
-        this.valueTextView.setTextColor(i);
+    public void setTextValueColor(int color) {
+        this.valueTextView.setTextColor(color);
     }
 
-    public void setText(String str, boolean z) {
-        this.textView.setText(str);
+    public void setText(String text, boolean divider) {
+        this.textView.setText(text);
         this.valueTextView.setVisibility(4);
         this.valueImageView.setVisibility(4);
-        this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
+    public void setTextAndValue(String text, String value, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
         this.valueImageView.setVisibility(4);
-        if (str2 != null) {
-            this.valueTextView.setText(str2);
-            this.valueTextView.setVisibility(null);
+        if (value != null) {
+            this.valueTextView.setText(value);
+            this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        this.needDivider = divider;
+        if (!divider) {
+            z = true;
+        }
+        setWillNotDraw(z);
         requestLayout();
     }
 
-    public void setTextAndIcon(String str, int i, boolean z) {
-        this.textView.setText(str);
+    public void setTextAndIcon(String text, int resId, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
         this.valueTextView.setVisibility(4);
-        if (i != 0) {
+        if (resId != 0) {
             this.valueImageView.setVisibility(0);
-            this.valueImageView.setImageResource(i);
+            this.valueImageView.setImageResource(resId);
         } else {
             this.valueImageView.setVisibility(4);
         }
-        this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        this.needDivider = divider;
+        if (!divider) {
+            z = true;
+        }
+        setWillNotDraw(z);
     }
 
-    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
-        setEnabled(z);
-        float f = 0.5f;
-        if (arrayList != null) {
-            TextView textView = this.textView;
+    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+        float f = 1.0f;
+        setEnabled(value);
+        TextView textView;
+        float f2;
+        if (animators != null) {
+            textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            fArr[0] = value ? 1.0f : 0.5f;
+            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             if (this.valueTextView.getVisibility() == 0) {
                 textView = this.valueTextView;
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = z ? 1.0f : 0.5f;
-                arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+                if (value) {
+                    f2 = 1.0f;
+                } else {
+                    f2 = 0.5f;
+                }
+                fArr[0] = f2;
+                animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             }
             if (this.valueImageView.getVisibility() == 0) {
                 ImageView imageView = this.valueImageView;
-                str = "alpha";
+                String str2 = "alpha";
                 float[] fArr2 = new float[1];
-                if (z) {
-                    f = 1.0f;
+                if (!value) {
+                    f = 0.5f;
                 }
                 fArr2[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(imageView, str, fArr2));
+                animators.add(ObjectAnimator.ofFloat(imageView, str2, fArr2));
                 return;
             }
             return;
         }
-        this.textView.setAlpha(z ? 1.0f : 0.5f);
-        if (this.valueTextView.getVisibility() == null) {
-            this.valueTextView.setAlpha(z ? 1.0f : 0.5f);
-        }
-        if (this.valueImageView.getVisibility() == null) {
-            arrayList = this.valueImageView;
-            if (z) {
-                f = 1.0f;
+        this.textView.setAlpha(value ? 1.0f : 0.5f);
+        if (this.valueTextView.getVisibility() == 0) {
+            textView = this.valueTextView;
+            if (value) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.5f;
             }
-            arrayList.setAlpha(f);
+            textView.setAlpha(f2);
+        }
+        if (this.valueImageView.getVisibility() == 0) {
+            imageView = this.valueImageView;
+            if (!value) {
+                f = 0.5f;
+            }
+            imageView.setAlpha(f);
         }
     }
 

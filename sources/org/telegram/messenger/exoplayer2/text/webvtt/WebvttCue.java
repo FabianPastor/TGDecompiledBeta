@@ -14,49 +14,18 @@ public final class WebvttCue extends Cue {
         static final /* synthetic */ int[] $SwitchMap$android$text$Layout$Alignment = new int[Alignment.values().length];
 
         static {
-            /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-            /*
-            r0 = android.text.Layout.Alignment.values();
-            r0 = r0.length;
-            r0 = new int[r0];
-            $SwitchMap$android$text$Layout$Alignment = r0;
-            r0 = $SwitchMap$android$text$Layout$Alignment;	 Catch:{ NoSuchFieldError -> 0x0014 }
-            r1 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ NoSuchFieldError -> 0x0014 }
-            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x0014 }
-            r2 = 1;	 Catch:{ NoSuchFieldError -> 0x0014 }
-            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x0014 }
-        L_0x0014:
-            r0 = $SwitchMap$android$text$Layout$Alignment;	 Catch:{ NoSuchFieldError -> 0x001f }
-            r1 = android.text.Layout.Alignment.ALIGN_CENTER;	 Catch:{ NoSuchFieldError -> 0x001f }
-            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x001f }
-            r2 = 2;	 Catch:{ NoSuchFieldError -> 0x001f }
-            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x001f }
-        L_0x001f:
-            r0 = $SwitchMap$android$text$Layout$Alignment;	 Catch:{ NoSuchFieldError -> 0x002a }
-            r1 = android.text.Layout.Alignment.ALIGN_OPPOSITE;	 Catch:{ NoSuchFieldError -> 0x002a }
-            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x002a }
-            r2 = 3;	 Catch:{ NoSuchFieldError -> 0x002a }
-            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x002a }
-        L_0x002a:
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.text.webvtt.WebvttCue.1.<clinit>():void");
+            try {
+                $SwitchMap$android$text$Layout$Alignment[Alignment.ALIGN_NORMAL.ordinal()] = 1;
+            } catch (NoSuchFieldError e) {
+            }
+            try {
+                $SwitchMap$android$text$Layout$Alignment[Alignment.ALIGN_CENTER.ordinal()] = 2;
+            } catch (NoSuchFieldError e2) {
+            }
+            try {
+                $SwitchMap$android$text$Layout$Alignment[Alignment.ALIGN_OPPOSITE.ordinal()] = 3;
+            } catch (NoSuchFieldError e3) {
+            }
         }
     }
 
@@ -97,53 +66,53 @@ Error: java.lang.NullPointerException
             return new WebvttCue(this.startTime, this.endTime, this.text, this.textAlignment, this.line, this.lineType, this.lineAnchor, this.position, this.positionAnchor, this.width);
         }
 
-        public Builder setStartTime(long j) {
-            this.startTime = j;
+        public Builder setStartTime(long time) {
+            this.startTime = time;
             return this;
         }
 
-        public Builder setEndTime(long j) {
-            this.endTime = j;
+        public Builder setEndTime(long time) {
+            this.endTime = time;
             return this;
         }
 
-        public Builder setText(SpannableStringBuilder spannableStringBuilder) {
-            this.text = spannableStringBuilder;
+        public Builder setText(SpannableStringBuilder aText) {
+            this.text = aText;
             return this;
         }
 
-        public Builder setTextAlignment(Alignment alignment) {
-            this.textAlignment = alignment;
+        public Builder setTextAlignment(Alignment textAlignment) {
+            this.textAlignment = textAlignment;
             return this;
         }
 
-        public Builder setLine(float f) {
-            this.line = f;
+        public Builder setLine(float line) {
+            this.line = line;
             return this;
         }
 
-        public Builder setLineType(int i) {
-            this.lineType = i;
+        public Builder setLineType(int lineType) {
+            this.lineType = lineType;
             return this;
         }
 
-        public Builder setLineAnchor(int i) {
-            this.lineAnchor = i;
+        public Builder setLineAnchor(int lineAnchor) {
+            this.lineAnchor = lineAnchor;
             return this;
         }
 
-        public Builder setPosition(float f) {
-            this.position = f;
+        public Builder setPosition(float position) {
+            this.position = position;
             return this;
         }
 
-        public Builder setPositionAnchor(int i) {
-            this.positionAnchor = i;
+        public Builder setPositionAnchor(int positionAnchor) {
+            this.positionAnchor = positionAnchor;
             return this;
         }
 
-        public Builder setWidth(float f) {
-            this.width = f;
+        public Builder setWidth(float width) {
+            this.width = width;
             return this;
         }
 
@@ -160,11 +129,7 @@ Error: java.lang.NullPointerException
                         this.positionAnchor = 2;
                         break;
                     default:
-                        String str = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Unrecognized alignment: ");
-                        stringBuilder.append(this.textAlignment);
-                        Log.w(str, stringBuilder.toString());
+                        Log.w(TAG, "Unrecognized alignment: " + this.textAlignment);
                         this.positionAnchor = 0;
                         break;
                 }
@@ -174,18 +139,18 @@ Error: java.lang.NullPointerException
         }
     }
 
-    public WebvttCue(CharSequence charSequence) {
-        this(0, 0, charSequence);
+    public WebvttCue(CharSequence text) {
+        this(0, 0, text);
     }
 
-    public WebvttCue(long j, long j2, CharSequence charSequence) {
-        this(j, j2, charSequence, null, Float.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE);
+    public WebvttCue(long startTime, long endTime, CharSequence text) {
+        this(startTime, endTime, text, null, Float.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE);
     }
 
-    public WebvttCue(long j, long j2, CharSequence charSequence, Alignment alignment, float f, int i, int i2, float f2, int i3, float f3) {
-        super(charSequence, alignment, f, i, i2, f2, i3, f3);
-        this.startTime = j;
-        this.endTime = j2;
+    public WebvttCue(long startTime, long endTime, CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float width) {
+        super(text, textAlignment, line, lineType, lineAnchor, position, positionAnchor, width);
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public boolean isNormalCue() {

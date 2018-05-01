@@ -63,36 +63,33 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             }
         }
 
-        public int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z) {
+        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
             if (this.streamState == 2) {
-                decoderInputBuffer.addFlag(4);
+                buffer.addFlag(4);
+                return -4;
+            } else if (requireFormat || this.streamState == 0) {
+                formatHolder.format = SingleSampleMediaPeriod.this.format;
+                this.streamState = 1;
+                return -5;
+            } else if (!SingleSampleMediaPeriod.this.loadingFinished) {
+                return -3;
+            } else {
+                if (SingleSampleMediaPeriod.this.loadingSucceeded) {
+                    buffer.timeUs = 0;
+                    buffer.addFlag(1);
+                    buffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
+                    buffer.data.put(SingleSampleMediaPeriod.this.sampleData, 0, SingleSampleMediaPeriod.this.sampleSize);
+                    sendFormat();
+                } else {
+                    buffer.addFlag(4);
+                }
+                this.streamState = 2;
                 return -4;
             }
-            if (!z) {
-                if (this.streamState) {
-                    if (SingleSampleMediaPeriod.this.loadingFinished == null) {
-                        return -3;
-                    }
-                    if (SingleSampleMediaPeriod.this.loadingSucceeded != null) {
-                        decoderInputBuffer.timeUs = 0;
-                        decoderInputBuffer.addFlag(1);
-                        decoderInputBuffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
-                        decoderInputBuffer.data.put(SingleSampleMediaPeriod.this.sampleData, false, SingleSampleMediaPeriod.this.sampleSize);
-                        sendFormat();
-                    } else {
-                        decoderInputBuffer.addFlag(4);
-                    }
-                    this.streamState = 2;
-                    return -4;
-                }
-            }
-            formatHolder.format = SingleSampleMediaPeriod.this.format;
-            this.streamState = 1;
-            return -5;
         }
 
-        public int skipData(long j) {
-            if (j <= 0 || this.streamState == 2) {
+        public int skipData(long positionUs) {
+            if (positionUs <= 0 || this.streamState == 2) {
                 return 0;
             }
             this.streamState = 2;
@@ -114,6 +111,11 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         private byte[] sampleData;
         private int sampleSize;
 
+        public SourceLoadable(DataSpec dataSpec, DataSource dataSource) {
+            this.dataSpec = dataSpec;
+            this.dataSource = dataSource;
+        }
+
         public void cancelLoad() {
         }
 
@@ -121,24 +123,19 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             return false;
         }
 
-        public SourceLoadable(DataSpec dataSpec, DataSource dataSource) {
-            this.dataSpec = dataSpec;
-            this.dataSource = dataSource;
-        }
-
         public void load() throws IOException, InterruptedException {
-            int i = 0;
             this.sampleSize = 0;
             try {
                 this.dataSource.open(this.dataSpec);
-                while (i != -1) {
-                    this.sampleSize += i;
+                int result = 0;
+                while (result != -1) {
+                    this.sampleSize += result;
                     if (this.sampleData == null) {
                         this.sampleData = new byte[1024];
                     } else if (this.sampleSize == this.sampleData.length) {
                         this.sampleData = Arrays.copyOf(this.sampleData, this.sampleData.length * 2);
                     }
-                    i = this.dataSource.read(this.sampleData, this.sampleSize, this.sampleData.length - this.sampleSize);
+                    result = this.dataSource.read(this.sampleData, this.sampleSize, this.sampleData.length - this.sampleSize);
                 }
             } finally {
                 Util.closeQuietly(this.dataSource);
@@ -146,116 +143,109 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         }
     }
 
-    public void discardBuffer(long j, boolean z) {
-    }
-
-    public long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters) {
-        return j;
-    }
-
-    public void maybeThrowPrepareError() throws IOException {
-    }
-
-    public long readDiscontinuity() {
-        return C0542C.TIME_UNSET;
-    }
-
-    public void reevaluateBuffer(long j) {
-    }
-
-    public SingleSampleMediaPeriod(DataSpec dataSpec, Factory factory, Format format, long j, int i, EventDispatcher eventDispatcher, boolean z) {
+    public SingleSampleMediaPeriod(DataSpec dataSpec, Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, EventDispatcher eventDispatcher, boolean treatLoadErrorsAsEndOfStream) {
         this.dataSpec = dataSpec;
-        this.dataSourceFactory = factory;
+        this.dataSourceFactory = dataSourceFactory;
         this.format = format;
-        this.durationUs = j;
-        this.minLoadableRetryCount = i;
+        this.durationUs = durationUs;
+        this.minLoadableRetryCount = minLoadableRetryCount;
         this.eventDispatcher = eventDispatcher;
-        this.treatLoadErrorsAsEndOfStream = z;
-        j = new TrackGroup[1];
-        j[0] = new TrackGroup(new Format[]{format});
-        this.tracks = new TrackGroupArray(j);
+        this.treatLoadErrorsAsEndOfStream = treatLoadErrorsAsEndOfStream;
+        TrackGroup[] trackGroupArr = new TrackGroup[1];
+        trackGroupArr[0] = new TrackGroup(format);
+        this.tracks = new TrackGroupArray(trackGroupArr);
     }
 
     public void release() {
         this.loader.release();
     }
 
-    public void prepare(MediaPeriod.Callback callback, long j) {
+    public void prepare(MediaPeriod.Callback callback, long positionUs) {
         callback.onPrepared(this);
+    }
+
+    public void maybeThrowPrepareError() throws IOException {
     }
 
     public TrackGroupArray getTrackGroups() {
         return this.tracks;
     }
 
-    public long selectTracks(TrackSelection[] trackSelectionArr, boolean[] zArr, SampleStream[] sampleStreamArr, boolean[] zArr2, long j) {
+    public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i = 0;
-        while (i < trackSelectionArr.length) {
-            if (sampleStreamArr[i] != null && (trackSelectionArr[i] == null || !zArr[i])) {
-                this.sampleStreams.remove(sampleStreamArr[i]);
-                sampleStreamArr[i] = null;
+        while (i < selections.length) {
+            if (streams[i] != null && (selections[i] == null || !mayRetainStreamFlags[i])) {
+                this.sampleStreams.remove(streams[i]);
+                streams[i] = null;
             }
-            if (sampleStreamArr[i] == null && trackSelectionArr[i] != null) {
-                SampleStreamImpl sampleStreamImpl = new SampleStreamImpl();
-                this.sampleStreams.add(sampleStreamImpl);
-                sampleStreamArr[i] = sampleStreamImpl;
-                zArr2[i] = true;
+            if (streams[i] == null && selections[i] != null) {
+                SampleStreamImpl stream = new SampleStreamImpl();
+                this.sampleStreams.add(stream);
+                streams[i] = stream;
+                streamResetFlags[i] = true;
             }
             i++;
         }
-        return j;
+        return positionUs;
     }
 
-    public boolean continueLoading(long j) {
-        if (!this.loadingFinished) {
-            if (!r0.loader.isLoading()) {
-                r0.eventDispatcher.loadStarted(r0.dataSpec, 1, -1, r0.format, 0, null, 0, r0.durationUs, r0.loader.startLoading(new SourceLoadable(r0.dataSpec, r0.dataSourceFactory.createDataSource()), r0, r0.minLoadableRetryCount));
-                return true;
-            }
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
+    }
+
+    public void reevaluateBuffer(long positionUs) {
+    }
+
+    public boolean continueLoading(long positionUs) {
+        if (this.loadingFinished || this.loader.isLoading()) {
+            return false;
         }
-        return false;
+        this.eventDispatcher.loadStarted(this.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, this.loader.startLoading(new SourceLoadable(this.dataSpec, this.dataSourceFactory.createDataSource()), this, this.minLoadableRetryCount));
+        return true;
+    }
+
+    public long readDiscontinuity() {
+        return C0542C.TIME_UNSET;
     }
 
     public long getNextLoadPositionUs() {
-        if (!this.loadingFinished) {
-            if (!this.loader.isLoading()) {
-                return 0;
-            }
-        }
-        return Long.MIN_VALUE;
+        return (this.loadingFinished || this.loader.isLoading()) ? Long.MIN_VALUE : 0;
     }
 
     public long getBufferedPositionUs() {
         return this.loadingFinished ? Long.MIN_VALUE : 0;
     }
 
-    public long seekToUs(long j) {
+    public long seekToUs(long positionUs) {
         for (int i = 0; i < this.sampleStreams.size(); i++) {
             ((SampleStreamImpl) this.sampleStreams.get(i)).reset();
         }
-        return j;
+        return positionUs;
     }
 
-    public void onLoadCompleted(SourceLoadable sourceLoadable, long j, long j2) {
-        this.eventDispatcher.loadCompleted(sourceLoadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, j, j2, (long) sourceLoadable.sampleSize);
-        this.sampleSize = sourceLoadable.sampleSize;
-        this.sampleData = sourceLoadable.sampleData;
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        return positionUs;
+    }
+
+    public void onLoadCompleted(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
+        this.eventDispatcher.loadCompleted(loadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize);
+        this.sampleSize = loadable.sampleSize;
+        this.sampleData = loadable.sampleData;
         this.loadingFinished = true;
         this.loadingSucceeded = true;
     }
 
-    public void onLoadCanceled(SourceLoadable sourceLoadable, long j, long j2, boolean z) {
-        this.eventDispatcher.loadCanceled(sourceLoadable.dataSpec, 1, -1, null, 0, null, 0, this.durationUs, j, j2, (long) sourceLoadable.sampleSize);
+    public void onLoadCanceled(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
+        this.eventDispatcher.loadCanceled(loadable.dataSpec, 1, -1, null, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize);
     }
 
-    public int onLoadError(SourceLoadable sourceLoadable, long j, long j2, IOException iOException) {
+    public int onLoadError(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
         this.errorCount++;
-        boolean z = this.treatLoadErrorsAsEndOfStream && r0.errorCount >= r0.minLoadableRetryCount;
-        r0.eventDispatcher.loadError(sourceLoadable.dataSpec, 1, -1, r0.format, 0, null, 0, r0.durationUs, j, j2, (long) sourceLoadable.sampleSize, iOException, z);
-        if (!z) {
+        boolean cancel = this.treatLoadErrorsAsEndOfStream && this.errorCount >= this.minLoadableRetryCount;
+        this.eventDispatcher.loadError(loadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize, error, cancel);
+        if (!cancel) {
             return 0;
         }
-        r0.loadingFinished = true;
+        this.loadingFinished = true;
         return 2;
     }
 }

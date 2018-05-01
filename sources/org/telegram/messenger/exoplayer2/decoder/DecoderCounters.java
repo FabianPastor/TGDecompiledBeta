@@ -14,15 +14,15 @@ public final class DecoderCounters {
     public synchronized void ensureUpdated() {
     }
 
-    public void merge(DecoderCounters decoderCounters) {
-        this.decoderInitCount += decoderCounters.decoderInitCount;
-        this.decoderReleaseCount += decoderCounters.decoderReleaseCount;
-        this.inputBufferCount += decoderCounters.inputBufferCount;
-        this.skippedInputBufferCount += decoderCounters.skippedInputBufferCount;
-        this.renderedOutputBufferCount += decoderCounters.renderedOutputBufferCount;
-        this.skippedOutputBufferCount += decoderCounters.skippedOutputBufferCount;
-        this.droppedBufferCount += decoderCounters.droppedBufferCount;
-        this.maxConsecutiveDroppedBufferCount = Math.max(this.maxConsecutiveDroppedBufferCount, decoderCounters.maxConsecutiveDroppedBufferCount);
-        this.droppedToKeyframeCount += decoderCounters.droppedToKeyframeCount;
+    public void merge(DecoderCounters other) {
+        this.decoderInitCount += other.decoderInitCount;
+        this.decoderReleaseCount += other.decoderReleaseCount;
+        this.inputBufferCount += other.inputBufferCount;
+        this.skippedInputBufferCount += other.skippedInputBufferCount;
+        this.renderedOutputBufferCount += other.renderedOutputBufferCount;
+        this.skippedOutputBufferCount += other.skippedOutputBufferCount;
+        this.droppedBufferCount += other.droppedBufferCount;
+        this.maxConsecutiveDroppedBufferCount = Math.max(this.maxConsecutiveDroppedBufferCount, other.maxConsecutiveDroppedBufferCount);
+        this.droppedToKeyframeCount += other.droppedToKeyframeCount;
     }
 }

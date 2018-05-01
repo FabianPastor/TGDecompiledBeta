@@ -9,21 +9,20 @@ public final class SubtitleInputBuffer extends DecoderInputBuffer implements Com
         super(1);
     }
 
-    public int compareTo(SubtitleInputBuffer subtitleInputBuffer) {
-        int i = -1;
-        if (isEndOfStream() != subtitleInputBuffer.isEndOfStream()) {
-            if (isEndOfStream() != null) {
-                i = 1;
+    public int compareTo(SubtitleInputBuffer other) {
+        if (isEndOfStream() == other.isEndOfStream()) {
+            long delta = this.timeUs - other.timeUs;
+            if (delta == 0) {
+                return 0;
             }
-            return i;
+            if (delta <= 0) {
+                return -1;
+            }
+            return 1;
+        } else if (isEndOfStream()) {
+            return 1;
+        } else {
+            return -1;
         }
-        long j = this.timeUs - subtitleInputBuffer.timeUs;
-        if (j == 0) {
-            return null;
-        }
-        if (j > 0) {
-            i = 1;
-        }
-        return i;
     }
 }
