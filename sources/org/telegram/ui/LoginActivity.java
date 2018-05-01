@@ -2355,8 +2355,6 @@ public class LoginActivity extends BaseFragment {
                 }
                 if (this.countryState == 1) {
                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", C0446R.string.AppName), LocaleController.getString("ChooseCountry", C0446R.string.ChooseCountry));
-                } else if (this.countryState == 2 && !BuildVars.DEBUG_VERSION && !this.codeField.getText().toString().equals("999")) {
-                    LoginActivity.this.needShowAlert(LocaleController.getString("AppName", C0446R.string.AppName), LocaleController.getString("WrongCountry", C0446R.string.WrongCountry));
                 } else if (this.codeField.length() == 0) {
                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", C0446R.string.AppName), LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
                 } else {

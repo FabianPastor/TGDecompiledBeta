@@ -45,7 +45,6 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.C0446R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -1080,8 +1079,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
                 if (this.countryState == 1) {
                     AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", C0446R.string.ChooseCountry));
-                } else if (this.countryState == 2 && !BuildVars.DEBUG_VERSION) {
-                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("WrongCountry", C0446R.string.WrongCountry));
                 } else if (this.codeField.length() == 0) {
                     AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", C0446R.string.InvalidPhoneNumber));
                 } else {
