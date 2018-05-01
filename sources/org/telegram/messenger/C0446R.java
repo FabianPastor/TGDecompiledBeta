@@ -592,6 +592,9 @@ public final class C0446R {
         public static final int profile_info = NUM;
         public static final int profile_list = NUM;
         public static final int profile_phone = NUM;
+        public static final int proxy_check = NUM;
+        public static final int proxy_off = NUM;
+        public static final int proxy_on = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;

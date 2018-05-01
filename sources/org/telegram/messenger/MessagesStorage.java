@@ -949,7 +949,9 @@ public class MessagesStorage {
     }
 
     public void cleanup(final boolean isLogin) {
-        this.storageQueue.cleanupQueue();
+        if (!isLogin) {
+            this.storageQueue.cleanupQueue();
+        }
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$3$1 */

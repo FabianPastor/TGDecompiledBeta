@@ -3689,7 +3689,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
                 file = new File(fullPath);
-                if (!file.exists()) {
+                if (!file.exists() || AndroidUtilities.isInternalUri(Uri.fromFile(file))) {
                     file = null;
                 }
             }
@@ -5015,6 +5015,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
+        if (videoPath == null) {
+            return false;
+        }
         long startTime = messageObject.videoEditedInfo.startTime;
         long endTime = messageObject.videoEditedInfo.endTime;
         int resultWidth = messageObject.videoEditedInfo.resultWidth;

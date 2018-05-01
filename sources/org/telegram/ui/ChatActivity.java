@@ -7506,7 +7506,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 hideFloatingDateView(true);
                 this.floatingDateView.setTranslationY(0.0f);
             }
-            if (!this.firstLoading) {
+            if (!this.firstLoading && !this.paused) {
                 if (maxPositiveUnreadId != Integer.MIN_VALUE || maxNegativeUnreadId != ConnectionsManager.DEFAULT_DATACENTER_ID) {
                     int counterDicrement = 0;
                     for (a = 0; a < this.messages.size(); a++) {

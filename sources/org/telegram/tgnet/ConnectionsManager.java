@@ -233,17 +233,11 @@ public class ConnectionsManager {
             Utilities.stageQueue.postRunnable(new Runnable() {
                 public void run() {
                     if (result != null) {
-                        ConnectionsManager.currentTask = null;
                         ConnectionsManager.native_applyDnsConfig(AzureLoadTask.this.currentAccount, result.address);
-                        return;
-                    }
-                    if (BuildVars.LOGS_ENABLED) {
+                    } else if (BuildVars.LOGS_ENABLED) {
                         FileLog.m0d("failed to get azure result");
-                        FileLog.m0d("start dns txt task");
                     }
-                    DnsTxtLoadTask task = new DnsTxtLoadTask(AzureLoadTask.this.currentAccount);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    ConnectionsManager.currentTask = task;
+                    ConnectionsManager.currentTask = null;
                 }
             });
         }
@@ -276,18 +270,32 @@ public class ConnectionsManager {
 
         protected NativeByteBuffer doInBackground(Void... voids) {
             Throwable e;
-            Throwable th;
-            ByteArrayOutputStream byteArrayOutputStream = null;
+            ByteArrayOutputStream outbuf;
             InputStream httpConnectionStream = null;
-            try {
-                URLConnection httpConnection = new URL("https://google.com/resolve?name=" + String.format(Locale.US, ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID}) + "&type=16").openConnection();
+            int i = 0;
+            ByteArrayOutputStream outbuf2 = null;
+            while (i < 3) {
+                String googleDomain;
+                if (i == 0) {
+                    try {
+                        googleDomain = "www.google.com";
+                    } catch (Throwable th) {
+                        th = th;
+                        outbuf = outbuf2;
+                    }
+                } else if (i == 1) {
+                    googleDomain = "www.google.ru";
+                } else {
+                    googleDomain = "google.com";
+                }
+                URLConnection httpConnection = new URL("https://" + googleDomain + "/resolve?name=" + String.format(Locale.US, ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID}) + "&type=16").openConnection();
                 httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
                 httpConnection.addRequestProperty("Host", "dns.google.com");
                 httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.connect();
                 httpConnectionStream = httpConnection.getInputStream();
-                ByteArrayOutputStream outbuf = new ByteArrayOutputStream();
+                outbuf = new ByteArrayOutputStream();
                 try {
                     JSONArray array;
                     int len;
@@ -326,13 +334,14 @@ public class ConnectionsManager {
                                 }
                             }
                             if (outbuf != null) {
-                                try {
-                                    outbuf.close();
-                                } catch (Exception e3) {
-                                }
+                                return buffer;
                             }
-                            byteArrayOutputStream = outbuf;
-                            return buffer;
+                            try {
+                                outbuf.close();
+                                return buffer;
+                            } catch (Exception e3) {
+                                return buffer;
+                            }
                         }
                     }
                     array = new JSONObject(new String(outbuf.toByteArray(), C0542C.UTF8_NAME)).getJSONArray("Answer");
@@ -353,61 +362,52 @@ public class ConnectionsManager {
                         httpConnectionStream.close();
                     }
                     if (outbuf != null) {
-                        outbuf.close();
+                        return buffer;
                     }
-                    byteArrayOutputStream = outbuf;
+                    outbuf.close();
                     return buffer;
                 } catch (Throwable th2) {
-                    th = th2;
-                    byteArrayOutputStream = outbuf;
-                }
-            } catch (Throwable th3) {
-                e2 = th3;
-                try {
-                    FileLog.m3e(e2);
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e22) {
-                            FileLog.m3e(e22);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e4) {
-                        }
-                    }
-                    return null;
-                } catch (Throwable th4) {
-                    th = th4;
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e222) {
-                            FileLog.m3e(e222);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e5) {
-                        }
-                    }
-                    throw th;
+                    e2 = th2;
                 }
             }
+            outbuf = outbuf2;
+            return null;
+            if (httpConnectionStream != null) {
+                try {
+                    httpConnectionStream.close();
+                } catch (Throwable e22) {
+                    FileLog.m3e(e22);
+                }
+            }
+            if (outbuf != null) {
+                try {
+                    outbuf.close();
+                } catch (Exception e4) {
+                }
+            }
+            throw th;
+            if (outbuf != null) {
+                outbuf.close();
+            }
+            throw th;
+            throw th;
         }
 
         protected void onPostExecute(final NativeByteBuffer result) {
             Utilities.stageQueue.postRunnable(new Runnable() {
                 public void run() {
                     if (result != null) {
+                        ConnectionsManager.currentTask = null;
                         ConnectionsManager.native_applyDnsConfig(DnsTxtLoadTask.this.currentAccount, result.address);
-                    } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("failed to get dns txt result");
+                        return;
                     }
-                    ConnectionsManager.currentTask = null;
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("failed to get dns txt result");
+                        FileLog.m0d("start azure task");
+                    }
+                    AzureLoadTask task = new AzureLoadTask(DnsTxtLoadTask.this.currentAccount);
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                    ConnectionsManager.currentTask = task;
                 }
             });
         }
@@ -435,9 +435,9 @@ public class ConnectionsManager {
                         if (TextUtils.isEmpty(config)) {
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.m0d("failed to get firebase result");
-                                FileLog.m0d("start azure task");
+                                FileLog.m0d("start dns txt task");
                             }
-                            AzureLoadTask task = new AzureLoadTask(FirebaseTask.this.currentAccount);
+                            DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
                             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                             ConnectionsManager.currentTask = task;
                             return;
@@ -463,9 +463,9 @@ public class ConnectionsManager {
             public void run() {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m0d("failed to get firebase result");
-                    FileLog.m0d("start azure task");
+                    FileLog.m0d("start dns txt task");
                 }
-                AzureLoadTask task = new AzureLoadTask(FirebaseTask.this.currentAccount);
+                DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                 ConnectionsManager.currentTask = task;
             }
@@ -932,16 +932,16 @@ public class ConnectionsManager {
                     ConnectionsManager.lastDnsRequestTime = System.currentTimeMillis();
                     if (second == 2) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start dns txt task");
+                            FileLog.m0d("start azure dns task");
                         }
-                        DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
+                        AzureLoadTask task = new AzureLoadTask(currentAccount);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                         ConnectionsManager.currentTask = task;
                     } else if (second == 1) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start azure dns task");
+                            FileLog.m0d("start dns txt task");
                         }
-                        AzureLoadTask task2 = new AzureLoadTask(currentAccount);
+                        DnsTxtLoadTask task2 = new DnsTxtLoadTask(currentAccount);
                         task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                         ConnectionsManager.currentTask = task2;
                     } else {
@@ -970,7 +970,7 @@ public class ConnectionsManager {
         ByteArrayOutputStream byteArrayOutputStream = null;
         InputStream httpConnectionStream = null;
         try {
-            URLConnection httpConnection = new URL("https://google.com/resolve?name=" + domain + "&type=A").openConnection();
+            URLConnection httpConnection = new URL("https://www.google.com/resolve?name=" + domain + "&type=A").openConnection();
             httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
             httpConnection.addRequestProperty("Host", "dns.google.com");
             httpConnection.setConnectTimeout(1000);

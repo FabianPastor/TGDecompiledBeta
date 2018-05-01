@@ -50,9 +50,9 @@ public class VideoEditedInfo {
                     } catch (Exception e) {
                     }
                 }
-                if (this.framerate == 0) {
+                if (this.framerate <= 0 || this.framerate > 400) {
                     pathStart = 9;
-                    this.framerate = 24;
+                    this.framerate = 25;
                 } else {
                     pathStart = 10;
                 }

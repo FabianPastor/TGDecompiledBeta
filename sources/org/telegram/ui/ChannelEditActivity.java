@@ -716,13 +716,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         i = this.rowCount;
         this.rowCount = i + 1;
         this.managementRow = i;
-        if (this.currentChat.megagroup || !(this.info == null || (this.info.banned_count == 0 && this.info.kicked_count == 0))) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.blockedUsersRow = i;
-        } else {
-            this.blockedUsersRow = -1;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.blockedUsersRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.membersSectionRow = i;

@@ -9346,7 +9346,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r150;
         r4 = r0.photoImage;
         r6 = r150.getResources();
-        r8 = NUM; // 0x7f0701e7 float:1.7945566E38 double:1.0529357436E-314;
+        r8 = NUM; // 0x7f0701ea float:1.7945572E38 double:1.052935745E-314;
         r6 = r6.getDrawable(r8);
         r4.setImageBitmap(r6);
         goto L_0x2445;
