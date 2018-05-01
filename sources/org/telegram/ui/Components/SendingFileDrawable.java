@@ -1,0 +1,84 @@
+package org.telegram.ui.Components;
+
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
+
+public class SendingFileDrawable extends StatusDrawable {
+    private boolean isChat = false;
+    private long lastUpdateTime = 0;
+    private float progress;
+    private boolean started = false;
+
+    public int getOpacity() {
+        return 0;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public void setIsChat(boolean z) {
+        this.isChat = z;
+    }
+
+    private void update() {
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        currentTimeMillis = 50;
+        if (j <= 50) {
+            currentTimeMillis = j;
+        }
+        this.progress += ((float) currentTimeMillis) / 500.0f;
+        while (this.progress > 1.0f) {
+            this.progress -= 1.0f;
+        }
+        invalidateSelf();
+    }
+
+    public void start() {
+        this.lastUpdateTime = System.currentTimeMillis();
+        this.started = true;
+        invalidateSelf();
+    }
+
+    public void stop() {
+        this.started = false;
+    }
+
+    public void draw(Canvas canvas) {
+        for (int i = 0; i < 3; i++) {
+            if (i == 0) {
+                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * this.progress));
+            } else if (i == 2) {
+                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * (1.0f - this.progress)));
+            } else {
+                Theme.chat_statusRecordPaint.setAlpha(255);
+            }
+            float dp = (((float) AndroidUtilities.dp(5.0f)) * this.progress) + ((float) (AndroidUtilities.dp(5.0f) * i));
+            float f = 8.0f;
+            canvas.drawLine(dp, (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), dp + ((float) AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
+            float dp2 = (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f);
+            float dp3 = dp + ((float) AndroidUtilities.dp(4.0f));
+            if (this.isChat) {
+                f = 7.0f;
+            }
+            canvas.drawLine(dp, dp2, dp3, (float) AndroidUtilities.dp(f), Theme.chat_statusRecordPaint);
+        }
+        if (this.started != null) {
+            update();
+        }
+    }
+
+    public int getIntrinsicWidth() {
+        return AndroidUtilities.dp(18.0f);
+    }
+
+    public int getIntrinsicHeight() {
+        return AndroidUtilities.dp(14.0f);
+    }
+}

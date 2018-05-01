@@ -1,0 +1,192 @@
+package org.telegram.ui.Components;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.text.Layout.Alignment;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
+import android.view.View;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0446R;
+import org.telegram.messenger.ContactsController.Contact;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
+
+public class GroupCreateSpan extends View {
+    private static Paint backPaint = new Paint(1);
+    private static TextPaint textPaint = new TextPaint(1);
+    private AvatarDrawable avatarDrawable;
+    private int[] colors;
+    private Contact currentContact;
+    private Drawable deleteDrawable;
+    private boolean deleting;
+    private ImageReceiver imageReceiver;
+    private String key;
+    private long lastUpdateTime;
+    private StaticLayout nameLayout;
+    private float progress;
+    private RectF rect;
+    private int textWidth;
+    private float textX;
+    private int uid;
+
+    public GroupCreateSpan(Context context, User user) {
+        this(context, user, null);
+    }
+
+    public GroupCreateSpan(Context context, Contact contact) {
+        this(context, null, contact);
+    }
+
+    public GroupCreateSpan(Context context, User user, Contact contact) {
+        int dp;
+        super(context);
+        this.rect = new RectF();
+        this.colors = new int[6];
+        this.currentContact = contact;
+        this.deleteDrawable = getResources().getDrawable(C0446R.drawable.delete);
+        textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+        this.avatarDrawable = new AvatarDrawable();
+        this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
+        if (user != null) {
+            this.avatarDrawable.setInfo(user);
+            this.uid = user.id;
+        } else {
+            this.avatarDrawable.setInfo(0, contact.first_name, contact.last_name, false);
+            this.uid = contact.contact_id;
+            this.key = contact.key;
+        }
+        this.imageReceiver = new ImageReceiver();
+        this.imageReceiver.setRoundRadius(AndroidUtilities.dp(16.0f));
+        this.imageReceiver.setParentView(this);
+        this.imageReceiver.setImageCoords(0, 0, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
+        if (AndroidUtilities.isTablet()) {
+            dp = AndroidUtilities.dp(366.0f) / 2;
+        } else {
+            dp = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 2;
+        }
+        if (user != null) {
+            contact = UserObject.getFirstName(user);
+        } else if (TextUtils.isEmpty(contact.first_name)) {
+            contact = contact.last_name;
+        } else {
+            contact = contact.first_name;
+        }
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(contact.replace('\n', ' '), textPaint, (float) dp, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        if (this.nameLayout.getLineCount() > null) {
+            this.textWidth = (int) Math.ceil((double) this.nameLayout.getLineWidth(0));
+            this.textX = -this.nameLayout.getLineLeft(0);
+        }
+        context = null;
+        if (!(user == null || user.photo == null)) {
+            context = user.photo.photo_small;
+        }
+        this.imageReceiver.setImage(context, null, "50_50", this.avatarDrawable, null, null, 0, null, 1);
+        updateColors();
+    }
+
+    public void updateColors() {
+        int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
+        int color2 = Theme.getColor(Theme.key_groupcreate_spanBackground);
+        int color3 = Theme.getColor(Theme.key_groupcreate_spanText);
+        this.colors[0] = Color.red(color2);
+        this.colors[1] = Color.red(color);
+        this.colors[2] = Color.green(color2);
+        this.colors[3] = Color.green(color);
+        this.colors[4] = Color.blue(color2);
+        this.colors[5] = Color.blue(color);
+        textPaint.setColor(color3);
+        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(color3, Mode.MULTIPLY));
+        backPaint.setColor(color2);
+        this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
+    }
+
+    public boolean isDeleting() {
+        return this.deleting;
+    }
+
+    public void startDeleteAnimation() {
+        if (!this.deleting) {
+            this.deleting = true;
+            this.lastUpdateTime = System.currentTimeMillis();
+            invalidate();
+        }
+    }
+
+    public void cancelDeleteAnimation() {
+        if (this.deleting) {
+            this.deleting = false;
+            this.lastUpdateTime = System.currentTimeMillis();
+            invalidate();
+        }
+    }
+
+    public int getUid() {
+        return this.uid;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public Contact getContact() {
+        return this.currentContact;
+    }
+
+    protected void onMeasure(int i, int i2) {
+        setMeasuredDimension(AndroidUtilities.dp(NUM) + this.textWidth, AndroidUtilities.dp(NUM));
+    }
+
+    protected void onDraw(Canvas canvas) {
+        if ((this.deleting && this.progress != 1.0f) || !(this.deleting || this.progress == 0.0f)) {
+            long currentTimeMillis = System.currentTimeMillis() - this.lastUpdateTime;
+            long j = 17;
+            if (currentTimeMillis >= 0) {
+                if (currentTimeMillis <= 17) {
+                    j = currentTimeMillis;
+                }
+            }
+            if (this.deleting) {
+                this.progress += ((float) j) / 120.0f;
+                if (this.progress >= 1.0f) {
+                    this.progress = 1.0f;
+                }
+            } else {
+                this.progress -= ((float) j) / 120.0f;
+                if (this.progress < 0.0f) {
+                    this.progress = 0.0f;
+                }
+            }
+            invalidate();
+        }
+        canvas.save();
+        this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.dp(32.0f));
+        backPaint.setColor(Color.argb(255, this.colors[0] + ((int) (((float) (this.colors[1] - this.colors[0])) * this.progress)), this.colors[2] + ((int) (((float) (this.colors[3] - this.colors[2])) * this.progress)), this.colors[4] + ((int) (((float) (this.colors[5] - this.colors[4])) * this.progress))));
+        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
+        this.imageReceiver.draw(canvas);
+        if (this.progress != 0.0f) {
+            backPaint.setColor(this.avatarDrawable.getColor());
+            backPaint.setAlpha((int) (this.progress * 255.0f));
+            canvas.drawCircle((float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
+            canvas.save();
+            canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f));
+            this.deleteDrawable.setBounds(AndroidUtilities.dp(11.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(21.0f));
+            this.deleteDrawable.setAlpha((int) (255.0f * this.progress));
+            this.deleteDrawable.draw(canvas);
+            canvas.restore();
+        }
+        canvas.translate(this.textX + ((float) AndroidUtilities.dp(41.0f)), (float) AndroidUtilities.dp(8.0f));
+        this.nameLayout.draw(canvas);
+        canvas.restore();
+    }
+}

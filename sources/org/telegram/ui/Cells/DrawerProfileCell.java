@@ -1,0 +1,176 @@
+package org.telegram.ui.Cells;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
+import android.text.TextUtils.TruncateAt;
+import android.view.View;
+import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
+import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0446R;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.LayoutHelper;
+
+public class DrawerProfileCell extends FrameLayout {
+    private boolean accountsShowed;
+    private ImageView arrowView;
+    private BackupImageView avatarImageView;
+    private Integer currentColor;
+    private Rect destRect = new Rect();
+    private TextView nameTextView;
+    private Paint paint = new Paint();
+    private TextView phoneTextView;
+    private ImageView shadowView;
+    private Rect srcRect = new Rect();
+
+    public DrawerProfileCell(Context context) {
+        super(context);
+        this.shadowView = new ImageView(context);
+        this.shadowView.setVisibility(4);
+        this.shadowView.setScaleType(ScaleType.FIT_XY);
+        this.shadowView.setImageResource(C0446R.drawable.bottom_shadow);
+        addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
+        this.avatarImageView = new BackupImageView(context);
+        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32.0f));
+        addView(this.avatarImageView, LayoutHelper.createFrame(64, 64.0f, 83, 16.0f, 0.0f, 0.0f, 67.0f));
+        this.nameTextView = new TextView(context);
+        this.nameTextView.setTextSize(1, 15.0f);
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setLines(1);
+        this.nameTextView.setMaxLines(1);
+        this.nameTextView.setSingleLine(true);
+        this.nameTextView.setGravity(3);
+        this.nameTextView.setEllipsize(TruncateAt.END);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 28.0f));
+        this.phoneTextView = new TextView(context);
+        this.phoneTextView.setTextSize(1, 13.0f);
+        this.phoneTextView.setLines(1);
+        this.phoneTextView.setMaxLines(1);
+        this.phoneTextView.setSingleLine(true);
+        this.phoneTextView.setGravity(3);
+        addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
+        this.arrowView = new ImageView(context);
+        this.arrowView.setScaleType(ScaleType.CENTER);
+        addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
+    }
+
+    protected void onMeasure(int i, int i2) {
+        if (VERSION.SDK_INT >= 21) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
+            return;
+        }
+        try {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
+        } catch (Throwable e) {
+            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(148.0f));
+            FileLog.m3e(e);
+        }
+    }
+
+    protected void onDraw(Canvas canvas) {
+        int color;
+        Drawable cachedWallpaper = Theme.getCachedWallpaper();
+        if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
+            color = Theme.getColor(Theme.key_chats_menuTopShadow);
+        } else {
+            color = Theme.getServiceMessageColor() | Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
+        }
+        if (this.currentColor == null || this.currentColor.intValue() != color) {
+            this.currentColor = Integer.valueOf(color);
+            this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        }
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
+        if (!Theme.isCustomTheme() || cachedWallpaper == null) {
+            this.shadowView.setVisibility(4);
+            this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
+            super.onDraw(canvas);
+            return;
+        }
+        this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
+        this.shadowView.setVisibility(0);
+        if (cachedWallpaper instanceof ColorDrawable) {
+            cachedWallpaper.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            cachedWallpaper.draw(canvas);
+        } else if (cachedWallpaper instanceof BitmapDrawable) {
+            Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
+            float measuredWidth = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
+            float measuredHeight = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
+            if (measuredWidth < measuredHeight) {
+                measuredWidth = measuredHeight;
+            }
+            int measuredWidth2 = (int) (((float) getMeasuredWidth()) / measuredWidth);
+            color = (int) (((float) getMeasuredHeight()) / measuredWidth);
+            int width = (bitmap.getWidth() - measuredWidth2) / 2;
+            int height = (bitmap.getHeight() - color) / 2;
+            this.srcRect.set(width, height, measuredWidth2 + width, color + height);
+            this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            try {
+                canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
+            } catch (Throwable th) {
+                FileLog.m3e(th);
+            }
+        }
+    }
+
+    public boolean isAccountsShowed() {
+        return this.accountsShowed;
+    }
+
+    public void setAccountsShowed(boolean z) {
+        if (this.accountsShowed != z) {
+            this.accountsShowed = z;
+            this.arrowView.setImageResource(this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
+        }
+    }
+
+    public void setOnArrowClickListener(final OnClickListener onClickListener) {
+        this.arrowView.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                DrawerProfileCell.this.accountsShowed = DrawerProfileCell.this.accountsShowed ^ 1;
+                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
+                onClickListener.onClick(DrawerProfileCell.this);
+            }
+        });
+    }
+
+    public void setUser(User user, boolean z) {
+        if (user != null) {
+            TLObject tLObject = null;
+            if (user.photo != null) {
+                tLObject = user.photo.photo_small;
+            }
+            this.accountsShowed = z;
+            this.arrowView.setImageResource(this.accountsShowed ? C0446R.drawable.collapse_up : C0446R.drawable.collapse_down);
+            this.nameTextView.setText(UserObject.getUserName(user));
+            z = this.phoneTextView;
+            PhoneFormat instance = PhoneFormat.getInstance();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("+");
+            stringBuilder.append(user.phone);
+            z.setText(instance.format(stringBuilder.toString()));
+            Drawable avatarDrawable = new AvatarDrawable(user);
+            avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
+            this.avatarImageView.setImage(tLObject, "50_50", avatarDrawable);
+        }
+    }
+}
