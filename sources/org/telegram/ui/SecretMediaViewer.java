@@ -39,7 +39,6 @@ import android.widget.FrameLayout;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -49,6 +48,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -150,98 +150,6 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zoomAnimation;
     private boolean zooming;
 
-    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C22101 implements VideoPlayerDelegate {
-        C22101() {
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
-                if (playbackState == 4 || playbackState == 1) {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                } else {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
-                    }
-                }
-                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
-                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
-                }
-                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
-                    if (SecretMediaViewer.this.isPlaying) {
-                        SecretMediaViewer.this.isPlaying = false;
-                        if (playbackState == 4) {
-                            SecretMediaViewer.this.videoWatchedOneTime = true;
-                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
-                                SecretMediaViewer.this.closePhoto(true, true);
-                                return;
-                            }
-                            SecretMediaViewer.this.videoPlayer.seekTo(0);
-                            SecretMediaViewer.this.videoPlayer.play();
-                        }
-                    }
-                } else if (!SecretMediaViewer.this.isPlaying) {
-                    SecretMediaViewer.this.isPlaying = true;
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-            FileLog.m3e((Throwable) e);
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
-                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
-                    int temp = width;
-                    width = height;
-                    height = temp;
-                }
-                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
-            }
-        }
-
-        public void onRenderedFirstFrame() {
-            if (!SecretMediaViewer.this.textureUploaded) {
-                SecretMediaViewer.this.textureUploaded = true;
-                SecretMediaViewer.this.containerView.invalidate();
-            }
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            return false;
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-    }
-
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-            setWillNotDraw(false);
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            SecretMediaViewer.this.processTouchEvent(event);
-            return true;
-        }
-
-        protected void onDraw(Canvas canvas) {
-            SecretMediaViewer.this.onDraw(canvas);
-        }
-
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
-        }
-    }
-
     /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
     class C22134 implements OnApplyWindowInsetsListener {
         C22134() {
@@ -255,18 +163,6 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 SecretMediaViewer.this.windowView.requestLayout();
             }
             return insets.consumeSystemWindowInsets();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C22145 extends ActionBarMenuOnItemClick {
-        C22145() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                SecretMediaViewer.this.closePhoto(true, false);
-            }
         }
     }
 
@@ -310,6 +206,26 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 SecretMediaViewer.this.actionBar.setVisibility(8);
                 SecretMediaViewer.this.currentActionBarAnimation = null;
             }
+        }
+    }
+
+    private class FrameLayoutDrawer extends FrameLayout {
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+            setWillNotDraw(false);
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            SecretMediaViewer.this.processTouchEvent(event);
+            return true;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            SecretMediaViewer.this.onDraw(canvas);
+        }
+
+        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
         }
     }
 
@@ -392,7 +308,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.afterDeleteProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
             this.circlePaint = new Paint(1);
             this.circlePaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.drawable = context.getResources().getDrawable(C0488R.drawable.flame_small);
+            this.drawable = context.getResources().getDrawable(R.drawable.flame_small);
             for (int a = 0; a < 40; a++) {
                 this.freeParticles.add(new Particle());
             }
@@ -755,6 +671,90 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
+    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
+    class C22101 implements VideoPlayerDelegate {
+        C22101() {
+        }
+
+        public void onStateChanged(boolean playWhenReady, int playbackState) {
+            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
+                if (playbackState == 4 || playbackState == 1) {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                } else {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
+                    } catch (Throwable e2) {
+                        FileLog.m3e(e2);
+                    }
+                }
+                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
+                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
+                }
+                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
+                    if (SecretMediaViewer.this.isPlaying) {
+                        SecretMediaViewer.this.isPlaying = false;
+                        if (playbackState == 4) {
+                            SecretMediaViewer.this.videoWatchedOneTime = true;
+                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
+                                SecretMediaViewer.this.closePhoto(true, true);
+                                return;
+                            }
+                            SecretMediaViewer.this.videoPlayer.seekTo(0);
+                            SecretMediaViewer.this.videoPlayer.play();
+                        }
+                    }
+                } else if (!SecretMediaViewer.this.isPlaying) {
+                    SecretMediaViewer.this.isPlaying = true;
+                }
+            }
+        }
+
+        public void onError(Exception e) {
+            FileLog.m3e((Throwable) e);
+        }
+
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
+                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                    int temp = width;
+                    width = height;
+                    height = temp;
+                }
+                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
+            }
+        }
+
+        public void onRenderedFirstFrame() {
+            if (!SecretMediaViewer.this.textureUploaded) {
+                SecretMediaViewer.this.textureUploaded = true;
+                SecretMediaViewer.this.containerView.invalidate();
+            }
+        }
+
+        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+            return false;
+        }
+
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
+    class C22145 extends ActionBarMenuOnItemClick {
+        C22145() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                SecretMediaViewer.this.closePhoto(true, false);
+            }
+        }
+    }
+
     public static SecretMediaViewer getInstance() {
         SecretMediaViewer localInstance = Instance;
         if (localInstance == null) {
@@ -958,7 +958,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-            this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
             this.actionBar.setActionBarMenuOnItemClick(new C22145());
@@ -1060,15 +1060,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 this.currentThumb = object.imageReceiver.getThumbBitmapSafe();
                 if (document == null) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", C0488R.string.DisappearingPhoto));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
                     this.centerImage.setImage(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()).location, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 2);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else if (MessageObject.isGifDocument((Document) document)) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", C0488R.string.DisappearingGif));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
                     this.centerImage.setImage(document, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 1);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", C0488R.string.DisappearingVideo));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
                     File file = new File(messageObject.messageOwner.attachPath);
                     if (file.exists()) {
                         preparePlayer(file);

@@ -76,12 +76,6 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private int videoSampleQueueIndex = -1;
     private boolean videoSampleQueueMappingDone;
 
-    public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
-        void onPlaylistRefreshRequired(HlsUrl hlsUrl);
-
-        void onPrepared();
-    }
-
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$1 */
     class C06951 implements Runnable {
         C06951() {
@@ -100,6 +94,12 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         public void run() {
             HlsSampleStreamWrapper.this.onTracksEnded();
         }
+    }
+
+    public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
+        void onPlaylistRefreshRequired(HlsUrl hlsUrl);
+
+        void onPrepared();
     }
 
     public HlsSampleStreamWrapper(int trackType, Callback callback, HlsChunkSource chunkSource, Allocator allocator, long positionUs, Format muxedAudioFormat, int minLoadableRetryCount, EventDispatcher eventDispatcher) {

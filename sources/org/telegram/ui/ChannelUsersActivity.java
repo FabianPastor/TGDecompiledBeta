@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -37,6 +36,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -136,6 +136,17 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     private int selectType = this.arguments.getInt("selectType");
     private int type = this.arguments.getInt("type");
 
+    /* renamed from: org.telegram.ui.ChannelUsersActivity$8 */
+    class C12628 implements Runnable {
+        C12628() {
+        }
+
+        public void run() {
+            ChannelUsersActivity.this.firstEndReached = false;
+            ChannelUsersActivity.this.getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChannelUsersActivity$1 */
     class C12491 extends ActionBarMenuOnItemClick {
         C12491() {
@@ -224,7 +235,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     args.putBoolean("destroyAfterSelect", true);
                     args.putBoolean("returnAsResult", true);
                     args.putBoolean("needForwardCount", false);
-                    args.putString("selectAlertString", LocaleController.getString("ChannelAddTo", C0488R.string.ChannelAddTo));
+                    args.putString("selectAlertString", LocaleController.getString("ChannelAddTo", R.string.ChannelAddTo));
                     ContactsActivity fragment = new ContactsActivity(args);
                     fragment.setDelegate(new C12511());
                     ChannelUsersActivity.this.presentFragment(fragment);
@@ -399,17 +410,6 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.ChannelUsersActivity$8 */
-    class C12628 implements Runnable {
-        C12628() {
-        }
-
-        public void run() {
-            ChannelUsersActivity.this.firstEndReached = false;
-            ChannelUsersActivity.this.getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
-        }
-    }
-
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
@@ -472,17 +472,17 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                     };
                     FrameLayout frameLayout = (FrameLayout) view;
-                    frameLayout.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    frameLayout.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     LinearLayout linearLayout = new LinearLayout(this.mContext);
                     linearLayout.setOrientation(1);
                     frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 20.0f, 0.0f, 20.0f, 0.0f));
                     ImageView imageView = new ImageView(this.mContext);
-                    imageView.setImageResource(C0488R.drawable.group_ban_empty);
+                    imageView.setImageResource(R.drawable.group_ban_empty);
                     imageView.setScaleType(ScaleType.CENTER);
                     imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_emptyListPlaceholder), Mode.MULTIPLY));
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 1));
                     TextView textView = new TextView(this.mContext);
-                    textView.setText(LocaleController.getString("NoBlockedUsers", C0488R.string.NoBlockedUsers));
+                    textView.setText(LocaleController.getString("NoBlockedUsers", R.string.NoBlockedUsers));
                     textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
                     textView.setTextSize(1, 16.0f);
                     textView.setGravity(1);
@@ -490,9 +490,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 1, 0, 10, 0, 0));
                     textView = new TextView(this.mContext);
                     if (ChannelUsersActivity.this.currentChat.megagroup) {
-                        textView.setText(LocaleController.getString("NoBlockedGroup", C0488R.string.NoBlockedGroup));
+                        textView.setText(LocaleController.getString("NoBlockedGroup", R.string.NoBlockedGroup));
                     } else {
-                        textView.setText(LocaleController.getString("NoBlockedChannel", C0488R.string.NoBlockedChannel));
+                        textView.setText(LocaleController.getString("NoBlockedChannel", R.string.NoBlockedChannel));
                     }
                     textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
                     textView.setTextSize(1, 15.0f);
@@ -526,16 +526,16 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     if (ChannelUsersActivity.this.type == 0) {
                         role = null;
                         if ((participant instanceof TL_channelParticipantBanned) && MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.kicked_by)) != null) {
-                            role = LocaleController.formatString("UserRestrictionsBy", C0488R.string.UserRestrictionsBy, ContactsController.formatName(MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.kicked_by)).first_name, MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.kicked_by)).last_name));
+                            role = LocaleController.formatString("UserRestrictionsBy", R.string.UserRestrictionsBy, ContactsController.formatName(MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.kicked_by)).first_name, MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.kicked_by)).last_name));
                         }
                         userCell.setData(user, null, role);
                         return;
                     } else if (ChannelUsersActivity.this.type == 1) {
                         role = null;
                         if ((participant instanceof TL_channelParticipantCreator) || (participant instanceof TL_channelParticipantSelf)) {
-                            role = LocaleController.getString("ChannelCreator", C0488R.string.ChannelCreator);
+                            role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                         } else if ((participant instanceof TL_channelParticipantAdmin) && MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.promoted_by)) != null) {
-                            role = LocaleController.formatString("EditAdminPromotedBy", C0488R.string.EditAdminPromotedBy, ContactsController.formatName(MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.promoted_by)).first_name, MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.promoted_by)).last_name));
+                            role = LocaleController.formatString("EditAdminPromotedBy", R.string.EditAdminPromotedBy, ContactsController.formatName(MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.promoted_by)).first_name, MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.promoted_by)).last_name));
                         }
                         userCell.setData(user, null, role);
                         return;
@@ -553,37 +553,37 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     if (ChannelUsersActivity.this.type == 0) {
                         if (ChatObject.canBlockUsers(ChannelUsersActivity.this.currentChat)) {
                             if (ChannelUsersActivity.this.currentChat.megagroup) {
-                                privacyCell.setText(String.format("%1$s\n\n%2$s", new Object[]{LocaleController.getString("NoBlockedGroup", C0488R.string.NoBlockedGroup), LocaleController.getString("UnbanText", C0488R.string.UnbanText)}));
+                                privacyCell.setText(String.format("%1$s\n\n%2$s", new Object[]{LocaleController.getString("NoBlockedGroup", R.string.NoBlockedGroup), LocaleController.getString("UnbanText", R.string.UnbanText)}));
                             } else {
-                                privacyCell.setText(String.format("%1$s\n\n%2$s", new Object[]{LocaleController.getString("NoBlockedChannel", C0488R.string.NoBlockedChannel), LocaleController.getString("UnbanText", C0488R.string.UnbanText)}));
+                                privacyCell.setText(String.format("%1$s\n\n%2$s", new Object[]{LocaleController.getString("NoBlockedChannel", R.string.NoBlockedChannel), LocaleController.getString("UnbanText", R.string.UnbanText)}));
                             }
                         } else if (ChannelUsersActivity.this.currentChat.megagroup) {
-                            privacyCell.setText(LocaleController.getString("NoBlockedGroup", C0488R.string.NoBlockedGroup));
+                            privacyCell.setText(LocaleController.getString("NoBlockedGroup", R.string.NoBlockedGroup));
                         } else {
-                            privacyCell.setText(LocaleController.getString("NoBlockedChannel", C0488R.string.NoBlockedChannel));
+                            privacyCell.setText(LocaleController.getString("NoBlockedChannel", R.string.NoBlockedChannel));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (ChannelUsersActivity.this.type == 1) {
                         if (ChannelUsersActivity.this.addNewRow != -1) {
                             if (ChannelUsersActivity.this.currentChat.megagroup) {
-                                privacyCell.setText(LocaleController.getString("MegaAdminsInfo", C0488R.string.MegaAdminsInfo));
+                                privacyCell.setText(LocaleController.getString("MegaAdminsInfo", R.string.MegaAdminsInfo));
                             } else {
-                                privacyCell.setText(LocaleController.getString("ChannelAdminsInfo", C0488R.string.ChannelAdminsInfo));
+                                privacyCell.setText(LocaleController.getString("ChannelAdminsInfo", R.string.ChannelAdminsInfo));
                             }
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                             return;
                         }
                         privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (ChannelUsersActivity.this.type == 2) {
                         if (ChannelUsersActivity.this.currentChat.megagroup || ChannelUsersActivity.this.selectType != 0) {
                             privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         } else {
-                            privacyCell.setText(LocaleController.getString("ChannelMembersInfo", C0488R.string.ChannelMembersInfo));
+                            privacyCell.setText(LocaleController.getString("ChannelMembersInfo", R.string.ChannelMembersInfo));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -592,24 +592,24 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     ManageChatTextCell actionCell = holder.itemView;
                     if (position == ChannelUsersActivity.this.addNewRow) {
                         if (ChannelUsersActivity.this.type == 0) {
-                            actionCell.setText(LocaleController.getString("ChannelBlockUser", C0488R.string.ChannelBlockUser), null, C0488R.drawable.group_ban_new, false);
+                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.group_ban_new, false);
                             return;
                         } else if (ChannelUsersActivity.this.type == 1) {
-                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", C0488R.string.ChannelAddAdmin), null, C0488R.drawable.group_admin_new, false);
+                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin), null, R.drawable.group_admin_new, false);
                             return;
                         } else if (ChannelUsersActivity.this.type != 2) {
                             return;
                         } else {
                             if (!ChatObject.isChannel(ChannelUsersActivity.this.currentChat) || ChannelUsersActivity.this.currentChat.megagroup) {
-                                actionCell.setText(LocaleController.getString("AddMember", C0488R.string.AddMember), null, C0488R.drawable.menu_invite, true);
+                                actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), null, R.drawable.menu_invite, true);
                                 return;
                             } else {
-                                actionCell.setText(LocaleController.getString("AddSubscriber", C0488R.string.AddSubscriber), null, C0488R.drawable.menu_invite, true);
+                                actionCell.setText(LocaleController.getString("AddSubscriber", R.string.AddSubscriber), null, R.drawable.menu_invite, true);
                                 return;
                             }
                         }
                     } else if (position == ChannelUsersActivity.this.addNew2Row) {
-                        actionCell.setText(LocaleController.getString("ChannelInviteViaLink", C0488R.string.ChannelInviteViaLink), null, C0488R.drawable.msg_panel_link, false);
+                        actionCell.setText(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), null, R.drawable.msg_panel_link, false);
                         return;
                     } else {
                         return;
@@ -617,13 +617,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 case 5:
                     HeaderCell headerCell = holder.itemView;
                     if (position == ChannelUsersActivity.this.restricted1SectionRow) {
-                        headerCell.setText(LocaleController.getString("ChannelRestrictedUsers", C0488R.string.ChannelRestrictedUsers));
+                        headerCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers));
                         return;
                     } else if (position == ChannelUsersActivity.this.restricted2SectionRow) {
-                        headerCell.setText(LocaleController.getString("ChannelBlockedUsers", C0488R.string.ChannelBlockedUsers));
+                        headerCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
                         return;
                     } else if (position == ChannelUsersActivity.this.changeAddHeaderRow) {
-                        headerCell.setText(LocaleController.getString("WhoCanAddMembers", C0488R.string.WhoCanAddMembers));
+                        headerCell.setText(LocaleController.getString("WhoCanAddMembers", R.string.WhoCanAddMembers));
                         return;
                     } else {
                         return;
@@ -635,13 +635,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     boolean z;
                     if (position == ChannelUsersActivity.this.changeAddRadio1Row) {
                         radioCell.setTag(Integer.valueOf(0));
-                        string = LocaleController.getString("WhoCanAddMembersAllMembers", C0488R.string.WhoCanAddMembersAllMembers);
+                        string = LocaleController.getString("WhoCanAddMembersAllMembers", R.string.WhoCanAddMembersAllMembers);
                         z = chat != null && chat.democracy;
                         radioCell.setText(string, z, true);
                         return;
                     } else if (position == ChannelUsersActivity.this.changeAddRadio2Row) {
                         radioCell.setTag(Integer.valueOf(1));
-                        string = LocaleController.getString("WhoCanAddMembersAdmins", C0488R.string.WhoCanAddMembersAdmins);
+                        string = LocaleController.getString("WhoCanAddMembersAdmins", R.string.WhoCanAddMembersAdmins);
                         z = (chat == null || chat.democracy) ? false : true;
                         radioCell.setText(string, z, false);
                         return;
@@ -1058,26 +1058,26 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     GraySectionCell sectionCell = holder.itemView;
                     if (position != this.groupStartRow) {
                         if (position == this.group2StartRow) {
-                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", C0488R.string.ChannelBlockedUsers).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers).toUpperCase());
                             return;
                         }
                         if (position == this.globalStartRow) {
-                            sectionCell.setText(LocaleController.getString("GlobalSearch", C0488R.string.GlobalSearch).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch).toUpperCase());
                             return;
                         }
                         if (position == this.contactsStartRow) {
-                            sectionCell.setText(LocaleController.getString("Contacts", C0488R.string.Contacts).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts).toUpperCase());
                             return;
                         }
                         return;
                     } else if (ChannelUsersActivity.this.type == 0) {
-                        sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", C0488R.string.ChannelRestrictedUsers).toUpperCase());
+                        sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers).toUpperCase());
                         return;
                     } else if (!ChatObject.isChannel(ChannelUsersActivity.this.currentChat) || ChannelUsersActivity.this.currentChat.megagroup) {
-                        sectionCell.setText(LocaleController.getString("ChannelMembers", C0488R.string.ChannelMembers).toUpperCase());
+                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers).toUpperCase());
                         return;
                     } else {
-                        ChannelUsersActivity.this.actionBar.setTitle(LocaleController.getString("ChannelSubscribers", C0488R.string.ChannelSubscribers));
+                        ChannelUsersActivity.this.actionBar.setTitle(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                         return;
                     }
                 default:
@@ -1258,37 +1258,37 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         int i = 1;
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.type == 0) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelBlacklist", C0488R.string.ChannelBlacklist));
+            this.actionBar.setTitle(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist));
         } else if (this.type == 1) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelAdministrators", C0488R.string.ChannelAdministrators));
+            this.actionBar.setTitle(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators));
         } else if (this.type == 2) {
             if (this.selectType == 0) {
                 if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
-                    this.actionBar.setTitle(LocaleController.getString("ChannelMembers", C0488R.string.ChannelMembers));
+                    this.actionBar.setTitle(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                 } else {
-                    this.actionBar.setTitle(LocaleController.getString("ChannelSubscribers", C0488R.string.ChannelSubscribers));
+                    this.actionBar.setTitle(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                 }
             } else if (this.selectType == 1) {
-                this.actionBar.setTitle(LocaleController.getString("ChannelAddAdmin", C0488R.string.ChannelAddAdmin));
+                this.actionBar.setTitle(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin));
             } else if (this.selectType == 2) {
-                this.actionBar.setTitle(LocaleController.getString("ChannelBlockUser", C0488R.string.ChannelBlockUser));
+                this.actionBar.setTitle(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser));
             }
         }
         this.actionBar.setActionBarMenuOnItemClick(new C12491());
         if (this.selectType != 0 || this.type == 2 || this.type == 0) {
             this.searchListViewAdapter = new SearchAdapter(context);
-            this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C12502());
-            this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
+            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C12502());
+            this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         }
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         if (this.type == 0 || this.type == 2) {
-            this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+            this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         }
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
@@ -1352,7 +1352,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 if (resultOnly) {
                     return true;
                 }
-                items.add(LocaleController.getString("SetAsAdmin", C0488R.string.SetAsAdmin));
+                items.add(LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
                 actions.add(Integer.valueOf(0));
             }
             if (ChatObject.canBlockUsers(this.currentChat) && canEditAdmin) {
@@ -1360,12 +1360,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     return true;
                 }
                 if (this.currentChat.megagroup) {
-                    items.add(LocaleController.getString("KickFromSupergroup", C0488R.string.KickFromSupergroup));
+                    items.add(LocaleController.getString("KickFromSupergroup", R.string.KickFromSupergroup));
                     actions.add(Integer.valueOf(1));
-                    items.add(LocaleController.getString("KickFromGroup", C0488R.string.KickFromGroup));
+                    items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
                     actions.add(Integer.valueOf(2));
                 } else {
-                    items.add(LocaleController.getString("ChannelRemoveUser", C0488R.string.ChannelRemoveUser));
+                    items.add(LocaleController.getString("ChannelRemoveUser", R.string.ChannelRemoveUser));
                     actions.add(Integer.valueOf(2));
                 }
             }
@@ -1432,12 +1432,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             if (resultOnly) {
                 return true;
             }
-            items2 = new CharSequence[]{LocaleController.getString("Unban", C0488R.string.Unban)};
+            items2 = new CharSequence[]{LocaleController.getString("Unban", R.string.Unban)};
         } else if (this.type == 1 && ChatObject.canAddAdmins(this.currentChat) && participant.can_edit) {
             if (resultOnly) {
                 return true;
             }
-            items2 = new CharSequence[]{LocaleController.getString("ChannelRemoveUserAdmin", C0488R.string.ChannelRemoveUserAdmin)};
+            items2 = new CharSequence[]{LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
         }
         if (items2 == null) {
             return false;

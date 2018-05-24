@@ -37,6 +37,27 @@ public class PhotoCropView extends FrameLayout {
     private boolean showOnSetBitmap;
     private CropRotationWheel wheelView;
 
+    /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
+    class C15603 implements Runnable {
+        C15603() {
+        }
+
+        public void run() {
+            if (PhotoCropView.this.animationRunnable == this) {
+                PhotoCropView.this.animationRunnable = null;
+                PhotoCropView.this.moveToFill(true);
+            }
+        }
+    }
+
+    public interface PhotoCropViewDelegate {
+        Bitmap getBitmap();
+
+        void needMoveImageTo(float f, float f2, float f3, boolean z);
+
+        void onChange(boolean z);
+    }
+
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
     class C15581 implements CropViewListener {
         C15581() {
@@ -81,27 +102,6 @@ public class PhotoCropView extends FrameLayout {
             PhotoCropView.this.wheelView.reset();
             PhotoCropView.this.cropView.rotate90Degrees();
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
-    class C15603 implements Runnable {
-        C15603() {
-        }
-
-        public void run() {
-            if (PhotoCropView.this.animationRunnable == this) {
-                PhotoCropView.this.animationRunnable = null;
-                PhotoCropView.this.moveToFill(true);
-            }
-        }
-    }
-
-    public interface PhotoCropViewDelegate {
-        Bitmap getBitmap();
-
-        void needMoveImageTo(float f, float f2, float f3, boolean z);
-
-        void onChange(boolean z);
     }
 
     public PhotoCropView(Context context) {

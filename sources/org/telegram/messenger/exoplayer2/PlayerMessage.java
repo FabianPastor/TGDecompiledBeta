@@ -17,12 +17,12 @@ public final class PlayerMessage {
     private int type;
     private int windowIndex;
 
-    public interface Target {
-        void handleMessage(int i, Object obj) throws ExoPlaybackException;
-    }
-
     public interface Sender {
         void sendMessage(PlayerMessage playerMessage);
+    }
+
+    public interface Target {
+        void handleMessage(int i, Object obj) throws ExoPlaybackException;
     }
 
     public PlayerMessage(Sender sender, Target target, Timeline timeline, int defaultWindowIndex, Handler defaultHandler) {

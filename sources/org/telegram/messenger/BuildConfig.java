@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
 public final class BuildConfig {
-    public static final String APPLICATION_ID = "org.telegram.messenger";
-    public static final String BUILD_TYPE = "release";
-    public static final boolean DEBUG = false;
-    public static final String FLAVOR = "armv7";
-    public static final int VERSION_CODE = 1252;
-    public static final String VERSION_NAME = "4.8.7";
+    public static final String APPLICATION_ID = "org.telegram.messenger.beta";
+    public static final String BUILD_TYPE = "debug";
+    public static final boolean DEBUG = Boolean.parseBoolean("true");
+    public static final String FLAVOR = "afat";
+    public static final int VERSION_CODE = 1255;
+    public static final String VERSION_NAME = "4.8.8";
 }

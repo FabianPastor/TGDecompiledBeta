@@ -58,6 +58,12 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
     private boolean videoPlayerReady;
 
+    public interface RendererBuilder {
+        void buildRenderers(VideoPlayer videoPlayer);
+
+        void cancel();
+    }
+
     public interface VideoPlayerDelegate {
         void onError(Exception exception);
 
@@ -110,12 +116,6 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
 
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         }
-    }
-
-    public interface RendererBuilder {
-        void buildRenderers(VideoPlayer videoPlayer);
-
-        void cancel();
     }
 
     public VideoPlayer() {

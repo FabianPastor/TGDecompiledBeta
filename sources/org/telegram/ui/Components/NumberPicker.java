@@ -81,10 +81,6 @@ public class NumberPicker extends LinearLayout {
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
 
-    public interface Formatter {
-        String format(int i);
-    }
-
     class ChangeCurrentByOneFromLongPressCommand implements Runnable {
         private boolean mIncrement;
 
@@ -99,6 +95,10 @@ public class NumberPicker extends LinearLayout {
             NumberPicker.this.changeValueByOne(this.mIncrement);
             NumberPicker.this.postDelayed(this, NumberPicker.this.mLongPressUpdateInterval);
         }
+    }
+
+    public interface Formatter {
+        String format(int i);
     }
 
     public interface OnScrollListener {

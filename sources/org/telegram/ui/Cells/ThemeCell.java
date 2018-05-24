@@ -17,10 +17,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
@@ -59,7 +59,7 @@ public class ThemeCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(C0488R.drawable.sticker_added);
+        this.checkImage.setImageResource(R.drawable.sticker_added);
         if (this.isNightTheme) {
             view = this.checkImage;
             if (!LocaleController.isRTL) {
@@ -78,7 +78,7 @@ public class ThemeCell extends FrameLayout {
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
         this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-        this.optionsButton.setImageResource(C0488R.drawable.ic_ab_other);
+        this.optionsButton.setImageResource(R.drawable.ic_ab_other);
         this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
         this.optionsButton.setScaleType(ScaleType.CENTER);
         View view2 = this.optionsButton;

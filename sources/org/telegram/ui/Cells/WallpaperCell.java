@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_wallPaperSolid;
@@ -27,11 +27,11 @@ public class WallpaperCell extends FrameLayout {
         this.imageView = new BackupImageView(context);
         addView(this.imageView, LayoutHelper.createFrame(100, 100, 83));
         this.imageView2 = new ImageView(context);
-        this.imageView2.setImageResource(C0488R.drawable.ic_gallery_background);
+        this.imageView2.setImageResource(R.drawable.ic_gallery_background);
         this.imageView2.setScaleType(ScaleType.CENTER);
         addView(this.imageView2, LayoutHelper.createFrame(100, 100, 83));
         this.selectionView = new View(context);
-        this.selectionView.setBackgroundResource(C0488R.drawable.wall_selection);
+        this.selectionView.setBackgroundResource(R.drawable.wall_selection);
         addView(this.selectionView, LayoutHelper.createFrame(100, 102.0f));
     }
 
@@ -59,7 +59,7 @@ public class WallpaperCell extends FrameLayout {
             int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
             imageView.setBackgroundColor(i2);
             this.imageView2.setScaleType(ScaleType.CENTER);
-            this.imageView2.setImageResource(C0488R.drawable.ic_gallery_background);
+            this.imageView2.setImageResource(R.drawable.ic_gallery_background);
             return;
         }
         this.imageView.setVisibility(0);

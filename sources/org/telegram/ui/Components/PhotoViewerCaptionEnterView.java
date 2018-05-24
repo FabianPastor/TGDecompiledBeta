@@ -28,13 +28,13 @@ import android.widget.LinearLayout;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
@@ -214,6 +214,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
+    public interface PhotoViewerCaptionEnterViewDelegate {
+        void onCaptionEnter();
+
+        void onTextChanged(CharSequence charSequence);
+
+        void onWindowSizeChanged(int i);
+    }
+
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$9 */
     class C15989 implements Listener {
         C15989() {
@@ -289,14 +297,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
-    public interface PhotoViewerCaptionEnterViewDelegate {
-        void onCaptionEnter();
-
-        void onTextChanged(CharSequence charSequence);
-
-        void onWindowSizeChanged(int i);
-    }
-
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, View window) {
         super(context);
         setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
@@ -310,7 +310,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         FrameLayout frameLayout = new FrameLayout(context);
         textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
         this.emojiButton = new ImageView(context);
-        this.emojiButton.setImageResource(C0488R.drawable.ic_smile_w);
+        this.emojiButton.setImageResource(R.drawable.ic_smile_w);
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
@@ -329,7 +329,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             this.messageEditText.setCustomSelectionActionModeCallback(new C15923());
             this.messageEditText.setCustomInsertionActionModeCallback(new C15934());
         }
-        this.messageEditText.setHint(LocaleController.getString("AddCaption", C0488R.string.AddCaption));
+        this.messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         this.messageEditText.setImeOptions(268435456);
         this.messageEditText.setInputType(this.messageEditText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
         this.messageEditText.setMaxLines(4);
@@ -349,7 +349,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.addTextChangedListener(new C15967());
         ImageView doneButton = new ImageView(context);
         doneButton.setScaleType(ScaleType.CENTER);
-        doneButton.setImageResource(C0488R.drawable.ic_done);
+        doneButton.setImageResource(R.drawable.ic_done);
         textFieldContainer.addView(doneButton, LayoutHelper.createLinear(48, 48, 80));
         if (VERSION.SDK_INT >= 21) {
             doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
@@ -549,14 +549,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (this.sizeNotifierLayout != null) {
                 this.emojiPadding = currentHeight;
                 this.sizeNotifierLayout.requestLayout();
-                this.emojiButton.setImageResource(C0488R.drawable.ic_keyboard_w);
+                this.emojiButton.setImageResource(R.drawable.ic_keyboard_w);
                 onWindowSizeChanged();
                 return;
             }
             return;
         }
         if (this.emojiButton != null) {
-            this.emojiButton.setImageResource(C0488R.drawable.ic_smile_w);
+            this.emojiButton.setImageResource(R.drawable.ic_smile_w);
         }
         if (this.emojiView != null) {
             this.emojiView.setVisibility(8);

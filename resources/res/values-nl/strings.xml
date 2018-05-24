@@ -70,6 +70,7 @@
     <string name="AddMasksInstalled">Nieuwe maskers toegevoegd</string>
     <string name="AddMember">Lid toevoegen</string>
     <string name="AddMutual">Contacten aan je kanaal toevoegen</string>
+    <string name="AddProxy">Proxy toevoegen</string>
     <string name="AddRecipient">Ontvanger toevoegen</string>
     <string name="AddShortcut">Snelkoppeling toevoegen</string>
     <string name="AddStickers">Stickers toevoegen</string>
@@ -202,7 +203,7 @@
     <string name="AutoNightTheme">Automatisch nachtthema</string>
     <string name="AutoNightTo">Tot</string>
     <string name="AutoNightUpdateLocation">Locatie bijwerken</string>
-    <string name="AutoNightUpdateLocationInfo">Het berekenen van zonsopkomst en -ondergang vereist een eenmalige controle van je locatie bij benadering. Deze locatie zal alleen lokaal op je apparaat worden opgeslagen. \n\nzonsondergang: %1$s\nzonsopkomst: %2$s</string>
+    <string name="AutoNightUpdateLocationInfo">Het berekenen van zonsopkomst en -ondergang vereist een eenmalige controle van je locatie bij benadering. Deze locatie zal alleen lokaal op je apparaat worden opgeslagen. \n\nZonsondergang: %1$s\nZonsopkomst: %2$s</string>
     <string name="AutodownloadChannels">Kanalen</string>
     <string name="AutodownloadContacts">Contacten</string>
     <string name="AutodownloadGroupChats">Groepschats</string>
@@ -211,6 +212,7 @@
     <string name="AutodownloadSizeLimitUpTo">tot %1$s</string>
     <string name="AutomaticMediaDownload">Automatisch media downloaden</string>
     <string name="AutoplayGifs">GIF\'s automatisch afspelen</string>
+    <string name="Available">Beschikbaar</string>
     <string name="AwaitingEncryption">Wachten tot %s online komt</string>
     <string name="BackgroundRestricted">Achtergrondgegevens beperkt.</string>
     <string name="BadgeNumber">Badgenummer</string>
@@ -382,6 +384,7 @@
     <string name="Chats_other">%1$d chats</string>
     <string name="Chats_two">%1$d chats</string>
     <string name="Chats_zero">%1$d chats</string>
+    <string name="Checking">Controleren...</string>
     <string name="ChooseCountry">Kies een land</string>
     <string name="ChooseFromYourStickers">Kies uit je stickers</string>
     <string name="ChooseStickerSet">KIES STICKERBUNDEL</string>
@@ -418,12 +421,10 @@
     <string name="ColorYellow">Geel</string>
     <string name="CompatibilityChat">%1$s gebruikt een oudere versie van Telegram, dus worden geheime foto\'s weergegeven in de compatibiliteitsmodus.\n\nZodra %2$s Telegram updatet werken foto\'s met timers voor 1 minuut of minder in de \'Druk en houd ingedrukt\'-modus en krijg je een bericht wanneer de andere partij een schermafdruk maakt.</string>
     <string name="ConfirmDeleteCallLog">Gesprek echt uit oproepgeschiedenis wissen?</string>
+    <string name="Connected">Verbonden</string>
     <string name="Connecting">Verbinden</string>
+    <string name="ConnectingConnectProxy">Verbinden met proxy</string>
     <string name="ConnectingToProxy">Verbinden met proxy...</string>
-    <string name="ConnectingToProxyDisable">Uitschakelen</string>
-    <string name="ConnectingToProxyDisableAlert">Proxy %1$s echt uitschakelen? Opnieuw inschakelen kan via Instellingen (Data en opslag).</string>
-    <string name="ConnectingToProxyEnable">Inschakelen</string>
-    <string name="ConnectingToProxyTapToDisable">Tik om proxy uit te schakelen</string>
     <string name="ContactJoined">Contact lid van Telegram</string>
     <string name="ContactNotRegistered">%1$s is nog geen lid, uitnodigen?</string>
     <string name="Contacts">Contacten</string>
@@ -511,6 +512,7 @@
     <string name="DeleteMega">Groep verwijderen</string>
     <string name="DeleteMegaMenu">Groep verwijderen</string>
     <string name="DeletePhoto">Foto verwijderen</string>
+    <string name="DeleteProxy">Proxy verwijderen?</string>
     <string name="DeleteReportSpam">Spam melden</string>
     <string name="DeleteThemeAlert">Thema echt verwijderen?</string>
     <string name="DeleteThisChat">Chat verwijderen</string>
@@ -561,8 +563,6 @@
     <string name="EmpryUsersPlaceholder">Toevoegen</string>
     <string name="EnableAllStreamingInfo">Sommige video\'s kunnen niet worden gestreamd, bijvoorbeeld video\'s verstuurd vanaf Android met Telegram versie 4.7 en ouder.</string>
     <string name="EnableAnimations">Animaties</string>
-    <string name="EnableProxyAlert">Proxy echt inschakelen</string>
-    <string name="EnableProxyAlert2">Je kunt de proxy-server aanpassen via Instellingen (Data en opslag)</string>
     <string name="EnableStreaming">Muziek en audio streamen</string>
     <string name="EnabledPasswordText">Je hebt twee-staps-verificatie ingeschakeld.\nAls je inlogt op je Telegram-account heb je het ingestelde wachtwoord nodig.</string>
     <string name="EncryptedChatStartedIncoming">Toegevoegd aan de geheime chat.</string>
@@ -1307,6 +1307,7 @@
     <string name="PinMessageAlertChannel">Wil je dit bericht vastzetten?</string>
     <string name="PinNotify">Alle leden informeren</string>
     <string name="PinToTop">Vastzetten</string>
+    <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Vastgezet bericht</string>
     <string name="PinnedMessages">Vastgezette berichten</string>
     <string name="PleaseDownload">Download media eerst</string>
@@ -1343,6 +1344,8 @@
     <string name="ProfilePopupNotification">Pop-up meldingen</string>
     <string name="ProfilePopupNotificationInfo">Nieuwe berichten van deze persoon worden weergegeven als je Telegram niet gebruikt.</string>
     <string name="Proxy">Proxy</string>
+    <string name="ProxyConnections">Connecties</string>
+    <string name="ProxyDetails">Proxy-details</string>
     <string name="ProxySettings">Proxy-instellingen</string>
     <string name="QuickReplyCustom">Aangepast bericht.</string>
     <string name="QuickReplyDefault1">Kan nu niet praten, wat is er?</string>
@@ -1586,7 +1589,7 @@
     <string name="Subscribers_other">%1$d abonnees</string>
     <string name="Subscribers_two">%1$d abonnees</string>
     <string name="Subscribers_zero">%1$d abonnees</string>
-    <string name="SuggestStickers">Stickersuggesties via Emoji</string>
+    <string name="SuggestStickers">Stickersuggesties</string>
     <string name="SuggestStickersAll">Alles</string>
     <string name="SuggestStickersInstalled">Toegevoegd</string>
     <string name="SuggestStickersNone">Geen</string>
@@ -1640,6 +1643,7 @@
     <string name="TwoStepVerification">Twee-staps-verificatie</string>
     <string name="TypeMessage">Bericht</string>
     <string name="Typing">aan het typen</string>
+    <string name="Unavailable">Onbeschikbaar</string>
     <string name="Unban">Deblokkeer</string>
     <string name="UnbanText">Gebruiker vasthouden om te deblokkeren.</string>
     <string name="Unblock">Deblokkeer</string>
@@ -1675,7 +1679,14 @@
     <string name="UseProxyInfo">SOCKS5 proxy-instellingen</string>
     <string name="UseProxyPassword">Wachtwoord</string>
     <string name="UseProxyPort">Poort</string>
+    <string name="UseProxySecret">Sleutel</string>
     <string name="UseProxySettings">Gebruik proxy-instellingen</string>
+    <string name="UseProxySocks5">SOCKS5</string>
+    <string name="UseProxySponsor">Proxy-sponsor</string>
+    <string name="UseProxySponsorInfo">Dit kanaal is zichtbaar omdat je een proxy-server gebruikt, om dit kanaal te verwijderen uit je chatoverzicht kun je de proxy uitschakelen via de instellingen van Telegram.</string>
+    <string name="UseProxyTelegram">MTProto Proxy</string>
+    <string name="UseProxyTelegramInfo">MTProto-proxy-instellingen.</string>
+    <string name="UseProxyTelegramInfo2">De proxy die je gebruikt kan een gesponsord kanaal weergeven in je chatoverzicht, maar heeft geen inzage in je Telegram-verkeer.</string>
     <string name="UseProxyUsername">Gebruiker</string>
     <string name="UserBio">Bio</string>
     <string name="UserBioEmpty">Geen</string>

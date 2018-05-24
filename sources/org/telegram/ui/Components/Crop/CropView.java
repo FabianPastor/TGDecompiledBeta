@@ -23,8 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
@@ -665,8 +665,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
             ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
             ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
-            actions[0] = LocaleController.getString("CropOriginal", C0488R.string.CropOriginal);
-            actions[1] = LocaleController.getString("CropSquare", C0488R.string.CropSquare);
+            actions[0] = LocaleController.getString("CropOriginal", R.string.CropOriginal);
+            actions[1] = LocaleController.getString("CropSquare", R.string.CropSquare);
             int i = 2;
             for (Integer[] ratioPair : ratios) {
                 if (this.areaView.getAspectRatio() > 1.0f) {

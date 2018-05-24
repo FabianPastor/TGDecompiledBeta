@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.LaunchActivity;
@@ -118,7 +119,7 @@ public class LocationSharingService extends Service implements NotificationCente
             } else {
                 param = LocaleController.formatPluralString("Chats", infos.size());
             }
-            String str = String.format(LocaleController.getString("AttachLiveLocationIsSharing", C0488R.string.AttachLiveLocationIsSharing), new Object[]{LocaleController.getString("AttachLiveLocation", C0488R.string.AttachLiveLocation), param});
+            String str = String.format(LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing), new Object[]{LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), param});
             this.builder.setTicker(str);
             this.builder.setContentText(str);
             if (post) {
@@ -138,11 +139,11 @@ public class LocationSharingService extends Service implements NotificationCente
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
             this.builder = new Builder(ApplicationLoader.applicationContext);
             this.builder.setWhen(System.currentTimeMillis());
-            this.builder.setSmallIcon(C0488R.drawable.live_loc);
+            this.builder.setSmallIcon(R.drawable.live_loc);
             this.builder.setContentIntent(contentIntent);
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            this.builder.setContentTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-            this.builder.addAction(0, LocaleController.getString("StopLiveLocation", C0488R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class), 134217728));
+            this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
+            this.builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class), 134217728));
         }
         updateNotification(false);
         startForeground(6, this.builder.build());

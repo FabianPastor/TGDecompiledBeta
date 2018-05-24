@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -43,6 +42,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -100,20 +100,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private boolean searching;
     private SparseArray<GroupCreateSpan> selectedContacts = new SparseArray();
     private SpansContainer spansContainer;
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C17921 extends ActionBarMenuOnItemClick {
-        C17921() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                GroupCreateActivity.this.finishFragment();
-            } else if (id == 1) {
-                GroupCreateActivity.this.onDonePressed();
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
     class C17965 implements Callback {
@@ -188,10 +174,199 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 GroupCreateActivity.this.adapter.searchDialogs(GroupCreateActivity.this.editText.getText().toString());
                 GroupCreateActivity.this.listView.setFastScrollVisible(false);
                 GroupCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
-                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                 return;
             }
             GroupCreateActivity.this.closeSearch();
+        }
+    }
+
+    public interface GroupCreateActivityDelegate {
+        void didSelectUsers(ArrayList<Integer> arrayList);
+    }
+
+    private class SpansContainer extends ViewGroup {
+        private View addingSpan;
+        private boolean animationStarted;
+        private ArrayList<Animator> animators = new ArrayList();
+        private AnimatorSet currentAnimation;
+        private View removingSpan;
+
+        /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
+        class C18061 extends AnimatorListenerAdapter {
+            C18061() {
+            }
+
+            public void onAnimationEnd(Animator animator) {
+                SpansContainer.this.addingSpan = null;
+                SpansContainer.this.currentAnimation = null;
+                SpansContainer.this.animationStarted = false;
+                GroupCreateActivity.this.editText.setAllowDrawCursor(true);
+            }
+        }
+
+        public SpansContainer(Context context) {
+            super(context);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int minWidth;
+            int count = getChildCount();
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int maxWidth = width - AndroidUtilities.dp(32.0f);
+            int currentLineWidth = 0;
+            int y = AndroidUtilities.dp(12.0f);
+            int allCurrentLineWidth = 0;
+            int allY = AndroidUtilities.dp(12.0f);
+            for (int a = 0; a < count; a++) {
+                View child = getChildAt(a);
+                if (child instanceof GroupCreateSpan) {
+                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+                    if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
+                        y += child.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
+                        currentLineWidth = 0;
+                    }
+                    if (child.getMeasuredWidth() + allCurrentLineWidth > maxWidth) {
+                        allY += child.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
+                        allCurrentLineWidth = 0;
+                    }
+                    int x = AndroidUtilities.dp(16.0f) + currentLineWidth;
+                    if (!this.animationStarted) {
+                        if (child == this.removingSpan) {
+                            child.setTranslationX((float) (AndroidUtilities.dp(16.0f) + allCurrentLineWidth));
+                            child.setTranslationY((float) allY);
+                        } else if (this.removingSpan != null) {
+                            if (child.getTranslationX() != ((float) x)) {
+                                this.animators.add(ObjectAnimator.ofFloat(child, "translationX", new float[]{(float) x}));
+                            }
+                            if (child.getTranslationY() != ((float) y)) {
+                                this.animators.add(ObjectAnimator.ofFloat(child, "translationY", new float[]{(float) y}));
+                            }
+                        } else {
+                            child.setTranslationX((float) x);
+                            child.setTranslationY((float) y);
+                        }
+                    }
+                    if (child != this.removingSpan) {
+                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
+                    }
+                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
+                }
+            }
+            if (AndroidUtilities.isTablet()) {
+                minWidth = AndroidUtilities.dp(366.0f) / 3;
+            } else {
+                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 3;
+            }
+            if (maxWidth - currentLineWidth < minWidth) {
+                currentLineWidth = 0;
+                y += AndroidUtilities.dp(44.0f);
+            }
+            if (maxWidth - allCurrentLineWidth < minWidth) {
+                allY += AndroidUtilities.dp(44.0f);
+            }
+            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+            if (!this.animationStarted) {
+                int currentHeight = allY + AndroidUtilities.dp(44.0f);
+                int fieldX = currentLineWidth + AndroidUtilities.dp(16.0f);
+                GroupCreateActivity.this.fieldY = y;
+                if (this.currentAnimation != null) {
+                    if (GroupCreateActivity.this.containerHeight != y + AndroidUtilities.dp(44.0f)) {
+                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", new int[]{resultHeight}));
+                    }
+                    if (GroupCreateActivity.this.editText.getTranslationX() != ((float) fieldX)) {
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", new float[]{(float) fieldX}));
+                    }
+                    if (GroupCreateActivity.this.editText.getTranslationY() != ((float) GroupCreateActivity.this.fieldY)) {
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", new float[]{(float) GroupCreateActivity.this.fieldY}));
+                    }
+                    GroupCreateActivity.this.editText.setAllowDrawCursor(false);
+                    this.currentAnimation.playTogether(this.animators);
+                    this.currentAnimation.start();
+                    this.animationStarted = true;
+                } else {
+                    GroupCreateActivity.this.containerHeight = currentHeight;
+                    GroupCreateActivity.this.editText.setTranslationX((float) fieldX);
+                    GroupCreateActivity.this.editText.setTranslationY((float) GroupCreateActivity.this.fieldY);
+                }
+            } else if (!(this.currentAnimation == null || GroupCreateActivity.this.ignoreScrollEvent || this.removingSpan != null)) {
+                GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
+            }
+            setMeasuredDimension(width, GroupCreateActivity.this.containerHeight);
+        }
+
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            int count = getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = getChildAt(a);
+                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+            }
+        }
+
+        public void addSpan(GroupCreateSpan span) {
+            GroupCreateActivity.this.allSpans.add(span);
+            GroupCreateActivity.this.selectedContacts.put(span.getUid(), span);
+            GroupCreateActivity.this.editText.setHintVisible(false);
+            if (this.currentAnimation != null) {
+                this.currentAnimation.setupEndValues();
+                this.currentAnimation.cancel();
+            }
+            this.animationStarted = false;
+            this.currentAnimation = new AnimatorSet();
+            this.currentAnimation.addListener(new C18061());
+            this.currentAnimation.setDuration(150);
+            this.addingSpan = span;
+            this.animators.clear();
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, 1.0f}));
+            addView(span);
+        }
+
+        public void removeSpan(final GroupCreateSpan span) {
+            GroupCreateActivity.this.ignoreScrollEvent = true;
+            GroupCreateActivity.this.selectedContacts.remove(span.getUid());
+            GroupCreateActivity.this.allSpans.remove(span);
+            span.setOnClickListener(null);
+            if (this.currentAnimation != null) {
+                this.currentAnimation.setupEndValues();
+                this.currentAnimation.cancel();
+            }
+            this.animationStarted = false;
+            this.currentAnimation = new AnimatorSet();
+            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    SpansContainer.this.removeView(span);
+                    SpansContainer.this.removingSpan = null;
+                    SpansContainer.this.currentAnimation = null;
+                    SpansContainer.this.animationStarted = false;
+                    GroupCreateActivity.this.editText.setAllowDrawCursor(true);
+                    if (GroupCreateActivity.this.allSpans.isEmpty()) {
+                        GroupCreateActivity.this.editText.setHintVisible(true);
+                    }
+                }
+            });
+            this.currentAnimation.setDuration(150);
+            this.removingSpan = span;
+            this.animators.clear();
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
+            requestLayout();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
+    class C17921 extends ActionBarMenuOnItemClick {
+        C17921() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                GroupCreateActivity.this.finishFragment();
+            } else if (id == 1) {
+                GroupCreateActivity.this.onDonePressed();
+            }
         }
     }
 
@@ -219,9 +394,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     } else {
                         if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
                             Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                            builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0488R.string.SoftUserLimitAlert));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setMessage(LocaleController.getString("SoftUserLimitAlert", R.string.SoftUserLimitAlert));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                             GroupCreateActivity.this.showDialog(builder.create());
                             return;
                         }
@@ -252,10 +427,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         }
-    }
-
-    public interface GroupCreateActivityDelegate {
-        void didSelectUsers(ArrayList<Integer> arrayList);
     }
 
     public class GroupCreateAdapter extends FastScrollAdapter {
@@ -349,7 +520,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
                     if (this.searching) {
-                        cell.setText(LocaleController.getString("GlobalSearch", C0488R.string.GlobalSearch));
+                        cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                         return;
                     }
                     return;
@@ -538,177 +709,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
-    private class SpansContainer extends ViewGroup {
-        private View addingSpan;
-        private boolean animationStarted;
-        private ArrayList<Animator> animators = new ArrayList();
-        private AnimatorSet currentAnimation;
-        private View removingSpan;
-
-        /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C18061 extends AnimatorListenerAdapter {
-            C18061() {
-            }
-
-            public void onAnimationEnd(Animator animator) {
-                SpansContainer.this.addingSpan = null;
-                SpansContainer.this.currentAnimation = null;
-                SpansContainer.this.animationStarted = false;
-                GroupCreateActivity.this.editText.setAllowDrawCursor(true);
-            }
-        }
-
-        public SpansContainer(Context context) {
-            super(context);
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int minWidth;
-            int count = getChildCount();
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int maxWidth = width - AndroidUtilities.dp(32.0f);
-            int currentLineWidth = 0;
-            int y = AndroidUtilities.dp(12.0f);
-            int allCurrentLineWidth = 0;
-            int allY = AndroidUtilities.dp(12.0f);
-            for (int a = 0; a < count; a++) {
-                View child = getChildAt(a);
-                if (child instanceof GroupCreateSpan) {
-                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
-                    if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
-                        y += child.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
-                        currentLineWidth = 0;
-                    }
-                    if (child.getMeasuredWidth() + allCurrentLineWidth > maxWidth) {
-                        allY += child.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
-                        allCurrentLineWidth = 0;
-                    }
-                    int x = AndroidUtilities.dp(16.0f) + currentLineWidth;
-                    if (!this.animationStarted) {
-                        if (child == this.removingSpan) {
-                            child.setTranslationX((float) (AndroidUtilities.dp(16.0f) + allCurrentLineWidth));
-                            child.setTranslationY((float) allY);
-                        } else if (this.removingSpan != null) {
-                            if (child.getTranslationX() != ((float) x)) {
-                                this.animators.add(ObjectAnimator.ofFloat(child, "translationX", new float[]{(float) x}));
-                            }
-                            if (child.getTranslationY() != ((float) y)) {
-                                this.animators.add(ObjectAnimator.ofFloat(child, "translationY", new float[]{(float) y}));
-                            }
-                        } else {
-                            child.setTranslationX((float) x);
-                            child.setTranslationY((float) y);
-                        }
-                    }
-                    if (child != this.removingSpan) {
-                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
-                    }
-                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
-                }
-            }
-            if (AndroidUtilities.isTablet()) {
-                minWidth = AndroidUtilities.dp(366.0f) / 3;
-            } else {
-                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 3;
-            }
-            if (maxWidth - currentLineWidth < minWidth) {
-                currentLineWidth = 0;
-                y += AndroidUtilities.dp(44.0f);
-            }
-            if (maxWidth - allCurrentLineWidth < minWidth) {
-                allY += AndroidUtilities.dp(44.0f);
-            }
-            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
-            if (!this.animationStarted) {
-                int currentHeight = allY + AndroidUtilities.dp(44.0f);
-                int fieldX = currentLineWidth + AndroidUtilities.dp(16.0f);
-                GroupCreateActivity.this.fieldY = y;
-                if (this.currentAnimation != null) {
-                    if (GroupCreateActivity.this.containerHeight != y + AndroidUtilities.dp(44.0f)) {
-                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", new int[]{resultHeight}));
-                    }
-                    if (GroupCreateActivity.this.editText.getTranslationX() != ((float) fieldX)) {
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", new float[]{(float) fieldX}));
-                    }
-                    if (GroupCreateActivity.this.editText.getTranslationY() != ((float) GroupCreateActivity.this.fieldY)) {
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", new float[]{(float) GroupCreateActivity.this.fieldY}));
-                    }
-                    GroupCreateActivity.this.editText.setAllowDrawCursor(false);
-                    this.currentAnimation.playTogether(this.animators);
-                    this.currentAnimation.start();
-                    this.animationStarted = true;
-                } else {
-                    GroupCreateActivity.this.containerHeight = currentHeight;
-                    GroupCreateActivity.this.editText.setTranslationX((float) fieldX);
-                    GroupCreateActivity.this.editText.setTranslationY((float) GroupCreateActivity.this.fieldY);
-                }
-            } else if (!(this.currentAnimation == null || GroupCreateActivity.this.ignoreScrollEvent || this.removingSpan != null)) {
-                GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
-            }
-            setMeasuredDimension(width, GroupCreateActivity.this.containerHeight);
-        }
-
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            int count = getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = getChildAt(a);
-                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
-            }
-        }
-
-        public void addSpan(GroupCreateSpan span) {
-            GroupCreateActivity.this.allSpans.add(span);
-            GroupCreateActivity.this.selectedContacts.put(span.getUid(), span);
-            GroupCreateActivity.this.editText.setHintVisible(false);
-            if (this.currentAnimation != null) {
-                this.currentAnimation.setupEndValues();
-                this.currentAnimation.cancel();
-            }
-            this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C18061());
-            this.currentAnimation.setDuration(150);
-            this.addingSpan = span;
-            this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, 1.0f}));
-            addView(span);
-        }
-
-        public void removeSpan(final GroupCreateSpan span) {
-            GroupCreateActivity.this.ignoreScrollEvent = true;
-            GroupCreateActivity.this.selectedContacts.remove(span.getUid());
-            GroupCreateActivity.this.allSpans.remove(span);
-            span.setOnClickListener(null);
-            if (this.currentAnimation != null) {
-                this.currentAnimation.setupEndValues();
-                this.currentAnimation.cancel();
-            }
-            this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    SpansContainer.this.removeView(span);
-                    SpansContainer.this.removingSpan = null;
-                    SpansContainer.this.currentAnimation = null;
-                    SpansContainer.this.animationStarted = false;
-                    GroupCreateActivity.this.editText.setAllowDrawCursor(true);
-                    if (GroupCreateActivity.this.allSpans.isEmpty()) {
-                        GroupCreateActivity.this.editText.setHintVisible(true);
-                    }
-                }
-            });
-            this.currentAnimation.setDuration(150);
-            this.removingSpan = span;
-            this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
-            requestLayout();
-        }
-    }
-
     public GroupCreateActivity(Bundle args) {
         super(args);
         this.chatType = args.getInt("chatType", 0);
@@ -763,25 +763,25 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             z = false;
         }
         this.doneButtonVisible = z;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.chatType == 2) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", C0488R.string.ChannelAddMembers));
+            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", R.string.ChannelAddMembers));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0488R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0488R.string.AlwaysShareWithTitle));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", R.string.AlwaysShareWithTitle));
             }
         } else if (!this.isNeverShare) {
-            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", C0488R.string.NewGroup) : LocaleController.getString("NewBroadcastList", C0488R.string.NewBroadcastList));
+            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", R.string.NewGroup) : LocaleController.getString("NewBroadcastList", R.string.NewBroadcastList));
         } else if (this.isGroup) {
-            this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0488R.string.NeverAllow));
+            this.actionBar.setTitle(LocaleController.getString("NeverAllow", R.string.NeverAllow));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0488R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
         this.actionBar.setActionBarMenuOnItemClick(new C17921());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         if (this.chatType != 2) {
             this.doneButton.setScaleX(0.0f);
             this.doneButton.setScaleY(0.0f);
@@ -860,19 +860,19 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         if (this.chatType == 2) {
-            this.editText.setHintText(LocaleController.getString("AddMutual", C0488R.string.AddMutual));
+            this.editText.setHintText(LocaleController.getString("AddMutual", R.string.AddMutual));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", C0488R.string.AlwaysAllowPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", R.string.AlwaysAllowPlaceholder));
             } else {
-                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", C0488R.string.AlwaysShareWithPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", R.string.AlwaysShareWithPlaceholder));
             }
         } else if (!this.isNeverShare) {
-            this.editText.setHintText(LocaleController.getString("SendMessageTo", C0488R.string.SendMessageTo));
+            this.editText.setHintText(LocaleController.getString("SendMessageTo", R.string.SendMessageTo));
         } else if (this.isGroup) {
-            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", C0488R.string.NeverAllowPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", R.string.NeverAllowPlaceholder));
         } else {
-            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", C0488R.string.NeverShareWithPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", R.string.NeverShareWithPlaceholder));
         }
         this.editText.setCustomSelectionActionModeCallback(new C17965());
         this.editText.setOnEditorActionListener(new C17976());
@@ -885,7 +885,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.emptyView.showTextView();
         }
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0488R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
         frameLayout.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
@@ -1029,7 +1029,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.adapter.searchDialogs(null);
         this.listView.setFastScrollVisible(true);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0488R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
     }
 
     private void updateHint() {
@@ -1037,9 +1037,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             if (this.chatType == 2) {
                 this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
             } else if (this.selectedContacts.size() == 0) {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", C0488R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
             } else {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", C0488R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
             }
         }
         if (this.chatType == 2) {

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.LaunchActivity;
@@ -113,7 +114,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         }
                         if (name != null) {
                             if (icon == null) {
-                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.logo_avatar);
+                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.logo_avatar);
                             }
                             targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
                         }

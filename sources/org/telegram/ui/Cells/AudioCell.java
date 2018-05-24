@@ -14,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -36,10 +36,6 @@ public class AudioCell extends FrameLayout {
     private ImageView playButton;
     private TextView timeTextView;
     private TextView titleTextView;
-
-    public interface AudioCellDelegate {
-        void startedPlayingAudio(MessageObject messageObject);
-    }
 
     /* renamed from: org.telegram.ui.Cells.AudioCell$1 */
     class C10491 implements OnClickListener {
@@ -66,6 +62,10 @@ public class AudioCell extends FrameLayout {
             MediaController.getInstance().pauseMessage(AudioCell.this.audioEntry.messageObject);
             AudioCell.this.setPlayDrawable(false);
         }
+    }
+
+    public interface AudioCellDelegate {
+        void startedPlayingAudio(MessageObject messageObject);
     }
 
     public AudioCell(Context context) {
@@ -168,7 +168,7 @@ public class AudioCell extends FrameLayout {
             i3 = 5;
         }
         addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0488R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         view2 = this.checkBox;
@@ -180,7 +180,7 @@ public class AudioCell extends FrameLayout {
 
     private void setPlayDrawable(boolean play) {
         Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
-        Drawable drawable = getResources().getDrawable(play ? C0488R.drawable.audiosend_pause : C0488R.drawable.audiosend_play);
+        Drawable drawable = getResources().getDrawable(play ? R.drawable.audiosend_pause : R.drawable.audiosend_play);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
         combinedDrawable.setCustomSize(AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));

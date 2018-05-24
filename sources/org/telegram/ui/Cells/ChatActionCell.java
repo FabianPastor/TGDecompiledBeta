@@ -11,13 +11,13 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -269,9 +269,9 @@ public class ChatActionCell extends BaseCell {
             } else if (this.currentMessageObject.messageOwner == null || this.currentMessageObject.messageOwner.media == null || this.currentMessageObject.messageOwner.media.ttl_seconds == 0) {
                 text = this.currentMessageObject.messageText;
             } else if (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) {
-                text = LocaleController.getString("AttachPhotoExpired", C0488R.string.AttachPhotoExpired);
+                text = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
             } else if (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty) {
-                text = LocaleController.getString("AttachVideoExpired", C0488R.string.AttachVideoExpired);
+                text = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
             } else {
                 text = this.currentMessageObject.messageText;
             }

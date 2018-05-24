@@ -10,11 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -34,21 +34,6 @@ public class ChangeNameActivity extends BaseFragment {
     private EditTextBoldCursor firstNameField;
     private View headerLabelView;
     private EditTextBoldCursor lastNameField;
-
-    /* renamed from: org.telegram.ui.ChangeNameActivity$1 */
-    class C11031 extends ActionBarMenuOnItemClick {
-        C11031() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChangeNameActivity.this.finishFragment();
-            } else if (id == 1 && ChangeNameActivity.this.firstNameField.getText().length() != 0) {
-                ChangeNameActivity.this.saveName();
-                ChangeNameActivity.this.finishFragment();
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$2 */
     class C11042 implements OnTouchListener {
@@ -89,15 +74,6 @@ public class ChangeNameActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.ChangeNameActivity$5 */
-    class C11075 implements RequestDelegate {
-        C11075() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
     /* renamed from: org.telegram.ui.ChangeNameActivity$6 */
     class C11086 implements Runnable {
         C11086() {
@@ -111,13 +87,37 @@ public class ChangeNameActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.ChangeNameActivity$1 */
+    class C11031 extends ActionBarMenuOnItemClick {
+        C11031() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChangeNameActivity.this.finishFragment();
+            } else if (id == 1 && ChangeNameActivity.this.firstNameField.getText().length() != 0) {
+                ChangeNameActivity.this.saveName();
+                ChangeNameActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChangeNameActivity$5 */
+    class C11075 implements RequestDelegate {
+        C11075() {
+        }
+
+        public void run(TLObject response, TL_error error) {
+        }
+    }
+
     public View createView(Context context) {
         int i = 5;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("EditName", C0488R.string.EditName));
+        this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         this.actionBar.setActionBarMenuOnItemClick(new C11031());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
@@ -138,7 +138,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", C0488R.string.FirstName));
+        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -159,7 +159,7 @@ public class ChangeNameActivity extends BaseFragment {
         editTextBoldCursor.setGravity(i);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
-        this.lastNameField.setHint(LocaleController.getString("LastName", C0488R.string.LastName));
+        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
         this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);

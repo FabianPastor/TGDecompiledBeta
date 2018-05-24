@@ -58,17 +58,6 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         void onDrmSessionManagerError(Exception exception);
     }
 
-    private class MediaDrmEventListener implements OnEventListener<T> {
-        private MediaDrmEventListener() {
-        }
-
-        public void onEvent(ExoMediaDrm<? extends T> exoMediaDrm, byte[] sessionId, int event, int extra, byte[] data) {
-            if (DefaultDrmSessionManager.this.mode == 0) {
-                DefaultDrmSessionManager.this.mediaDrmHandler.obtainMessage(event, sessionId).sendToTarget();
-            }
-        }
-    }
-
     @SuppressLint({"HandlerLeak"})
     private class MediaDrmHandler extends Handler {
         public MediaDrmHandler(Looper looper) {
@@ -94,6 +83,17 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface Mode {
+    }
+
+    private class MediaDrmEventListener implements OnEventListener<T> {
+        private MediaDrmEventListener() {
+        }
+
+        public void onEvent(ExoMediaDrm<? extends T> exoMediaDrm, byte[] sessionId, int event, int extra, byte[] data) {
+            if (DefaultDrmSessionManager.this.mode == 0) {
+                DefaultDrmSessionManager.this.mediaDrmHandler.obtainMessage(event, sessionId).sendToTarget();
+            }
+        }
     }
 
     public static DefaultDrmSessionManager<FrameworkMediaCrypto> newWidevineInstance(MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) throws UnsupportedDrmException {

@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
@@ -14,6 +13,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnPreDrawListener;
@@ -40,7 +40,6 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver.BitmapHolder;
@@ -56,6 +55,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -140,10 +140,211 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private boolean singlePhoto;
     private int type;
 
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$9 */
+    class C20879 implements OnClickListener {
+        C20879() {
+        }
+
+        public void onClick(View view) {
+            PhotoPickerActivity.this.delegate.actionButtonPressed(true);
+            PhotoPickerActivity.this.finishFragment();
+        }
+    }
+
     public interface PhotoPickerActivityDelegate {
         void actionButtonPressed(boolean z);
 
         void selectedPhotosChanged();
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$2 */
+    class C20792 extends ActionBarMenuOnItemClick {
+        C20792() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoPickerActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$3 */
+    class C20803 extends ActionBarMenuItemSearchListener {
+        C20803() {
+        }
+
+        public void onSearchExpand() {
+        }
+
+        public boolean canCollapseSearch() {
+            PhotoPickerActivity.this.finishFragment();
+            return false;
+        }
+
+        public void onTextChanged(EditText editText) {
+            if (editText.getText().length() == 0) {
+                PhotoPickerActivity.this.searchResult.clear();
+                PhotoPickerActivity.this.searchResultKeys.clear();
+                PhotoPickerActivity.this.lastSearchString = null;
+                PhotoPickerActivity.this.bingSearchEndReached = true;
+                PhotoPickerActivity.this.giphySearchEndReached = true;
+                PhotoPickerActivity.this.searching = false;
+                if (PhotoPickerActivity.this.currentBingTask != null) {
+                    PhotoPickerActivity.this.currentBingTask.cancel(true);
+                    PhotoPickerActivity.this.currentBingTask = null;
+                }
+                if (PhotoPickerActivity.this.giphyReqId != 0) {
+                    ConnectionsManager.getInstance(PhotoPickerActivity.this.currentAccount).cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
+                    PhotoPickerActivity.this.giphyReqId = 0;
+                }
+                if (PhotoPickerActivity.this.type == 0) {
+                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", R.string.NoRecentPhotos));
+                } else if (PhotoPickerActivity.this.type == 1) {
+                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", R.string.NoRecentGIFs));
+                }
+                PhotoPickerActivity.this.updateSearchInterface();
+            }
+        }
+
+        public void onSearchPressed(EditText editText) {
+            if (editText.getText().toString().length() != 0) {
+                PhotoPickerActivity.this.searchResult.clear();
+                PhotoPickerActivity.this.searchResultKeys.clear();
+                PhotoPickerActivity.this.bingSearchEndReached = true;
+                PhotoPickerActivity.this.giphySearchEndReached = true;
+                if (PhotoPickerActivity.this.type == 0) {
+                    PhotoPickerActivity.this.searchBingImages(editText.getText().toString(), 0, 53);
+                } else if (PhotoPickerActivity.this.type == 1) {
+                    PhotoPickerActivity.this.nextGiphySearchOffset = 0;
+                    PhotoPickerActivity.this.searchGiphyImages(editText.getText().toString(), 0);
+                }
+                PhotoPickerActivity.this.lastSearchString = editText.getText().toString();
+                if (PhotoPickerActivity.this.lastSearchString.length() == 0) {
+                    PhotoPickerActivity.this.lastSearchString = null;
+                    if (PhotoPickerActivity.this.type == 0) {
+                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", R.string.NoRecentPhotos));
+                    } else if (PhotoPickerActivity.this.type == 1) {
+                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", R.string.NoRecentGIFs));
+                    }
+                } else {
+                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                }
+                PhotoPickerActivity.this.updateSearchInterface();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$5 */
+    class C20825 extends ItemDecoration {
+        C20825() {
+        }
+
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
+            int dp;
+            int i = 0;
+            super.getItemOffsets(outRect, view, parent, state);
+            int total = state.getItemCount();
+            int position = parent.getChildAdapterPosition(view);
+            int spanCount = PhotoPickerActivity.this.layoutManager.getSpanCount();
+            int rowsCOunt = (int) Math.ceil((double) (((float) total) / ((float) spanCount)));
+            int row = position / spanCount;
+            if (position % spanCount != spanCount - 1) {
+                dp = AndroidUtilities.dp(4.0f);
+            } else {
+                dp = 0;
+            }
+            outRect.right = dp;
+            if (row != rowsCOunt - 1) {
+                i = AndroidUtilities.dp(4.0f);
+            }
+            outRect.bottom = i;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$6 */
+    class C20836 implements OnItemClickListener {
+        C20836() {
+        }
+
+        public void onItemClick(View view, int position) {
+            ArrayList<Object> arrayList;
+            if (PhotoPickerActivity.this.selectedAlbum != null) {
+                arrayList = PhotoPickerActivity.this.selectedAlbum.photos;
+            } else if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
+                arrayList = PhotoPickerActivity.this.recentImages;
+            } else {
+                arrayList = PhotoPickerActivity.this.searchResult;
+            }
+            if (position >= 0 && position < arrayList.size()) {
+                if (PhotoPickerActivity.this.searchItem != null) {
+                    AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
+                }
+                PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
+                PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, PhotoPickerActivity.this.singlePhoto ? 1 : 0, PhotoPickerActivity.this.provider, PhotoPickerActivity.this.chatActivity);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$7 */
+    class C20857 implements OnItemLongClickListener {
+
+        /* renamed from: org.telegram.ui.PhotoPickerActivity$7$1 */
+        class C20841 implements DialogInterface.OnClickListener {
+            C20841() {
+            }
+
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PhotoPickerActivity.this.recentImages.clear();
+                if (PhotoPickerActivity.this.listAdapter != null) {
+                    PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
+                }
+                MessagesStorage.getInstance(PhotoPickerActivity.this.currentAccount).clearWebRecent(PhotoPickerActivity.this.type);
+            }
+        }
+
+        C20857() {
+        }
+
+        public boolean onItemClick(View view, int position) {
+            if (!PhotoPickerActivity.this.searchResult.isEmpty() || PhotoPickerActivity.this.lastSearchString != null) {
+                return false;
+            }
+            Builder builder = new Builder(PhotoPickerActivity.this.getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
+            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C20841());
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            PhotoPickerActivity.this.showDialog(builder.create());
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhotoPickerActivity$8 */
+    class C20868 extends OnScrollListener {
+        C20868() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == 1) {
+                AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.getParentActivity().getCurrentFocus());
+            }
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            int firstVisibleItem = PhotoPickerActivity.this.layoutManager.findFirstVisibleItemPosition();
+            int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(PhotoPickerActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
+            if (visibleItemCount > 0) {
+                int totalItemCount = PhotoPickerActivity.this.layoutManager.getItemCount();
+                if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount > totalItemCount - 2 && !PhotoPickerActivity.this.searching) {
+                    if (PhotoPickerActivity.this.type == 0 && !PhotoPickerActivity.this.bingSearchEndReached) {
+                        PhotoPickerActivity.this.searchBingImages(PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.searchResult.size(), 54);
+                    } else if (PhotoPickerActivity.this.type == 1 && !PhotoPickerActivity.this.giphySearchEndReached) {
+                        PhotoPickerActivity.this.searchGiphyImages(PhotoPickerActivity.this.searchItem.getSearchField().getText().toString(), PhotoPickerActivity.this.nextGiphySearchOffset);
+                    }
+                }
+            }
+        }
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$1 */
@@ -182,19 +383,19 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 cell.photoImage.setOrientation(0, true);
                 PhotoEntry photoEntry = (PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(index);
                 if (photoEntry.thumbPath != null) {
-                    cell.photoImage.setImage(photoEntry.thumbPath, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                    cell.photoImage.setImage(photoEntry.thumbPath, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
                     return;
                 } else if (photoEntry.path != null) {
                     cell.photoImage.setOrientation(photoEntry.orientation, true);
                     if (photoEntry.isVideo) {
-                        cell.photoImage.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                        cell.photoImage.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
                         return;
                     } else {
-                        cell.photoImage.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                        cell.photoImage.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
                         return;
                     }
                 } else {
-                    cell.photoImage.setImageResource(C0488R.drawable.nophotos);
+                    cell.photoImage.setImageResource(R.drawable.nophotos);
                     return;
                 }
             }
@@ -206,13 +407,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
             SearchImage photoEntry2 = (SearchImage) array.get(index);
             if (photoEntry2.document != null && photoEntry2.document.thumb != null) {
-                cell.photoImage.setImage(photoEntry2.document.thumb.location, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                cell.photoImage.setImage(photoEntry2.document.thumb.location, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
             } else if (photoEntry2.thumbPath != null) {
-                cell.photoImage.setImage(photoEntry2.thumbPath, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                cell.photoImage.setImage(photoEntry2.thumbPath, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
             } else if (photoEntry2.thumbUrl == null || photoEntry2.thumbUrl.length() <= 0) {
-                cell.photoImage.setImageResource(C0488R.drawable.nophotos);
+                cell.photoImage.setImageResource(R.drawable.nophotos);
             } else {
-                cell.photoImage.setImage(photoEntry2.thumbUrl, null, cell.getContext().getResources().getDrawable(C0488R.drawable.nophotos));
+                cell.photoImage.setImage(photoEntry2.thumbUrl, null, cell.getContext().getResources().getDrawable(R.drawable.nophotos));
             }
         }
 
@@ -396,212 +597,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$2 */
-    class C20792 extends ActionBarMenuOnItemClick {
-        C20792() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PhotoPickerActivity.this.finishFragment();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$3 */
-    class C20803 extends ActionBarMenuItemSearchListener {
-        C20803() {
-        }
-
-        public void onSearchExpand() {
-        }
-
-        public boolean canCollapseSearch() {
-            PhotoPickerActivity.this.finishFragment();
-            return false;
-        }
-
-        public void onTextChanged(EditText editText) {
-            if (editText.getText().length() == 0) {
-                PhotoPickerActivity.this.searchResult.clear();
-                PhotoPickerActivity.this.searchResultKeys.clear();
-                PhotoPickerActivity.this.lastSearchString = null;
-                PhotoPickerActivity.this.bingSearchEndReached = true;
-                PhotoPickerActivity.this.giphySearchEndReached = true;
-                PhotoPickerActivity.this.searching = false;
-                if (PhotoPickerActivity.this.currentBingTask != null) {
-                    PhotoPickerActivity.this.currentBingTask.cancel(true);
-                    PhotoPickerActivity.this.currentBingTask = null;
-                }
-                if (PhotoPickerActivity.this.giphyReqId != 0) {
-                    ConnectionsManager.getInstance(PhotoPickerActivity.this.currentAccount).cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
-                    PhotoPickerActivity.this.giphyReqId = 0;
-                }
-                if (PhotoPickerActivity.this.type == 0) {
-                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", C0488R.string.NoRecentPhotos));
-                } else if (PhotoPickerActivity.this.type == 1) {
-                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", C0488R.string.NoRecentGIFs));
-                }
-                PhotoPickerActivity.this.updateSearchInterface();
-            }
-        }
-
-        public void onSearchPressed(EditText editText) {
-            if (editText.getText().toString().length() != 0) {
-                PhotoPickerActivity.this.searchResult.clear();
-                PhotoPickerActivity.this.searchResultKeys.clear();
-                PhotoPickerActivity.this.bingSearchEndReached = true;
-                PhotoPickerActivity.this.giphySearchEndReached = true;
-                if (PhotoPickerActivity.this.type == 0) {
-                    PhotoPickerActivity.this.searchBingImages(editText.getText().toString(), 0, 53);
-                } else if (PhotoPickerActivity.this.type == 1) {
-                    PhotoPickerActivity.this.nextGiphySearchOffset = 0;
-                    PhotoPickerActivity.this.searchGiphyImages(editText.getText().toString(), 0);
-                }
-                PhotoPickerActivity.this.lastSearchString = editText.getText().toString();
-                if (PhotoPickerActivity.this.lastSearchString.length() == 0) {
-                    PhotoPickerActivity.this.lastSearchString = null;
-                    if (PhotoPickerActivity.this.type == 0) {
-                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", C0488R.string.NoRecentPhotos));
-                    } else if (PhotoPickerActivity.this.type == 1) {
-                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", C0488R.string.NoRecentGIFs));
-                    }
-                } else {
-                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
-                }
-                PhotoPickerActivity.this.updateSearchInterface();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$5 */
-    class C20825 extends ItemDecoration {
-        C20825() {
-        }
-
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-            int dp;
-            int i = 0;
-            super.getItemOffsets(outRect, view, parent, state);
-            int total = state.getItemCount();
-            int position = parent.getChildAdapterPosition(view);
-            int spanCount = PhotoPickerActivity.this.layoutManager.getSpanCount();
-            int rowsCOunt = (int) Math.ceil((double) (((float) total) / ((float) spanCount)));
-            int row = position / spanCount;
-            if (position % spanCount != spanCount - 1) {
-                dp = AndroidUtilities.dp(4.0f);
-            } else {
-                dp = 0;
-            }
-            outRect.right = dp;
-            if (row != rowsCOunt - 1) {
-                i = AndroidUtilities.dp(4.0f);
-            }
-            outRect.bottom = i;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$6 */
-    class C20836 implements OnItemClickListener {
-        C20836() {
-        }
-
-        public void onItemClick(View view, int position) {
-            ArrayList<Object> arrayList;
-            if (PhotoPickerActivity.this.selectedAlbum != null) {
-                arrayList = PhotoPickerActivity.this.selectedAlbum.photos;
-            } else if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
-                arrayList = PhotoPickerActivity.this.recentImages;
-            } else {
-                arrayList = PhotoPickerActivity.this.searchResult;
-            }
-            if (position >= 0 && position < arrayList.size()) {
-                if (PhotoPickerActivity.this.searchItem != null) {
-                    AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
-                }
-                PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
-                PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, PhotoPickerActivity.this.singlePhoto ? 1 : 0, PhotoPickerActivity.this.provider, PhotoPickerActivity.this.chatActivity);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$7 */
-    class C20857 implements OnItemLongClickListener {
-
-        /* renamed from: org.telegram.ui.PhotoPickerActivity$7$1 */
-        class C20841 implements OnClickListener {
-            C20841() {
-            }
-
-            public void onClick(DialogInterface dialogInterface, int i) {
-                PhotoPickerActivity.this.recentImages.clear();
-                if (PhotoPickerActivity.this.listAdapter != null) {
-                    PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
-                }
-                MessagesStorage.getInstance(PhotoPickerActivity.this.currentAccount).clearWebRecent(PhotoPickerActivity.this.type);
-            }
-        }
-
-        C20857() {
-        }
-
-        public boolean onItemClick(View view, int position) {
-            if (!PhotoPickerActivity.this.searchResult.isEmpty() || PhotoPickerActivity.this.lastSearchString != null) {
-                return false;
-            }
-            Builder builder = new Builder(PhotoPickerActivity.this.getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-            builder.setMessage(LocaleController.getString("ClearSearch", C0488R.string.ClearSearch));
-            builder.setPositiveButton(LocaleController.getString("ClearButton", C0488R.string.ClearButton).toUpperCase(), new C20841());
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
-            PhotoPickerActivity.this.showDialog(builder.create());
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$8 */
-    class C20868 extends OnScrollListener {
-        C20868() {
-        }
-
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            if (newState == 1) {
-                AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.getParentActivity().getCurrentFocus());
-            }
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            int firstVisibleItem = PhotoPickerActivity.this.layoutManager.findFirstVisibleItemPosition();
-            int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(PhotoPickerActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
-            if (visibleItemCount > 0) {
-                int totalItemCount = PhotoPickerActivity.this.layoutManager.getItemCount();
-                if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount > totalItemCount - 2 && !PhotoPickerActivity.this.searching) {
-                    if (PhotoPickerActivity.this.type == 0 && !PhotoPickerActivity.this.bingSearchEndReached) {
-                        PhotoPickerActivity.this.searchBingImages(PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.searchResult.size(), 54);
-                    } else if (PhotoPickerActivity.this.type == 1 && !PhotoPickerActivity.this.giphySearchEndReached) {
-                        PhotoPickerActivity.this.searchGiphyImages(PhotoPickerActivity.this.searchItem.getSearchField().getText().toString(), PhotoPickerActivity.this.nextGiphySearchOffset);
-                    }
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoPickerActivity$9 */
-    class C20879 implements View.OnClickListener {
-        C20879() {
-        }
-
-        public void onClick(View view) {
-            PhotoPickerActivity.this.delegate.actionButtonPressed(true);
-            PhotoPickerActivity.this.finishFragment();
-        }
-    }
-
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         /* renamed from: org.telegram.ui.PhotoPickerActivity$ListAdapter$1 */
-        class C20881 implements View.OnClickListener {
+        class C20881 implements OnClickListener {
             C20881() {
             }
 
@@ -724,20 +724,20 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     if (PhotoPickerActivity.this.selectedAlbum != null) {
                         PhotoEntry photoEntry = (PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(position);
                         if (photoEntry.thumbPath != null) {
-                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                         } else if (photoEntry.path != null) {
                             imageView.setOrientation(photoEntry.orientation, true);
                             if (photoEntry.isVideo) {
                                 cell.videoInfoContainer.setVisibility(0);
                                 int seconds = photoEntry.duration - ((photoEntry.duration / 60) * 60);
                                 cell.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
-                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                             } else {
                                 cell.videoInfoContainer.setVisibility(4);
-                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                             }
                         } else {
-                            imageView.setImageResource(C0488R.drawable.nophotos);
+                            imageView.setImageResource(R.drawable.nophotos);
                         }
                         cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(Integer.valueOf(photoEntry.imageId)) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(Integer.valueOf(photoEntry.imageId)), false);
                         showing = PhotoViewer.isShowingImage(photoEntry.path);
@@ -749,13 +749,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             photoEntry2 = (SearchImage) PhotoPickerActivity.this.searchResult.get(position);
                         }
                         if (photoEntry2.thumbPath != null) {
-                            imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                         } else if (photoEntry2.thumbUrl != null && photoEntry2.thumbUrl.length() > 0) {
-                            imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                         } else if (photoEntry2.document == null || photoEntry2.document.thumb == null) {
-                            imageView.setImageResource(C0488R.drawable.nophotos);
+                            imageView.setImageResource(R.drawable.nophotos);
                         } else {
-                            imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(C0488R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                         }
                         cell.videoInfoContainer.setVisibility(4);
                         cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry2.id) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.id), false);
@@ -836,23 +836,23 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setTitleColor(-1);
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (this.selectedAlbum != null) {
             this.actionBar.setTitle(this.selectedAlbum.bucketName);
         } else if (this.type == 0) {
-            this.actionBar.setTitle(LocaleController.getString("SearchImagesTitle", C0488R.string.SearchImagesTitle));
+            this.actionBar.setTitle(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
         } else if (this.type == 1) {
-            this.actionBar.setTitle(LocaleController.getString("SearchGifsTitle", C0488R.string.SearchGifsTitle));
+            this.actionBar.setTitle(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
         }
         this.actionBar.setActionBarMenuOnItemClick(new C20792());
         if (this.selectedAlbum == null) {
-            this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C20803());
+            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C20803());
         }
         if (this.selectedAlbum == null) {
             if (this.type == 0) {
-                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchImagesTitle", C0488R.string.SearchImagesTitle));
+                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
             } else if (this.type == 1) {
-                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchGifsTitle", C0488R.string.SearchGifsTitle));
+                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
             }
         }
         this.fragmentView = new FrameLayout(context);
@@ -889,11 +889,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.emptyView.setProgressBarColor(-1);
         this.emptyView.setShowAtCenter(true);
         if (this.selectedAlbum != null) {
-            this.emptyView.setText(LocaleController.getString("NoPhotos", C0488R.string.NoPhotos));
+            this.emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
         } else if (this.type == 0) {
-            this.emptyView.setText(LocaleController.getString("NoRecentPhotos", C0488R.string.NoRecentPhotos));
+            this.emptyView.setText(LocaleController.getString("NoRecentPhotos", R.string.NoRecentPhotos));
         } else if (this.type == 1) {
-            this.emptyView.setText(LocaleController.getString("NoRecentGIFs", C0488R.string.NoRecentGIFs));
+            this.emptyView.setText(LocaleController.getString("NoRecentGIFs", R.string.NoRecentGIFs));
         }
         this.frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
         if (this.selectedAlbum == null) {
@@ -903,7 +903,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.pickerBottomLayout = new PickerBottomLayout(context);
         this.frameLayout.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 80));
         this.pickerBottomLayout.cancelButton.setOnClickListener(new C20879());
-        this.pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener() {
+        this.pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 PhotoPickerActivity.this.sendSelectedPhotos();
             }
@@ -913,9 +913,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         } else if ((this.selectedAlbum != null || this.type == 0) && this.chatActivity != null && this.chatActivity.allowGroupPhotos()) {
             this.imageOrderToggleButton = new ImageView(context);
             this.imageOrderToggleButton.setScaleType(ScaleType.CENTER);
-            this.imageOrderToggleButton.setImageResource(C0488R.drawable.photos_group);
+            this.imageOrderToggleButton.setImageResource(R.drawable.photos_group);
             this.pickerBottomLayout.addView(this.imageOrderToggleButton, LayoutHelper.createFrame(48, -1, 17));
-            this.imageOrderToggleButton.setOnClickListener(new View.OnClickListener() {
+            this.imageOrderToggleButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     SharedConfig.toggleGroupPhotosEnabled();
                     PhotoPickerActivity.this.imageOrderToggleButton.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
@@ -1014,7 +1014,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     hideHint();
                     return;
                 }
-                this.hintTextView.setText(enabled ? LocaleController.getString("GroupPhotosHelp", C0488R.string.GroupPhotosHelp) : LocaleController.getString("SinglePhotosHelp", C0488R.string.SinglePhotosHelp));
+                this.hintTextView.setText(enabled ? LocaleController.getString("GroupPhotosHelp", R.string.GroupPhotosHelp) : LocaleController.getString("SinglePhotosHelp", R.string.SinglePhotosHelp));
                 if (this.hintHideRunnable != null) {
                     if (this.hintAnimation != null) {
                         this.hintAnimation.cancel();

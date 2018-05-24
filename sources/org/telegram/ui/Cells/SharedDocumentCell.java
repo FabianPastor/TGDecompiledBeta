@@ -14,7 +14,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
@@ -24,6 +23,7 @@ import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -41,7 +41,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private int currentAccount = UserConfig.selectedAccount;
     private TextView dateTextView;
     private TextView extTextView;
-    private int[] icons = new int[]{C0488R.drawable.media_doc_blue, C0488R.drawable.media_doc_green, C0488R.drawable.media_doc_red, C0488R.drawable.media_doc_yellow};
+    private int[] icons = new int[]{R.drawable.media_doc_blue, R.drawable.media_doc_green, R.drawable.media_doc_red, R.drawable.media_doc_yellow};
     private boolean loaded;
     private boolean loading;
     private MessageObject message;
@@ -144,7 +144,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.progressView = new LineProgressView(context);
         this.progressView.setProgressColor(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon));
         addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0488R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         view = this.checkBox;
@@ -289,7 +289,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             TextView textView2 = this.dateTextView;
             Object[] objArr = new Object[2];
             objArr[0] = AndroidUtilities.formatFileSize((long) messageObject.getDocument().size);
-            objArr[1] = LocaleController.formatString("formatDateAtTime", C0488R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
+            objArr[1] = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
             textView2.setText(String.format("%s, %s", objArr));
         }
         setWillNotDraw(!this.needDivider);
@@ -325,7 +325,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         this.loading = FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName);
         this.statusImageView.setVisibility(0);
-        this.statusImageView.setImageResource(this.loading ? C0488R.drawable.media_doc_pause : C0488R.drawable.media_doc_load);
+        this.statusImageView.setImageResource(this.loading ? R.drawable.media_doc_pause : R.drawable.media_doc_load);
         this.dateTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(14.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(14.0f) : 0, 0);
         if (this.loading) {
             this.progressView.setVisibility(0);

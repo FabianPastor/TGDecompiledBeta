@@ -10,12 +10,6 @@ import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public interface TsPayloadReader {
 
-    public interface Factory {
-        SparseArray<TsPayloadReader> createInitialPayloadReaders();
-
-        TsPayloadReader createPayloadReader(int i, EsInfo esInfo);
-    }
-
     public static final class DvbSubtitleInfo {
         public final byte[] initializationData;
         public final String language;
@@ -46,6 +40,12 @@ public interface TsPayloadReader {
             this.dvbSubtitleInfos = emptyList;
             this.descriptorBytes = descriptorBytes;
         }
+    }
+
+    public interface Factory {
+        SparseArray<TsPayloadReader> createInitialPayloadReaders();
+
+        TsPayloadReader createPayloadReader(int i, EsInfo esInfo);
     }
 
     public static final class TrackIdGenerator {

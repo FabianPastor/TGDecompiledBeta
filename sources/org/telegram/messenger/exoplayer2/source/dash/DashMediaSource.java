@@ -21,7 +21,6 @@ import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
 import org.telegram.messenger.exoplayer2.source.DefaultCompositeSequenceableLoaderFactory;
@@ -36,6 +35,7 @@ import org.telegram.messenger.exoplayer2.source.dash.PlayerEmsgHandler.PlayerEms
 import org.telegram.messenger.exoplayer2.source.dash.manifest.AdaptationSet;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifest;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifestParser;
+import org.telegram.messenger.exoplayer2.source.dash.manifest.Period;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.Representation;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.UtcTimingElement;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
@@ -107,6 +107,47 @@ public final class DashMediaSource implements MediaSource {
         }
     }
 
+    private static final class PeriodSeekInfo {
+        public final long availableEndTimeUs;
+        public final long availableStartTimeUs;
+        public final boolean isIndexExplicit;
+
+        public static PeriodSeekInfo createPeriodSeekInfo(Period period, long durationUs) {
+            int adaptationSetCount = period.adaptationSets.size();
+            long availableStartTimeUs = 0;
+            long availableEndTimeUs = Long.MAX_VALUE;
+            boolean isIndexExplicit = false;
+            boolean seenEmptyIndex = false;
+            for (int i = 0; i < adaptationSetCount; i++) {
+                DashSegmentIndex index = ((Representation) ((AdaptationSet) period.adaptationSets.get(i)).representations.get(0)).getIndex();
+                if (index == null) {
+                    return new PeriodSeekInfo(true, 0, durationUs);
+                }
+                isIndexExplicit |= index.isExplicit();
+                int segmentCount = index.getSegmentCount(durationUs);
+                if (segmentCount == 0) {
+                    seenEmptyIndex = true;
+                    availableStartTimeUs = 0;
+                    availableEndTimeUs = 0;
+                } else if (!seenEmptyIndex) {
+                    int firstSegmentNum = index.getFirstSegmentNum();
+                    availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
+                    if (segmentCount != -1) {
+                        int lastSegmentNum = (firstSegmentNum + segmentCount) - 1;
+                        availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
+                    }
+                }
+            }
+            return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
+        }
+
+        private PeriodSeekInfo(boolean isIndexExplicit, long availableStartTimeUs, long availableEndTimeUs) {
+            this.isIndexExplicit = isIndexExplicit;
+            this.availableStartTimeUs = availableStartTimeUs;
+            this.availableEndTimeUs = availableEndTimeUs;
+        }
+    }
+
     private static final class DashTimeline extends Timeline {
         private final int firstPeriodId;
         private final DashManifest manifest;
@@ -130,7 +171,7 @@ public final class DashMediaSource implements MediaSource {
             return this.manifest.getPeriodCount();
         }
 
-        public Period getPeriod(int periodIndex, Period period, boolean setIdentifiers) {
+        public Timeline.Period getPeriod(int periodIndex, Timeline.Period period, boolean setIdentifiers) {
             String id;
             Integer uid = null;
             Assertions.checkIndex(periodIndex, 0, this.manifest.getPeriodCount());
@@ -184,7 +225,7 @@ public final class DashMediaSource implements MediaSource {
                     periodIndex++;
                     periodDurationUs = this.manifest.getPeriodDurationUs(periodIndex);
                 }
-                org.telegram.messenger.exoplayer2.source.dash.manifest.Period period = this.manifest.getPeriod(periodIndex);
+                Period period = this.manifest.getPeriod(periodIndex);
                 int videoAdaptationSetIndex = period.getAdaptationSetIndex(2);
                 if (videoAdaptationSetIndex == -1) {
                     j = windowDefaultStartPositionUs;
@@ -345,47 +386,6 @@ public final class DashMediaSource implements MediaSource {
             if (DashMediaSource.this.manifestFatalError != null) {
                 throw DashMediaSource.this.manifestFatalError;
             }
-        }
-    }
-
-    private static final class PeriodSeekInfo {
-        public final long availableEndTimeUs;
-        public final long availableStartTimeUs;
-        public final boolean isIndexExplicit;
-
-        public static PeriodSeekInfo createPeriodSeekInfo(org.telegram.messenger.exoplayer2.source.dash.manifest.Period period, long durationUs) {
-            int adaptationSetCount = period.adaptationSets.size();
-            long availableStartTimeUs = 0;
-            long availableEndTimeUs = Long.MAX_VALUE;
-            boolean isIndexExplicit = false;
-            boolean seenEmptyIndex = false;
-            for (int i = 0; i < adaptationSetCount; i++) {
-                DashSegmentIndex index = ((Representation) ((AdaptationSet) period.adaptationSets.get(i)).representations.get(0)).getIndex();
-                if (index == null) {
-                    return new PeriodSeekInfo(true, 0, durationUs);
-                }
-                isIndexExplicit |= index.isExplicit();
-                int segmentCount = index.getSegmentCount(durationUs);
-                if (segmentCount == 0) {
-                    seenEmptyIndex = true;
-                    availableStartTimeUs = 0;
-                    availableEndTimeUs = 0;
-                } else if (!seenEmptyIndex) {
-                    int firstSegmentNum = index.getFirstSegmentNum();
-                    availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
-                    if (segmentCount != -1) {
-                        int lastSegmentNum = (firstSegmentNum + segmentCount) - 1;
-                        availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
-                    }
-                }
-            }
-            return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
-        }
-
-        private PeriodSeekInfo(boolean isIndexExplicit, long availableStartTimeUs, long availableEndTimeUs) {
-            this.isIndexExplicit = isIndexExplicit;
-            this.availableStartTimeUs = availableStartTimeUs;
-            this.availableEndTimeUs = availableEndTimeUs;
         }
     }
 

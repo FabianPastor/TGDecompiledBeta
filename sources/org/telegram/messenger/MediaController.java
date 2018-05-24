@@ -60,6 +60,7 @@ import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
@@ -174,7 +175,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private User lastUser;
     private float[] linearAcceleration = new float[3];
     private Sensor linearSensor;
-    private String[] mediaProjections = null;
+    private String[] mediaProjections;
     private PipRoundVideoView pipRoundVideoView;
     private int pipSwitchingState;
     private boolean playMusicAgain;
@@ -358,51 +359,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 MediaController.this.recordBuffers.add(buffer);
                 MediaController.this.stopRecordingInternal(MediaController.this.sendAfterDone);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.MediaController$20 */
-    class AnonymousClass20 implements VideoPlayerDelegate {
-        final /* synthetic */ MessageObject val$messageObject;
-
-        AnonymousClass20(MessageObject messageObject) {
-            this.val$messageObject = messageObject;
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (playbackState == 4) {
-                if (MediaController.this.playlist.isEmpty() || MediaController.this.playlist.size() <= 1) {
-                    MediaController mediaController = MediaController.this;
-                    boolean z = this.val$messageObject != null && this.val$messageObject.isVoice();
-                    mediaController.cleanupPlayer(true, true, z);
-                    return;
-                }
-                MediaController.this.playNextMessageWithoutOrder(true);
-            } else if (MediaController.this.seekToProgressPending == 0.0f) {
-            } else {
-                if (playbackState == 3 || playbackState == 1) {
-                    int seekTo = (int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending);
-                    MediaController.this.audioPlayer.seekTo((long) seekTo);
-                    MediaController.this.lastProgress = (long) seekTo;
-                    MediaController.this.seekToProgressPending = 0.0f;
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        }
-
-        public void onRenderedFirstFrame() {
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            return false;
         }
     }
 
@@ -900,6 +856,51 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     }
                 }
             }).start();
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.MediaController$20 */
+    class AnonymousClass20 implements VideoPlayerDelegate {
+        final /* synthetic */ MessageObject val$messageObject;
+
+        AnonymousClass20(MessageObject messageObject) {
+            this.val$messageObject = messageObject;
+        }
+
+        public void onStateChanged(boolean playWhenReady, int playbackState) {
+            if (playbackState == 4) {
+                if (MediaController.this.playlist.isEmpty() || MediaController.this.playlist.size() <= 1) {
+                    MediaController mediaController = MediaController.this;
+                    boolean z = this.val$messageObject != null && this.val$messageObject.isVoice();
+                    mediaController.cleanupPlayer(true, true, z);
+                    return;
+                }
+                MediaController.this.playNextMessageWithoutOrder(true);
+            } else if (MediaController.this.seekToProgressPending == 0.0f) {
+            } else {
+                if (playbackState == 3 || playbackState == 1) {
+                    int seekTo = (int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending);
+                    MediaController.this.audioPlayer.seekTo((long) seekTo);
+                    MediaController.this.lastProgress = (long) seekTo;
+                    MediaController.this.seekToProgressPending = 0.0f;
+                }
+            }
+        }
+
+        public void onError(Exception e) {
+        }
+
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+        }
+
+        public void onRenderedFirstFrame() {
+        }
+
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        }
+
+        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+            return false;
         }
     }
 
@@ -3689,7 +3690,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
                 file = new File(fullPath);
-                if (!file.exists()) {
+                if (!file.exists() || AndroidUtilities.isInternalUri(Uri.fromFile(file))) {
                     file = null;
                 }
             }
@@ -3702,7 +3703,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         try {
                             AlertDialog progressDialog2 = new AlertDialog(context, 2);
                             try {
-                                progressDialog2.setMessage(LocaleController.getString("Loading", C0488R.string.Loading));
+                                progressDialog2.setMessage(LocaleController.getString("Loading", R.string.Loading));
                                 progressDialog2.setCanceledOnTouchOutside(false);
                                 progressDialog2.setCancelable(true);
                                 progressDialog2.setOnCancelListener(new OnCancelListener() {
@@ -4273,7 +4274,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 r22 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
                 r2 = 0;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
                 r10 = "AllPhotos";	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r11 = NUM; // 0x7f0c0056 float:1.8609366E38 double:1.053097441E-314;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
+                r11 = NUM; // 0x7f0c0057 float:1.8609368E38 double:1.0530974414E-314;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
                 r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
                 r0 = r22;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
                 r0.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
@@ -4287,7 +4288,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 r14 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
                 r2 = 0;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
                 r10 = "AllMedia";	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r11 = NUM; // 0x7f0c0055 float:1.8609364E38 double:1.0530974405E-314;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
+                r11 = NUM; // 0x7f0c0056 float:1.8609366E38 double:1.053097441E-314;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
                 r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
                 r14.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
                 r2 = 0;
@@ -4462,7 +4463,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 r14 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
                 r2 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
                 r10 = "AllMedia";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r11 = NUM; // 0x7f0c0055 float:1.8609364E38 double:1.0530974405E-314;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
+                r11 = NUM; // 0x7f0c0056 float:1.8609366E38 double:1.053097441E-314;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
                 r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
                 r14.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
                 r2 = 0;

@@ -45,24 +45,6 @@ class HlsChunkSource {
     private TrackSelection trackSelection;
     private final HlsUrl[] variants;
 
-    private static final class EncryptionKeyChunk extends DataChunk {
-        public final String iv;
-        private byte[] result;
-
-        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] scratchSpace, String iv) {
-            super(dataSource, dataSpec, 3, trackFormat, trackSelectionReason, trackSelectionData, scratchSpace);
-            this.iv = iv;
-        }
-
-        protected void consume(byte[] data, int limit) throws IOException {
-            this.result = Arrays.copyOf(data, limit);
-        }
-
-        public byte[] getResult() {
-            return this.result;
-        }
-    }
-
     public static final class HlsChunkHolder {
         public Chunk chunk;
         public boolean endOfStream;
@@ -113,6 +95,24 @@ class HlsChunkSource {
 
         public Object getSelectionData() {
             return null;
+        }
+    }
+
+    private static final class EncryptionKeyChunk extends DataChunk {
+        public final String iv;
+        private byte[] result;
+
+        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] scratchSpace, String iv) {
+            super(dataSource, dataSpec, 3, trackFormat, trackSelectionReason, trackSelectionData, scratchSpace);
+            this.iv = iv;
+        }
+
+        protected void consume(byte[] data, int limit) throws IOException {
+            this.result = Arrays.copyOf(data, limit);
+        }
+
+        public byte[] getResult() {
+            return this.result;
         }
     }
 

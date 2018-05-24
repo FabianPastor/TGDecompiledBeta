@@ -70,6 +70,7 @@
     <string name="AddMasksInstalled">Novas máscaras adicionadas</string>
     <string name="AddMember">Adicionar membro</string>
     <string name="AddMutual">Adicionar contatos no canal</string>
+    <string name="AddProxy">Adicionar Proxy</string>
     <string name="AddRecipient">Adicionar destinatário</string>
     <string name="AddShortcut">Adicionar atalho</string>
     <string name="AddStickers">Adicionar Stickers</string>
@@ -211,6 +212,7 @@
     <string name="AutodownloadSizeLimitUpTo">até %1$s</string>
     <string name="AutomaticMediaDownload">Download automático de mídia</string>
     <string name="AutoplayGifs">Auto reproduzir GIFs</string>
+    <string name="Available">Disponível</string>
     <string name="AwaitingEncryption">Esperando %s se conectar...</string>
     <string name="BackgroundRestricted">Dados em segundo plano restringidos.</string>
     <string name="BadgeNumber">Contador no Ícone</string>
@@ -382,6 +384,7 @@
     <string name="Chats_other">%1$d conversas</string>
     <string name="Chats_two">%1$d conversas</string>
     <string name="Chats_zero">%1$d conversas</string>
+    <string name="Checking">Verificando...</string>
     <string name="ChooseCountry">Escolha um país</string>
     <string name="ChooseFromYourStickers">Escolher de seus stickers</string>
     <string name="ChooseStickerSet">ESCOLHER PACOTE DE STICKER</string>
@@ -418,12 +421,10 @@
     <string name="ColorYellow">Amarelo</string>
     <string name="CompatibilityChat">%1$s está usando uma versão mais antiga do Telegram, por isso fotos secretas serão mostradas em modo de compatibilidade.\n\nAssim que %2$s atualizar o Telegram, fotos com timers de 1 minuto ou menos passarão a funcionar no modo ‘Toque e segure para ver’, e você será notificado caso a outra pessoa salve a tela.</string>
     <string name="ConfirmDeleteCallLog">Você tem certeza que deseja apagar essa entrada do registro de chamadas?</string>
+    <string name="Connected">Conectado</string>
     <string name="Connecting">Conectando...</string>
+    <string name="ConnectingConnectProxy">Conectar Proxy</string>
     <string name="ConnectingToProxy">Conectando ao proxy...</string>
-    <string name="ConnectingToProxyDisable">Desativar</string>
-    <string name="ConnectingToProxyDisableAlert">Você tem certeza que deseja desabilitar o servidor proxy %1$s? Você pode reabilitá-lo depois nas Configurações (Dados e Armazenamento).</string>
-    <string name="ConnectingToProxyEnable">Ativar</string>
-    <string name="ConnectingToProxyTapToDisable">Toque para desabilitar o proxy...</string>
     <string name="ContactJoined">Contato entrou para o Telegram</string>
     <string name="ContactNotRegistered">%1$s ainda não está no Telegram, deseja lhe enviar um convite para entrar?</string>
     <string name="Contacts">Contatos</string>
@@ -511,6 +512,7 @@
     <string name="DeleteMega">Apagar Grupo</string>
     <string name="DeleteMegaMenu">Apagar Grupo</string>
     <string name="DeletePhoto">Apagar foto</string>
+    <string name="DeleteProxy">Apagar Proxy?</string>
     <string name="DeleteReportSpam">Reportar spam</string>
     <string name="DeleteThemeAlert">Você tem certeza que deseja apagar esse tema?</string>
     <string name="DeleteThisChat">Apagar este chat</string>
@@ -561,8 +563,6 @@
     <string name="EmpryUsersPlaceholder">Adicionar Usuários</string>
     <string name="EnableAllStreamingInfo">Alguns vídeos não podem ser transmitidos por stream - ex: todos os vídeos enviados via Android utilizando o Telegram 4.7 ou inferiores.</string>
     <string name="EnableAnimations">Permitir Animações</string>
-    <string name="EnableProxyAlert">Você tem certeza que deseja habilitar o proxy?</string>
-    <string name="EnableProxyAlert2">Você pode alterar seu servidor proxy nas Configurações (Dados e Armazenamento).</string>
     <string name="EnableStreaming">Streaming de Música e Vídeo</string>
     <string name="EnabledPasswordText">Você habilitou a verificação em duas etapas.\nToda vez que você entrar na sua conta em um novo aparelho, será preciso digitar a senha que você configurar aqui.</string>
     <string name="EncryptedChatStartedIncoming">Você entrou no chat secreto</string>
@@ -1307,6 +1307,7 @@
     <string name="PinMessageAlertChannel">Você deseja fixar essa mensagem no canal?</string>
     <string name="PinNotify">Notificar todos os membros</string>
     <string name="PinToTop">Fixar no topo</string>
+    <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Mensagem Fixada</string>
     <string name="PinnedMessages">Mensagens Fixadas</string>
     <string name="PleaseDownload">Baixar o vídeo primeiro</string>
@@ -1343,6 +1344,8 @@
     <string name="ProfilePopupNotification">Notificações popup</string>
     <string name="ProfilePopupNotificationInfo">Novas mensagens desse contato aparecerão em sua tela quando você não estiver no Telegram.</string>
     <string name="Proxy">Proxy</string>
+    <string name="ProxyConnections">Conexões</string>
+    <string name="ProxyDetails">Detalhes do Proxy</string>
     <string name="ProxySettings">Configurações de Proxy</string>
     <string name="QuickReplyCustom">Mensagem Customizada...</string>
     <string name="QuickReplyDefault1">Não posso falar agora. Está tudo bem?</string>
@@ -1640,6 +1643,7 @@
     <string name="TwoStepVerification">Verificação em Duas Etapas</string>
     <string name="TypeMessage">Mensagem</string>
     <string name="Typing">escrevendo...</string>
+    <string name="Unavailable">Indisponível</string>
     <string name="Unban">Desbanir</string>
     <string name="UnbanText">Toque e segure no usuário para desbanir</string>
     <string name="Unblock">Desbloquear</string>
@@ -1669,13 +1673,20 @@
     <string name="UseLessDataAlways">Sempre</string>
     <string name="UseLessDataNever">Nunca</string>
     <string name="UseLessDataOnMobile">Somente em redes móveis</string>
-    <string name="UseProxyAddress">Server</string>
+    <string name="UseProxyAddress">Servidor</string>
     <string name="UseProxyForCalls">Usar proxy para chamadas</string>
     <string name="UseProxyForCallsInfo">Servidores proxy podem diminuir a qualidade de suas chamadas.</string>
     <string name="UseProxyInfo">Configuração de proxy SOCKS5</string>
     <string name="UseProxyPassword">Senha</string>
     <string name="UseProxyPort">Porta</string>
+    <string name="UseProxySecret">Secreto</string>
     <string name="UseProxySettings">Usar configurações de proxy</string>
+    <string name="UseProxySocks5">SOCKS5</string>
+    <string name="UseProxySponsor">Proxy patrocinado</string>
+    <string name="UseProxySponsorInfo">Esse canal é mostrado pelo seu servidor proxy. Para remover esse canal de sua lista de conversas, desative o proxy nas Configurações do Telegram.</string>
+    <string name="UseProxyTelegram">Proxy MTProto</string>
+    <string name="UseProxyTelegramInfo">Configurações de proxy MTProto.\n\nEsse proxy pode mostrar um canal patrocinado em sua lista de conversas. Isso não revela nada do seu tráfego no Telegram.</string>
+    <string name="UseProxyTelegramInfo2">Esse proxy pode mostrar um canal patrocinado em sua lista de conversas. Isso não revela nada do seu tráfego no Telegram.</string>
     <string name="UseProxyUsername">Nome de Usuário</string>
     <string name="UserBio">Bio</string>
     <string name="UserBioEmpty">Nenhuma</string>

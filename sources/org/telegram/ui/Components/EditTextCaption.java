@@ -18,8 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 
 public class EditTextCaption extends EditTextBoldCursor {
     private String caption;
@@ -101,13 +101,13 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 boolean z = true;
-                if (item.getItemId() == C0488R.id.menu_regular) {
+                if (item.getItemId() == R.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
-                } else if (item.getItemId() == C0488R.id.menu_bold) {
+                } else if (item.getItemId() == R.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
-                } else if (item.getItemId() == C0488R.id.menu_italic) {
+                } else if (item.getItemId() == R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
                 } else {

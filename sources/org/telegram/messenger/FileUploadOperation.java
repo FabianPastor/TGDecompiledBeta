@@ -69,14 +69,6 @@ public class FileUploadOperation {
     private long uploadedBytesCount;
     private String uploadingFilePath;
 
-    public interface FileUploadOperationDelegate {
-        void didChangedUploadProgress(FileUploadOperation fileUploadOperation, float f);
-
-        void didFailedUploadingFile(FileUploadOperation fileUploadOperation);
-
-        void didFinishUploadingFile(FileUploadOperation fileUploadOperation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2);
-    }
-
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
     class C02021 implements Runnable {
         C02021() {
@@ -102,6 +94,22 @@ public class FileUploadOperation {
         }
     }
 
+    public interface FileUploadOperationDelegate {
+        void didChangedUploadProgress(FileUploadOperation fileUploadOperation, float f);
+
+        void didFailedUploadingFile(FileUploadOperation fileUploadOperation);
+
+        void didFinishUploadingFile(FileUploadOperation fileUploadOperation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2);
+    }
+
+    private class UploadCachedResult {
+        private long bytesOffset;
+        private byte[] iv;
+
+        private UploadCachedResult() {
+        }
+    }
+
     /* renamed from: org.telegram.messenger.FileUploadOperation$5 */
     class C02075 implements WriteToSocketDelegate {
 
@@ -122,14 +130,6 @@ public class FileUploadOperation {
 
         public void run() {
             Utilities.stageQueue.postRunnable(new C02061());
-        }
-    }
-
-    private class UploadCachedResult {
-        private long bytesOffset;
-        private byte[] iv;
-
-        private UploadCachedResult() {
         }
     }
 

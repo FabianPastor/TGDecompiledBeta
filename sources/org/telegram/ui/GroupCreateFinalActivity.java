@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -83,36 +83,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ArrayList<Integer> selectedContacts;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$2 */
-    class C18092 extends ActionBarMenuOnItemClick {
-        C18092() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                GroupCreateFinalActivity.this.finishFragment();
-            } else if (id == 1 && !GroupCreateFinalActivity.this.donePressed) {
-                if (GroupCreateFinalActivity.this.editText.length() == 0) {
-                    Vibrator v = (Vibrator) GroupCreateFinalActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(GroupCreateFinalActivity.this.editText, 2.0f, 0);
-                    return;
-                }
-                GroupCreateFinalActivity.this.donePressed = true;
-                AndroidUtilities.hideKeyboard(GroupCreateFinalActivity.this.editText);
-                GroupCreateFinalActivity.this.editText.setEnabled(false);
-                if (GroupCreateFinalActivity.this.avatarUpdater.uploadingAvatar != null) {
-                    GroupCreateFinalActivity.this.createAfterUpload = true;
-                    return;
-                }
-                GroupCreateFinalActivity.this.showEditDoneProgress(true);
-                GroupCreateFinalActivity.this.reqId = MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$4 */
     class C18124 implements OnClickListener {
 
@@ -140,7 +110,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         public void onClick(View view) {
             if (GroupCreateFinalActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(GroupCreateFinalActivity.this.getParentActivity());
-                builder.setItems(GroupCreateFinalActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", C0488R.string.FromCamera), LocaleController.getString("FromGalley", C0488R.string.FromGalley), LocaleController.getString("DeletePhoto", C0488R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", C0488R.string.FromCamera), LocaleController.getString("FromGalley", C0488R.string.FromGalley)}, new C18111());
+                builder.setItems(GroupCreateFinalActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)}, new C18111());
                 GroupCreateFinalActivity.this.showDialog(builder.create());
             }
         }
@@ -167,6 +137,36 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
             access$1500.setInfo(5, obj, null, false);
             GroupCreateFinalActivity.this.avatarImage.invalidate();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$2 */
+    class C18092 extends ActionBarMenuOnItemClick {
+        C18092() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                GroupCreateFinalActivity.this.finishFragment();
+            } else if (id == 1 && !GroupCreateFinalActivity.this.donePressed) {
+                if (GroupCreateFinalActivity.this.editText.length() == 0) {
+                    Vibrator v = (Vibrator) GroupCreateFinalActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(GroupCreateFinalActivity.this.editText, 2.0f, 0);
+                    return;
+                }
+                GroupCreateFinalActivity.this.donePressed = true;
+                AndroidUtilities.hideKeyboard(GroupCreateFinalActivity.this.editText);
+                GroupCreateFinalActivity.this.editText.setEnabled(false);
+                if (GroupCreateFinalActivity.this.avatarUpdater.uploadingAvatar != null) {
+                    GroupCreateFinalActivity.this.createAfterUpload = true;
+                    return;
+                }
+                GroupCreateFinalActivity.this.showEditDoneProgress(true);
+                GroupCreateFinalActivity.this.reqId = MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
+            }
         }
     }
 
@@ -330,11 +330,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public View createView(Context context) {
         float f;
         float f2;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NewGroup", C0488R.string.NewGroup));
+        this.actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
         this.actionBar.setActionBarMenuOnItemClick(new C18092());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView.setVisibility(4);
@@ -372,7 +372,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarDrawable.setDrawPhoto(true);
         this.avatarImage.setOnClickListener(new C18124());
         this.editText = new EditTextBoldCursor(context);
-        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", C0488R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", C0488R.string.EnterListName));
+        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
         if (this.nameToSet != null) {
             this.editText.setText(this.nameToSet);
             this.nameToSet = null;

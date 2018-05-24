@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -236,7 +236,7 @@ public class SearchAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0488R.string.GlobalSearch));
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                 break;
         }
         return new Holder(view);

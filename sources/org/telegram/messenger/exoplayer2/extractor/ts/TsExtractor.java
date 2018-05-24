@@ -69,6 +69,10 @@ public final class TsExtractor implements Extractor {
     private final ParsableByteArray tsPacketBuffer;
     private final SparseArray<TsPayloadReader> tsPayloadReaders;
 
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Mode {
+    }
+
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor$1 */
     static class C06471 implements ExtractorsFactory {
         C06471() {
@@ -77,10 +81,6 @@ public final class TsExtractor implements Extractor {
         public Extractor[] createExtractors() {
             return new Extractor[]{new TsExtractor()};
         }
-    }
-
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Mode {
     }
 
     private class PatReader implements SectionPayloadReader {

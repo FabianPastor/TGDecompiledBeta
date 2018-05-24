@@ -74,6 +74,14 @@ public class TextDetailSettingsCell extends FrameLayout {
         super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
     }
 
+    public TextView getTextView() {
+        return this.textView;
+    }
+
+    public TextView getValueTextView() {
+        return this.valueTextView;
+    }
+
     public void setMultilineDetail(boolean value) {
         this.multiline = value;
         if (value) {

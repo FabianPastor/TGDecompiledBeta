@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -56,6 +56,30 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     private int rowCount = 0;
     private int sendMediaRow;
     private int sendStickersRow;
+
+    /* renamed from: org.telegram.ui.ChannelPermissionsActivity$4 */
+    class C12374 implements OnClickListener {
+        C12374() {
+        }
+
+        public void onClick(View v) {
+            ChannelPermissionsActivity.this.radioButtonCell3.setChecked(true, true);
+            ChannelPermissionsActivity.this.radioButtonCell4.setChecked(false, true);
+            ChannelPermissionsActivity.this.historyHidden = false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelPermissionsActivity$5 */
+    class C12385 implements OnClickListener {
+        C12385() {
+        }
+
+        public void onClick(View v) {
+            ChannelPermissionsActivity.this.radioButtonCell3.setChecked(false, true);
+            ChannelPermissionsActivity.this.radioButtonCell4.setChecked(true, true);
+            ChannelPermissionsActivity.this.historyHidden = true;
+        }
+    }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$1 */
     class C12341 extends ActionBarMenuOnItemClick {
@@ -129,30 +153,6 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
     }
 
-    /* renamed from: org.telegram.ui.ChannelPermissionsActivity$4 */
-    class C12374 implements OnClickListener {
-        C12374() {
-        }
-
-        public void onClick(View v) {
-            ChannelPermissionsActivity.this.radioButtonCell3.setChecked(true, true);
-            ChannelPermissionsActivity.this.radioButtonCell4.setChecked(false, true);
-            ChannelPermissionsActivity.this.historyHidden = false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelPermissionsActivity$5 */
-    class C12385 implements OnClickListener {
-        C12385() {
-        }
-
-        public void onClick(View v) {
-            ChannelPermissionsActivity.this.radioButtonCell3.setChecked(false, true);
-            ChannelPermissionsActivity.this.radioButtonCell4.setChecked(true, true);
-            ChannelPermissionsActivity.this.historyHidden = true;
-        }
-    }
-
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
@@ -193,19 +193,19 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            int i = C0488R.drawable.greydivider_bottom;
+            int i = R.drawable.greydivider_bottom;
             switch (holder.getItemViewType()) {
                 case 2:
                     ShadowSectionCell shadowCell = holder.itemView;
                     if (position == ChannelPermissionsActivity.this.rightsShadowRow) {
                         Context context = this.mContext;
                         if (ChannelPermissionsActivity.this.forwardShadowRow != -1) {
-                            i = C0488R.drawable.greydivider;
+                            i = R.drawable.greydivider;
                         }
                         shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(context, i, Theme.key_windowBackgroundGrayShadow));
                         return;
                     }
-                    shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     return;
                 default:
                     return;
@@ -275,10 +275,10 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
 
     public View createView(Context context) {
         boolean z = true;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new C12341());
-        this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
@@ -303,14 +303,14 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         this.linearLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         this.linearLayout.setLayoutParams(new LayoutParams(-1, -2));
         this.headerCell2 = new HeaderCell(context);
-        this.headerCell2.setText(LocaleController.getString("ChatHistory", C0488R.string.ChatHistory));
+        this.headerCell2.setText(LocaleController.getString("ChatHistory", R.string.ChatHistory));
         this.headerCell2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         this.linearLayout.addView(this.headerCell2);
         this.radioButtonCell3 = new RadioButtonCell(context);
         this.radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         RadioButtonCell radioButtonCell = this.radioButtonCell3;
-        String string = LocaleController.getString("ChatHistoryVisible", C0488R.string.ChatHistoryVisible);
-        String string2 = LocaleController.getString("ChatHistoryVisibleInfo", C0488R.string.ChatHistoryVisibleInfo);
+        String string = LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible);
+        String string2 = LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo);
         if (this.historyHidden) {
             z = false;
         }
@@ -319,7 +319,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         this.radioButtonCell3.setOnClickListener(new C12374());
         this.radioButtonCell4 = new RadioButtonCell(context);
         this.radioButtonCell4.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", C0488R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", C0488R.string.ChatHistoryHiddenInfo), this.historyHidden);
+        this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", R.string.ChatHistoryHiddenInfo), this.historyHidden);
         this.linearLayout.addView(this.radioButtonCell4, LayoutHelper.createLinear(-1, -2));
         this.radioButtonCell4.setOnClickListener(new C12385());
         return this.fragmentView;

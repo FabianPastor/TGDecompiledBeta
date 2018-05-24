@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -29,6 +28,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -83,26 +83,6 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private ArrayList<CharSequence> searchResultNames = new ArrayList();
     private Timer searchTimer;
     private int selfUserId;
-
-    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
-    class C09001 implements SearchAdapterHelperDelegate {
-        C09001() {
-        }
-
-        public void onDataSetChanged() {
-            DialogsSearchAdapter.this.notifyDataSetChanged();
-        }
-
-        public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-            for (int a = 0; a < arrayList.size(); a++) {
-                DialogsSearchAdapter.this.searchResultHashtags.add(((HashtagObject) arrayList.get(a)).hashtag);
-            }
-            if (DialogsSearchAdapter.this.delegate != null) {
-                DialogsSearchAdapter.this.delegate.searchStateChanged(false);
-            }
-            DialogsSearchAdapter.this.notifyDataSetChanged();
-        }
-    }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$3 */
     class C09053 implements Runnable {
@@ -237,6 +217,52 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
+    private class DialogSearchResult {
+        public int date;
+        public CharSequence name;
+        public TLObject object;
+
+        private DialogSearchResult() {
+        }
+    }
+
+    public interface DialogsSearchAdapterDelegate {
+        void didPressedOnSubDialog(long j);
+
+        void needRemoveHint(int i);
+
+        void searchStateChanged(boolean z);
+    }
+
+    protected static class RecentSearchObject {
+        int date;
+        long did;
+        TLObject object;
+
+        protected RecentSearchObject() {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
+    class C09001 implements SearchAdapterHelperDelegate {
+        C09001() {
+        }
+
+        public void onDataSetChanged() {
+            DialogsSearchAdapter.this.notifyDataSetChanged();
+        }
+
+        public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+            for (int a = 0; a < arrayList.size(); a++) {
+                DialogsSearchAdapter.this.searchResultHashtags.add(((HashtagObject) arrayList.get(a)).hashtag);
+            }
+            if (DialogsSearchAdapter.this.delegate != null) {
+                DialogsSearchAdapter.this.delegate.searchStateChanged(false);
+            }
+            DialogsSearchAdapter.this.notifyDataSetChanged();
+        }
+    }
+
     private class CategoryAdapterRecycler extends SelectionAdapter {
         private CategoryAdapterRecycler() {
         }
@@ -284,32 +310,6 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
         public int getItemCount() {
             return DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.size();
-        }
-    }
-
-    private class DialogSearchResult {
-        public int date;
-        public CharSequence name;
-        public TLObject object;
-
-        private DialogSearchResult() {
-        }
-    }
-
-    public interface DialogsSearchAdapterDelegate {
-        void didPressedOnSubDialog(long j);
-
-        void needRemoveHint(int i);
-
-        void searchStateChanged(boolean z);
-    }
-
-    protected static class RecentSearchObject {
-        int date;
-        long did;
-        TLObject object;
-
-        protected RecentSearchObject() {
         }
     }
 
@@ -529,7 +529,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
                 public void run() {
                     try {
-                        String savedMessages = LocaleController.getString("SavedMessages", C0488R.string.SavedMessages).toLowerCase();
+                        String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
                         String search1 = query.trim().toLowerCase();
                         if (search1.length() == 0) {
                             DialogsSearchAdapter.this.lastSearchId = -1;
@@ -1203,7 +1203,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 }
                 boolean savedMessages = false;
                 if (user != null && user.id == this.selfUserId) {
-                    name = LocaleController.getString("SavedMessages", C0488R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                     username2 = null;
                     savedMessages = true;
                 }
@@ -1233,20 +1233,20 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
                     if (position < (!DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0)) {
-                        cell2.setText(LocaleController.getString("ChatHints", C0488R.string.ChatHints).toUpperCase());
+                        cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints).toUpperCase());
                         return;
                     } else {
-                        cell2.setText(LocaleController.getString("Recent", C0488R.string.Recent).toUpperCase());
+                        cell2.setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
                         return;
                     }
                 } else if (!this.searchResultHashtags.isEmpty()) {
-                    cell2.setText(LocaleController.getString("Hashtags", C0488R.string.Hashtags).toUpperCase());
+                    cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags).toUpperCase());
                     return;
                 } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
-                    cell2.setText(LocaleController.getString("SearchMessages", C0488R.string.SearchMessages));
+                    cell2.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));
                     return;
                 } else {
-                    cell2.setText(LocaleController.getString("GlobalSearch", C0488R.string.GlobalSearch));
+                    cell2.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                     return;
                 }
             case 2:

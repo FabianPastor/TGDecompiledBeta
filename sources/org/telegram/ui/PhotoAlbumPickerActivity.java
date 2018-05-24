@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AlbumEntry;
@@ -27,6 +26,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -65,27 +65,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private ArrayList<Object> selectedPhotosOrder = new ArrayList();
     private boolean sendPressed;
     private boolean singlePhoto;
-
-    public interface PhotoAlbumPickerActivityDelegate {
-        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
-
-        void startPhotoSelectActivity();
-    }
-
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
-    class C20651 extends ActionBarMenuOnItemClick {
-        C20651() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PhotoAlbumPickerActivity.this.finishFragment();
-            } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
-                PhotoAlbumPickerActivity.this.finishFragment(false);
-                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$2 */
     class C20662 implements OnTouchListener {
@@ -129,6 +108,27 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 PhotoAlbumPickerActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
             }
             return true;
+        }
+    }
+
+    public interface PhotoAlbumPickerActivityDelegate {
+        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
+
+        void startPhotoSelectActivity();
+    }
+
+    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
+    class C20651 extends ActionBarMenuOnItemClick {
+        C20651() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoAlbumPickerActivity.this.finishFragment();
+            } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
+                PhotoAlbumPickerActivity.this.finishFragment(false);
+                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
+            }
         }
     }
 
@@ -270,13 +270,13 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setActionBarMenuOnItemClick(new C20651());
-        this.actionBar.createMenu().addItem(1, (int) C0488R.drawable.ic_ab_other);
+        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_other);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-        this.actionBar.setTitle(LocaleController.getString("Gallery", C0488R.string.Gallery));
+        this.actionBar.setTitle(LocaleController.getString("Gallery", R.string.Gallery));
         this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         this.listView.setClipToPadding(false);
@@ -300,7 +300,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.emptyView.setTextSize(20.0f);
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
-        this.emptyView.setText(LocaleController.getString("NoPhotos", C0488R.string.NoPhotos));
+        this.emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
         frameLayout.addView(this.emptyView);
         layoutParams = (LayoutParams) this.emptyView.getLayoutParams();
         layoutParams.width = -1;

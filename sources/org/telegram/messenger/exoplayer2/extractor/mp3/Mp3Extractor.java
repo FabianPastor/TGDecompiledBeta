@@ -46,8 +46,8 @@ public final class Mp3Extractor implements Extractor {
     private int synchronizedHeaderData;
     private TrackOutput trackOutput;
 
-    interface Seeker extends SeekMap {
-        long getTimeUs(long j);
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor$1 */
@@ -60,8 +60,8 @@ public final class Mp3Extractor implements Extractor {
         }
     }
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Flags {
+    interface Seeker extends SeekMap {
+        long getTimeUs(long j);
     }
 
     public Mp3Extractor() {

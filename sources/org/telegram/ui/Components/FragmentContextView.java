@@ -25,7 +25,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -37,6 +36,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -127,23 +127,23 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         public void onClick(View v) {
             if (FragmentContextView.this.currentStyle == 2) {
                 Builder builder = new Builder(FragmentContextView.this.fragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 if (FragmentContextView.this.fragment instanceof DialogsActivity) {
-                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", C0488R.string.StopLiveLocationAlertAll));
+                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", R.string.StopLiveLocationAlertAll));
                 } else {
                     ChatActivity activity = (ChatActivity) FragmentContextView.this.fragment;
                     Chat chat = activity.getCurrentChat();
                     User user = activity.getCurrentUser();
                     if (chat != null) {
-                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", C0488R.string.StopLiveLocationAlertToGroup, chat.title));
+                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", R.string.StopLiveLocationAlertToGroup, chat.title));
                     } else if (user != null) {
-                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", C0488R.string.StopLiveLocationAlertToUser, UserObject.getFirstName(user)));
+                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", R.string.StopLiveLocationAlertToUser, UserObject.getFirstName(user)));
                     } else {
-                        builder.setMessage(LocaleController.getString("AreYouSure", C0488R.string.AreYouSure));
+                        builder.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
                     }
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C14811());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14811());
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
                 return;
             }
@@ -291,7 +291,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.frameLayout.setWillNotDraw(false);
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(C0488R.drawable.header_shadow);
+        shadow.setBackgroundResource(R.drawable.header_shadow);
         addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         this.playButton = new ImageView(context);
         this.playButton.setScaleType(ScaleType.CENTER);
@@ -307,7 +307,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.titleTextView.setGravity(19);
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
         this.closeButton = new ImageView(context);
-        this.closeButton.setImageResource(C0488R.drawable.miniplayer_close);
+        this.closeButton.setImageResource(R.drawable.miniplayer_close);
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), Mode.MULTIPLY));
         this.closeButton.setScaleType(ScaleType.CENTER);
         addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
@@ -397,7 +397,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
                 }
             } else if (style == 1) {
-                this.titleTextView.setText(LocaleController.getString("ReturnToCall", C0488R.string.ReturnToCall));
+                this.titleTextView.setText(LocaleController.getString("ReturnToCall", R.string.ReturnToCall));
                 this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_returnToCallBackground));
                 this.frameLayout.setTag(Theme.key_returnToCallBackground);
                 this.titleTextView.setTextColor(Theme.getColor(Theme.key_returnToCallText));
@@ -513,7 +513,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (this.fragment instanceof DialogsActivity) {
                 String param;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", C0488R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
                 ArrayList<SharingLocationInfo> infos = new ArrayList();
                 for (int a = 0; a < 3; a++) {
                     infos.addAll(LocationController.getInstance(a).sharingLocationsUI);
@@ -534,7 +534,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     param = LocaleController.formatPluralString("Chats", infos.size());
                 }
-                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", C0488R.string.AttachLiveLocationIsSharing), new Object[]{liveLocation, param});
+                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing), new Object[]{liveLocation, param});
                 int start = fullString.indexOf(liveLocation);
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(fullString);
                 this.titleTextView.setEllipsize(TruncateAt.END);
@@ -601,20 +601,20 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.lastLocationSharingCount != locationSharingCount) {
                 String fullString;
                 this.lastLocationSharingCount = locationSharingCount;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", C0488R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
                 if (locationSharingCount == 0) {
                     fullString = liveLocation;
                 } else {
                     int otherSharingCount = locationSharingCount - 1;
                     if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                         if (otherSharingCount == 0) {
-                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0488R.string.ChatYourSelfName)});
+                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName)});
                         } else if (otherSharingCount != 1 || notYouUser == null) {
-                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0488R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount)});
+                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount)});
                         } else {
                             Object[] objArr = new Object[2];
                             objArr[0] = liveLocation;
-                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", C0488R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser));
+                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser));
                             fullString = String.format("%1$s - %2$s", objArr);
                         }
                     } else if (otherSharingCount != 0) {
@@ -713,9 +713,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             setVisibility(0);
         }
         if (MediaController.getInstance().isMessagePaused()) {
-            this.playButton.setImageResource(C0488R.drawable.miniplayer_play);
+            this.playButton.setImageResource(R.drawable.miniplayer_play);
         } else {
-            this.playButton.setImageResource(C0488R.drawable.miniplayer_pause);
+            this.playButton.setImageResource(R.drawable.miniplayer_pause);
         }
         if (this.lastMessageObject != messageObject || prevStyle != 0) {
             SpannableStringBuilder stringBuilder;

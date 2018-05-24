@@ -3,7 +3,7 @@
     <string name="ALongTimeAgo">마지막으로 접속한 지 오래됨</string>
     <string name="AbortPassword">2단계 인증 설정 끝내기</string>
     <string name="AccessError">접근 오류</string>
-    <string name="AccountAlreadyLoggedIn">이 계정은 이미 이 앱에 로그인되어 있습니다.</string>
+    <string name="AccountAlreadyLoggedIn">이미 이 계정으로 앱에 로그인되었습니다.</string>
     <string name="AccountSettings">계정설정</string>
     <string name="AccountSwitch">바꾸기</string>
     <string name="AccurateTo">%1$s 반경 내 정확함</string>
@@ -70,6 +70,7 @@
     <string name="AddMasksInstalled">새로운 마스크 추가</string>
     <string name="AddMember">참가자 추가</string>
     <string name="AddMutual">채널에 연락 상대 추가</string>
+    <string name="AddProxy">프록시 추가</string>
     <string name="AddRecipient">받는 사람 추가</string>
     <string name="AddShortcut">바로가기 추가</string>
     <string name="AddStickers">스티커 추가</string>
@@ -211,6 +212,7 @@
     <string name="AutodownloadSizeLimitUpTo">최대 %1$s</string>
     <string name="AutomaticMediaDownload">미디어 자동 다운로드</string>
     <string name="AutoplayGifs">GIF 자동 재생</string>
+    <string name="Available">Available</string>
     <string name="AwaitingEncryption">%s 님을 기다리고 있습니다...</string>
     <string name="BackgroundRestricted">백그라운드 데이터가 제한되었습니다.</string>
     <string name="BadgeNumber">앱 아이콘에 알림 개수 표시</string>
@@ -382,6 +384,7 @@
     <string name="Chats_other">대화 %1$d개</string>
     <string name="Chats_two">대화 %1$d개</string>
     <string name="Chats_zero">대화 %1$d개</string>
+    <string name="Checking">Checking...</string>
     <string name="ChooseCountry">국가를 선택하세요</string>
     <string name="ChooseFromYourStickers">내 스티커에서 선택</string>
     <string name="ChooseStickerSet">스티커 묶음 선택</string>
@@ -389,7 +392,7 @@
     <string name="ChooseStickerSetNotFound">스티커 묶음을 찾지 못했습니다</string>
     <string name="ChooseStickerSetNotFoundInfo">다시 시도하거나 아래 목록에서 고르세요</string>
     <string name="ChooseStickerSetPlaceholder">스티커 묶음</string>
-    <string name="ChooseYourLanguage">언어 선택</string>
+    <string name="ChooseYourLanguage">언어를 선택하세요</string>
     <string name="ChooseYourLanguageOther">기타</string>
     <string name="ChromeCustomTabs">앱 안 브라우저</string>
     <string name="ChromeCustomTabsInfo">앱 안에서 외부 링크 열기</string>
@@ -407,7 +410,7 @@
     <string name="CodeExpired">코드가 만료했습니다. 다시 로그인하세요.</string>
     <string name="ColorBlue">파란색</string>
     <string name="ColorCyan">청록색</string>
-    <string name="ColorDark">어둡게</string>
+    <string name="ColorDark">다크</string>
     <string name="ColorGreen">초록색</string>
     <string name="ColorOrange">주황색</string>
     <string name="ColorPink">분홍색</string>
@@ -418,12 +421,10 @@
     <string name="ColorYellow">노란색</string>
     <string name="CompatibilityChat">%1$s님의 텔레그램 버전이 낮아 비밀 사진을 호환성 모드로 표시합니다.\n\n%2$s님이 텔레그램을 업데이트하고 나면, 자동삭제 시간이 1분 이하인 사진은 \"탭하고 누르고 있어야 보임\" 상태가 되며, 상대방이 화면을 캡처할 때 마다 알림을 받습니다.</string>
     <string name="ConfirmDeleteCallLog">이 전화 기록을 정말 삭제하시겠습니까?</string>
+    <string name="Connected">Connected</string>
     <string name="Connecting">연결 중...</string>
+    <string name="ConnectingConnectProxy">Connect Proxy</string>
     <string name="ConnectingToProxy">프록시 연결 중...</string>
-    <string name="ConnectingToProxyDisable">비활성화</string>
-    <string name="ConnectingToProxyDisableAlert">%1$s 프록시 서버를 정말 비활성화하겠습니까? 프록시 서버는 설정(데이터 및 저장소)에서 바꾸실 수 있습니다.</string>
-    <string name="ConnectingToProxyEnable">활성화</string>
-    <string name="ConnectingToProxyTapToDisable">프록시를 비활성화하려면 여기를 탭하세요..</string>
     <string name="ContactJoined">친구의 텔레그램 가입</string>
     <string name="ContactNotRegistered">아직 %1$s님이 텔레그램에 가입하시지 않았습니다. 초대하시겠습니까?</string>
     <string name="Contacts">연락처</string>
@@ -511,6 +512,7 @@
     <string name="DeleteMega">그룹 삭제</string>
     <string name="DeleteMegaMenu">그룹 삭제</string>
     <string name="DeletePhoto">사진 삭제</string>
+    <string name="DeleteProxy">Delete Proxy?</string>
     <string name="DeleteReportSpam">스팸 신고</string>
     <string name="DeleteThemeAlert">이 테마를 삭제하시겠습니까?</string>
     <string name="DeleteThisChat">대화방 삭제</string>
@@ -561,8 +563,6 @@
     <string name="EmpryUsersPlaceholder">사용자 추가</string>
     <string name="EnableAllStreamingInfo">어떤 동영상은 스트리밍할 수 없습니다 – 예로, 안드로이드에서 텔레그램 4.7 이하 버전으로 보낸 동영상은 모두 스트리밍할 수 없습니다.</string>
     <string name="EnableAnimations">화면 전환 효과 사용</string>
-    <string name="EnableProxyAlert">이 프록시를 비활성화 하겠습니까?</string>
-    <string name="EnableProxyAlert2">프록시 서버는 설정(데이터 및 저장소)에서 바꾸실 수 있습니다.</string>
     <string name="EnableStreaming">동영상 및 음악 파일 스트리밍</string>
     <string name="EnabledPasswordText">2단계 인증을 키셨습니다.\n회원님의 텔레그램 계정에 로그인하는 데 여기서 설정한 비밀번호가 필요합니다.</string>
     <string name="EncryptedChatStartedIncoming">비밀 대화에 들어오셨습니다.</string>
@@ -685,7 +685,7 @@
     <string name="FontSize">폰트 크기</string>
     <string name="ForgotPassword">비밀번호를 잊어버리셨나요?</string>
     <string name="Forward">전달</string>
-    <string name="ForwardTo">다음에게 전달...</string>
+    <string name="ForwardTo">대화방 선택</string>
     <string name="ForwardedAudio_few">전달되는 음성 메시지 %1$d개</string>
     <string name="ForwardedAudio_many">전달되는 음성 메시지 %1$d개</string>
     <string name="ForwardedAudio_one">전달되는 음성 메시지 %1$d개</string>
@@ -1307,6 +1307,7 @@
     <string name="PinMessageAlertChannel">채널에 이 메시지를 고정하시겠습니까?</string>
     <string name="PinNotify">모든 참가자에게 알리기</string>
     <string name="PinToTop">맨 위로 고정</string>
+    <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">고정된 메시지</string>
     <string name="PinnedMessages">고정된 메시지</string>
     <string name="PleaseDownload">먼저 미디어를 다운로드하세요</string>
@@ -1343,6 +1344,8 @@
     <string name="ProfilePopupNotification">팝업 알림</string>
     <string name="ProfilePopupNotificationInfo">이 연락 상대에게서 수신되는 메시지는 텔레그램이 꺼져 있을 때도 화면에 뜹니다.</string>
     <string name="Proxy">프록시</string>
+    <string name="ProxyConnections">Connections</string>
+    <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">프록시 설정</string>
     <string name="QuickReplyCustom">맞춤 메시지...</string>
     <string name="QuickReplyDefault1">지금 대화할 수 없어요. 무슨 일이죠?</string>
@@ -1429,7 +1432,7 @@
     <string name="SaveToGallery">갤러리에 저장</string>
     <string name="SaveToGallerySettings">갤러리에 자동 저장</string>
     <string name="SaveToMusic">음악에 저장</string>
-    <string name="SavedMessages">저장된 메시지</string>
+    <string name="SavedMessages">저장한 메시지</string>
     <string name="SavedMessagesInfo">저장하려면 여기로 전달하세요</string>
     <string name="ScreenCapture">화면 캡처 허용</string>
     <string name="ScreenCaptureInfo">활성화할 시 앱 안에서 스크린샷을 찍으실 수 있으나, 암호가 설정된 때에도 주고받은 대화가 최근 실행한 앱 목록에서 보입니다.\n\n적용이 안 된다면 앱을 재시작하세요.</string>
@@ -1445,12 +1448,12 @@
     <string name="SearchMembers">참가자 검색</string>
     <string name="SearchMessages">메시지</string>
     <string name="SearchStickersHint">스티커 묶음 검색</string>
-    <string name="SecondsBold_few">**%1$d** 초</string>
-    <string name="SecondsBold_many">**%1$d** 초</string>
-    <string name="SecondsBold_one">**%1$d** 초</string>
-    <string name="SecondsBold_other">**%1$d** 초</string>
-    <string name="SecondsBold_two">**%1$d** 초</string>
-    <string name="SecondsBold_zero">**%1$d** 초</string>
+    <string name="SecondsBold_few">**%1$d**초</string>
+    <string name="SecondsBold_many">**%1$d**초</string>
+    <string name="SecondsBold_one">**%1$d**초</string>
+    <string name="SecondsBold_other">**%1$d**초</string>
+    <string name="SecondsBold_two">**%1$d**초</string>
+    <string name="SecondsBold_zero">**%1$d**초</string>
     <string name="Seconds_few">%1$d초</string>
     <string name="Seconds_many">%1$d초</string>
     <string name="Seconds_one">%1$d초</string>
@@ -1523,7 +1526,7 @@
     <string name="ShareLink">링크 공유</string>
     <string name="ShareLocation">위치</string>
     <string name="ShareMyContactInfo">내 연락처 공유</string>
-    <string name="ShareSendTo">다음에게 보내기...</string>
+    <string name="ShareSendTo">대화방 선택</string>
     <string name="ShareTelegram">텔레그램 공유...</string>
     <string name="ShareYouLocationInfo">현재 위치를 봇에게 보냅니다.</string>
     <string name="ShareYouLocationInline">요청시마다 봇이 위치를 확인합니다. 이 요청으로 인하여 특정 위치에 대한 결과 확인이 가능합니다.</string>
@@ -1586,10 +1589,10 @@
     <string name="Subscribers_other">구독자 %1$d명</string>
     <string name="Subscribers_two">구독자 %1$d명</string>
     <string name="Subscribers_zero">구독자 %1$d명</string>
-    <string name="SuggestStickers">이모지에 맞춰 스티커 제안</string>
-    <string name="SuggestStickersAll">모두</string>
-    <string name="SuggestStickersInstalled">추가됨</string>
-    <string name="SuggestStickersNone">아무도 없음</string>
+    <string name="SuggestStickers">이모지에 맞춰 스티커 추천</string>
+    <string name="SuggestStickersAll">모든 스티커</string>
+    <string name="SuggestStickersInstalled">추가한 스티커</string>
+    <string name="SuggestStickersNone">사용 안 함</string>
     <string name="Support">지원</string>
     <string name="SyncContacts">연락처 동기화</string>
     <string name="SyncContactsAdded">사용중인 계정에 기기에 있는 연락처가 추가되었습니다.</string>
@@ -1640,6 +1643,7 @@
     <string name="TwoStepVerification">2단계 인증</string>
     <string name="TypeMessage">메시지</string>
     <string name="Typing">입력 중...</string>
+    <string name="Unavailable">Unavailable</string>
     <string name="Unban">차단 해제</string>
     <string name="UnbanText">차단을 해제하려면 사용자를 길게 누르세요.</string>
     <string name="Unblock">차단 해제</string>
@@ -1675,7 +1679,14 @@
     <string name="UseProxyInfo">SOCKS5 프록시 설정</string>
     <string name="UseProxyPassword">비밀번호</string>
     <string name="UseProxyPort">포트</string>
+    <string name="UseProxySecret">Secret</string>
     <string name="UseProxySettings">프록시 설정 사용</string>
+    <string name="UseProxySocks5">SOCKS5</string>
+    <string name="UseProxySponsor">프록시 협찬</string>
+    <string name="UseProxySponsorInfo">이 채널은 회원님의 프록시 서버로 인해 나타났습니다. 채널을 대화방 목록에서 제거하려면, 텔레그램 설정에서 프록시를 비활성화하세요.</string>
+    <string name="UseProxyTelegram">MTProto Proxy</string>
+    <string name="UseProxyTelegramInfo">MTProto proxy settings.</string>
+    <string name="UseProxyTelegramInfo2">This proxy may display a sponsored channel in your chat list. This doesn\'t reveal any of your Telegram traffic.</string>
     <string name="UseProxyUsername">사용자명</string>
     <string name="UserBio">자기소개</string>
     <string name="UserBioEmpty">없음</string>

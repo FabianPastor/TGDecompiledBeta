@@ -23,10 +23,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
@@ -225,7 +225,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
-        this.addButton.setText(LocaleController.getString("Add", C0488R.string.Add).toUpperCase());
+        this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         view = this.addButton;
         if (!LocaleController.isRTL) {
@@ -234,7 +234,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-2, 28.0f, i3 | 48, LocaleController.isRTL ? 14.0f : 0.0f, 18.0f, LocaleController.isRTL ? 0.0f : 14.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(C0488R.drawable.sticker_added);
+        this.checkImage.setImageResource(R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
 

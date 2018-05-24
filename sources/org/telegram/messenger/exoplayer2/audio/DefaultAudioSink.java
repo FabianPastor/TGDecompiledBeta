@@ -210,6 +210,28 @@ public final class DefaultAudioSink implements AudioSink {
         }
     }
 
+    public static final class InvalidAudioTrackTimestampException extends RuntimeException {
+        public InvalidAudioTrackTimestampException(String message) {
+            super(message);
+        }
+    }
+
+    private static final class PlaybackParametersCheckpoint {
+        private final long mediaTimeUs;
+        private final PlaybackParameters playbackParameters;
+        private final long positionUs;
+
+        private PlaybackParametersCheckpoint(PlaybackParameters playbackParameters, long mediaTimeUs, long positionUs) {
+            this.playbackParameters = playbackParameters;
+            this.mediaTimeUs = mediaTimeUs;
+            this.positionUs = positionUs;
+        }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface StartMediaTimeState {
+    }
+
     @TargetApi(19)
     private static class AudioTrackUtilV19 extends AudioTrackUtil {
         private final AudioTimestamp audioTimestamp = new AudioTimestamp();
@@ -248,28 +270,6 @@ public final class DefaultAudioSink implements AudioSink {
         public long getTimestampFramePosition() {
             return this.lastTimestampFramePosition;
         }
-    }
-
-    public static final class InvalidAudioTrackTimestampException extends RuntimeException {
-        public InvalidAudioTrackTimestampException(String message) {
-            super(message);
-        }
-    }
-
-    private static final class PlaybackParametersCheckpoint {
-        private final long mediaTimeUs;
-        private final PlaybackParameters playbackParameters;
-        private final long positionUs;
-
-        private PlaybackParametersCheckpoint(PlaybackParameters playbackParameters, long mediaTimeUs, long positionUs) {
-            this.playbackParameters = playbackParameters;
-            this.mediaTimeUs = mediaTimeUs;
-            this.positionUs = positionUs;
-        }
-    }
-
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface StartMediaTimeState {
     }
 
     public DefaultAudioSink(AudioCapabilities audioCapabilities, AudioProcessor[] audioProcessors) {

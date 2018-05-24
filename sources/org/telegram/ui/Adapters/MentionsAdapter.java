@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -30,6 +29,7 @@ import org.telegram.messenger.SendMessagesHelper.LocationProvider;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProviderDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -121,6 +121,14 @@ public class MentionsAdapter extends SelectionAdapter {
     private String searchingContextQuery;
     private String searchingContextUsername;
 
+    public interface MentionsAdapterDelegate {
+        void needChangePanelVisibility(boolean z);
+
+        void onContextClick(BotInlineResult botInlineResult);
+
+        void onContextSearch(boolean z);
+    }
+
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
     class C09171 implements LocationProviderDelegate {
         C09171() {
@@ -152,14 +160,6 @@ public class MentionsAdapter extends SelectionAdapter {
                 MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
             }
         }
-    }
-
-    public interface MentionsAdapterDelegate {
-        void needChangePanelVisibility(boolean z);
-
-        void onContextClick(BotInlineResult botInlineResult);
-
-        void onContextSearch(boolean z);
     }
 
     static /* synthetic */ int access$3104(MentionsAdapter x0) {
@@ -290,10 +290,10 @@ public class MentionsAdapter extends SelectionAdapter {
                 } else {
                     final User foundContextBotFinal = this.foundContextBot;
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", C0488R.string.ShareYouLocationTitle));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", C0488R.string.ShareYouLocationInline));
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
                     final boolean[] buttonClicked = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             buttonClicked[0] = true;
                             if (foundContextBotFinal != null) {
@@ -302,7 +302,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), new OnClickListener() {
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             buttonClicked[0] = true;
                             MentionsAdapter.this.onLocationUnavailable();
@@ -1131,9 +1131,9 @@ public class MentionsAdapter extends SelectionAdapter {
                 return;
             }
             if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", C0488R.string.AttachInlineRestrictedForever));
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0488R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
             boolean hasTop;

@@ -180,18 +180,6 @@ public class LocationController implements NotificationCenterDelegate {
     /* renamed from: org.telegram.messenger.LocationController$9 */
     class C02829 implements Runnable {
 
-        /* renamed from: org.telegram.messenger.LocationController$9$1 */
-        class C02801 implements RequestDelegate {
-            C02801() {
-            }
-
-            public void run(TLObject response, TL_error error) {
-                if (error == null) {
-                    MessagesController.getInstance(LocationController.this.currentAccount).processUpdates((Updates) response, false);
-                }
-            }
-        }
-
         /* renamed from: org.telegram.messenger.LocationController$9$2 */
         class C02812 implements Runnable {
             C02812() {
@@ -202,6 +190,18 @@ public class LocationController implements NotificationCenterDelegate {
                 LocationController.this.sharingLocationsMapUI.clear();
                 LocationController.this.stopService();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsChanged, new Object[0]);
+            }
+        }
+
+        /* renamed from: org.telegram.messenger.LocationController$9$1 */
+        class C02801 implements RequestDelegate {
+            C02801() {
+            }
+
+            public void run(TLObject response, TL_error error) {
+                if (error == null) {
+                    MessagesController.getInstance(LocationController.this.currentAccount).processUpdates((Updates) response, false);
+                }
             }
         }
 

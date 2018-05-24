@@ -25,7 +25,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -33,6 +32,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -72,14 +72,6 @@ public class StickerPreviewViewer {
     private LayoutParams windowLayoutParams;
     private FrameLayout windowView;
 
-    public interface StickerPreviewViewerDelegate {
-        boolean needSend();
-
-        void openSet(InputStickerSet inputStickerSet);
-
-        void sendSticker(Document document);
-    }
-
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
     class C22711 implements Runnable {
 
@@ -106,17 +98,17 @@ public class StickerPreviewViewer {
                 ArrayList<Integer> icons = new ArrayList();
                 if (StickerPreviewViewer.this.delegate != null) {
                     if (StickerPreviewViewer.this.delegate.needSend()) {
-                        items.add(LocaleController.getString("SendStickerPreview", C0488R.string.SendStickerPreview));
-                        icons.add(Integer.valueOf(C0488R.drawable.stickers_send));
+                        items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
+                        icons.add(Integer.valueOf(R.drawable.stickers_send));
                         actions.add(Integer.valueOf(0));
                     }
-                    items.add(LocaleController.formatString("ViewPackPreview", C0488R.string.ViewPackPreview, new Object[0]));
-                    icons.add(Integer.valueOf(C0488R.drawable.stickers_pack));
+                    items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
+                    icons.add(Integer.valueOf(R.drawable.stickers_pack));
                     actions.add(Integer.valueOf(1));
                 }
                 if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
-                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", C0488R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", C0488R.string.AddToFavorites));
-                    icons.add(Integer.valueOf(inFavs ? C0488R.drawable.stickers_unfavorite : C0488R.drawable.stickers_favorite));
+                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+                    icons.add(Integer.valueOf(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite));
                     actions.add(Integer.valueOf(2));
                 }
                 if (!items.isEmpty()) {
@@ -182,6 +174,14 @@ public class StickerPreviewViewer {
         protected void onDraw(Canvas canvas) {
             StickerPreviewViewer.this.onDraw(canvas);
         }
+    }
+
+    public interface StickerPreviewViewerDelegate {
+        boolean needSend();
+
+        void openSet(InputStickerSet inputStickerSet);
+
+        void sendSticker(Document document);
     }
 
     public static StickerPreviewViewer getInstance() {

@@ -43,6 +43,22 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         void onPlaylistChanged();
     }
 
+    public static final class PlaylistResetException extends IOException {
+        public final String url;
+
+        private PlaylistResetException(String url) {
+            this.url = url;
+        }
+    }
+
+    public static final class PlaylistStuckException extends IOException {
+        public final String url;
+
+        private PlaylistStuckException(String url) {
+            this.url = url;
+        }
+    }
+
     public interface PrimaryPlaylistListener {
         void onPrimaryPlaylistRefreshed(HlsMediaPlaylist hlsMediaPlaylist);
     }
@@ -167,22 +183,6 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
             this.blacklistUntilMs = SystemClock.elapsedRealtime() + ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
             HlsPlaylistTracker.this.notifyPlaylistBlacklisting(this.playlistUrl, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
             return HlsPlaylistTracker.this.primaryHlsUrl == this.playlistUrl && !HlsPlaylistTracker.this.maybeSelectNewPrimaryUrl();
-        }
-    }
-
-    public static final class PlaylistResetException extends IOException {
-        public final String url;
-
-        private PlaylistResetException(String url) {
-            this.url = url;
-        }
-    }
-
-    public static final class PlaylistStuckException extends IOException {
-        public final String url;
-
-        private PlaylistStuckException(String url) {
-            this.url = url;
         }
     }
 

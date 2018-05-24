@@ -16,12 +16,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -46,27 +46,6 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     private TextView onlineTextView;
     private String phone = null;
     private int user_id;
-
-    /* renamed from: org.telegram.ui.ContactAddActivity$1 */
-    class C17251 extends ActionBarMenuOnItemClick {
-        C17251() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ContactAddActivity.this.finishFragment();
-            } else if (id == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
-                User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
-                user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
-                user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
-                ContactsController.getInstance(ContactAddActivity.this.currentAccount).addContact(user);
-                ContactAddActivity.this.finishFragment();
-                MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
-                NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$2 */
     class C17262 implements OnTouchListener {
@@ -107,6 +86,27 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         }
     }
 
+    /* renamed from: org.telegram.ui.ContactAddActivity$1 */
+    class C17251 extends ActionBarMenuOnItemClick {
+        C17251() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ContactAddActivity.this.finishFragment();
+            } else if (id == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
+                User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
+                user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
+                ContactsController.getInstance(ContactAddActivity.this.currentAccount).addContact(user);
+                ContactAddActivity.this.finishFragment();
+                MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
+                NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ContactAddActivity$5 */
     class C17295 implements ThemeDescriptionDelegate {
         C17295() {
@@ -144,15 +144,15 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.addContact) {
-            this.actionBar.setTitle(LocaleController.getString("AddContactTitle", C0488R.string.AddContactTitle));
+            this.actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("EditName", C0488R.string.EditName));
+            this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
         this.actionBar.setActionBarMenuOnItemClick(new C17251());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
@@ -193,7 +193,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", C0488R.string.FirstName));
+        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -210,7 +210,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
-        this.lastNameField.setHint(LocaleController.getString("LastName", C0488R.string.LastName));
+        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
         this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);

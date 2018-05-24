@@ -9,10 +9,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLObject;
@@ -175,12 +175,12 @@ public class DialogsAdapter extends SelectionAdapter {
             case 2:
                 int i;
                 View headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("RecentlyViewed", C0488R.string.RecentlyViewed));
+                headerCell.setText(LocaleController.getString("RecentlyViewed", R.string.RecentlyViewed));
                 TextView textView = new TextView(this.mContext);
                 textView.setTextSize(1, 15.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
-                textView.setText(LocaleController.getString("RecentlyViewedHide", C0488R.string.RecentlyViewedHide));
+                textView.setText(LocaleController.getString("RecentlyViewedHide", R.string.RecentlyViewedHide));
                 if (LocaleController.isRTL) {
                     i = 3;
                 } else {
@@ -204,7 +204,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 };
                 frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
                 View v = new View(this.mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
                 view = frameLayout;
                 break;

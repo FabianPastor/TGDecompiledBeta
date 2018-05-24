@@ -10,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
@@ -40,13 +40,13 @@ public class DialogsEmptyCell extends LinearLayout {
         setOrientation(1);
         setOnTouchListener(new C10561());
         this.emptyTextView1 = new TextView(context);
-        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0488R.string.NoChats));
+        this.emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView1.setGravity(17);
         this.emptyTextView1.setTextSize(1, 20.0f);
         addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2));
         this.emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", C0488R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace('\n', ' ');
         }

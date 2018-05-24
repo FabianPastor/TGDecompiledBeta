@@ -11,16 +11,17 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -38,6 +39,7 @@ import org.telegram.ui.Components.LinkPath;
 
 public class SharedLinkCell extends FrameLayout {
     private CheckBox checkBox;
+    private boolean checkingForLongPress = false;
     private SharedLinkCellDelegate delegate;
     private int description2Y = AndroidUtilities.dp(27.0f);
     private StaticLayout descriptionLayout;
@@ -53,16 +55,80 @@ public class SharedLinkCell extends FrameLayout {
     ArrayList<String> links = new ArrayList();
     private MessageObject message;
     private boolean needDivider;
+    private CheckForLongPress pendingCheckForLongPress = null;
+    private CheckForTap pendingCheckForTap = null;
+    private int pressCount = 0;
     private int pressedLink;
     private StaticLayout titleLayout;
     private TextPaint titleTextPaint = new TextPaint(1);
     private int titleY = AndroidUtilities.dp(7.0f);
     private LinkPath urlPath = new LinkPath();
 
+    class CheckForLongPress implements Runnable {
+        public int currentPressCount;
+
+        CheckForLongPress() {
+        }
+
+        public void run() {
+            if (SharedLinkCell.this.checkingForLongPress && SharedLinkCell.this.getParent() != null && this.currentPressCount == SharedLinkCell.this.pressCount) {
+                SharedLinkCell.this.checkingForLongPress = false;
+                SharedLinkCell.this.performHapticFeedback(0);
+                if (SharedLinkCell.this.pressedLink >= 0) {
+                    SharedLinkCell.this.delegate.onLinkLongPress((String) SharedLinkCell.this.links.get(SharedLinkCell.this.pressedLink));
+                }
+                MotionEvent event = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
+                SharedLinkCell.this.onTouchEvent(event);
+                event.recycle();
+            }
+        }
+    }
+
+    private final class CheckForTap implements Runnable {
+        private CheckForTap() {
+        }
+
+        public void run() {
+            if (SharedLinkCell.this.pendingCheckForLongPress == null) {
+                SharedLinkCell.this.pendingCheckForLongPress = new CheckForLongPress();
+            }
+            SharedLinkCell.this.pendingCheckForLongPress.currentPressCount = SharedLinkCell.access$104(SharedLinkCell.this);
+            SharedLinkCell.this.postDelayed(SharedLinkCell.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
+        }
+    }
+
     public interface SharedLinkCellDelegate {
         boolean canPerformActions();
 
         void needOpenWebView(WebPage webPage);
+
+        void onLinkLongPress(String str);
+    }
+
+    static /* synthetic */ int access$104(SharedLinkCell x0) {
+        int i = x0.pressCount + 1;
+        x0.pressCount = i;
+        return i;
+    }
+
+    protected void startCheckLongPress() {
+        if (!this.checkingForLongPress) {
+            this.checkingForLongPress = true;
+            if (this.pendingCheckForTap == null) {
+                this.pendingCheckForTap = new CheckForTap();
+            }
+            postDelayed(this.pendingCheckForTap, (long) ViewConfiguration.getTapTimeout());
+        }
+    }
+
+    protected void cancelCheckLongPress() {
+        this.checkingForLongPress = false;
+        if (this.pendingCheckForLongPress != null) {
+            removeCallbacks(this.pendingCheckForLongPress);
+        }
+        if (this.pendingCheckForTap != null) {
+            removeCallbacks(this.pendingCheckForTap);
+        }
     }
 
     public SharedLinkCell(Context context) {
@@ -75,7 +141,7 @@ public class SharedLinkCell extends FrameLayout {
         setWillNotDraw(false);
         this.linkImageView = new ImageReceiver(this);
         this.letterDrawable = new LetterDrawable();
-        this.checkBox = new CheckBox(context, C0488R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 44.0f, 44.0f, LocaleController.isRTL ? 44.0f : 0.0f, 0.0f));
@@ -311,8 +377,14 @@ public class SharedLinkCell extends FrameLayout {
             for (int a = 0; a < this.linkLayout.size(); a++) {
                 StaticLayout layout = (StaticLayout) this.linkLayout.get(a);
                 if (layout.getLineCount() > 0) {
+                    float f;
                     int height = layout.getLineBottom(layout.getLineCount() - 1);
-                    int linkPosX = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline);
+                    if (LocaleController.isRTL) {
+                        f = 8.0f;
+                    } else {
+                        f = (float) AndroidUtilities.leftBaseline;
+                    }
+                    int linkPosX = AndroidUtilities.dp(f);
                     if (((float) x) < ((float) linkPosX) + layout.getLineLeft(0) || ((float) x) > ((float) linkPosX) + layout.getLineWidth(0) || y < this.linkY + offset || y > (this.linkY + offset) + height) {
                         offset += height;
                     } else {
@@ -321,6 +393,7 @@ public class SharedLinkCell extends FrameLayout {
                             resetPressedLink();
                             this.pressedLink = a;
                             this.linkPreviewPressed = true;
+                            startCheckLongPress();
                             try {
                                 this.urlPath.setCurrentLayout(layout, 0, 0.0f);
                                 layout.getSelectionPath(0, layout.getText().length(), this.urlPath);
@@ -372,6 +445,7 @@ public class SharedLinkCell extends FrameLayout {
     protected void resetPressedLink() {
         this.pressedLink = -1;
         this.linkPreviewPressed = false;
+        cancelCheckLongPress();
         invalidate();
     }
 

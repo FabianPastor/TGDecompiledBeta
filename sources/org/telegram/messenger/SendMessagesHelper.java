@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
@@ -195,23 +196,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
-    /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C05331 implements LocationProviderDelegate {
-        C05331() {
-        }
-
-        public void onLocationAcquired(Location location) {
-            SendMessagesHelper.this.sendLocation(location);
-            SendMessagesHelper.this.waitingForLocation.clear();
-        }
-
-        public void onUnableLocationAcquire() {
-            HashMap<String, MessageObject> waitingForLocationCopy = new HashMap(SendMessagesHelper.this.waitingForLocation);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.wasUnableToFindCurrentLocation, waitingForLocationCopy);
-            SendMessagesHelper.this.waitingForLocation.clear();
-        }
-    }
-
     /* renamed from: org.telegram.messenger.SendMessagesHelper$2 */
     class C05432 implements Runnable {
         C05432() {
@@ -335,12 +319,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private Runnable locationQueryCancelRunnable;
         private GpsLocationListener networkLocationListener = new GpsLocationListener();
 
-        public interface LocationProviderDelegate {
-            void onLocationAcquired(Location location);
-
-            void onUnableLocationAcquire();
-        }
-
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
         class C05621 implements Runnable {
             C05621() {
@@ -390,6 +368,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
             public void onProviderDisabled(String provider) {
             }
+        }
+
+        public interface LocationProviderDelegate {
+            void onLocationAcquired(Location location);
+
+            void onUnableLocationAcquire();
         }
 
         public LocationProvider(LocationProviderDelegate locationProviderDelegate) {
@@ -464,6 +448,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         public int ttl;
         public Uri uri;
         public VideoEditedInfo videoEditedInfo;
+    }
+
+    /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
+    class C05331 implements LocationProviderDelegate {
+        C05331() {
+        }
+
+        public void onLocationAcquired(Location location) {
+            SendMessagesHelper.this.sendLocation(location);
+            SendMessagesHelper.this.waitingForLocation.clear();
+        }
+
+        public void onUnableLocationAcquire() {
+            HashMap<String, MessageObject> waitingForLocationCopy = new HashMap(SendMessagesHelper.this.waitingForLocation);
+            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.wasUnableToFindCurrentLocation, waitingForLocationCopy);
+            SendMessagesHelper.this.waitingForLocation.clear();
+        }
     }
 
     static {
@@ -1702,8 +1703,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             chatActivity.showAlert(name, res.message);
                                         } else if (chatActivity.getParentActivity() != null) {
                                             Builder builder = new Builder(chatActivity.getParentActivity());
-                                            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                                            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
+                                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                             builder.setMessage(res.message);
                                             chatActivity.showDialog(builder.create());
                                         }
@@ -7365,7 +7366,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                         public void run() {
                             try {
-                                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", C0488R.string.UnsupportedAttachment), 0).show();
+                                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment), 0).show();
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
                             }
@@ -7758,7 +7759,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 venue.title = result.send_message.title;
                 venue.provider = result.send_message.provider;
                 venue.venue_id = result.send_message.venue_id;
-                venue.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
+                String str2 = result.send_message.venue_type;
+                venue.venue_id = str2;
+                venue.venue_type = str2;
+                if (venue.venue_type == null) {
+                    venue.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
+                }
                 getInstance(currentAccount).sendMessage(venue, dialog_id, reply_to_msg, result.send_message.reply_markup, (HashMap) params);
             } else if (result.send_message instanceof TL_botInlineMessageMediaGeo) {
                 MessageMedia location;

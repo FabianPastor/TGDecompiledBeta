@@ -83,10 +83,6 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     private Rect mTmpRect;
     VelocityTracker mVelocityTracker;
 
-    public interface ViewDropHandler {
-        void prepareForDrop(View view, View view2, int i, int i2);
-    }
-
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$1 */
     class C07711 implements Runnable {
         C07711() {
@@ -100,222 +96,6 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                 ItemTouchHelper.this.mRecyclerView.removeCallbacks(ItemTouchHelper.this.mScrollRunnable);
                 ViewCompat.postOnAnimation(ItemTouchHelper.this.mRecyclerView, this);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$2 */
-    class C07722 implements OnItemTouchListener {
-        C07722() {
-        }
-
-        public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
-            ItemTouchHelper.this.mGestureDetector.onTouchEvent(event);
-            int action = event.getActionMasked();
-            if (action == 0) {
-                ItemTouchHelper.this.mActivePointerId = event.getPointerId(0);
-                ItemTouchHelper.this.mInitialTouchX = event.getX();
-                ItemTouchHelper.this.mInitialTouchY = event.getY();
-                ItemTouchHelper.this.obtainVelocityTracker();
-                if (ItemTouchHelper.this.mSelected == null) {
-                    RecoverAnimation animation = ItemTouchHelper.this.findAnimation(event);
-                    if (animation != null) {
-                        ItemTouchHelper itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchX -= animation.mX;
-                        itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchY -= animation.mY;
-                        ItemTouchHelper.this.endRecoverAnimation(animation.mViewHolder, true);
-                        if (ItemTouchHelper.this.mPendingCleanup.remove(animation.mViewHolder.itemView)) {
-                            ItemTouchHelper.this.mCallback.clearView(ItemTouchHelper.this.mRecyclerView, animation.mViewHolder);
-                        }
-                        ItemTouchHelper.this.select(animation.mViewHolder, animation.mActionState);
-                        ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, 0);
-                    }
-                }
-            } else if (action == 3 || action == 1) {
-                ItemTouchHelper.this.mActivePointerId = -1;
-                ItemTouchHelper.this.select(null, 0);
-            } else if (ItemTouchHelper.this.mActivePointerId != -1) {
-                int index = event.findPointerIndex(ItemTouchHelper.this.mActivePointerId);
-                if (index >= 0) {
-                    ItemTouchHelper.this.checkSelectForSwipe(action, event, index);
-                }
-            }
-            if (ItemTouchHelper.this.mVelocityTracker != null) {
-                ItemTouchHelper.this.mVelocityTracker.addMovement(event);
-            }
-            if (ItemTouchHelper.this.mSelected != null) {
-                return true;
-            }
-            return false;
-        }
-
-        public void onTouchEvent(RecyclerView recyclerView, MotionEvent event) {
-            int newPointerIndex = 0;
-            ItemTouchHelper.this.mGestureDetector.onTouchEvent(event);
-            if (ItemTouchHelper.this.mVelocityTracker != null) {
-                ItemTouchHelper.this.mVelocityTracker.addMovement(event);
-            }
-            if (ItemTouchHelper.this.mActivePointerId != -1) {
-                int action = event.getActionMasked();
-                int activePointerIndex = event.findPointerIndex(ItemTouchHelper.this.mActivePointerId);
-                if (activePointerIndex >= 0) {
-                    ItemTouchHelper.this.checkSelectForSwipe(action, event, activePointerIndex);
-                }
-                ViewHolder viewHolder = ItemTouchHelper.this.mSelected;
-                if (viewHolder != null) {
-                    switch (action) {
-                        case 1:
-                            break;
-                        case 2:
-                            if (activePointerIndex >= 0) {
-                                ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, activePointerIndex);
-                                ItemTouchHelper.this.moveIfNecessary(viewHolder);
-                                ItemTouchHelper.this.mRecyclerView.removeCallbacks(ItemTouchHelper.this.mScrollRunnable);
-                                ItemTouchHelper.this.mScrollRunnable.run();
-                                ItemTouchHelper.this.mRecyclerView.invalidate();
-                                return;
-                            }
-                            return;
-                        case 3:
-                            if (ItemTouchHelper.this.mVelocityTracker != null) {
-                                ItemTouchHelper.this.mVelocityTracker.clear();
-                                break;
-                            }
-                            break;
-                        case 6:
-                            int pointerIndex = event.getActionIndex();
-                            if (event.getPointerId(pointerIndex) == ItemTouchHelper.this.mActivePointerId) {
-                                if (pointerIndex == 0) {
-                                    newPointerIndex = 1;
-                                }
-                                ItemTouchHelper.this.mActivePointerId = event.getPointerId(newPointerIndex);
-                                ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, pointerIndex);
-                                return;
-                            }
-                            return;
-                        default:
-                            return;
-                    }
-                    ItemTouchHelper.this.select(null, 0);
-                    ItemTouchHelper.this.mActivePointerId = -1;
-                }
-            }
-        }
-
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            if (disallowIntercept) {
-                ItemTouchHelper.this.select(null, 0);
-            }
-        }
-    }
-
-    private static class RecoverAnimation implements AnimatorListener {
-        final int mActionState;
-        final int mAnimationType;
-        boolean mEnded = false;
-        private float mFraction;
-        public boolean mIsPendingCleanup;
-        boolean mOverridden = false;
-        final float mStartDx;
-        final float mStartDy;
-        final float mTargetX;
-        final float mTargetY;
-        private final ValueAnimator mValueAnimator;
-        final ViewHolder mViewHolder;
-        float mX;
-        float mY;
-
-        /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$RecoverAnimation$1 */
-        class C07781 implements AnimatorUpdateListener {
-            C07781() {
-            }
-
-            public void onAnimationUpdate(ValueAnimator animation) {
-                RecoverAnimation.this.setFraction(animation.getAnimatedFraction());
-            }
-        }
-
-        RecoverAnimation(ViewHolder viewHolder, int animationType, int actionState, float startDx, float startDy, float targetX, float targetY) {
-            this.mActionState = actionState;
-            this.mAnimationType = animationType;
-            this.mViewHolder = viewHolder;
-            this.mStartDx = startDx;
-            this.mStartDy = startDy;
-            this.mTargetX = targetX;
-            this.mTargetY = targetY;
-            this.mValueAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.mValueAnimator.addUpdateListener(new C07781());
-            this.mValueAnimator.setTarget(viewHolder.itemView);
-            this.mValueAnimator.addListener(this);
-            setFraction(0.0f);
-        }
-
-        public void setDuration(long duration) {
-            this.mValueAnimator.setDuration(duration);
-        }
-
-        public void start() {
-            this.mViewHolder.setIsRecyclable(false);
-            this.mValueAnimator.start();
-        }
-
-        public void cancel() {
-            this.mValueAnimator.cancel();
-        }
-
-        public void setFraction(float fraction) {
-            this.mFraction = fraction;
-        }
-
-        public void update() {
-            if (this.mStartDx == this.mTargetX) {
-                this.mX = this.mViewHolder.itemView.getTranslationX();
-            } else {
-                this.mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
-            }
-            if (this.mStartDy == this.mTargetY) {
-                this.mY = this.mViewHolder.itemView.getTranslationY();
-            } else {
-                this.mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
-            }
-        }
-
-        public void onAnimationStart(Animator animation) {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (!this.mEnded) {
-                this.mViewHolder.setIsRecyclable(true);
-            }
-            this.mEnded = true;
-        }
-
-        public void onAnimationCancel(Animator animation) {
-            setFraction(1.0f);
-        }
-
-        public void onAnimationRepeat(Animator animation) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$5 */
-    class C07755 implements ChildDrawingOrderCallback {
-        C07755() {
-        }
-
-        public int onGetChildDrawingOrder(int childCount, int i) {
-            if (ItemTouchHelper.this.mOverdrawChild == null) {
-                return i;
-            }
-            int childPosition = ItemTouchHelper.this.mOverdrawChildPosition;
-            if (childPosition == -1) {
-                childPosition = ItemTouchHelper.this.mRecyclerView.indexOfChild(ItemTouchHelper.this.mOverdrawChild);
-                ItemTouchHelper.this.mOverdrawChildPosition = childPosition;
-            }
-            if (i == childCount - 1) {
-                return childPosition;
-            }
-            return i >= childPosition ? i + 1 : i;
         }
     }
 
@@ -661,6 +441,226 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                     }
                 }
             }
+        }
+    }
+
+    private static class RecoverAnimation implements AnimatorListener {
+        final int mActionState;
+        final int mAnimationType;
+        boolean mEnded = false;
+        private float mFraction;
+        public boolean mIsPendingCleanup;
+        boolean mOverridden = false;
+        final float mStartDx;
+        final float mStartDy;
+        final float mTargetX;
+        final float mTargetY;
+        private final ValueAnimator mValueAnimator;
+        final ViewHolder mViewHolder;
+        float mX;
+        float mY;
+
+        /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$RecoverAnimation$1 */
+        class C07781 implements AnimatorUpdateListener {
+            C07781() {
+            }
+
+            public void onAnimationUpdate(ValueAnimator animation) {
+                RecoverAnimation.this.setFraction(animation.getAnimatedFraction());
+            }
+        }
+
+        RecoverAnimation(ViewHolder viewHolder, int animationType, int actionState, float startDx, float startDy, float targetX, float targetY) {
+            this.mActionState = actionState;
+            this.mAnimationType = animationType;
+            this.mViewHolder = viewHolder;
+            this.mStartDx = startDx;
+            this.mStartDy = startDy;
+            this.mTargetX = targetX;
+            this.mTargetY = targetY;
+            this.mValueAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.mValueAnimator.addUpdateListener(new C07781());
+            this.mValueAnimator.setTarget(viewHolder.itemView);
+            this.mValueAnimator.addListener(this);
+            setFraction(0.0f);
+        }
+
+        public void setDuration(long duration) {
+            this.mValueAnimator.setDuration(duration);
+        }
+
+        public void start() {
+            this.mViewHolder.setIsRecyclable(false);
+            this.mValueAnimator.start();
+        }
+
+        public void cancel() {
+            this.mValueAnimator.cancel();
+        }
+
+        public void setFraction(float fraction) {
+            this.mFraction = fraction;
+        }
+
+        public void update() {
+            if (this.mStartDx == this.mTargetX) {
+                this.mX = this.mViewHolder.itemView.getTranslationX();
+            } else {
+                this.mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
+            }
+            if (this.mStartDy == this.mTargetY) {
+                this.mY = this.mViewHolder.itemView.getTranslationY();
+            } else {
+                this.mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
+            }
+        }
+
+        public void onAnimationStart(Animator animation) {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (!this.mEnded) {
+                this.mViewHolder.setIsRecyclable(true);
+            }
+            this.mEnded = true;
+        }
+
+        public void onAnimationCancel(Animator animation) {
+            setFraction(1.0f);
+        }
+
+        public void onAnimationRepeat(Animator animation) {
+        }
+    }
+
+    public interface ViewDropHandler {
+        void prepareForDrop(View view, View view2, int i, int i2);
+    }
+
+    /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$2 */
+    class C07722 implements OnItemTouchListener {
+        C07722() {
+        }
+
+        public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
+            ItemTouchHelper.this.mGestureDetector.onTouchEvent(event);
+            int action = event.getActionMasked();
+            if (action == 0) {
+                ItemTouchHelper.this.mActivePointerId = event.getPointerId(0);
+                ItemTouchHelper.this.mInitialTouchX = event.getX();
+                ItemTouchHelper.this.mInitialTouchY = event.getY();
+                ItemTouchHelper.this.obtainVelocityTracker();
+                if (ItemTouchHelper.this.mSelected == null) {
+                    RecoverAnimation animation = ItemTouchHelper.this.findAnimation(event);
+                    if (animation != null) {
+                        ItemTouchHelper itemTouchHelper = ItemTouchHelper.this;
+                        itemTouchHelper.mInitialTouchX -= animation.mX;
+                        itemTouchHelper = ItemTouchHelper.this;
+                        itemTouchHelper.mInitialTouchY -= animation.mY;
+                        ItemTouchHelper.this.endRecoverAnimation(animation.mViewHolder, true);
+                        if (ItemTouchHelper.this.mPendingCleanup.remove(animation.mViewHolder.itemView)) {
+                            ItemTouchHelper.this.mCallback.clearView(ItemTouchHelper.this.mRecyclerView, animation.mViewHolder);
+                        }
+                        ItemTouchHelper.this.select(animation.mViewHolder, animation.mActionState);
+                        ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, 0);
+                    }
+                }
+            } else if (action == 3 || action == 1) {
+                ItemTouchHelper.this.mActivePointerId = -1;
+                ItemTouchHelper.this.select(null, 0);
+            } else if (ItemTouchHelper.this.mActivePointerId != -1) {
+                int index = event.findPointerIndex(ItemTouchHelper.this.mActivePointerId);
+                if (index >= 0) {
+                    ItemTouchHelper.this.checkSelectForSwipe(action, event, index);
+                }
+            }
+            if (ItemTouchHelper.this.mVelocityTracker != null) {
+                ItemTouchHelper.this.mVelocityTracker.addMovement(event);
+            }
+            if (ItemTouchHelper.this.mSelected != null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void onTouchEvent(RecyclerView recyclerView, MotionEvent event) {
+            int newPointerIndex = 0;
+            ItemTouchHelper.this.mGestureDetector.onTouchEvent(event);
+            if (ItemTouchHelper.this.mVelocityTracker != null) {
+                ItemTouchHelper.this.mVelocityTracker.addMovement(event);
+            }
+            if (ItemTouchHelper.this.mActivePointerId != -1) {
+                int action = event.getActionMasked();
+                int activePointerIndex = event.findPointerIndex(ItemTouchHelper.this.mActivePointerId);
+                if (activePointerIndex >= 0) {
+                    ItemTouchHelper.this.checkSelectForSwipe(action, event, activePointerIndex);
+                }
+                ViewHolder viewHolder = ItemTouchHelper.this.mSelected;
+                if (viewHolder != null) {
+                    switch (action) {
+                        case 1:
+                            break;
+                        case 2:
+                            if (activePointerIndex >= 0) {
+                                ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, activePointerIndex);
+                                ItemTouchHelper.this.moveIfNecessary(viewHolder);
+                                ItemTouchHelper.this.mRecyclerView.removeCallbacks(ItemTouchHelper.this.mScrollRunnable);
+                                ItemTouchHelper.this.mScrollRunnable.run();
+                                ItemTouchHelper.this.mRecyclerView.invalidate();
+                                return;
+                            }
+                            return;
+                        case 3:
+                            if (ItemTouchHelper.this.mVelocityTracker != null) {
+                                ItemTouchHelper.this.mVelocityTracker.clear();
+                                break;
+                            }
+                            break;
+                        case 6:
+                            int pointerIndex = event.getActionIndex();
+                            if (event.getPointerId(pointerIndex) == ItemTouchHelper.this.mActivePointerId) {
+                                if (pointerIndex == 0) {
+                                    newPointerIndex = 1;
+                                }
+                                ItemTouchHelper.this.mActivePointerId = event.getPointerId(newPointerIndex);
+                                ItemTouchHelper.this.updateDxDy(event, ItemTouchHelper.this.mSelectedFlags, pointerIndex);
+                                return;
+                            }
+                            return;
+                        default:
+                            return;
+                    }
+                    ItemTouchHelper.this.select(null, 0);
+                    ItemTouchHelper.this.mActivePointerId = -1;
+                }
+            }
+        }
+
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            if (disallowIntercept) {
+                ItemTouchHelper.this.select(null, 0);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$5 */
+    class C07755 implements ChildDrawingOrderCallback {
+        C07755() {
+        }
+
+        public int onGetChildDrawingOrder(int childCount, int i) {
+            if (ItemTouchHelper.this.mOverdrawChild == null) {
+                return i;
+            }
+            int childPosition = ItemTouchHelper.this.mOverdrawChildPosition;
+            if (childPosition == -1) {
+                childPosition = ItemTouchHelper.this.mRecyclerView.indexOfChild(ItemTouchHelper.this.mOverdrawChild);
+                ItemTouchHelper.this.mOverdrawChildPosition = childPosition;
+            }
+            if (i == childCount - 1) {
+                return childPosition;
+            }
+            return i >= childPosition ? i + 1 : i;
         }
     }
 

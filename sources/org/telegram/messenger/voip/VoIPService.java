@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationManagerCompat;
 import android.telecom.TelecomManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
@@ -29,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -39,6 +39,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.voip.VoIPBaseService.CallConnection;
@@ -118,18 +119,6 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    /* renamed from: org.telegram.messenger.voip.VoIPService$3 */
-    class C07983 implements RequestDelegate {
-        C07983() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("Sent debug logs, response=" + response);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.messenger.voip.VoIPService$4 */
     class C07994 implements Runnable {
         C07994() {
@@ -147,6 +136,18 @@ public class VoIPService extends VoIPBaseService {
 
         public void run() {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.voip.VoIPService$3 */
+    class C07983 implements RequestDelegate {
+        C07983() {
+        }
+
+        public void run(TLObject response, TL_error error) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("Sent debug logs, response=" + response);
+            }
         }
     }
 
@@ -210,7 +211,7 @@ public class VoIPService extends VoIPBaseService {
     public void onCreate() {
         super.onCreate();
         if (callIShouldHavePutIntoIntent != null && VERSION.SDK_INT >= 26) {
-            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(C0488R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", C0488R.string.VoipOutgoingCall)).setShowWhen(false).build());
+            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall)).setShowWhen(false).build());
         }
     }
 
@@ -893,6 +894,7 @@ public class VoIPService extends VoIPBaseService {
             boolean z;
             boolean z2;
             String server;
+            String secret;
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("InitCall: keyID=" + this.keyFingerprint);
             }
@@ -975,7 +977,8 @@ public class VoIPService extends VoIPBaseService {
                     if (prefs.getBoolean("proxy_enabled", false)) {
                         if (prefs.getBoolean("proxy_enabled_calls", false)) {
                             server = prefs.getString("proxy_ip", null);
-                            if (server != null) {
+                            secret = prefs.getString("proxy_secret", null);
+                            if (!TextUtils.isEmpty(server) && TextUtils.isEmpty(secret)) {
                                 this.controller.setProxy(server, prefs.getInt("proxy_port", 0), prefs.getString("proxy_user", null), prefs.getString("proxy_pass", null));
                             }
                         }
@@ -1004,9 +1007,8 @@ public class VoIPService extends VoIPBaseService {
             if (prefs.getBoolean("proxy_enabled", false)) {
                 if (prefs.getBoolean("proxy_enabled_calls", false)) {
                     server = prefs.getString("proxy_ip", null);
-                    if (server != null) {
-                        this.controller.setProxy(server, prefs.getInt("proxy_port", 0), prefs.getString("proxy_user", null), prefs.getString("proxy_pass", null));
-                    }
+                    secret = prefs.getString("proxy_secret", null);
+                    this.controller.setProxy(server, prefs.getInt("proxy_port", 0), prefs.getString("proxy_user", null), prefs.getString("proxy_pass", null));
                 }
             }
             this.controller.start();

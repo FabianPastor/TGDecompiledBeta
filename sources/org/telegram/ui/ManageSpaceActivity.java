@@ -18,8 +18,8 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -91,8 +91,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         boolean z = true;
         ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
-        setTheme(C0488R.style.Theme.TMessages);
-        getWindow().setBackgroundDrawableResource(C0488R.drawable.transparent);
+        setTheme(R.style.Theme.TMessages);
+        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         super.onCreate(savedInstanceState);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -112,7 +112,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             layoutParams1.height = -1;
             launchLayout.setLayoutParams(layoutParams1);
             View backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0488R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -126,7 +126,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0488R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
             launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 528));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);

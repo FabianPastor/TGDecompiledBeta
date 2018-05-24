@@ -8,11 +8,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
@@ -196,11 +196,11 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -239,12 +239,12 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", C0488R.string.ArchivedStickers));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", C0488R.string.ArchivedMasks));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks));
         }
         this.actionBar.setActionBarMenuOnItemClick(new C09501());
         this.listAdapter = new ListAdapter(context);
@@ -253,9 +253,9 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.emptyView = new EmptyTextProgressView(context);
         if (this.currentType == 0) {
-            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", C0488R.string.ArchivedStickersEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", R.string.ArchivedStickersEmpty));
         } else {
-            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", C0488R.string.ArchivedMasksEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", R.string.ArchivedMasksEmpty));
         }
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         if (this.loadingStickers) {

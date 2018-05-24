@@ -48,6 +48,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
@@ -1057,7 +1058,7 @@ public class NotificationsController {
 
     private String getStringForMessage(MessageObject messageObject, boolean shortMessage, boolean[] text) {
         if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
-            return LocaleController.getString("YouHaveNewMessage", C0488R.string.YouHaveNewMessage);
+            return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         }
         long dialog_id = messageObject.messageOwner.dialog_id;
         int chat_id = messageObject.messageOwner.to_id.chat_id != 0 ? messageObject.messageOwner.to_id.chat_id : messageObject.messageOwner.to_id.channel_id;
@@ -1065,14 +1066,14 @@ public class NotificationsController {
         if (messageObject.isFcmMessage()) {
             if (chat_id == 0 && from_id != 0) {
                 if (!MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewAll", true)) {
-                    return LocaleController.formatString("NotificationMessageNoText", C0488R.string.NotificationMessageNoText, messageObject.localName);
+                    return LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, messageObject.localName);
                 }
             } else if (chat_id != 0) {
                 if (!MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewGroup", true)) {
                     if (messageObject.isMegagroup() || messageObject.messageOwner.to_id.channel_id == 0) {
-                        return LocaleController.formatString("NotificationMessageGroupNoText", C0488R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
+                        return LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
                     }
-                    return LocaleController.formatString("ChannelMessageNoText", C0488R.string.ChannelMessageNoText, messageObject.localName);
+                    return LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, messageObject.localName);
                 }
             }
             text[0] = true;
@@ -1120,83 +1121,83 @@ public class NotificationsController {
         }
         String msg = null;
         if (((int) dialog_id) == 0) {
-            msg = LocaleController.getString("YouHaveNewMessage", C0488R.string.YouHaveNewMessage);
+            msg = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         } else if (chat_id == 0 && from_id != 0) {
             if (!MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewAll", true)) {
-                msg = LocaleController.formatString("NotificationMessageNoText", C0488R.string.NotificationMessageNoText, name);
+                msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
             } else if (messageObject.messageOwner instanceof TL_messageService) {
                 if (messageObject.messageOwner.action instanceof TL_messageActionUserJoined) {
-                    msg = LocaleController.formatString("NotificationContactJoined", C0488R.string.NotificationContactJoined, name);
+                    msg = LocaleController.formatString("NotificationContactJoined", R.string.NotificationContactJoined, name);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
-                    msg = LocaleController.formatString("NotificationContactNewPhoto", C0488R.string.NotificationContactNewPhoto, name);
+                    msg = LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionLoginUnknownLocation) {
-                    String date = LocaleController.formatString("formatDateAtTime", C0488R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
-                    msg = LocaleController.formatString("NotificationUnrecognizedDevice", C0488R.string.NotificationUnrecognizedDevice, UserConfig.getInstance(this.currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
+                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
+                    msg = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getInstance(this.currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                 } else if ((messageObject.messageOwner.action instanceof TL_messageActionGameScore) || (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent)) {
                     msg = messageObject.messageText.toString();
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionPhoneCall) {
                     PhoneCallDiscardReason reason = messageObject.messageOwner.action.reason;
                     if (!messageObject.isOut() && (reason instanceof TL_phoneCallDiscardReasonMissed)) {
-                        msg = LocaleController.getString("CallMessageIncomingMissed", C0488R.string.CallMessageIncomingMissed);
+                        msg = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
                     }
                 }
             } else if (messageObject.isMediaEmpty()) {
                 if (shortMessage) {
-                    msg = LocaleController.formatString("NotificationMessageNoText", C0488R.string.NotificationMessageNoText, name);
+                    msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
                 } else if (TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = LocaleController.formatString("NotificationMessageNoText", C0488R.string.NotificationMessageNoText, name);
+                    msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
                 if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = messageObject.messageOwner.media.ttl_seconds != 0 ? LocaleController.formatString("NotificationMessageSDPhoto", C0488R.string.NotificationMessageSDPhoto, name) : LocaleController.formatString("NotificationMessagePhoto", C0488R.string.NotificationMessagePhoto, name);
+                    msg = messageObject.messageOwner.media.ttl_seconds != 0 ? LocaleController.formatString("NotificationMessageSDPhoto", R.string.NotificationMessageSDPhoto, name) : LocaleController.formatString("NotificationMessagePhoto", R.string.NotificationMessagePhoto, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\uddbc " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\uddbc " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.isVideo()) {
                 if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = messageObject.messageOwner.media.ttl_seconds != 0 ? LocaleController.formatString("NotificationMessageSDVideo", C0488R.string.NotificationMessageSDVideo, name) : LocaleController.formatString("NotificationMessageVideo", C0488R.string.NotificationMessageVideo, name);
+                    msg = messageObject.messageOwner.media.ttl_seconds != 0 ? LocaleController.formatString("NotificationMessageSDVideo", R.string.NotificationMessageSDVideo, name) : LocaleController.formatString("NotificationMessageVideo", R.string.NotificationMessageVideo, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\udcf9 " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\udcf9 " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.isGame()) {
-                msg = LocaleController.formatString("NotificationMessageGame", C0488R.string.NotificationMessageGame, name, messageObject.messageOwner.media.game.title);
+                msg = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, name, messageObject.messageOwner.media.game.title);
             } else if (messageObject.isVoice()) {
-                msg = LocaleController.formatString("NotificationMessageAudio", C0488R.string.NotificationMessageAudio, name);
+                msg = LocaleController.formatString("NotificationMessageAudio", R.string.NotificationMessageAudio, name);
             } else if (messageObject.isRoundVideo()) {
-                msg = LocaleController.formatString("NotificationMessageRound", C0488R.string.NotificationMessageRound, name);
+                msg = LocaleController.formatString("NotificationMessageRound", R.string.NotificationMessageRound, name);
             } else if (messageObject.isMusic()) {
-                msg = LocaleController.formatString("NotificationMessageMusic", C0488R.string.NotificationMessageMusic, name);
+                msg = LocaleController.formatString("NotificationMessageMusic", R.string.NotificationMessageMusic, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
-                msg = LocaleController.formatString("NotificationMessageContact", C0488R.string.NotificationMessageContact, name);
+                msg = LocaleController.formatString("NotificationMessageContact", R.string.NotificationMessageContact, name);
             } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
-                msg = LocaleController.formatString("NotificationMessageMap", C0488R.string.NotificationMessageMap, name);
+                msg = LocaleController.formatString("NotificationMessageMap", R.string.NotificationMessageMap, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                msg = LocaleController.formatString("NotificationMessageLiveLocation", C0488R.string.NotificationMessageLiveLocation, name);
+                msg = LocaleController.formatString("NotificationMessageLiveLocation", R.string.NotificationMessageLiveLocation, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaDocument) {
                 if (messageObject.isSticker()) {
-                    msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("NotificationMessageStickerEmoji", C0488R.string.NotificationMessageStickerEmoji, name, messageObject.getStickerEmoji()) : LocaleController.formatString("NotificationMessageSticker", C0488R.string.NotificationMessageSticker, name);
+                    msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("NotificationMessageStickerEmoji", R.string.NotificationMessageStickerEmoji, name, messageObject.getStickerEmoji()) : LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, name);
                 } else if (messageObject.isGif()) {
                     if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                        msg = LocaleController.formatString("NotificationMessageGif", C0488R.string.NotificationMessageGif, name);
+                        msg = LocaleController.formatString("NotificationMessageGif", R.string.NotificationMessageGif, name);
                     } else {
-                        msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83c\udfac " + messageObject.messageOwner.message);
+                        msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83c\udfac " + messageObject.messageOwner.message);
                         text[0] = true;
                     }
                 } else if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = LocaleController.formatString("NotificationMessageDocument", C0488R.string.NotificationMessageDocument, name);
+                    msg = LocaleController.formatString("NotificationMessageDocument", R.string.NotificationMessageDocument, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\udcce " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\udcce " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             }
         } else if (chat_id != 0) {
             if (!MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewGroup", true)) {
-                msg = (!ChatObject.isChannel(chat) || chat.megagroup) ? LocaleController.formatString("NotificationMessageGroupNoText", C0488R.string.NotificationMessageGroupNoText, name, chat.title) : LocaleController.formatString("ChannelMessageNoText", C0488R.string.ChannelMessageNoText, name);
+                msg = (!ChatObject.isChannel(chat) || chat.megagroup) ? LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, name, chat.title) : LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
             } else if (messageObject.messageOwner instanceof TL_messageService) {
                 if (messageObject.messageOwner.action instanceof TL_messageActionChatAddUser) {
                     int singleUserId = messageObject.messageOwner.action.user_id;
@@ -1215,43 +1216,43 @@ public class NotificationsController {
                                 stringBuilder.append(name2);
                             }
                         }
-                        msg = LocaleController.formatString("NotificationGroupAddMember", C0488R.string.NotificationGroupAddMember, name, chat.title, stringBuilder.toString());
+                        msg = LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, stringBuilder.toString());
                     } else if (messageObject.messageOwner.to_id.channel_id != 0 && !chat.megagroup) {
-                        msg = LocaleController.formatString("ChannelAddedByNotification", C0488R.string.ChannelAddedByNotification, name, chat.title);
+                        msg = LocaleController.formatString("ChannelAddedByNotification", R.string.ChannelAddedByNotification, name, chat.title);
                     } else if (singleUserId == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        msg = LocaleController.formatString("NotificationInvitedToGroup", C0488R.string.NotificationInvitedToGroup, name, chat.title);
+                        msg = LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, name, chat.title);
                     } else {
                         User u2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(singleUserId));
                         if (u2 == null) {
                             return null;
                         }
-                        msg = from_id == u2.id ? chat.megagroup ? LocaleController.formatString("NotificationGroupAddSelfMega", C0488R.string.NotificationGroupAddSelfMega, name, chat.title) : LocaleController.formatString("NotificationGroupAddSelf", C0488R.string.NotificationGroupAddSelf, name, chat.title) : LocaleController.formatString("NotificationGroupAddMember", C0488R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
+                        msg = from_id == u2.id ? chat.megagroup ? LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title) : LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, name, chat.title) : LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
                     }
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatJoinedByLink) {
-                    msg = LocaleController.formatString("NotificationInvitedToGroupByLink", C0488R.string.NotificationInvitedToGroupByLink, name, chat.title);
+                    msg = LocaleController.formatString("NotificationInvitedToGroupByLink", R.string.NotificationInvitedToGroupByLink, name, chat.title);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatEditTitle) {
-                    msg = LocaleController.formatString("NotificationEditedGroupName", C0488R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
+                    msg = LocaleController.formatString("NotificationEditedGroupName", R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
                 } else if ((messageObject.messageOwner.action instanceof TL_messageActionChatEditPhoto) || (messageObject.messageOwner.action instanceof TL_messageActionChatDeletePhoto)) {
-                    msg = (messageObject.messageOwner.to_id.channel_id == 0 || chat.megagroup) ? LocaleController.formatString("NotificationEditedGroupPhoto", C0488R.string.NotificationEditedGroupPhoto, name, chat.title) : LocaleController.formatString("ChannelPhotoEditNotification", C0488R.string.ChannelPhotoEditNotification, chat.title);
+                    msg = (messageObject.messageOwner.to_id.channel_id == 0 || chat.megagroup) ? LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, name, chat.title) : LocaleController.formatString("ChannelPhotoEditNotification", R.string.ChannelPhotoEditNotification, chat.title);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatDeleteUser) {
                     if (messageObject.messageOwner.action.user_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        msg = LocaleController.formatString("NotificationGroupKickYou", C0488R.string.NotificationGroupKickYou, name, chat.title);
+                        msg = LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, name, chat.title);
                     } else if (messageObject.messageOwner.action.user_id == from_id) {
-                        msg = LocaleController.formatString("NotificationGroupLeftMember", C0488R.string.NotificationGroupLeftMember, name, chat.title);
+                        msg = LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, name, chat.title);
                     } else {
                         if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.action.user_id)) == null) {
                             return null;
                         }
-                        msg = LocaleController.formatString("NotificationGroupKickMember", C0488R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.action.user_id))));
+                        msg = LocaleController.formatString("NotificationGroupKickMember", R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.action.user_id))));
                     }
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatCreate) {
                     msg = messageObject.messageText.toString();
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChannelCreate) {
                     msg = messageObject.messageText.toString();
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatMigrateTo) {
-                    msg = LocaleController.formatString("ActionMigrateFromGroupNotify", C0488R.string.ActionMigrateFromGroupNotify, chat.title);
+                    msg = LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, chat.title);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChannelMigrateFrom) {
-                    msg = LocaleController.formatString("ActionMigrateFromGroupNotify", C0488R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
+                    msg = LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionScreenshotTaken) {
                     msg = messageObject.messageText.toString();
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionPinMessage) {
@@ -1260,119 +1261,119 @@ public class NotificationsController {
                     CharSequence message2;
                     if (chat == null || !chat.megagroup) {
                         if (messageObject.replyMessageObject == null) {
-                            msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", C0488R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
                         } else {
                             object = messageObject.replyMessageObject;
                             if (object.isMusic()) {
-                                msg = LocaleController.formatString("NotificationActionPinnedMusicChannel", C0488R.string.NotificationActionPinnedMusicChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedMusicChannel", R.string.NotificationActionPinnedMusicChannel, chat.title);
                             } else if (object.isVideo()) {
                                 if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedVideoChannel", C0488R.string.NotificationActionPinnedVideoChannel, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedVideoChannel", R.string.NotificationActionPinnedVideoChannel, chat.title);
                                 } else {
                                     message = "\ud83d\udcf9 " + object.messageOwner.message;
-                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", C0488R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                 }
                             } else if (object.isGif()) {
                                 if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedGifChannel", C0488R.string.NotificationActionPinnedGifChannel, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedGifChannel", R.string.NotificationActionPinnedGifChannel, chat.title);
                                 } else {
                                     message = "\ud83c\udfac " + object.messageOwner.message;
-                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", C0488R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                 }
                             } else if (object.isVoice()) {
-                                msg = LocaleController.formatString("NotificationActionPinnedVoiceChannel", C0488R.string.NotificationActionPinnedVoiceChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedVoiceChannel", R.string.NotificationActionPinnedVoiceChannel, chat.title);
                             } else if (object.isRoundVideo()) {
-                                msg = LocaleController.formatString("NotificationActionPinnedRoundChannel", C0488R.string.NotificationActionPinnedRoundChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, chat.title);
                             } else if (object.isSticker()) {
-                                msg = object.getStickerEmoji() != null ? LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", C0488R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, object.getStickerEmoji()) : LocaleController.formatString("NotificationActionPinnedStickerChannel", C0488R.string.NotificationActionPinnedStickerChannel, chat.title);
+                                msg = object.getStickerEmoji() != null ? LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, object.getStickerEmoji()) : LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, chat.title);
                             } else if (object.messageOwner.media instanceof TL_messageMediaDocument) {
                                 if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedFileChannel", C0488R.string.NotificationActionPinnedFileChannel, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedFileChannel", R.string.NotificationActionPinnedFileChannel, chat.title);
                                 } else {
                                     message = "\ud83d\udcce " + object.messageOwner.message;
-                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", C0488R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                 }
                             } else if ((object.messageOwner.media instanceof TL_messageMediaGeo) || (object.messageOwner.media instanceof TL_messageMediaVenue)) {
-                                msg = LocaleController.formatString("NotificationActionPinnedGeoChannel", C0488R.string.NotificationActionPinnedGeoChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedGeoChannel", R.string.NotificationActionPinnedGeoChannel, chat.title);
                             } else if (object.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                                msg = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", C0488R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
                             } else if (object.messageOwner.media instanceof TL_messageMediaContact) {
-                                msg = LocaleController.formatString("NotificationActionPinnedContactChannel", C0488R.string.NotificationActionPinnedContactChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedContactChannel", R.string.NotificationActionPinnedContactChannel, chat.title);
                             } else if (object.messageOwner.media instanceof TL_messageMediaPhoto) {
                                 if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedPhotoChannel", C0488R.string.NotificationActionPinnedPhotoChannel, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedPhotoChannel", R.string.NotificationActionPinnedPhotoChannel, chat.title);
                                 } else {
                                     message = "\ud83d\uddbc " + object.messageOwner.message;
-                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", C0488R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                    msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                 }
                             } else if (object.messageOwner.media instanceof TL_messageMediaGame) {
-                                msg = LocaleController.formatString("NotificationActionPinnedGameChannel", C0488R.string.NotificationActionPinnedGameChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedGameChannel", R.string.NotificationActionPinnedGameChannel, chat.title);
                             } else if (object.messageText == null || object.messageText.length() <= 0) {
-                                msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", C0488R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
                             } else {
                                 message2 = object.messageText;
                                 if (message2.length() > 20) {
                                     message2 = message2.subSequence(0, 20) + "...";
                                 }
-                                msg = LocaleController.formatString("NotificationActionPinnedTextChannel", C0488R.string.NotificationActionPinnedTextChannel, chat.title, message2);
+                                msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message2);
                             }
                         }
                     } else if (messageObject.replyMessageObject == null) {
-                        msg = LocaleController.formatString("NotificationActionPinnedNoText", C0488R.string.NotificationActionPinnedNoText, name, chat.title);
+                        msg = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
                     } else {
                         object = messageObject.replyMessageObject;
                         if (object.isMusic()) {
-                            msg = LocaleController.formatString("NotificationActionPinnedMusic", C0488R.string.NotificationActionPinnedMusic, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedMusic", R.string.NotificationActionPinnedMusic, name, chat.title);
                         } else if (object.isVideo()) {
                             if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationActionPinnedVideo", C0488R.string.NotificationActionPinnedVideo, name, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedVideo", R.string.NotificationActionPinnedVideo, name, chat.title);
                             } else {
                                 message = "\ud83d\udcf9 " + object.messageOwner.message;
-                                msg = LocaleController.formatString("NotificationActionPinnedText", C0488R.string.NotificationActionPinnedText, name, message, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
                             }
                         } else if (object.isGif()) {
                             if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationActionPinnedGif", C0488R.string.NotificationActionPinnedGif, name, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedGif", R.string.NotificationActionPinnedGif, name, chat.title);
                             } else {
                                 message = "\ud83c\udfac " + object.messageOwner.message;
-                                msg = LocaleController.formatString("NotificationActionPinnedText", C0488R.string.NotificationActionPinnedText, name, message, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
                             }
                         } else if (object.isVoice()) {
-                            msg = LocaleController.formatString("NotificationActionPinnedVoice", C0488R.string.NotificationActionPinnedVoice, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, name, chat.title);
                         } else if (object.isRoundVideo()) {
-                            msg = LocaleController.formatString("NotificationActionPinnedRound", C0488R.string.NotificationActionPinnedRound, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, name, chat.title);
                         } else if (object.isSticker()) {
-                            msg = object.getStickerEmoji() != null ? LocaleController.formatString("NotificationActionPinnedStickerEmoji", C0488R.string.NotificationActionPinnedStickerEmoji, name, chat.title, object.getStickerEmoji()) : LocaleController.formatString("NotificationActionPinnedSticker", C0488R.string.NotificationActionPinnedSticker, name, chat.title);
+                            msg = object.getStickerEmoji() != null ? LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, name, chat.title, object.getStickerEmoji()) : LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, name, chat.title);
                         } else if (object.messageOwner.media instanceof TL_messageMediaDocument) {
                             if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationActionPinnedFile", C0488R.string.NotificationActionPinnedFile, name, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedFile", R.string.NotificationActionPinnedFile, name, chat.title);
                             } else {
                                 message = "\ud83d\udcce " + object.messageOwner.message;
-                                msg = LocaleController.formatString("NotificationActionPinnedText", C0488R.string.NotificationActionPinnedText, name, message, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
                             }
                         } else if ((object.messageOwner.media instanceof TL_messageMediaGeo) || (object.messageOwner.media instanceof TL_messageMediaVenue)) {
-                            msg = LocaleController.formatString("NotificationActionPinnedGeo", C0488R.string.NotificationActionPinnedGeo, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedGeo", R.string.NotificationActionPinnedGeo, name, chat.title);
                         } else if (object.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                            msg = LocaleController.formatString("NotificationActionPinnedGeoLive", C0488R.string.NotificationActionPinnedGeoLive, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedGeoLive", R.string.NotificationActionPinnedGeoLive, name, chat.title);
                         } else if (object.messageOwner.media instanceof TL_messageMediaContact) {
-                            msg = LocaleController.formatString("NotificationActionPinnedContact", C0488R.string.NotificationActionPinnedContact, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedContact", R.string.NotificationActionPinnedContact, name, chat.title);
                         } else if (object.messageOwner.media instanceof TL_messageMediaPhoto) {
                             if (VERSION.SDK_INT < 19 || TextUtils.isEmpty(object.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationActionPinnedPhoto", C0488R.string.NotificationActionPinnedPhoto, name, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedPhoto", R.string.NotificationActionPinnedPhoto, name, chat.title);
                             } else {
                                 message = "\ud83d\uddbc " + object.messageOwner.message;
-                                msg = LocaleController.formatString("NotificationActionPinnedText", C0488R.string.NotificationActionPinnedText, name, message, chat.title);
+                                msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
                             }
                         } else if (object.messageOwner.media instanceof TL_messageMediaGame) {
-                            msg = LocaleController.formatString("NotificationActionPinnedGame", C0488R.string.NotificationActionPinnedGame, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedGame", R.string.NotificationActionPinnedGame, name, chat.title);
                         } else if (object.messageText == null || object.messageText.length() <= 0) {
-                            msg = LocaleController.formatString("NotificationActionPinnedNoText", C0488R.string.NotificationActionPinnedNoText, name, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
                         } else {
                             message2 = object.messageText;
                             if (message2.length() > 20) {
                                 message2 = message2.subSequence(0, 20) + "...";
                             }
-                            msg = LocaleController.formatString("NotificationActionPinnedText", C0488R.string.NotificationActionPinnedText, name, message2, chat.title);
+                            msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message2, chat.title);
                         }
                     }
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionGameScore) {
@@ -1380,79 +1381,79 @@ public class NotificationsController {
                 }
             } else if (!ChatObject.isChannel(chat) || chat.megagroup) {
                 if (messageObject.isMediaEmpty()) {
-                    msg = (shortMessage || messageObject.messageOwner.message == null || messageObject.messageOwner.message.length() == 0) ? LocaleController.formatString("NotificationMessageGroupNoText", C0488R.string.NotificationMessageGroupNoText, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", C0488R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageOwner.message);
+                    msg = (shortMessage || messageObject.messageOwner.message == null || messageObject.messageOwner.message.length() == 0) ? LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageOwner.message);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
-                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupPhoto", C0488R.string.NotificationMessageGroupPhoto, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", C0488R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\uddbc " + messageObject.messageOwner.message);
+                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\uddbc " + messageObject.messageOwner.message);
                 } else if (messageObject.isVideo()) {
-                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupVideo", C0488R.string.NotificationMessageGroupVideo, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", C0488R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcf9 " + messageObject.messageOwner.message);
+                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupVideo", R.string.NotificationMessageGroupVideo, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcf9 " + messageObject.messageOwner.message);
                 } else if (messageObject.isVoice()) {
-                    msg = LocaleController.formatString("NotificationMessageGroupAudio", C0488R.string.NotificationMessageGroupAudio, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, name, chat.title);
                 } else if (messageObject.isRoundVideo()) {
-                    msg = LocaleController.formatString("NotificationMessageGroupRound", C0488R.string.NotificationMessageGroupRound, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupRound", R.string.NotificationMessageGroupRound, name, chat.title);
                 } else if (messageObject.isMusic()) {
-                    msg = LocaleController.formatString("NotificationMessageGroupMusic", C0488R.string.NotificationMessageGroupMusic, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupMusic", R.string.NotificationMessageGroupMusic, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
-                    msg = LocaleController.formatString("NotificationMessageGroupContact", C0488R.string.NotificationMessageGroupContact, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupContact", R.string.NotificationMessageGroupContact, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaGame) {
-                    msg = LocaleController.formatString("NotificationMessageGroupGame", C0488R.string.NotificationMessageGroupGame, name, chat.title, messageObject.messageOwner.media.game.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupGame", R.string.NotificationMessageGroupGame, name, chat.title, messageObject.messageOwner.media.game.title);
                 } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
-                    msg = LocaleController.formatString("NotificationMessageGroupMap", C0488R.string.NotificationMessageGroupMap, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupMap", R.string.NotificationMessageGroupMap, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                    msg = LocaleController.formatString("NotificationMessageGroupLiveLocation", C0488R.string.NotificationMessageGroupLiveLocation, name, chat.title);
+                    msg = LocaleController.formatString("NotificationMessageGroupLiveLocation", R.string.NotificationMessageGroupLiveLocation, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaDocument) {
                     if (messageObject.isSticker()) {
-                        msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("NotificationMessageGroupStickerEmoji", C0488R.string.NotificationMessageGroupStickerEmoji, name, chat.title, messageObject.getStickerEmoji()) : LocaleController.formatString("NotificationMessageGroupSticker", C0488R.string.NotificationMessageGroupSticker, name, chat.title);
+                        msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("NotificationMessageGroupStickerEmoji", R.string.NotificationMessageGroupStickerEmoji, name, chat.title, messageObject.getStickerEmoji()) : LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, name, chat.title);
                     } else {
-                        msg = messageObject.isGif() ? (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupGif", C0488R.string.NotificationMessageGroupGif, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", C0488R.string.NotificationMessageGroupText, name, chat.title, "\ud83c\udfac " + messageObject.messageOwner.message) : (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupDocument", C0488R.string.NotificationMessageGroupDocument, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", C0488R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcce " + messageObject.messageOwner.message);
+                        msg = messageObject.isGif() ? (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupGif", R.string.NotificationMessageGroupGif, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83c\udfac " + messageObject.messageOwner.message) : (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupDocument", R.string.NotificationMessageGroupDocument, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcce " + messageObject.messageOwner.message);
                     }
                 }
             } else if (messageObject.isMediaEmpty()) {
                 if (shortMessage || messageObject.messageOwner.message == null || messageObject.messageOwner.message.length() == 0) {
-                    msg = LocaleController.formatString("ChannelMessageNoText", C0488R.string.ChannelMessageNoText, name);
+                    msg = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
                 if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = LocaleController.formatString("ChannelMessagePhoto", C0488R.string.ChannelMessagePhoto, name);
+                    msg = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\uddbc " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\uddbc " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.isVideo()) {
                 if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = LocaleController.formatString("ChannelMessageVideo", C0488R.string.ChannelMessageVideo, name);
+                    msg = LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\udcf9 " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\udcf9 " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             } else if (messageObject.isVoice()) {
-                msg = LocaleController.formatString("ChannelMessageAudio", C0488R.string.ChannelMessageAudio, name);
+                msg = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, name);
             } else if (messageObject.isRoundVideo()) {
-                msg = LocaleController.formatString("ChannelMessageRound", C0488R.string.ChannelMessageRound, name);
+                msg = LocaleController.formatString("ChannelMessageRound", R.string.ChannelMessageRound, name);
             } else if (messageObject.isMusic()) {
-                msg = LocaleController.formatString("ChannelMessageMusic", C0488R.string.ChannelMessageMusic, name);
+                msg = LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
-                msg = LocaleController.formatString("ChannelMessageContact", C0488R.string.ChannelMessageContact, name);
+                msg = LocaleController.formatString("ChannelMessageContact", R.string.ChannelMessageContact, name);
             } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
-                msg = LocaleController.formatString("ChannelMessageMap", C0488R.string.ChannelMessageMap, name);
+                msg = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                msg = LocaleController.formatString("ChannelMessageLiveLocation", C0488R.string.ChannelMessageLiveLocation, name);
+                msg = LocaleController.formatString("ChannelMessageLiveLocation", R.string.ChannelMessageLiveLocation, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaDocument) {
                 if (messageObject.isSticker()) {
-                    msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("ChannelMessageStickerEmoji", C0488R.string.ChannelMessageStickerEmoji, name, messageObject.getStickerEmoji()) : LocaleController.formatString("ChannelMessageSticker", C0488R.string.ChannelMessageSticker, name);
+                    msg = messageObject.getStickerEmoji() != null ? LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, name, messageObject.getStickerEmoji()) : LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, name);
                 } else if (messageObject.isGif()) {
                     if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                        msg = LocaleController.formatString("ChannelMessageGIF", C0488R.string.ChannelMessageGIF, name);
+                        msg = LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, name);
                     } else {
-                        msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83c\udfac " + messageObject.messageOwner.message);
+                        msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83c\udfac " + messageObject.messageOwner.message);
                         text[0] = true;
                     }
                 } else if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                    msg = LocaleController.formatString("ChannelMessageDocument", C0488R.string.ChannelMessageDocument, name);
+                    msg = LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, name);
                 } else {
-                    msg = LocaleController.formatString("NotificationMessageText", C0488R.string.NotificationMessageText, name, "\ud83d\udcce " + messageObject.messageOwner.message);
+                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\ud83d\udcce " + messageObject.messageOwner.message);
                     text[0] = true;
                 }
             }
@@ -1556,7 +1557,7 @@ public class NotificationsController {
                                     }
                                     if (NotificationsController.this.soundIn == 0 && !NotificationsController.this.soundInLoaded) {
                                         NotificationsController.this.soundInLoaded = true;
-                                        NotificationsController.this.soundIn = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, C0488R.raw.sound_in, 1);
+                                        NotificationsController.this.soundIn = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_in, 1);
                                     }
                                     if (NotificationsController.this.soundIn != 0) {
                                         try {
@@ -1930,7 +1931,7 @@ public class NotificationsController {
                         chatName = UserObject.getUserName(user);
                     }
                     if (((int) dialog_id) != 0 || this.pushDialogs.size() > 1 || AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
-                        name = LocaleController.getString("AppName", C0488R.string.AppName);
+                        name = LocaleController.getString("AppName", R.string.AppName);
                         replace = false;
                     } else {
                         name = chatName;
@@ -1946,10 +1947,10 @@ public class NotificationsController {
                         if (this.pushDialogs.size() != 1) {
                             detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
                         } else {
-                            detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", C0488R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+                            detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
                         }
                     }
-                    mBuilder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(C0488R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
+                    mBuilder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
                     vibrationPattern = null;
                     importance = 0;
                     sound = null;
@@ -2126,9 +2127,9 @@ public class NotificationsController {
                         intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
                         intent.putExtra("currentAccount", this.currentAccount);
                         if (VERSION.SDK_INT > 19) {
-                            mBuilder.addAction(C0488R.drawable.ic_ab_reply2, LocaleController.getString("Reply", C0488R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                            mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
                         } else {
-                            mBuilder.addAction(C0488R.drawable.ic_ab_reply, LocaleController.getString("Reply", C0488R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                            mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
                         }
                     }
                     if (VERSION.SDK_INT >= 26) {
@@ -2291,7 +2292,7 @@ public class NotificationsController {
             }
             if (((int) dialog_id) != 0) {
             }
-            name = LocaleController.getString("AppName", C0488R.string.AppName);
+            name = LocaleController.getString("AppName", R.string.AppName);
             replace = false;
             if (UserConfig.getActivatedAccountsCount() > 1) {
                 detailText = TtmlNode.ANONYMOUS_REGION_ID;
@@ -2301,11 +2302,11 @@ public class NotificationsController {
                 detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser());
             }
             if (this.pushDialogs.size() != 1) {
-                detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", C0488R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+                detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
             } else {
                 detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
             }
-            mBuilder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(C0488R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
+            mBuilder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
             vibrationPattern = null;
             importance = 0;
             sound = null;
@@ -2422,9 +2423,9 @@ public class NotificationsController {
             intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
             intent.putExtra("currentAccount", this.currentAccount);
             if (VERSION.SDK_INT > 19) {
-                mBuilder.addAction(C0488R.drawable.ic_ab_reply, LocaleController.getString("Reply", C0488R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
             } else {
-                mBuilder.addAction(C0488R.drawable.ic_ab_reply2, LocaleController.getString("Reply", C0488R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
             }
             if (VERSION.SDK_INT >= 26) {
                 mBuilder.setChannelId(validateChannelId(dialog_id, chatName, vibrationPattern, ledColor, sound, importance, configVibrationPattern, configSound, configImportance));
@@ -2529,14 +2530,14 @@ public class NotificationsController {
                 if (encryptedChat != null) {
                     user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
                     if (user != null) {
-                        name = LocaleController.getString("SecretChatName", C0488R.string.SecretChatName);
+                        name = LocaleController.getString("SecretChatName", R.string.SecretChatName);
                         photoPath = null;
                         jSONObject = null;
                     }
                 }
             }
             if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
-                name = LocaleController.getString("AppName", C0488R.string.AppName);
+                name = LocaleController.getString("AppName", R.string.AppName);
                 photoPath = null;
                 canReply = false;
             }
@@ -2557,19 +2558,19 @@ public class NotificationsController {
                 intent.putExtra("dialog_id", dialog_id);
                 intent.putExtra("max_id", max_id);
                 intent.putExtra("currentAccount", this.currentAccount);
-                unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", C0488R.string.Reply)).build());
+                unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
                 intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
                 intent.putExtra("dialog_id", dialog_id);
                 intent.putExtra("max_id", max_id);
                 intent.putExtra("currentAccount", this.currentAccount);
                 PendingIntent replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
-                RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", C0488R.string.Reply)).build();
+                RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
                 if (lowerId < 0) {
-                    replyToString = LocaleController.formatString("ReplyToGroup", C0488R.string.ReplyToGroup, name);
+                    replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
                 } else {
-                    replyToString = LocaleController.formatString("ReplyToUser", C0488R.string.ReplyToUser, name);
+                    replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
                 }
-                wearReplyAction = new Action.Builder(C0488R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
+                wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
             }
             Integer count = (Integer) this.pushDialogs.get(dialog_id);
             if (count == null) {
@@ -2658,7 +2659,7 @@ public class NotificationsController {
             summaryExtender.setDismissalId("summary_" + dismissalID);
             notificationBuilder.extend(summaryExtender);
             long date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(C0488R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
             if (this.pushDialogs.size() == 1 && !TextUtils.isEmpty(summary)) {
                 builder.setSubText(summary);
             }
@@ -2806,7 +2807,7 @@ public class NotificationsController {
                             }
                             if (NotificationsController.this.soundOut == 0 && !NotificationsController.this.soundOutLoaded) {
                                 NotificationsController.this.soundOutLoaded = true;
-                                NotificationsController.this.soundOut = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, C0488R.raw.sound_out, 1);
+                                NotificationsController.this.soundOut = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_out, 1);
                             }
                             if (NotificationsController.this.soundOut != 0) {
                                 try {

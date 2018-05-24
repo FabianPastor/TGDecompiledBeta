@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -31,6 +30,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -77,6 +77,16 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private ArrayList<WallPaper> wallPapers = new ArrayList();
     private File wallpaperFile;
     private SparseArray<WallPaper> wallpappersByIds = new SparseArray();
+
+    /* renamed from: org.telegram.ui.WallpapersActivity$3 */
+    class C23603 implements OnTouchListener {
+        C23603() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
+    }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$1 */
     class C23581 implements WallpaperUpdaterDelegate {
@@ -144,16 +154,6 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 }
                 WallpapersActivity.this.finishFragment();
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.WallpapersActivity$3 */
-    class C23603 implements OnTouchListener {
-        C23603() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
         }
     }
 
@@ -299,11 +299,11 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     public View createView(Context context) {
         this.themedWallpaper = Theme.getThemedWallpaper(true);
         this.updater = new WallpaperUpdater(getParentActivity(), new C23581());
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChatBackground", C0488R.string.ChatBackground));
+        this.actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
         this.actionBar.setActionBarMenuOnItemClick(new C23592());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.backgroundImage = new ImageView(context);
@@ -314,7 +314,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.progressView.setVisibility(4);
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 52.0f));
         this.progressViewBackground = new View(context);
-        this.progressViewBackground.setBackgroundResource(C0488R.drawable.system_loader);
+        this.progressViewBackground.setBackgroundResource(R.drawable.system_loader);
         this.progressView.addView(this.progressViewBackground, LayoutHelper.createFrame(36, 36, 17));
         RadialProgressView progressBar = new RadialProgressView(context);
         progressBar.setSize(AndroidUtilities.dp(28.0f));
@@ -362,7 +362,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.loadingSize);
                 }
                 if (this.selectedBackground == 1000001) {
-                    this.backgroundImage.setImageResource(C0488R.drawable.background_hd);
+                    this.backgroundImage.setImageResource(R.drawable.background_hd);
                     this.backgroundImage.setBackgroundColor(0);
                     this.selectedColor = 0;
                 } else if (this.selectedBackground == -1) {

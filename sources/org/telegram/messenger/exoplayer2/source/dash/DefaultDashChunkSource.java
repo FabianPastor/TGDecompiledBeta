@@ -53,24 +53,6 @@ public class DefaultDashChunkSource implements DashChunkSource {
     private final TrackSelection trackSelection;
     private final int trackType;
 
-    public static final class Factory implements org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory {
-        private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
-        private final int maxSegmentsPerLoad;
-
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
-            this(dataSourceFactory, 1);
-        }
-
-        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, int maxSegmentsPerLoad) {
-            this.dataSourceFactory = dataSourceFactory;
-            this.maxSegmentsPerLoad = maxSegmentsPerLoad;
-        }
-
-        public DashChunkSource createDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int[] adaptationSetIndices, TrackSelection trackSelection, int trackType, long elapsedRealtimeOffsetMs, boolean enableEventMessageTrack, boolean enableCea608Track, PlayerTrackEmsgHandler playerEmsgHandler) {
-            return new DefaultDashChunkSource(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection, trackType, this.dataSourceFactory.createDataSource(), elapsedRealtimeOffsetMs, this.maxSegmentsPerLoad, enableEventMessageTrack, enableCea608Track, playerEmsgHandler);
-        }
-    }
-
     protected static final class RepresentationHolder {
         final ChunkExtractorWrapper extractorWrapper;
         private long periodDurationUs;
@@ -164,6 +146,24 @@ public class DefaultDashChunkSource implements DashChunkSource {
 
         private static boolean mimeTypeIsRawText(String mimeType) {
             return MimeTypes.isText(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType);
+        }
+    }
+
+    public static final class Factory implements org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory {
+        private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
+        private final int maxSegmentsPerLoad;
+
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this(dataSourceFactory, 1);
+        }
+
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, int maxSegmentsPerLoad) {
+            this.dataSourceFactory = dataSourceFactory;
+            this.maxSegmentsPerLoad = maxSegmentsPerLoad;
+        }
+
+        public DashChunkSource createDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int[] adaptationSetIndices, TrackSelection trackSelection, int trackType, long elapsedRealtimeOffsetMs, boolean enableEventMessageTrack, boolean enableCea608Track, PlayerTrackEmsgHandler playerEmsgHandler) {
+            return new DefaultDashChunkSource(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection, trackType, this.dataSourceFactory.createDataSource(), elapsedRealtimeOffsetMs, this.maxSegmentsPerLoad, enableEventMessageTrack, enableCea608Track, playerEmsgHandler);
         }
     }
 

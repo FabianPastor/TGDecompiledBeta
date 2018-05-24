@@ -41,6 +41,7 @@ import java.util.Map.Entry;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
@@ -432,9 +433,9 @@ public class DataQuery {
         }
         if (type == 2) {
             if (remove) {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", C0488R.string.RemovedFromFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", R.string.RemovedFromFavorites), 0).show();
             } else {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", C0488R.string.AddedToFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", R.string.AddedToFavorites), 0).show();
             }
             TL_messages_faveSticker req = new TL_messages_faveSticker();
             req.id = new TL_inputDocument();
@@ -1715,13 +1716,13 @@ public class DataQuery {
                         try {
                             if (error == null) {
                                 if (stickerSet.masks) {
-                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", C0488R.string.MasksRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", R.string.MasksRemoved), 0).show();
                                 } else {
-                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", C0488R.string.StickersRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", R.string.StickersRemoved), 0).show();
                                 }
                                 DataQuery.this.loadStickers(type, false, true);
                             }
-                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", C0488R.string.ErrorOccurred), 0).show();
+                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), 0).show();
                             DataQuery.this.loadStickers(type, false, true);
                         } catch (Throwable e) {
                             FileLog.m3e(e);
@@ -2517,7 +2518,7 @@ public class DataQuery {
                         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                         intent.setAction("new_dialog");
                         ArrayList<ShortcutInfo> arrayList = new ArrayList();
-                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", C0488R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", C0488R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.shortcut_compose)).setIntent(intent).build());
+                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose)).setIntent(intent).build());
                         if (shortcutsToUpdate.contains("compose")) {
                             shortcutManager.updateShortcuts(arrayList);
                         } else {
@@ -2596,7 +2597,7 @@ public class DataQuery {
                                 if (bitmap != null) {
                                     builder.setIcon(Icon.createWithBitmap(bitmap));
                                 } else {
-                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.shortcut_user));
+                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
                                 }
                                 arrayList.add(builder.build());
                                 if (shortcutsToUpdate.contains(id)) {
@@ -3019,7 +3020,7 @@ public class DataQuery {
                         photo = chat.photo.photo_small;
                     }
                 } else if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", C0488R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                     selfUser = true;
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
@@ -3060,7 +3061,7 @@ public class DataQuery {
                             canvas.drawRoundRect(bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), roundPaint);
                             canvas.restore();
                         }
-                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(C0488R.drawable.book_logo);
+                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
                         int w = AndroidUtilities.dp(15.0f);
                         int left = (size - w) - AndroidUtilities.dp(2.0f);
                         int top = (size - w) - AndroidUtilities.dp(2.0f);
@@ -3079,15 +3080,15 @@ public class DataQuery {
                         pinShortcutInfo.setIcon(Icon.createWithBitmap(bitmap));
                     } else if (user != null) {
                         if (user.bot) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.book_bot));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_bot));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.book_user));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_user));
                         }
                     } else if (chat != null) {
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.book_group));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0488R.drawable.book_channel));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_channel));
                         }
                     }
                     ((ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class)).requestPinShortcut(pinShortcutInfo.build(), null);
@@ -3098,15 +3099,15 @@ public class DataQuery {
                     addIntent.putExtra("android.intent.extra.shortcut.ICON", bitmap);
                 } else if (user != null) {
                     if (user.bot) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0488R.drawable.book_bot));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_bot));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0488R.drawable.book_user));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_user));
                     }
                 } else if (chat != null) {
                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0488R.drawable.book_group));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_group));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0488R.drawable.book_channel));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_channel));
                     }
                 }
                 addIntent.putExtra("android.intent.extra.shortcut.INTENT", shortcutIntent);

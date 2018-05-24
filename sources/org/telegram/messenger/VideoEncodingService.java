@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 
 public class VideoEncodingService extends Service implements NotificationCenterDelegate {
     private Builder builder;
@@ -81,13 +82,13 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 this.builder.setSmallIcon(17301640);
                 this.builder.setWhen(System.currentTimeMillis());
                 this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                this.builder.setContentTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
                 if (isGif) {
-                    this.builder.setTicker(LocaleController.getString("SendingGif", C0488R.string.SendingGif));
-                    this.builder.setContentText(LocaleController.getString("SendingGif", C0488R.string.SendingGif));
+                    this.builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));
+                    this.builder.setContentText(LocaleController.getString("SendingGif", R.string.SendingGif));
                 } else {
-                    this.builder.setTicker(LocaleController.getString("SendingVideo", C0488R.string.SendingVideo));
-                    this.builder.setContentText(LocaleController.getString("SendingVideo", C0488R.string.SendingVideo));
+                    this.builder.setTicker(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+                    this.builder.setContentText(LocaleController.getString("SendingVideo", R.string.SendingVideo));
                 }
             }
             this.currentProgress = 0;

@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -68,10 +68,10 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         public void onItemClick(View view, int position) {
             if (position == ConvertGroupActivity.this.convertRow) {
                 Builder builder = new Builder(ConvertGroupActivity.this.getParentActivity());
-                builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0488R.string.ConvertGroupAlert));
-                builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0488R.string.ConvertGroupAlertWarning));
-                builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C17391());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
+                builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17391());
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 ConvertGroupActivity.this.showDialog(builder.create());
             }
         }
@@ -111,19 +111,19 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
                 case 0:
                     TextSettingsCell textCell = holder.itemView;
                     if (position == ConvertGroupActivity.this.convertRow) {
-                        textCell.setText(LocaleController.getString("ConvertGroup", C0488R.string.ConvertGroup), false);
+                        textCell.setText(LocaleController.getString("ConvertGroup", R.string.ConvertGroup), false);
                         return;
                     }
                     return;
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == ConvertGroupActivity.this.convertInfoRow) {
-                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", C0488R.string.ConvertGroupInfo2)));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", R.string.ConvertGroupInfo2)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ConvertGroupActivity.this.convertDetailRow) {
-                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", C0488R.string.ConvertGroupInfo3)));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", R.string.ConvertGroupInfo3)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -170,9 +170,9 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ConvertGroup", C0488R.string.ConvertGroup));
+        this.actionBar.setTitle(LocaleController.getString("ConvertGroup", R.string.ConvertGroup));
         this.actionBar.setActionBarMenuOnItemClick(new C17381());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);

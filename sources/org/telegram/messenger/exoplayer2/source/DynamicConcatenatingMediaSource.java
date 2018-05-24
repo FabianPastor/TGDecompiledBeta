@@ -42,77 +42,56 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
     private ShuffleOrder shuffleOrder;
     private int windowCount;
 
-    private static final class ConcatenatedTimeline extends AbstractConcatenatedTimeline {
-        private final SparseIntArray childIndexByUid = new SparseIntArray();
-        private final int[] firstPeriodInChildIndices;
-        private final int[] firstWindowInChildIndices;
-        private final int periodCount;
-        private final Timeline[] timelines;
-        private final int[] uids;
-        private final int windowCount;
+    private static final class EventDispatcher {
+        public final Handler eventHandler;
+        public final Runnable runnable;
 
-        public ConcatenatedTimeline(Collection<MediaSourceHolder> mediaSourceHolders, int windowCount, int periodCount, ShuffleOrder shuffleOrder) {
-            super(shuffleOrder);
-            this.windowCount = windowCount;
-            this.periodCount = periodCount;
-            int childCount = mediaSourceHolders.size();
-            this.firstPeriodInChildIndices = new int[childCount];
-            this.firstWindowInChildIndices = new int[childCount];
-            this.timelines = new Timeline[childCount];
-            this.uids = new int[childCount];
-            int index = 0;
-            for (MediaSourceHolder mediaSourceHolder : mediaSourceHolders) {
-                this.timelines[index] = mediaSourceHolder.timeline;
-                this.firstPeriodInChildIndices[index] = mediaSourceHolder.firstPeriodIndexInChild;
-                this.firstWindowInChildIndices[index] = mediaSourceHolder.firstWindowIndexInChild;
-                this.uids[index] = ((Integer) mediaSourceHolder.uid).intValue();
-                int index2 = index + 1;
-                this.childIndexByUid.put(this.uids[index], index);
-                index = index2;
+        public EventDispatcher(Runnable runnable) {
+            Looper myLooper;
+            this.runnable = runnable;
+            if (Looper.myLooper() != null) {
+                myLooper = Looper.myLooper();
+            } else {
+                myLooper = Looper.getMainLooper();
             }
+            this.eventHandler = new Handler(myLooper);
         }
 
-        protected int getChildIndexByPeriodIndex(int periodIndex) {
-            return Util.binarySearchFloor(this.firstPeriodInChildIndices, periodIndex + 1, false, false);
+        public void dispatchEvent() {
+            this.eventHandler.post(this.runnable);
+        }
+    }
+
+    private static final class MediaSourceHolder implements Comparable<MediaSourceHolder> {
+        public int firstPeriodIndexInChild;
+        public int firstWindowIndexInChild;
+        public boolean isPrepared;
+        public final MediaSource mediaSource;
+        public DeferredTimeline timeline;
+        public final Object uid;
+
+        public MediaSourceHolder(MediaSource mediaSource, DeferredTimeline timeline, int window, int period, Object uid) {
+            this.mediaSource = mediaSource;
+            this.timeline = timeline;
+            this.firstWindowIndexInChild = window;
+            this.firstPeriodIndexInChild = period;
+            this.uid = uid;
         }
 
-        protected int getChildIndexByWindowIndex(int windowIndex) {
-            return Util.binarySearchFloor(this.firstWindowInChildIndices, windowIndex + 1, false, false);
+        public int compareTo(MediaSourceHolder other) {
+            return this.firstPeriodIndexInChild - other.firstPeriodIndexInChild;
         }
+    }
 
-        protected int getChildIndexByChildUid(Object childUid) {
-            if (!(childUid instanceof Integer)) {
-                return -1;
-            }
-            int index = this.childIndexByUid.get(((Integer) childUid).intValue(), -1);
-            if (index == -1) {
-                index = -1;
-            }
-            return index;
-        }
+    private static final class MessageData<CustomType> {
+        public final EventDispatcher actionOnCompletion;
+        public final CustomType customData;
+        public final int index;
 
-        protected Timeline getTimelineByChildIndex(int childIndex) {
-            return this.timelines[childIndex];
-        }
-
-        protected int getFirstPeriodIndexByChildIndex(int childIndex) {
-            return this.firstPeriodInChildIndices[childIndex];
-        }
-
-        protected int getFirstWindowIndexByChildIndex(int childIndex) {
-            return this.firstWindowInChildIndices[childIndex];
-        }
-
-        protected Object getChildUidByChildIndex(int childIndex) {
-            return Integer.valueOf(this.uids[childIndex]);
-        }
-
-        public int getWindowCount() {
-            return this.windowCount;
-        }
-
-        public int getPeriodCount() {
-            return this.periodCount;
+        public MessageData(int index, CustomType customData, Runnable actionOnCompletion) {
+            this.index = index;
+            this.actionOnCompletion = actionOnCompletion != null ? new EventDispatcher(actionOnCompletion) : null;
+            this.customData = customData;
         }
     }
 
@@ -191,56 +170,77 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
         }
     }
 
-    private static final class EventDispatcher {
-        public final Handler eventHandler;
-        public final Runnable runnable;
+    private static final class ConcatenatedTimeline extends AbstractConcatenatedTimeline {
+        private final SparseIntArray childIndexByUid = new SparseIntArray();
+        private final int[] firstPeriodInChildIndices;
+        private final int[] firstWindowInChildIndices;
+        private final int periodCount;
+        private final Timeline[] timelines;
+        private final int[] uids;
+        private final int windowCount;
 
-        public EventDispatcher(Runnable runnable) {
-            Looper myLooper;
-            this.runnable = runnable;
-            if (Looper.myLooper() != null) {
-                myLooper = Looper.myLooper();
-            } else {
-                myLooper = Looper.getMainLooper();
+        public ConcatenatedTimeline(Collection<MediaSourceHolder> mediaSourceHolders, int windowCount, int periodCount, ShuffleOrder shuffleOrder) {
+            super(shuffleOrder);
+            this.windowCount = windowCount;
+            this.periodCount = periodCount;
+            int childCount = mediaSourceHolders.size();
+            this.firstPeriodInChildIndices = new int[childCount];
+            this.firstWindowInChildIndices = new int[childCount];
+            this.timelines = new Timeline[childCount];
+            this.uids = new int[childCount];
+            int index = 0;
+            for (MediaSourceHolder mediaSourceHolder : mediaSourceHolders) {
+                this.timelines[index] = mediaSourceHolder.timeline;
+                this.firstPeriodInChildIndices[index] = mediaSourceHolder.firstPeriodIndexInChild;
+                this.firstWindowInChildIndices[index] = mediaSourceHolder.firstWindowIndexInChild;
+                this.uids[index] = ((Integer) mediaSourceHolder.uid).intValue();
+                int index2 = index + 1;
+                this.childIndexByUid.put(this.uids[index], index);
+                index = index2;
             }
-            this.eventHandler = new Handler(myLooper);
         }
 
-        public void dispatchEvent() {
-            this.eventHandler.post(this.runnable);
-        }
-    }
-
-    private static final class MediaSourceHolder implements Comparable<MediaSourceHolder> {
-        public int firstPeriodIndexInChild;
-        public int firstWindowIndexInChild;
-        public boolean isPrepared;
-        public final MediaSource mediaSource;
-        public DeferredTimeline timeline;
-        public final Object uid;
-
-        public MediaSourceHolder(MediaSource mediaSource, DeferredTimeline timeline, int window, int period, Object uid) {
-            this.mediaSource = mediaSource;
-            this.timeline = timeline;
-            this.firstWindowIndexInChild = window;
-            this.firstPeriodIndexInChild = period;
-            this.uid = uid;
+        protected int getChildIndexByPeriodIndex(int periodIndex) {
+            return Util.binarySearchFloor(this.firstPeriodInChildIndices, periodIndex + 1, false, false);
         }
 
-        public int compareTo(MediaSourceHolder other) {
-            return this.firstPeriodIndexInChild - other.firstPeriodIndexInChild;
+        protected int getChildIndexByWindowIndex(int windowIndex) {
+            return Util.binarySearchFloor(this.firstWindowInChildIndices, windowIndex + 1, false, false);
         }
-    }
 
-    private static final class MessageData<CustomType> {
-        public final EventDispatcher actionOnCompletion;
-        public final CustomType customData;
-        public final int index;
+        protected int getChildIndexByChildUid(Object childUid) {
+            if (!(childUid instanceof Integer)) {
+                return -1;
+            }
+            int index = this.childIndexByUid.get(((Integer) childUid).intValue(), -1);
+            if (index == -1) {
+                index = -1;
+            }
+            return index;
+        }
 
-        public MessageData(int index, CustomType customData, Runnable actionOnCompletion) {
-            this.index = index;
-            this.actionOnCompletion = actionOnCompletion != null ? new EventDispatcher(actionOnCompletion) : null;
-            this.customData = customData;
+        protected Timeline getTimelineByChildIndex(int childIndex) {
+            return this.timelines[childIndex];
+        }
+
+        protected int getFirstPeriodIndexByChildIndex(int childIndex) {
+            return this.firstPeriodInChildIndices[childIndex];
+        }
+
+        protected int getFirstWindowIndexByChildIndex(int childIndex) {
+            return this.firstWindowInChildIndices[childIndex];
+        }
+
+        protected Object getChildUidByChildIndex(int childIndex) {
+            return Integer.valueOf(this.uids[childIndex]);
+        }
+
+        public int getWindowCount() {
+            return this.windowCount;
+        }
+
+        public int getPeriodCount() {
+            return this.periodCount;
         }
     }
 

@@ -42,6 +42,10 @@ public final class FlvExtractor implements Extractor {
     private int tagType;
     private VideoTagPayloadReader videoReader;
 
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface States {
+    }
+
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.flv.FlvExtractor$1 */
     static class C06331 implements ExtractorsFactory {
         C06331() {
@@ -50,10 +54,6 @@ public final class FlvExtractor implements Extractor {
         public Extractor[] createExtractors() {
             return new Extractor[]{new FlvExtractor()};
         }
-    }
-
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface States {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {

@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 @TargetApi(10)
@@ -125,9 +125,9 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(-1);
         this.paint2 = new Paint();
         this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.drawableLeft = context.getResources().getDrawable(C0488R.drawable.video_cropleft);
+        this.drawableLeft = context.getResources().getDrawable(R.drawable.video_cropleft);
         this.drawableLeft.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
-        this.drawableRight = context.getResources().getDrawable(C0488R.drawable.video_cropright);
+        this.drawableRight = context.getResources().getDrawable(R.drawable.video_cropright);
         this.drawableRight.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
     }
 

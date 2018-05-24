@@ -8,8 +8,8 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -36,7 +36,7 @@ public class MaxFileSizeCell extends FrameLayout {
             } else {
                 size = (int) (((float) 104857600) + ((((float) (MaxFileSizeCell.this.maxSize - ((long) 104857600))) * (progress - 0.8f)) / 0.2f));
             }
-            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", C0488R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
+            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
             MaxFileSizeCell.this.didChangedSizeValue(size);
         }
     }
@@ -52,7 +52,7 @@ public class MaxFileSizeCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setText(LocaleController.getString("AutodownloadSizeLimit", C0488R.string.AutodownloadSizeLimit));
+        this.textView.setText(LocaleController.getString("AutodownloadSizeLimit", R.string.AutodownloadSizeLimit));
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.textView.setEllipsize(TruncateAt.END);
         View view = this.textView;
@@ -108,6 +108,6 @@ public class MaxFileSizeCell extends FrameLayout {
             progress = 0.8f + ((((float) (size - ((long) 104857600))) / ((float) (this.maxSize - ((long) 104857600)))) * 0.2f);
         }
         this.seekBarView.setProgress(progress);
-        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", C0488R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
     }
 }

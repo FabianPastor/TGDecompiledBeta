@@ -46,12 +46,6 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
     private final Handler mainHandler;
     private final Period period;
 
-    public interface MediaSourceFactory {
-        MediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener);
-
-        int[] getSupportedTypes();
-    }
-
     /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$2 */
     class C06852 implements Runnable {
         C06852() {
@@ -60,6 +54,12 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         public void run() {
             AdsMediaSource.this.adsLoader.detachPlayer();
         }
+    }
+
+    public interface MediaSourceFactory {
+        MediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener);
+
+        int[] getSupportedTypes();
     }
 
     private final class ComponentListener implements org.telegram.messenger.exoplayer2.source.ads.AdsLoader.EventListener {

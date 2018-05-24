@@ -31,9 +31,9 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener;
 import org.telegram.ui.Components.CloseProgressDrawable2;
@@ -94,18 +94,6 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
             return false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
-    class C08483 implements OnDispatchKeyEventListener {
-        C08483() {
-        }
-
-        public void onDispatchKeyEvent(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
-                ActionBarMenuItem.this.popupWindow.dismiss();
-            }
         }
     }
 
@@ -210,6 +198,18 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public void onCaptionCleared() {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
+    class C08483 implements OnDispatchKeyEventListener {
+        C08483() {
+        }
+
+        public void onDispatchKeyEvent(KeyEvent keyEvent) {
+            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
+                ActionBarMenuItem.this.popupWindow.dismiss();
+            }
         }
     }
 
@@ -400,7 +400,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (this.popupWindow == null) {
                     this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                     if (!this.animationEnabled || VERSION.SDK_INT < 19) {
-                        this.popupWindow.setAnimationStyle(C0488R.style.PopupAnimation);
+                        this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
                     } else {
                         this.popupWindow.setAnimationStyle(0);
                     }

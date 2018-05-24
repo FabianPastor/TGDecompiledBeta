@@ -23,6 +23,22 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
     private Listener sourceListener;
     private final long startUs;
 
+    public static final class IllegalClippingException extends IOException {
+        public static final int REASON_INVALID_PERIOD_COUNT = 0;
+        public static final int REASON_NOT_SEEKABLE_TO_START = 2;
+        public static final int REASON_PERIOD_OFFSET_IN_WINDOW = 1;
+        public static final int REASON_START_EXCEEDS_END = 3;
+        public final int reason;
+
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface Reason {
+        }
+
+        public IllegalClippingException(int reason) {
+            this.reason = reason;
+        }
+    }
+
     private static final class ClippingTimeline extends ForwardingTimeline {
         private final long endUs;
         private final long startUs;
@@ -88,22 +104,6 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
             }
             period.durationUs = j;
             return period;
-        }
-    }
-
-    public static final class IllegalClippingException extends IOException {
-        public static final int REASON_INVALID_PERIOD_COUNT = 0;
-        public static final int REASON_NOT_SEEKABLE_TO_START = 2;
-        public static final int REASON_PERIOD_OFFSET_IN_WINDOW = 1;
-        public static final int REASON_START_EXCEEDS_END = 3;
-        public final int reason;
-
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface Reason {
-        }
-
-        public IllegalClippingException(int reason) {
-            this.reason = reason;
         }
     }
 

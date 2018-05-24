@@ -37,6 +37,7 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         View view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
@@ -57,6 +58,7 @@ public class TextSettingsCell extends FrameLayout {
             i2 = 5;
         }
         textView.setGravity(i2 | 16);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         view = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 3;
@@ -73,12 +75,6 @@ public class TextSettingsCell extends FrameLayout {
             i3 = 5;
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
-    }
-
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

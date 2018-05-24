@@ -27,8 +27,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 
 public class DrawerLayoutContainer extends FrameLayout {
     private static final int MIN_DRAWER_MARGIN = 64;
@@ -101,7 +101,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             setOnApplyWindowInsetsListener(new C08821());
             setSystemUiVisibility(1280);
         }
-        this.shadowLeft = getResources().getDrawable(C0488R.drawable.menu_shadow);
+        this.shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
     }
 
     @SuppressLint({"NewApi"})

@@ -949,7 +949,9 @@ public class MessagesStorage {
     }
 
     public void cleanup(final boolean isLogin) {
-        this.storageQueue.cleanupQueue();
+        if (!isLogin) {
+            this.storageQueue.cleanupQueue();
+        }
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$3$1 */
@@ -6777,12 +6779,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 76;
+                    message.media.bytes[0] = (byte) 78;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 76;
+                message.media.bytes[0] = (byte) 78;
                 message.flags |= 512;
             }
         }

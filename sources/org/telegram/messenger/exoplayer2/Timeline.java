@@ -8,32 +8,6 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 public abstract class Timeline {
     public static final Timeline EMPTY = new C06051();
 
-    /* renamed from: org.telegram.messenger.exoplayer2.Timeline$1 */
-    static class C06051 extends Timeline {
-        C06051() {
-        }
-
-        public int getWindowCount() {
-            return 0;
-        }
-
-        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        public int getPeriodCount() {
-            return 0;
-        }
-
-        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        public int getIndexOfPeriod(Object uid) {
-            return -1;
-        }
-    }
-
     public static final class Period {
         private AdPlaybackState adPlaybackState;
         public long durationUs;
@@ -185,6 +159,32 @@ public abstract class Timeline {
 
         public long getPositionInFirstPeriodUs() {
             return this.positionInFirstPeriodUs;
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.Timeline$1 */
+    static class C06051 extends Timeline {
+        C06051() {
+        }
+
+        public int getWindowCount() {
+            return 0;
+        }
+
+        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        public int getPeriodCount() {
+            return 0;
+        }
+
+        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        public int getIndexOfPeriod(Object uid) {
+            return -1;
         }
     }
 

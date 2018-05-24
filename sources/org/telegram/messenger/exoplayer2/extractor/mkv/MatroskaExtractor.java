@@ -227,55 +227,8 @@ public final class MatroskaExtractor implements Extractor {
     private final VarintReader varintReader;
     private final ParsableByteArray vorbisNumPageSamples;
 
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$1 */
-    static class C06351 implements ExtractorsFactory {
-        C06351() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new MatroskaExtractor()};
-        }
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     public @interface Flags {
-    }
-
-    private final class InnerEbmlReaderOutput implements EbmlReaderOutput {
-        private InnerEbmlReaderOutput() {
-        }
-
-        public int getElementType(int id) {
-            return MatroskaExtractor.this.getElementType(id);
-        }
-
-        public boolean isLevel1Element(int id) {
-            return MatroskaExtractor.this.isLevel1Element(id);
-        }
-
-        public void startMasterElement(int id, long contentPosition, long contentSize) throws ParserException {
-            MatroskaExtractor.this.startMasterElement(id, contentPosition, contentSize);
-        }
-
-        public void endMasterElement(int id) throws ParserException {
-            MatroskaExtractor.this.endMasterElement(id);
-        }
-
-        public void integerElement(int id, long value) throws ParserException {
-            MatroskaExtractor.this.integerElement(id, value);
-        }
-
-        public void floatElement(int id, double value) throws ParserException {
-            MatroskaExtractor.this.floatElement(id, value);
-        }
-
-        public void stringElement(int id, String value) throws ParserException {
-            MatroskaExtractor.this.stringElement(id, value);
-        }
-
-        public void binaryElement(int id, int contentsSize, ExtractorInput input) throws IOException, InterruptedException {
-            MatroskaExtractor.this.binaryElement(id, contentsSize, input);
-        }
     }
 
     private static final class Track {
@@ -1316,6 +1269,53 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 track.output.sampleMetadata(this.timeUs, this.blockFlags, this.chunkSize, 0, track.cryptoData);
                 this.sampleCount = 0;
             }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$1 */
+    static class C06351 implements ExtractorsFactory {
+        C06351() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new MatroskaExtractor()};
+        }
+    }
+
+    private final class InnerEbmlReaderOutput implements EbmlReaderOutput {
+        private InnerEbmlReaderOutput() {
+        }
+
+        public int getElementType(int id) {
+            return MatroskaExtractor.this.getElementType(id);
+        }
+
+        public boolean isLevel1Element(int id) {
+            return MatroskaExtractor.this.isLevel1Element(id);
+        }
+
+        public void startMasterElement(int id, long contentPosition, long contentSize) throws ParserException {
+            MatroskaExtractor.this.startMasterElement(id, contentPosition, contentSize);
+        }
+
+        public void endMasterElement(int id) throws ParserException {
+            MatroskaExtractor.this.endMasterElement(id);
+        }
+
+        public void integerElement(int id, long value) throws ParserException {
+            MatroskaExtractor.this.integerElement(id, value);
+        }
+
+        public void floatElement(int id, double value) throws ParserException {
+            MatroskaExtractor.this.floatElement(id, value);
+        }
+
+        public void stringElement(int id, String value) throws ParserException {
+            MatroskaExtractor.this.stringElement(id, value);
+        }
+
+        public void binaryElement(int id, int contentsSize, ExtractorInput input) throws IOException, InterruptedException {
+            MatroskaExtractor.this.binaryElement(id, contentsSize, input);
         }
     }
 

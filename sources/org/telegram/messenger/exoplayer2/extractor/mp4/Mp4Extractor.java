@@ -54,16 +54,6 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     private int sampleTrackIndex;
     private Mp4Track[] tracks;
 
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.Mp4Extractor$1 */
-    static class C06391 implements ExtractorsFactory {
-        C06391() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new Mp4Extractor()};
-        }
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     public @interface Flags {
     }
@@ -83,6 +73,16 @@ public final class Mp4Extractor implements Extractor, SeekMap {
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.Mp4Extractor$1 */
+    static class C06391 implements ExtractorsFactory {
+        C06391() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new Mp4Extractor()};
+        }
     }
 
     public Mp4Extractor() {

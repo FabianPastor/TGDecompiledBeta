@@ -73,16 +73,6 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         }
     }
 
-    /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
-    class C07512 extends OnScrollListener {
-        C07512() {
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            FastScroller.this.updateScrollPosition(recyclerView.computeHorizontalScrollOffset(), recyclerView.computeVerticalScrollOffset());
-        }
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     private @interface AnimationState {
     }
@@ -129,6 +119,16 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
+    }
+
+    /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
+    class C07512 extends OnScrollListener {
+        C07512() {
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            FastScroller.this.updateScrollPosition(recyclerView.computeHorizontalScrollOffset(), recyclerView.computeVerticalScrollOffset());
+        }
     }
 
     FastScroller(RecyclerView recyclerView, StateListDrawable verticalThumbDrawable, Drawable verticalTrackDrawable, StateListDrawable horizontalThumbDrawable, Drawable horizontalTrackDrawable, int defaultWidth, int scrollbarMinimumRange, int margin) {

@@ -35,11 +35,11 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -80,6 +80,29 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     private String phone;
     private AlertDialog progressDialog;
     private SlideView[] views = new SlideView[5];
+
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
 
     /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$1 */
     class C10311 extends ActionBarMenuOnItemClick {
@@ -178,9 +201,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     if (LoginActivitySmsView.this.time >= 1000) {
                         int seconds = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
                         if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", C0488R.string.CallText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                         } else if (LoginActivitySmsView.this.nextType == 2) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", C0488R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                         }
                         if (LoginActivitySmsView.this.progressView != null) {
                             LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
@@ -201,7 +224,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     } else if (LoginActivitySmsView.this.currentType != 2) {
                     } else {
                         if (LoginActivitySmsView.this.nextType == 4) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", C0488R.string.Calling));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", R.string.Calling));
                             LoginActivitySmsView.this.createCodeTimer();
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = LoginActivitySmsView.this.phone;
@@ -243,7 +266,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (this.currentType == 3) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(C0488R.drawable.phone_activate);
+                imageView.setImageResource(R.drawable.phone_activate);
                 if (LocaleController.isRTL) {
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 19, 2.0f, 2.0f, 0.0f, 0.0f));
                     frameLayout.addView(this.confirmTextView, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, 82.0f, 0.0f, 0.0f, 0.0f));
@@ -257,7 +280,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
             this.codeField = new EditTextBoldCursor(context);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.codeField.setHint(LocaleController.getString("Code", C0488R.string.Code));
+            this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
             this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setCursorWidth(1.5f);
             this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
@@ -307,7 +330,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
             }
             this.problemText = new TextView(context);
-            this.problemText.setText(LocaleController.getString("DidNotGetTheCode", C0488R.string.DidNotGetTheCode));
+            this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
             this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
@@ -329,7 +352,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 LoginActivitySmsView.this.getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                                 return;
                             } catch (Exception e) {
-                                AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", C0488R.string.NoMailInstalled));
+                                AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                                 return;
                             }
                         }
@@ -365,7 +388,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public String getHeaderName() {
-            return LocaleController.getString("CancelAccountReset", C0488R.string.CancelAccountReset);
+            return LocaleController.getString("CancelAccountReset", R.string.CancelAccountReset);
         }
 
         public void setParams(Bundle params, boolean restore) {
@@ -399,7 +422,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
                 if (this.phone != null) {
                     String number = PhoneFormat.getInstance().format(this.phone);
-                    this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo", C0488R.string.CancelAccountResetInfo, PhoneFormat.getInstance().format("+" + number))));
+                    this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo", R.string.CancelAccountResetInfo, PhoneFormat.getInstance().format("+" + number))));
                     if (this.currentType != 3) {
                         AndroidUtilities.showKeyboard(this.codeField);
                         this.codeField.requestFocus();
@@ -416,14 +439,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         this.problemText.setVisibility(8);
                         this.timeText.setVisibility(0);
                         if (this.nextType == 4) {
-                            this.timeText.setText(LocaleController.formatString("CallText", C0488R.string.CallText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(1), Integer.valueOf(0)));
                         } else if (this.nextType == 2) {
-                            this.timeText.setText(LocaleController.formatString("SmsText", C0488R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
                         }
                         createTimer();
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setVisibility(0);
-                        this.timeText.setText(LocaleController.formatString("CallText", C0488R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
+                        this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         createTimer();
                     } else {
@@ -500,7 +523,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 CancelAccountDeletionActivity.this.needHideProgress();
                                 LoginActivitySmsView.this.nextPressed = false;
                                 if (error == null) {
-                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", C0488R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
+                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
                                     return;
                                 }
                                 LoginActivitySmsView.this.lastError = error.text;
@@ -642,35 +665,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public String getHeaderName() {
-            return LocaleController.getString("CancelAccountReset", C0488R.string.CancelAccountReset);
+            return LocaleController.getString("CancelAccountReset", R.string.CancelAccountReset);
         }
 
         public void onShow() {
             super.onShow();
             onNextPressed();
-        }
-    }
-
-    private class ProgressView extends View {
-        private Paint paint = new Paint();
-        private Paint paint2 = new Paint();
-        private float progress;
-
-        public ProgressView(Context context) {
-            super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
-            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
-        }
-
-        public void setProgress(float value) {
-            this.progress = value;
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int start = (int) (((float) getMeasuredWidth()) * this.progress);
-            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
         }
     }
 
@@ -699,10 +699,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setActionBarMenuOnItemClick(new C10311());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.doneButton.setVisibility(8);
         this.fragmentView = new ScrollView(context);
         ScrollView scrollView = this.fragmentView;
@@ -765,7 +765,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     public void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
             this.progressDialog = new AlertDialog(getParentActivity(), 1);
-            this.progressDialog.setMessage(LocaleController.getString("Loading", C0488R.string.Loading));
+            this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);
             this.progressDialog.show();

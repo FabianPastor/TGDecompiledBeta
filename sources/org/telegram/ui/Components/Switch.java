@@ -16,8 +16,8 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.CompoundButton;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class Switch extends CompoundButton {
@@ -74,11 +74,11 @@ public class Switch extends CompoundButton {
 
     public Switch(Context context) {
         super(context);
-        this.mThumbDrawable = context.getResources().getDrawable(C0488R.drawable.switch_thumb);
+        this.mThumbDrawable = context.getResources().getDrawable(R.drawable.switch_thumb);
         if (this.mThumbDrawable != null) {
             this.mThumbDrawable.setCallback(this);
         }
-        this.mTrackDrawable = context.getResources().getDrawable(C0488R.drawable.switch_track);
+        this.mTrackDrawable = context.getResources().getDrawable(R.drawable.switch_track);
         if (this.mTrackDrawable != null) {
             this.mTrackDrawable.setCallback(this);
         }

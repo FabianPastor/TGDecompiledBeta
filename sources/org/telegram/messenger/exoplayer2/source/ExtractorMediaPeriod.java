@@ -95,6 +95,58 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         }
     }
 
+    private static final class ExtractorHolder {
+        private Extractor extractor;
+        private final ExtractorOutput extractorOutput;
+        private final Extractor[] extractors;
+
+        public ExtractorHolder(Extractor[] extractors, ExtractorOutput extractorOutput) {
+            this.extractors = extractors;
+            this.extractorOutput = extractorOutput;
+        }
+
+        public Extractor selectExtractor(ExtractorInput input, Uri uri) throws IOException, InterruptedException {
+            if (this.extractor != null) {
+                return this.extractor;
+            }
+            Extractor[] extractorArr = this.extractors;
+            int length = extractorArr.length;
+            int i = 0;
+            loop0:
+            while (i < length) {
+                Extractor extractor = extractorArr[i];
+                try {
+                    if (extractor.sniff(input)) {
+                        this.extractor = extractor;
+                        input.resetPeekPosition();
+                        break loop0;
+                    }
+                    i++;
+                } catch (EOFException e) {
+                    i++;
+                } finally {
+                    input.resetPeekPosition();
+                }
+            }
+            if (this.extractor == null) {
+                throw new UnrecognizedInputFormatException("None of the available extractors (" + Util.getCommaDelimitedSimpleClassNames(this.extractors) + ") could read the stream.", uri);
+            }
+            this.extractor.init(this.extractorOutput);
+            return this.extractor;
+        }
+
+        public void release() {
+            if (this.extractor != null) {
+                this.extractor.release();
+                this.extractor = null;
+            }
+        }
+    }
+
+    interface Listener {
+        void onSourceInfoRefreshed(long j, boolean z);
+    }
+
     final class ExtractingLoadable implements Loadable {
         private long bytesLoaded;
         private final DataSource dataSource;
@@ -182,58 +234,6 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             Util.closeQuietly(this.dataSource);
             throw th;
         }
-    }
-
-    private static final class ExtractorHolder {
-        private Extractor extractor;
-        private final ExtractorOutput extractorOutput;
-        private final Extractor[] extractors;
-
-        public ExtractorHolder(Extractor[] extractors, ExtractorOutput extractorOutput) {
-            this.extractors = extractors;
-            this.extractorOutput = extractorOutput;
-        }
-
-        public Extractor selectExtractor(ExtractorInput input, Uri uri) throws IOException, InterruptedException {
-            if (this.extractor != null) {
-                return this.extractor;
-            }
-            Extractor[] extractorArr = this.extractors;
-            int length = extractorArr.length;
-            int i = 0;
-            loop0:
-            while (i < length) {
-                Extractor extractor = extractorArr[i];
-                try {
-                    if (extractor.sniff(input)) {
-                        this.extractor = extractor;
-                        input.resetPeekPosition();
-                        break loop0;
-                    }
-                    i++;
-                } catch (EOFException e) {
-                    i++;
-                } finally {
-                    input.resetPeekPosition();
-                }
-            }
-            if (this.extractor == null) {
-                throw new UnrecognizedInputFormatException("None of the available extractors (" + Util.getCommaDelimitedSimpleClassNames(this.extractors) + ") could read the stream.", uri);
-            }
-            this.extractor.init(this.extractorOutput);
-            return this.extractor;
-        }
-
-        public void release() {
-            if (this.extractor != null) {
-                this.extractor.release();
-                this.extractor = null;
-            }
-        }
-    }
-
-    interface Listener {
-        void onSourceInfoRefreshed(long j, boolean z);
     }
 
     private final class SampleStreamImpl implements SampleStream {

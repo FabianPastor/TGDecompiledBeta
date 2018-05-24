@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -24,18 +24,6 @@ public class ChannelIntroActivity extends BaseFragment {
     private TextView descriptionText;
     private ImageView imageView;
     private TextView whatIsChannelText;
-
-    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class C12301 extends ActionBarMenuOnItemClick {
-        C12301() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChannelIntroActivity.this.finishFragment();
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
     class C12323 implements OnTouchListener {
@@ -59,9 +47,21 @@ public class ChannelIntroActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
+    class C12301 extends ActionBarMenuOnItemClick {
+        C12301() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChannelIntroActivity.this.finishFragment();
+            }
+        }
+    }
+
     public View createView(Context context) {
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         this.actionBar.setCastShadows(false);
@@ -118,27 +118,27 @@ public class ChannelIntroActivity extends BaseFragment {
         ViewGroup viewGroup = this.fragmentView;
         viewGroup.setOnTouchListener(new C12323());
         this.imageView = new ImageView(context);
-        this.imageView.setImageResource(C0488R.drawable.channelintro);
+        this.imageView.setImageResource(R.drawable.channelintro);
         this.imageView.setScaleType(ScaleType.FIT_CENTER);
         viewGroup.addView(this.imageView);
         this.whatIsChannelText = new TextView(context);
         this.whatIsChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.whatIsChannelText.setGravity(1);
         this.whatIsChannelText.setTextSize(1, 24.0f);
-        this.whatIsChannelText.setText(LocaleController.getString("ChannelAlertTitle", C0488R.string.ChannelAlertTitle));
+        this.whatIsChannelText.setText(LocaleController.getString("ChannelAlertTitle", R.string.ChannelAlertTitle));
         viewGroup.addView(this.whatIsChannelText);
         this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        this.descriptionText.setText(LocaleController.getString("ChannelAlertText", C0488R.string.ChannelAlertText));
+        this.descriptionText.setText(LocaleController.getString("ChannelAlertText", R.string.ChannelAlertText));
         viewGroup.addView(this.descriptionText);
         this.createChannelText = new TextView(context);
         this.createChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText5));
         this.createChannelText.setGravity(17);
         this.createChannelText.setTextSize(1, 16.0f);
         this.createChannelText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", C0488R.string.ChannelAlertCreate));
+        this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", R.string.ChannelAlertCreate));
         viewGroup.addView(this.createChannelText);
         this.createChannelText.setOnClickListener(new C12334());
         return this.fragmentView;

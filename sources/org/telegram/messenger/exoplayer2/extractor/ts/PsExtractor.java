@@ -36,16 +36,6 @@ public final class PsExtractor implements Extractor {
     private final SparseArray<PesReader> psPayloadReaders;
     private final TimestampAdjuster timestampAdjuster;
 
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
-    static class C06461 implements ExtractorsFactory {
-        C06461() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new PsExtractor()};
-        }
-    }
-
     private static final class PesReader {
         private static final int PES_SCRATCH_SIZE = 64;
         private boolean dtsFlag;
@@ -110,6 +100,16 @@ public final class PsExtractor implements Extractor {
                 }
                 this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
+    static class C06461 implements ExtractorsFactory {
+        C06461() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new PsExtractor()};
         }
     }
 

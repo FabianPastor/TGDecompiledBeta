@@ -17,10 +17,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
@@ -50,6 +50,12 @@ public class CountrySelectActivity extends BaseFragment {
     private CountrySearchAdapter searchListViewAdapter;
     private boolean searchWas;
     private boolean searching;
+
+    public static class Country {
+        public String code;
+        public String name;
+        public String shortname;
+    }
 
     public interface CountrySelectActivityDelegate {
         void didSelectCountry(String str, String str2);
@@ -82,7 +88,7 @@ public class CountrySelectActivity extends BaseFragment {
             CountrySelectActivity.this.searchWas = false;
             CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.listViewAdapter);
             CountrySelectActivity.this.listView.setFastScrollVisible(true);
-            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", C0488R.string.ChooseCountry));
+            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
         }
 
         public void onTextChanged(EditText editText) {
@@ -139,10 +145,105 @@ public class CountrySelectActivity extends BaseFragment {
         }
     }
 
-    public static class Country {
-        public String code;
-        public String name;
-        public String shortname;
+    public class CountrySearchAdapter extends SelectionAdapter {
+        private HashMap<String, ArrayList<Country>> countries;
+        private Context mContext;
+        private ArrayList<Country> searchResult;
+        private Timer searchTimer;
+
+        public CountrySearchAdapter(Context context, HashMap<String, ArrayList<Country>> countries) {
+            this.mContext = context;
+            this.countries = countries;
+        }
+
+        public void search(final String query) {
+            if (query == null) {
+                this.searchResult = null;
+                return;
+            }
+            try {
+                if (this.searchTimer != null) {
+                    this.searchTimer.cancel();
+                }
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+            this.searchTimer = new Timer();
+            this.searchTimer.schedule(new TimerTask() {
+                public void run() {
+                    try {
+                        CountrySearchAdapter.this.searchTimer.cancel();
+                        CountrySearchAdapter.this.searchTimer = null;
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                    CountrySearchAdapter.this.processSearch(query);
+                }
+            }, 100, 300);
+        }
+
+        private void processSearch(final String query) {
+            Utilities.searchQueue.postRunnable(new Runnable() {
+                public void run() {
+                    if (query.trim().toLowerCase().length() == 0) {
+                        CountrySearchAdapter.this.updateSearchResults(new ArrayList());
+                        return;
+                    }
+                    ArrayList<Country> resultArray = new ArrayList();
+                    ArrayList<Country> arr = (ArrayList) CountrySearchAdapter.this.countries.get(query.substring(0, 1).toUpperCase());
+                    if (arr != null) {
+                        Iterator it = arr.iterator();
+                        while (it.hasNext()) {
+                            Country c = (Country) it.next();
+                            if (c.name.toLowerCase().startsWith(query)) {
+                                resultArray.add(c);
+                            }
+                        }
+                    }
+                    CountrySearchAdapter.this.updateSearchResults(resultArray);
+                }
+            });
+        }
+
+        private void updateSearchResults(final ArrayList<Country> arrCounties) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    CountrySearchAdapter.this.searchResult = arrCounties;
+                    CountrySearchAdapter.this.notifyDataSetChanged();
+                }
+            });
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
+        public int getItemCount() {
+            if (this.searchResult == null) {
+                return 0;
+            }
+            return this.searchResult.size();
+        }
+
+        public Country getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
+            return (Country) this.searchResult.get(i);
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Holder(new TextSettingsCell(this.mContext));
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Country c = (Country) this.searchResult.get(position);
+            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, position != this.searchResult.size() + -1);
+        }
+
+        public int getItemViewType(int i) {
+            return 0;
+        }
     }
 
     public class CountryAdapter extends SectionsAdapter {
@@ -290,107 +391,6 @@ public class CountrySelectActivity extends BaseFragment {
         }
     }
 
-    public class CountrySearchAdapter extends SelectionAdapter {
-        private HashMap<String, ArrayList<Country>> countries;
-        private Context mContext;
-        private ArrayList<Country> searchResult;
-        private Timer searchTimer;
-
-        public CountrySearchAdapter(Context context, HashMap<String, ArrayList<Country>> countries) {
-            this.mContext = context;
-            this.countries = countries;
-        }
-
-        public void search(final String query) {
-            if (query == null) {
-                this.searchResult = null;
-                return;
-            }
-            try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
-                }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
-                public void run() {
-                    try {
-                        CountrySearchAdapter.this.searchTimer.cancel();
-                        CountrySearchAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                    CountrySearchAdapter.this.processSearch(query);
-                }
-            }, 100, 300);
-        }
-
-        private void processSearch(final String query) {
-            Utilities.searchQueue.postRunnable(new Runnable() {
-                public void run() {
-                    if (query.trim().toLowerCase().length() == 0) {
-                        CountrySearchAdapter.this.updateSearchResults(new ArrayList());
-                        return;
-                    }
-                    ArrayList<Country> resultArray = new ArrayList();
-                    ArrayList<Country> arr = (ArrayList) CountrySearchAdapter.this.countries.get(query.substring(0, 1).toUpperCase());
-                    if (arr != null) {
-                        Iterator it = arr.iterator();
-                        while (it.hasNext()) {
-                            Country c = (Country) it.next();
-                            if (c.name.toLowerCase().startsWith(query)) {
-                                resultArray.add(c);
-                            }
-                        }
-                    }
-                    CountrySearchAdapter.this.updateSearchResults(resultArray);
-                }
-            });
-        }
-
-        private void updateSearchResults(final ArrayList<Country> arrCounties) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    CountrySearchAdapter.this.searchResult = arrCounties;
-                    CountrySearchAdapter.this.notifyDataSetChanged();
-                }
-            });
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return true;
-        }
-
-        public int getItemCount() {
-            if (this.searchResult == null) {
-                return 0;
-            }
-            return this.searchResult.size();
-        }
-
-        public Country getItem(int i) {
-            if (i < 0 || i >= this.searchResult.size()) {
-                return null;
-            }
-            return (Country) this.searchResult.get(i);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(new TextSettingsCell(this.mContext));
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            Country c = (Country) this.searchResult.get(position);
-            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, position != this.searchResult.size() + -1);
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-    }
-
     public CountrySelectActivity(boolean phoneCode) {
         this.needPhoneCode = phoneCode;
     }
@@ -405,11 +405,11 @@ public class CountrySelectActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", C0488R.string.ChooseCountry));
+        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
         this.actionBar.setActionBarMenuOnItemClick(new C17411());
-        this.actionBar.createMenu().addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17422()).getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17422()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.searching = false;
         this.searchWas = false;
         this.listViewAdapter = new CountryAdapter(context);
@@ -419,7 +419,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setSectionsType(1);

@@ -28,22 +28,6 @@ class ViewBoundsCheck {
     BoundFlags mBoundFlags = new BoundFlags();
     final Callback mCallback;
 
-    interface Callback {
-        View getChildAt(int i);
-
-        int getChildCount();
-
-        int getChildEnd(View view);
-
-        int getChildStart(View view);
-
-        View getParent();
-
-        int getParentEnd();
-
-        int getParentStart();
-    }
-
     static class BoundFlags {
         int mBoundFlags = 0;
         int mChildEnd;
@@ -98,6 +82,22 @@ class ViewBoundsCheck {
             }
             return false;
         }
+    }
+
+    interface Callback {
+        View getChildAt(int i);
+
+        int getChildCount();
+
+        int getChildEnd(View view);
+
+        int getChildStart(View view);
+
+        View getParent();
+
+        int getParentEnd();
+
+        int getParentStart();
     }
 
     @Retention(RetentionPolicy.SOURCE)

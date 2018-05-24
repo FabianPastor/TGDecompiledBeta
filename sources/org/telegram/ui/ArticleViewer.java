@@ -84,7 +84,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.Emoji;
@@ -101,6 +100,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
@@ -458,18 +458,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$2 */
-    class C09632 implements OnDispatchKeyEventListener {
-        C09632() {
-        }
-
-        public void onDispatchKeyEvent(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
-                ArticleViewer.this.popupWindow.dismiss();
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.ArticleViewer$3 */
     class C09683 implements OnClickListener {
         C09683() {
@@ -478,7 +466,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onClick(View v) {
             if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
                 AndroidUtilities.addToClipboard(ArticleViewer.this.pressedLinkOwnerLayout.getText());
-                Toast.makeText(ArticleViewer.this.parentActivity, LocaleController.getString("TextCopied", C0488R.string.TextCopied), 0).show();
+                Toast.makeText(ArticleViewer.this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
                 if (ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
                     ArticleViewer.this.popupWindow.dismiss(true);
                 }
@@ -513,333 +501,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 ArticleViewer.this.windowView.requestLayout();
             }
             return insets.consumeSystemWindowInsets();
-        }
-    }
-
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            ArticleViewer.this.processTouchEvent(event);
-            return true;
-        }
-
-        protected void onDraw(Canvas canvas) {
-            ArticleViewer.this.drawContent(canvas);
-        }
-
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            return child != ArticleViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$9 */
-    class C09779 implements OnItemLongClickListener {
-        C09779() {
-        }
-
-        public boolean onItemClick(View view, int position) {
-            return false;
-        }
-    }
-
-    private class BlockAudioCell extends View implements FileDownloadProgressListener {
-        private int TAG;
-        private int buttonPressed;
-        private int buttonState;
-        private int buttonX;
-        private int buttonY;
-        private TL_pageBlockAudio currentBlock;
-        private Document currentDocument;
-        private MessageObject currentMessageObject;
-        private StaticLayout durationLayout;
-        private boolean isFirst;
-        private boolean isLast;
-        private int lastCreatedWidth;
-        private String lastTimeString;
-        private RadialProgress radialProgress = new RadialProgress(this);
-        private SeekBar seekBar;
-        private int seekBarX;
-        private int seekBarY;
-        private StaticLayout textLayout;
-        private int textX;
-        private int textY = AndroidUtilities.dp(54.0f);
-        private StaticLayout titleLayout;
-
-        public BlockAudioCell(Context context) {
-            super(context);
-            this.radialProgress.setAlphaForPrevious(true);
-            this.radialProgress.setDiff(AndroidUtilities.dp(0.0f));
-            this.radialProgress.setStrikeWidth(AndroidUtilities.dp(2.0f));
-            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
-            this.seekBar = new SeekBar(context);
-            this.seekBar.setDelegate(new SeekBarDelegate(ArticleViewer.this) {
-                public void onSeekBarDrag(float progress) {
-                    if (BlockAudioCell.this.currentMessageObject != null) {
-                        BlockAudioCell.this.currentMessageObject.audioProgress = progress;
-                        MediaController.getInstance().seekToProgress(BlockAudioCell.this.currentMessageObject, progress);
-                    }
-                }
-            });
-        }
-
-        public void setBlock(TL_pageBlockAudio block, boolean first, boolean last) {
-            this.currentBlock = block;
-            this.currentMessageObject = (MessageObject) ArticleViewer.this.audioBlocks.get(this.currentBlock);
-            this.currentDocument = this.currentMessageObject.getDocument();
-            this.lastCreatedWidth = 0;
-            this.isFirst = first;
-            this.isLast = last;
-            this.radialProgress.setProgressColor(ArticleViewer.this.getTextColor());
-            this.seekBar.setColors(ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor());
-            updateButtonState(false);
-            requestLayout();
-        }
-
-        public MessageObject getMessageObject() {
-            return this.currentMessageObject;
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX();
-            float y = event.getY();
-            if (this.seekBar.onTouch(event.getAction(), event.getX() - ((float) this.seekBarX), event.getY() - ((float) this.seekBarY))) {
-                if (event.getAction() == 0) {
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                invalidate();
-                return true;
-            }
-            boolean z;
-            if (event.getAction() == 0) {
-                if ((this.buttonState != -1 && x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + AndroidUtilities.dp(48.0f))) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + AndroidUtilities.dp(48.0f)))) || this.buttonState == 0) {
-                    this.buttonPressed = 1;
-                    invalidate();
-                }
-            } else if (event.getAction() == 1) {
-                if (this.buttonPressed == 1) {
-                    this.buttonPressed = 0;
-                    playSoundEffect(0);
-                    didPressedButton(false);
-                    this.radialProgress.swapBackground(getDrawableForCurrentState());
-                    invalidate();
-                }
-            } else if (event.getAction() == 3) {
-                this.buttonPressed = 0;
-            }
-            if (this.buttonPressed != 0 || ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event)) {
-                z = true;
-            } else {
-                z = false;
-            }
-            return z;
-        }
-
-        @SuppressLint({"DrawAllocation"})
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = AndroidUtilities.dp(54.0f);
-            if (this.currentBlock != null) {
-                if (this.currentBlock.level > 0) {
-                    this.textX = AndroidUtilities.dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.dp(18.0f);
-                } else {
-                    this.textX = AndroidUtilities.dp(18.0f);
-                }
-                int textWidth = (width - this.textX) - AndroidUtilities.dp(18.0f);
-                int size = AndroidUtilities.dp(40.0f);
-                this.buttonX = AndroidUtilities.dp(16.0f);
-                this.buttonY = AndroidUtilities.dp(7.0f);
-                this.currentBlock.caption = new TL_textPlain();
-                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
-                if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
-                    }
-                }
-                if (!this.isFirst && this.currentBlock.level <= 0) {
-                    height += AndroidUtilities.dp(8.0f);
-                }
-                String author = this.currentMessageObject.getMusicAuthor(false);
-                String title = this.currentMessageObject.getMusicTitle(false);
-                this.seekBarX = (this.buttonX + AndroidUtilities.dp(50.0f)) + size;
-                int w = (width - this.seekBarX) - AndroidUtilities.dp(18.0f);
-                if (TextUtils.isEmpty(title) && TextUtils.isEmpty(author)) {
-                    this.titleLayout = null;
-                    this.seekBarY = this.buttonY + ((size - AndroidUtilities.dp(30.0f)) / 2);
-                } else {
-                    SpannableStringBuilder stringBuilder;
-                    if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
-                        stringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{author, title}));
-                    } else if (TextUtils.isEmpty(title)) {
-                        stringBuilder = new SpannableStringBuilder(author);
-                    } else {
-                        stringBuilder = new SpannableStringBuilder(title);
-                    }
-                    if (!TextUtils.isEmpty(author)) {
-                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, author.length(), 18);
-                    }
-                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(stringBuilder, Theme.chat_audioTitlePaint, (float) w, TruncateAt.END), ArticleViewer.audioTimePaint, w, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.seekBarY = (this.buttonY + ((size - AndroidUtilities.dp(30.0f)) / 2)) + AndroidUtilities.dp(11.0f);
-                }
-                this.seekBar.setSize(w, AndroidUtilities.dp(30.0f));
-            } else {
-                height = 1;
-            }
-            setMeasuredDimension(width, height);
-            updatePlayingMessageProgress();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                this.radialProgress.draw(canvas);
-                canvas.save();
-                canvas.translate((float) this.seekBarX, (float) this.seekBarY);
-                this.seekBar.draw(canvas);
-                canvas.restore();
-                if (this.durationLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.dp(6.0f)));
-                    this.durationLayout.draw(canvas);
-                    canvas.restore();
-                }
-                if (this.titleLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY - AndroidUtilities.dp(16.0f)));
-                    this.titleLayout.draw(canvas);
-                    canvas.restore();
-                }
-                if (this.textLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
-                    canvas.restore();
-                }
-                if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
-                }
-            }
-        }
-
-        private Drawable getDrawableForCurrentState() {
-            return Theme.chat_ivStatesDrawable[this.buttonState][this.buttonPressed != 0 ? 1 : 0];
-        }
-
-        public void updatePlayingMessageProgress() {
-            if (this.currentDocument != null && this.currentMessageObject != null) {
-                if (!this.seekBar.isDragging()) {
-                    this.seekBar.setProgress(this.currentMessageObject.audioProgress);
-                }
-                int duration = 0;
-                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
-                    duration = this.currentMessageObject.audioProgressSec;
-                } else {
-                    for (int a = 0; a < this.currentDocument.attributes.size(); a++) {
-                        DocumentAttribute attribute = (DocumentAttribute) this.currentDocument.attributes.get(a);
-                        if (attribute instanceof TL_documentAttributeAudio) {
-                            duration = attribute.duration;
-                            break;
-                        }
-                    }
-                }
-                String timeString = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
-                if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
-                    this.lastTimeString = timeString;
-                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-                    this.durationLayout = new StaticLayout(timeString, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(timeString)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                }
-                ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
-                invalidate();
-            }
-        }
-
-        public void updateButtonState(boolean animated) {
-            String fileName = FileLoader.getAttachFileName(this.currentDocument);
-            boolean fileExists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
-            if (TextUtils.isEmpty(fileName)) {
-                this.radialProgress.setBackground(null, false, false);
-                return;
-            }
-            if (fileExists) {
-                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
-                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
-                    this.buttonState = 0;
-                } else {
-                    this.buttonState = 1;
-                }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
-            } else {
-                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
-                if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(fileName)) {
-                    this.buttonState = 3;
-                    Float progress = ImageLoader.getInstance().getFileProgress(fileName);
-                    if (progress != null) {
-                        this.radialProgress.setProgress(progress.floatValue(), animated);
-                    } else {
-                        this.radialProgress.setProgress(0.0f, animated);
-                    }
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
-                } else {
-                    this.buttonState = 2;
-                    this.radialProgress.setProgress(0.0f, animated);
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
-                }
-            }
-            updatePlayingMessageProgress();
-        }
-
-        private void didPressedButton(boolean animated) {
-            if (this.buttonState == 0) {
-                if (MediaController.getInstance().setPlaylist(ArticleViewer.this.audioMessages, this.currentMessageObject, false)) {
-                    this.buttonState = 1;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
-                    invalidate();
-                }
-            } else if (this.buttonState == 1) {
-                if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
-                    this.buttonState = 0;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
-                    invalidate();
-                }
-            } else if (this.buttonState == 2) {
-                this.radialProgress.setProgress(0.0f, false);
-                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, true, 1);
-                this.buttonState = 3;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
-                invalidate();
-            } else if (this.buttonState == 3) {
-                FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
-                this.buttonState = 2;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
-                invalidate();
-            }
-        }
-
-        public void onFailedDownload(String fileName) {
-            updateButtonState(true);
-        }
-
-        public void onSuccessDownload(String fileName) {
-            this.radialProgress.setProgress(1.0f, true);
-            updateButtonState(true);
-        }
-
-        public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
-        }
-
-        public void onProgressDownload(String fileName, float progress) {
-            this.radialProgress.setProgress(progress, true);
-            if (this.buttonState != 3) {
-                updateButtonState(false);
-            }
-        }
-
-        public int getObserverTag() {
-            return this.TAG;
         }
     }
 
@@ -885,11 +546,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     r16 = new Object[2];
                     r16[0] = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                     r16[1] = author;
-                    text = LocaleController.formatString("ArticleDateByAuthor", C0488R.string.ArticleDateByAuthor, r16);
+                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, r16);
                 } else if (TextUtils.isEmpty(author)) {
                     text = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                 } else {
-                    text = LocaleController.formatString("ArticleByAuthor", C0488R.string.ArticleByAuthor, author);
+                    text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
                 }
                 if (spans != null) {
                     try {
@@ -1055,7 +716,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.textView = new TextView(context);
             this.textView.setTextSize(1, 14.0f);
             this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.textView.setText(LocaleController.getString("ChannelJoin", C0488R.string.ChannelJoin));
+            this.textView.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
             this.textView.setGravity(19);
             addView(this.textView, LayoutHelper.createFrame(-2, 39, 53));
             this.textView.setOnClickListener(new OnClickListener(ArticleViewer.this) {
@@ -1067,7 +728,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             });
             this.imageView = new ImageView(context);
-            this.imageView.setImageResource(C0488R.drawable.list_check);
+            this.imageView.setImageResource(R.drawable.list_check);
             this.imageView.setScaleType(ScaleType.CENTER);
             addView(this.imageView, LayoutHelper.createFrame(39, 39, 53));
             this.progressView = new ContextProgressView(context, 0);
@@ -2824,6 +2485,1073 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
+    class CheckForLongPress implements Runnable {
+        public int currentPressCount;
+
+        CheckForLongPress() {
+        }
+
+        public void run() {
+            if (ArticleViewer.this.checkingForLongPress && ArticleViewer.this.windowView != null) {
+                ArticleViewer.this.checkingForLongPress = false;
+                ArticleViewer.this.windowView.performHapticFeedback(0);
+                if (ArticleViewer.this.pressedLink != null) {
+                    final String urlFinal = ArticleViewer.this.pressedLink.getUrl();
+                    Builder builder = new Builder(ArticleViewer.this.parentActivity);
+                    builder.setTitle(urlFinal);
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (ArticleViewer.this.parentActivity != null) {
+                                if (which == 0) {
+                                    Browser.openUrl(ArticleViewer.this.parentActivity, urlFinal);
+                                } else if (which == 1) {
+                                    String url = urlFinal;
+                                    if (url.startsWith("mailto:")) {
+                                        url = url.substring(7);
+                                    } else if (url.startsWith("tel:")) {
+                                        url = url.substring(4);
+                                    }
+                                    AndroidUtilities.addToClipboard(url);
+                                }
+                            }
+                        }
+                    });
+                    ArticleViewer.this.showDialog(builder.create());
+                    ArticleViewer.this.hideActionBar();
+                    ArticleViewer.this.pressedLink = null;
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                } else if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
+                    int y = (ArticleViewer.this.pressedLinkOwnerView.getTop() - AndroidUtilities.dp(54.0f)) + ArticleViewer.this.pressedLayoutY;
+                    if (y < 0) {
+                        y *= -1;
+                    }
+                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    ArticleViewer.this.drawBlockSelection = true;
+                    ArticleViewer.this.showPopup(ArticleViewer.this.pressedLinkOwnerView, 48, 0, y);
+                    ArticleViewer.this.listView.setLayoutFrozen(true);
+                    ArticleViewer.this.listView.setLayoutFrozen(false);
+                }
+            }
+        }
+    }
+
+    private final class CheckForTap implements Runnable {
+        private CheckForTap() {
+        }
+
+        public void run() {
+            if (ArticleViewer.this.pendingCheckForLongPress == null) {
+                ArticleViewer.this.pendingCheckForLongPress = new CheckForLongPress();
+            }
+            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$804(ArticleViewer.this);
+            if (ArticleViewer.this.windowView != null) {
+                ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
+            }
+        }
+    }
+
+    public class ColorCell extends FrameLayout {
+        private int currentColor;
+        private boolean selected;
+        private TextView textView;
+        final /* synthetic */ ArticleViewer this$0;
+
+        public ColorCell(ArticleViewer this$0, Context context) {
+            int i;
+            int i2 = 5;
+            this.this$0 = this$0;
+            super(context);
+            if (ArticleViewer.colorPaint == null) {
+                ArticleViewer.colorPaint = new Paint(1);
+                ArticleViewer.selectorPaint = new Paint(1);
+                ArticleViewer.selectorPaint.setColor(-15428119);
+                ArticleViewer.selectorPaint.setStyle(Style.STROKE);
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            }
+            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            setWillNotDraw(false);
+            this.textView = new TextView(context);
+            this.textView.setTextColor(-14606047);
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            TextView textView = this.textView;
+            if (LocaleController.isRTL) {
+                i = 5;
+            } else {
+                i = 3;
+            }
+            textView.setGravity(i | 16);
+            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
+            View view = this.textView;
+            if (!LocaleController.isRTL) {
+                i2 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        }
+
+        public void setTextAndColor(String text, int color) {
+            this.textView.setText(text);
+            this.currentColor = color;
+            invalidate();
+        }
+
+        public void select(boolean value) {
+            if (this.selected != value) {
+                this.selected = value;
+                invalidate();
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            ArticleViewer.colorPaint.setColor(this.currentColor);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.colorPaint);
+            if (this.selected) {
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+                ArticleViewer.selectorPaint.setColor(-15428119);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.selectorPaint);
+            } else if (this.currentColor == -1) {
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+                ArticleViewer.selectorPaint.setColor(-4539718);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), ArticleViewer.selectorPaint);
+            }
+        }
+    }
+
+    public class FontCell extends FrameLayout {
+        private TextView textView;
+        private TextView textView2;
+        final /* synthetic */ ArticleViewer this$0;
+
+        public FontCell(ArticleViewer this$0, Context context) {
+            int i;
+            int i2;
+            int i3 = 5;
+            this.this$0 = this$0;
+            super(context);
+            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            this.textView = new TextView(context);
+            this.textView.setTextColor(-14606047);
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            View view = this.textView;
+            if (LocaleController.isRTL) {
+                i = 5;
+            } else {
+                i = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
+            this.textView2 = new TextView(context);
+            this.textView2.setTextColor(-14606047);
+            this.textView2.setTextSize(1, 16.0f);
+            this.textView2.setLines(1);
+            this.textView2.setMaxLines(1);
+            this.textView2.setSingleLine(true);
+            this.textView2.setText("Aa");
+            TextView textView = this.textView2;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            } else {
+                i2 = 3;
+            }
+            textView.setGravity(i2 | 16);
+            view = this.textView2;
+            if (!LocaleController.isRTL) {
+                i3 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i3 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        }
+
+        public void select(boolean value) {
+            this.textView2.setTextColor(value ? -15428119 : -14606047);
+        }
+
+        public void setTextAndTypeface(String text, Typeface typeface) {
+            this.textView.setText(text);
+            this.textView.setTypeface(typeface);
+            this.textView2.setTypeface(typeface);
+            invalidate();
+        }
+    }
+
+    private class FrameLayoutDrawer extends FrameLayout {
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            ArticleViewer.this.processTouchEvent(event);
+            return true;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            ArticleViewer.this.drawContent(canvas);
+        }
+
+        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            return child != ArticleViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
+        }
+    }
+
+    private class PhotoBackgroundDrawable extends ColorDrawable {
+        private Runnable drawRunnable;
+
+        public PhotoBackgroundDrawable(int color) {
+            super(color);
+        }
+
+        @Keep
+        public void setAlpha(int alpha) {
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isPhotoVisible && alpha == 255) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            super.setAlpha(alpha);
+        }
+
+        public void draw(Canvas canvas) {
+            super.draw(canvas);
+            if (getAlpha() != 0 && this.drawRunnable != null) {
+                this.drawRunnable.run();
+                this.drawRunnable = null;
+            }
+        }
+    }
+
+    public static class PlaceProviderObject {
+        public int clipBottomAddition;
+        public int clipTopAddition;
+        public ImageReceiver imageReceiver;
+        public int index;
+        public View parentView;
+        public int radius;
+        public float scale = 1.0f;
+        public int size;
+        public BitmapHolder thumb;
+        public int viewX;
+        public int viewY;
+    }
+
+    private class RadialProgressView {
+        private float alpha = 1.0f;
+        private float animatedAlphaValue = 1.0f;
+        private float animatedProgressValue = 0.0f;
+        private float animationProgressStart = 0.0f;
+        private int backgroundState = -1;
+        private float currentProgress = 0.0f;
+        private long currentProgressTime = 0;
+        private long lastUpdateTime = 0;
+        private View parent = null;
+        private int previousBackgroundState = -2;
+        private RectF progressRect = new RectF();
+        private float radOffset = 0.0f;
+        private float scale = 1.0f;
+        private int size = AndroidUtilities.dp(64.0f);
+
+        public RadialProgressView(Context context, View parentView) {
+            if (ArticleViewer.decelerateInterpolator == null) {
+                ArticleViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
+                ArticleViewer.progressPaint = new Paint(1);
+                ArticleViewer.progressPaint.setStyle(Style.STROKE);
+                ArticleViewer.progressPaint.setStrokeCap(Cap.ROUND);
+                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+                ArticleViewer.progressPaint.setColor(-1);
+            }
+            this.parent = parentView;
+        }
+
+        private void updateAnimation() {
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastUpdateTime;
+            this.lastUpdateTime = newTime;
+            if (this.animatedProgressValue != 1.0f) {
+                this.radOffset += ((float) (360 * dt)) / 3000.0f;
+                float progressDiff = this.currentProgress - this.animationProgressStart;
+                if (progressDiff > 0.0f) {
+                    this.currentProgressTime += dt;
+                    if (this.currentProgressTime >= 300) {
+                        this.animatedProgressValue = this.currentProgress;
+                        this.animationProgressStart = this.currentProgress;
+                        this.currentProgressTime = 0;
+                    } else {
+                        this.animatedProgressValue = this.animationProgressStart + (ArticleViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
+                    }
+                }
+                this.parent.invalidate();
+            }
+            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
+                this.animatedAlphaValue -= ((float) dt) / 200.0f;
+                if (this.animatedAlphaValue <= 0.0f) {
+                    this.animatedAlphaValue = 0.0f;
+                    this.previousBackgroundState = -2;
+                }
+                this.parent.invalidate();
+            }
+        }
+
+        public void setProgress(float value, boolean animated) {
+            if (animated) {
+                this.animationProgressStart = this.animatedProgressValue;
+            } else {
+                this.animatedProgressValue = value;
+                this.animationProgressStart = value;
+            }
+            this.currentProgress = value;
+            this.currentProgressTime = 0;
+        }
+
+        public void setBackgroundState(int state, boolean animated) {
+            this.lastUpdateTime = System.currentTimeMillis();
+            if (!animated || this.backgroundState == state) {
+                this.previousBackgroundState = -2;
+            } else {
+                this.previousBackgroundState = this.backgroundState;
+                this.animatedAlphaValue = 1.0f;
+            }
+            this.backgroundState = state;
+            this.parent.invalidate();
+        }
+
+        public void setAlpha(float value) {
+            this.alpha = value;
+        }
+
+        public void setScale(float value) {
+            this.scale = value;
+        }
+
+        public void onDraw(Canvas canvas) {
+            Drawable drawable;
+            int sizeScaled = (int) (((float) this.size) * this.scale);
+            int x = (ArticleViewer.this.getContainerViewWidth() - sizeScaled) / 2;
+            int y = (ArticleViewer.this.getContainerViewHeight() - sizeScaled) / 2;
+            if (this.previousBackgroundState >= 0 && this.previousBackgroundState < 4) {
+                drawable = ArticleViewer.progressDrawables[this.previousBackgroundState];
+                if (drawable != null) {
+                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
+                    drawable.draw(canvas);
+                }
+            }
+            if (this.backgroundState >= 0 && this.backgroundState < 4) {
+                drawable = ArticleViewer.progressDrawables[this.backgroundState];
+                if (drawable != null) {
+                    if (this.previousBackgroundState != -2) {
+                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
+                    } else {
+                        drawable.setAlpha((int) (this.alpha * 255.0f));
+                    }
+                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
+                    drawable.draw(canvas);
+                }
+            }
+            if (this.backgroundState == 0 || this.backgroundState == 1 || this.previousBackgroundState == 0 || this.previousBackgroundState == 1) {
+                int diff = AndroidUtilities.dp(4.0f);
+                if (this.previousBackgroundState != -2) {
+                    ArticleViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+                } else {
+                    ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
+                }
+                this.progressRect.set((float) (x + diff), (float) (y + diff), (float) ((x + sizeScaled) - diff), (float) ((y + sizeScaled) - diff));
+                canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, ArticleViewer.progressPaint);
+                updateAnimation();
+            }
+        }
+    }
+
+    private class SizeChooseView extends View {
+        private int circleSize;
+        private int gapSize;
+        private int lineSize;
+        private boolean moving;
+        private Paint paint = new Paint(1);
+        private int sideSide;
+        private boolean startMoving;
+        private int startMovingQuality;
+        private float startX;
+
+        public SizeChooseView(Context context) {
+            super(context);
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            boolean z = false;
+            float x = event.getX();
+            int a;
+            int cx;
+            if (event.getAction() == 0) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+                a = 0;
+                while (a < 5) {
+                    cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                    if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                        a++;
+                    } else {
+                        if (a == ArticleViewer.this.selectedFontSize) {
+                            z = true;
+                        }
+                        this.startMoving = z;
+                        this.startX = x;
+                        this.startMovingQuality = ArticleViewer.this.selectedFontSize;
+                    }
+                }
+            } else if (event.getAction() == 2) {
+                if (this.startMoving) {
+                    if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
+                        this.moving = true;
+                        this.startMoving = false;
+                    }
+                } else if (this.moving) {
+                    a = 0;
+                    while (a < 5) {
+                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                        int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
+                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
+                            a++;
+                        } else if (ArticleViewer.this.selectedFontSize != a) {
+                            ArticleViewer.this.selectedFontSize = a;
+                            ArticleViewer.this.updatePaintSize();
+                            invalidate();
+                        }
+                    }
+                }
+            } else if (event.getAction() == 1 || event.getAction() == 3) {
+                if (!this.moving) {
+                    a = 0;
+                    while (a < 5) {
+                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                            a++;
+                        } else if (ArticleViewer.this.selectedFontSize != a) {
+                            ArticleViewer.this.selectedFontSize = a;
+                            ArticleViewer.this.updatePaintSize();
+                            invalidate();
+                        }
+                    }
+                } else if (ArticleViewer.this.selectedFontSize != this.startMovingQuality) {
+                    ArticleViewer.this.updatePaintSize();
+                }
+                this.startMoving = false;
+                this.moving = false;
+            }
+            return true;
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            this.circleSize = AndroidUtilities.dp(5.0f);
+            this.gapSize = AndroidUtilities.dp(2.0f);
+            this.sideSide = AndroidUtilities.dp(17.0f);
+            this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - (this.gapSize * 8)) - (this.sideSide * 2)) / 4;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int cy = getMeasuredHeight() / 2;
+            int a = 0;
+            while (a < 5) {
+                int cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                if (a <= ArticleViewer.this.selectedFontSize) {
+                    this.paint.setColor(-15428119);
+                } else {
+                    this.paint.setColor(-3355444);
+                }
+                canvas.drawCircle((float) cx, (float) cy, a == ArticleViewer.this.selectedFontSize ? (float) AndroidUtilities.dp(4.0f) : (float) (this.circleSize / 2), this.paint);
+                if (a != 0) {
+                    int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
+                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.dp(1.0f) + cy), this.paint);
+                }
+                a++;
+            }
+        }
+    }
+
+    private class WindowView extends FrameLayout {
+        private float alpha;
+        private Runnable attachRunnable;
+        private boolean closeAnimationInProgress;
+        private float innerTranslationX;
+        private boolean maybeStartTracking;
+        private boolean selfLayout;
+        private boolean startedTracking;
+        private int startedTrackingPointerId;
+        private int startedTrackingX;
+        private int startedTrackingY;
+        private VelocityTracker tracker;
+
+        public WindowView(Context context) {
+            super(context);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+            if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
+                setMeasuredDimension(widthSize, heightSize);
+            } else {
+                setMeasuredDimension(widthSize, heightSize);
+                WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
+                if (AndroidUtilities.incorrectDisplaySizeFix) {
+                    if (heightSize > AndroidUtilities.displaySize.y) {
+                        heightSize = AndroidUtilities.displaySize.y;
+                    }
+                    heightSize += AndroidUtilities.statusBarHeight;
+                }
+                heightSize -= insets.getSystemWindowInsetBottom();
+                widthSize -= insets.getSystemWindowInsetRight() + insets.getSystemWindowInsetLeft();
+                if (insets.getSystemWindowInsetRight() != 0) {
+                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetRight(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                } else if (insets.getSystemWindowInsetLeft() != 0) {
+                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetLeft(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                } else {
+                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetBottom(), NUM));
+                }
+            }
+            ArticleViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+            ArticleViewer.this.photoContainerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+            ArticleViewer.this.photoContainerBackground.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+            ArticleViewer.this.fullscreenVideoContainer.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+            ViewGroup.LayoutParams layoutParams = ArticleViewer.this.animatingImageView.getLayoutParams();
+            ArticleViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
+        }
+
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            if (!this.selfLayout) {
+                int x;
+                if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
+                    x = 0;
+                } else {
+                    WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
+                    x = insets.getSystemWindowInsetLeft();
+                    if (insets.getSystemWindowInsetRight() != 0) {
+                        ArticleViewer.this.barBackground.layout((right - left) - insets.getSystemWindowInsetRight(), 0, right - left, bottom - top);
+                    } else if (insets.getSystemWindowInsetLeft() != 0) {
+                        ArticleViewer.this.barBackground.layout(0, 0, insets.getSystemWindowInsetLeft(), bottom - top);
+                    } else {
+                        ArticleViewer.this.barBackground.layout(0, (bottom - top) - insets.getStableInsetBottom(), right - left, bottom - top);
+                    }
+                }
+                ArticleViewer.this.containerView.layout(x, 0, ArticleViewer.this.containerView.getMeasuredWidth() + x, ArticleViewer.this.containerView.getMeasuredHeight());
+                ArticleViewer.this.photoContainerView.layout(x, 0, ArticleViewer.this.photoContainerView.getMeasuredWidth() + x, ArticleViewer.this.photoContainerView.getMeasuredHeight());
+                ArticleViewer.this.photoContainerBackground.layout(x, 0, ArticleViewer.this.photoContainerBackground.getMeasuredWidth() + x, ArticleViewer.this.photoContainerBackground.getMeasuredHeight());
+                ArticleViewer.this.fullscreenVideoContainer.layout(x, 0, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + x, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight());
+                ArticleViewer.this.animatingImageView.layout(0, 0, ArticleViewer.this.animatingImageView.getMeasuredWidth(), ArticleViewer.this.animatingImageView.getMeasuredHeight());
+            }
+        }
+
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            ArticleViewer.this.attachedToWindow = true;
+        }
+
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            ArticleViewer.this.attachedToWindow = false;
+        }
+
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            handleTouchEvent(null);
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return !ArticleViewer.this.collapsed && (handleTouchEvent(ev) || super.onInterceptTouchEvent(ev));
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            return !ArticleViewer.this.collapsed && (handleTouchEvent(event) || super.onTouchEvent(event));
+        }
+
+        @Keep
+        public void setInnerTranslationX(float value) {
+            this.innerTranslationX = value;
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            invalidate();
+        }
+
+        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            int width = getMeasuredWidth();
+            int translationX = (int) this.innerTranslationX;
+            int restoreCount = canvas.save();
+            canvas.clipRect(translationX, 0, width, getHeight());
+            boolean result = super.drawChild(canvas, child, drawingTime);
+            canvas.restoreToCount(restoreCount);
+            if (translationX != 0 && child == ArticleViewer.this.containerView) {
+                float opacity = Math.min(0.8f, ((float) (width - translationX)) / ((float) width));
+                if (opacity < 0.0f) {
+                    opacity = 0.0f;
+                }
+                ArticleViewer.this.scrimPaint.setColor(((int) (153.0f * opacity)) << 24);
+                canvas.drawRect(0.0f, 0.0f, (float) translationX, (float) getHeight(), ArticleViewer.this.scrimPaint);
+                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
+                ArticleViewer.this.layerShadowDrawable.setBounds(translationX - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
+                ArticleViewer.this.layerShadowDrawable.setAlpha((int) (255.0f * alpha));
+                ArticleViewer.this.layerShadowDrawable.draw(canvas);
+            }
+            return result;
+        }
+
+        @Keep
+        public float getInnerTranslationX() {
+            return this.innerTranslationX;
+        }
+
+        private void prepareForMoving(MotionEvent ev) {
+            this.maybeStartTracking = false;
+            this.startedTracking = true;
+            this.startedTrackingX = (int) ev.getX();
+        }
+
+        public boolean handleTouchEvent(MotionEvent event) {
+            if (ArticleViewer.this.isPhotoVisible || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0) {
+                return false;
+            }
+            if (event != null && event.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
+                this.startedTrackingPointerId = event.getPointerId(0);
+                this.maybeStartTracking = true;
+                this.startedTrackingX = (int) event.getX();
+                this.startedTrackingY = (int) event.getY();
+                if (this.tracker != null) {
+                    this.tracker.clear();
+                }
+            } else if (event != null && event.getAction() == 2 && event.getPointerId(0) == this.startedTrackingPointerId) {
+                if (this.tracker == null) {
+                    this.tracker = VelocityTracker.obtain();
+                }
+                int dx = Math.max(0, (int) (event.getX() - ((float) this.startedTrackingX)));
+                int dy = Math.abs(((int) event.getY()) - this.startedTrackingY);
+                this.tracker.addMovement(event);
+                if (this.maybeStartTracking && !this.startedTracking && ((float) dx) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
+                    prepareForMoving(event);
+                } else if (this.startedTracking) {
+                    ArticleViewer.this.containerView.setTranslationX((float) dx);
+                    setInnerTranslationX((float) dx);
+                }
+            } else if (event != null && event.getPointerId(0) == this.startedTrackingPointerId && (event.getAction() == 3 || event.getAction() == 1 || event.getAction() == 6)) {
+                float velX;
+                if (this.tracker == null) {
+                    this.tracker = VelocityTracker.obtain();
+                }
+                this.tracker.computeCurrentVelocity(1000);
+                if (!this.startedTracking) {
+                    velX = this.tracker.getXVelocity();
+                    float velY = this.tracker.getYVelocity();
+                    if (velX >= 3500.0f && velX > Math.abs(velY)) {
+                        prepareForMoving(event);
+                    }
+                }
+                if (this.startedTracking) {
+                    float distToMove;
+                    float x = ArticleViewer.this.containerView.getX();
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    velX = this.tracker.getXVelocity();
+                    final boolean backAnimation = x < ((float) ArticleViewer.this.containerView.getMeasuredWidth()) / 3.0f && (velX < 3500.0f || velX < this.tracker.getYVelocity());
+                    Animator[] animatorArr;
+                    if (backAnimation) {
+                        distToMove = x;
+                        animatorArr = new Animator[2];
+                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, "translationX", new float[]{0.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{0.0f});
+                        animatorSet.playTogether(animatorArr);
+                    } else {
+                        distToMove = ((float) ArticleViewer.this.containerView.getMeasuredWidth()) - x;
+                        animatorArr = new Animator[2];
+                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, "translationX", new float[]{(float) ArticleViewer.this.containerView.getMeasuredWidth()});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{(float) ArticleViewer.this.containerView.getMeasuredWidth()});
+                        animatorSet.playTogether(animatorArr);
+                    }
+                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) ArticleViewer.this.containerView.getMeasuredWidth())) * distToMove), 50));
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (!backAnimation) {
+                                ArticleViewer.this.saveCurrentPagePosition();
+                                ArticleViewer.this.onClosed();
+                            }
+                            WindowView.this.startedTracking = false;
+                            WindowView.this.closeAnimationInProgress = false;
+                        }
+                    });
+                    animatorSet.start();
+                    this.closeAnimationInProgress = true;
+                } else {
+                    this.maybeStartTracking = false;
+                    this.startedTracking = false;
+                }
+                if (this.tracker != null) {
+                    this.tracker.recycle();
+                    this.tracker = null;
+                }
+            } else if (event == null) {
+                this.maybeStartTracking = false;
+                this.startedTracking = false;
+                if (this.tracker != null) {
+                    this.tracker.recycle();
+                    this.tracker = null;
+                }
+            }
+            return this.startedTracking;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            canvas.drawRect(this.innerTranslationX, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), ArticleViewer.this.backgroundPaint);
+        }
+
+        @Keep
+        public void setAlpha(float value) {
+            ArticleViewer.this.backgroundPaint.setAlpha((int) (255.0f * value));
+            this.alpha = value;
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            invalidate();
+        }
+
+        @Keep
+        public float getAlpha() {
+            return this.alpha;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$2 */
+    class C09632 implements OnDispatchKeyEventListener {
+        C09632() {
+        }
+
+        public void onDispatchKeyEvent(KeyEvent keyEvent) {
+            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
+                ArticleViewer.this.popupWindow.dismiss();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$9 */
+    class C09779 implements OnItemLongClickListener {
+        C09779() {
+        }
+
+        public boolean onItemClick(View view, int position) {
+            return false;
+        }
+    }
+
+    private class BlockAudioCell extends View implements FileDownloadProgressListener {
+        private int TAG;
+        private int buttonPressed;
+        private int buttonState;
+        private int buttonX;
+        private int buttonY;
+        private TL_pageBlockAudio currentBlock;
+        private Document currentDocument;
+        private MessageObject currentMessageObject;
+        private StaticLayout durationLayout;
+        private boolean isFirst;
+        private boolean isLast;
+        private int lastCreatedWidth;
+        private String lastTimeString;
+        private RadialProgress radialProgress = new RadialProgress(this);
+        private SeekBar seekBar;
+        private int seekBarX;
+        private int seekBarY;
+        private StaticLayout textLayout;
+        private int textX;
+        private int textY = AndroidUtilities.dp(54.0f);
+        private StaticLayout titleLayout;
+
+        public BlockAudioCell(Context context) {
+            super(context);
+            this.radialProgress.setAlphaForPrevious(true);
+            this.radialProgress.setDiff(AndroidUtilities.dp(0.0f));
+            this.radialProgress.setStrikeWidth(AndroidUtilities.dp(2.0f));
+            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
+            this.seekBar = new SeekBar(context);
+            this.seekBar.setDelegate(new SeekBarDelegate(ArticleViewer.this) {
+                public void onSeekBarDrag(float progress) {
+                    if (BlockAudioCell.this.currentMessageObject != null) {
+                        BlockAudioCell.this.currentMessageObject.audioProgress = progress;
+                        MediaController.getInstance().seekToProgress(BlockAudioCell.this.currentMessageObject, progress);
+                    }
+                }
+            });
+        }
+
+        public void setBlock(TL_pageBlockAudio block, boolean first, boolean last) {
+            this.currentBlock = block;
+            this.currentMessageObject = (MessageObject) ArticleViewer.this.audioBlocks.get(this.currentBlock);
+            this.currentDocument = this.currentMessageObject.getDocument();
+            this.lastCreatedWidth = 0;
+            this.isFirst = first;
+            this.isLast = last;
+            this.radialProgress.setProgressColor(ArticleViewer.this.getTextColor());
+            this.seekBar.setColors(ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor());
+            updateButtonState(false);
+            requestLayout();
+        }
+
+        public MessageObject getMessageObject() {
+            return this.currentMessageObject;
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            float x = event.getX();
+            float y = event.getY();
+            if (this.seekBar.onTouch(event.getAction(), event.getX() - ((float) this.seekBarX), event.getY() - ((float) this.seekBarY))) {
+                if (event.getAction() == 0) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                invalidate();
+                return true;
+            }
+            boolean z;
+            if (event.getAction() == 0) {
+                if ((this.buttonState != -1 && x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + AndroidUtilities.dp(48.0f))) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + AndroidUtilities.dp(48.0f)))) || this.buttonState == 0) {
+                    this.buttonPressed = 1;
+                    invalidate();
+                }
+            } else if (event.getAction() == 1) {
+                if (this.buttonPressed == 1) {
+                    this.buttonPressed = 0;
+                    playSoundEffect(0);
+                    didPressedButton(false);
+                    this.radialProgress.swapBackground(getDrawableForCurrentState());
+                    invalidate();
+                }
+            } else if (event.getAction() == 3) {
+                this.buttonPressed = 0;
+            }
+            if (this.buttonPressed != 0 || ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event)) {
+                z = true;
+            } else {
+                z = false;
+            }
+            return z;
+        }
+
+        @SuppressLint({"DrawAllocation"})
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = AndroidUtilities.dp(54.0f);
+            if (this.currentBlock != null) {
+                if (this.currentBlock.level > 0) {
+                    this.textX = AndroidUtilities.dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.dp(18.0f);
+                } else {
+                    this.textX = AndroidUtilities.dp(18.0f);
+                }
+                int textWidth = (width - this.textX) - AndroidUtilities.dp(18.0f);
+                int size = AndroidUtilities.dp(40.0f);
+                this.buttonX = AndroidUtilities.dp(16.0f);
+                this.buttonY = AndroidUtilities.dp(7.0f);
+                this.currentBlock.caption = new TL_textPlain();
+                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
+                if (this.lastCreatedWidth != width) {
+                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
+                    if (this.textLayout != null) {
+                        height += AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
+                    }
+                }
+                if (!this.isFirst && this.currentBlock.level <= 0) {
+                    height += AndroidUtilities.dp(8.0f);
+                }
+                String author = this.currentMessageObject.getMusicAuthor(false);
+                String title = this.currentMessageObject.getMusicTitle(false);
+                this.seekBarX = (this.buttonX + AndroidUtilities.dp(50.0f)) + size;
+                int w = (width - this.seekBarX) - AndroidUtilities.dp(18.0f);
+                if (TextUtils.isEmpty(title) && TextUtils.isEmpty(author)) {
+                    this.titleLayout = null;
+                    this.seekBarY = this.buttonY + ((size - AndroidUtilities.dp(30.0f)) / 2);
+                } else {
+                    SpannableStringBuilder stringBuilder;
+                    if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
+                        stringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{author, title}));
+                    } else if (TextUtils.isEmpty(title)) {
+                        stringBuilder = new SpannableStringBuilder(author);
+                    } else {
+                        stringBuilder = new SpannableStringBuilder(title);
+                    }
+                    if (!TextUtils.isEmpty(author)) {
+                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, author.length(), 18);
+                    }
+                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(stringBuilder, Theme.chat_audioTitlePaint, (float) w, TruncateAt.END), ArticleViewer.audioTimePaint, w, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.seekBarY = (this.buttonY + ((size - AndroidUtilities.dp(30.0f)) / 2)) + AndroidUtilities.dp(11.0f);
+                }
+                this.seekBar.setSize(w, AndroidUtilities.dp(30.0f));
+            } else {
+                height = 1;
+            }
+            setMeasuredDimension(width, height);
+            updatePlayingMessageProgress();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                this.radialProgress.draw(canvas);
+                canvas.save();
+                canvas.translate((float) this.seekBarX, (float) this.seekBarY);
+                this.seekBar.draw(canvas);
+                canvas.restore();
+                if (this.durationLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.dp(6.0f)));
+                    this.durationLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.titleLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY - AndroidUtilities.dp(16.0f)));
+                    this.titleLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
+                    this.textLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
+            }
+        }
+
+        private Drawable getDrawableForCurrentState() {
+            return Theme.chat_ivStatesDrawable[this.buttonState][this.buttonPressed != 0 ? 1 : 0];
+        }
+
+        public void updatePlayingMessageProgress() {
+            if (this.currentDocument != null && this.currentMessageObject != null) {
+                if (!this.seekBar.isDragging()) {
+                    this.seekBar.setProgress(this.currentMessageObject.audioProgress);
+                }
+                int duration = 0;
+                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                    duration = this.currentMessageObject.audioProgressSec;
+                } else {
+                    for (int a = 0; a < this.currentDocument.attributes.size(); a++) {
+                        DocumentAttribute attribute = (DocumentAttribute) this.currentDocument.attributes.get(a);
+                        if (attribute instanceof TL_documentAttributeAudio) {
+                            duration = attribute.duration;
+                            break;
+                        }
+                    }
+                }
+                String timeString = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
+                if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
+                    this.lastTimeString = timeString;
+                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+                    this.durationLayout = new StaticLayout(timeString, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(timeString)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                }
+                ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
+                invalidate();
+            }
+        }
+
+        public void updateButtonState(boolean animated) {
+            String fileName = FileLoader.getAttachFileName(this.currentDocument);
+            boolean fileExists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
+            if (TextUtils.isEmpty(fileName)) {
+                this.radialProgress.setBackground(null, false, false);
+                return;
+            }
+            if (fileExists) {
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
+                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                    this.buttonState = 0;
+                } else {
+                    this.buttonState = 1;
+                }
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+            } else {
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
+                if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(fileName)) {
+                    this.buttonState = 3;
+                    Float progress = ImageLoader.getInstance().getFileProgress(fileName);
+                    if (progress != null) {
+                        this.radialProgress.setProgress(progress.floatValue(), animated);
+                    } else {
+                        this.radialProgress.setProgress(0.0f, animated);
+                    }
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
+                } else {
+                    this.buttonState = 2;
+                    this.radialProgress.setProgress(0.0f, animated);
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+                }
+            }
+            updatePlayingMessageProgress();
+        }
+
+        private void didPressedButton(boolean animated) {
+            if (this.buttonState == 0) {
+                if (MediaController.getInstance().setPlaylist(ArticleViewer.this.audioMessages, this.currentMessageObject, false)) {
+                    this.buttonState = 1;
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                    invalidate();
+                }
+            } else if (this.buttonState == 1) {
+                if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+                    this.buttonState = 0;
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                    invalidate();
+                }
+            } else if (this.buttonState == 2) {
+                this.radialProgress.setProgress(0.0f, false);
+                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, true, 1);
+                this.buttonState = 3;
+                this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
+                invalidate();
+            } else if (this.buttonState == 3) {
+                FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
+                this.buttonState = 2;
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                invalidate();
+            }
+        }
+
+        public void onFailedDownload(String fileName) {
+            updateButtonState(true);
+        }
+
+        public void onSuccessDownload(String fileName) {
+            this.radialProgress.setProgress(1.0f, true);
+            updateButtonState(true);
+        }
+
+        public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
+        }
+
+        public void onProgressDownload(String fileName, float progress) {
+            this.radialProgress.setProgress(progress, true);
+            if (this.buttonState != 3) {
+                updateButtonState(false);
+            }
+        }
+
+        public int getObserverTag() {
+            return this.TAG;
+        }
+    }
+
     private class BlockVideoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
         private int buttonPressed;
@@ -3123,482 +3851,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    class CheckForLongPress implements Runnable {
-        public int currentPressCount;
-
-        CheckForLongPress() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.checkingForLongPress && ArticleViewer.this.windowView != null) {
-                ArticleViewer.this.checkingForLongPress = false;
-                ArticleViewer.this.windowView.performHapticFeedback(0);
-                if (ArticleViewer.this.pressedLink != null) {
-                    final String urlFinal = ArticleViewer.this.pressedLink.getUrl();
-                    Builder builder = new Builder(ArticleViewer.this.parentActivity);
-                    builder.setTitle(urlFinal);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0488R.string.Open), LocaleController.getString("Copy", C0488R.string.Copy)}, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (ArticleViewer.this.parentActivity != null) {
-                                if (which == 0) {
-                                    Browser.openUrl(ArticleViewer.this.parentActivity, urlFinal);
-                                } else if (which == 1) {
-                                    String url = urlFinal;
-                                    if (url.startsWith("mailto:")) {
-                                        url = url.substring(7);
-                                    } else if (url.startsWith("tel:")) {
-                                        url = url.substring(4);
-                                    }
-                                    AndroidUtilities.addToClipboard(url);
-                                }
-                            }
-                        }
-                    });
-                    ArticleViewer.this.showDialog(builder.create());
-                    ArticleViewer.this.hideActionBar();
-                    ArticleViewer.this.pressedLink = null;
-                    ArticleViewer.this.pressedLinkOwnerLayout = null;
-                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                } else if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
-                    int y = (ArticleViewer.this.pressedLinkOwnerView.getTop() - AndroidUtilities.dp(54.0f)) + ArticleViewer.this.pressedLayoutY;
-                    if (y < 0) {
-                        y *= -1;
-                    }
-                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                    ArticleViewer.this.drawBlockSelection = true;
-                    ArticleViewer.this.showPopup(ArticleViewer.this.pressedLinkOwnerView, 48, 0, y);
-                    ArticleViewer.this.listView.setLayoutFrozen(true);
-                    ArticleViewer.this.listView.setLayoutFrozen(false);
-                }
-            }
-        }
-    }
-
-    private final class CheckForTap implements Runnable {
-        private CheckForTap() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.pendingCheckForLongPress == null) {
-                ArticleViewer.this.pendingCheckForLongPress = new CheckForLongPress();
-            }
-            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$804(ArticleViewer.this);
-            if (ArticleViewer.this.windowView != null) {
-                ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
-            }
-        }
-    }
-
-    public class ColorCell extends FrameLayout {
-        private int currentColor;
-        private boolean selected;
-        private TextView textView;
-        final /* synthetic */ ArticleViewer this$0;
-
-        public ColorCell(ArticleViewer this$0, Context context) {
-            int i;
-            int i2 = 5;
-            this.this$0 = this$0;
-            super(context);
-            if (ArticleViewer.colorPaint == null) {
-                ArticleViewer.colorPaint = new Paint(1);
-                ArticleViewer.selectorPaint = new Paint(1);
-                ArticleViewer.selectorPaint.setColor(-15428119);
-                ArticleViewer.selectorPaint.setStyle(Style.STROKE);
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            }
-            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
-            setWillNotDraw(false);
-            this.textView = new TextView(context);
-            this.textView.setTextColor(-14606047);
-            this.textView.setTextSize(1, 16.0f);
-            this.textView.setLines(1);
-            this.textView.setMaxLines(1);
-            this.textView.setSingleLine(true);
-            TextView textView = this.textView;
-            if (LocaleController.isRTL) {
-                i = 5;
-            } else {
-                i = 3;
-            }
-            textView.setGravity(i | 16);
-            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
-            View view = this.textView;
-            if (!LocaleController.isRTL) {
-                i2 = 3;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-        }
-
-        public void setTextAndColor(String text, int color) {
-            this.textView.setText(text);
-            this.currentColor = color;
-            invalidate();
-        }
-
-        public void select(boolean value) {
-            if (this.selected != value) {
-                this.selected = value;
-                invalidate();
-            }
-        }
-
-        protected void onDraw(Canvas canvas) {
-            ArticleViewer.colorPaint.setColor(this.currentColor);
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.colorPaint);
-            if (this.selected) {
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-                ArticleViewer.selectorPaint.setColor(-15428119);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.selectorPaint);
-            } else if (this.currentColor == -1) {
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-                ArticleViewer.selectorPaint.setColor(-4539718);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), ArticleViewer.selectorPaint);
-            }
-        }
-    }
-
-    public class FontCell extends FrameLayout {
-        private TextView textView;
-        private TextView textView2;
-        final /* synthetic */ ArticleViewer this$0;
-
-        public FontCell(ArticleViewer this$0, Context context) {
-            int i;
-            int i2;
-            int i3 = 5;
-            this.this$0 = this$0;
-            super(context);
-            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
-            this.textView = new TextView(context);
-            this.textView.setTextColor(-14606047);
-            this.textView.setTextSize(1, 16.0f);
-            this.textView.setLines(1);
-            this.textView.setMaxLines(1);
-            this.textView.setSingleLine(true);
-            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            View view = this.textView;
-            if (LocaleController.isRTL) {
-                i = 5;
-            } else {
-                i = 3;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
-            this.textView2 = new TextView(context);
-            this.textView2.setTextColor(-14606047);
-            this.textView2.setTextSize(1, 16.0f);
-            this.textView2.setLines(1);
-            this.textView2.setMaxLines(1);
-            this.textView2.setSingleLine(true);
-            this.textView2.setText("Aa");
-            TextView textView = this.textView2;
-            if (LocaleController.isRTL) {
-                i2 = 5;
-            } else {
-                i2 = 3;
-            }
-            textView.setGravity(i2 | 16);
-            view = this.textView2;
-            if (!LocaleController.isRTL) {
-                i3 = 3;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i3 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-        }
-
-        public void select(boolean value) {
-            this.textView2.setTextColor(value ? -15428119 : -14606047);
-        }
-
-        public void setTextAndTypeface(String text, Typeface typeface) {
-            this.textView.setText(text);
-            this.textView.setTypeface(typeface);
-            this.textView2.setTypeface(typeface);
-            invalidate();
-        }
-    }
-
-    private class PhotoBackgroundDrawable extends ColorDrawable {
-        private Runnable drawRunnable;
-
-        public PhotoBackgroundDrawable(int color) {
-            super(color);
-        }
-
-        @Keep
-        public void setAlpha(int alpha) {
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isPhotoVisible && alpha == 255) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            super.setAlpha(alpha);
-        }
-
-        public void draw(Canvas canvas) {
-            super.draw(canvas);
-            if (getAlpha() != 0 && this.drawRunnable != null) {
-                this.drawRunnable.run();
-                this.drawRunnable = null;
-            }
-        }
-    }
-
-    public static class PlaceProviderObject {
-        public int clipBottomAddition;
-        public int clipTopAddition;
-        public ImageReceiver imageReceiver;
-        public int index;
-        public View parentView;
-        public int radius;
-        public float scale = 1.0f;
-        public int size;
-        public BitmapHolder thumb;
-        public int viewX;
-        public int viewY;
-    }
-
-    private class RadialProgressView {
-        private float alpha = 1.0f;
-        private float animatedAlphaValue = 1.0f;
-        private float animatedProgressValue = 0.0f;
-        private float animationProgressStart = 0.0f;
-        private int backgroundState = -1;
-        private float currentProgress = 0.0f;
-        private long currentProgressTime = 0;
-        private long lastUpdateTime = 0;
-        private View parent = null;
-        private int previousBackgroundState = -2;
-        private RectF progressRect = new RectF();
-        private float radOffset = 0.0f;
-        private float scale = 1.0f;
-        private int size = AndroidUtilities.dp(64.0f);
-
-        public RadialProgressView(Context context, View parentView) {
-            if (ArticleViewer.decelerateInterpolator == null) {
-                ArticleViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
-                ArticleViewer.progressPaint = new Paint(1);
-                ArticleViewer.progressPaint.setStyle(Style.STROKE);
-                ArticleViewer.progressPaint.setStrokeCap(Cap.ROUND);
-                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-                ArticleViewer.progressPaint.setColor(-1);
-            }
-            this.parent = parentView;
-        }
-
-        private void updateAnimation() {
-            long newTime = System.currentTimeMillis();
-            long dt = newTime - this.lastUpdateTime;
-            this.lastUpdateTime = newTime;
-            if (this.animatedProgressValue != 1.0f) {
-                this.radOffset += ((float) (360 * dt)) / 3000.0f;
-                float progressDiff = this.currentProgress - this.animationProgressStart;
-                if (progressDiff > 0.0f) {
-                    this.currentProgressTime += dt;
-                    if (this.currentProgressTime >= 300) {
-                        this.animatedProgressValue = this.currentProgress;
-                        this.animationProgressStart = this.currentProgress;
-                        this.currentProgressTime = 0;
-                    } else {
-                        this.animatedProgressValue = this.animationProgressStart + (ArticleViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
-                    }
-                }
-                this.parent.invalidate();
-            }
-            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
-                this.animatedAlphaValue -= ((float) dt) / 200.0f;
-                if (this.animatedAlphaValue <= 0.0f) {
-                    this.animatedAlphaValue = 0.0f;
-                    this.previousBackgroundState = -2;
-                }
-                this.parent.invalidate();
-            }
-        }
-
-        public void setProgress(float value, boolean animated) {
-            if (animated) {
-                this.animationProgressStart = this.animatedProgressValue;
-            } else {
-                this.animatedProgressValue = value;
-                this.animationProgressStart = value;
-            }
-            this.currentProgress = value;
-            this.currentProgressTime = 0;
-        }
-
-        public void setBackgroundState(int state, boolean animated) {
-            this.lastUpdateTime = System.currentTimeMillis();
-            if (!animated || this.backgroundState == state) {
-                this.previousBackgroundState = -2;
-            } else {
-                this.previousBackgroundState = this.backgroundState;
-                this.animatedAlphaValue = 1.0f;
-            }
-            this.backgroundState = state;
-            this.parent.invalidate();
-        }
-
-        public void setAlpha(float value) {
-            this.alpha = value;
-        }
-
-        public void setScale(float value) {
-            this.scale = value;
-        }
-
-        public void onDraw(Canvas canvas) {
-            Drawable drawable;
-            int sizeScaled = (int) (((float) this.size) * this.scale);
-            int x = (ArticleViewer.this.getContainerViewWidth() - sizeScaled) / 2;
-            int y = (ArticleViewer.this.getContainerViewHeight() - sizeScaled) / 2;
-            if (this.previousBackgroundState >= 0 && this.previousBackgroundState < 4) {
-                drawable = ArticleViewer.progressDrawables[this.previousBackgroundState];
-                if (drawable != null) {
-                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
-                    drawable.draw(canvas);
-                }
-            }
-            if (this.backgroundState >= 0 && this.backgroundState < 4) {
-                drawable = ArticleViewer.progressDrawables[this.backgroundState];
-                if (drawable != null) {
-                    if (this.previousBackgroundState != -2) {
-                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
-                    } else {
-                        drawable.setAlpha((int) (this.alpha * 255.0f));
-                    }
-                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
-                    drawable.draw(canvas);
-                }
-            }
-            if (this.backgroundState == 0 || this.backgroundState == 1 || this.previousBackgroundState == 0 || this.previousBackgroundState == 1) {
-                int diff = AndroidUtilities.dp(4.0f);
-                if (this.previousBackgroundState != -2) {
-                    ArticleViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                } else {
-                    ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
-                }
-                this.progressRect.set((float) (x + diff), (float) (y + diff), (float) ((x + sizeScaled) - diff), (float) ((y + sizeScaled) - diff));
-                canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, ArticleViewer.progressPaint);
-                updateAnimation();
-            }
-        }
-    }
-
-    private class SizeChooseView extends View {
-        private int circleSize;
-        private int gapSize;
-        private int lineSize;
-        private boolean moving;
-        private Paint paint = new Paint(1);
-        private int sideSide;
-        private boolean startMoving;
-        private int startMovingQuality;
-        private float startX;
-
-        public SizeChooseView(Context context) {
-            super(context);
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            boolean z = false;
-            float x = event.getX();
-            int a;
-            int cx;
-            if (event.getAction() == 0) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-                a = 0;
-                while (a < 5) {
-                    cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                    if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                        a++;
-                    } else {
-                        if (a == ArticleViewer.this.selectedFontSize) {
-                            z = true;
-                        }
-                        this.startMoving = z;
-                        this.startX = x;
-                        this.startMovingQuality = ArticleViewer.this.selectedFontSize;
-                    }
-                }
-            } else if (event.getAction() == 2) {
-                if (this.startMoving) {
-                    if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
-                        this.moving = true;
-                        this.startMoving = false;
-                    }
-                } else if (this.moving) {
-                    a = 0;
-                    while (a < 5) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
-                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
-                            a++;
-                        } else if (ArticleViewer.this.selectedFontSize != a) {
-                            ArticleViewer.this.selectedFontSize = a;
-                            ArticleViewer.this.updatePaintSize();
-                            invalidate();
-                        }
-                    }
-                }
-            } else if (event.getAction() == 1 || event.getAction() == 3) {
-                if (!this.moving) {
-                    a = 0;
-                    while (a < 5) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                            a++;
-                        } else if (ArticleViewer.this.selectedFontSize != a) {
-                            ArticleViewer.this.selectedFontSize = a;
-                            ArticleViewer.this.updatePaintSize();
-                            invalidate();
-                        }
-                    }
-                } else if (ArticleViewer.this.selectedFontSize != this.startMovingQuality) {
-                    ArticleViewer.this.updatePaintSize();
-                }
-                this.startMoving = false;
-                this.moving = false;
-            }
-            return true;
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            this.circleSize = AndroidUtilities.dp(5.0f);
-            this.gapSize = AndroidUtilities.dp(2.0f);
-            this.sideSide = AndroidUtilities.dp(17.0f);
-            this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - (this.gapSize * 8)) - (this.sideSide * 2)) / 4;
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int cy = getMeasuredHeight() / 2;
-            int a = 0;
-            while (a < 5) {
-                int cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                if (a <= ArticleViewer.this.selectedFontSize) {
-                    this.paint.setColor(-15428119);
-                } else {
-                    this.paint.setColor(-3355444);
-                }
-                canvas.drawCircle((float) cx, (float) cy, a == ArticleViewer.this.selectedFontSize ? (float) AndroidUtilities.dp(4.0f) : (float) (this.circleSize / 2), this.paint);
-                if (a != 0) {
-                    int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
-                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.dp(1.0f) + cy), this.paint);
-                }
-                a++;
-            }
-        }
-    }
-
     private class WebpageAdapter extends SelectionAdapter {
         private Context context;
 
@@ -3678,7 +3930,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     frameLayout.setTag(Integer.valueOf(90));
                     TextView textView = new TextView(this.context);
                     frameLayout.addView(textView, LayoutHelper.createFrame(-1, 34.0f, 51, 0.0f, 10.0f, 0.0f, 0.0f));
-                    textView.setText(LocaleController.getString("PreviewFeedback", C0488R.string.PreviewFeedback));
+                    textView.setText(LocaleController.getString("PreviewFeedback", R.string.PreviewFeedback));
                     textView.setTextSize(1, 12.0f);
                     textView.setGravity(17);
                     view = frameLayout;
@@ -3897,258 +4149,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    private class WindowView extends FrameLayout {
-        private float alpha;
-        private Runnable attachRunnable;
-        private boolean closeAnimationInProgress;
-        private float innerTranslationX;
-        private boolean maybeStartTracking;
-        private boolean selfLayout;
-        private boolean startedTracking;
-        private int startedTrackingPointerId;
-        private int startedTrackingX;
-        private int startedTrackingY;
-        private VelocityTracker tracker;
-
-        public WindowView(Context context) {
-            super(context);
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-            if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
-                setMeasuredDimension(widthSize, heightSize);
-            } else {
-                setMeasuredDimension(widthSize, heightSize);
-                WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
-                if (AndroidUtilities.incorrectDisplaySizeFix) {
-                    if (heightSize > AndroidUtilities.displaySize.y) {
-                        heightSize = AndroidUtilities.displaySize.y;
-                    }
-                    heightSize += AndroidUtilities.statusBarHeight;
-                }
-                heightSize -= insets.getSystemWindowInsetBottom();
-                widthSize -= insets.getSystemWindowInsetRight() + insets.getSystemWindowInsetLeft();
-                if (insets.getSystemWindowInsetRight() != 0) {
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetRight(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-                } else if (insets.getSystemWindowInsetLeft() != 0) {
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetLeft(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-                } else {
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetBottom(), NUM));
-                }
-            }
-            ArticleViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-            ArticleViewer.this.photoContainerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-            ArticleViewer.this.photoContainerBackground.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-            ArticleViewer.this.fullscreenVideoContainer.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
-            ViewGroup.LayoutParams layoutParams = ArticleViewer.this.animatingImageView.getLayoutParams();
-            ArticleViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
-        }
-
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            if (!this.selfLayout) {
-                int x;
-                if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
-                    x = 0;
-                } else {
-                    WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
-                    x = insets.getSystemWindowInsetLeft();
-                    if (insets.getSystemWindowInsetRight() != 0) {
-                        ArticleViewer.this.barBackground.layout((right - left) - insets.getSystemWindowInsetRight(), 0, right - left, bottom - top);
-                    } else if (insets.getSystemWindowInsetLeft() != 0) {
-                        ArticleViewer.this.barBackground.layout(0, 0, insets.getSystemWindowInsetLeft(), bottom - top);
-                    } else {
-                        ArticleViewer.this.barBackground.layout(0, (bottom - top) - insets.getStableInsetBottom(), right - left, bottom - top);
-                    }
-                }
-                ArticleViewer.this.containerView.layout(x, 0, ArticleViewer.this.containerView.getMeasuredWidth() + x, ArticleViewer.this.containerView.getMeasuredHeight());
-                ArticleViewer.this.photoContainerView.layout(x, 0, ArticleViewer.this.photoContainerView.getMeasuredWidth() + x, ArticleViewer.this.photoContainerView.getMeasuredHeight());
-                ArticleViewer.this.photoContainerBackground.layout(x, 0, ArticleViewer.this.photoContainerBackground.getMeasuredWidth() + x, ArticleViewer.this.photoContainerBackground.getMeasuredHeight());
-                ArticleViewer.this.fullscreenVideoContainer.layout(x, 0, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + x, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight());
-                ArticleViewer.this.animatingImageView.layout(0, 0, ArticleViewer.this.animatingImageView.getMeasuredWidth(), ArticleViewer.this.animatingImageView.getMeasuredHeight());
-            }
-        }
-
-        protected void onAttachedToWindow() {
-            super.onAttachedToWindow();
-            ArticleViewer.this.attachedToWindow = true;
-        }
-
-        protected void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
-            ArticleViewer.this.attachedToWindow = false;
-        }
-
-        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            handleTouchEvent(null);
-            super.requestDisallowInterceptTouchEvent(disallowIntercept);
-        }
-
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            return !ArticleViewer.this.collapsed && (handleTouchEvent(ev) || super.onInterceptTouchEvent(ev));
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            return !ArticleViewer.this.collapsed && (handleTouchEvent(event) || super.onTouchEvent(event));
-        }
-
-        @Keep
-        public void setInnerTranslationX(float value) {
-            this.innerTranslationX = value;
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            invalidate();
-        }
-
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            int width = getMeasuredWidth();
-            int translationX = (int) this.innerTranslationX;
-            int restoreCount = canvas.save();
-            canvas.clipRect(translationX, 0, width, getHeight());
-            boolean result = super.drawChild(canvas, child, drawingTime);
-            canvas.restoreToCount(restoreCount);
-            if (translationX != 0 && child == ArticleViewer.this.containerView) {
-                float opacity = Math.min(0.8f, ((float) (width - translationX)) / ((float) width));
-                if (opacity < 0.0f) {
-                    opacity = 0.0f;
-                }
-                ArticleViewer.this.scrimPaint.setColor(((int) (153.0f * opacity)) << 24);
-                canvas.drawRect(0.0f, 0.0f, (float) translationX, (float) getHeight(), ArticleViewer.this.scrimPaint);
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
-                ArticleViewer.this.layerShadowDrawable.setBounds(translationX - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
-                ArticleViewer.this.layerShadowDrawable.setAlpha((int) (255.0f * alpha));
-                ArticleViewer.this.layerShadowDrawable.draw(canvas);
-            }
-            return result;
-        }
-
-        @Keep
-        public float getInnerTranslationX() {
-            return this.innerTranslationX;
-        }
-
-        private void prepareForMoving(MotionEvent ev) {
-            this.maybeStartTracking = false;
-            this.startedTracking = true;
-            this.startedTrackingX = (int) ev.getX();
-        }
-
-        public boolean handleTouchEvent(MotionEvent event) {
-            if (ArticleViewer.this.isPhotoVisible || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0) {
-                return false;
-            }
-            if (event != null && event.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
-                this.startedTrackingPointerId = event.getPointerId(0);
-                this.maybeStartTracking = true;
-                this.startedTrackingX = (int) event.getX();
-                this.startedTrackingY = (int) event.getY();
-                if (this.tracker != null) {
-                    this.tracker.clear();
-                }
-            } else if (event != null && event.getAction() == 2 && event.getPointerId(0) == this.startedTrackingPointerId) {
-                if (this.tracker == null) {
-                    this.tracker = VelocityTracker.obtain();
-                }
-                int dx = Math.max(0, (int) (event.getX() - ((float) this.startedTrackingX)));
-                int dy = Math.abs(((int) event.getY()) - this.startedTrackingY);
-                this.tracker.addMovement(event);
-                if (this.maybeStartTracking && !this.startedTracking && ((float) dx) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
-                    prepareForMoving(event);
-                } else if (this.startedTracking) {
-                    ArticleViewer.this.containerView.setTranslationX((float) dx);
-                    setInnerTranslationX((float) dx);
-                }
-            } else if (event != null && event.getPointerId(0) == this.startedTrackingPointerId && (event.getAction() == 3 || event.getAction() == 1 || event.getAction() == 6)) {
-                float velX;
-                if (this.tracker == null) {
-                    this.tracker = VelocityTracker.obtain();
-                }
-                this.tracker.computeCurrentVelocity(1000);
-                if (!this.startedTracking) {
-                    velX = this.tracker.getXVelocity();
-                    float velY = this.tracker.getYVelocity();
-                    if (velX >= 3500.0f && velX > Math.abs(velY)) {
-                        prepareForMoving(event);
-                    }
-                }
-                if (this.startedTracking) {
-                    float distToMove;
-                    float x = ArticleViewer.this.containerView.getX();
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    velX = this.tracker.getXVelocity();
-                    final boolean backAnimation = x < ((float) ArticleViewer.this.containerView.getMeasuredWidth()) / 3.0f && (velX < 3500.0f || velX < this.tracker.getYVelocity());
-                    Animator[] animatorArr;
-                    if (backAnimation) {
-                        distToMove = x;
-                        animatorArr = new Animator[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, "translationX", new float[]{0.0f});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{0.0f});
-                        animatorSet.playTogether(animatorArr);
-                    } else {
-                        distToMove = ((float) ArticleViewer.this.containerView.getMeasuredWidth()) - x;
-                        animatorArr = new Animator[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, "translationX", new float[]{(float) ArticleViewer.this.containerView.getMeasuredWidth()});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{(float) ArticleViewer.this.containerView.getMeasuredWidth()});
-                        animatorSet.playTogether(animatorArr);
-                    }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) ArticleViewer.this.containerView.getMeasuredWidth())) * distToMove), 50));
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            if (!backAnimation) {
-                                ArticleViewer.this.saveCurrentPagePosition();
-                                ArticleViewer.this.onClosed();
-                            }
-                            WindowView.this.startedTracking = false;
-                            WindowView.this.closeAnimationInProgress = false;
-                        }
-                    });
-                    animatorSet.start();
-                    this.closeAnimationInProgress = true;
-                } else {
-                    this.maybeStartTracking = false;
-                    this.startedTracking = false;
-                }
-                if (this.tracker != null) {
-                    this.tracker.recycle();
-                    this.tracker = null;
-                }
-            } else if (event == null) {
-                this.maybeStartTracking = false;
-                this.startedTracking = false;
-                if (this.tracker != null) {
-                    this.tracker.recycle();
-                    this.tracker = null;
-                }
-            }
-            return this.startedTracking;
-        }
-
-        protected void onDraw(Canvas canvas) {
-            canvas.drawRect(this.innerTranslationX, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), ArticleViewer.this.backgroundPaint);
-        }
-
-        @Keep
-        public void setAlpha(float value) {
-            ArticleViewer.this.backgroundPaint.setAlpha((int) (255.0f * value));
-            this.alpha = value;
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            invalidate();
-        }
-
-        @Keep
-        public float getAlpha() {
-            return this.alpha;
-        }
-    }
-
     static /* synthetic */ int access$804(ArticleViewer x0) {
         int i = x0.pressCount + 1;
         x0.pressCount = i;
@@ -4190,7 +4190,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.popupLayout == null) {
                 this.popupRect = new Rect();
                 this.popupLayout = new ActionBarPopupWindowLayout(this.parentActivity);
-                this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(C0488R.drawable.menu_copy));
+                this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(R.drawable.menu_copy));
                 this.popupLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new C09591());
                 this.popupLayout.setDispatchKeyEventListener(new C09632());
@@ -4202,12 +4202,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 deleteView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 deleteView.setTextSize(1, 15.0f);
                 deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                deleteView.setText(LocaleController.getString("Copy", C0488R.string.Copy).toUpperCase());
+                deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
                 deleteView.setOnClickListener(new C09683());
                 this.popupLayout.addView(deleteView, LayoutHelper.createFrame(-2, 38.0f));
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
-                this.popupWindow.setAnimationStyle(C0488R.style.PopupAnimation);
+                this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
                 this.popupWindow.setOutsideTouchable(true);
                 this.popupWindow.setClippingEnabled(true);
                 this.popupWindow.setInputMethodMode(2);
@@ -5287,9 +5287,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.selectedColor = sharedPreferences.getInt("font_color", 0);
         this.nightModeEnabled = sharedPreferences.getBoolean("nightModeEnabled", false);
         this.backgroundPaint = new Paint();
-        this.layerShadowDrawable = activity.getResources().getDrawable(C0488R.drawable.layer_shadow);
-        this.slideDotDrawable = activity.getResources().getDrawable(C0488R.drawable.slide_dot_small);
-        this.slideDotBigDrawable = activity.getResources().getDrawable(C0488R.drawable.slide_dot_big);
+        this.layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
+        this.slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
+        this.slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
         this.scrimPaint = new Paint();
         this.windowView = new WindowView(activity);
         this.windowView.setWillNotDraw(false);
@@ -5478,7 +5478,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 case 0:
                     this.nightModeImageView = new ImageView(this.parentActivity);
                     this.nightModeImageView.setScaleType(ScaleType.CENTER);
-                    this.nightModeImageView.setImageResource(C0488R.drawable.moon);
+                    this.nightModeImageView.setImageResource(R.drawable.moon);
                     ImageView imageView = this.nightModeImageView;
                     int i = (!this.nightModeEnabled || this.selectedColor == 2) ? -3355444 : -15428119;
                     imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
@@ -5496,13 +5496,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             }
                         }
                     });
-                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", C0488R.string.ColorWhite), -1);
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
                     break;
                 case 1:
-                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorSepia", C0488R.string.ColorSepia), -1382967);
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorSepia", R.string.ColorSepia), -1382967);
                     break;
                 case 2:
-                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorDark", C0488R.string.ColorDark), -14474461);
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorDark", R.string.ColorDark), -14474461);
                     break;
             }
             this.colorCells[a].select(a == this.selectedColor);
@@ -5570,7 +5570,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         textView.setSingleLine(true);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        textView.setText(LocaleController.getString("FontSize", C0488R.string.FontSize));
+        textView.setText(LocaleController.getString("FontSize", R.string.FontSize));
         settingsContainer.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 12, 17, 0));
         settingsContainer.addView(new SizeChooseView(this.parentActivity), LayoutHelper.createLinear(-1, 38, 0.0f, 0.0f, 0.0f, 1.0f));
         this.settingsButton = new ActionBarMenuItem(this.parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -1);
@@ -5598,7 +5598,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         });
         this.shareButton = new ImageView(activity);
         this.shareButton.setScaleType(ScaleType.CENTER);
-        this.shareButton.setImageResource(C0488R.drawable.ic_share_article);
+        this.shareButton.setImageResource(R.drawable.ic_share_article);
         this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.shareContainer.addView(this.shareButton, LayoutHelper.createFrame(48, 56.0f));
         this.progressView = new ContextProgressView(activity, 2);
@@ -5617,10 +5617,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         if (progressDrawables == null) {
             progressDrawables = new Drawable[4];
-            progressDrawables[0] = this.parentActivity.getResources().getDrawable(C0488R.drawable.circle_big);
-            progressDrawables[1] = this.parentActivity.getResources().getDrawable(C0488R.drawable.cancel_big);
-            progressDrawables[2] = this.parentActivity.getResources().getDrawable(C0488R.drawable.load_big);
-            progressDrawables[3] = this.parentActivity.getResources().getDrawable(C0488R.drawable.play_big);
+            progressDrawables[0] = this.parentActivity.getResources().getDrawable(R.drawable.circle_big);
+            progressDrawables[1] = this.parentActivity.getResources().getDrawable(R.drawable.cancel_big);
+            progressDrawables[2] = this.parentActivity.getResources().getDrawable(R.drawable.load_big);
+            progressDrawables[3] = this.parentActivity.getResources().getDrawable(R.drawable.play_big);
         }
         this.scroller = new Scroller(activity);
         this.blackPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
@@ -5629,8 +5629,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
-        this.actionBar.setTitle(LocaleController.formatString("Of", C0488R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
         this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -5642,9 +5642,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
                         if (f == null || !f.exists()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
-                            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
-                            builder.setMessage(LocaleController.getString("PleaseDownload", C0488R.string.PleaseDownload));
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
                             ArticleViewer.this.showDialog(builder.create());
                             return;
                         }
@@ -5675,11 +5675,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
         });
         ActionBarMenu menu = this.actionBar.createMenu();
-        menu.addItem(2, (int) C0488R.drawable.share);
-        this.menuItem = menu.addItem(0, (int) C0488R.drawable.ic_ab_other);
+        menu.addItem(2, (int) R.drawable.share);
+        this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
         this.menuItem.setLayoutInScreen(true);
-        this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", C0488R.string.OpenInExternalApp));
-        this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", C0488R.string.SaveToGallery));
+        this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
         this.bottomLayout = new FrameLayout(this.parentActivity);
         this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
@@ -5810,7 +5810,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.containerView.addView(this.nightModeHintView, LayoutHelper.createFrame(-1, -2, 83));
             ImageView nightModeImageView = new ImageView(this.parentActivity);
             nightModeImageView.setScaleType(ScaleType.CENTER);
-            nightModeImageView.setImageResource(C0488R.drawable.moon);
+            nightModeImageView.setImageResource(R.drawable.moon);
             FrameLayout frameLayout = this.nightModeHintView;
             if (LocaleController.isRTL) {
                 i3 = 5;
@@ -5819,7 +5819,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
             frameLayout.addView(nightModeImageView, LayoutHelper.createFrame(56, 56, i3 | 16));
             TextView textView = new TextView(this.parentActivity);
-            textView.setText(LocaleController.getString("InstantViewNightMode", C0488R.string.InstantViewNightMode));
+            textView.setText(LocaleController.getString("InstantViewNightMode", R.string.InstantViewNightMode));
             textView.setTextColor(-1);
             textView.setTextSize(1, 15.0f);
             FrameLayout frameLayout2 = this.nightModeHintView;
@@ -6654,9 +6654,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 File f = getMediaFile(this.currentIndex);
                 if (f == null || !f.exists()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
-                    builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
-                    builder.setMessage(LocaleController.getString("PleaseDownload", C0488R.string.PleaseDownload));
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
                     showDialog(builder.create());
                     return;
                 }
@@ -6664,7 +6664,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 intent.setType(getMediaMime(this.currentIndex));
                 if (VERSION.SDK_INT >= 24) {
                     try {
-                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.provider", f));
+                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
                         intent.setFlags(1);
                     } catch (Exception e) {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
@@ -6672,7 +6672,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else {
                     intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
                 }
-                this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0488R.string.ShareFile)), 500);
+                this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } catch (Throwable e2) {
                 FileLog.m3e(e2);
             }
@@ -6723,7 +6723,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             TextureView textureView = this.videoTextureView;
             this.videoCrossfadeAlpha = 0.0f;
             textureView.setAlpha(0.0f);
-            this.videoPlayButton.setImageResource(C0488R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
             if (this.videoPlayer == null) {
                 long duration;
                 this.videoPlayer = new VideoPlayer();
@@ -6750,7 +6750,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             if (!ArticleViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
                                 if (ArticleViewer.this.isPlaying) {
                                     ArticleViewer.this.isPlaying = false;
-                                    ArticleViewer.this.videoPlayButton.setImageResource(C0488R.drawable.inline_video_play);
+                                    ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
                                     AndroidUtilities.cancelRunOnUIThread(ArticleViewer.this.updateProgressRunnable);
                                     if (playbackState == 4 && !ArticleViewer.this.videoPlayerSeekbar.isDragging()) {
                                         ArticleViewer.this.videoPlayerSeekbar.setProgress(0.0f);
@@ -6761,7 +6761,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 }
                             } else if (!ArticleViewer.this.isPlaying) {
                                 ArticleViewer.this.isPlaying = true;
-                                ArticleViewer.this.videoPlayButton.setImageResource(C0488R.drawable.inline_video_pause);
+                                ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_pause);
                                 AndroidUtilities.runOnUIThread(ArticleViewer.this.updateProgressRunnable);
                             }
                             ArticleViewer.this.updateVideoPlayerTime();
@@ -6833,7 +6833,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         if (this.isPlaying) {
             this.isPlaying = false;
-            this.videoPlayButton.setImageResource(C0488R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
             AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
         }
         this.bottomLayout.setVisibility(8);
@@ -7110,15 +7110,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.currentAnimation != null) {
                     this.menuItem.setVisibility(8);
                     this.menuItem.hideSubItem(1);
-                    this.actionBar.setTitle(LocaleController.getString("AttachGif", C0488R.string.AttachGif));
+                    this.actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
                 } else {
                     this.menuItem.setVisibility(0);
                     if (this.imagesArr.size() != 1) {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", C0488R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.imagesArr.size())));
+                        this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.imagesArr.size())));
                     } else if (isVideo) {
-                        this.actionBar.setTitle(LocaleController.getString("AttachVideo", C0488R.string.AttachVideo));
+                        this.actionBar.setTitle(LocaleController.getString("AttachVideo", R.string.AttachVideo));
                     } else {
-                        this.actionBar.setTitle(LocaleController.getString("AttachPhoto", C0488R.string.AttachPhoto));
+                        this.actionBar.setTitle(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
                     }
                     this.menuItem.showSubItem(1);
                 }
@@ -7322,7 +7322,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 imageReceiver.setImage(fileLocation, null, null, bitmapDrawable, fileLocation2, "b", size[0], null, 1);
             } else if (isMediaVideo(index)) {
                 if (fileLocation instanceof TL_fileLocationUnavailable) {
-                    imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(C0488R.drawable.photoview_placeholder));
+                    imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
                     return;
                 }
                 placeHolder = null;
@@ -7337,7 +7337,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         } else if (size[0] == 0) {
             imageReceiver.setImageBitmap((Bitmap) null);
         } else {
-            imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(C0488R.drawable.photoview_placeholder));
+            imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
         }
     }
 

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -22,6 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -237,7 +237,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -521,18 +521,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         int i = 1;
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupMembers", C0488R.string.GroupMembers));
+        this.actionBar.setTitle(LocaleController.getString("GroupMembers", R.string.GroupMembers));
         this.actionBar.setActionBarMenuOnItemClick(new C13311());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13322());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13322());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -581,7 +581,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         ArrayList<String> items = new ArrayList();
         final ArrayList<Integer> actions = new ArrayList();
-        items.add(LocaleController.getString("KickFromGroup", C0488R.string.KickFromGroup));
+        items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
         actions.add(Integer.valueOf(0));
         Builder builder = new Builder(getParentActivity());
         builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {

@@ -99,6 +99,7 @@ public class NotificationCenter {
     public static final int peerSettingsDidLoaded;
     public static final int playerDidStartPlaying;
     public static final int privacyRulesUpdated;
+    public static final int proxyCheckDone;
     public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
     public static final int recentDocumentsDidLoaded;
@@ -132,10 +133,6 @@ public class NotificationCenter {
     private SparseArray<ArrayList<Object>> observers = new SparseArray();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray();
 
-    public interface NotificationCenterDelegate {
-        void didReceivedNotification(int i, int i2, Object... objArr);
-    }
-
     private class DelayedPost {
         private Object[] args;
         private int id;
@@ -144,6 +141,10 @@ public class NotificationCenter {
             this.id = id;
             this.args = args;
         }
+    }
+
+    public interface NotificationCenterDelegate {
+        void didReceivedNotification(int i, int i2, Object... objArr);
     }
 
     static {
@@ -484,6 +485,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         proxySettingsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        proxyCheckDone = i;
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsChanged = i;

@@ -49,10 +49,10 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BringAppForegroundService;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
@@ -638,7 +638,7 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setEllipsize(TruncateAt.END);
         textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        textView.setText(LocaleController.getString("Close", C0488R.string.Close).toUpperCase());
+        textView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createLinear(-2, -1, 51));
         textView.setOnClickListener(new OnClickListener() {
@@ -651,7 +651,7 @@ public class EmbedBottomSheet extends BottomSheet {
         frameLayout.addView(this.imageButtonsContainer, LayoutHelper.createFrame(-2, -1, 17));
         this.pipButton = new ImageView(context);
         this.pipButton.setScaleType(ScaleType.CENTER);
-        this.pipButton.setImageResource(C0488R.drawable.video_pip);
+        this.pipButton.setImageResource(R.drawable.video_pip);
         this.pipButton.setEnabled(false);
         this.pipButton.setAlpha(0.5f);
         this.pipButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue4), Mode.MULTIPLY));
@@ -720,13 +720,13 @@ public class EmbedBottomSheet extends BottomSheet {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                Toast.makeText(EmbedBottomSheet.this.getContext(), LocaleController.getString("LinkCopied", C0488R.string.LinkCopied), 0).show();
+                Toast.makeText(EmbedBottomSheet.this.getContext(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                 EmbedBottomSheet.this.dismiss();
             }
         };
         ImageView copyButton = new ImageView(context);
         copyButton.setScaleType(ScaleType.CENTER);
-        copyButton.setImageResource(C0488R.drawable.video_copy);
+        copyButton.setImageResource(R.drawable.video_copy);
         copyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue4), Mode.MULTIPLY));
         copyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         this.imageButtonsContainer.addView(copyButton, LayoutHelper.createFrame(48, 48, 51));
@@ -739,7 +739,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.copyTextButton.setEllipsize(TruncateAt.END);
         this.copyTextButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         this.copyTextButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.copyTextButton.setText(LocaleController.getString("Copy", C0488R.string.Copy).toUpperCase());
+        this.copyTextButton.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
         this.copyTextButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.copyTextButton, LayoutHelper.createFrame(-2, -1, 51));
         this.copyTextButton.setOnClickListener(copyClickListener);
@@ -751,7 +751,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.openInButton.setEllipsize(TruncateAt.END);
         this.openInButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         this.openInButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.openInButton.setText(LocaleController.getString("OpenInBrowser", C0488R.string.OpenInBrowser).toUpperCase());
+        this.openInButton.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
         this.openInButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.openInButton, LayoutHelper.createFrame(-2, -1, 51));
         this.openInButton.setOnClickListener(new OnClickListener() {
@@ -786,7 +786,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     if (EmbedBottomSheet.this.videoView.getYoutubeId() != null) {
                         EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(0);
                         EmbedBottomSheet.this.youtubeLogoImage.setVisibility(0);
-                        EmbedBottomSheet.this.youtubeLogoImage.setImageResource(C0488R.drawable.ytlogo);
+                        EmbedBottomSheet.this.youtubeLogoImage.setImageResource(R.drawable.ytlogo);
                         EmbedBottomSheet.this.isYouTube = true;
                         if (VERSION.SDK_INT >= 17) {
                             EmbedBottomSheet.this.webView.addJavascriptInterface(new YoutubeProxy(), "YoutubeProxy");
@@ -888,7 +888,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this.parentActivity)) {
             return true;
         }
-        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", C0488R.string.AppName)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", C0488R.string.PermissionDrawAboveOtherApps)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0488R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", R.string.PermissionDrawAboveOtherApps)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
             @TargetApi(23)
             public void onClick(DialogInterface dialog, int which) {
                 if (EmbedBottomSheet.this.parentActivity != null) {

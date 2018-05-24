@@ -13,12 +13,12 @@ import android.support.v4.content.FileProvider;
 import java.io.File;
 import java.io.FileOutputStream;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class WallpaperUpdater {
@@ -42,7 +42,7 @@ public class WallpaperUpdater {
 
     public void showAlert(final boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", C0488R.string.FromCamera), LocaleController.getString("FromGalley", C0488R.string.FromGalley), LocaleController.getString("SelectColor", C0488R.string.SelectColor), LocaleController.getString("Default", C0488R.string.Default), LocaleController.getString("Cancel", C0488R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", C0488R.string.FromCamera), LocaleController.getString("FromGalley", C0488R.string.FromGalley), LocaleController.getString("Cancel", C0488R.string.Cancel)}, new OnClickListener() {
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     try {
@@ -50,7 +50,7 @@ public class WallpaperUpdater {
                         File image = AndroidUtilities.generatePicturePath();
                         if (image != null) {
                             if (VERSION.SDK_INT >= 24) {
-                                takePictureIntent.putExtra("output", FileProvider.getUriForFile(WallpaperUpdater.this.parentActivity, "org.telegram.messenger.provider", image));
+                                takePictureIntent.putExtra("output", FileProvider.getUriForFile(WallpaperUpdater.this.parentActivity, "org.telegram.messenger.beta.provider", image));
                                 takePictureIntent.addFlags(2);
                                 takePictureIntent.addFlags(1);
                             } else {

@@ -26,12 +26,12 @@ import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.tgnet.SerializedData;
@@ -68,23 +68,6 @@ public class WebviewActivity extends BaseFragment {
             if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null && WebviewActivity.this.typingRunnable != null) {
                 MessagesController.getInstance(WebviewActivity.this.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
                 AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.WebviewActivity$2 */
-    class C23652 extends ActionBarMenuOnItemClick {
-        C23652() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                WebviewActivity.this.finishFragment();
-            } else if (id == 1) {
-                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
-            } else if (id == 2) {
-                WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
             }
         }
     }
@@ -190,6 +173,23 @@ public class WebviewActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.WebviewActivity$2 */
+    class C23652 extends ActionBarMenuOnItemClick {
+        C23652() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                WebviewActivity.this.finishFragment();
+            } else if (id == 1) {
+                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
+                WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+            } else if (id == 2) {
+                WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
+            }
+        }
+    }
+
     public WebviewActivity(String url, String botName, String gameName, String startParam, MessageObject messageObject) {
         this.currentUrl = url;
         this.currentBot = botName;
@@ -220,17 +220,17 @@ public class WebviewActivity extends BaseFragment {
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public View createView(Context context) {
         this.swipeBackEnabled = false;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(this.currentGame);
         this.actionBar.setSubtitle("@" + this.currentBot);
         this.actionBar.setActionBarMenuOnItemClick(new C23652());
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.progressItem = menu.addItemWithWidth(1, C0488R.drawable.share, AndroidUtilities.dp(54.0f));
+        this.progressItem = menu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.dp(54.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressItem.getImageView().setVisibility(4);
-        menu.addItem(0, (int) C0488R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", C0488R.string.OpenInExternalApp));
+        menu.addItem(0, (int) R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);

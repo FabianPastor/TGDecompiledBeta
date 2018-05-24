@@ -40,14 +40,6 @@ public final class PlayerEmsgHandler implements Callback {
     private final PlayerEmsgCallback playerEmsgCallback;
     private boolean released;
 
-    public interface PlayerEmsgCallback {
-        void onDashLiveMediaPresentationEndSignalEncountered();
-
-        void onDashManifestPublishTimeExpired(long j);
-
-        void onDashManifestRefreshRequested();
-    }
-
     private static final class ManifestExpiryEventInfo {
         public final long eventTimeUs;
         public final long manifestPublishTimeMsInEmsg;
@@ -56,6 +48,14 @@ public final class PlayerEmsgHandler implements Callback {
             this.eventTimeUs = eventTimeUs;
             this.manifestPublishTimeMsInEmsg = manifestPublishTimeMsInEmsg;
         }
+    }
+
+    public interface PlayerEmsgCallback {
+        void onDashLiveMediaPresentationEndSignalEncountered();
+
+        void onDashManifestPublishTimeExpired(long j);
+
+        void onDashManifestRefreshRequested();
     }
 
     public final class PlayerTrackEmsgHandler implements TrackOutput {

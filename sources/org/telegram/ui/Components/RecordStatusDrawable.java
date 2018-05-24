@@ -24,7 +24,7 @@ public class RecordStatusDrawable extends StatusDrawable {
         if (dt > 50) {
             dt = 50;
         }
-        this.progress += ((float) dt) / 300.0f;
+        this.progress += ((float) dt) / 800.0f;
         while (this.progress > 1.0f) {
             this.progress -= 1.0f;
         }

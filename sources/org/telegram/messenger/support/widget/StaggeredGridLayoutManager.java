@@ -123,47 +123,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         }
     }
 
-    public static class LayoutParams extends org.telegram.messenger.support.widget.RecyclerView.LayoutParams {
-        public static final int INVALID_SPAN_ID = -1;
-        boolean mFullSpan;
-        Span mSpan;
-
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-        }
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(MarginLayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(org.telegram.messenger.support.widget.RecyclerView.LayoutParams source) {
-            super(source);
-        }
-
-        public void setFullSpan(boolean fullSpan) {
-            this.mFullSpan = fullSpan;
-        }
-
-        public boolean isFullSpan() {
-            return this.mFullSpan;
-        }
-
-        public final int getSpanIndex() {
-            if (this.mSpan == null) {
-                return -1;
-            }
-            return this.mSpan.mIndex;
-        }
-    }
-
     static class LazySpanLookup {
         private static final int MIN_SIZE = 10;
         int[] mData;
@@ -825,6 +784,47 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 }
             }
             return candidate;
+        }
+    }
+
+    public static class LayoutParams extends org.telegram.messenger.support.widget.RecyclerView.LayoutParams {
+        public static final int INVALID_SPAN_ID = -1;
+        boolean mFullSpan;
+        Span mSpan;
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(MarginLayoutParams source) {
+            super(source);
+        }
+
+        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
+            super(source);
+        }
+
+        public LayoutParams(org.telegram.messenger.support.widget.RecyclerView.LayoutParams source) {
+            super(source);
+        }
+
+        public void setFullSpan(boolean fullSpan) {
+            this.mFullSpan = fullSpan;
+        }
+
+        public boolean isFullSpan() {
+            return this.mFullSpan;
+        }
+
+        public final int getSpanIndex() {
+            if (this.mSpan == null) {
+                return -1;
+            }
+            return this.mSpan.mIndex;
         }
     }
 

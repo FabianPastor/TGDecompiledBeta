@@ -13,7 +13,6 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -22,6 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -65,6 +65,63 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     private boolean searching;
     private int usersEndRow;
     private int usersStartRow;
+
+    /* renamed from: org.telegram.ui.SetAdminsActivity$4 */
+    class C22394 implements Comparator<ChatParticipant> {
+        C22394() {
+        }
+
+        public int compare(ChatParticipant lhs, ChatParticipant rhs) {
+            int type1 = SetAdminsActivity.this.getChatAdminParticipantType(lhs);
+            int type2 = SetAdminsActivity.this.getChatAdminParticipantType(rhs);
+            if (type1 > type2) {
+                return 1;
+            }
+            if (type1 < type2) {
+                return -1;
+            }
+            if (type1 == type2) {
+                User user1 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(rhs.user_id));
+                User user2 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(lhs.user_id));
+                int status1 = 0;
+                int status2 = 0;
+                if (!(user1 == null || user1.status == null)) {
+                    status1 = user1.status.expires;
+                }
+                if (!(user2 == null || user2.status == null)) {
+                    status2 = user2.status.expires;
+                }
+                if (status1 <= 0 || status2 <= 0) {
+                    if (status1 >= 0 || status2 >= 0) {
+                        if ((status1 < 0 && status2 > 0) || (status1 == 0 && status2 != 0)) {
+                            return -1;
+                        }
+                        if (status2 < 0 && status1 > 0) {
+                            return 1;
+                        }
+                        if (status2 == 0 && status1 != 0) {
+                            return 1;
+                        }
+                    } else if (status1 > status2) {
+                        return 1;
+                    } else {
+                        if (status1 < status2) {
+                            return -1;
+                        }
+                        return 0;
+                    }
+                } else if (status1 > status2) {
+                    return 1;
+                } else {
+                    if (status1 < status2) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            }
+            return 0;
+        }
+    }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$1 */
     class C22361 extends ActionBarMenuOnItemClick {
@@ -202,63 +259,6 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    /* renamed from: org.telegram.ui.SetAdminsActivity$4 */
-    class C22394 implements Comparator<ChatParticipant> {
-        C22394() {
-        }
-
-        public int compare(ChatParticipant lhs, ChatParticipant rhs) {
-            int type1 = SetAdminsActivity.this.getChatAdminParticipantType(lhs);
-            int type2 = SetAdminsActivity.this.getChatAdminParticipantType(rhs);
-            if (type1 > type2) {
-                return 1;
-            }
-            if (type1 < type2) {
-                return -1;
-            }
-            if (type1 == type2) {
-                User user1 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(rhs.user_id));
-                User user2 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(lhs.user_id));
-                int status1 = 0;
-                int status2 = 0;
-                if (!(user1 == null || user1.status == null)) {
-                    status1 = user1.status.expires;
-                }
-                if (!(user2 == null || user2.status == null)) {
-                    status2 = user2.status.expires;
-                }
-                if (status1 <= 0 || status2 <= 0) {
-                    if (status1 >= 0 || status2 >= 0) {
-                        if ((status1 < 0 && status2 > 0) || (status1 == 0 && status2 != 0)) {
-                            return -1;
-                        }
-                        if (status2 < 0 && status1 > 0) {
-                            return 1;
-                        }
-                        if (status2 == 0 && status1 != 0) {
-                            return 1;
-                        }
-                    } else if (status1 > status2) {
-                        return 1;
-                    } else {
-                        if (status1 < status2) {
-                            return -1;
-                        }
-                        return 0;
-                    }
-                } else if (status1 > status2) {
-                    return 1;
-                } else {
-                    if (status1 < status2) {
-                        return -1;
-                    }
-                    return 0;
-                }
-            }
-            return 0;
-        }
-    }
-
     /* renamed from: org.telegram.ui.SetAdminsActivity$5 */
     class C22405 implements ThemeDescriptionDelegate {
         C22405() {
@@ -324,7 +324,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 case 0:
                     TextCheckCell checkCell = holder.itemView;
                     SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
-                    String string = LocaleController.getString("SetAdminsAll", C0488R.string.SetAdminsAll);
+                    String string = LocaleController.getString("SetAdminsAll", R.string.SetAdminsAll);
                     if (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled) {
                         z = false;
                     }
@@ -334,20 +334,20 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == SetAdminsActivity.this.allAdminsInfoRow) {
                         if (SetAdminsActivity.this.chat.admins_enabled) {
-                            privacyCell.setText(LocaleController.getString("SetAdminsNotAllInfo", C0488R.string.SetAdminsNotAllInfo));
+                            privacyCell.setText(LocaleController.getString("SetAdminsNotAllInfo", R.string.SetAdminsNotAllInfo));
                         } else {
-                            privacyCell.setText(LocaleController.getString("SetAdminsAllInfo", C0488R.string.SetAdminsAllInfo));
+                            privacyCell.setText(LocaleController.getString("SetAdminsAllInfo", R.string.SetAdminsAllInfo));
                         }
                         if (SetAdminsActivity.this.usersStartRow != -1) {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                             return;
                         } else {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                             return;
                         }
                     } else if (position == SetAdminsActivity.this.usersEndRow) {
                         privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -567,12 +567,12 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     public View createView(Context context) {
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("SetAdminsTitle", C0488R.string.SetAdminsTitle));
+        this.actionBar.setTitle(LocaleController.getString("SetAdminsTitle", R.string.SetAdminsTitle));
         this.actionBar.setActionBarMenuOnItemClick(new C22361());
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22372());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22372());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context);
         this.searchAdapter = new SearchAdapter(context);
         this.fragmentView = new FrameLayout(context);
@@ -587,7 +587,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setVisibility(8);
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.showTextView();
         updateRowsIds();

@@ -85,7 +85,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                     File image = AndroidUtilities.generatePicturePath();
                     if (image != null) {
                         if (VERSION.SDK_INT >= 24) {
-                            takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.provider", image));
+                            takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", image));
                             takePictureIntent.addFlags(2);
                             takePictureIntent.addFlags(1);
                         } else {

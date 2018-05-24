@@ -13,6 +13,68 @@ public final class FingerprintManagerCompat {
     static final FingerprintManagerCompatImpl IMPL;
     private Context mContext;
 
+    public static abstract class AuthenticationCallback {
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+        }
+
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+        }
+
+        public void onAuthenticationSucceeded(AuthenticationResult result) {
+        }
+
+        public void onAuthenticationFailed() {
+        }
+    }
+
+    public static final class AuthenticationResult {
+        private CryptoObject mCryptoObject;
+
+        public AuthenticationResult(CryptoObject crypto) {
+            this.mCryptoObject = crypto;
+        }
+
+        public CryptoObject getCryptoObject() {
+            return this.mCryptoObject;
+        }
+    }
+
+    public static class CryptoObject {
+        private final Cipher mCipher;
+        private final Mac mMac;
+        private final Signature mSignature;
+
+        public CryptoObject(Signature signature) {
+            this.mSignature = signature;
+            this.mCipher = null;
+            this.mMac = null;
+        }
+
+        public CryptoObject(Cipher cipher) {
+            this.mCipher = cipher;
+            this.mSignature = null;
+            this.mMac = null;
+        }
+
+        public CryptoObject(Mac mac) {
+            this.mMac = mac;
+            this.mCipher = null;
+            this.mSignature = null;
+        }
+
+        public Signature getSignature() {
+            return this.mSignature;
+        }
+
+        public Cipher getCipher() {
+            return this.mCipher;
+        }
+
+        public Mac getMac() {
+            return this.mMac;
+        }
+    }
+
     private interface FingerprintManagerCompatImpl {
         void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler);
 
@@ -84,68 +146,6 @@ public final class FingerprintManagerCompat {
                     callback.onAuthenticationFailed();
                 }
             };
-        }
-    }
-
-    public static abstract class AuthenticationCallback {
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-        }
-
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-        }
-
-        public void onAuthenticationSucceeded(AuthenticationResult result) {
-        }
-
-        public void onAuthenticationFailed() {
-        }
-    }
-
-    public static final class AuthenticationResult {
-        private CryptoObject mCryptoObject;
-
-        public AuthenticationResult(CryptoObject crypto) {
-            this.mCryptoObject = crypto;
-        }
-
-        public CryptoObject getCryptoObject() {
-            return this.mCryptoObject;
-        }
-    }
-
-    public static class CryptoObject {
-        private final Cipher mCipher;
-        private final Mac mMac;
-        private final Signature mSignature;
-
-        public CryptoObject(Signature signature) {
-            this.mSignature = signature;
-            this.mCipher = null;
-            this.mMac = null;
-        }
-
-        public CryptoObject(Cipher cipher) {
-            this.mCipher = cipher;
-            this.mSignature = null;
-            this.mMac = null;
-        }
-
-        public CryptoObject(Mac mac) {
-            this.mMac = mac;
-            this.mCipher = null;
-            this.mSignature = null;
-        }
-
-        public Signature getSignature() {
-            return this.mSignature;
-        }
-
-        public Cipher getCipher() {
-            return this.mCipher;
-        }
-
-        public Mac getMac() {
-            return this.mMac;
         }
     }
 

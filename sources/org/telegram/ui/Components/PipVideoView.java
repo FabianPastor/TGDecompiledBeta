@@ -29,8 +29,8 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.PhotoViewer;
@@ -128,7 +128,7 @@ public class PipVideoView {
             super(context);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
-            this.inlineButton.setImageResource(C0488R.drawable.ic_outinline);
+            this.inlineButton.setImageResource(R.drawable.ic_outinline);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener(PipVideoView.this) {
                 public void onClick(View v) {
@@ -179,12 +179,12 @@ public class PipVideoView {
                 if (videoPlayer != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
                     if (videoPlayer.isPlaying()) {
-                        this.playButton.setImageResource(C0488R.drawable.ic_pauseinline);
+                        this.playButton.setImageResource(R.drawable.ic_pauseinline);
                         AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
                     } else if (this.isCompleted) {
-                        this.playButton.setImageResource(C0488R.drawable.ic_againinline);
+                        this.playButton.setImageResource(R.drawable.ic_againinline);
                     } else {
-                        this.playButton.setImageResource(C0488R.drawable.ic_playinline);
+                        this.playButton.setImageResource(R.drawable.ic_playinline);
                     }
                 }
             }

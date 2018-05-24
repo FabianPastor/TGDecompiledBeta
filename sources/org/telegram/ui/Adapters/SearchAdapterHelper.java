@@ -53,12 +53,6 @@ public class SearchAdapterHelper {
     private ArrayList<TLObject> localServerSearch = new ArrayList();
     private int reqId = 0;
 
-    public interface SearchAdapterHelperDelegate {
-        void onDataSetChanged();
-
-        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
-    }
-
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4 */
     class C09444 implements Runnable {
 
@@ -132,6 +126,12 @@ public class SearchAdapterHelper {
     public static class HashtagObject {
         int date;
         String hashtag;
+    }
+
+    public interface SearchAdapterHelperDelegate {
+        void onDataSetChanged();
+
+        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
 
     public SearchAdapterHelper(boolean global) {

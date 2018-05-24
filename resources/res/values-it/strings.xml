@@ -70,6 +70,7 @@
     <string name="AddMasksInstalled">Nuove maschere aggiunte</string>
     <string name="AddMember">Aggiungi membro</string>
     <string name="AddMutual">Aggiungi contatti al tuo canale</string>
+    <string name="AddProxy">Aggiungi proxy</string>
     <string name="AddRecipient">Aggiungi destinatario</string>
     <string name="AddShortcut">Aggiungi scorciatoia</string>
     <string name="AddStickers">Aggiungi sticker</string>
@@ -202,7 +203,7 @@
     <string name="AutoNightTheme">Modalità notte automatica</string>
     <string name="AutoNightTo">Alle</string>
     <string name="AutoNightUpdateLocation">Aggiorna posizione</string>
-    <string name="AutoNightUpdateLocationInfo">Calcolare gli orari di tramonto e alba richiede un unico controllo della tua posizione approssimativa. Ricorda che questa posizione è archiviata solo localmente sul tuo dispositivo. \n\nTramonto: %1$s\nAlba: %2$s</string>
+    <string name="AutoNightUpdateLocationInfo">Calcolare gli orari di tramonto e alba richiede un unico controllo della tua posizione approssimativa. Ricorda che questa posizione è archiviata solo localmente sul tuo dispositivo.\n\nTramonto: %1$s\nAlba: %2$s</string>
     <string name="AutodownloadChannels">Canali</string>
     <string name="AutodownloadContacts">Contatti</string>
     <string name="AutodownloadGroupChats">Gruppi</string>
@@ -211,6 +212,7 @@
     <string name="AutodownloadSizeLimitUpTo">fino a %1$s</string>
     <string name="AutomaticMediaDownload">Download automatico media</string>
     <string name="AutoplayGifs">Autoriproduzione GIF</string>
+    <string name="Available">Disponibile</string>
     <string name="AwaitingEncryption">Attendo che %s si colleghi...</string>
     <string name="BackgroundRestricted">Dati in background disattivati.</string>
     <string name="BadgeNumber">Contatore badge</string>
@@ -382,6 +384,7 @@
     <string name="Chats_other">%1$d chat</string>
     <string name="Chats_two">%1$d chat</string>
     <string name="Chats_zero">%1$d chat</string>
+    <string name="Checking">Controllo...</string>
     <string name="ChooseCountry">Scegli una nazione</string>
     <string name="ChooseFromYourStickers">Scegli dai tuoi sticker</string>
     <string name="ChooseStickerSet">SCEGLI SET DI STICKER</string>
@@ -418,12 +421,10 @@
     <string name="ColorYellow">Giallo</string>
     <string name="CompatibilityChat">%1$s sta usando una versione vecchia di Telegram, quindi le foto segrete verranno visualizzate in modalità di compatibilità.\n\nUna volta che %2$s avrà aggiornato Telegram, le foto con il timer minore di 1 minuto funzioneranno in modalità \'Tieni premuto per vedere\' , e verrai notificato ogni volta che l\'altro esegue uno screenshot.</string>
     <string name="ConfirmDeleteCallLog">Sei sicuro di voler eliminare questa voce dal registro delle chiamate?</string>
+    <string name="Connected">Connesso</string>
     <string name="Connecting">Connetto...</string>
+    <string name="ConnectingConnectProxy">Connetti proxy</string>
     <string name="ConnectingToProxy">Connetto al proxy...</string>
-    <string name="ConnectingToProxyDisable">Disattiva</string>
-    <string name="ConnectingToProxyDisableAlert">Sei sicuro di voler disattivare il server proxy %1$s? Puoi riattivarlo più tardi nelle Impostazioni (Dati e archivio).</string>
-    <string name="ConnectingToProxyEnable">Attiva</string>
-    <string name="ConnectingToProxyTapToDisable">Tocca qui per disattivare il proxy...</string>
     <string name="ContactJoined">Un contatto si è unito a Telegram</string>
     <string name="ContactNotRegistered">%1$s non si è ancora unito a Telegram, vuoi invitarlo a unirsi?</string>
     <string name="Contacts">Contatti</string>
@@ -506,11 +507,12 @@
     <string name="DeleteForAll">Elimina per tutti i membri</string>
     <string name="DeleteForUser">Elimina per %1$s</string>
     <string name="DeleteFromFavorites">Elimina dai preferiti</string>
-    <string name="DeleteGif">Eliminare GIF?</string>
+    <string name="DeleteGif">Eliminare la GIF?</string>
     <string name="DeleteLocalization">Eliminare la traduzione?</string>
     <string name="DeleteMega">Elimina gruppo</string>
     <string name="DeleteMegaMenu">Elimina gruppo</string>
     <string name="DeletePhoto">Elimina foto</string>
+    <string name="DeleteProxy">Eliminare il proxy?</string>
     <string name="DeleteReportSpam">Segnala come spam</string>
     <string name="DeleteThemeAlert">Sei sicuro di voler eliminare questo tema?</string>
     <string name="DeleteThisChat">Elimina questa chat</string>
@@ -561,8 +563,6 @@
     <string name="EmpryUsersPlaceholder">Aggiungi utenti</string>
     <string name="EnableAllStreamingInfo">Alcuni video non possono essere riprodotti in streaming – ad esempio, tutti i video inviati da Android usando Telegram 4.7 o precedente.</string>
     <string name="EnableAnimations">Attiva animazioni</string>
-    <string name="EnableProxyAlert">Sei sicuro di voler attivare questo proxy?</string>
-    <string name="EnableProxyAlert2">Puoi cambiare il tuo server proxy più tardi nelle Impostazioni (Dati e archivio).</string>
     <string name="EnableStreaming">Streaming file video e audio</string>
     <string name="EnabledPasswordText">Hai attivato la verifica in due passaggi.\nAvrai bisogno della password che hai impostato per accedere al tuo account Telegram.</string>
     <string name="EncryptedChatStartedIncoming">Ti sei unito alla chat segreta.</string>
@@ -1284,7 +1284,7 @@
     <string name="PermissionNoLocation">Telegram deve accedere alla tua posizione per poterla condividere con i tuoi amici.</string>
     <string name="PermissionNoLocationPosition">Telegram deve accedere alla tua posizione.</string>
     <string name="PermissionOpenSettings">IMPOSTAZIONI</string>
-    <string name="PermissionStorage">Telegram deve accedere alla tua memoria per poter inviare e salvare foto,video, musica e altri media.</string>
+    <string name="PermissionStorage">Telegram deve accedere alla tua memoria per poter inviare e salvare foto, video, musica e altri media.</string>
     <string name="Phone">Telefono</string>
     <string name="PhoneHome">Home</string>
     <string name="PhoneMain">Principale</string>
@@ -1307,6 +1307,7 @@
     <string name="PinMessageAlertChannel">Vuoi fissare questo messaggio in questo canale?</string>
     <string name="PinNotify">Notifica tutti i membri</string>
     <string name="PinToTop">Fissa in alto</string>
+    <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Messaggio fissato</string>
     <string name="PinnedMessages">Messaggi fissati</string>
     <string name="PleaseDownload">Scarica prima il file</string>
@@ -1343,6 +1344,8 @@
     <string name="ProfilePopupNotification">Notifiche popup</string>
     <string name="ProfilePopupNotificationInfo">I nuovi messaggi da questo contatto appariranno sul tuo schermo quando non stai usando Telegram.</string>
     <string name="Proxy">Proxy</string>
+    <string name="ProxyConnections">Connessioni</string>
+    <string name="ProxyDetails">Dettagli proxy</string>
     <string name="ProxySettings">Impostazioni proxy</string>
     <string name="QuickReplyCustom">Messaggio personalizzato...</string>
     <string name="QuickReplyDefault1">Non posso parlare ora. Cosa succede?</string>
@@ -1406,8 +1409,8 @@
     <string name="RestoreEmailSent">Abbiamo inviato un codice di ripristino all\'email che ci hai fornito:\n\n%1$s</string>
     <string name="RestoreEmailSentInfo">Controlla la tua email e inserisci il codice a 6 cifre che ti abbiamo inviato.</string>
     <string name="RestoreEmailTrouble">Hai problemi ad accedere alla tua email %1$s?</string>
-    <string name="RestoreEmailTroubleText">Se non puoi ripristinare l\'accesso alla tua email, non ti resta che ricordarti la password o ripristinare il tuo account.</string>
-    <string name="RestorePasswordNoEmailText">Siccome non hai fornito un\'email di recupero quando hai impostato la tua password, non ti resta che ricordarti la password o ripristinare il tuo account.</string>
+    <string name="RestoreEmailTroubleText">Se non puoi ripristinare l\'accesso alla tua email, non ti resta che ricordare la tua password o ripristinare il tuo account.</string>
+    <string name="RestorePasswordNoEmailText">Siccome non hai fornito un\'email di recupero quando hai impostato la tua password, non ti resta che ricordare la tua password o ripristinare il tuo account.</string>
     <string name="RestorePasswordNoEmailTitle">Spiacenti</string>
     <string name="Retry">Riprova</string>
     <string name="ReturnToCall">RITORNA ALLA CHIAMATA</string>
@@ -1586,7 +1589,7 @@
     <string name="Subscribers_other">%1$d iscritti</string>
     <string name="Subscribers_two">%1$d iscritti</string>
     <string name="Subscribers_zero">%1$d iscritti</string>
-    <string name="SuggestStickers">Suggerisci sticker da emoji</string>
+    <string name="SuggestStickers">Suggerisci da emoji</string>
     <string name="SuggestStickersAll">Tutti</string>
     <string name="SuggestStickersInstalled">Aggiunti</string>
     <string name="SuggestStickersNone">Nessuno</string>
@@ -1640,6 +1643,7 @@
     <string name="TwoStepVerification">Verifica in due passaggi</string>
     <string name="TypeMessage">Messaggio</string>
     <string name="Typing">sta scrivendo...</string>
+    <string name="Unavailable">Non disponibile</string>
     <string name="Unban">Sblocca</string>
     <string name="UnbanText">Tieni premuto sull\'utente per sbloccarlo.</string>
     <string name="Unblock">Sblocca</string>
@@ -1675,7 +1679,14 @@
     <string name="UseProxyInfo">Impostazioni proxy SOCKS5</string>
     <string name="UseProxyPassword">Password</string>
     <string name="UseProxyPort">Porta</string>
+    <string name="UseProxySecret">Secret</string>
     <string name="UseProxySettings">Usa impostazioni proxy</string>
+    <string name="UseProxySocks5">SOCKS5</string>
+    <string name="UseProxySponsor">Sponsor del proxy</string>
+    <string name="UseProxySponsorInfo">Questo canale è mostrato dal tuo server proxy. Per rimuovere questo canale dalla tua lista chat, disattiva il proxy nelle Impostazioni di Telegram.</string>
+    <string name="UseProxyTelegram">Proxy MTProto</string>
+    <string name="UseProxyTelegramInfo">Impostazioni proxy MTProto.</string>
+    <string name="UseProxyTelegramInfo2">Questo proxy potrebbe mostrare un canale sponsorizzato nella tua lista chat. Questo non rivela nulla del tuo traffico Telegram.</string>
     <string name="UseProxyUsername">Username</string>
     <string name="UserBio">Bio</string>
     <string name="UserBioEmpty">Nessuna</string>
@@ -1791,7 +1802,7 @@
     <string name="Yesterday">ieri</string>
     <string name="YesterdayAt">ieri alle</string>
     <string name="YesterdayAtFormatted">ieri alle %1$s</string>
-    <string name="YouBlockedUser">Spiacenti, non puoi aggiungere questo utente o bot al gruppo perchè lo hai bloccato. Per favore sbloccalo per procedere.</string>
+    <string name="YouBlockedUser">Spiacenti, non puoi aggiungere questo utente o bot al gruppo perché lo hai bloccato. Per favore sbloccalo per procedere.</string>
     <string name="YouCreatedBroadcastList">Hai creato una lista broadcast</string>
     <string name="YouHaveNewMessage">Hai un nuovo messaggio</string>
     <string name="YouLeft">Hai lasciato il gruppo</string>

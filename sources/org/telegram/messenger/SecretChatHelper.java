@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
@@ -1860,7 +1861,7 @@ public class SecretChatHelper {
         if (user != null && context != null) {
             this.startingSecretChat = true;
             final AlertDialog progressDialog = new AlertDialog(context, 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", C0488R.string.Loading));
+            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             TL_messages_getDhConfig req = new TL_messages_getDhConfig();
@@ -1945,9 +1946,9 @@ public class SecretChatHelper {
                                             FileLog.m3e(e);
                                         }
                                         Builder builder = new Builder(context);
-                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                                        builder.setMessage(LocaleController.getString("CreateEncryptedChatError", C0488R.string.CreateEncryptedChatError));
-                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
+                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setMessage(LocaleController.getString("CreateEncryptedChatError", R.string.CreateEncryptedChatError));
+                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                         builder.show().setCanceledOnTouchOutside(true);
                                     }
                                 }
@@ -2011,7 +2012,7 @@ public class SecretChatHelper {
                     AndroidUtilities.runOnUIThread(new C04963());
                 }
             }, 2);
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0488R.string.Cancel), new OnClickListener() {
+            progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).cancelRequest(reqId, true);
                     try {

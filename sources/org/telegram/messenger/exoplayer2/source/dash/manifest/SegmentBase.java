@@ -9,6 +9,16 @@ public abstract class SegmentBase {
     final long presentationTimeOffset;
     final long timescale;
 
+    public static class SegmentTimelineElement {
+        final long duration;
+        final long startTime;
+
+        public SegmentTimelineElement(long startTime, long duration) {
+            this.startTime = startTime;
+            this.duration = duration;
+        }
+    }
+
     public static abstract class MultiSegmentBase extends SegmentBase {
         final long duration;
         final List<SegmentTimelineElement> segmentTimeline;
@@ -87,6 +97,25 @@ public abstract class SegmentBase {
         }
     }
 
+    public static class SingleSegmentBase extends SegmentBase {
+        final long indexLength;
+        final long indexStart;
+
+        public SingleSegmentBase(RangedUri initialization, long timescale, long presentationTimeOffset, long indexStart, long indexLength) {
+            super(initialization, timescale, presentationTimeOffset);
+            this.indexStart = indexStart;
+            this.indexLength = indexLength;
+        }
+
+        public SingleSegmentBase() {
+            this(null, 1, 0, 0, 0);
+        }
+
+        public RangedUri getIndex() {
+            return this.indexLength <= 0 ? null : new RangedUri(null, this.indexStart, this.indexLength);
+        }
+    }
+
     public static class SegmentList extends MultiSegmentBase {
         final List<RangedUri> mediaSegments;
 
@@ -143,35 +172,6 @@ public abstract class SegmentBase {
                 return (int) Util.ceilDivide(periodDurationUs, (this.duration * C0600C.MICROS_PER_SECOND) / this.timescale);
             }
             return -1;
-        }
-    }
-
-    public static class SegmentTimelineElement {
-        final long duration;
-        final long startTime;
-
-        public SegmentTimelineElement(long startTime, long duration) {
-            this.startTime = startTime;
-            this.duration = duration;
-        }
-    }
-
-    public static class SingleSegmentBase extends SegmentBase {
-        final long indexLength;
-        final long indexStart;
-
-        public SingleSegmentBase(RangedUri initialization, long timescale, long presentationTimeOffset, long indexStart, long indexLength) {
-            super(initialization, timescale, presentationTimeOffset);
-            this.indexStart = indexStart;
-            this.indexLength = indexLength;
-        }
-
-        public SingleSegmentBase() {
-            this(null, 1, 0, 0, 0);
-        }
-
-        public RangedUri getIndex() {
-            return this.indexLength <= 0 ? null : new RangedUri(null, this.indexStart, this.indexLength);
         }
     }
 

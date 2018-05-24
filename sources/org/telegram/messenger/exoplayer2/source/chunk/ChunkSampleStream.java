@@ -44,6 +44,10 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     private final List<BaseMediaChunk> readOnlyMediaChunks = Collections.unmodifiableList(this.mediaChunks);
     private ReleaseCallback<T> releaseCallback;
 
+    public interface ReleaseCallback<T extends ChunkSource> {
+        void onSampleStreamReleased(ChunkSampleStream<T> chunkSampleStream);
+    }
+
     public final class EmbeddedSampleStream implements SampleStream {
         private boolean formatNotificationSent;
         private final int index;
@@ -102,10 +106,6 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
                 this.formatNotificationSent = true;
             }
         }
-    }
-
-    public interface ReleaseCallback<T extends ChunkSource> {
-        void onSampleStreamReleased(ChunkSampleStream<T> chunkSampleStream);
     }
 
     public ChunkSampleStream(int primaryTrackType, int[] embeddedTrackTypes, Format[] embeddedTrackFormats, T chunkSource, SequenceableLoader.Callback<ChunkSampleStream<T>> callback, Allocator allocator, long positionUs, int minLoadableRetryCount, EventDispatcher eventDispatcher) {

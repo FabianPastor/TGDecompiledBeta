@@ -24,8 +24,8 @@ import android.widget.ScrollView;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
@@ -37,10 +37,6 @@ public class ActionBarPopupWindow extends PopupWindow {
     private OnScrollChangedListener mSuperScrollListener;
     private ViewTreeObserver mViewTreeObserver;
     private AnimatorSet windowAnimatorSet;
-
-    public interface OnDispatchKeyEventListener {
-        void onDispatchKeyEvent(KeyEvent keyEvent);
-    }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
     static class C08551 implements OnScrollChangedListener {
@@ -102,7 +98,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
-        protected Drawable backgroundDrawable = getResources().getDrawable(C0488R.drawable.popup_fixed).mutate();
+        protected Drawable backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
         private int lastStartedChild = 0;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -271,6 +267,10 @@ public class ActionBarPopupWindow extends PopupWindow {
                 this.scrollView.scrollTo(0, 0);
             }
         }
+    }
+
+    public interface OnDispatchKeyEventListener {
+        void onDispatchKeyEvent(KeyEvent keyEvent);
     }
 
     static {

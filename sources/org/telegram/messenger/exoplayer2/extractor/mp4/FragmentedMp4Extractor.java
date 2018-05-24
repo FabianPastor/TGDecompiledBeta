@@ -89,16 +89,6 @@ public final class FragmentedMp4Extractor implements Extractor {
     private final TimestampAdjuster timestampAdjuster;
     private final SparseArray<TrackBundle> trackBundles;
 
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor$1 */
-    static class C06381 implements ExtractorsFactory {
-        C06381() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new FragmentedMp4Extractor()};
-        }
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     public @interface Flags {
     }
@@ -143,6 +133,16 @@ public final class FragmentedMp4Extractor implements Extractor {
         public void updateDrmInitData(DrmInitData drmInitData) {
             TrackEncryptionBox encryptionBox = this.track.getSampleDescriptionEncryptionBox(this.fragment.header.sampleDescriptionIndex);
             this.output.format(this.track.format.copyWithDrmInitData(drmInitData.copyWithSchemeType(encryptionBox != null ? encryptionBox.schemeType : null)));
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor$1 */
+    static class C06381 implements ExtractorsFactory {
+        C06381() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new FragmentedMp4Extractor()};
         }
     }
 

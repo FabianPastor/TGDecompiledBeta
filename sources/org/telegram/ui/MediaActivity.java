@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff.Mode;
@@ -18,7 +19,6 @@ import android.text.TextUtils.TruncateAt;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnPreDrawListener;
@@ -39,7 +39,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
@@ -54,6 +53,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -85,9 +85,10 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -161,47 +162,150 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private SparseArray<MessageObject>[] selectedFiles = new SparseArray[]{new SparseArray(), new SparseArray()};
     private NumberTextView selectedMessagesCountTextView;
     private int selectedMode;
-    private SharedMediaData[] sharedMediaData = new SharedMediaData[5];
-
-    /* renamed from: org.telegram.ui.MediaActivity$1 */
-    class C19801 extends EmptyPhotoViewerProvider {
-        C19801() {
+    SharedLinkCellDelegate sharedLinkCellDelegate = new SharedLinkCellDelegate() {
+        public void needOpenWebView(WebPage webPage) {
+            MediaActivity.this.openWebView(webPage);
         }
 
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            if (messageObject == null || MediaActivity.this.listView == null || MediaActivity.this.selectedMode != 0) {
-                return null;
-            }
-            int count = MediaActivity.this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View view = MediaActivity.this.listView.getChildAt(a);
-                if (view instanceof SharedPhotoVideoCell) {
-                    SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
-                    for (int i = 0; i < 6; i++) {
-                        MessageObject message = cell.getMessageObject(i);
-                        if (message == null) {
-                            continue;
-                            break;
+        public boolean canPerformActions() {
+            return !MediaActivity.this.actionBar.isActionModeShowed();
+        }
+
+        public void onLinkLongPress(final String urlFinal) {
+            Builder builder = new Builder(MediaActivity.this.getParentActivity());
+            builder.setTitle(urlFinal);
+            builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        Browser.openUrl(MediaActivity.this.getParentActivity(), urlFinal, true);
+                    } else if (which == 1) {
+                        String url = urlFinal;
+                        if (url.startsWith("mailto:")) {
+                            url = url.substring(7);
+                        } else if (url.startsWith("tel:")) {
+                            url = url.substring(4);
                         }
-                        BackupImageView imageView = cell.getImageView(i);
-                        if (message.getId() == messageObject.getId()) {
-                            int[] coords = new int[2];
-                            imageView.getLocationInWindow(coords);
-                            PlaceProviderObject object = new PlaceProviderObject();
-                            object.viewX = coords[0];
-                            object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                            object.parentView = MediaActivity.this.listView;
-                            object.imageReceiver = imageView.getImageReceiver();
-                            object.thumb = object.imageReceiver.getBitmapSafe();
-                            object.parentView.getLocationInWindow(coords);
-                            object.clipTopAddition = AndroidUtilities.dp(40.0f);
-                            return object;
-                        }
+                        AndroidUtilities.addToClipboard(url);
                     }
-                    continue;
+                }
+            });
+            MediaActivity.this.showDialog(builder.create());
+        }
+    };
+    private SharedMediaData[] sharedMediaData = new SharedMediaData[5];
+
+    /* renamed from: org.telegram.ui.MediaActivity$4 */
+    class C19864 implements View.OnClickListener {
+        C19864() {
+        }
+
+        public void onClick(View view) {
+            MediaActivity.this.dropDownContainer.toggleSubMenu();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.MediaActivity$5 */
+    class C19875 implements OnTouchListener {
+        C19875() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.MediaActivity$9 */
+    class C19919 implements OnTouchListener {
+        C19919() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
+    }
+
+    private class SharedMediaData {
+        private boolean[] endReached;
+        private boolean loading;
+        private int[] max_id;
+        private ArrayList<MessageObject> messages;
+        private SparseArray<MessageObject>[] messagesDict;
+        private HashMap<String, ArrayList<MessageObject>> sectionArrays;
+        private ArrayList<String> sections;
+        private int totalCount;
+
+        private SharedMediaData() {
+            this.messages = new ArrayList();
+            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
+            this.sections = new ArrayList();
+            this.sectionArrays = new HashMap();
+            this.endReached = new boolean[]{false, true};
+            this.max_id = new int[]{0, 0};
+        }
+
+        public boolean addMessage(MessageObject messageObject, boolean isNew, boolean enc) {
+            int loadIndex;
+            if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
+                loadIndex = 0;
+            } else {
+                loadIndex = 1;
+            }
+            if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
+                return false;
+            }
+            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
+            if (messageObjects == null) {
+                messageObjects = new ArrayList();
+                this.sectionArrays.put(messageObject.monthKey, messageObjects);
+                if (isNew) {
+                    this.sections.add(0, messageObject.monthKey);
+                } else {
+                    this.sections.add(messageObject.monthKey);
                 }
             }
-            return null;
+            if (isNew) {
+                messageObjects.add(0, messageObject);
+                this.messages.add(0, messageObject);
+            } else {
+                messageObjects.add(messageObject);
+                this.messages.add(messageObject);
+            }
+            this.messagesDict[loadIndex].put(messageObject.getId(), messageObject);
+            if (enc) {
+                this.max_id[loadIndex] = Math.max(messageObject.getId(), this.max_id[loadIndex]);
+            } else if (messageObject.getId() > 0) {
+                this.max_id[loadIndex] = Math.min(messageObject.getId(), this.max_id[loadIndex]);
+            }
+            return true;
+        }
+
+        public boolean deleteMessage(int mid, int loadIndex) {
+            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(mid);
+            if (messageObject == null) {
+                return false;
+            }
+            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
+            if (messageObjects == null) {
+                return false;
+            }
+            messageObjects.remove(messageObject);
+            this.messages.remove(messageObject);
+            this.messagesDict[loadIndex].remove(messageObject.getId());
+            if (messageObjects.isEmpty()) {
+                this.sectionArrays.remove(messageObject.monthKey);
+                this.sections.remove(messageObject.monthKey);
+            }
+            this.totalCount--;
+            return true;
+        }
+
+        public void replaceMid(int oldMid, int newMid) {
+            MessageObject obj = (MessageObject) this.messagesDict[0].get(oldMid);
+            if (obj != null) {
+                this.messagesDict[0].remove(oldMid);
+                this.messagesDict[0].put(newMid, obj);
+                obj.messageOwner.id = newMid;
+            }
         }
     }
 
@@ -321,9 +425,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             } else if (id == 4) {
                 if (MediaActivity.this.getParentActivity() != null) {
                     final boolean[] zArr;
-                    Builder builder = new Builder(MediaActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.formatString("AreYouSureDeleteMessages", C0488R.string.AreYouSureDeleteMessages, LocaleController.formatPluralString("items", MediaActivity.this.selectedFiles[0].size() + MediaActivity.this.selectedFiles[1].size())));
-                    builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MediaActivity.this.getParentActivity());
+                    builder.setMessage(LocaleController.formatString("AreYouSureDeleteMessages", R.string.AreYouSureDeleteMessages, LocaleController.formatPluralString("items", MediaActivity.this.selectedFiles[0].size() + MediaActivity.this.selectedFiles[1].size())));
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     boolean[] deleteForAll = new boolean[1];
                     int lower_id = (int) MediaActivity.this.dialog_id;
                     if (lower_id != 0) {
@@ -363,9 +467,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity(), 1);
                                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                     if (currentChat != null) {
-                                        cell.setText(LocaleController.getString("DeleteForAll", C0488R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                        cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                     } else {
-                                        cell.setText(LocaleController.formatString("DeleteForUser", C0488R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                        cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                     }
                                     if (LocaleController.isRTL) {
                                         dp = AndroidUtilities.dp(16.0f);
@@ -380,7 +484,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     cell.setPadding(dp, 0, dp2, 0);
                                     frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                                     zArr = deleteForAll;
-                                    cell.setOnClickListener(new OnClickListener() {
+                                    cell.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
                                             boolean z;
                                             CheckBoxCell cell = (CheckBoxCell) v;
@@ -400,7 +504,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                     }
                     zArr = deleteForAll;
-                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             for (int a = 1; a >= 0; a--) {
                                 int b;
@@ -438,7 +542,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             MediaActivity.this.cantDeleteMessagesCount = 0;
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     MediaActivity.this.showDialog(builder.create());
                 }
             } else if (id == 3) {
@@ -514,26 +618,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             } else if (MediaActivity.this.selectedMode == 4 && MediaActivity.this.audioSearchAdapter != null) {
                 MediaActivity.this.audioSearchAdapter.search(text);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.MediaActivity$4 */
-    class C19864 implements OnClickListener {
-        C19864() {
-        }
-
-        public void onClick(View view) {
-            MediaActivity.this.dropDownContainer.toggleSubMenu();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.MediaActivity$5 */
-    class C19875 implements OnTouchListener {
-        C19875() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
         }
     }
 
@@ -614,13 +698,45 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    /* renamed from: org.telegram.ui.MediaActivity$9 */
-    class C19919 implements OnTouchListener {
-        C19919() {
+    /* renamed from: org.telegram.ui.MediaActivity$1 */
+    class C19801 extends EmptyPhotoViewerProvider {
+        C19801() {
         }
 
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            if (messageObject == null || MediaActivity.this.listView == null || MediaActivity.this.selectedMode != 0) {
+                return null;
+            }
+            int count = MediaActivity.this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View view = MediaActivity.this.listView.getChildAt(a);
+                if (view instanceof SharedPhotoVideoCell) {
+                    SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
+                    for (int i = 0; i < 6; i++) {
+                        MessageObject message = cell.getMessageObject(i);
+                        if (message == null) {
+                            continue;
+                            break;
+                        }
+                        BackupImageView imageView = cell.getImageView(i);
+                        if (message.getId() == messageObject.getId()) {
+                            int[] coords = new int[2];
+                            imageView.getLocationInWindow(coords);
+                            PlaceProviderObject object = new PlaceProviderObject();
+                            object.viewX = coords[0];
+                            object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                            object.parentView = MediaActivity.this.listView;
+                            object.imageReceiver = imageView.getImageReceiver();
+                            object.thumb = object.imageReceiver.getBitmapSafe();
+                            object.parentView.getLocationInWindow(coords);
+                            object.clipTopAddition = AndroidUtilities.dp(40.0f);
+                            return object;
+                        }
+                    }
+                    continue;
+                }
+            }
+            return null;
         }
     }
 
@@ -632,20 +748,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         private int reqId = 0;
         private ArrayList<MessageObject> searchResult = new ArrayList();
         private Timer searchTimer;
-
-        /* renamed from: org.telegram.ui.MediaActivity$MediaSearchAdapter$5 */
-        class C19985 implements SharedLinkCellDelegate {
-            C19985() {
-            }
-
-            public void needOpenWebView(WebPage webPage) {
-                MediaActivity.this.openWebView(webPage);
-            }
-
-            public boolean canPerformActions() {
-                return !MediaActivity.this.actionBar.isActionModeShowed();
-            }
-        }
 
         public MediaSearchAdapter(Context context, int type) {
             this.mContext = context;
@@ -747,8 +849,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                     }
                     if (MediaSearchAdapter.this.currentType == 1 || MediaSearchAdapter.this.currentType == 4) {
-                        final ArrayList<MessageObject> copy = new ArrayList();
-                        copy.addAll(MediaActivity.this.sharedMediaData[MediaSearchAdapter.this.currentType].messages);
+                        final ArrayList<MessageObject> copy = new ArrayList(MediaActivity.this.sharedMediaData[MediaSearchAdapter.this.currentType].messages);
                         Utilities.searchQueue.postRunnable(new Runnable() {
                             public void run() {
                                 String search1 = query.trim().toLowerCase();
@@ -864,7 +965,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 view = new SharedDocumentCell(this.mContext);
             } else {
                 view = new SharedLinkCell(this.mContext);
-                ((SharedLinkCell) view).setDelegate(new C19985());
+                ((SharedLinkCell) view).setDelegate(MediaActivity.this.sharedLinkCellDelegate);
             }
             return new Holder(view);
         }
@@ -1066,20 +1167,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private class SharedLinksAdapter extends SectionsAdapter {
         private Context mContext;
 
-        /* renamed from: org.telegram.ui.MediaActivity$SharedLinksAdapter$1 */
-        class C19991 implements SharedLinkCellDelegate {
-            C19991() {
-            }
-
-            public void needOpenWebView(WebPage webPage) {
-                MediaActivity.this.openWebView(webPage);
-            }
-
-            public boolean canPerformActions() {
-                return !MediaActivity.this.actionBar.isActionModeShowed();
-            }
-        }
-
         public SharedLinksAdapter(Context context) {
             this.mContext = context;
         }
@@ -1126,7 +1213,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     break;
                 case 1:
                     view = new SharedLinkCell(this.mContext);
-                    ((SharedLinkCell) view).setDelegate(new C19991());
+                    ((SharedLinkCell) view).setDelegate(MediaActivity.this.sharedLinkCellDelegate);
                     break;
                 default:
                     view = new LoadingCell(this.mContext);
@@ -1195,91 +1282,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
         public int getPositionForScrollProgress(float progress) {
             return 0;
-        }
-    }
-
-    private class SharedMediaData {
-        private boolean[] endReached;
-        private boolean loading;
-        private int[] max_id;
-        private ArrayList<MessageObject> messages;
-        private SparseArray<MessageObject>[] messagesDict;
-        private HashMap<String, ArrayList<MessageObject>> sectionArrays;
-        private ArrayList<String> sections;
-        private int totalCount;
-
-        private SharedMediaData() {
-            this.messages = new ArrayList();
-            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
-            this.sections = new ArrayList();
-            this.sectionArrays = new HashMap();
-            this.endReached = new boolean[]{false, true};
-            this.max_id = new int[]{0, 0};
-        }
-
-        public boolean addMessage(MessageObject messageObject, boolean isNew, boolean enc) {
-            int loadIndex;
-            if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
-                loadIndex = 0;
-            } else {
-                loadIndex = 1;
-            }
-            if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
-                return false;
-            }
-            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
-            if (messageObjects == null) {
-                messageObjects = new ArrayList();
-                this.sectionArrays.put(messageObject.monthKey, messageObjects);
-                if (isNew) {
-                    this.sections.add(0, messageObject.monthKey);
-                } else {
-                    this.sections.add(messageObject.monthKey);
-                }
-            }
-            if (isNew) {
-                messageObjects.add(0, messageObject);
-                this.messages.add(0, messageObject);
-            } else {
-                messageObjects.add(messageObject);
-                this.messages.add(messageObject);
-            }
-            this.messagesDict[loadIndex].put(messageObject.getId(), messageObject);
-            if (enc) {
-                this.max_id[loadIndex] = Math.max(messageObject.getId(), this.max_id[loadIndex]);
-            } else if (messageObject.getId() > 0) {
-                this.max_id[loadIndex] = Math.min(messageObject.getId(), this.max_id[loadIndex]);
-            }
-            return true;
-        }
-
-        public boolean deleteMessage(int mid, int loadIndex) {
-            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(mid);
-            if (messageObject == null) {
-                return false;
-            }
-            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
-            if (messageObjects == null) {
-                return false;
-            }
-            messageObjects.remove(messageObject);
-            this.messages.remove(messageObject);
-            this.messagesDict[loadIndex].remove(messageObject.getId());
-            if (messageObjects.isEmpty()) {
-                this.sectionArrays.remove(messageObject.monthKey);
-                this.sections.remove(messageObject.monthKey);
-            }
-            this.totalCount--;
-            return true;
-        }
-
-        public void replaceMid(int oldMid, int newMid) {
-            MessageObject obj = (MessageObject) this.messagesDict[0].get(oldMid);
-            if (obj != null) {
-                this.messagesDict[0].remove(oldMid);
-                this.messagesDict[0].put(newMid, obj);
-                obj.messageOwner.id = newMid;
-            }
         }
     }
 
@@ -1478,20 +1480,20 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.cantDeleteMessagesCount = 0;
         this.actionModeViews.clear();
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.searchItem = menu.addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C19853());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
+        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C19853());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.searchItem.setVisibility(8);
         this.dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0);
         this.dropDownContainer.setSubMenuOpenSide(1);
-        this.dropDownContainer.addSubItem(1, LocaleController.getString("SharedMediaTitle", C0488R.string.SharedMediaTitle));
-        this.dropDownContainer.addSubItem(2, LocaleController.getString("DocumentsTitle", C0488R.string.DocumentsTitle));
+        this.dropDownContainer.addSubItem(1, LocaleController.getString("SharedMediaTitle", R.string.SharedMediaTitle));
+        this.dropDownContainer.addSubItem(2, LocaleController.getString("DocumentsTitle", R.string.DocumentsTitle));
         if (((int) this.dialog_id) != 0) {
-            this.dropDownContainer.addSubItem(5, LocaleController.getString("LinksTitle", C0488R.string.LinksTitle));
-            this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", C0488R.string.AudioTitle));
+            this.dropDownContainer.addSubItem(5, LocaleController.getString("LinksTitle", R.string.LinksTitle));
+            this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", R.string.AudioTitle));
         } else {
             EncryptedChat currentEncryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf((int) (this.dialog_id >> 32)));
             if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
-                this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", C0488R.string.AudioTitle));
+                this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", R.string.AudioTitle));
             }
         }
         this.actionBar.addView(this.dropDownContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
@@ -1504,7 +1506,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.dropDown.setEllipsize(TruncateAt.END);
         this.dropDown.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
         this.dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.dropDownDrawable = context.getResources().getDrawable(C0488R.drawable.ic_arrow_drop_down).mutate();
+        this.dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
         this.dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), Mode.MULTIPLY));
         this.dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, this.dropDownDrawable, null);
         this.dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
@@ -1519,12 +1521,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         if (((int) this.dialog_id) != 0) {
             ArrayList arrayList = this.actionModeViews;
-            ActionBarMenuItem addItemWithWidth = actionMode.addItemWithWidth(7, C0488R.drawable.go_to_message, AndroidUtilities.dp(54.0f));
+            ActionBarMenuItem addItemWithWidth = actionMode.addItemWithWidth(7, R.drawable.go_to_message, AndroidUtilities.dp(54.0f));
             this.gotoItem = addItemWithWidth;
             arrayList.add(addItemWithWidth);
-            this.actionModeViews.add(actionMode.addItemWithWidth(3, C0488R.drawable.ic_ab_forward, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_forward, AndroidUtilities.dp(54.0f)));
         }
-        this.actionModeViews.add(actionMode.addItemWithWidth(4, C0488R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
+        this.actionModeViews.add(actionMode.addItemWithWidth(4, R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
         this.photoVideoAdapter = new SharedPhotoVideoAdapter(context);
         this.documentsAdapter = new SharedDocumentsAdapter(context, 1);
         this.audioAdapter = new SharedDocumentsAdapter(context, 4);
@@ -1813,7 +1815,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
             }
             if (this.emptyTextView != null) {
-                this.emptyTextView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
+                this.emptyTextView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                 this.emptyTextView.setTextSize(1, 20.0f);
                 this.emptyImageView.setVisibility(8);
                 return;
@@ -1824,12 +1826,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.emptyImageView.setVisibility(0);
         if (this.selectedMode == 0) {
             this.listView.setAdapter(this.photoVideoAdapter);
-            this.dropDown.setText(LocaleController.getString("SharedMediaTitle", C0488R.string.SharedMediaTitle));
-            this.emptyImageView.setImageResource(C0488R.drawable.tip1);
+            this.dropDown.setText(LocaleController.getString("SharedMediaTitle", R.string.SharedMediaTitle));
+            this.emptyImageView.setImageResource(R.drawable.tip1);
             if (((int) this.dialog_id) == 0) {
-                this.emptyTextView.setText(LocaleController.getString("NoMediaSecret", C0488R.string.NoMediaSecret));
+                this.emptyTextView.setText(LocaleController.getString("NoMediaSecret", R.string.NoMediaSecret));
             } else {
-                this.emptyTextView.setText(LocaleController.getString("NoMedia", C0488R.string.NoMedia));
+                this.emptyTextView.setText(LocaleController.getString("NoMedia", R.string.NoMedia));
             }
             this.searchItem.setVisibility(8);
             if (this.sharedMediaData[this.selectedMode].loading && this.sharedMediaData[this.selectedMode].messages.isEmpty()) {
@@ -1845,21 +1847,21 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         } else if (this.selectedMode == 1 || this.selectedMode == 4) {
             if (this.selectedMode == 1) {
                 this.listView.setAdapter(this.documentsAdapter);
-                this.dropDown.setText(LocaleController.getString("DocumentsTitle", C0488R.string.DocumentsTitle));
-                this.emptyImageView.setImageResource(C0488R.drawable.tip2);
+                this.dropDown.setText(LocaleController.getString("DocumentsTitle", R.string.DocumentsTitle));
+                this.emptyImageView.setImageResource(R.drawable.tip2);
                 if (((int) this.dialog_id) == 0) {
-                    this.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", C0488R.string.NoSharedFilesSecret));
+                    this.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", R.string.NoSharedFilesSecret));
                 } else {
-                    this.emptyTextView.setText(LocaleController.getString("NoSharedFiles", C0488R.string.NoSharedFiles));
+                    this.emptyTextView.setText(LocaleController.getString("NoSharedFiles", R.string.NoSharedFiles));
                 }
             } else if (this.selectedMode == 4) {
                 this.listView.setAdapter(this.audioAdapter);
-                this.dropDown.setText(LocaleController.getString("AudioTitle", C0488R.string.AudioTitle));
-                this.emptyImageView.setImageResource(C0488R.drawable.tip4);
+                this.dropDown.setText(LocaleController.getString("AudioTitle", R.string.AudioTitle));
+                this.emptyImageView.setImageResource(R.drawable.tip4);
                 if (((int) this.dialog_id) == 0) {
-                    this.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", C0488R.string.NoSharedAudioSecret));
+                    this.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", R.string.NoSharedAudioSecret));
                 } else {
-                    this.emptyTextView.setText(LocaleController.getString("NoSharedAudio", C0488R.string.NoSharedAudio));
+                    this.emptyTextView.setText(LocaleController.getString("NoSharedAudio", R.string.NoSharedAudio));
                 }
             }
             r1 = this.searchItem;
@@ -1893,12 +1895,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(4.0f));
         } else if (this.selectedMode == 3) {
             this.listView.setAdapter(this.linksAdapter);
-            this.dropDown.setText(LocaleController.getString("LinksTitle", C0488R.string.LinksTitle));
-            this.emptyImageView.setImageResource(C0488R.drawable.tip3);
+            this.dropDown.setText(LocaleController.getString("LinksTitle", R.string.LinksTitle));
+            this.emptyImageView.setImageResource(R.drawable.tip3);
             if (((int) this.dialog_id) == 0) {
-                this.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", C0488R.string.NoSharedLinksSecret));
+                this.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", R.string.NoSharedLinksSecret));
             } else {
-                this.emptyTextView.setText(LocaleController.getString("NoSharedLinks", C0488R.string.NoSharedLinks));
+                this.emptyTextView.setText(LocaleController.getString("NoSharedLinks", R.string.NoSharedLinks));
             }
             r1 = this.searchItem;
             if (this.sharedMediaData[3].messages.isEmpty()) {
@@ -2025,17 +2027,17 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 f = FileLoader.getPathToMessage(message.messageOwner);
                             }
                             if (f != null && f.exists()) {
-                                Builder builder;
+                                AlertDialog.Builder builder;
                                 if (f.getName().toLowerCase().endsWith("attheme")) {
                                     ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
                                     if (themeInfo != null) {
                                         presentFragment(new ThemePreviewActivity(f, themeInfo));
                                         return;
                                     }
-                                    builder = new Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("IncorrectTheme", C0488R.string.IncorrectTheme));
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
+                                    builder = new AlertDialog.Builder(getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                     showDialog(builder.create());
                                     return;
                                 }
@@ -2055,7 +2057,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                         }
                                     }
                                     if (VERSION.SDK_INT >= 24) {
-                                        intent.setDataAndType(FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                                        intent.setDataAndType(FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
                                     } else {
                                         intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
                                     }
@@ -2065,7 +2067,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                             return;
                                         } catch (Exception e) {
                                             if (VERSION.SDK_INT >= 24) {
-                                                intent.setDataAndType(FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.provider", f), "text/plain");
+                                                intent.setDataAndType(FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", f), "text/plain");
                                             } else {
                                                 intent.setDataAndType(Uri.fromFile(f), "text/plain");
                                             }
@@ -2076,10 +2078,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     getParentActivity().startActivityForResult(intent, 500);
                                 } catch (Exception e2) {
                                     if (getParentActivity() != null) {
-                                        builder = new Builder(getParentActivity());
-                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
-                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
-                                        builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0488R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                                        builder = new AlertDialog.Builder(getParentActivity());
+                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                        builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
                                         showDialog(builder.create());
                                     }
                                 }
@@ -2161,7 +2163,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate cellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (MediaActivity.this.listView != null) {
                     int count = MediaActivity.this.listView.getChildCount();
@@ -2221,8 +2223,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         themeDescriptionArr[43] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{SharedMediaSectionCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[44] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         themeDescriptionArr[45] = new ThemeDescription(this.listView, 0, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[46] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedPhotoVideoCell.class}, null, null, сellDelegate, Theme.key_checkbox);
-        themeDescriptionArr[47] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedPhotoVideoCell.class}, null, null, сellDelegate, Theme.key_checkboxCheck);
+        themeDescriptionArr[46] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedPhotoVideoCell.class}, null, null, cellDelegate, Theme.key_checkbox);
+        themeDescriptionArr[47] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedPhotoVideoCell.class}, null, null, cellDelegate, Theme.key_checkboxCheck);
         themeDescriptionArr[48] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
         themeDescriptionArr[49] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
         themeDescriptionArr[50] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);

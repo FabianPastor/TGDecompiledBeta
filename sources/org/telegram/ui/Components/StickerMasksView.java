@@ -13,13 +13,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0488R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -54,6 +54,27 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     private OnItemClickListener stickersOnItemClickListener;
     private int stickersTabOffset;
 
+    /* renamed from: org.telegram.ui.Components.StickerMasksView$3 */
+    class C16533 implements OnTouchListener {
+        C16533() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return StickerPreviewViewer.getInstance().onTouch(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), StickerMasksView.this.stickersOnItemClickListener, null);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.StickerMasksView$7 */
+    class C16577 implements Runnable {
+        C16577() {
+        }
+
+        public void run() {
+            StickerMasksView.this.updateStickerTabs();
+            StickerMasksView.this.reloadStickersAdapter();
+        }
+    }
+
     public interface Listener {
         void onStickerSelected(Document document);
 
@@ -70,16 +91,6 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 return StickerMasksView.this.stickersGridAdapter.stickersPerRow;
             }
             return 1;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.StickerMasksView$3 */
-    class C16533 implements OnTouchListener {
-        C16533() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return StickerPreviewViewer.getInstance().onTouch(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), StickerMasksView.this.stickersOnItemClickListener, null);
         }
     }
 
@@ -143,17 +154,6 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             StickerMasksView.this.checkScroll();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.StickerMasksView$7 */
-    class C16577 implements Runnable {
-        C16577() {
-        }
-
-        public void run() {
-            StickerMasksView.this.updateStickerTabs();
-            StickerMasksView.this.reloadStickersAdapter();
         }
     }
 
@@ -360,20 +360,20 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             this.scrollSlidingTabStrip.removeTabs();
             Drawable drawable;
             if (this.currentType == 0) {
-                drawable = getContext().getResources().getDrawable(C0488R.drawable.ic_masks_msk1);
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_masks_msk1);
                 Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
                 this.scrollSlidingTabStrip.addIconTab(drawable);
-                this.stickersEmptyView.setText(LocaleController.getString("NoStickers", C0488R.string.NoStickers));
+                this.stickersEmptyView.setText(LocaleController.getString("NoStickers", R.string.NoStickers));
             } else {
-                drawable = getContext().getResources().getDrawable(C0488R.drawable.ic_masks_sticker1);
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_masks_sticker1);
                 Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
                 this.scrollSlidingTabStrip.addIconTab(drawable);
-                this.stickersEmptyView.setText(LocaleController.getString("NoMasks", C0488R.string.NoMasks));
+                this.stickersEmptyView.setText(LocaleController.getString("NoMasks", R.string.NoMasks));
             }
             if (!this.recentStickers[this.currentType].isEmpty()) {
                 this.recentTabBum = this.stickersTabOffset;
                 this.stickersTabOffset++;
-                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), C0488R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
+                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
             }
             this.stickerSets[this.currentType].clear();
             ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);

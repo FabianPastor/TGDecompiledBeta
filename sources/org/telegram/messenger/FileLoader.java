@@ -61,6 +61,20 @@ public class FileLoader {
     private HashMap<String, Long> uploadSizes = new HashMap();
     private LinkedList<FileUploadOperation> uploadSmallOperationQueue = new LinkedList();
 
+    public interface FileLoaderDelegate {
+        void fileDidFailedLoad(String str, int i);
+
+        void fileDidFailedUpload(String str, boolean z);
+
+        void fileDidLoaded(String str, File file, int i);
+
+        void fileDidUploaded(String str, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
+
+        void fileLoadProgressChanged(String str, float f);
+
+        void fileUploadProgressChanged(String str, float f, boolean z);
+    }
+
     /* renamed from: org.telegram.messenger.FileLoader$5 */
     class C01925 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
@@ -98,20 +112,6 @@ public class FileLoader {
                 FileLoader.this.delegate.fileLoadProgressChanged(this.val$finalFileName, progress);
             }
         }
-    }
-
-    public interface FileLoaderDelegate {
-        void fileDidFailedLoad(String str, int i);
-
-        void fileDidFailedUpload(String str, boolean z);
-
-        void fileDidLoaded(String str, File file, int i);
-
-        void fileDidUploaded(String str, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
-
-        void fileLoadProgressChanged(String str, float f);
-
-        void fileUploadProgressChanged(String str, float f, boolean z);
     }
 
     public static FileLoader getInstance(int num) {

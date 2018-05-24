@@ -22,24 +22,12 @@ public final class Loader implements LoaderErrorThrower {
     private final ExecutorService downloadExecutorService;
     private IOException fatalError;
 
-    public interface Loadable {
-        void cancelLoad();
-
-        boolean isLoadCanceled();
-
-        void load() throws IOException, InterruptedException;
-    }
-
     public interface Callback<T extends Loadable> {
         void onLoadCanceled(T t, long j, long j2, boolean z);
 
         void onLoadCompleted(T t, long j, long j2);
 
         int onLoadError(T t, long j, long j2, IOException iOException);
-    }
-
-    public interface ReleaseCallback {
-        void onLoaderReleased();
     }
 
     @SuppressLint({"HandlerLeak"})
@@ -210,6 +198,18 @@ public final class Loader implements LoaderErrorThrower {
         private long getRetryDelayMillis() {
             return (long) Math.min((this.errorCount - 1) * 1000, DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
         }
+    }
+
+    public interface Loadable {
+        void cancelLoad();
+
+        boolean isLoadCanceled();
+
+        void load() throws IOException, InterruptedException;
+    }
+
+    public interface ReleaseCallback {
+        void onLoaderReleased();
     }
 
     private static final class ReleaseTask extends Handler implements Runnable {
