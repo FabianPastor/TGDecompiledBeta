@@ -6,13 +6,13 @@ import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
     private static volatile CountDownLatch countDownLatch;
-    private static Runnable finishJobByTimeoutRunnable = new C02213();
+    private static Runnable finishJobByTimeoutRunnable = new C02533();
     private static volatile boolean startingJob;
     private static final Object sync = new Object();
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$1 */
-    static class C02191 implements Runnable {
-        C02191() {
+    static class C02511 implements Runnable {
+        C02511() {
         }
 
         public void run() {
@@ -32,8 +32,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$2 */
-    static class C02202 implements Runnable {
-        C02202() {
+    static class C02522 implements Runnable {
+        C02522() {
         }
 
         public void run() {
@@ -55,8 +55,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$3 */
-    static class C02213 implements Runnable {
-        C02213() {
+    static class C02533 implements Runnable {
+        C02533() {
         }
 
         public void run() {
@@ -65,11 +65,11 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new C02191());
+        Utilities.globalQueue.postRunnable(new C02511());
     }
 
     public static void finishJob() {
-        Utilities.globalQueue.postRunnable(new C02202());
+        Utilities.globalQueue.postRunnable(new C02522());
     }
 
     /* JADX WARNING: inconsistent code. */

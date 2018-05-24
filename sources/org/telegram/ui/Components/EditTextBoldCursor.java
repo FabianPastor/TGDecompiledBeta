@@ -16,8 +16,8 @@ import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class EditTextBoldCursor extends EditText {
@@ -68,7 +68,7 @@ public class EditTextBoldCursor extends EditText {
             this.gradientDrawable = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{-11230757, -11230757});
             this.editor = mEditor.get(this);
             this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
-            mCursorDrawableResField.set(this, Integer.valueOf(R.drawable.field_carret_empty));
+            mCursorDrawableResField.set(this, Integer.valueOf(C0488R.drawable.field_carret_empty));
         } catch (Throwable e) {
             FileLog.m3e(e);
         }

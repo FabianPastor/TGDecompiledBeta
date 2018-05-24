@@ -82,7 +82,6 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -130,8 +129,8 @@ public class AndroidUtilities {
     private static boolean waitingForSms = false;
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C17905 extends CrashManagerListener {
-        C17905() {
+    static class C00775 extends CrashManagerListener {
+        C00775() {
         }
 
         public boolean includeDeviceData() {
@@ -377,7 +376,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             Builder builder = new Builder(fragment.getParentActivity());
             builder.setMessage("Install Google Maps?");
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
@@ -386,7 +385,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
             fragment.showDialog(builder.create());
             return false;
         }
@@ -707,7 +706,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0488R.bool.isTablet));
         }
         return isTablet.booleanValue();
     }
@@ -819,7 +818,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00612 = new ContentObserver(new Handler()) {
+                ContentObserver c00742 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -829,16 +828,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00612;
-                contentResolver.registerContentObserver(uri, true, c00612);
-                Runnable c00623 = new Runnable() {
+                callLogContentObserver = c00742;
+                contentResolver.registerContentObserver(uri, true, c00742);
+                Runnable c00753 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00623;
-                runOnUIThread(c00623, 10000);
+                unregisterRunnable = c00753;
+                runOnUIThread(c00753, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1088,7 +1087,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17905());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C00775());
     }
 
     public static void checkForUpdates(Activity context) {
@@ -1519,7 +1518,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             if (VERSION.SDK_INT < 26 || realMimeType == null || !realMimeType.equals("application/vnd.android.package-archive") || ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
                 if (VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.provider", f), realMimeType != null ? realMimeType : "text/plain");
                 } else {
                     intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
                 }
@@ -1529,7 +1528,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         return;
                     } catch (Exception e) {
                         if (VERSION.SDK_INT >= 24) {
-                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
+                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.provider", f), "text/plain");
                         } else {
                             intent.setDataAndType(Uri.fromFile(f), "text/plain");
                         }
@@ -1541,9 +1540,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return;
             }
             Builder builder = new Builder((Context) activity);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new OnClickListener() {
+            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+            builder.setMessage(LocaleController.getString("ApkRestricted", C0488R.string.ApkRestricted));
+            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0488R.string.PermissionOpenSettings), new OnClickListener() {
                 @TargetApi(26)
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
@@ -1553,7 +1552,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
             builder.show();
         }
     }
@@ -1580,7 +1579,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
                 if (VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.provider", f), realMimeType != null ? realMimeType : "text/plain");
                 } else {
                     intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
                 }
@@ -1590,7 +1589,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         return;
                     } catch (Exception e) {
                         if (VERSION.SDK_INT >= 24) {
-                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
+                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.provider", f), "text/plain");
                         } else {
                             intent.setDataAndType(Uri.fromFile(f), "text/plain");
                         }
@@ -1699,20 +1698,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password) {
         Builder builder = new Builder((Context) activity);
-        builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
-        StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", R.string.EnableProxyAlert));
+        builder.setTitle(LocaleController.getString("Proxy", C0488R.string.Proxy));
+        StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", C0488R.string.EnableProxyAlert));
         stringBuilder.append("\n\n");
-        stringBuilder.append(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress)).append(": ").append(address).append("\n");
-        stringBuilder.append(LocaleController.getString("UseProxyPort", R.string.UseProxyPort)).append(": ").append(port).append("\n");
+        stringBuilder.append(LocaleController.getString("UseProxyAddress", C0488R.string.UseProxyAddress)).append(": ").append(address).append("\n");
+        stringBuilder.append(LocaleController.getString("UseProxyPort", C0488R.string.UseProxyPort)).append(": ").append(port).append("\n");
         if (!TextUtils.isEmpty(user)) {
-            stringBuilder.append(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername)).append(": ").append(user).append("\n");
+            stringBuilder.append(LocaleController.getString("UseProxyUsername", C0488R.string.UseProxyUsername)).append(": ").append(user).append("\n");
         }
         if (!TextUtils.isEmpty(password)) {
-            stringBuilder.append(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword)).append(": ").append(password).append("\n");
+            stringBuilder.append(LocaleController.getString("UseProxyPassword", C0488R.string.UseProxyPassword)).append(": ").append(password).append("\n");
         }
-        stringBuilder.append("\n").append(LocaleController.getString("EnableProxyAlert2", R.string.EnableProxyAlert2));
+        stringBuilder.append("\n").append(LocaleController.getString("EnableProxyAlert2", C0488R.string.EnableProxyAlert2));
         builder.setMessage(stringBuilder.toString());
-        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new OnClickListener() {
+        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", C0488R.string.ConnectingToProxyEnable), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Editor editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled", true);
@@ -1736,7 +1735,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
         builder.show().setCanceledOnTouchOutside(true);
     }
 }

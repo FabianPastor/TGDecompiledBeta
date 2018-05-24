@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -27,7 +27,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Mp4Extractor implements Extractor, SeekMap {
     private static final int BRAND_QUICKTIME = Util.getIntegerCodeForString("qt  ");
-    public static final ExtractorsFactory FACTORY = new C18431();
+    public static final ExtractorsFactory FACTORY = new C06391();
     public static final int FLAG_WORKAROUND_IGNORE_EDIT_LISTS = 1;
     private static final long MAXIMUM_READ_AHEAD_BYTES_STREAM = 10485760;
     private static final long RELOAD_MINIMUM_SEEK_DISTANCE = 262144;
@@ -54,6 +54,16 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     private int sampleTrackIndex;
     private Mp4Track[] tracks;
 
+    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.Mp4Extractor$1 */
+    static class C06391 implements ExtractorsFactory {
+        C06391() {
+        }
+
+        public Extractor[] createExtractors() {
+            return new Extractor[]{new Mp4Extractor()};
+        }
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     public @interface Flags {
     }
@@ -73,16 +83,6 @@ public final class Mp4Extractor implements Extractor, SeekMap {
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
-    }
-
-    /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.Mp4Extractor$1 */
-    static class C18431 implements ExtractorsFactory {
-        C18431() {
-        }
-
-        public Extractor[] createExtractors() {
-            return new Extractor[]{new Mp4Extractor()};
-        }
     }
 
     public Mp4Extractor() {
@@ -158,7 +158,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         TrackSampleTable sampleTable;
         long firstTimeUs;
         long firstOffset;
-        long secondTimeUs = C0542C.TIME_UNSET;
+        long secondTimeUs = C0600C.TIME_UNSET;
         long secondOffset = -1;
         if (this.firstVideoTrackIndex != -1) {
             sampleTable = this.tracks[this.firstVideoTrackIndex].sampleTable;
@@ -184,13 +184,13 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             if (i != this.firstVideoTrackIndex) {
                 sampleTable = this.tracks[i].sampleTable;
                 firstOffset = maybeAdjustSeekOffset(sampleTable, firstTimeUs, firstOffset);
-                if (secondTimeUs != C0542C.TIME_UNSET) {
+                if (secondTimeUs != C0600C.TIME_UNSET) {
                     secondOffset = maybeAdjustSeekOffset(sampleTable, secondTimeUs, secondOffset);
                 }
             }
         }
         SeekPoint firstSeekPoint = new SeekPoint(firstTimeUs, firstOffset);
-        if (secondTimeUs == C0542C.TIME_UNSET) {
+        if (secondTimeUs == C0600C.TIME_UNSET) {
             return new SeekPoints(firstSeekPoint);
         }
         return new SeekPoints(firstSeekPoint, new SeekPoint(secondTimeUs, secondOffset));
@@ -302,7 +302,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
 
     private void processMoovAtom(ContainerAtom moov) throws ParserException {
         int firstVideoTrackIndex = -1;
-        long durationUs = C0542C.TIME_UNSET;
+        long durationUs = C0600C.TIME_UNSET;
         List<Mp4Track> tracks = new ArrayList();
         Metadata metadata = null;
         GaplessInfoHolder gaplessInfoHolder = new GaplessInfoHolder();
@@ -316,7 +316,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         for (int i = 0; i < moov.containerChildren.size(); i++) {
             ContainerAtom atom = (ContainerAtom) moov.containerChildren.get(i);
             if (atom.type == Atom.TYPE_trak) {
-                Track track = AtomParsers.parseTrak(atom, moov.getLeafAtomOfType(Atom.TYPE_mvhd), C0542C.TIME_UNSET, null, (this.flags & 1) != 0, this.isQuickTime);
+                Track track = AtomParsers.parseTrak(atom, moov.getLeafAtomOfType(Atom.TYPE_mvhd), C0600C.TIME_UNSET, null, (this.flags & 1) != 0, this.isQuickTime);
                 if (track != null) {
                     TrackSampleTable trackSampleTable = AtomParsers.parseStbl(track, atom.getContainerAtomOfType(Atom.TYPE_mdia).getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl), gaplessInfoHolder);
                     if (trackSampleTable.sampleCount != 0) {

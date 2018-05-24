@@ -4,7 +4,7 @@ import android.net.Uri;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.offline.Downloader.ProgressListener;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
@@ -88,7 +88,7 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
     }
 
     public final synchronized void download(ProgressListener listener) throws IOException, InterruptedException {
-        this.priorityTaskManager.add(C0542C.PRIORITY_DOWNLOAD);
+        this.priorityTaskManager.add(C0600C.PRIORITY_DOWNLOAD);
         try {
             getManifestIfNeeded(false);
             List<Segment> segments = initStatus(false);
@@ -97,14 +97,14 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
             byte[] buffer = new byte[131072];
             CachingCounters cachingCounters = new CachingCounters();
             for (int i = 0; i < segments.size(); i++) {
-                CacheUtil.cache(((Segment) segments.get(i)).dataSpec, this.cache, this.dataSource, buffer, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, cachingCounters, true);
+                CacheUtil.cache(((Segment) segments.get(i)).dataSpec, this.cache, this.dataSource, buffer, this.priorityTaskManager, C0600C.PRIORITY_DOWNLOAD, cachingCounters, true);
                 this.downloadedBytes += cachingCounters.newlyCachedBytes;
                 this.downloadedSegments++;
                 notifyListener(listener);
             }
-            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
+            this.priorityTaskManager.remove(C0600C.PRIORITY_DOWNLOAD);
         } catch (Throwable th) {
-            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
+            this.priorityTaskManager.remove(C0600C.PRIORITY_DOWNLOAD);
         }
     }
 

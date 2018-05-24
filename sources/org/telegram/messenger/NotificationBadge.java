@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 
 public class NotificationBadge {
     private static final List<Class<? extends Badger>> BADGERS = new LinkedList();
@@ -472,7 +472,7 @@ public class NotificationBadge {
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C0542C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C0600C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfo != null) {
             String currentHomePackage = resolveInfo.activityInfo.packageName;
             for (Class<? extends Badger> b : BADGERS) {
@@ -490,7 +490,7 @@ public class NotificationBadge {
                 return true;
             }
         }
-        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0542C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0600C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfos != null) {
             for (int a = 0; a < resolveInfos.size(); a++) {
                 currentHomePackage = ((ResolveInfo) resolveInfos.get(a)).activityInfo.packageName;

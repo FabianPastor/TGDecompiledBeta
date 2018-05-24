@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
@@ -46,9 +46,15 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
     private final Handler mainHandler;
     private final Period period;
 
+    public interface MediaSourceFactory {
+        MediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener);
+
+        int[] getSupportedTypes();
+    }
+
     /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$2 */
-    class C06052 implements Runnable {
-        C06052() {
+    class C06852 implements Runnable {
+        C06852() {
         }
 
         public void run() {
@@ -56,19 +62,13 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         }
     }
 
-    public interface MediaSourceFactory {
-        MediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener);
-
-        int[] getSupportedTypes();
-    }
-
     private final class ComponentListener implements org.telegram.messenger.exoplayer2.source.ads.AdsLoader.EventListener {
         private final Handler playerHandler = new Handler();
         private volatile boolean released;
 
         /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$ComponentListener$2 */
-        class C06072 implements Runnable {
-            C06072() {
+        class C06872 implements Runnable {
+            C06872() {
             }
 
             public void run() {
@@ -79,8 +79,8 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         }
 
         /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$ComponentListener$3 */
-        class C06083 implements Runnable {
-            C06083() {
+        class C06883 implements Runnable {
+            C06883() {
             }
 
             public void run() {
@@ -109,13 +109,13 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
 
         public void onAdClicked() {
             if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
-                AdsMediaSource.this.eventHandler.post(new C06072());
+                AdsMediaSource.this.eventHandler.post(new C06872());
             }
         }
 
         public void onAdTapped() {
             if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
-                AdsMediaSource.this.eventHandler.post(new C06083());
+                AdsMediaSource.this.eventHandler.post(new C06883());
             }
         }
 
@@ -195,7 +195,7 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
                 int adCount = adIndexInAdGroup + 1;
                 this.adGroupMediaSources[adGroupIndex] = (MediaSource[]) Arrays.copyOf(this.adGroupMediaSources[adGroupIndex], adCount);
                 this.adDurationsUs[adGroupIndex] = Arrays.copyOf(this.adDurationsUs[adGroupIndex], adCount);
-                Arrays.fill(this.adDurationsUs[adGroupIndex], oldAdCount, adCount, C0542C.TIME_UNSET);
+                Arrays.fill(this.adDurationsUs[adGroupIndex], oldAdCount, adCount, C0600C.TIME_UNSET);
             }
             this.adGroupMediaSources[adGroupIndex][adIndexInAdGroup] = adMediaSource;
             this.deferredMediaPeriodByAdMediaSource.put(adMediaSource, new ArrayList());
@@ -232,7 +232,7 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         this.adGroupMediaSources = new MediaSource[0][];
         this.adDurationsUs = new long[0][];
         this.listener = null;
-        this.mainHandler.post(new C06052());
+        this.mainHandler.post(new C06852());
     }
 
     protected void onChildSourceInfoRefreshed(MediaPeriodId mediaPeriodId, MediaSource mediaSource, Timeline timeline, Object manifest) {

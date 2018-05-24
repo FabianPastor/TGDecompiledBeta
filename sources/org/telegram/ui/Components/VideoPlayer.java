@@ -58,12 +58,6 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
     private boolean videoPlayerReady;
 
-    public interface RendererBuilder {
-        void buildRenderers(VideoPlayer videoPlayer);
-
-        void cancel();
-    }
-
     public interface VideoPlayerDelegate {
         void onError(Exception exception);
 
@@ -79,8 +73,8 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     }
 
     /* renamed from: org.telegram.ui.Components.VideoPlayer$1 */
-    class C21031 implements Player.EventListener {
-        C21031() {
+    class C16931 implements Player.EventListener {
+        C16931() {
         }
 
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
@@ -118,6 +112,12 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
     }
 
+    public interface RendererBuilder {
+        void buildRenderers(VideoPlayer videoPlayer);
+
+        void cancel();
+    }
+
     public VideoPlayer() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.playerDidStartPlaying);
     }
@@ -138,7 +138,7 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
         if (this.mixedAudio && this.audioPlayer == null) {
             this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 2);
-            this.audioPlayer.addListener(new C21031());
+            this.audioPlayer.addListener(new C16931());
             this.audioPlayer.setPlayWhenReady(this.autoplay);
         }
     }

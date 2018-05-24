@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
@@ -743,7 +743,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected static boolean formatHasNoLanguage(Format format) {
-        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C0542C.LANGUAGE_UNDETERMINED);
+        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C0600C.LANGUAGE_UNDETERMINED);
     }
 
     protected static boolean formatHasLanguage(Format format, String language) {

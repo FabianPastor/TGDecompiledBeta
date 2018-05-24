@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import android.net.Uri;
 import android.os.Handler;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -151,7 +151,7 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
         }
         Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.sourceListener = listener;
-        notifySourceInfoRefreshed(C0542C.TIME_UNSET, false);
+        notifySourceInfoRefreshed(C0600C.TIME_UNSET, false);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
@@ -170,7 +170,7 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
     }
 
     public void onSourceInfoRefreshed(long durationUs, boolean isSeekable) {
-        if (durationUs == C0542C.TIME_UNSET) {
+        if (durationUs == C0600C.TIME_UNSET) {
             durationUs = this.timelineDurationUs;
         }
         if (this.timelineDurationUs != durationUs || this.timelineIsSeekable != isSeekable) {

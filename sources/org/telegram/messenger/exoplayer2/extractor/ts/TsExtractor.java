@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
@@ -32,7 +32,7 @@ public final class TsExtractor implements Extractor {
     private static final long AC3_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("AC-3"));
     private static final int BUFFER_SIZE = 9400;
     private static final long E_AC3_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("EAC3"));
-    public static final ExtractorsFactory FACTORY = new C18481();
+    public static final ExtractorsFactory FACTORY = new C06471();
     private static final long HEVC_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("HEVC"));
     private static final int MAX_PID_PLUS_ONE = 8192;
     public static final int MODE_HLS = 2;
@@ -69,18 +69,18 @@ public final class TsExtractor implements Extractor {
     private final ParsableByteArray tsPacketBuffer;
     private final SparseArray<TsPayloadReader> tsPayloadReaders;
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Mode {
-    }
-
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor$1 */
-    static class C18481 implements ExtractorsFactory {
-        C18481() {
+    static class C06471 implements ExtractorsFactory {
+        C06471() {
         }
 
         public Extractor[] createExtractors() {
             return new Extractor[]{new TsExtractor()};
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Mode {
     }
 
     private class PatReader implements SectionPayloadReader {
@@ -304,7 +304,7 @@ public final class TsExtractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         this.output = output;
-        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0600C.TIME_UNSET));
     }
 
     public void seek(long position, long timeUs) {

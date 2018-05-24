@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -22,7 +23,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -63,9 +63,40 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
     private View shadow;
 
+    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
+    class C09941 extends ActionBarMenuOnItemClick {
+        C09941() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                AudioSelectActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
+    class C09952 implements OnItemClickListener {
+        C09952() {
+        }
+
+        public void onItemClick(View view, int position) {
+            AudioCell audioCell = (AudioCell) view;
+            AudioEntry audioEntry = audioCell.getAudioEntry();
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
+                AudioSelectActivity.this.selectedAudios.remove(audioEntry.id);
+                audioCell.setChecked(false);
+            } else {
+                AudioSelectActivity.this.selectedAudios.put(audioEntry.id, audioEntry);
+                audioCell.setChecked(true);
+            }
+            AudioSelectActivity.this.updateBottomLayoutCount();
+        }
+    }
+
     /* renamed from: org.telegram.ui.AudioSelectActivity$3 */
-    class C08353 implements OnClickListener {
-        C08353() {
+    class C09963 implements OnClickListener {
+        C09963() {
         }
 
         public void onClick(View view) {
@@ -74,8 +105,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$4 */
-    class C08364 implements OnClickListener {
-        C08364() {
+    class C09974 implements OnClickListener {
+        C09974() {
         }
 
         public void onClick(View view) {
@@ -91,8 +122,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$5 */
-    class C08385 implements Runnable {
-        C08385() {
+    class C09995 implements Runnable {
+        C09995() {
         }
 
         public void run() {
@@ -182,43 +213,12 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         void didSelectAudio(ArrayList<MessageObject> arrayList);
     }
 
-    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
-    class C19231 extends ActionBarMenuOnItemClick {
-        C19231() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                AudioSelectActivity.this.finishFragment();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
-    class C19242 implements OnItemClickListener {
-        C19242() {
-        }
-
-        public void onItemClick(View view, int position) {
-            AudioCell audioCell = (AudioCell) view;
-            AudioEntry audioEntry = audioCell.getAudioEntry();
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
-                AudioSelectActivity.this.selectedAudios.remove(audioEntry.id);
-                audioCell.setChecked(false);
-            } else {
-                AudioSelectActivity.this.selectedAudios.put(audioEntry.id, audioEntry);
-                audioCell.setChecked(true);
-            }
-            AudioSelectActivity.this.updateBottomLayoutCount();
-        }
-    }
-
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         /* renamed from: org.telegram.ui.AudioSelectActivity$ListAdapter$1 */
-        class C19251 implements AudioCellDelegate {
-            C19251() {
+        class C10001 implements AudioCellDelegate {
+            C10001() {
             }
 
             public void startedPlayingAudio(MessageObject messageObject) {
@@ -248,7 +248,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             AudioCell view = new AudioCell(this.mContext);
-            view.setDelegate(new C19251());
+            view.setDelegate(new C10001());
             return new Holder(view);
         }
 
@@ -293,14 +293,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("AttachMusic", R.string.AttachMusic));
-        this.actionBar.setActionBarMenuOnItemClick(new C19231());
+        this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0488R.string.AttachMusic));
+        this.actionBar.setActionBarMenuOnItemClick(new C09941());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.progressView = new EmptyTextProgressView(context);
-        this.progressView.setText(LocaleController.getString("NoAudio", R.string.NoAudio));
+        this.progressView.setText(LocaleController.getString("NoAudio", C0488R.string.NoAudio));
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.progressView);
@@ -316,13 +316,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        this.listView.setOnItemClickListener(new C19242());
+        this.listView.setOnItemClickListener(new C09952());
         this.bottomLayout = new PickerBottomLayout(context, false);
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.cancelButton.setOnClickListener(new C08353());
-        this.bottomLayout.doneButton.setOnClickListener(new C08364());
+        this.bottomLayout.cancelButton.setOnClickListener(new C09963());
+        this.bottomLayout.doneButton.setOnClickListener(new C09974());
         View shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(C0488R.drawable.header_shadow_reverse);
         frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         if (this.loadingAudio) {
             this.progressView.showProgress();
@@ -354,7 +354,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (this.progressView != null) {
             this.progressView.showProgress();
         }
-        Utilities.globalQueue.postRunnable(new C08385());
+        Utilities.globalQueue.postRunnable(new C09995());
     }
 
     public ThemeDescription[] getThemeDescriptions() {

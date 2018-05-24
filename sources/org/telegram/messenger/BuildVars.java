@@ -7,7 +7,7 @@ public class BuildVars {
     public static int BUILD_VERSION = BuildConfig.VERSION_CODE;
     public static String BUILD_VERSION_STRING = "4.8.5";
     public static boolean DEBUG_PRIVATE_VERSION = false;
-    public static boolean DEBUG_VERSION = true;
+    public static boolean DEBUG_VERSION = false;
     public static String FOURSQUARE_API_ID = "WQFF4AJFCITFSTBAU2H2UPLCBNPP3TMAZH5XLR1AHZ0AN3EH";
     public static String FOURSQUARE_API_KEY = "KNMWIDXUJGWOHEBRHPLX5VVNGU0HQOLQGTD4GG53ST5JOUBD";
     public static String FOURSQUARE_API_VERSION = "20150326";

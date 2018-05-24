@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -42,7 +43,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -101,9 +101,23 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private SparseArray<GroupCreateSpan> selectedContacts = new SparseArray();
     private SpansContainer spansContainer;
 
+    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
+    class C17921 extends ActionBarMenuOnItemClick {
+        C17921() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                GroupCreateActivity.this.finishFragment();
+            } else if (id == 1) {
+                GroupCreateActivity.this.onDonePressed();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
-    class C13975 implements Callback {
-        C13975() {
+    class C17965 implements Callback {
+        C17965() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -123,8 +137,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C13986 implements OnEditorActionListener {
-        C13986() {
+    class C17976 implements OnEditorActionListener {
+        C17976() {
         }
 
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -133,10 +147,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C13997 implements OnKeyListener {
+    class C17987 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C13997() {
+        C17987() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -155,8 +169,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C14008 implements TextWatcher {
-        C14008() {
+    class C17998 implements TextWatcher {
+        C17998() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -174,15 +188,354 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 GroupCreateActivity.this.adapter.searchDialogs(GroupCreateActivity.this.editText.getText().toString());
                 GroupCreateActivity.this.listView.setFastScrollVisible(false);
                 GroupCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
-                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
                 return;
             }
             GroupCreateActivity.this.closeSearch();
         }
     }
 
+    /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
+    class C18009 implements OnItemClickListener {
+        C18009() {
+        }
+
+        public void onItemClick(View view, int position) {
+            boolean z = false;
+            if (view instanceof GroupCreateUserCell) {
+                GroupCreateUserCell cell = (GroupCreateUserCell) view;
+                User user = cell.getUser();
+                if (user != null) {
+                    boolean exists;
+                    if (GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0) {
+                        exists = true;
+                    } else {
+                        exists = false;
+                    }
+                    if (exists) {
+                        GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(user.id));
+                    } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
+                        return;
+                    } else {
+                        if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
+                            Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
+                            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                            builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0488R.string.SoftUserLimitAlert));
+                            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
+                            GroupCreateActivity.this.showDialog(builder.create());
+                            return;
+                        }
+                        boolean z2;
+                        MessagesController instance = MessagesController.getInstance(GroupCreateActivity.this.currentAccount);
+                        if (GroupCreateActivity.this.searching) {
+                            z2 = false;
+                        } else {
+                            z2 = true;
+                        }
+                        instance.putUser(user, z2);
+                        GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
+                        GroupCreateActivity.this.spansContainer.addSpan(span);
+                        span.setOnClickListener(GroupCreateActivity.this);
+                    }
+                    GroupCreateActivity.this.updateHint();
+                    if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
+                        AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
+                    } else {
+                        if (!exists) {
+                            z = true;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    if (GroupCreateActivity.this.editText.length() > 0) {
+                        GroupCreateActivity.this.editText.setText(null);
+                    }
+                }
+            }
+        }
+    }
+
     public interface GroupCreateActivityDelegate {
         void didSelectUsers(ArrayList<Integer> arrayList);
+    }
+
+    public class GroupCreateAdapter extends FastScrollAdapter {
+        private ArrayList<User> contacts = new ArrayList();
+        private Context context;
+        private SearchAdapterHelper searchAdapterHelper;
+        private ArrayList<User> searchResult = new ArrayList();
+        private ArrayList<CharSequence> searchResultNames = new ArrayList();
+        private Timer searchTimer;
+        private boolean searching;
+
+        public GroupCreateAdapter(Context ctx) {
+            this.context = ctx;
+            ArrayList<TL_contact> arrayList = ContactsController.getInstance(GroupCreateActivity.this.currentAccount).contacts;
+            for (int a = 0; a < arrayList.size(); a++) {
+                User user = MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(a)).user_id));
+                if (!(user == null || user.self || user.deleted)) {
+                    this.contacts.add(user);
+                }
+            }
+            this.searchAdapterHelper = new SearchAdapterHelper(true);
+            this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(GroupCreateActivity.this) {
+                public void onDataSetChanged() {
+                    GroupCreateAdapter.this.notifyDataSetChanged();
+                }
+
+                public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+                }
+            });
+        }
+
+        public void setSearching(boolean value) {
+            if (this.searching != value) {
+                this.searching = value;
+                notifyDataSetChanged();
+            }
+        }
+
+        public String getLetter(int position) {
+            if (position < 0 || position >= this.contacts.size()) {
+                return null;
+            }
+            User user = (User) this.contacts.get(position);
+            if (user == null) {
+                return null;
+            }
+            if (LocaleController.nameDisplayOrder == 1) {
+                if (!TextUtils.isEmpty(user.first_name)) {
+                    return user.first_name.substring(0, 1).toUpperCase();
+                }
+                if (!TextUtils.isEmpty(user.last_name)) {
+                    return user.last_name.substring(0, 1).toUpperCase();
+                }
+            } else if (!TextUtils.isEmpty(user.last_name)) {
+                return user.last_name.substring(0, 1).toUpperCase();
+            } else {
+                if (!TextUtils.isEmpty(user.first_name)) {
+                    return user.first_name.substring(0, 1).toUpperCase();
+                }
+            }
+            return TtmlNode.ANONYMOUS_REGION_ID;
+        }
+
+        public int getItemCount() {
+            if (!this.searching) {
+                return this.contacts.size();
+            }
+            int count = this.searchResult.size();
+            int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
+            if (globalCount != 0) {
+                return count + (globalCount + 1);
+            }
+            return count;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new GroupCreateSectionCell(this.context);
+                    break;
+                default:
+                    view = new GroupCreateUserCell(this.context, true);
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
+                    if (this.searching) {
+                        cell.setText(LocaleController.getString("GlobalSearch", C0488R.string.GlobalSearch));
+                        return;
+                    }
+                    return;
+                default:
+                    User user;
+                    GroupCreateUserCell cell2 = holder.itemView;
+                    CharSequence username = null;
+                    CharSequence name = null;
+                    if (this.searching) {
+                        int localCount = this.searchResult.size();
+                        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
+                        if (position >= 0 && position < localCount) {
+                            user = (User) this.searchResult.get(position);
+                        } else if (position <= localCount || position > globalCount + localCount) {
+                            user = null;
+                        } else {
+                            user = (User) this.searchAdapterHelper.getGlobalSearch().get((position - localCount) - 1);
+                        }
+                        if (user != null) {
+                            if (position < localCount) {
+                                name = (CharSequence) this.searchResultNames.get(position);
+                                if (!(name == null || TextUtils.isEmpty(user.username) || !name.toString().startsWith("@" + user.username))) {
+                                    username = name;
+                                    name = null;
+                                }
+                            } else if (position > localCount && !TextUtils.isEmpty(user.username)) {
+                                String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
+                                if (foundUserName.startsWith("@")) {
+                                    foundUserName = foundUserName.substring(1);
+                                }
+                                try {
+                                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                                    spannableStringBuilder.append("@");
+                                    spannableStringBuilder.append(user.username);
+                                    int index = user.username.toLowerCase().indexOf(foundUserName);
+                                    if (index != -1) {
+                                        int len = foundUserName.length();
+                                        if (index == 0) {
+                                            len++;
+                                        } else {
+                                            index++;
+                                        }
+                                        spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
+                                    }
+                                    Object username2 = spannableStringBuilder;
+                                } catch (Exception e) {
+                                    username = user.username;
+                                }
+                            }
+                        }
+                    } else {
+                        user = (User) this.contacts.get(position);
+                    }
+                    cell2.setUser(user, name, username);
+                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0, false);
+                    return;
+            }
+        }
+
+        public int getItemViewType(int position) {
+            if (this.searching && position == this.searchResult.size()) {
+                return 0;
+            }
+            return 1;
+        }
+
+        public int getPositionForScrollProgress(float progress) {
+            return (int) (((float) getItemCount()) * progress);
+        }
+
+        public void onViewRecycled(ViewHolder holder) {
+            if (holder.itemView instanceof GroupCreateUserCell) {
+                ((GroupCreateUserCell) holder.itemView).recycle();
+            }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
+        public void searchDialogs(final String query) {
+            try {
+                if (this.searchTimer != null) {
+                    this.searchTimer.cancel();
+                }
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+            if (query == null) {
+                this.searchResult.clear();
+                this.searchResultNames.clear();
+                this.searchAdapterHelper.queryServerSearch(null, true, false, false, false, 0, false);
+                notifyDataSetChanged();
+                return;
+            }
+            this.searchTimer = new Timer();
+            this.searchTimer.schedule(new TimerTask() {
+
+                /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1 */
+                class C18031 implements Runnable {
+
+                    /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1$1 */
+                    class C18021 implements Runnable {
+                        C18021() {
+                        }
+
+                        public void run() {
+                            String search1 = query.trim().toLowerCase();
+                            if (search1.length() == 0) {
+                                GroupCreateAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
+                                return;
+                            }
+                            String search2 = LocaleController.getInstance().getTranslitString(search1);
+                            if (search1.equals(search2) || search2.length() == 0) {
+                                search2 = null;
+                            }
+                            String[] search = new String[((search2 != null ? 1 : 0) + 1)];
+                            search[0] = search1;
+                            if (search2 != null) {
+                                search[1] = search2;
+                            }
+                            ArrayList<User> resultArray = new ArrayList();
+                            ArrayList<CharSequence> resultArrayNames = new ArrayList();
+                            for (int a = 0; a < GroupCreateAdapter.this.contacts.size(); a++) {
+                                User user = (User) GroupCreateAdapter.this.contacts.get(a);
+                                String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                                String tName = LocaleController.getInstance().getTranslitString(name);
+                                if (name.equals(tName)) {
+                                    tName = null;
+                                }
+                                int found = 0;
+                                int length = search.length;
+                                int i = 0;
+                                while (i < length) {
+                                    String q = search[i];
+                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                                        found = 1;
+                                    } else if (user.username != null && user.username.startsWith(q)) {
+                                        found = 2;
+                                    }
+                                    if (found != 0) {
+                                        if (found == 1) {
+                                            resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
+                                        } else {
+                                            resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
+                                        }
+                                        resultArray.add(user);
+                                    } else {
+                                        i++;
+                                    }
+                                }
+                            }
+                            GroupCreateAdapter.this.updateSearchResults(resultArray, resultArrayNames);
+                        }
+                    }
+
+                    C18031() {
+                    }
+
+                    public void run() {
+                        GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
+                        Utilities.searchQueue.postRunnable(new C18021());
+                    }
+                }
+
+                public void run() {
+                    try {
+                        GroupCreateAdapter.this.searchTimer.cancel();
+                        GroupCreateAdapter.this.searchTimer = null;
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                    AndroidUtilities.runOnUIThread(new C18031());
+                }
+            }, 200, 300);
+        }
+
+        private void updateSearchResults(final ArrayList<User> users, final ArrayList<CharSequence> names) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    GroupCreateAdapter.this.searchResult = users;
+                    GroupCreateAdapter.this.searchResultNames = names;
+                    GroupCreateAdapter.this.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     private class SpansContainer extends ViewGroup {
@@ -193,8 +546,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C14051 extends AnimatorListenerAdapter {
-            C14051() {
+        class C18061 extends AnimatorListenerAdapter {
+            C18061() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -313,7 +666,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C14051());
+            this.currentAnimation.addListener(new C18061());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -353,359 +706,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
             this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
             requestLayout();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C21401 extends ActionBarMenuOnItemClick {
-        C21401() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                GroupCreateActivity.this.finishFragment();
-            } else if (id == 1) {
-                GroupCreateActivity.this.onDonePressed();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C21429 implements OnItemClickListener {
-        C21429() {
-        }
-
-        public void onItemClick(View view, int position) {
-            boolean z = false;
-            if (view instanceof GroupCreateUserCell) {
-                GroupCreateUserCell cell = (GroupCreateUserCell) view;
-                User user = cell.getUser();
-                if (user != null) {
-                    boolean exists;
-                    if (GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0) {
-                        exists = true;
-                    } else {
-                        exists = false;
-                    }
-                    if (exists) {
-                        GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(user.id));
-                    } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
-                        return;
-                    } else {
-                        if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
-                            Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setMessage(LocaleController.getString("SoftUserLimitAlert", R.string.SoftUserLimitAlert));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                            GroupCreateActivity.this.showDialog(builder.create());
-                            return;
-                        }
-                        boolean z2;
-                        MessagesController instance = MessagesController.getInstance(GroupCreateActivity.this.currentAccount);
-                        if (GroupCreateActivity.this.searching) {
-                            z2 = false;
-                        } else {
-                            z2 = true;
-                        }
-                        instance.putUser(user, z2);
-                        GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
-                        GroupCreateActivity.this.spansContainer.addSpan(span);
-                        span.setOnClickListener(GroupCreateActivity.this);
-                    }
-                    GroupCreateActivity.this.updateHint();
-                    if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
-                        AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
-                    } else {
-                        if (!exists) {
-                            z = true;
-                        }
-                        cell.setChecked(z, true);
-                    }
-                    if (GroupCreateActivity.this.editText.length() > 0) {
-                        GroupCreateActivity.this.editText.setText(null);
-                    }
-                }
-            }
-        }
-    }
-
-    public class GroupCreateAdapter extends FastScrollAdapter {
-        private ArrayList<User> contacts = new ArrayList();
-        private Context context;
-        private SearchAdapterHelper searchAdapterHelper;
-        private ArrayList<User> searchResult = new ArrayList();
-        private ArrayList<CharSequence> searchResultNames = new ArrayList();
-        private Timer searchTimer;
-        private boolean searching;
-
-        public GroupCreateAdapter(Context ctx) {
-            this.context = ctx;
-            ArrayList<TL_contact> arrayList = ContactsController.getInstance(GroupCreateActivity.this.currentAccount).contacts;
-            for (int a = 0; a < arrayList.size(); a++) {
-                User user = MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(a)).user_id));
-                if (!(user == null || user.self || user.deleted)) {
-                    this.contacts.add(user);
-                }
-            }
-            this.searchAdapterHelper = new SearchAdapterHelper(true);
-            this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(GroupCreateActivity.this) {
-                public void onDataSetChanged() {
-                    GroupCreateAdapter.this.notifyDataSetChanged();
-                }
-
-                public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-                }
-            });
-        }
-
-        public void setSearching(boolean value) {
-            if (this.searching != value) {
-                this.searching = value;
-                notifyDataSetChanged();
-            }
-        }
-
-        public String getLetter(int position) {
-            if (position < 0 || position >= this.contacts.size()) {
-                return null;
-            }
-            User user = (User) this.contacts.get(position);
-            if (user == null) {
-                return null;
-            }
-            if (LocaleController.nameDisplayOrder == 1) {
-                if (!TextUtils.isEmpty(user.first_name)) {
-                    return user.first_name.substring(0, 1).toUpperCase();
-                }
-                if (!TextUtils.isEmpty(user.last_name)) {
-                    return user.last_name.substring(0, 1).toUpperCase();
-                }
-            } else if (!TextUtils.isEmpty(user.last_name)) {
-                return user.last_name.substring(0, 1).toUpperCase();
-            } else {
-                if (!TextUtils.isEmpty(user.first_name)) {
-                    return user.first_name.substring(0, 1).toUpperCase();
-                }
-            }
-            return TtmlNode.ANONYMOUS_REGION_ID;
-        }
-
-        public int getItemCount() {
-            if (!this.searching) {
-                return this.contacts.size();
-            }
-            int count = this.searchResult.size();
-            int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
-            if (globalCount != 0) {
-                return count + (globalCount + 1);
-            }
-            return count;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 0:
-                    view = new GroupCreateSectionCell(this.context);
-                    break;
-                default:
-                    view = new GroupCreateUserCell(this.context, true);
-                    break;
-            }
-            return new Holder(view);
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 0:
-                    GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
-                    if (this.searching) {
-                        cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
-                        return;
-                    }
-                    return;
-                default:
-                    User user;
-                    GroupCreateUserCell cell2 = holder.itemView;
-                    CharSequence username = null;
-                    CharSequence name = null;
-                    if (this.searching) {
-                        int localCount = this.searchResult.size();
-                        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
-                        if (position >= 0 && position < localCount) {
-                            user = (User) this.searchResult.get(position);
-                        } else if (position <= localCount || position > globalCount + localCount) {
-                            user = null;
-                        } else {
-                            user = (User) this.searchAdapterHelper.getGlobalSearch().get((position - localCount) - 1);
-                        }
-                        if (user != null) {
-                            if (position < localCount) {
-                                name = (CharSequence) this.searchResultNames.get(position);
-                                if (!(name == null || TextUtils.isEmpty(user.username) || !name.toString().startsWith("@" + user.username))) {
-                                    username = name;
-                                    name = null;
-                                }
-                            } else if (position > localCount && !TextUtils.isEmpty(user.username)) {
-                                String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                                if (foundUserName.startsWith("@")) {
-                                    foundUserName = foundUserName.substring(1);
-                                }
-                                try {
-                                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-                                    spannableStringBuilder.append("@");
-                                    spannableStringBuilder.append(user.username);
-                                    int index = user.username.toLowerCase().indexOf(foundUserName);
-                                    if (index != -1) {
-                                        int len = foundUserName.length();
-                                        if (index == 0) {
-                                            len++;
-                                        } else {
-                                            index++;
-                                        }
-                                        spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
-                                    }
-                                    Object username2 = spannableStringBuilder;
-                                } catch (Exception e) {
-                                    username = user.username;
-                                }
-                            }
-                        }
-                    } else {
-                        user = (User) this.contacts.get(position);
-                    }
-                    cell2.setUser(user, name, username);
-                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0, false);
-                    return;
-            }
-        }
-
-        public int getItemViewType(int position) {
-            if (this.searching && position == this.searchResult.size()) {
-                return 0;
-            }
-            return 1;
-        }
-
-        public int getPositionForScrollProgress(float progress) {
-            return (int) (((float) getItemCount()) * progress);
-        }
-
-        public void onViewRecycled(ViewHolder holder) {
-            if (holder.itemView instanceof GroupCreateUserCell) {
-                ((GroupCreateUserCell) holder.itemView).recycle();
-            }
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return true;
-        }
-
-        public void searchDialogs(final String query) {
-            try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
-                }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-            if (query == null) {
-                this.searchResult.clear();
-                this.searchResultNames.clear();
-                this.searchAdapterHelper.queryServerSearch(null, true, false, false, false, 0, false);
-                notifyDataSetChanged();
-                return;
-            }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
-
-                /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1 */
-                class C14021 implements Runnable {
-
-                    /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1$1 */
-                    class C14011 implements Runnable {
-                        C14011() {
-                        }
-
-                        public void run() {
-                            String search1 = query.trim().toLowerCase();
-                            if (search1.length() == 0) {
-                                GroupCreateAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
-                                return;
-                            }
-                            String search2 = LocaleController.getInstance().getTranslitString(search1);
-                            if (search1.equals(search2) || search2.length() == 0) {
-                                search2 = null;
-                            }
-                            String[] search = new String[((search2 != null ? 1 : 0) + 1)];
-                            search[0] = search1;
-                            if (search2 != null) {
-                                search[1] = search2;
-                            }
-                            ArrayList<User> resultArray = new ArrayList();
-                            ArrayList<CharSequence> resultArrayNames = new ArrayList();
-                            for (int a = 0; a < GroupCreateAdapter.this.contacts.size(); a++) {
-                                User user = (User) GroupCreateAdapter.this.contacts.get(a);
-                                String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-                                String tName = LocaleController.getInstance().getTranslitString(name);
-                                if (name.equals(tName)) {
-                                    tName = null;
-                                }
-                                int found = 0;
-                                int length = search.length;
-                                int i = 0;
-                                while (i < length) {
-                                    String q = search[i];
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        found = 1;
-                                    } else if (user.username != null && user.username.startsWith(q)) {
-                                        found = 2;
-                                    }
-                                    if (found != 0) {
-                                        if (found == 1) {
-                                            resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
-                                        } else {
-                                            resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
-                                        }
-                                        resultArray.add(user);
-                                    } else {
-                                        i++;
-                                    }
-                                }
-                            }
-                            GroupCreateAdapter.this.updateSearchResults(resultArray, resultArrayNames);
-                        }
-                    }
-
-                    C14021() {
-                    }
-
-                    public void run() {
-                        GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
-                        Utilities.searchQueue.postRunnable(new C14011());
-                    }
-                }
-
-                public void run() {
-                    try {
-                        GroupCreateAdapter.this.searchTimer.cancel();
-                        GroupCreateAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                    AndroidUtilities.runOnUIThread(new C14021());
-                }
-            }, 200, 300);
-        }
-
-        private void updateSearchResults(final ArrayList<User> users, final ArrayList<CharSequence> names) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    GroupCreateAdapter.this.searchResult = users;
-                    GroupCreateAdapter.this.searchResultNames = names;
-                    GroupCreateAdapter.this.notifyDataSetChanged();
-                }
-            });
         }
     }
 
@@ -763,25 +763,25 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             z = false;
         }
         this.doneButtonVisible = z;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.chatType == 2) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", R.string.ChannelAddMembers));
+            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", C0488R.string.ChannelAddMembers));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0488R.string.AlwaysAllow));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", R.string.AlwaysShareWithTitle));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0488R.string.AlwaysShareWithTitle));
             }
         } else if (!this.isNeverShare) {
-            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", R.string.NewGroup) : LocaleController.getString("NewBroadcastList", R.string.NewBroadcastList));
+            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", C0488R.string.NewGroup) : LocaleController.getString("NewBroadcastList", C0488R.string.NewBroadcastList));
         } else if (this.isGroup) {
-            this.actionBar.setTitle(LocaleController.getString("NeverAllow", R.string.NeverAllow));
+            this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0488R.string.NeverAllow));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0488R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21401());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C17921());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         if (this.chatType != 2) {
             this.doneButton.setScaleX(0.0f);
             this.doneButton.setScaleY(0.0f);
@@ -860,24 +860,24 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         if (this.chatType == 2) {
-            this.editText.setHintText(LocaleController.getString("AddMutual", R.string.AddMutual));
+            this.editText.setHintText(LocaleController.getString("AddMutual", C0488R.string.AddMutual));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", R.string.AlwaysAllowPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", C0488R.string.AlwaysAllowPlaceholder));
             } else {
-                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", R.string.AlwaysShareWithPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", C0488R.string.AlwaysShareWithPlaceholder));
             }
         } else if (!this.isNeverShare) {
-            this.editText.setHintText(LocaleController.getString("SendMessageTo", R.string.SendMessageTo));
+            this.editText.setHintText(LocaleController.getString("SendMessageTo", C0488R.string.SendMessageTo));
         } else if (this.isGroup) {
-            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", R.string.NeverAllowPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", C0488R.string.NeverAllowPlaceholder));
         } else {
-            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", R.string.NeverShareWithPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", C0488R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C13975());
-        this.editText.setOnEditorActionListener(new C13986());
-        this.editText.setOnKeyListener(new C13997());
-        this.editText.addTextChangedListener(new C14008());
+        this.editText.setCustomSelectionActionModeCallback(new C17965());
+        this.editText.setOnEditorActionListener(new C17976());
+        this.editText.setOnKeyListener(new C17987());
+        this.editText.addTextChangedListener(new C17998());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -885,7 +885,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.emptyView.showTextView();
         }
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0488R.string.NoContacts));
         frameLayout.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
@@ -907,7 +907,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.itemDecoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C21429());
+        this.listView.setOnItemClickListener(new C18009());
         this.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == 1) {
@@ -1029,7 +1029,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.adapter.searchDialogs(null);
         this.listView.setFastScrollVisible(true);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0488R.string.NoContacts));
     }
 
     private void updateHint() {
@@ -1037,9 +1037,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             if (this.chatType == 2) {
                 this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
             } else if (this.selectedContacts.size() == 0) {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", C0488R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
             } else {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", C0488R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
             }
         }
         if (this.chatType == 2) {

@@ -21,6 +21,14 @@ public interface ExoPlayer extends Player {
     public static final int STATE_READY = 3;
 
     @Deprecated
+    public interface EventListener extends org.telegram.messenger.exoplayer2.Player.EventListener {
+    }
+
+    @Deprecated
+    public interface ExoPlayerComponent extends Target {
+    }
+
+    @Deprecated
     public static final class ExoPlayerMessage {
         public final Object message;
         public final int messageType;
@@ -32,14 +40,6 @@ public interface ExoPlayer extends Player {
             this.messageType = messageType;
             this.message = message;
         }
-    }
-
-    @Deprecated
-    public interface EventListener extends org.telegram.messenger.exoplayer2.Player.EventListener {
-    }
-
-    @Deprecated
-    public interface ExoPlayerComponent extends Target {
     }
 
     @Deprecated

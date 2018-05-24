@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
@@ -24,7 +24,7 @@ import org.telegram.messenger.exoplayer2.video.HevcConfig;
 
 final class AtomParsers {
     private static final String TAG = "AtomParsers";
-    private static final int TYPE_cenc = Util.getIntegerCodeForString(C0542C.CENC_TYPE_cenc);
+    private static final int TYPE_cenc = Util.getIntegerCodeForString(C0600C.CENC_TYPE_cenc);
     private static final int TYPE_clcp = Util.getIntegerCodeForString("clcp");
     private static final int TYPE_meta = Util.getIntegerCodeForString(MetaBox.TYPE);
     private static final int TYPE_sbtl = Util.getIntegerCodeForString("sbtl");
@@ -104,18 +104,6 @@ final class AtomParsers {
         }
     }
 
-    private static final class TkhdData {
-        private final long duration;
-        private final int id;
-        private final int rotationDegrees;
-
-        public TkhdData(int id, long duration, int rotationDegrees) {
-            this.id = id;
-            this.duration = duration;
-            this.rotationDegrees = rotationDegrees;
-        }
-    }
-
     static final class StszSampleSizeBox implements SampleSizeBox {
         private final ParsableByteArray data;
         private final int fixedSampleSize = this.data.readUnsignedIntToInt();
@@ -176,6 +164,18 @@ final class AtomParsers {
         }
     }
 
+    private static final class TkhdData {
+        private final long duration;
+        private final int id;
+        private final int rotationDegrees;
+
+        public TkhdData(int id, long duration, int rotationDegrees) {
+            this.id = id;
+            this.duration = duration;
+            this.rotationDegrees = rotationDegrees;
+        }
+    }
+
     public static Track parseTrak(ContainerAtom trak, LeafAtom mvhd, long duration, DrmInitData drmInitData, boolean ignoreEditLists, boolean isQuickTime) throws ParserException {
         ContainerAtom mdia = trak.getContainerAtomOfType(Atom.TYPE_mdia);
         int trackType = parseHdlr(mdia.getLeafAtomOfType(Atom.TYPE_hdlr).data);
@@ -184,14 +184,14 @@ final class AtomParsers {
         }
         long durationUs;
         TkhdData tkhdData = parseTkhd(trak.getLeafAtomOfType(Atom.TYPE_tkhd).data);
-        if (duration == C0542C.TIME_UNSET) {
+        if (duration == C0600C.TIME_UNSET) {
             duration = tkhdData.duration;
         }
         long movieTimescale = parseMvhd(mvhd.data);
-        if (duration == C0542C.TIME_UNSET) {
-            durationUs = C0542C.TIME_UNSET;
+        if (duration == C0600C.TIME_UNSET) {
+            durationUs = C0600C.TIME_UNSET;
         } else {
-            durationUs = Util.scaleLargeTimestamp(duration, C0542C.MICROS_PER_SECOND, movieTimescale);
+            durationUs = Util.scaleLargeTimestamp(duration, C0600C.MICROS_PER_SECOND, movieTimescale);
         }
         ContainerAtom stbl = mdia.getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl);
         Pair<Long, String> mdhdData = parseMdhd(mdia.getLeafAtomOfType(Atom.TYPE_mdhd).data);
@@ -1047,11 +1047,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         if (durationUnknown) {
             tkhd.skipBytes(durationByteCount);
-            duration = C0542C.TIME_UNSET;
+            duration = C0600C.TIME_UNSET;
         } else {
             duration = version == 0 ? tkhd.readUnsignedInt() : tkhd.readUnsignedLongToLong();
             if (duration == 0) {
-                duration = C0542C.TIME_UNSET;
+                duration = C0600C.TIME_UNSET;
             }
         }
         tkhd.skipBytes(16);
@@ -1060,9 +1060,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         tkhd.skipBytes(4);
         int a10 = tkhd.readInt();
         int a11 = tkhd.readInt();
-        if (a00 == 0 && a01 == C0542C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
+        if (a00 == 0 && a01 == C0600C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
             rotationDegrees = 90;
-        } else if (a00 == 0 && a01 == (-65536) && a10 == C0542C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
+        } else if (a00 == 0 && a01 == (-65536) && a10 == C0600C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
             rotationDegrees = 270;
         } else if (a00 == (-65536) && a01 == 0 && a10 == 0 && a11 == (-65536)) {
             rotationDegrees = 180;
@@ -1511,7 +1511,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             childPosition += childAtomSize;
         }
-        if (!C0542C.CENC_TYPE_cenc.equals(schemeType) && !C0542C.CENC_TYPE_cbc1.equals(schemeType) && !C0542C.CENC_TYPE_cens.equals(schemeType) && !C0542C.CENC_TYPE_cbcs.equals(schemeType)) {
+        if (!C0600C.CENC_TYPE_cenc.equals(schemeType) && !C0600C.CENC_TYPE_cbc1.equals(schemeType) && !C0600C.CENC_TYPE_cens.equals(schemeType) && !C0600C.CENC_TYPE_cbcs.equals(schemeType)) {
             return null;
         }
         boolean z2;

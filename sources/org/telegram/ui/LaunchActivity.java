@@ -41,6 +41,7 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -64,7 +65,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -157,8 +157,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$2 */
-    class C14592 implements OnTouchListener {
-        C14592() {
+    class C18852 implements OnTouchListener {
+        C18852() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -187,39 +187,17 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C14613 implements OnClickListener {
-        C14613() {
+    class C18873 implements OnClickListener {
+        C18873() {
         }
 
         public void onClick(View v) {
         }
     }
 
-    /* renamed from: org.telegram.ui.LaunchActivity$7 */
-    class C14637 implements Runnable {
-        final /* synthetic */ Bundle val$args;
-
-        C14637(Bundle bundle) {
-            this.val$args = bundle;
-        }
-
-        public void run() {
-            LaunchActivity.this.presentFragment(new CancelAccountDeletionActivity(this.val$args));
-        }
-    }
-
-    private class VcardData {
-        String name;
-        ArrayList<String> phones;
-
-        private VcardData() {
-            this.phones = new ArrayList();
-        }
-    }
-
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C21684 implements OnItemClickListener {
-        C21684() {
+    class C18884 implements OnItemClickListener {
+        C18884() {
         }
 
         public void onItemClick(View view, int position) {
@@ -279,7 +257,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.presentFragment(new SettingsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", C0488R.string.TelegramFaqUrl));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     LaunchActivity.this.presentFragment(new CallLogActivity());
@@ -295,8 +273,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$6 */
-    class C21696 implements PasscodeViewDelegate {
-        C21696() {
+    class C18906 implements PasscodeViewDelegate {
+        C18906() {
         }
 
         public void didAcceptedPassword() {
@@ -314,11 +292,24 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
     }
 
+    /* renamed from: org.telegram.ui.LaunchActivity$7 */
+    class C18917 implements Runnable {
+        final /* synthetic */ Bundle val$args;
+
+        C18917(Bundle bundle) {
+            this.val$args = bundle;
+        }
+
+        public void run() {
+            LaunchActivity.this.presentFragment(new CancelAccountDeletionActivity(this.val$args));
+        }
+    }
+
     /* renamed from: org.telegram.ui.LaunchActivity$8 */
-    class C21718 implements SharingLocationsAlertDelegate {
+    class C18938 implements SharingLocationsAlertDelegate {
         final /* synthetic */ int[] val$intentAccount;
 
-        C21718(int[] iArr) {
+        C18938(int[] iArr) {
             this.val$intentAccount = iArr;
         }
 
@@ -330,10 +321,19 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             final long dialog_id = info.messageObject.getDialogId();
             locationActivity.setDelegate(new LocationActivityDelegate() {
                 public void didSelectLocation(MessageMedia location, int live) {
-                    SendMessagesHelper.getInstance(C21718.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
+                    SendMessagesHelper.getInstance(C18938.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
                 }
             });
             LaunchActivity.this.presentFragment(locationActivity);
+        }
+    }
+
+    private class VcardData {
+        String name;
+        ArrayList<String> phones;
+
+        private VcardData() {
+            this.phones = new ArrayList();
         }
     }
 
@@ -367,14 +367,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             return;
         }
         requestWindowFeature(1);
-        setTheme(R.style.Theme.TMessages);
+        setTheme(C0488R.style.Theme.TMessages);
         if (VERSION.SDK_INT >= 21) {
             try {
                 setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             } catch (Exception e) {
             }
         }
-        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+        getWindow().setBackgroundDrawableResource(C0488R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -399,7 +399,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c14551 = new RelativeLayout(this) {
+            View c18811 = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -453,36 +453,36 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c14551, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(c18811, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0488R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c14551.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c14551.addView(this.actionBarLayout);
+            c18811.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            c18811.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c14551.addView(this.rightActionBarLayout);
+            c18811.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c14551.addView(this.shadowTabletSide);
+            c18811.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c14551.addView(this.shadowTablet);
-            this.shadowTablet.setOnTouchListener(new C14592());
-            this.shadowTablet.setOnClickListener(new C14613());
+            c18811.addView(this.shadowTablet);
+            this.shadowTablet.setOnTouchListener(new C18852());
+            this.shadowTablet.setOnClickListener(new C18873());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(C0488R.drawable.boxshadow);
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c14551.addView(this.layersActionBarLayout);
+            c18811.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -505,7 +505,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         layoutParams.width = dp;
         layoutParams.height = -1;
         this.sideMenu.setLayoutParams(layoutParams);
-        this.sideMenu.setOnItemClickListener(new C21684());
+        this.sideMenu.setOnItemClickListener(new C18884());
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
@@ -906,7 +906,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
                 final View view2 = view;
-                OnGlobalLayoutListener c14625 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener c18895 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view2.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -920,8 +920,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = c14625;
-                viewTreeObserver.addOnGlobalLayoutListener(c14625);
+                this.onGlobalLayoutListener = c18895;
+                viewTreeObserver.addOnGlobalLayoutListener(c18895);
             }
         } catch (Throwable e222) {
             FileLog.m3e(e222);
@@ -1112,7 +1112,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C21696());
+            this.passcodeView.setDelegate(new C18906());
         }
     }
 
@@ -3383,7 +3383,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private void runLinkRequest(int intentAccount, String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, String[] instantView, int state) {
         final AlertDialog progressDialog = new AlertDialog(this, 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+        progressDialog.setMessage(LocaleController.getString("Loading", C0488R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         int requestId = 0;
@@ -3411,7 +3411,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 final TL_contacts_resolvedPeer res = response;
                                 if (error != null || LaunchActivity.this.actionBarLayout == null || (str3 != null && (str3 == null || res.users.isEmpty()))) {
                                     try {
-                                        Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound), 0).show();
+                                        Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", C0488R.string.NoUsernameFound), 0).show();
                                         return;
                                     } catch (Throwable e2) {
                                         FileLog.m3e(e2);
@@ -3428,8 +3428,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     args.putBoolean("onlySelect", true);
                                     args.putBoolean("cantSendToChannels", true);
                                     args.putInt("dialogsType", 1);
-                                    args.putString("selectAlertString", LocaleController.getString("SendGameTo", R.string.SendGameTo));
-                                    args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", R.string.SendGameToGroup));
+                                    args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0488R.string.SendGameTo));
+                                    args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0488R.string.SendGameToGroup));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
                                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -3478,7 +3478,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     final User user = !res.users.isEmpty() ? (User) res.users.get(0) : null;
                                     if (user == null || (user.bot && user.bot_nochats)) {
                                         try {
-                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups), 0).show();
+                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", C0488R.string.BotCantJoinGroups), 0).show();
                                             return;
                                         } catch (Throwable e22) {
                                             FileLog.m3e(e22);
@@ -3488,7 +3488,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     args = new Bundle();
                                     args.putBoolean("onlySelect", true);
                                     args.putInt("dialogsType", 2);
-                                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
+                                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0488R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
                                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -3559,8 +3559,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.LaunchActivity$10$1$1 */
-                            class C14521 implements DialogInterface.OnClickListener {
-                                C14521() {
+                            class C18771 implements DialogInterface.OnClickListener {
+                                C18771() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -3578,13 +3578,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     Builder builder;
                                     if (error != null || LaunchActivity.this.actionBarLayout == null) {
                                         builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                                         if (error.text.startsWith("FLOOD_WAIT")) {
-                                            builder.setMessage(LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            builder.setMessage(LocaleController.getString("FloodWait", C0488R.string.FloodWait));
                                         } else {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0488R.string.JoinToGroupErrorNotExist));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                         return;
                                     }
@@ -3603,13 +3603,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         }
                                     } else if (((invite.chat != null || (invite.channel && !invite.megagroup)) && (invite.chat == null || (ChatObject.isChannel(invite.chat) && !invite.chat.megagroup))) || LaunchActivity.mainFragmentsStack.isEmpty()) {
                                         builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                                         String str = "ChannelJoinTo";
                                         Object[] objArr = new Object[1];
                                         objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                                        builder.setMessage(LocaleController.formatString(str, R.string.ChannelJoinTo, objArr));
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14521());
-                                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                        builder.setMessage(LocaleController.formatString(str, C0488R.string.ChannelJoinTo, objArr));
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C18771());
+                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                     } else {
                                         BaseFragment fragment2 = (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1);
@@ -3639,15 +3639,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     if (error != null) {
                                         Builder builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                                         if (error.text.startsWith("FLOOD_WAIT")) {
-                                            builder.setMessage(LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            builder.setMessage(LocaleController.getString("FloodWait", C0488R.string.FloodWait));
                                         } else if (error.text.equals("USERS_TOO_MUCH")) {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", R.string.JoinToGroupErrorFull));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0488R.string.JoinToGroupErrorFull));
                                         } else {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0488R.string.JoinToGroupErrorNotExist));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                     } else if (LaunchActivity.this.actionBarLayout != null) {
                                         Updates updates = response;
@@ -3718,7 +3718,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (requestId != 0) {
             i3 = intentAccount;
             i4 = requestId;
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
+            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0488R.string.Cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ConnectionsManager.getInstance(i3).cancelRequest(i4, true);
                     try {
@@ -3752,7 +3752,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onDismiss(DialogInterface dialog) {
                     if (LaunchActivity.this.visibleDialog != null && LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
                         try {
-                            Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", R.string.ChangeLanguageLater), 1).show();
+                            Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0488R.string.ChangeLanguageLater), 1).show();
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -3933,17 +3933,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             if (showAlert) {
                 Builder builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                 if (requestCode == 3) {
-                    builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
+                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0488R.string.PermissionNoAudio));
                 } else if (requestCode == 4) {
-                    builder.setMessage(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
+                    builder.setMessage(LocaleController.getString("PermissionStorage", C0488R.string.PermissionStorage));
                 } else if (requestCode == 5) {
-                    builder.setMessage(LocaleController.getString("PermissionContacts", R.string.PermissionContacts));
+                    builder.setMessage(LocaleController.getString("PermissionContacts", C0488R.string.PermissionContacts));
                 } else if (requestCode == 19 || requestCode == 20) {
-                    builder.setMessage(LocaleController.getString("PermissionNoCamera", R.string.PermissionNoCamera));
+                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0488R.string.PermissionNoCamera));
                 }
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0488R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
                     @TargetApi(9)
                     public void onClick(DialogInterface dialog, int which) {
                         try {
@@ -3955,7 +3955,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
                 builder.show();
                 return;
             }
@@ -4154,11 +4154,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         } else if (id == NotificationCenter.needShowAlert) {
             Integer reason = args[0];
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
             if (reason.intValue() != 2) {
                 final int i = account;
-                builder.setNegativeButton(LocaleController.getString("MoreInfo", R.string.MoreInfo), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("MoreInfo", C0488R.string.MoreInfo), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!LaunchActivity.mainFragmentsStack.isEmpty()) {
                             MessagesController.getInstance(i).openByUserName("spambot", (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1), 1);
@@ -4167,9 +4167,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 });
             }
             if (reason.intValue() == 0) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", R.string.NobodyLikesSpam1));
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0488R.string.NobodyLikesSpam1));
             } else if (reason.intValue() == 1) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", R.string.NobodyLikesSpam2));
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0488R.string.NobodyLikesSpam2));
             } else if (reason.intValue() == 2) {
                 builder.setMessage((String) args[1]);
             }
@@ -4179,15 +4179,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         } else if (id == NotificationCenter.wasUnableToFindCurrentLocation) {
             HashMap<String, MessageObject> waitingForLocation = args[0];
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
             final HashMap<String, MessageObject> hashMap = waitingForLocation;
             final int i2 = account;
-            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0488R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$19$1 */
-                class C21671 implements LocationActivityDelegate {
-                    C21671() {
+                class C18801 implements LocationActivityDelegate {
+                    C18801() {
                     }
 
                     public void didSelectLocation(MessageMedia location, int live) {
@@ -4201,12 +4201,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
                         LocationActivity fragment = new LocationActivity(0);
-                        fragment.setDelegate(new C21671());
+                        fragment.setDelegate(new C18801());
                         LaunchActivity.this.presentFragment(fragment);
                     }
                 }
             });
-            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", R.string.ShareYouLocationUnable));
+            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0488R.string.ShareYouLocationUnable));
             if (!mainFragmentsStack.isEmpty()) {
                 ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
             }
@@ -4249,16 +4249,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 final boolean schedule = ((Boolean) args[3]).booleanValue();
                 BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("UpdateContactsTitle", R.string.UpdateContactsTitle));
-                builder.setMessage(LocaleController.getString("UpdateContactsMessage", R.string.UpdateContactsMessage));
+                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0488R.string.UpdateContactsTitle));
+                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0488R.string.UpdateContactsMessage));
                 final int i3 = account;
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, false);
                     }
                 });
                 i3 = account;
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, true);
                     }
@@ -4320,8 +4320,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.globalQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$23$1 */
-                class C14561 implements Runnable {
-                    C14561() {
+                class C18821 implements Runnable {
+                    C18821() {
                     }
 
                     public void run() {
@@ -4348,7 +4348,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                                     if (freeSpace < 104857600) {
-                                        AndroidUtilities.runOnUIThread(new C14561());
+                                        AndroidUtilities.runOnUIThread(new C18821());
                                     }
                                 }
                             }
@@ -4366,14 +4366,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.loadingLocaleDialog = false;
             boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
             Builder builder = new Builder((Context) this);
-            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
-            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0488R.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0488R.string.ChooseYourLanguage));
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(1);
             final LanguageCell[] cells = new LanguageCell[2];
             final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
             LocaleInfo[] locales = new LocaleInfo[2];
-            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", R.string.English);
+            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0488R.string.English);
             if (firstSystem) {
                 localeInfo = systemInfo;
             } else {
@@ -4417,7 +4417,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 a++;
             }
             LanguageCell cell = new LanguageCell(this, true);
-            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther));
+            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0488R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0488R.string.ChooseYourLanguageOther));
             cell.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     LaunchActivity.this.localeDialog = null;
@@ -4431,7 +4431,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
             builder.setView(linearLayout);
-            builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("OK", C0488R.string.OK), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     LocaleController.getInstance().applyLanguage(selectedLanguage[0], true, false, LaunchActivity.this.currentAccount);
                     LaunchActivity.this.rebuildAllFragments(true);
@@ -4601,9 +4601,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             String subtitle = null;
             Runnable action = null;
             if (this.currentConnectionState == 2) {
-                title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+                title = LocaleController.getString("WaitingForNetwork", C0488R.string.WaitingForNetwork);
             } else if (this.currentConnectionState == 1) {
-                title = LocaleController.getString("Connecting", R.string.Connecting);
+                title = LocaleController.getString("Connecting", C0488R.string.Connecting);
                 action = new Runnable() {
                     public void run() {
                         if (AndroidUtilities.isTablet()) {
@@ -4617,15 +4617,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 };
             } else if (this.currentConnectionState == 5) {
-                title = LocaleController.getString("Updating", R.string.Updating);
+                title = LocaleController.getString("Updating", C0488R.string.Updating);
             } else if (this.currentConnectionState == 4) {
-                title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
-                subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", R.string.ConnectingToProxyTapToDisable);
+                title = LocaleController.getString("ConnectingToProxy", C0488R.string.ConnectingToProxy);
+                subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", C0488R.string.ConnectingToProxyTapToDisable);
                 action = new Runnable() {
 
                     /* renamed from: org.telegram.ui.LaunchActivity$31$1 */
-                    class C14601 implements DialogInterface.OnClickListener {
-                        C14601() {
+                    class C18861 implements DialogInterface.OnClickListener {
+                        C18861() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -4644,10 +4644,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                             BaseFragment fragment = (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1);
                             Builder builder = new Builder(LaunchActivity.this);
-                            builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
-                            builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
-                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new C14601());
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                            builder.setTitle(LocaleController.getString("Proxy", C0488R.string.Proxy));
+                            builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", C0488R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", C0488R.string.ConnectingToProxyDisable), new C18861());
+                            builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                             fragment.showDialog(builder.create());
                         }
                     }

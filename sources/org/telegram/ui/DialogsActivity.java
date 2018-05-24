@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.Outline;
 import android.graphics.PorterDuff.Mode;
@@ -21,7 +22,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -33,6 +33,7 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -47,7 +48,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -144,36 +144,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private RecyclerView sideMenu;
     private ActionBarMenuItem switchItem;
 
-    /* renamed from: org.telegram.ui.DialogsActivity$8 */
-    class C13868 extends ViewOutlineProvider {
-        C13868() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$9 */
-    class C13879 implements OnClickListener {
-        C13879() {
-        }
-
-        public void onClick(View v) {
-            Bundle args = new Bundle();
-            args.putBoolean("destroyAfterSelect", true);
-            DialogsActivity.this.presentFragment(new ContactsActivity(args));
-        }
-    }
-
     public interface DialogsActivityDelegate {
         void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z);
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$2 */
-    class C21282 extends ActionBarMenuItemSearchListener {
-        C21282() {
+    class C17632 extends ActionBarMenuItemSearchListener {
+        C17632() {
         }
 
         public void onSearchExpand() {
@@ -253,8 +230,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$3 */
-    class C21293 extends ActionBarMenuOnItemClick {
-        C21293() {
+    class C17643 extends ActionBarMenuOnItemClick {
+        C17643() {
         }
 
         public void onItemClick(int id) {
@@ -284,8 +261,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$6 */
-    class C21316 implements OnItemClickListener {
-        C21316() {
+    class C17676 implements OnItemClickListener {
+        C17676() {
         }
 
         public void onItemClick(View view, int position) {
@@ -415,11 +392,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$7 */
-    class C21327 implements OnItemLongClickListener {
+    class C17747 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.DialogsActivity$7$1 */
-        class C13801 implements DialogInterface.OnClickListener {
-            C13801() {
+        class C17681 implements OnClickListener {
+            C17681() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -431,7 +408,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C21327() {
+        C17747() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -456,28 +433,28 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         CharSequence[] items;
                         final Chat chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                         int[] icons = new int[3];
-                        icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                        icons[1] = R.drawable.chats_clear;
-                        icons[2] = R.drawable.chats_leave;
+                        icons[0] = dialog.pinned ? C0488R.drawable.chats_unpin : C0488R.drawable.chats_pin;
+                        icons[1] = C0488R.drawable.chats_clear;
+                        icons[2] = C0488R.drawable.chats_leave;
                         if (chat == null || !chat.megagroup) {
                             items = new CharSequence[3];
-                            string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                            string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", C0488R.string.UnpinFromTop) : LocaleController.getString("PinToTop", C0488R.string.PinToTop) : null;
                             items[0] = string;
-                            items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                            items[2] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
+                            items[1] = LocaleController.getString("ClearHistoryCache", C0488R.string.ClearHistoryCache);
+                            items[2] = LocaleController.getString("LeaveChannelMenu", C0488R.string.LeaveChannelMenu);
                         } else {
                             items = new CharSequence[3];
-                            string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                            string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", C0488R.string.UnpinFromTop) : LocaleController.getString("PinToTop", C0488R.string.PinToTop) : null;
                             items[0] = string;
-                            items[1] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                            items[2] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
+                            items[1] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", C0488R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", C0488R.string.ClearHistoryCache);
+                            items[2] = LocaleController.getString("LeaveMegaMenu", C0488R.string.LeaveMegaMenu);
                         }
                         z = pinned;
-                        builder.setItems(items, icons, new DialogInterface.OnClickListener() {
+                        builder.setItems(items, icons, new OnClickListener() {
 
                             /* renamed from: org.telegram.ui.DialogsActivity$7$2$1 */
-                            class C13811 implements DialogInterface.OnClickListener {
-                                C13811() {
+                            class C17691 implements OnClickListener {
+                                C17691() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -490,8 +467,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             }
 
                             /* renamed from: org.telegram.ui.DialogsActivity$7$2$2 */
-                            class C13822 implements DialogInterface.OnClickListener {
-                                C13822() {
+                            class C17702 implements OnClickListener {
+                                C17702() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -517,25 +494,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                     return;
                                 }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                                 if (which == 1) {
                                     if (chat == null || !chat.megagroup) {
-                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistoryChannel", R.string.AreYouSureClearHistoryChannel));
+                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistoryChannel", C0488R.string.AreYouSureClearHistoryChannel));
                                     } else if (TextUtils.isEmpty(chat.username)) {
-                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
+                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", C0488R.string.AreYouSureClearHistory));
                                     } else {
-                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistoryGroup", R.string.AreYouSureClearHistoryGroup));
+                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistoryGroup", C0488R.string.AreYouSureClearHistoryGroup));
                                     }
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13811());
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C17691());
                                 } else {
                                     if (chat == null || !chat.megagroup) {
-                                        builder.setMessage(LocaleController.getString("ChannelLeaveAlert", R.string.ChannelLeaveAlert));
+                                        builder.setMessage(LocaleController.getString("ChannelLeaveAlert", C0488R.string.ChannelLeaveAlert));
                                     } else {
-                                        builder.setMessage(LocaleController.getString("MegaLeaveAlert", R.string.MegaLeaveAlert));
+                                        builder.setMessage(LocaleController.getString("MegaLeaveAlert", C0488R.string.MegaLeaveAlert));
                                     }
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13822());
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C17702());
                                 }
-                                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                                 DialogsActivity.this.showDialog(builder.create());
                             }
                         });
@@ -553,15 +530,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             if (!MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(lower_id == 0)) {
                                 string = null;
                                 charSequenceArr[0] = string;
-                                charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                                string = isChat ? LocaleController.getString("DeleteChat", R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", R.string.DeleteAndStop) : LocaleController.getString("Delete", R.string.Delete);
+                                charSequenceArr[1] = LocaleController.getString("ClearHistory", C0488R.string.ClearHistory);
+                                string = isChat ? LocaleController.getString("DeleteChat", C0488R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", C0488R.string.DeleteAndStop) : LocaleController.getString("Delete", C0488R.string.Delete);
                                 charSequenceArr[2] = string;
                                 iArr = new int[3];
-                                iArr[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                                iArr[1] = R.drawable.chats_clear;
-                                iArr[2] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
+                                iArr[0] = dialog.pinned ? C0488R.drawable.chats_unpin : C0488R.drawable.chats_pin;
+                                iArr[1] = C0488R.drawable.chats_clear;
+                                iArr[2] = isChat ? C0488R.drawable.chats_leave : C0488R.drawable.chats_delete;
                                 z = pinned;
-                                builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() {
+                                builder.setItems(charSequenceArr, iArr, new OnClickListener() {
                                     public void onClick(DialogInterface dialog, final int which) {
                                         boolean z = true;
                                         if (which == 0) {
@@ -577,15 +554,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                             return;
                                         }
                                         AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
                                         if (which == 1) {
-                                            builder.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
+                                            builder.setMessage(LocaleController.getString("AreYouSureClearHistory", C0488R.string.AreYouSureClearHistory));
                                         } else if (isChat) {
-                                            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
+                                            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", C0488R.string.AreYouSureDeleteAndExit));
                                         } else {
-                                            builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
+                                            builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", C0488R.string.AreYouSureDeleteThisChat));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 if (which != 1) {
                                                     if (isChat) {
@@ -610,27 +587,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                                 MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 1);
                                             }
                                         });
-                                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                                         DialogsActivity.this.showDialog(builder.create());
                                     }
                                 });
                                 DialogsActivity.this.showDialog(builder.create());
                             }
                         }
-                        string = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
+                        string = dialog.pinned ? LocaleController.getString("UnpinFromTop", C0488R.string.UnpinFromTop) : LocaleController.getString("PinToTop", C0488R.string.PinToTop);
                         charSequenceArr[0] = string;
-                        charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
+                        charSequenceArr[1] = LocaleController.getString("ClearHistory", C0488R.string.ClearHistory);
                         if (isChat) {
                         }
                         charSequenceArr[2] = string;
                         iArr = new int[3];
                         if (dialog.pinned) {
                         }
-                        iArr[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                        iArr[1] = R.drawable.chats_clear;
+                        iArr[0] = dialog.pinned ? C0488R.drawable.chats_unpin : C0488R.drawable.chats_pin;
+                        iArr[1] = C0488R.drawable.chats_clear;
                         if (isChat) {
                         }
-                        iArr[2] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
+                        iArr[2] = isChat ? C0488R.drawable.chats_leave : C0488R.drawable.chats_delete;
                         z = pinned;
                         builder.setItems(charSequenceArr, iArr, /* anonymous class already generated */);
                         DialogsActivity.this.showDialog(builder.create());
@@ -646,13 +623,36 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return false;
             } else {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder2.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                builder2.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C13801());
-                builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder2.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                builder2.setMessage(LocaleController.getString("ClearSearch", C0488R.string.ClearSearch));
+                builder2.setPositiveButton(LocaleController.getString("ClearButton", C0488R.string.ClearButton).toUpperCase(), new C17681());
+                builder2.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                 DialogsActivity.this.showDialog(builder2.create());
                 return true;
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$8 */
+    class C17758 extends ViewOutlineProvider {
+        C17758() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$9 */
+    class C17769 implements View.OnClickListener {
+        C17769() {
+        }
+
+        public void onClick(View v) {
+            Bundle args = new Bundle();
+            args.putBoolean("destroyAfterSelect", true);
+            DialogsActivity.this.presentFragment(new ContactsActivity(args));
         }
     }
 
@@ -741,27 +741,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         });
         ActionBarMenu menu = this.actionBar.createMenu();
         if (!this.onlySelect && this.searchString == null) {
-            this.passcodeItem = menu.addItem(1, (int) R.drawable.lock_close);
+            this.passcodeItem = menu.addItem(1, (int) C0488R.drawable.lock_close);
             updatePasscodeButton();
         }
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21282()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) C0488R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17632()).getSearchField().setHint(LocaleController.getString("Search", C0488R.string.Search));
         if (this.onlySelect) {
-            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
             if (this.dialogsType == 3 && this.selectAlertString == null) {
-                this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
+                this.actionBar.setTitle(LocaleController.getString("ForwardTo", C0488R.string.ForwardTo));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
+                this.actionBar.setTitle(LocaleController.getString("SelectChat", C0488R.string.SelectChat));
             }
         } else {
             if (this.searchString != null) {
-                this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+                this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
             } else {
                 this.actionBar.setBackButtonDrawable(new MenuDrawable());
             }
             if (BuildVars.DEBUG_VERSION) {
                 this.actionBar.setTitle("Telegram Beta");
             } else {
-                this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                this.actionBar.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
             }
             this.actionBar.setSupportsHolidayImage(true);
         }
@@ -791,7 +791,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C21293());
+        this.actionBar.setActionBarMenuOnItemClick(new C17643());
         if (this.sideMenu != null) {
             this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
             this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
@@ -910,12 +910,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.listView.setLayoutManager(this.layoutManager);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         backupImageView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21316());
-        this.listView.setOnItemLongClickListener(new C21327());
+        this.listView.setOnItemClickListener(new C17676());
+        this.listView.setOnItemLongClickListener(new C17747());
         this.searchEmptyView = new EmptyTextProgressView(context);
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
-        this.searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.searchEmptyView.setText(LocaleController.getString("NoResult", C0488R.string.NoResult));
         backupImageView.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView = new RadialProgressView(context);
         this.progressView.setVisibility(8);
@@ -925,7 +925,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(C0488R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -933,13 +933,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         this.floatingButton.setBackgroundDrawable(drawable);
         this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
-        this.floatingButton.setImageResource(R.drawable.floating_pencil);
+        this.floatingButton.setImageResource(C0488R.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C13868());
+            this.floatingButton.setOutlineProvider(new C17758());
         }
         View view = this.floatingButton;
         int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
@@ -965,7 +965,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             f3 = 14.0f;
         }
         backupImageView.addView(view, LayoutHelper.createFrame(i2, f, i, f2, 0.0f, f3, 14.0f));
-        this.floatingButton.setOnClickListener(new C13879());
+        this.floatingButton.setOnClickListener(new C17769());
         this.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == 1 && DialogsActivity.this.searching && DialogsActivity.this.searchWas) {
@@ -1073,14 +1073,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             public void needRemoveHint(final int did) {
                 if (DialogsActivity.this.getParentActivity() != null && MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(did)) != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(user.first_name, user.last_name)));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                    builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                    builder.setMessage(LocaleController.formatString("ChatHintsDelete", C0488R.string.ChatHintsDelete, ContactsController.formatName(user.first_name, user.last_name)));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             DataQuery.getInstance(DialogsActivity.this.currentAccount).removePeer(did);
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
                     DialogsActivity.this.showDialog(builder.create());
                 }
             }
@@ -1191,17 +1191,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     Dialog create;
                     if (activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
                         builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("PermissionContacts", R.string.PermissionContacts));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                        builder.setMessage(LocaleController.getString("PermissionContacts", C0488R.string.PermissionContacts));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
                         create = builder.create();
                         this.permissionDialog = create;
                         showDialog(create);
                     } else if (activity.shouldShowRequestPermissionRationale("android.permission.WRITE_EXTERNAL_STORAGE")) {
                         builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                        builder.setMessage(LocaleController.getString("PermissionStorage", C0488R.string.PermissionStorage));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
                         create = builder.create();
                         this.permissionDialog = create;
                         showDialog(create);
@@ -1246,9 +1246,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return;
             }
             if (this.dialogsType == 3 && this.selectAlertString == null) {
-                this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
+                this.actionBar.setTitle(LocaleController.getString("ForwardTo", C0488R.string.ForwardTo));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
+                this.actionBar.setTitle(LocaleController.getString("SelectChat", C0488R.string.SelectChat));
             }
             if (this.commentView.getTag() != null) {
                 this.commentView.hidePopup(false);
@@ -1450,9 +1450,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
             this.passcodeItem.setVisibility(0);
             if (SharedConfig.appLocked) {
-                this.passcodeItem.setIcon((int) R.drawable.lock_close);
+                this.passcodeItem.setIcon((int) C0488R.drawable.lock_close);
             } else {
-                this.passcodeItem.setIcon((int) R.drawable.lock_open);
+                this.passcodeItem.setIcon((int) C0488R.drawable.lock_open);
             }
         }
     }
@@ -1539,9 +1539,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-((int) dialog_id)));
             if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id), this.currentAccount))) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ChannelCantSendMessage", R.string.ChannelCantSendMessage));
-                builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+                builder.setMessage(LocaleController.getString("ChannelCantSendMessage", C0488R.string.ChannelCantSendMessage));
+                builder.setNegativeButton(LocaleController.getString("OK", C0488R.string.OK), null);
                 showDialog(builder.create());
                 return;
             }
@@ -1557,7 +1557,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             finishFragment();
         } else if (getParentActivity() != null) {
             builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
             int lower_part = (int) dialog_id;
             int high_id = (int) (dialog_id >> 32);
             if (lower_part == 0) {
@@ -1573,7 +1573,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     return;
                 }
             } else if (lower_part == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", R.string.SavedMessages)));
+                builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", C0488R.string.SavedMessages)));
             } else if (lower_part > 0) {
                 if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_part)) != null) {
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(user)));
@@ -1590,12 +1590,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, chat.title));
                 }
             }
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     DialogsActivity.this.didSelectResult(dialog_id, false, false);
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
             showDialog(builder.create());
         }
     }

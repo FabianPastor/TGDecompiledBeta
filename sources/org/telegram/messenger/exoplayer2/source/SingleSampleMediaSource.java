@@ -30,6 +30,35 @@ public final class SingleSampleMediaSource implements MediaSource {
         void onLoadError(int i, IOException iOException);
     }
 
+    private static final class EventListenerWrapper implements MediaSourceEventListener {
+        private final EventListener eventListener;
+        private final int eventSourceId;
+
+        public EventListenerWrapper(EventListener eventListener, int eventSourceId) {
+            this.eventListener = (EventListener) Assertions.checkNotNull(eventListener);
+            this.eventSourceId = eventSourceId;
+        }
+
+        public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
+        }
+
+        public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+        }
+
+        public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+        }
+
+        public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
+            this.eventListener.onLoadError(this.eventSourceId, error);
+        }
+
+        public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
+        }
+
+        public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
+        }
+    }
+
     public static final class Factory {
         private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
         private boolean isCreateCalled;
@@ -59,35 +88,6 @@ public final class SingleSampleMediaSource implements MediaSource {
         public SingleSampleMediaSource createMediaSource(Uri uri, Format format, long durationUs, Handler eventHandler, MediaSourceEventListener eventListener) {
             this.isCreateCalled = true;
             return new SingleSampleMediaSource(uri, this.dataSourceFactory, format, durationUs, this.minLoadableRetryCount, eventHandler, eventListener, this.treatLoadErrorsAsEndOfStream);
-        }
-    }
-
-    private static final class EventListenerWrapper implements MediaSourceEventListener {
-        private final EventListener eventListener;
-        private final int eventSourceId;
-
-        public EventListenerWrapper(EventListener eventListener, int eventSourceId) {
-            this.eventListener = (EventListener) Assertions.checkNotNull(eventListener);
-            this.eventSourceId = eventSourceId;
-        }
-
-        public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
-        }
-
-        public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-        }
-
-        public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-        }
-
-        public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
-            this.eventListener.onLoadError(this.eventSourceId, error);
-        }
-
-        public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
-        }
-
-        public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
         }
     }
 

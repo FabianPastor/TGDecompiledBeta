@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -43,8 +43,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C19261 extends ActionBarMenuOnItemClick {
-        C19261() {
+    class C10011 extends ActionBarMenuOnItemClick {
+        C10011() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$2 */
-    class C19272 implements OnItemClickListener {
-        C19272() {
+    class C10022 implements OnItemClickListener {
+        C10022() {
         }
 
         public void onItemClick(View view, int position) {
@@ -77,11 +77,11 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$3 */
-    class C19283 implements OnItemLongClickListener {
+    class C10043 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.BlockedUsersActivity$3$1 */
-        class C08391 implements OnClickListener {
-            C08391() {
+        class C10031 implements OnClickListener {
+            C10031() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -91,14 +91,14 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C19283() {
+        C10043() {
         }
 
         public boolean onItemClick(View view, int position) {
             if (position < MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
                 BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.get(position)).intValue();
                 Builder builder = new Builder(BlockedUsersActivity.this.getParentActivity());
-                builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new C08391());
+                builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", C0488R.string.Unblock)}, new C10031());
                 BlockedUsersActivity.this.showDialog(builder.create());
             }
             return true;
@@ -106,8 +106,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$4 */
-    class C19294 implements ThemeDescriptionDelegate {
-        C19294() {
+    class C10054 implements ThemeDescriptionDelegate {
+        C10054() {
         }
 
         public void didSetColor() {
@@ -149,7 +149,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", R.string.UnblockText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", C0488R.string.UnblockText));
                     break;
             }
             return new Holder(view);
@@ -161,9 +161,9 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 if (user != null) {
                     String number;
                     if (user.bot) {
-                        number = LocaleController.getString("Bot", R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", R.string.Bot).substring(1);
+                        number = LocaleController.getString("Bot", C0488R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", C0488R.string.Bot).substring(1);
                     } else if (user.phone == null || user.phone.length() == 0) {
-                        number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                        number = LocaleController.getString("NumberUnknown", C0488R.string.NumberUnknown);
                     } else {
                         number = PhoneFormat.getInstance().format("+" + user.phone);
                     }
@@ -196,15 +196,15 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C19261());
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
+        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", C0488R.string.BlockedUsers));
+        this.actionBar.setActionBarMenuOnItemClick(new C10011());
+        this.actionBar.createMenu().addItem(1, (int) C0488R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoBlocked", R.string.NoBlocked));
+        this.emptyView.setText(LocaleController.getString("NoBlocked", C0488R.string.NoBlocked));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -220,8 +220,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19272());
-        this.listView.setOnItemLongClickListener(new C19283());
+        this.listView.setOnItemClickListener(new C10022());
+        this.listView.setOnItemLongClickListener(new C10043());
         if (MessagesController.getInstance(this.currentAccount).loadingBlockedUsers) {
             this.emptyView.showProgress();
         } else {
@@ -270,7 +270,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C19294();
+        ThemeDescriptionDelegate сellDelegate = new C10054();
         r10 = new ThemeDescription[20];
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);

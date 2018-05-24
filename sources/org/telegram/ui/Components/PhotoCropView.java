@@ -37,30 +37,9 @@ public class PhotoCropView extends FrameLayout {
     private boolean showOnSetBitmap;
     private CropRotationWheel wheelView;
 
-    /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
-    class C12403 implements Runnable {
-        C12403() {
-        }
-
-        public void run() {
-            if (PhotoCropView.this.animationRunnable == this) {
-                PhotoCropView.this.animationRunnable = null;
-                PhotoCropView.this.moveToFill(true);
-            }
-        }
-    }
-
-    public interface PhotoCropViewDelegate {
-        Bitmap getBitmap();
-
-        void needMoveImageTo(float f, float f2, float f3, boolean z);
-
-        void onChange(boolean z);
-    }
-
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
-    class C20671 implements CropViewListener {
-        C20671() {
+    class C15581 implements CropViewListener {
+        C15581() {
         }
 
         public void onChange(boolean reset) {
@@ -75,8 +54,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
-    class C20682 implements RotationWheelListener {
-        C20682() {
+    class C15592 implements RotationWheelListener {
+        C15592() {
         }
 
         public void onStart() {
@@ -104,6 +83,27 @@ public class PhotoCropView extends FrameLayout {
         }
     }
 
+    /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
+    class C15603 implements Runnable {
+        C15603() {
+        }
+
+        public void run() {
+            if (PhotoCropView.this.animationRunnable == this) {
+                PhotoCropView.this.animationRunnable = null;
+                PhotoCropView.this.moveToFill(true);
+            }
+        }
+    }
+
+    public interface PhotoCropViewDelegate {
+        Bitmap getBitmap();
+
+        void needMoveImageTo(float f, float f2, float f3, boolean z);
+
+        void onChange(boolean z);
+    }
+
     public PhotoCropView(Context context) {
         super(context);
     }
@@ -124,11 +124,11 @@ public class PhotoCropView extends FrameLayout {
         requestLayout();
         if (this.cropView == null) {
             this.cropView = new CropView(getContext());
-            this.cropView.setListener(new C20671());
+            this.cropView.setListener(new C15581());
             this.cropView.setBottomPadding((float) AndroidUtilities.dp(64.0f));
             addView(this.cropView);
             this.wheelView = new CropRotationWheel(getContext());
-            this.wheelView.setListener(new C20682());
+            this.wheelView.setListener(new C15592());
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);
@@ -234,7 +234,7 @@ public class PhotoCropView extends FrameLayout {
 
     public void startAnimationRunnable() {
         if (this.animationRunnable == null) {
-            this.animationRunnable = new C12403();
+            this.animationRunnable = new C15603();
             AndroidUtilities.runOnUIThread(this.animationRunnable, 1500);
         }
     }

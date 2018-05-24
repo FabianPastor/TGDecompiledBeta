@@ -35,7 +35,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private static final int STATE_VISIBLE = 1;
     private int mAnimationState = 0;
     private int mDragState = 0;
-    private final Runnable mHideRunnable = new C06561();
+    private final Runnable mHideRunnable = new C07501();
     float mHorizontalDragX;
     private final int[] mHorizontalRange = new int[2];
     int mHorizontalThumbCenterX;
@@ -47,7 +47,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mMargin;
     private boolean mNeedHorizontalScrollbar = false;
     private boolean mNeedVerticalScrollbar = false;
-    private final OnScrollListener mOnScrollListener = new C18682();
+    private final OnScrollListener mOnScrollListener = new C07512();
     private RecyclerView mRecyclerView;
     private int mRecyclerViewHeight = 0;
     private int mRecyclerViewWidth = 0;
@@ -64,12 +64,22 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mVerticalTrackWidth;
 
     /* renamed from: org.telegram.messenger.support.widget.FastScroller$1 */
-    class C06561 implements Runnable {
-        C06561() {
+    class C07501 implements Runnable {
+        C07501() {
         }
 
         public void run() {
             FastScroller.this.hide(500);
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
+    class C07512 extends OnScrollListener {
+        C07512() {
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            FastScroller.this.updateScrollPosition(recyclerView.computeHorizontalScrollOffset(), recyclerView.computeVerticalScrollOffset());
         }
     }
 
@@ -119,16 +129,6 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
-    }
-
-    /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
-    class C18682 extends OnScrollListener {
-        C18682() {
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            FastScroller.this.updateScrollPosition(recyclerView.computeHorizontalScrollOffset(), recyclerView.computeVerticalScrollOffset());
-        }
     }
 
     FastScroller(RecyclerView recyclerView, StateListDrawable verticalThumbDrawable, Drawable verticalTrackDrawable, StateListDrawable horizontalThumbDrawable, Drawable horizontalTrackDrawable, int defaultWidth, int scrollbarMinimumRange, int margin) {

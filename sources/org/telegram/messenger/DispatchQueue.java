@@ -10,8 +10,8 @@ public class DispatchQueue extends Thread {
     private CountDownLatch syncLatch = new CountDownLatch(1);
 
     /* renamed from: org.telegram.messenger.DispatchQueue$1 */
-    class C01441 extends Handler {
-        C01441() {
+    class C01691 extends Handler {
+        C01691() {
         }
 
         public void handleMessage(Message msg) {
@@ -77,7 +77,7 @@ public class DispatchQueue extends Thread {
 
     public void run() {
         Looper.prepare();
-        this.handler = new C01441();
+        this.handler = new C01691();
         this.syncLatch.countDown();
         Looper.loop();
     }

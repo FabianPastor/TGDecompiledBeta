@@ -1,9 +1,7 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.beta.R;
-
 /* renamed from: org.telegram.messenger.R */
-public final class C0446R {
+public final class C0488R {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -594,6 +592,9 @@ public final class C0446R {
         public static final int profile_info = NUM;
         public static final int profile_list = NUM;
         public static final int profile_phone = NUM;
+        public static final int proxy_check = NUM;
+        public static final int proxy_off = NUM;
+        public static final int proxy_on = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;
@@ -2852,8 +2853,8 @@ public final class C0446R {
 
     /* renamed from: org.telegram.messenger.R$styleable */
     public static final class styleable {
-        public static final int[] CoordinatorLayout = new int[]{R.attr.keylines, R.attr.statusBarBackground};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, R.attr.layout_anchor, R.attr.layout_anchorGravity, R.attr.layout_behavior, R.attr.layout_dodgeInsetEdges, R.attr.layout_insetEdge, R.attr.layout_keyline};
+        public static final int[] CoordinatorLayout = new int[]{C0488R.attr.keylines, C0488R.attr.statusBarBackground};
+        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0488R.attr.layout_anchor, C0488R.attr.layout_anchorGravity, C0488R.attr.layout_behavior, C0488R.attr.layout_dodgeInsetEdges, C0488R.attr.layout_insetEdge, C0488R.attr.layout_keyline};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -2863,12 +2864,12 @@ public final class C0446R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{R.attr.customThemeStyle, R.attr.toolbarTextColorStyle, R.attr.windowTransitionStyle};
+        public static final int[] CustomWalletTheme = new int[]{C0488R.attr.customThemeStyle, C0488R.attr.toolbarTextColorStyle, C0488R.attr.windowTransitionStyle};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{R.attr.fontProviderAuthority, R.attr.fontProviderCerts, R.attr.fontProviderFetchStrategy, R.attr.fontProviderFetchTimeout, R.attr.fontProviderPackage, R.attr.fontProviderQuery};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, R.attr.font, R.attr.fontStyle, R.attr.fontWeight};
+        public static final int[] FontFamily = new int[]{C0488R.attr.fontProviderAuthority, C0488R.attr.fontProviderCerts, C0488R.attr.fontProviderFetchStrategy, C0488R.attr.fontProviderFetchTimeout, C0488R.attr.fontProviderPackage, C0488R.attr.fontProviderQuery};
+        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, C0488R.attr.font, C0488R.attr.fontStyle, C0488R.attr.fontWeight};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontWeight = 1;
@@ -2881,11 +2882,11 @@ public final class C0446R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
-        public static final int[] LoadingImageView = new int[]{R.attr.circleCrop, R.attr.imageAspectRatio, R.attr.imageAspectRatioAdjust};
+        public static final int[] LoadingImageView = new int[]{C0488R.attr.circleCrop, C0488R.attr.imageAspectRatio, C0488R.attr.imageAspectRatioAdjust};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{R.attr.ambientEnabled, R.attr.cameraBearing, R.attr.cameraMaxZoomPreference, R.attr.cameraMinZoomPreference, R.attr.cameraTargetLat, R.attr.cameraTargetLng, R.attr.cameraTilt, R.attr.cameraZoom, R.attr.latLngBoundsNorthEastLatitude, R.attr.latLngBoundsNorthEastLongitude, R.attr.latLngBoundsSouthWestLatitude, R.attr.latLngBoundsSouthWestLongitude, R.attr.liteMode, R.attr.mapType, R.attr.uiCompass, R.attr.uiMapToolbar, R.attr.uiRotateGestures, R.attr.uiScrollGestures, R.attr.uiTiltGestures, R.attr.uiZoomControls, R.attr.uiZoomGestures, R.attr.useViewLifecycle, R.attr.zOrderOnTop};
+        public static final int[] MapAttrs = new int[]{C0488R.attr.ambientEnabled, C0488R.attr.cameraBearing, C0488R.attr.cameraMaxZoomPreference, C0488R.attr.cameraMinZoomPreference, C0488R.attr.cameraTargetLat, C0488R.attr.cameraTargetLng, C0488R.attr.cameraTilt, C0488R.attr.cameraZoom, C0488R.attr.latLngBoundsNorthEastLatitude, C0488R.attr.latLngBoundsNorthEastLongitude, C0488R.attr.latLngBoundsSouthWestLatitude, C0488R.attr.latLngBoundsSouthWestLongitude, C0488R.attr.liteMode, C0488R.attr.mapType, C0488R.attr.uiCompass, C0488R.attr.uiMapToolbar, C0488R.attr.uiRotateGestures, C0488R.attr.uiScrollGestures, C0488R.attr.uiTiltGestures, C0488R.attr.uiZoomControls, C0488R.attr.uiZoomGestures, C0488R.attr.useViewLifecycle, C0488R.attr.zOrderOnTop};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -2909,16 +2910,16 @@ public final class C0446R {
         public static final int MapAttrs_uiZoomGestures = 20;
         public static final int MapAttrs_useViewLifecycle = 21;
         public static final int MapAttrs_zOrderOnTop = 22;
-        public static final int[] SignInButton = new int[]{R.attr.buttonSize, R.attr.colorScheme, R.attr.scopeUris};
+        public static final int[] SignInButton = new int[]{C0488R.attr.buttonSize, C0488R.attr.colorScheme, C0488R.attr.scopeUris};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{R.attr.appTheme, R.attr.environment, R.attr.fragmentMode, R.attr.fragmentStyle};
+        public static final int[] WalletFragmentOptions = new int[]{C0488R.attr.appTheme, C0488R.attr.environment, C0488R.attr.fragmentMode, C0488R.attr.fragmentStyle};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{R.attr.buyButtonAppearance, R.attr.buyButtonHeight, R.attr.buyButtonText, R.attr.buyButtonWidth, R.attr.maskedWalletDetailsBackground, R.attr.maskedWalletDetailsButtonBackground, R.attr.maskedWalletDetailsButtonTextAppearance, R.attr.maskedWalletDetailsHeaderTextAppearance, R.attr.maskedWalletDetailsLogoImageType, R.attr.maskedWalletDetailsLogoTextColor, R.attr.maskedWalletDetailsTextAppearance};
+        public static final int[] WalletFragmentStyle = new int[]{C0488R.attr.buyButtonAppearance, C0488R.attr.buyButtonHeight, C0488R.attr.buyButtonText, C0488R.attr.buyButtonWidth, C0488R.attr.maskedWalletDetailsBackground, C0488R.attr.maskedWalletDetailsButtonBackground, C0488R.attr.maskedWalletDetailsButtonTextAppearance, C0488R.attr.maskedWalletDetailsHeaderTextAppearance, C0488R.attr.maskedWalletDetailsLogoImageType, C0488R.attr.maskedWalletDetailsLogoTextColor, C0488R.attr.maskedWalletDetailsTextAppearance};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

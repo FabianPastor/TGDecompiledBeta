@@ -39,9 +39,17 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int underlineColor = 436207616;
     private int underlineHeight = AndroidUtilities.dp(2.0f);
 
+    public interface IconTabProvider {
+        boolean canScrollToTab(int i);
+
+        void customOnDraw(Canvas canvas, int i);
+
+        Drawable getPageIconDrawable(int i);
+    }
+
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$1 */
-    class C11981 implements OnGlobalLayoutListener {
-        C11981() {
+    class C15151 implements OnGlobalLayoutListener {
+        C15151() {
         }
 
         public void onGlobalLayout() {
@@ -52,21 +60,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$4 */
-    class C12014 implements Runnable {
-        C12014() {
+    class C15184 implements Runnable {
+        C15184() {
         }
 
         public void run() {
             PagerSlidingTabStrip.this.notifyDataSetChanged();
         }
-    }
-
-    public interface IconTabProvider {
-        boolean canScrollToTab(int i);
-
-        void customOnDraw(Canvas canvas, int i);
-
-        Drawable getPageIconDrawable(int i);
     }
 
     private class PageListener implements OnPageChangeListener {
@@ -140,7 +140,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
         }
         updateTabStyles();
-        getViewTreeObserver().addOnGlobalLayoutListener(new C11981());
+        getViewTreeObserver().addOnGlobalLayoutListener(new C15151());
     }
 
     public View getTab(int position) {
@@ -234,7 +234,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void onSizeChanged(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         if (!this.shouldExpand) {
-            post(new C12014());
+            post(new C15184());
         }
     }
 

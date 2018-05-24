@@ -8,11 +8,11 @@ import android.os.RemoteException;
 import org.telegram.messenger.support.customtabs.IPostMessageService.Stub;
 
 public class PostMessageService extends Service {
-    private Stub mBinder = new C23221();
+    private Stub mBinder = new C07321();
 
     /* renamed from: org.telegram.messenger.support.customtabs.PostMessageService$1 */
-    class C23221 extends Stub {
-        C23221() {
+    class C07321 extends Stub {
+        C07321() {
         }
 
         public void onMessageChannelReady(ICustomTabsCallback callback, Bundle extras) throws RemoteException {

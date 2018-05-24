@@ -39,6 +39,7 @@ import android.widget.FrameLayout;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -48,7 +49,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -150,62 +150,75 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zoomAnimation;
     private boolean zooming;
 
-    /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class C16694 implements OnApplyWindowInsetsListener {
-        C16694() {
+    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
+    class C22101 implements VideoPlayerDelegate {
+        C22101() {
         }
 
-        @SuppressLint({"NewApi"})
-        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-            WindowInsets oldInsets = (WindowInsets) SecretMediaViewer.this.lastInsets;
-            SecretMediaViewer.this.lastInsets = insets;
-            if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
-                SecretMediaViewer.this.windowView.requestLayout();
-            }
-            return insets.consumeSystemWindowInsets();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
-    class C16706 implements Runnable {
-        C16706() {
-        }
-
-        public void run() {
-            SecretMediaViewer.this.photoAnimationInProgress = 0;
-            SecretMediaViewer.this.imageMoveAnimation = null;
-            if (SecretMediaViewer.this.containerView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    SecretMediaViewer.this.containerView.setLayerType(0, null);
+        public void onStateChanged(boolean playWhenReady, int playbackState) {
+            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
+                if (playbackState == 4 || playbackState == 1) {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                } else {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
+                    } catch (Throwable e2) {
+                        FileLog.m3e(e2);
+                    }
                 }
+                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
+                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
+                }
+                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
+                    if (SecretMediaViewer.this.isPlaying) {
+                        SecretMediaViewer.this.isPlaying = false;
+                        if (playbackState == 4) {
+                            SecretMediaViewer.this.videoWatchedOneTime = true;
+                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
+                                SecretMediaViewer.this.closePhoto(true, true);
+                                return;
+                            }
+                            SecretMediaViewer.this.videoPlayer.seekTo(0);
+                            SecretMediaViewer.this.videoPlayer.play();
+                        }
+                    }
+                } else if (!SecretMediaViewer.this.isPlaying) {
+                    SecretMediaViewer.this.isPlaying = true;
+                }
+            }
+        }
+
+        public void onError(Exception e) {
+            FileLog.m3e((Throwable) e);
+        }
+
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
+                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                    int temp = width;
+                    width = height;
+                    height = temp;
+                }
+                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
+            }
+        }
+
+        public void onRenderedFirstFrame() {
+            if (!SecretMediaViewer.this.textureUploaded) {
+                SecretMediaViewer.this.textureUploaded = true;
                 SecretMediaViewer.this.containerView.invalidate();
             }
         }
-    }
 
-    /* renamed from: org.telegram.ui.SecretMediaViewer$7 */
-    class C16717 extends AnimatorListenerAdapter {
-        C16717() {
+        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+            return false;
         }
 
-        public void onAnimationEnd(Animator animation) {
-            if (SecretMediaViewer.this.photoAnimationEndRunnable != null) {
-                SecretMediaViewer.this.photoAnimationEndRunnable.run();
-                SecretMediaViewer.this.photoAnimationEndRunnable = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
-    class C16739 extends AnimatorListenerAdapter {
-        C16739() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (SecretMediaViewer.this.currentActionBarAnimation != null && SecretMediaViewer.this.currentActionBarAnimation.equals(animation)) {
-                SecretMediaViewer.this.actionBar.setVisibility(8);
-                SecretMediaViewer.this.currentActionBarAnimation = null;
-            }
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         }
     }
 
@@ -226,6 +239,77 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
 
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
             return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
+    class C22134 implements OnApplyWindowInsetsListener {
+        C22134() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+            WindowInsets oldInsets = (WindowInsets) SecretMediaViewer.this.lastInsets;
+            SecretMediaViewer.this.lastInsets = insets;
+            if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+                SecretMediaViewer.this.windowView.requestLayout();
+            }
+            return insets.consumeSystemWindowInsets();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
+    class C22145 extends ActionBarMenuOnItemClick {
+        C22145() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                SecretMediaViewer.this.closePhoto(true, false);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
+    class C22156 implements Runnable {
+        C22156() {
+        }
+
+        public void run() {
+            SecretMediaViewer.this.photoAnimationInProgress = 0;
+            SecretMediaViewer.this.imageMoveAnimation = null;
+            if (SecretMediaViewer.this.containerView != null) {
+                if (VERSION.SDK_INT >= 18) {
+                    SecretMediaViewer.this.containerView.setLayerType(0, null);
+                }
+                SecretMediaViewer.this.containerView.invalidate();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$7 */
+    class C22167 extends AnimatorListenerAdapter {
+        C22167() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (SecretMediaViewer.this.photoAnimationEndRunnable != null) {
+                SecretMediaViewer.this.photoAnimationEndRunnable.run();
+                SecretMediaViewer.this.photoAnimationEndRunnable = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
+    class C22189 extends AnimatorListenerAdapter {
+        C22189() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (SecretMediaViewer.this.currentActionBarAnimation != null && SecretMediaViewer.this.currentActionBarAnimation.equals(animation)) {
+                SecretMediaViewer.this.actionBar.setVisibility(8);
+                SecretMediaViewer.this.currentActionBarAnimation = null;
+            }
         }
     }
 
@@ -283,9 +367,9 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             float vx;
             float vy;
             /* renamed from: x */
-            float f30x;
+            float f60x;
             /* renamed from: y */
-            float f31y;
+            float f61y;
 
             private Particle() {
             }
@@ -308,7 +392,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.afterDeleteProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
             this.circlePaint = new Paint(1);
             this.circlePaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.drawable = context.getResources().getDrawable(R.drawable.flame_small);
+            this.drawable = context.getResources().getDrawable(C0488R.drawable.flame_small);
             for (int a = 0; a < 40; a++) {
                 this.freeParticles.add(new Particle());
             }
@@ -336,8 +420,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     count--;
                 } else {
                     particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                    particle.f30x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
-                    particle.f31y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
+                    particle.f60x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
+                    particle.f61y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
                     particle.currentTime += (float) dt;
                 }
                 a++;
@@ -490,9 +574,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r5 = (int) r5;
             r4.setAlpha(r5);
             r0 = r23;
-            r4 = r0.f30x;
+            r4 = r0.f60x;
             r0 = r23;
-            r5 = r0.f31y;
+            r5 = r0.f61y;
             r0 = r36;
             r6 = r0.particlePaint;
             r0 = r37;
@@ -586,9 +670,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4.remove(r5);
         L_0x01b6:
             r0 = r22;
-            r0.f30x = r14;
+            r0.f60x = r14;
             r0 = r22;
-            r0.f31y = r15;
+            r0.f61y = r15;
             r4 = 458068779NUM; // 0x3f91df46a2529d39 float:-2.854354E-18 double:0.01745329NUM;
             r6 = org.telegram.messenger.Utilities.random;
             r8 = 140; // 0x8c float:1.96E-43 double:6.9E-322;
@@ -668,90 +752,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             goto L_0x0018;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SecretMediaViewer.SecretDeleteTimer.onDraw(android.graphics.Canvas):void");
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C22721 implements VideoPlayerDelegate {
-        C22721() {
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
-                if (playbackState == 4 || playbackState == 1) {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                } else {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
-                    }
-                }
-                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
-                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
-                }
-                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
-                    if (SecretMediaViewer.this.isPlaying) {
-                        SecretMediaViewer.this.isPlaying = false;
-                        if (playbackState == 4) {
-                            SecretMediaViewer.this.videoWatchedOneTime = true;
-                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
-                                SecretMediaViewer.this.closePhoto(true, true);
-                                return;
-                            }
-                            SecretMediaViewer.this.videoPlayer.seekTo(0);
-                            SecretMediaViewer.this.videoPlayer.play();
-                        }
-                    }
-                } else if (!SecretMediaViewer.this.isPlaying) {
-                    SecretMediaViewer.this.isPlaying = true;
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-            FileLog.m3e((Throwable) e);
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
-                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
-                    int temp = width;
-                    width = height;
-                    height = temp;
-                }
-                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
-            }
-        }
-
-        public void onRenderedFirstFrame() {
-            if (!SecretMediaViewer.this.textureUploaded) {
-                SecretMediaViewer.this.textureUploaded = true;
-                SecretMediaViewer.this.containerView.invalidate();
-            }
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            return false;
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C22745 extends ActionBarMenuOnItemClick {
-        C22745() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                SecretMediaViewer.this.closePhoto(true, false);
-            }
         }
     }
 
@@ -851,7 +851,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C22721());
+                this.videoPlayer.setDelegate(new C22101());
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.videoPlayer.setPlayWhenReady(true);
@@ -947,7 +947,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.containerView.setLayoutParams(layoutParams);
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new C16694());
+                this.containerView.setOnApplyWindowInsetsListener(new C22134());
                 this.containerView.setSystemUiVisibility(1280);
             }
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
@@ -958,10 +958,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C22745());
+            this.actionBar.setActionBarMenuOnItemClick(new C22145());
             this.secretDeleteTimer = new SecretDeleteTimer(activity);
             this.containerView.addView(this.secretDeleteTimer, LayoutHelper.createFrame(119, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
             this.windowLayoutParams = new LayoutParams();
@@ -1060,15 +1060,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 this.currentThumb = object.imageReceiver.getThumbBitmapSafe();
                 if (document == null) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", C0488R.string.DisappearingPhoto));
                     this.centerImage.setImage(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()).location, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 2);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else if (MessageObject.isGifDocument((Document) document)) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", C0488R.string.DisappearingGif));
                     this.centerImage.setImage(document, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 1);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", C0488R.string.DisappearingVideo));
                     File file = new File(messageObject.messageOwner.attachPath);
                     if (file.exists()) {
                         preparePlayer(file);
@@ -1101,9 +1101,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation = new AnimatorSet();
                 this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
                 this.photoAnimationInProgress = 3;
-                this.photoAnimationEndRunnable = new C16706();
+                this.photoAnimationEndRunnable = new C22156();
                 this.imageMoveAnimation.setDuration(250);
-                this.imageMoveAnimation.addListener(new C16717());
+                this.imageMoveAnimation.addListener(new C22167());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.containerView.setLayerType(2, null);
@@ -1146,7 +1146,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C16739());
+                this.currentActionBarAnimation.addListener(new C22189());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
@@ -1462,8 +1462,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.SecretMediaViewer$11$1 */
-                    class C16671 implements Runnable {
-                        C16671() {
+                    class C22091 implements Runnable {
+                        C22091() {
                         }
 
                         public void run() {
@@ -1479,7 +1479,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             object.imageReceiver.setVisible(true, true);
                         }
                         SecretMediaViewer.this.isVisible = false;
-                        AndroidUtilities.runOnUIThread(new C16671());
+                        AndroidUtilities.runOnUIThread(new C22091());
                     }
                 });
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();

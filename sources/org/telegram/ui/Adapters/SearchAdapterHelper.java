@@ -53,12 +53,18 @@ public class SearchAdapterHelper {
     private ArrayList<TLObject> localServerSearch = new ArrayList();
     private int reqId = 0;
 
+    public interface SearchAdapterHelperDelegate {
+        void onDataSetChanged();
+
+        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
+    }
+
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4 */
-    class C08054 implements Runnable {
+    class C09444 implements Runnable {
 
         /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4$1 */
-        class C08031 implements Comparator<HashtagObject> {
-            C08031() {
+        class C09421 implements Comparator<HashtagObject> {
+            C09421() {
             }
 
             public int compare(HashtagObject lhs, HashtagObject rhs) {
@@ -72,7 +78,7 @@ public class SearchAdapterHelper {
             }
         }
 
-        C08054() {
+        C09444() {
         }
 
         public void run() {
@@ -88,7 +94,7 @@ public class SearchAdapterHelper {
                     hashMap.put(hashtagObject.hashtag, hashtagObject);
                 }
                 cursor.dispose();
-                Collections.sort(arrayList, new C08031());
+                Collections.sort(arrayList, new C09421());
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         SearchAdapterHelper.this.setHashtags(arrayList, hashMap);
@@ -101,8 +107,8 @@ public class SearchAdapterHelper {
     }
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$6 */
-    class C08076 implements Runnable {
-        C08076() {
+    class C09466 implements Runnable {
+        C09466() {
         }
 
         public void run() {
@@ -126,12 +132,6 @@ public class SearchAdapterHelper {
     public static class HashtagObject {
         int date;
         String hashtag;
-    }
-
-    public interface SearchAdapterHelperDelegate {
-        void onDataSetChanged();
-
-        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
 
     public SearchAdapterHelper(boolean global) {
@@ -176,7 +176,7 @@ public class SearchAdapterHelper {
             } else {
                 req.filter = new TL_channelParticipantsSearch();
             }
-            req.filter.f32q = query;
+            req.filter.f14q = query;
             req.limit = 50;
             req.offset = 0;
             req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -201,7 +201,7 @@ public class SearchAdapterHelper {
             if (kicked) {
                 req = new TL_channels_getParticipants();
                 req.filter = new TL_channelParticipantsKicked();
-                req.filter.f32q = query;
+                req.filter.f14q = query;
                 req.limit = 50;
                 req.offset = 0;
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -230,7 +230,7 @@ public class SearchAdapterHelper {
         }
         if (query.length() > 0) {
             req = new TL_contacts_search();
-            req.f45q = query;
+            req.f27q = query;
             req.limit = 50;
             currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
@@ -361,7 +361,7 @@ public class SearchAdapterHelper {
         if (this.hashtagsLoadedFromDb) {
             return true;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08054());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C09444());
         return false;
     }
 
@@ -493,7 +493,7 @@ public class SearchAdapterHelper {
     public void clearRecentHashtags() {
         this.hashtags = new ArrayList();
         this.hashtagsByText = new HashMap();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08076());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C09466());
     }
 
     public void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {

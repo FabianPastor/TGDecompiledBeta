@@ -22,16 +22,12 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_MESSAGING_ERROR = -3;
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
-    private Stub mBinder = new C23211();
+    private Stub mBinder = new C07291();
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Result {
-    }
-
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
-    class C23211 extends Stub {
-        C23211() {
+    class C07291 extends Stub {
+        C07291() {
         }
 
         public boolean warmup(long flags) {
@@ -76,6 +72,10 @@ public abstract class CustomTabsService extends Service {
         public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) {
             return CustomTabsService.this.postMessage(new CustomTabsSessionToken(callback), message, extras);
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Result {
     }
 
     protected abstract Bundle extraCommand(String str, Bundle bundle);

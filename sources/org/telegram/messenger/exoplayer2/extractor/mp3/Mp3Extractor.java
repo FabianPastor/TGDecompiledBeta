@@ -4,7 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
@@ -21,7 +21,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Mp3Extractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18411();
+    public static final ExtractorsFactory FACTORY = new C06361();
     public static final int FLAG_DISABLE_ID3_METADATA = 2;
     public static final int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING = 1;
     private static final int MAX_SNIFF_BYTES = 16384;
@@ -46,13 +46,13 @@ public final class Mp3Extractor implements Extractor {
     private int synchronizedHeaderData;
     private TrackOutput trackOutput;
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Flags {
+    interface Seeker extends SeekMap {
+        long getTimeUs(long j);
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor$1 */
-    static class C18411 implements ExtractorsFactory {
-        C18411() {
+    static class C06361 implements ExtractorsFactory {
+        C06361() {
         }
 
         public Extractor[] createExtractors() {
@@ -60,8 +60,8 @@ public final class Mp3Extractor implements Extractor {
         }
     }
 
-    interface Seeker extends SeekMap {
-        long getTimeUs(long j);
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
     }
 
     public Mp3Extractor() {
@@ -69,7 +69,7 @@ public final class Mp3Extractor implements Extractor {
     }
 
     public Mp3Extractor(int flags) {
-        this(flags, C0542C.TIME_UNSET);
+        this(flags, C0600C.TIME_UNSET);
     }
 
     public Mp3Extractor(int flags, long forcedFirstSampleTimestampUs) {
@@ -78,7 +78,7 @@ public final class Mp3Extractor implements Extractor {
         this.scratch = new ParsableByteArray(10);
         this.synchronizedHeader = new MpegAudioHeader();
         this.gaplessInfoHolder = new GaplessInfoHolder();
-        this.basisTimeUs = C0542C.TIME_UNSET;
+        this.basisTimeUs = C0600C.TIME_UNSET;
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
@@ -93,7 +93,7 @@ public final class Mp3Extractor implements Extractor {
 
     public void seek(long position, long timeUs) {
         this.synchronizedHeaderData = 0;
-        this.basisTimeUs = C0542C.TIME_UNSET;
+        this.basisTimeUs = C0600C.TIME_UNSET;
         this.samplesRead = 0;
         this.sampleBytesRemaining = 0;
     }
@@ -134,9 +134,9 @@ public final class Mp3Extractor implements Extractor {
                 return 0;
             }
             MpegAudioHeader.populateHeader(sampleHeaderData, this.synchronizedHeader);
-            if (this.basisTimeUs == C0542C.TIME_UNSET) {
+            if (this.basisTimeUs == C0600C.TIME_UNSET) {
                 this.basisTimeUs = this.seeker.getTimeUs(extractorInput.getPosition());
-                if (this.forcedFirstSampleTimestampUs != C0542C.TIME_UNSET) {
+                if (this.forcedFirstSampleTimestampUs != C0600C.TIME_UNSET) {
                     this.basisTimeUs += this.forcedFirstSampleTimestampUs - this.seeker.getTimeUs(0);
                 }
             }
@@ -150,7 +150,7 @@ public final class Mp3Extractor implements Extractor {
         if (this.sampleBytesRemaining > 0) {
             return 0;
         }
-        this.trackOutput.sampleMetadata(this.basisTimeUs + ((this.samplesRead * C0542C.MICROS_PER_SECOND) / ((long) this.synchronizedHeader.sampleRate)), 1, this.synchronizedHeader.frameSize, 0, null);
+        this.trackOutput.sampleMetadata(this.basisTimeUs + ((this.samplesRead * C0600C.MICROS_PER_SECOND) / ((long) this.synchronizedHeader.sampleRate)), 1, this.synchronizedHeader.frameSize, 0, null);
         this.samplesRead += (long) this.synchronizedHeader.samplesPerFrame;
         this.sampleBytesRemaining = 0;
         return 0;

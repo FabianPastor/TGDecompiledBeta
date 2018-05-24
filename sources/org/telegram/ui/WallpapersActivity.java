@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -30,7 +31,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -78,19 +78,9 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private File wallpaperFile;
     private SparseArray<WallPaper> wallpappersByIds = new SparseArray();
 
-    /* renamed from: org.telegram.ui.WallpapersActivity$3 */
-    class C17723 implements OnTouchListener {
-        C17723() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
-
     /* renamed from: org.telegram.ui.WallpapersActivity$1 */
-    class C23141 implements WallpaperUpdaterDelegate {
-        C23141() {
+    class C23581 implements WallpaperUpdaterDelegate {
+        C23581() {
         }
 
         public void didSelectWallpaper(File file, Bitmap bitmap) {
@@ -107,8 +97,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$2 */
-    class C23152 extends ActionBarMenuOnItemClick {
-        C23152() {
+    class C23592 extends ActionBarMenuOnItemClick {
+        C23592() {
         }
 
         public void onItemClick(int id) {
@@ -157,9 +147,19 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         }
     }
 
+    /* renamed from: org.telegram.ui.WallpapersActivity$3 */
+    class C23603 implements OnTouchListener {
+        C23603() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
+        }
+    }
+
     /* renamed from: org.telegram.ui.WallpapersActivity$4 */
-    class C23164 implements OnItemClickListener {
-        C23164() {
+    class C23614 implements OnItemClickListener {
+        C23614() {
         }
 
         public void onItemClick(View view, int position) {
@@ -186,8 +186,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$5 */
-    class C23175 implements RequestDelegate {
-        C23175() {
+    class C23635 implements RequestDelegate {
+        C23635() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -298,23 +298,23 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
 
     public View createView(Context context) {
         this.themedWallpaper = Theme.getThemedWallpaper(true);
-        this.updater = new WallpaperUpdater(getParentActivity(), new C23141());
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.updater = new WallpaperUpdater(getParentActivity(), new C23581());
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
-        this.actionBar.setActionBarMenuOnItemClick(new C23152());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("ChatBackground", C0488R.string.ChatBackground));
+        this.actionBar.setActionBarMenuOnItemClick(new C23592());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0488R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.backgroundImage = new ImageView(context);
         this.backgroundImage.setScaleType(ScaleType.CENTER_CROP);
         frameLayout.addView(this.backgroundImage, LayoutHelper.createFrame(-1, -1.0f));
-        this.backgroundImage.setOnTouchListener(new C17723());
+        this.backgroundImage.setOnTouchListener(new C23603());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 52.0f));
         this.progressViewBackground = new View(context);
-        this.progressViewBackground.setBackgroundResource(R.drawable.system_loader);
+        this.progressViewBackground.setBackgroundResource(C0488R.drawable.system_loader);
         this.progressView.addView(this.progressViewBackground, LayoutHelper.createFrame(36, 36, 17));
         RadialProgressView progressBar = new RadialProgressView(context);
         progressBar.setSize(AndroidUtilities.dp(28.0f));
@@ -334,7 +334,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, 102, 83));
-        this.listView.setOnItemClickListener(new C23164());
+        this.listView.setOnItemClickListener(new C23614());
         processSelectedBackground();
         return this.fragmentView;
     }
@@ -362,7 +362,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.loadingSize);
                 }
                 if (this.selectedBackground == 1000001) {
-                    this.backgroundImage.setImageResource(R.drawable.background_hd);
+                    this.backgroundImage.setImageResource(C0488R.drawable.background_hd);
                     this.backgroundImage.setBackgroundColor(0);
                     this.selectedColor = 0;
                 } else if (this.selectedBackground == -1) {
@@ -482,7 +482,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     private void loadWallpapers() {
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C23175()), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C23635()), this.classGuid);
     }
 
     public void onResume() {

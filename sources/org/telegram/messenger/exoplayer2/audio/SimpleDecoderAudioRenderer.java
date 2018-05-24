@@ -56,10 +56,6 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     private final boolean playClearSamplesWithoutKeys;
     private boolean waitingForKeys;
 
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface ReinitializationState {
-    }
-
     private final class AudioSinkListener implements Listener {
         private AudioSinkListener() {
         }
@@ -78,6 +74,10 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
             SimpleDecoderAudioRenderer.this.eventDispatcher.audioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
             SimpleDecoderAudioRenderer.this.onAudioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReinitializationState {
     }
 
     protected abstract SimpleDecoder<DecoderInputBuffer, ? extends SimpleOutputBuffer, ? extends AudioDecoderException> createDecoder(Format format, ExoMediaCrypto exoMediaCrypto) throws AudioDecoderException;

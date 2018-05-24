@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -79,7 +79,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private static final int TYPE_IN = 1;
     private static final int TYPE_MISSED = 2;
     private static final int TYPE_OUT = 0;
-    private OnClickListener callBtnClickListener = new C08501();
+    private OnClickListener callBtnClickListener = new C10181();
     private ArrayList<CallLogRow> calls = new ArrayList();
     private EmptyTextProgressView emptyView;
     private boolean endReached;
@@ -103,8 +103,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private boolean scrollUpdated;
 
     /* renamed from: org.telegram.ui.CallLogActivity$1 */
-    class C08501 implements OnClickListener {
-        C08501() {
+    class C10181 implements OnClickListener {
+        C10181() {
         }
 
         public void onClick(View v) {
@@ -112,72 +112,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    /* renamed from: org.telegram.ui.CallLogActivity$6 */
-    class C08536 extends ViewOutlineProvider {
-        C08536() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CallLogActivity$7 */
-    class C08547 implements OnClickListener {
-
-        /* renamed from: org.telegram.ui.CallLogActivity$7$1 */
-        class C19361 implements ContactsActivityDelegate {
-            C19361() {
-            }
-
-            public void didSelectContact(User user, String param, ContactsActivity activity) {
-                VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity(), null);
-            }
-        }
-
-        C08547() {
-        }
-
-        public void onClick(View v) {
-            Bundle args = new Bundle();
-            args.putBoolean("destroyAfterSelect", true);
-            args.putBoolean("returnAsResult", true);
-            args.putBoolean("onlyUsers", true);
-            ContactsActivity contactsFragment = new ContactsActivity(args);
-            contactsFragment.setDelegate(new C19361());
-            CallLogActivity.this.presentFragment(contactsFragment);
-        }
-    }
-
-    private class CallLogRow {
-        public List<Message> calls;
-        public int type;
-        public User user;
-
-        private CallLogRow() {
-        }
-    }
-
-    private class CustomCell extends FrameLayout {
-        public CustomCell(Context context) {
-            super(context);
-        }
-    }
-
-    private class ViewItem {
-        public ImageView button;
-        public ProfileSearchCell cell;
-
-        public ViewItem(ImageView button, ProfileSearchCell cell) {
-            this.button = button;
-            this.cell = cell;
-        }
-    }
-
     /* renamed from: org.telegram.ui.CallLogActivity$2 */
-    class C19322 extends ActionBarMenuOnItemClick {
-        C19322() {
+    class C10192 extends ActionBarMenuOnItemClick {
+        C10192() {
         }
 
         public void onItemClick(int id) {
@@ -188,8 +125,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$3 */
-    class C19333 implements OnItemClickListener {
-        C19333() {
+    class C10203 implements OnItemClickListener {
+        C10203() {
         }
 
         public void onItemClick(View view, int position) {
@@ -205,8 +142,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$4 */
-    class C19344 implements OnItemLongClickListener {
-        C19344() {
+    class C10224 implements OnItemLongClickListener {
+        C10224() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -215,11 +152,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             }
             final CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
             ArrayList<String> items = new ArrayList();
-            items.add(LocaleController.getString("Delete", R.string.Delete));
+            items.add(LocaleController.getString("Delete", C0488R.string.Delete));
             if (VoIPHelper.canRateCall((TL_messageActionPhoneCall) ((Message) row.calls.get(0)).action)) {
-                items.add(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem));
+                items.add(LocaleController.getString("CallMessageReportProblem", C0488R.string.CallMessageReportProblem));
             }
-            new Builder(CallLogActivity.this.getParentActivity()).setTitle(LocaleController.getString("Calls", R.string.Calls)).setItems((CharSequence[]) items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
+            new Builder(CallLogActivity.this.getParentActivity()).setTitle(LocaleController.getString("Calls", C0488R.string.Calls)).setItems((CharSequence[]) items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
@@ -238,8 +175,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$5 */
-    class C19355 extends OnScrollListener {
-        C19355() {
+    class C10245 extends OnScrollListener {
+        C10245() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -286,9 +223,47 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
+    /* renamed from: org.telegram.ui.CallLogActivity$6 */
+    class C10256 extends ViewOutlineProvider {
+        C10256() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.CallLogActivity$7 */
+    class C10277 implements OnClickListener {
+
+        /* renamed from: org.telegram.ui.CallLogActivity$7$1 */
+        class C10261 implements ContactsActivityDelegate {
+            C10261() {
+            }
+
+            public void didSelectContact(User user, String param, ContactsActivity activity) {
+                VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity(), null);
+            }
+        }
+
+        C10277() {
+        }
+
+        public void onClick(View v) {
+            Bundle args = new Bundle();
+            args.putBoolean("destroyAfterSelect", true);
+            args.putBoolean("returnAsResult", true);
+            args.putBoolean("onlyUsers", true);
+            ContactsActivity contactsFragment = new ContactsActivity(args);
+            contactsFragment.setDelegate(new C10261());
+            CallLogActivity.this.presentFragment(contactsFragment);
+        }
+    }
+
     /* renamed from: org.telegram.ui.CallLogActivity$8 */
-    class C19378 implements RequestDelegate {
-        C19378() {
+    class C10298 implements RequestDelegate {
+        C10298() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -355,6 +330,21 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
+    private class CallLogRow {
+        public List<Message> calls;
+        public int type;
+        public User user;
+
+        private CallLogRow() {
+        }
+    }
+
+    private class CustomCell extends FrameLayout {
+        public CustomCell(Context context) {
+            super(context);
+        }
+    }
+
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
@@ -384,7 +374,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     cell.setPaddingRight(AndroidUtilities.dp(32.0f));
                     frameLayout.addView(cell);
                     ImageView imageView = new ImageView(this.mContext);
-                    imageView.setImageResource(R.drawable.profile_phone);
+                    imageView.setImageResource(C0488R.drawable.profile_phone);
                     imageView.setAlpha(214);
                     imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
                     imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
@@ -400,7 +390,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -445,6 +435,16 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 return 2;
             }
             return 1;
+        }
+    }
+
+    private class ViewItem {
+        public ImageView button;
+        public ProfileSearchCell cell;
+
+        public ViewItem(ImageView button, ProfileSearchCell cell) {
+            this.button = button;
+            this.cell = cell;
         }
     }
 
@@ -516,27 +516,27 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     public View createView(Context context) {
-        this.greenDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+        this.greenDrawable = getParentActivity().getResources().getDrawable(C0488R.drawable.ic_call_made_green_18dp).mutate();
         this.greenDrawable.setBounds(0, 0, this.greenDrawable.getIntrinsicWidth(), this.greenDrawable.getIntrinsicHeight());
         this.greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), Mode.MULTIPLY));
         this.iconOut = new ImageSpan(this.greenDrawable, 0);
-        this.greenDrawable2 = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+        this.greenDrawable2 = getParentActivity().getResources().getDrawable(C0488R.drawable.ic_call_received_green_18dp).mutate();
         this.greenDrawable2.setBounds(0, 0, this.greenDrawable2.getIntrinsicWidth(), this.greenDrawable2.getIntrinsicHeight());
         this.greenDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), Mode.MULTIPLY));
         this.iconIn = new ImageSpan(this.greenDrawable2, 0);
-        this.redDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+        this.redDrawable = getParentActivity().getResources().getDrawable(C0488R.drawable.ic_call_received_green_18dp).mutate();
         this.redDrawable.setBounds(0, 0, this.redDrawable.getIntrinsicWidth(), this.redDrawable.getIntrinsicHeight());
         this.redDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedRedIcon), Mode.MULTIPLY));
         this.iconMissed = new ImageSpan(this.redDrawable, 0);
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("Calls", R.string.Calls));
-        this.actionBar.setActionBarMenuOnItemClick(new C19322());
+        this.actionBar.setTitle(LocaleController.getString("Calls", C0488R.string.Calls));
+        this.actionBar.setActionBarMenuOnItemClick(new C10192());
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoCallLog", R.string.NoCallLog));
+        this.emptyView.setText(LocaleController.getString("NoCallLog", C0488R.string.NoCallLog));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -550,9 +550,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19333());
-        this.listView.setOnItemLongClickListener(new C19344());
-        this.listView.setOnScrollListener(new C19355());
+        this.listView.setOnItemClickListener(new C10203());
+        this.listView.setOnItemLongClickListener(new C10224());
+        this.listView.setOnScrollListener(new C10245());
         if (this.loading) {
             this.emptyView.showProgress();
         } else {
@@ -563,7 +563,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(C0488R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -571,16 +571,16 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
         this.floatingButton.setBackgroundDrawable(drawable);
         this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
-        this.floatingButton.setImageResource(R.drawable.ic_call_white_24dp);
+        this.floatingButton.setImageResource(C0488R.drawable.ic_call_white_24dp);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C08536());
+            this.floatingButton.setOutlineProvider(new C10256());
         }
         frameLayout.addView(this.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        this.floatingButton.setOnClickListener(new C08547());
+        this.floatingButton.setOnClickListener(new C10277());
         return this.fragmentView;
     }
 
@@ -618,15 +618,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             req.limit = count;
             req.peer = new TL_inputPeerEmpty();
             req.filter = new TL_inputMessagesFilterPhoneCalls();
-            req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
+            req.f33q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19378(), 2), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C10298(), 2), this.classGuid);
         }
     }
 
     private void confirmAndDelete(final CallLogRow row) {
         if (getParentActivity() != null) {
-            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog)).setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", C0488R.string.AppName)).setMessage(LocaleController.getString("ConfirmDeleteCallLog", C0488R.string.ConfirmDeleteCallLog)).setPositiveButton(LocaleController.getString("Delete", C0488R.string.Delete), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ArrayList<Integer> ids = new ArrayList();
                     for (Message msg : row.calls) {
@@ -634,7 +634,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     }
                     MessagesController.getInstance(CallLogActivity.this.currentAccount).deleteMessages(ids, null, null, 0, false);
                 }
-            }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
+            }).setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
         }
     }
 

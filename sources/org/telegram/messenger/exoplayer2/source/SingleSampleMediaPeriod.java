@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -204,7 +204,7 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     }
 
     public long readDiscontinuity() {
-        return C0542C.TIME_UNSET;
+        return C0600C.TIME_UNSET;
     }
 
     public long getNextLoadPositionUs() {

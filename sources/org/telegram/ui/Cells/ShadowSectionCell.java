@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
+import org.telegram.messenger.C0488R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ShadowSectionCell extends View {
@@ -12,7 +12,7 @@ public class ShadowSectionCell extends View {
 
     public ShadowSectionCell(Context context) {
         super(context);
-        setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+        setBackgroundDrawable(Theme.getThemedDrawable(context, C0488R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
     }
 
     public void setSize(int value) {

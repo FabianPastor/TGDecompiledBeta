@@ -132,6 +132,10 @@ public class NotificationCenter {
     private SparseArray<ArrayList<Object>> observers = new SparseArray();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray();
 
+    public interface NotificationCenterDelegate {
+        void didReceivedNotification(int i, int i2, Object... objArr);
+    }
+
     private class DelayedPost {
         private Object[] args;
         private int id;
@@ -140,10 +144,6 @@ public class NotificationCenter {
             this.id = id;
             this.args = args;
         }
-    }
-
-    public interface NotificationCenterDelegate {
-        void didReceivedNotification(int i, int i2, Object... objArr);
     }
 
     static {

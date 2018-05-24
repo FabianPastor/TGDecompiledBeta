@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class SpliceInsertCommand extends SpliceCommand {
-    public static final Creator<SpliceInsertCommand> CREATOR = new C05891();
+    public static final Creator<SpliceInsertCommand> CREATOR = new C06641();
     public final boolean autoReturn;
     public final int availNum;
     public final int availsExpected;
@@ -23,8 +23,8 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final int uniqueProgramId;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.SpliceInsertCommand$1 */
-    static class C05891 implements Creator<SpliceInsertCommand> {
-        C05891() {
+    static class C06641 implements Creator<SpliceInsertCommand> {
+        C06641() {
         }
 
         public SpliceInsertCommand createFromParcel(Parcel in) {
@@ -131,8 +131,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
 	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
 	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)

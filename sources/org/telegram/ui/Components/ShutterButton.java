@@ -12,34 +12,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
+import org.telegram.messenger.C0488R;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
     private ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
-    private Runnable longPressed = new C13061();
+    private Runnable longPressed = new C16461();
     private boolean pressed;
     private boolean processRelease;
     private Paint redPaint;
     private float redProgress;
-    private Drawable shadowDrawable = getResources().getDrawable(R.drawable.camera_btn);
+    private Drawable shadowDrawable = getResources().getDrawable(C0488R.drawable.camera_btn);
     private State state;
     private long totalTime;
     private Paint whitePaint = new Paint(1);
-
-    /* renamed from: org.telegram.ui.Components.ShutterButton$1 */
-    class C13061 implements Runnable {
-        C13061() {
-        }
-
-        public void run() {
-            if (ShutterButton.this.delegate != null && !ShutterButton.this.delegate.shutterLongPressed()) {
-                ShutterButton.this.processRelease = false;
-            }
-        }
-    }
 
     public interface ShutterButtonDelegate {
         void shutterCancel();
@@ -47,6 +35,18 @@ public class ShutterButton extends View {
         boolean shutterLongPressed();
 
         void shutterReleased();
+    }
+
+    /* renamed from: org.telegram.ui.Components.ShutterButton$1 */
+    class C16461 implements Runnable {
+        C16461() {
+        }
+
+        public void run() {
+            if (ShutterButton.this.delegate != null && !ShutterButton.this.delegate.shutterLongPressed()) {
+                ShutterButton.this.processRelease = false;
+            }
+        }
     }
 
     public enum State {

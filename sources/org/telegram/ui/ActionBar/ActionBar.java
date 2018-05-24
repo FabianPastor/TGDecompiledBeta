@@ -66,8 +66,8 @@ public class ActionBar extends FrameLayout {
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$1 */
-    class C07091 implements OnClickListener {
-        C07091() {
+    class C08321 implements OnClickListener {
+        C08321() {
         }
 
         public void onClick(View v) {
@@ -78,8 +78,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$2 */
-    class C07102 implements OnClickListener {
-        C07102() {
+    class C08332 implements OnClickListener {
+        C08332() {
         }
 
         public void onClick(View v) {
@@ -92,8 +92,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$3 */
-    class C07113 extends AnimatorListenerAdapter {
-        C07113() {
+    class C08343 extends AnimatorListenerAdapter {
+        C08343() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -126,8 +126,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$4 */
-    class C07124 extends AnimatorListenerAdapter {
-        C07124() {
+    class C08354 extends AnimatorListenerAdapter {
+        C08354() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -162,7 +162,7 @@ public class ActionBar extends FrameLayout {
         this.addToContainer = true;
         this.interceptTouches = true;
         this.castShadows = true;
-        setOnClickListener(new C07091());
+        setOnClickListener(new C08321());
     }
 
     private void createBackButtonImage() {
@@ -175,7 +175,7 @@ public class ActionBar extends FrameLayout {
             }
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
-            this.backButtonImageView.setOnClickListener(new C07102());
+            this.backButtonImageView.setOnClickListener(new C08332());
         }
     }
 
@@ -437,7 +437,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07113());
+            this.actionModeAnimation.addListener(new C08343());
             this.actionModeAnimation.start();
             if (this.backButtonImageView != null) {
                 Drawable drawable = this.backButtonImageView.getDrawable();
@@ -463,7 +463,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07124());
+            this.actionModeAnimation.addListener(new C08354());
             this.actionModeAnimation.start();
             if (this.titleTextView != null) {
                 this.titleTextView.setVisibility(0);

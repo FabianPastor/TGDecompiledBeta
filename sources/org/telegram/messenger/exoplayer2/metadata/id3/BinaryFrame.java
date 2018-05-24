@@ -5,12 +5,12 @@ import android.os.Parcelable.Creator;
 import java.util.Arrays;
 
 public final class BinaryFrame extends Id3Frame {
-    public static final Creator<BinaryFrame> CREATOR = new C05801();
+    public static final Creator<BinaryFrame> CREATOR = new C06551();
     public final byte[] data;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.BinaryFrame$1 */
-    static class C05801 implements Creator<BinaryFrame> {
-        C05801() {
+    static class C06551 implements Creator<BinaryFrame> {
+        C06551() {
         }
 
         public BinaryFrame createFromParcel(Parcel in) {

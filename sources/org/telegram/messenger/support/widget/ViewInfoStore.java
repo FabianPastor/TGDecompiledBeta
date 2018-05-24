@@ -12,6 +12,16 @@ class ViewInfoStore {
     final ArrayMap<ViewHolder, InfoRecord> mLayoutHolderMap = new ArrayMap();
     final LongSparseArray<ViewHolder> mOldChangedHolders = new LongSparseArray();
 
+    interface ProcessCallback {
+        void processAppeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void processDisappeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void processPersistent(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void unused(ViewHolder viewHolder);
+    }
+
     static class InfoRecord {
         static final int FLAG_APPEAR = 2;
         static final int FLAG_APPEAR_AND_DISAPPEAR = 3;
@@ -44,16 +54,6 @@ class ViewInfoStore {
             do {
             } while (sPool.acquire() != null);
         }
-    }
-
-    interface ProcessCallback {
-        void processAppeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void processDisappeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void processPersistent(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void unused(ViewHolder viewHolder);
     }
 
     ViewInfoStore() {

@@ -40,11 +40,21 @@ public class VideoTimelineView extends View {
     private Rect rect2;
     private long videoLength;
 
+    public interface VideoTimelineViewDelegate {
+        void didStartDragging();
+
+        void didStopDragging();
+
+        void onLeftProgressChanged(float f);
+
+        void onRightProgressChanged(float f);
+    }
+
     /* renamed from: org.telegram.ui.Components.VideoTimelineView$1 */
-    class C13361 extends AsyncTask<Integer, Integer, Bitmap> {
+    class C16951 extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C13361() {
+        C16951() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -93,16 +103,6 @@ public class VideoTimelineView extends View {
                 }
             }
         }
-    }
-
-    public interface VideoTimelineViewDelegate {
-        void didStartDragging();
-
-        void didStopDragging();
-
-        void onLeftProgressChanged(float f);
-
-        void onRightProgressChanged(float f);
     }
 
     public VideoTimelineView(Context context) {
@@ -278,7 +278,7 @@ public class VideoTimelineView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C13361();
+            this.currentTask = new C16951();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }

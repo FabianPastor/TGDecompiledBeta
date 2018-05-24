@@ -10,11 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_authorization;
 import org.telegram.tgnet.TLRPC.TL_webAuthorization;
@@ -100,7 +100,7 @@ public class SessionCell extends FrameLayout {
             this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
             if ((session.flags & 1) != 0) {
                 setTag(Theme.key_windowBackgroundWhiteValueText);
-                this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
+                this.onlineTextView.setText(LocaleController.getString("Online", C0488R.string.Online));
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
             } else {
                 setTag(Theme.key_windowBackgroundWhiteGrayText3);
@@ -141,7 +141,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString("UnofficialApp", C0488R.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");

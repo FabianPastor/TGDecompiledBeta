@@ -5,13 +5,13 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 
 public final class TrackKey implements Parcelable, Comparable<TrackKey> {
-    public static final Creator<TrackKey> CREATOR = new C06191();
+    public static final Creator<TrackKey> CREATOR = new C06991();
     public final int streamElementIndex;
     public final int trackIndex;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.TrackKey$1 */
-    static class C06191 implements Creator<TrackKey> {
-        C06191() {
+    static class C06991 implements Creator<TrackKey> {
+        C06991() {
         }
 
         public TrackKey createFromParcel(Parcel in) {

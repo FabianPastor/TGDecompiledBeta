@@ -85,28 +85,6 @@ public class FastDateParser implements Serializable, DateParser {
         }
     }
 
-    private static class CopyQuotedStrategy extends Strategy {
-        private final String formatField;
-
-        CopyQuotedStrategy(String formatField) {
-            super();
-            this.formatField = formatField;
-        }
-
-        boolean isNumber() {
-            char c = this.formatField.charAt(0);
-            if (c == '\'') {
-                c = this.formatField.charAt(1);
-            }
-            return Character.isDigit(c);
-        }
-
-        boolean addRegex(FastDateParser parser, StringBuilder regex) {
-            FastDateParser.escapeRegex(regex, this.formatField, true);
-            return false;
-        }
-    }
-
     private static class NumberStrategy extends Strategy {
         private final int field;
 
@@ -134,6 +112,28 @@ public class FastDateParser implements Serializable, DateParser {
 
         int modify(int iValue) {
             return iValue;
+        }
+    }
+
+    private static class CopyQuotedStrategy extends Strategy {
+        private final String formatField;
+
+        CopyQuotedStrategy(String formatField) {
+            super();
+            this.formatField = formatField;
+        }
+
+        boolean isNumber() {
+            char c = this.formatField.charAt(0);
+            if (c == '\'') {
+                c = this.formatField.charAt(1);
+            }
+            return Character.isDigit(c);
+        }
+
+        boolean addRegex(FastDateParser parser, StringBuilder regex) {
+            FastDateParser.escapeRegex(regex, this.formatField, true);
+            return false;
         }
     }
 

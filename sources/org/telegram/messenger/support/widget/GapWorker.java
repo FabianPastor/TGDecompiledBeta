@@ -13,15 +13,15 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
 final class GapWorker implements Runnable {
     static final ThreadLocal<GapWorker> sGapWorker = new ThreadLocal();
-    static Comparator<Task> sTaskComparator = new C06571();
+    static Comparator<Task> sTaskComparator = new C07521();
     long mFrameIntervalNs;
     long mPostTimeNs;
     ArrayList<RecyclerView> mRecyclerViews = new ArrayList();
     private ArrayList<Task> mTasks = new ArrayList();
 
     /* renamed from: org.telegram.messenger.support.widget.GapWorker$1 */
-    static class C06571 implements Comparator<Task> {
-        C06571() {
+    static class C07521 implements Comparator<Task> {
+        C07521() {
         }
 
         public int compare(Task lhs, Task rhs) {
@@ -42,25 +42,6 @@ final class GapWorker implements Runnable {
                 int deltaDistanceToItem = lhs.distanceToItem - rhs.distanceToItem;
                 return deltaDistanceToItem != 0 ? deltaDistanceToItem : 0;
             }
-        }
-    }
-
-    static class Task {
-        public int distanceToItem;
-        public boolean immediate;
-        public int position;
-        public RecyclerView view;
-        public int viewVelocity;
-
-        Task() {
-        }
-
-        public void clear() {
-            this.immediate = false;
-            this.viewVelocity = 0;
-            this.distanceToItem = 0;
-            this.view = null;
-            this.position = 0;
         }
     }
 
@@ -138,6 +119,25 @@ final class GapWorker implements Runnable {
                 Arrays.fill(this.mPrefetchArray, -1);
             }
             this.mCount = 0;
+        }
+    }
+
+    static class Task {
+        public int distanceToItem;
+        public boolean immediate;
+        public int position;
+        public RecyclerView view;
+        public int viewVelocity;
+
+        Task() {
+        }
+
+        public void clear() {
+            this.immediate = false;
+            this.viewVelocity = 0;
+            this.distanceToItem = 0;
+            this.view = null;
+            this.position = 0;
         }
     }
 

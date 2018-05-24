@@ -17,12 +17,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -47,9 +47,37 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     private TextView textView;
     private Pattern urlPattern;
 
+    public interface SharingLocationsAlertDelegate {
+        void didSelectLocation(SharingLocationInfo sharingLocationInfo);
+    }
+
+    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
+    class C16413 extends OnScrollListener {
+        C16413() {
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            SharingLocationsAlert.this.updateLayout();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
+    class C16424 implements OnItemClickListener {
+        C16424() {
+        }
+
+        public void onItemClick(View view, int position) {
+            position--;
+            if (position >= 0 && position < LocationController.getLocationsCount()) {
+                SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
+                SharingLocationsAlert.this.dismiss();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class C13035 implements OnClickListener {
-        C13035() {
+    class C16435 implements OnClickListener {
+        C16435() {
         }
 
         public void onClick(View view) {
@@ -61,40 +89,12 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class C13046 implements OnClickListener {
-        C13046() {
+    class C16446 implements OnClickListener {
+        C16446() {
         }
 
         public void onClick(View view) {
             SharingLocationsAlert.this.dismiss();
-        }
-    }
-
-    public interface SharingLocationsAlertDelegate {
-        void didSelectLocation(SharingLocationInfo sharingLocationInfo);
-    }
-
-    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C20853 extends OnScrollListener {
-        C20853() {
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            SharingLocationsAlert.this.updateLayout();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C20864 implements OnItemClickListener {
-        C20864() {
-        }
-
-        public void onItemClick(View view, int position) {
-            position--;
-            if (position >= 0 && position < LocationController.getLocationsCount()) {
-                SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
-                SharingLocationsAlert.this.dismiss();
-            }
         }
     }
 
@@ -156,7 +156,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     return;
                 case 1:
                     if (SharingLocationsAlert.this.textView != null) {
-                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
+                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", C0488R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
                         return;
                     }
                     return;
@@ -170,7 +170,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         super(context, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(C0488R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -251,23 +251,23 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C20853());
-        this.listView.setOnItemClickListener(new C20864());
+        this.listView.setOnScrollListener(new C16413());
+        this.listView.setOnItemClickListener(new C16424());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(C0488R.drawable.header_shadow_reverse);
         this.containerView.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
-        pickerBottomLayout.cancelButton.setOnClickListener(new C13035());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", C0488R.string.StopAllLocationSharings));
+        pickerBottomLayout.cancelButton.setOnClickListener(new C16435());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", C0488R.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new C13046());
+        pickerBottomLayout.doneButton.setOnClickListener(new C16446());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }

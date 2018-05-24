@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -43,10 +43,6 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     public final int primaryTrackType;
     private final List<BaseMediaChunk> readOnlyMediaChunks = Collections.unmodifiableList(this.mediaChunks);
     private ReleaseCallback<T> releaseCallback;
-
-    public interface ReleaseCallback<T extends ChunkSource> {
-        void onSampleStreamReleased(ChunkSampleStream<T> chunkSampleStream);
-    }
 
     public final class EmbeddedSampleStream implements SampleStream {
         private boolean formatNotificationSent;
@@ -106,6 +102,10 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
                 this.formatNotificationSent = true;
             }
         }
+    }
+
+    public interface ReleaseCallback<T extends ChunkSource> {
+        void onSampleStreamReleased(ChunkSampleStream<T> chunkSampleStream);
     }
 
     public ChunkSampleStream(int primaryTrackType, int[] embeddedTrackTypes, Format[] embeddedTrackFormats, T chunkSource, SequenceableLoader.Callback<ChunkSampleStream<T>> callback, Allocator allocator, long positionUs, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
@@ -365,7 +365,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         Chunk loadable = this.nextChunkHolder.chunk;
         this.nextChunkHolder.clear();
         if (endOfStream) {
-            this.pendingResetPositionUs = C0542C.TIME_UNSET;
+            this.pendingResetPositionUs = C0600C.TIME_UNSET;
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
@@ -375,7 +375,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
                 BaseMediaChunk mediaChunk = (BaseMediaChunk) loadable;
                 if (pendingReset) {
                     this.decodeOnlyUntilPositionUs = (mediaChunk.startTimeUs > this.pendingResetPositionUs ? 1 : (mediaChunk.startTimeUs == this.pendingResetPositionUs ? 0 : -1)) == 0 ? Long.MIN_VALUE : this.pendingResetPositionUs;
-                    this.pendingResetPositionUs = C0542C.TIME_UNSET;
+                    this.pendingResetPositionUs = C0600C.TIME_UNSET;
                 }
                 mediaChunk.init(this.mediaChunkOutput);
                 this.mediaChunks.add(mediaChunk);
@@ -435,7 +435,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     }
 
     boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0542C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0600C.TIME_UNSET;
     }
 
     private void discardDownstreamMediaChunks(int discardToPrimaryStreamIndex) {

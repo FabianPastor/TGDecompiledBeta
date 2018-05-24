@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.wav;
 
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
@@ -39,11 +39,11 @@ final class WavHeader implements SeekMap {
     }
 
     public long getDurationUs() {
-        return (C0542C.MICROS_PER_SECOND * (this.dataSize / ((long) this.blockAlignment))) / ((long) this.sampleRateHz);
+        return (C0600C.MICROS_PER_SECOND * (this.dataSize / ((long) this.blockAlignment))) / ((long) this.sampleRateHz);
     }
 
     public SeekPoints getSeekPoints(long timeUs) {
-        long positionOffset = Util.constrainValue((((((long) this.averageBytesPerSecond) * timeUs) / C0542C.MICROS_PER_SECOND) / ((long) this.blockAlignment)) * ((long) this.blockAlignment), 0, this.dataSize - ((long) this.blockAlignment));
+        long positionOffset = Util.constrainValue((((((long) this.averageBytesPerSecond) * timeUs) / C0600C.MICROS_PER_SECOND) / ((long) this.blockAlignment)) * ((long) this.blockAlignment), 0, this.dataSize - ((long) this.blockAlignment));
         long seekPosition = this.dataStartPosition + positionOffset;
         long seekTimeUs = getTimeUs(seekPosition);
         SeekPoint seekPoint = new SeekPoint(seekTimeUs, seekPosition);
@@ -55,7 +55,7 @@ final class WavHeader implements SeekMap {
     }
 
     public long getTimeUs(long position) {
-        return (C0542C.MICROS_PER_SECOND * Math.max(0, position - this.dataStartPosition)) / ((long) this.averageBytesPerSecond);
+        return (C0600C.MICROS_PER_SECOND * Math.max(0, position - this.dataStartPosition)) / ((long) this.averageBytesPerSecond);
     }
 
     public int getBytesPerFrame() {

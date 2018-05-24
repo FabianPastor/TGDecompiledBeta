@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -48,7 +49,6 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -116,102 +116,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private VelocityTracker velocityTracker = null;
     private WakeLock wakeLock = null;
 
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class C16275 implements OnClickListener {
-        C16275() {
-        }
-
-        @TargetApi(9)
-        public void onClick(DialogInterface dialog, int which) {
-            try {
-                Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-                intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
-                PopupNotificationActivity.this.startActivity(intent);
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class C16286 implements Runnable {
-        C16286() {
-        }
-
-        public void run() {
-            PopupNotificationActivity.this.animationInProgress = false;
-            PopupNotificationActivity.this.switchToPreviousMessage();
-            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class C16297 implements Runnable {
-        C16297() {
-        }
-
-        public void run() {
-            PopupNotificationActivity.this.animationInProgress = false;
-            PopupNotificationActivity.this.switchToNextMessage();
-            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$8 */
-    class C16308 implements Runnable {
-        C16308() {
-        }
-
-        public void run() {
-            PopupNotificationActivity.this.animationInProgress = false;
-            PopupNotificationActivity.this.applyViewsLayoutParams(0);
-            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$9 */
-    class C16319 extends AnimatorListenerAdapter {
-        C16319() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
-                PopupNotificationActivity.this.onAnimationEndRunnable.run();
-                PopupNotificationActivity.this.onAnimationEndRunnable = null;
-            }
-        }
-    }
-
-    private class FrameLayoutTouch extends FrameLayout {
-        public FrameLayoutTouch(Context context) {
-            super(context);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-        }
-
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
-        }
-
-        public boolean onTouchEvent(MotionEvent ev) {
-            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
-        }
-
-        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            ((PopupNotificationActivity) getContext()).onTouchEventMy(null);
-            super.requestDisallowInterceptTouchEvent(disallowIntercept);
-        }
-    }
-
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
-    class C22403 implements ChatActivityEnterViewDelegate {
-        C22403() {
+    class C21313 implements ChatActivityEnterViewDelegate {
+        C21313() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -275,8 +182,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$4 */
-    class C22414 extends ActionBarMenuOnItemClick {
-        C22414() {
+    class C21324 extends ActionBarMenuOnItemClick {
+        C21324() {
         }
 
         public void onItemClick(int id) {
@@ -288,6 +195,99 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             } else if (id == 2) {
                 PopupNotificationActivity.this.switchToNextMessage();
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
+    class C21335 implements OnClickListener {
+        C21335() {
+        }
+
+        @TargetApi(9)
+        public void onClick(DialogInterface dialog, int which) {
+            try {
+                Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
+                PopupNotificationActivity.this.startActivity(intent);
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
+    class C21346 implements Runnable {
+        C21346() {
+        }
+
+        public void run() {
+            PopupNotificationActivity.this.animationInProgress = false;
+            PopupNotificationActivity.this.switchToPreviousMessage();
+            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
+    class C21357 implements Runnable {
+        C21357() {
+        }
+
+        public void run() {
+            PopupNotificationActivity.this.animationInProgress = false;
+            PopupNotificationActivity.this.switchToNextMessage();
+            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$8 */
+    class C21368 implements Runnable {
+        C21368() {
+        }
+
+        public void run() {
+            PopupNotificationActivity.this.animationInProgress = false;
+            PopupNotificationActivity.this.applyViewsLayoutParams(0);
+            AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$9 */
+    class C21379 extends AnimatorListenerAdapter {
+        C21379() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
+                PopupNotificationActivity.this.onAnimationEndRunnable.run();
+                PopupNotificationActivity.this.onAnimationEndRunnable = null;
+            }
+        }
+    }
+
+    private class FrameLayoutTouch extends FrameLayout {
+        public FrameLayoutTouch(Context context) {
+            super(context);
+        }
+
+        public FrameLayoutTouch(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public FrameLayoutTouch(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
+        }
+
+        public boolean onTouchEvent(MotionEvent ev) {
+            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
+        }
+
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            ((PopupNotificationActivity) getContext()).onTouchEventMy(null);
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
         }
     }
 
@@ -426,12 +426,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
-        this.chatActivityEnterView.setDelegate(new C22403());
+        this.chatActivityEnterView.setDelegate(new C21313());
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
-        this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_close_white);
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         this.popupContainer.addView(this.actionBar);
@@ -495,7 +495,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.bottomMargin = AndroidUtilities.dp(4.0f);
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
-        this.actionBar.setActionBarMenuOnItemClick(new C22414());
+        this.actionBar.setActionBarMenuOnItemClick(new C21324());
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
@@ -516,10 +516,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 3 && grantResults[0] != 0) {
             Builder builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C16275());
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0488R.string.AppName));
+            builder.setMessage(LocaleController.getString("PermissionNoAudio", C0488R.string.PermissionNoAudio));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0488R.string.PermissionOpenSettings), new C21335());
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
             builder.show();
         }
     }
@@ -615,12 +615,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     moveDiff = ((float) width) - this.centerView.getTranslationX();
                     otherView = this.leftView;
                     otherButtonsView = this.leftButtonsView;
-                    this.onAnimationEndRunnable = new C16286();
+                    this.onAnimationEndRunnable = new C21346();
                 } else if ((forceMove == 2 || diff < (-width) / 3) && this.rightView != null) {
                     moveDiff = ((float) (-width)) - this.centerView.getTranslationX();
                     otherView = this.rightView;
                     otherButtonsView = this.rightButtonsView;
-                    this.onAnimationEndRunnable = new C16297();
+                    this.onAnimationEndRunnable = new C21357();
                 } else if (this.centerView.getTranslationX() != 0.0f) {
                     moveDiff = -this.centerView.getTranslationX();
                     otherView = diff > 0 ? this.leftView : this.rightView;
@@ -629,7 +629,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     } else {
                         otherButtonsView = this.rightButtonsView;
                     }
-                    this.onAnimationEndRunnable = new C16308();
+                    this.onAnimationEndRunnable = new C21368();
                 }
                 if (moveDiff != 0.0f) {
                     int time = (int) (Math.abs(moveDiff / ((float) width)) * 200.0f);
@@ -647,7 +647,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animators);
                     animatorSet.setDuration((long) time);
-                    animatorSet.addListener(new C16319());
+                    animatorSet.addListener(new C21379());
                     animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();
@@ -1646,7 +1646,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             } else if (this.currentUser != null) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
                 if (((int) dialog_id) == 0) {
-                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white, 0, 0, 0);
+                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(C0488R.drawable.ic_lock_white, 0, 0, 0);
                     this.nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                 } else {
                     this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1686,7 +1686,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 setTypingAnimation(true);
                 return;
             }
-            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications));
+            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", C0488R.string.ServiceNotifications));
         }
     }
 

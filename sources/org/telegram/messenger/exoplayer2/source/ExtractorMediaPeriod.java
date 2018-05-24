@@ -5,7 +5,7 @@ import android.os.Handler;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -74,8 +74,8 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     private final Uri uri;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.ExtractorMediaPeriod$1 */
-    class C05931 implements Runnable {
-        C05931() {
+    class C06711 implements Runnable {
+        C06711() {
         }
 
         public void run() {
@@ -84,8 +84,8 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.ExtractorMediaPeriod$2 */
-    class C05942 implements Runnable {
-        C05942() {
+    class C06722 implements Runnable {
+        C06722() {
         }
 
         public void run() {
@@ -93,58 +93,6 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 ExtractorMediaPeriod.this.callback.onContinueLoadingRequested(ExtractorMediaPeriod.this);
             }
         }
-    }
-
-    private static final class ExtractorHolder {
-        private Extractor extractor;
-        private final ExtractorOutput extractorOutput;
-        private final Extractor[] extractors;
-
-        public ExtractorHolder(Extractor[] extractors, ExtractorOutput extractorOutput) {
-            this.extractors = extractors;
-            this.extractorOutput = extractorOutput;
-        }
-
-        public Extractor selectExtractor(ExtractorInput input, Uri uri) throws IOException, InterruptedException {
-            if (this.extractor != null) {
-                return this.extractor;
-            }
-            Extractor[] extractorArr = this.extractors;
-            int length = extractorArr.length;
-            int i = 0;
-            loop0:
-            while (i < length) {
-                Extractor extractor = extractorArr[i];
-                try {
-                    if (extractor.sniff(input)) {
-                        this.extractor = extractor;
-                        input.resetPeekPosition();
-                        break loop0;
-                    }
-                    i++;
-                } catch (EOFException e) {
-                    i++;
-                } finally {
-                    input.resetPeekPosition();
-                }
-            }
-            if (this.extractor == null) {
-                throw new UnrecognizedInputFormatException("None of the available extractors (" + Util.getCommaDelimitedSimpleClassNames(this.extractors) + ") could read the stream.", uri);
-            }
-            this.extractor.init(this.extractorOutput);
-            return this.extractor;
-        }
-
-        public void release() {
-            if (this.extractor != null) {
-                this.extractor.release();
-                this.extractor = null;
-            }
-        }
-    }
-
-    interface Listener {
-        void onSourceInfoRefreshed(long j, boolean z);
     }
 
     final class ExtractingLoadable implements Loadable {
@@ -236,6 +184,58 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         }
     }
 
+    private static final class ExtractorHolder {
+        private Extractor extractor;
+        private final ExtractorOutput extractorOutput;
+        private final Extractor[] extractors;
+
+        public ExtractorHolder(Extractor[] extractors, ExtractorOutput extractorOutput) {
+            this.extractors = extractors;
+            this.extractorOutput = extractorOutput;
+        }
+
+        public Extractor selectExtractor(ExtractorInput input, Uri uri) throws IOException, InterruptedException {
+            if (this.extractor != null) {
+                return this.extractor;
+            }
+            Extractor[] extractorArr = this.extractors;
+            int length = extractorArr.length;
+            int i = 0;
+            loop0:
+            while (i < length) {
+                Extractor extractor = extractorArr[i];
+                try {
+                    if (extractor.sniff(input)) {
+                        this.extractor = extractor;
+                        input.resetPeekPosition();
+                        break loop0;
+                    }
+                    i++;
+                } catch (EOFException e) {
+                    i++;
+                } finally {
+                    input.resetPeekPosition();
+                }
+            }
+            if (this.extractor == null) {
+                throw new UnrecognizedInputFormatException("None of the available extractors (" + Util.getCommaDelimitedSimpleClassNames(this.extractors) + ") could read the stream.", uri);
+            }
+            this.extractor.init(this.extractorOutput);
+            return this.extractor;
+        }
+
+        public void release() {
+            if (this.extractor != null) {
+                this.extractor.release();
+                this.extractor = null;
+            }
+        }
+    }
+
+    interface Listener {
+        void onSourceInfoRefreshed(long j, boolean z);
+    }
+
     private final class SampleStreamImpl implements SampleStream {
         private final int track;
 
@@ -271,14 +271,14 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         this.continueLoadingCheckIntervalBytes = (long) continueLoadingCheckIntervalBytes;
         this.extractorHolder = new ExtractorHolder(extractors, this);
         this.loadCondition = new ConditionVariable();
-        this.maybeFinishPrepareRunnable = new C05931();
-        this.onContinueLoadingRequestedRunnable = new C05942();
+        this.maybeFinishPrepareRunnable = new C06711();
+        this.onContinueLoadingRequestedRunnable = new C06722();
         this.handler = new Handler();
         this.sampleQueueTrackIds = new int[0];
         this.sampleQueues = new SampleQueue[0];
-        this.pendingResetPositionUs = C0542C.TIME_UNSET;
+        this.pendingResetPositionUs = C0600C.TIME_UNSET;
         this.length = -1;
-        this.durationUs = C0542C.TIME_UNSET;
+        this.durationUs = C0600C.TIME_UNSET;
         if (minLoadableRetryCount == -1) {
             minLoadableRetryCount = 3;
         }
@@ -410,7 +410,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
 
     public long readDiscontinuity() {
         if (!this.notifyDiscontinuity || (!this.loadingFinished && getExtractedSamplesCount() <= this.extractedSamplesCountAtStartOfLoad)) {
-            return C0542C.TIME_UNSET;
+            return C0600C.TIME_UNSET;
         }
         this.notifyDiscontinuity = false;
         return this.lastSeekPositionUs;
@@ -548,7 +548,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public void onLoadCompleted(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
-        if (this.durationUs == C0542C.TIME_UNSET) {
+        if (this.durationUs == C0600C.TIME_UNSET) {
             long largestQueuedTimestampUs = getLargestQueuedTimestampUs();
             this.durationUs = largestQueuedTimestampUs == Long.MIN_VALUE ? 0 : DEFAULT_LAST_SAMPLE_DURATION_US + largestQueuedTimestampUs;
             this.listener.onSourceInfoRefreshed(this.durationUs, this.seekMap.isSeekable());
@@ -650,7 +650,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 this.haveAudioVideoTracks |= isAudioVideo;
             }
             this.tracks = new TrackGroupArray(trackArray);
-            if (this.minLoadableRetryCount == -1 && this.length == -1 && this.seekMap.getDurationUs() == C0542C.TIME_UNSET) {
+            if (this.minLoadableRetryCount == -1 && this.length == -1 && this.seekMap.getDurationUs() == C0600C.TIME_UNSET) {
                 this.actualMinLoadableRetryCount = 6;
             }
             this.prepared = true;
@@ -669,12 +669,12 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         ExtractingLoadable loadable = new ExtractingLoadable(this.uri, this.dataSource, this.extractorHolder, this.loadCondition);
         if (this.prepared) {
             Assertions.checkState(isPendingReset());
-            if (this.durationUs == C0542C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
+            if (this.durationUs == C0600C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
                 loadable.setLoadPosition(this.seekMap.getSeekPoints(this.pendingResetPositionUs).first.position, this.pendingResetPositionUs);
-                this.pendingResetPositionUs = C0542C.TIME_UNSET;
+                this.pendingResetPositionUs = C0600C.TIME_UNSET;
             } else {
                 this.loadingFinished = true;
-                this.pendingResetPositionUs = C0542C.TIME_UNSET;
+                this.pendingResetPositionUs = C0600C.TIME_UNSET;
                 return;
             }
         }
@@ -684,7 +684,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
 
     private boolean configureRetry(ExtractingLoadable loadable, int currentExtractedSampleCount) {
         int i = 0;
-        if (this.length != -1 || (this.seekMap != null && this.seekMap.getDurationUs() != C0542C.TIME_UNSET)) {
+        if (this.length != -1 || (this.seekMap != null && this.seekMap.getDurationUs() != C0600C.TIME_UNSET)) {
             this.extractedSamplesCountAtStartOfLoad = currentExtractedSampleCount;
             return true;
         } else if (!this.prepared || suppressRead()) {
@@ -742,7 +742,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     private boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0542C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0600C.TIME_UNSET;
     }
 
     private static boolean isLoadableExceptionFatal(IOException e) {

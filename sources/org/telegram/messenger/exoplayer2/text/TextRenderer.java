@@ -34,12 +34,12 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     private Format streamFormat;
     private SubtitleOutputBuffer subtitle;
 
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface ReplacementState {
-    }
-
     @Deprecated
     public interface Output extends TextOutput {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReplacementState {
     }
 
     public TextRenderer(TextOutput output, Looper outputLooper) {

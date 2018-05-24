@@ -37,7 +37,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
-    private final Runnable mCheckForGapsRunnable = new C06631();
+    private final Runnable mCheckForGapsRunnable = new C07681();
     private int mFullSizeSpec;
     private int mGapStrategy = 2;
     private boolean mLaidOutInvalidFullSpan = false;
@@ -62,8 +62,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private final Rect mTmpRect = new Rect();
 
     /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$1 */
-    class C06631 implements Runnable {
-        C06631() {
+    class C07681 implements Runnable {
+        C07681() {
         }
 
         public void run() {
@@ -123,21 +123,62 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         }
     }
 
+    public static class LayoutParams extends org.telegram.messenger.support.widget.RecyclerView.LayoutParams {
+        public static final int INVALID_SPAN_ID = -1;
+        boolean mFullSpan;
+        Span mSpan;
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(MarginLayoutParams source) {
+            super(source);
+        }
+
+        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
+            super(source);
+        }
+
+        public LayoutParams(org.telegram.messenger.support.widget.RecyclerView.LayoutParams source) {
+            super(source);
+        }
+
+        public void setFullSpan(boolean fullSpan) {
+            this.mFullSpan = fullSpan;
+        }
+
+        public boolean isFullSpan() {
+            return this.mFullSpan;
+        }
+
+        public final int getSpanIndex() {
+            if (this.mSpan == null) {
+                return -1;
+            }
+            return this.mSpan.mIndex;
+        }
+    }
+
     static class LazySpanLookup {
         private static final int MIN_SIZE = 10;
         int[] mData;
         List<FullSpanItem> mFullSpanItems;
 
         static class FullSpanItem implements Parcelable {
-            public static final Creator<FullSpanItem> CREATOR = new C06641();
+            public static final Creator<FullSpanItem> CREATOR = new C07691();
             int mGapDir;
             int[] mGapPerSpan;
             boolean mHasUnwantedGapAfter;
             int mPosition;
 
             /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$LazySpanLookup$FullSpanItem$1 */
-            static class C06641 implements Creator<FullSpanItem> {
-                C06641() {
+            static class C07691 implements Creator<FullSpanItem> {
+                C07691() {
                 }
 
                 public FullSpanItem createFromParcel(Parcel in) {
@@ -382,7 +423,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C06651();
+        public static final Creator<SavedState> CREATOR = new C07701();
         boolean mAnchorLayoutFromEnd;
         int mAnchorPosition;
         List<FullSpanItem> mFullSpanItems;
@@ -395,8 +436,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int mVisibleAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$SavedState$1 */
-        static class C06651 implements Creator<SavedState> {
-            C06651() {
+        static class C07701 implements Creator<SavedState> {
+            C07701() {
             }
 
             public SavedState createFromParcel(Parcel in) {
@@ -784,47 +825,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 }
             }
             return candidate;
-        }
-    }
-
-    public static class LayoutParams extends org.telegram.messenger.support.widget.RecyclerView.LayoutParams {
-        public static final int INVALID_SPAN_ID = -1;
-        boolean mFullSpan;
-        Span mSpan;
-
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-        }
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(MarginLayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(org.telegram.messenger.support.widget.RecyclerView.LayoutParams source) {
-            super(source);
-        }
-
-        public void setFullSpan(boolean fullSpan) {
-            this.mFullSpan = fullSpan;
-        }
-
-        public boolean isFullSpan() {
-            return this.mFullSpan;
-        }
-
-        public final int getSpanIndex() {
-            if (this.mSpan == null) {
-                return -1;
-            }
-            return this.mSpan.mIndex;
         }
     }
 

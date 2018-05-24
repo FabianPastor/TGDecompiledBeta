@@ -11,12 +11,12 @@ public class AsyncListUtil<T> {
     static final boolean DEBUG = false;
     static final String TAG = "AsyncListUtil";
     boolean mAllowScrollHints;
-    private final BackgroundCallback<T> mBackgroundCallback = new C18652();
+    private final BackgroundCallback<T> mBackgroundCallback = new C07362();
     final BackgroundCallback<T> mBackgroundProxy;
     final DataCallback<T> mDataCallback;
     int mDisplayedGeneration = 0;
     int mItemCount = 0;
-    private final MainThreadCallback<T> mMainThreadCallback = new C18641();
+    private final MainThreadCallback<T> mMainThreadCallback = new C07351();
     final MainThreadCallback<T> mMainThreadProxy;
     final SparseIntArray mMissingPositions = new SparseIntArray();
     final int[] mPrevRange = new int[2];
@@ -29,52 +29,9 @@ public class AsyncListUtil<T> {
     final int[] mTmpRangeExtended = new int[2];
     final ViewCallback mViewCallback;
 
-    public static abstract class DataCallback<T> {
-        public abstract void fillData(T[] tArr, int i, int i2);
-
-        public abstract int refreshData();
-
-        public void recycleData(T[] tArr, int itemCount) {
-        }
-
-        public int getMaxCachedTiles() {
-            return 10;
-        }
-    }
-
-    public static abstract class ViewCallback {
-        public static final int HINT_SCROLL_ASC = 2;
-        public static final int HINT_SCROLL_DESC = 1;
-        public static final int HINT_SCROLL_NONE = 0;
-
-        public abstract void getItemRangeInto(int[] iArr);
-
-        public abstract void onDataRefresh();
-
-        public abstract void onItemLoaded(int i);
-
-        public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
-            int i;
-            int fullRange = (range[1] - range[0]) + 1;
-            int halfRange = fullRange / 2;
-            int i2 = range[0];
-            if (scrollHint == 1) {
-                i = fullRange;
-            } else {
-                i = halfRange;
-            }
-            outRange[0] = i2 - i;
-            i = range[1];
-            if (scrollHint != 2) {
-                fullRange = halfRange;
-            }
-            outRange[1] = i + fullRange;
-        }
-    }
-
     /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$1 */
-    class C18641 implements MainThreadCallback<T> {
-        C18641() {
+    class C07351 implements MainThreadCallback<T> {
+        C07351() {
         }
 
         public void updateItemCount(int generation, int itemCount) {
@@ -135,7 +92,7 @@ public class AsyncListUtil<T> {
     }
 
     /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$2 */
-    class C18652 implements BackgroundCallback<T> {
+    class C07362 implements BackgroundCallback<T> {
         private int mFirstRequiredTileStart;
         private int mGeneration;
         private int mItemCount;
@@ -143,7 +100,7 @@ public class AsyncListUtil<T> {
         final SparseBooleanArray mLoadedTiles = new SparseBooleanArray();
         private Tile<T> mRecycledRoot;
 
-        C18652() {
+        C07362() {
         }
 
         public void refresh(int generation) {
@@ -250,6 +207,49 @@ public class AsyncListUtil<T> {
 
         private void log(String s, Object... args) {
             Log.d(AsyncListUtil.TAG, "[BKGR] " + String.format(s, args));
+        }
+    }
+
+    public static abstract class DataCallback<T> {
+        public abstract void fillData(T[] tArr, int i, int i2);
+
+        public abstract int refreshData();
+
+        public void recycleData(T[] tArr, int itemCount) {
+        }
+
+        public int getMaxCachedTiles() {
+            return 10;
+        }
+    }
+
+    public static abstract class ViewCallback {
+        public static final int HINT_SCROLL_ASC = 2;
+        public static final int HINT_SCROLL_DESC = 1;
+        public static final int HINT_SCROLL_NONE = 0;
+
+        public abstract void getItemRangeInto(int[] iArr);
+
+        public abstract void onDataRefresh();
+
+        public abstract void onItemLoaded(int i);
+
+        public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
+            int i;
+            int fullRange = (range[1] - range[0]) + 1;
+            int halfRange = fullRange / 2;
+            int i2 = range[0];
+            if (scrollHint == 1) {
+                i = fullRange;
+            } else {
+                i = halfRange;
+            }
+            outRange[0] = i2 - i;
+            i = range[1];
+            if (scrollHint != 2) {
+                fullRange = halfRange;
+            }
+            outRange[1] = i + fullRange;
         }
     }
 

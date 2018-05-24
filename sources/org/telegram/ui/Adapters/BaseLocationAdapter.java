@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
@@ -67,8 +67,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.searchTimer.schedule(new TimerTask() {
 
             /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-            class C07691 implements Runnable {
-                C07691() {
+            class C08951 implements Runnable {
+                C08951() {
                 }
 
                 public void run() {
@@ -84,7 +84,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                AndroidUtilities.runOnUIThread(new C07691());
+                AndroidUtilities.runOnUIThread(new C08951());
             }
         }, 200, 500);
     }
@@ -109,7 +109,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 if (query == null || query.length() <= 0) {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
-                    str = "&query=" + URLEncoder.encode(query, C0542C.UTF8_NAME);
+                    str = "&query=" + URLEncoder.encode(query, C0600C.UTF8_NAME);
                 }
                 r5[4] = str;
                 final String url = String.format(locale, str2, r5);
@@ -195,7 +195,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                                         result = result2;
                                                     }
                                                     try {
-                                                        result.append(new String(data, 0, read, C0542C.UTF8_NAME));
+                                                        result.append(new String(data, 0, read, C0600C.UTF8_NAME));
                                                         result2 = result;
                                                     } catch (Exception e3) {
                                                         e22 = e3;

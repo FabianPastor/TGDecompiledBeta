@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
@@ -41,134 +41,6 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
     private final MediaSourceHolder query;
     private ShuffleOrder shuffleOrder;
     private int windowCount;
-
-    private static final class EventDispatcher {
-        public final Handler eventHandler;
-        public final Runnable runnable;
-
-        public EventDispatcher(Runnable runnable) {
-            Looper myLooper;
-            this.runnable = runnable;
-            if (Looper.myLooper() != null) {
-                myLooper = Looper.myLooper();
-            } else {
-                myLooper = Looper.getMainLooper();
-            }
-            this.eventHandler = new Handler(myLooper);
-        }
-
-        public void dispatchEvent() {
-            this.eventHandler.post(this.runnable);
-        }
-    }
-
-    private static final class MediaSourceHolder implements Comparable<MediaSourceHolder> {
-        public int firstPeriodIndexInChild;
-        public int firstWindowIndexInChild;
-        public boolean isPrepared;
-        public final MediaSource mediaSource;
-        public DeferredTimeline timeline;
-        public final Object uid;
-
-        public MediaSourceHolder(MediaSource mediaSource, DeferredTimeline timeline, int window, int period, Object uid) {
-            this.mediaSource = mediaSource;
-            this.timeline = timeline;
-            this.firstWindowIndexInChild = window;
-            this.firstPeriodIndexInChild = period;
-            this.uid = uid;
-        }
-
-        public int compareTo(MediaSourceHolder other) {
-            return this.firstPeriodIndexInChild - other.firstPeriodIndexInChild;
-        }
-    }
-
-    private static final class MessageData<CustomType> {
-        public final EventDispatcher actionOnCompletion;
-        public final CustomType customData;
-        public final int index;
-
-        public MessageData(int index, CustomType customData, Runnable actionOnCompletion) {
-            this.index = index;
-            this.actionOnCompletion = actionOnCompletion != null ? new EventDispatcher(actionOnCompletion) : null;
-            this.customData = customData;
-        }
-    }
-
-    private static final class DeferredTimeline extends Timeline {
-        private static final Object DUMMY_ID = new Object();
-        private static final Period period = new Period();
-        private final Object replacedID;
-        private final Timeline timeline;
-
-        public DeferredTimeline() {
-            this.timeline = null;
-            this.replacedID = null;
-        }
-
-        private DeferredTimeline(Timeline timeline, Object replacedID) {
-            this.timeline = timeline;
-            this.replacedID = replacedID;
-        }
-
-        public DeferredTimeline cloneWithNewTimeline(Timeline timeline) {
-            Object obj = (this.replacedID != null || timeline.getPeriodCount() <= 0) ? this.replacedID : timeline.getPeriod(0, period, true).uid;
-            return new DeferredTimeline(timeline, obj);
-        }
-
-        public Timeline getTimeline() {
-            return this.timeline;
-        }
-
-        public int getWindowCount() {
-            return this.timeline == null ? 1 : this.timeline.getWindowCount();
-        }
-
-        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-            if (this.timeline != null) {
-                return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
-            }
-            return window.set(setIds ? DUMMY_ID : null, C0542C.TIME_UNSET, C0542C.TIME_UNSET, false, true, 0, C0542C.TIME_UNSET, 0, 0, 0);
-        }
-
-        public int getPeriodCount() {
-            return this.timeline == null ? 1 : this.timeline.getPeriodCount();
-        }
-
-        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            Object obj = null;
-            if (this.timeline == null) {
-                Object obj2;
-                if (setIds) {
-                    obj2 = DUMMY_ID;
-                } else {
-                    obj2 = null;
-                }
-                if (setIds) {
-                    obj = DUMMY_ID;
-                }
-                return period.set(obj2, obj, 0, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
-            }
-            this.timeline.getPeriod(periodIndex, period, setIds);
-            if (period.uid != this.replacedID) {
-                return period;
-            }
-            period.uid = DUMMY_ID;
-            return period;
-        }
-
-        public int getIndexOfPeriod(Object uid) {
-            if (this.timeline == null) {
-                return uid == DUMMY_ID ? 0 : -1;
-            } else {
-                Timeline timeline = this.timeline;
-                if (uid == DUMMY_ID) {
-                    uid = this.replacedID;
-                }
-                return timeline.getIndexOfPeriod(uid);
-            }
-        }
-    }
 
     private static final class ConcatenatedTimeline extends AbstractConcatenatedTimeline {
         private final SparseIntArray childIndexByUid = new SparseIntArray();
@@ -241,6 +113,134 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
 
         public int getPeriodCount() {
             return this.periodCount;
+        }
+    }
+
+    private static final class DeferredTimeline extends Timeline {
+        private static final Object DUMMY_ID = new Object();
+        private static final Period period = new Period();
+        private final Object replacedID;
+        private final Timeline timeline;
+
+        public DeferredTimeline() {
+            this.timeline = null;
+            this.replacedID = null;
+        }
+
+        private DeferredTimeline(Timeline timeline, Object replacedID) {
+            this.timeline = timeline;
+            this.replacedID = replacedID;
+        }
+
+        public DeferredTimeline cloneWithNewTimeline(Timeline timeline) {
+            Object obj = (this.replacedID != null || timeline.getPeriodCount() <= 0) ? this.replacedID : timeline.getPeriod(0, period, true).uid;
+            return new DeferredTimeline(timeline, obj);
+        }
+
+        public Timeline getTimeline() {
+            return this.timeline;
+        }
+
+        public int getWindowCount() {
+            return this.timeline == null ? 1 : this.timeline.getWindowCount();
+        }
+
+        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            if (this.timeline != null) {
+                return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
+            }
+            return window.set(setIds ? DUMMY_ID : null, C0600C.TIME_UNSET, C0600C.TIME_UNSET, false, true, 0, C0600C.TIME_UNSET, 0, 0, 0);
+        }
+
+        public int getPeriodCount() {
+            return this.timeline == null ? 1 : this.timeline.getPeriodCount();
+        }
+
+        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
+            Object obj = null;
+            if (this.timeline == null) {
+                Object obj2;
+                if (setIds) {
+                    obj2 = DUMMY_ID;
+                } else {
+                    obj2 = null;
+                }
+                if (setIds) {
+                    obj = DUMMY_ID;
+                }
+                return period.set(obj2, obj, 0, C0600C.TIME_UNSET, C0600C.TIME_UNSET);
+            }
+            this.timeline.getPeriod(periodIndex, period, setIds);
+            if (period.uid != this.replacedID) {
+                return period;
+            }
+            period.uid = DUMMY_ID;
+            return period;
+        }
+
+        public int getIndexOfPeriod(Object uid) {
+            if (this.timeline == null) {
+                return uid == DUMMY_ID ? 0 : -1;
+            } else {
+                Timeline timeline = this.timeline;
+                if (uid == DUMMY_ID) {
+                    uid = this.replacedID;
+                }
+                return timeline.getIndexOfPeriod(uid);
+            }
+        }
+    }
+
+    private static final class EventDispatcher {
+        public final Handler eventHandler;
+        public final Runnable runnable;
+
+        public EventDispatcher(Runnable runnable) {
+            Looper myLooper;
+            this.runnable = runnable;
+            if (Looper.myLooper() != null) {
+                myLooper = Looper.myLooper();
+            } else {
+                myLooper = Looper.getMainLooper();
+            }
+            this.eventHandler = new Handler(myLooper);
+        }
+
+        public void dispatchEvent() {
+            this.eventHandler.post(this.runnable);
+        }
+    }
+
+    private static final class MediaSourceHolder implements Comparable<MediaSourceHolder> {
+        public int firstPeriodIndexInChild;
+        public int firstWindowIndexInChild;
+        public boolean isPrepared;
+        public final MediaSource mediaSource;
+        public DeferredTimeline timeline;
+        public final Object uid;
+
+        public MediaSourceHolder(MediaSource mediaSource, DeferredTimeline timeline, int window, int period, Object uid) {
+            this.mediaSource = mediaSource;
+            this.timeline = timeline;
+            this.firstWindowIndexInChild = window;
+            this.firstPeriodIndexInChild = period;
+            this.uid = uid;
+        }
+
+        public int compareTo(MediaSourceHolder other) {
+            return this.firstPeriodIndexInChild - other.firstPeriodIndexInChild;
+        }
+    }
+
+    private static final class MessageData<CustomType> {
+        public final EventDispatcher actionOnCompletion;
+        public final CustomType customData;
+        public final int index;
+
+        public MessageData(int index, CustomType customData, Runnable actionOnCompletion) {
+            this.index = index;
+            this.actionOnCompletion = actionOnCompletion != null ? new EventDispatcher(actionOnCompletion) : null;
+            this.customData = customData;
         }
     }
 

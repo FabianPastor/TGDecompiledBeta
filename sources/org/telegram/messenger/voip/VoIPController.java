@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 import org.telegram.ui.Components.voip.VoIPHelper;
@@ -234,8 +233,6 @@ public class VoIPController {
     }
 
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, long callID) {
-        String logFilePath;
-        String logFilePath2;
         ensureNativeInstance();
         boolean sysAecAvailable = false;
         boolean sysNsAvailable = false;
@@ -250,17 +247,7 @@ public class VoIPController {
         long j = this.nativeInst;
         boolean z = (sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
         boolean z2 = (sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
-        if (BuildConfig.DEBUG) {
-            logFilePath = getLogFilePath("voip");
-        } else {
-            logFilePath = getLogFilePath(callID);
-        }
-        if (BuildConfig.DEBUG && dump) {
-            logFilePath2 = getLogFilePath("voipStats");
-        } else {
-            logFilePath2 = null;
-        }
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, logFilePath, logFilePath2);
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, getLogFilePath(callID), null);
     }
 
     public void debugCtl(int request, int param) {
@@ -297,22 +284,20 @@ public class VoIPController {
 
     private String getLogFilePath(long callID) {
         File dir = VoIPHelper.getLogsDir();
-        if (!BuildConfig.DEBUG) {
-            File[] _logs = dir.listFiles();
-            ArrayList<File> logs = new ArrayList();
-            logs.addAll(Arrays.asList(_logs));
-            while (logs.size() > 20) {
-                File oldest = (File) logs.get(0);
-                Iterator it = logs.iterator();
-                while (it.hasNext()) {
-                    File file = (File) it.next();
-                    if (file.getName().endsWith(".log") && file.lastModified() < oldest.lastModified()) {
-                        oldest = file;
-                    }
+        File[] _logs = dir.listFiles();
+        ArrayList<File> logs = new ArrayList();
+        logs.addAll(Arrays.asList(_logs));
+        while (logs.size() > 20) {
+            File oldest = (File) logs.get(0);
+            Iterator it = logs.iterator();
+            while (it.hasNext()) {
+                File file = (File) it.next();
+                if (file.getName().endsWith(".log") && file.lastModified() < oldest.lastModified()) {
+                    oldest = file;
                 }
-                oldest.delete();
-                logs.remove(oldest);
             }
+            oldest.delete();
+            logs.remove(oldest);
         }
         return new File(dir, callID + ".log").getAbsolutePath();
     }

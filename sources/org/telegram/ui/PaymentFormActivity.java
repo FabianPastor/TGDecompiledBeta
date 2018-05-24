@@ -75,6 +75,7 @@ import org.json.JSONObject;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -84,8 +85,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -232,14 +232,58 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private WebView webView;
     private boolean webviewLoading;
 
+    /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
+    class C20371 extends ActionBarMenuOnItemClick {
+        C20371() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                if (!PaymentFormActivity.this.donePressed) {
+                    PaymentFormActivity.this.finishFragment();
+                }
+            } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
+                if (PaymentFormActivity.this.currentStep != 3) {
+                    AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
+                }
+                if (PaymentFormActivity.this.currentStep == 0) {
+                    PaymentFormActivity.this.setDonePressed(true);
+                    PaymentFormActivity.this.sendForm();
+                } else if (PaymentFormActivity.this.currentStep == 1) {
+                    for (int a = 0; a < PaymentFormActivity.this.radioCells.length; a++) {
+                        if (PaymentFormActivity.this.radioCells[a].isChecked()) {
+                            PaymentFormActivity.this.shippingOption = (TL_shippingOption) PaymentFormActivity.this.requestedInfo.shipping_options.get(a);
+                            break;
+                        }
+                    }
+                    PaymentFormActivity.this.goToNextStep();
+                } else if (PaymentFormActivity.this.currentStep == 2) {
+                    PaymentFormActivity.this.sendCardData();
+                } else if (PaymentFormActivity.this.currentStep == 3) {
+                    PaymentFormActivity.this.checkPassword();
+                } else if (PaymentFormActivity.this.currentStep == 6) {
+                    PaymentFormActivity.this.sendSavePassword(false);
+                }
+            }
+        }
+    }
+
+    private interface PaymentFormActivityDelegate {
+        void currentPasswordUpdated(account_Password account_password);
+
+        boolean didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
+
+        void onFragmentDestroyed();
+    }
+
     /* renamed from: org.telegram.ui.PaymentFormActivity$21 */
     class AnonymousClass21 implements OnClickListener {
         final /* synthetic */ String val$providerName;
         final /* synthetic */ String val$totalPrice;
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$21$1 */
-        class C15581 implements DialogInterface.OnClickListener {
-            C15581() {
+        class C20391 implements DialogInterface.OnClickListener {
+            C20391() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -265,9 +309,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             preferences.edit().putBoolean(botKey, true).commit();
             Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-            builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
-            builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, this.val$providerName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15581());
+            builder.setTitle(LocaleController.getString("PaymentWarning", C0488R.string.PaymentWarning));
+            builder.setMessage(LocaleController.formatString("PaymentWarningText", C0488R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, this.val$providerName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C20391());
             PaymentFormActivity.this.showDialog(builder.create());
         }
     }
@@ -285,8 +329,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$2 */
-    class C15622 implements Comparator<String> {
-        C15622() {
+    class C20432 implements Comparator<String> {
+        C20432() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -295,11 +339,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$3 */
-    class C15733 implements OnTouchListener {
+    class C20573 implements OnTouchListener {
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$3$1 */
-        class C22191 implements CountrySelectActivityDelegate {
-            C22191() {
+        class C20441 implements CountrySelectActivityDelegate {
+            C20441() {
             }
 
             public void didSelectCountry(String name, String shortName) {
@@ -308,7 +352,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C15733() {
+        C20573() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -317,7 +361,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             if (event.getAction() == 1) {
                 CountrySelectActivity fragment = new CountrySelectActivity(false);
-                fragment.setCountrySelectActivityDelegate(new C22191());
+                fragment.setCountrySelectActivityDelegate(new C20441());
                 PaymentFormActivity.this.presentFragment(fragment);
             }
             return true;
@@ -325,8 +369,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$4 */
-    class C15744 implements TextWatcher {
-        C15744() {
+    class C20584 implements TextWatcher {
+        C20584() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -343,7 +387,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 HintEditText phoneField = PaymentFormActivity.this.inputFields[9];
                 if (text.length() == 0) {
                     phoneField.setHintText(null);
-                    phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
+                    phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", C0488R.string.PaymentShippingPhoneNumber));
                 } else {
                     boolean ok = false;
                     String textToSet = null;
@@ -377,7 +421,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
                     if (!set) {
                         phoneField.setHintText(null);
-                        phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
+                        phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", C0488R.string.PaymentShippingPhoneNumber));
                     }
                     if (!ok) {
                         PaymentFormActivity.this.inputFields[8].setSelection(PaymentFormActivity.this.inputFields[8].getText().length());
@@ -394,11 +438,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$5 */
-    class C15755 implements TextWatcher {
+    class C20595 implements TextWatcher {
         private int actionPosition;
         private int characterAction = -1;
 
-        C15755() {
+        C20595() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -471,8 +515,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$6 */
-    class C15766 implements OnEditorActionListener {
-        C15766() {
+    class C20606 implements OnEditorActionListener {
+        C20606() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -496,8 +540,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$7 */
-    class C15777 implements OnClickListener {
-        C15777() {
+    class C20617 implements OnClickListener {
+        C20617() {
         }
 
         public void onClick(View v) {
@@ -507,8 +551,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$8 */
-    class C15788 extends WebView {
-        C15788(Context x0) {
+    class C20628 extends WebView {
+        C20628(Context x0) {
             super(x0);
         }
 
@@ -519,8 +563,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$9 */
-    class C15799 extends WebViewClient {
-        C15799() {
+    class C20639 extends WebViewClient {
+        C20639() {
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -565,14 +609,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    private interface PaymentFormActivityDelegate {
-        void currentPasswordUpdated(account_Password account_password);
-
-        boolean didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
-
-        void onFragmentDestroyed();
-    }
-
     private class TelegramWebviewProxy {
         private TelegramWebviewProxy() {
         }
@@ -594,42 +630,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
                 }
             });
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
-    class C22171 extends ActionBarMenuOnItemClick {
-        C22171() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                if (!PaymentFormActivity.this.donePressed) {
-                    PaymentFormActivity.this.finishFragment();
-                }
-            } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
-                if (PaymentFormActivity.this.currentStep != 3) {
-                    AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
-                }
-                if (PaymentFormActivity.this.currentStep == 0) {
-                    PaymentFormActivity.this.setDonePressed(true);
-                    PaymentFormActivity.this.sendForm();
-                } else if (PaymentFormActivity.this.currentStep == 1) {
-                    for (int a = 0; a < PaymentFormActivity.this.radioCells.length; a++) {
-                        if (PaymentFormActivity.this.radioCells[a].isChecked()) {
-                            PaymentFormActivity.this.shippingOption = (TL_shippingOption) PaymentFormActivity.this.requestedInfo.shipping_options.get(a);
-                            break;
-                        }
-                    }
-                    PaymentFormActivity.this.goToNextStep();
-                } else if (PaymentFormActivity.this.currentStep == 2) {
-                    PaymentFormActivity.this.sendCardData();
-                } else if (PaymentFormActivity.this.currentStep == 3) {
-                    PaymentFormActivity.this.checkPassword();
-                } else if (PaymentFormActivity.this.currentStep == 6) {
-                    PaymentFormActivity.this.sendSavePassword(false);
-                }
-            }
         }
     }
 
@@ -5105,7 +5105,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                 }
                 this.doneItem.setVisibility(8);
-                this.bottomCell[2].setText(LocaleController.formatString("EmailPasswordConfirmText", R.string.EmailPasswordConfirmText, this.currentPassword.email_unconfirmed_pattern));
+                this.bottomCell[2].setText(LocaleController.formatString("EmailPasswordConfirmText", C0488R.string.EmailPasswordConfirmText, this.currentPassword.email_unconfirmed_pattern));
                 this.bottomCell[2].setVisibility(0);
                 this.settingsCell1.setVisibility(0);
                 this.bottomCell[1].setText(TtmlNode.ANONYMOUS_REGION_ID);
@@ -5123,7 +5123,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.doneItem.setVisibility(0);
             this.bottomCell[2].setVisibility(8);
             this.settingsCell1.setVisibility(8);
-            this.bottomCell[1].setText(LocaleController.getString("PaymentPasswordEmailInfo", R.string.PaymentPasswordEmailInfo));
+            this.bottomCell[1].setText(LocaleController.getString("PaymentPasswordEmailInfo", C0488R.string.PaymentPasswordEmailInfo));
             this.headerCell[0].setVisibility(0);
             this.headerCell[1].setVisibility(0);
             this.bottomCell[0].setVisibility(0);
@@ -5144,8 +5144,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.PaymentFormActivity$26$1$1 */
-                        class C15601 implements Runnable {
-                            C15601() {
+                        class C20411 implements Runnable {
+                            C20411() {
                             }
 
                             public void run() {
@@ -5174,7 +5174,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
                             }
                             if ((response instanceof TL_account_noPassword) && PaymentFormActivity.this.shortPollRunnable == null) {
-                                PaymentFormActivity.this.shortPollRunnable = new C15601();
+                                PaymentFormActivity.this.shortPollRunnable = new C20411();
                                 AndroidUtilities.runOnUIThread(PaymentFormActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             }
                         }
@@ -5186,7 +5186,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private void showAlertWithText(String title, String text) {
         Builder builder = new Builder(getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), null);
         builder.setTitle(title);
         builder.setMessage(text);
         showDialog(builder.create());
@@ -5194,15 +5194,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private void showPayAlert(String totalPrice) {
         Builder builder = new Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("PaymentTransactionReview", R.string.PaymentTransactionReview));
-        builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, totalPrice, this.currentBotName, this.currentItemName));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+        builder.setTitle(LocaleController.getString("PaymentTransactionReview", C0488R.string.PaymentTransactionReview));
+        builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", C0488R.string.PaymentTransactionMessage, totalPrice, this.currentBotName, this.currentItemName));
+        builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 PaymentFormActivity.this.setDonePressed(true);
                 PaymentFormActivity.this.sendData();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0488R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -5506,12 +5506,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private void updateSavePaymentField() {
         if (this.bottomCell[0] != null && this.sectionCell[2] != null) {
             if ((this.paymentForm.password_missing || this.paymentForm.can_save_credentials) && (this.webView == null || !(this.webView == null || this.webviewLoading))) {
-                SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", R.string.PaymentCardSavePaymentInformationInfoLine1));
+                SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", C0488R.string.PaymentCardSavePaymentInformationInfoLine1));
                 if (this.paymentForm.password_missing) {
                     loadPasswordInfo();
                     text.append("\n");
                     int len = text.length();
-                    String str2 = LocaleController.getString("PaymentCardSavePaymentInformationInfoLine2", R.string.PaymentCardSavePaymentInformationInfoLine2);
+                    String str2 = LocaleController.getString("PaymentCardSavePaymentInformationInfoLine2", C0488R.string.PaymentCardSavePaymentInformationInfoLine2);
                     int index1 = str2.indexOf(42);
                     int index2 = str2.lastIndexOf(42);
                     text.append(str2);
@@ -5528,12 +5528,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.bottomCell[0].setText(text);
                 this.checkCell1.setVisibility(0);
                 this.bottomCell[0].setVisibility(0);
-                this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), C0488R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 return;
             }
             this.checkCell1.setVisibility(8);
             this.bottomCell[0].setVisibility(8);
-            this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), C0488R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         }
     }
 
@@ -5621,7 +5621,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 req.new_settings = new TL_account_passwordInputSettings();
                 byte[] newPasswordBytes = null;
                 try {
-                    newPasswordBytes = firstPassword.getBytes(C0542C.UTF8_NAME);
+                    newPasswordBytes = firstPassword.getBytes(C0600C.UTF8_NAME);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -5642,7 +5642,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             } else {
                 try {
-                    Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", R.string.PasswordDoNotMatch), 0).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", C0488R.string.PasswordDoNotMatch), 0).show();
                 } catch (Throwable e2) {
                     FileLog.m3e(e2);
                 }
@@ -5656,8 +5656,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$32$1$1 */
-                    class C15631 implements DialogInterface.OnClickListener {
-                        C15631() {
+                    class C20451 implements DialogInterface.OnClickListener {
+                        C20451() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -5681,16 +5681,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         } else {
                             if (error.text.equals("EMAIL_UNCONFIRMED")) {
                                 Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15631());
-                                builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
-                                builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0488R.string.OK), new C20451());
+                                builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", C0488R.string.YourEmailAlmostThereText));
+                                builder.setTitle(LocaleController.getString("YourEmailAlmostThere", C0488R.string.YourEmailAlmostThere));
                                 Dialog dialog = PaymentFormActivity.this.showDialog(builder.create());
                                 if (dialog != null) {
                                     dialog.setCanceledOnTouchOutside(false);
                                     dialog.setCancelable(false);
                                 }
                             } else if (error.text.equals("EMAIL_INVALID")) {
-                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PasswordEmailInvalid", R.string.PasswordEmailInvalid));
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", C0488R.string.AppName), LocaleController.getString("PasswordEmailInvalid", C0488R.string.PasswordEmailInvalid));
                             } else if (error.text.startsWith("FLOOD_WAIT")) {
                                 String timeString;
                                 int time = Utilities.parseInt(error.text).intValue();
@@ -5699,9 +5699,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", C0488R.string.AppName), LocaleController.formatString("FloodWaitTime", C0488R.string.FloodWaitTime, timeString));
                             } else {
-                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", C0488R.string.AppName), error.text);
                             }
                         }
                     }
@@ -5747,8 +5747,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 new Stripe(this.stripeApiKey).createToken(card, new TokenCallback() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$33$1 */
-                    class C15651 implements Runnable {
-                        C15651() {
+                    class C20471 implements Runnable {
+                        C20471() {
                         }
 
                         public void run() {
@@ -5761,7 +5761,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     public void onSuccess(Token token) {
                         if (!PaymentFormActivity.this.canceled) {
                             PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
-                            AndroidUtilities.runOnUIThread(new C15651());
+                            AndroidUtilities.runOnUIThread(new C20471());
                         }
                     }
 
@@ -5770,7 +5770,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             PaymentFormActivity.this.showEditDoneProgress(true, false);
                             PaymentFormActivity.this.setDonePressed(false);
                             if ((error instanceof APIConnectionException) || (error instanceof APIException)) {
-                                AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", R.string.PaymentConnectionFailed));
+                                AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", C0488R.string.PaymentConnectionFailed));
                             } else {
                                 AlertsCreator.showSimpleToast(PaymentFormActivity.this, error.getMessage());
                             }
@@ -5825,8 +5825,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$34$1$1 */
-                            class C22201 implements RequestDelegate {
-                                C22201() {
+                            class C20481 implements RequestDelegate {
+                                C20481() {
                                 }
 
                                 public void run(TLObject response, TL_error error) {
@@ -5838,7 +5838,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (!(PaymentFormActivity.this.paymentForm.saved_info == null || PaymentFormActivity.this.saveShippingInfo)) {
                                     TL_payments_clearSavedInfo req = new TL_payments_clearSavedInfo();
                                     req.info = true;
-                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C22201());
+                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C20481());
                                 }
                                 PaymentFormActivity.this.goToNextStep();
                                 PaymentFormActivity.this.setDonePressed(false);
@@ -6005,8 +6005,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.ui.PaymentFormActivity$35$1 */
-                class C15681 implements Runnable {
-                    C15681() {
+                class C20511 implements Runnable {
+                    C20511() {
                     }
 
                     public void run() {
@@ -6025,7 +6025,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         });
                     } else if (response instanceof TL_payments_paymentResult) {
                         MessagesController.getInstance(PaymentFormActivity.this.currentAccount).processUpdates(((TL_payments_paymentResult) response).updates, false);
-                        AndroidUtilities.runOnUIThread(new C15681());
+                        AndroidUtilities.runOnUIThread(new C20511());
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -6108,7 +6108,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 TL_account_password currentPassword = response;
                                 byte[] passwordBytes = null;
                                 try {
-                                    passwordBytes = password.getBytes(C0542C.UTF8_NAME);
+                                    passwordBytes = password.getBytes(C0600C.UTF8_NAME);
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
                                 }

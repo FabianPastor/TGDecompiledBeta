@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -20,7 +21,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -53,8 +53,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$1 */
-    class C11151 implements OnClickListener {
-        C11151() {
+    class C14181 implements OnClickListener {
+        C14181() {
         }
 
         public void onClick(View v) {
@@ -63,8 +63,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$2 */
-    class C11162 implements OnClickListener {
-        C11162() {
+    class C14192 implements OnClickListener {
+        C14192() {
         }
 
         public void onClick(View v) {
@@ -126,10 +126,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timerDrawable = timerDrawable;
             imageView.setImageDrawable(timerDrawable);
             addView(this.timeItem);
-            this.timeItem.setOnClickListener(new C11151());
+            this.timeItem.setOnClickListener(new C14181());
         }
         if (this.parentFragment != null) {
-            setOnClickListener(new C11162());
+            setOnClickListener(new C14192());
             Chat chat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();
@@ -279,11 +279,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         if (ChatObject.isChannel(chat)) {
                             if (info == null || info.participants_count == 0) {
                                 if (chat.megagroup) {
-                                    newSubtitle = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
+                                    newSubtitle = LocaleController.getString("Loading", C0488R.string.Loading).toLowerCase();
                                 } else if ((chat.flags & 64) != 0) {
-                                    newSubtitle = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPublic", C0488R.string.ChannelPublic).toLowerCase();
                                 } else {
-                                    newSubtitle = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPrivate", C0488R.string.ChannelPrivate).toLowerCase();
                                 }
                             } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                                 int[] result = new int[1];
@@ -299,9 +299,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
                             }
                         } else if (ChatObject.isKickedFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
+                            newSubtitle = LocaleController.getString("YouWereKicked", C0488R.string.YouWereKicked);
                         } else if (ChatObject.isLeftFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouLeft", R.string.YouLeft);
+                            newSubtitle = LocaleController.getString("YouLeft", C0488R.string.YouLeft);
                         } else {
                             int count = chat.participants_count;
                             if (!(info == null || info.participants == null)) {
@@ -320,11 +320,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             user = newUser;
                         }
                         if (user.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
+                            newStatus = LocaleController.getString("ChatYourSelf", C0488R.string.ChatYourSelf);
                         } else if (user.id == 333000 || user.id == 777000) {
-                            newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                            newStatus = LocaleController.getString("ServiceNotifications", C0488R.string.ServiceNotifications);
                         } else if (user.bot) {
-                            newStatus = LocaleController.getString("Bot", R.string.Bot);
+                            newStatus = LocaleController.getString("Bot", C0488R.string.Bot);
                         } else {
                             newStatus = LocaleController.formatUserStatus(this.currentAccount, user);
                         }
@@ -442,13 +442,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private void updateCurrentConnectionState() {
         String title = null;
         if (this.currentConnectionState == 2) {
-            title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            title = LocaleController.getString("WaitingForNetwork", C0488R.string.WaitingForNetwork);
         } else if (this.currentConnectionState == 1) {
-            title = LocaleController.getString("Connecting", R.string.Connecting);
+            title = LocaleController.getString("Connecting", C0488R.string.Connecting);
         } else if (this.currentConnectionState == 5) {
-            title = LocaleController.getString("Updating", R.string.Updating);
+            title = LocaleController.getString("Updating", C0488R.string.Updating);
         } else if (this.currentConnectionState == 4) {
-            title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+            title = LocaleController.getString("ConnectingToProxy", C0488R.string.ConnectingToProxy);
         }
         if (title != null) {
             this.lastSubtitle = this.subtitleTextView.getText();

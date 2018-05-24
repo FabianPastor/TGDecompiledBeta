@@ -12,8 +12,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.MediaController.AlbumEntry;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -25,8 +25,8 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     private PhotoPickerAlbumsCellDelegate delegate;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerAlbumsCell$1 */
-    class C08891 implements OnClickListener {
-        C08891() {
+    class C10731 implements OnClickListener {
+        C10731() {
         }
 
         public void onClick(View v) {
@@ -90,7 +90,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             addView(this.albumViews[a]);
             this.albumViews[a].setVisibility(4);
             this.albumViews[a].setTag(Integer.valueOf(a));
-            this.albumViews[a].setOnClickListener(new C08891());
+            this.albumViews[a].setOnClickListener(new C10731());
         }
     }
 
@@ -113,13 +113,13 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             AlbumView albumView = this.albumViews[a];
             albumView.imageView.setOrientation(0, true);
             if (albumEntry.coverPhoto == null || albumEntry.coverPhoto.path == null) {
-                albumView.imageView.setImageResource(R.drawable.nophotos);
+                albumView.imageView.setImageResource(C0488R.drawable.nophotos);
             } else {
                 albumView.imageView.setOrientation(albumEntry.coverPhoto.orientation, true);
                 if (albumEntry.coverPhoto.isVideo) {
-                    albumView.imageView.setImage("vthumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+                    albumView.imageView.setImage("vthumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(C0488R.drawable.nophotos));
                 } else {
-                    albumView.imageView.setImage("thumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+                    albumView.imageView.setImage("thumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(C0488R.drawable.nophotos));
                 }
             }
             albumView.nameTextView.setText(albumEntry.bucketName);

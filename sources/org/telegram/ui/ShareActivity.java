@@ -13,11 +13,11 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.ui.Components.ShareAlert;
@@ -26,8 +26,8 @@ public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
     /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class C17031 implements OnDismissListener {
-        C17031() {
+    class C22681 implements OnDismissListener {
+        C22681() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -42,7 +42,7 @@ public class ShareActivity extends Activity {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
-        setTheme(R.style.Theme.TMessages.Transparent);
+        setTheme(C0488R.style.Theme.TMessages.Transparent);
         super.onCreate(savedInstanceState);
         setContentView(new View(this), new LayoutParams(-1, -1));
         Intent intent = getIntent();
@@ -74,7 +74,7 @@ public class ShareActivity extends Activity {
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new C17031());
+                this.visibleDialog.setOnDismissListener(new C22681());
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {

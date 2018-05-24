@@ -62,12 +62,6 @@ public abstract class JobIntentService extends Service {
         GenericWorkItem dequeueWork();
     }
 
-    interface GenericWorkItem {
-        void complete();
-
-        Intent getIntent();
-    }
-
     static abstract class WorkEnqueuer {
         final ComponentName mComponentName;
         boolean mHasJobId;
@@ -157,6 +151,12 @@ public abstract class JobIntentService extends Service {
                 }
             }
         }
+    }
+
+    interface GenericWorkItem {
+        void complete();
+
+        Intent getIntent();
     }
 
     final class CompatWorkItem implements GenericWorkItem {

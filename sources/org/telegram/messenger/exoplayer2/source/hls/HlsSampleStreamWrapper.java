@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.ParserException;
@@ -51,12 +51,12 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private long lastSeekPositionUs;
     private final Loader loader = new Loader("Loader:HlsSampleStreamWrapper");
     private boolean loadingFinished;
-    private final Runnable maybeFinishPrepareRunnable = new C06151();
+    private final Runnable maybeFinishPrepareRunnable = new C06951();
     private final ArrayList<HlsMediaChunk> mediaChunks = new ArrayList();
     private final int minLoadableRetryCount;
     private final Format muxedAudioFormat;
     private final HlsChunkHolder nextChunkHolder = new HlsChunkHolder();
-    private final Runnable onTracksEndedRunnable = new C06162();
+    private final Runnable onTracksEndedRunnable = new C06962();
     private long pendingResetPositionUs;
     private boolean pendingResetUpstreamFormats;
     private boolean prepared;
@@ -76,9 +76,15 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private int videoSampleQueueIndex = -1;
     private boolean videoSampleQueueMappingDone;
 
+    public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
+        void onPlaylistRefreshRequired(HlsUrl hlsUrl);
+
+        void onPrepared();
+    }
+
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$1 */
-    class C06151 implements Runnable {
-        C06151() {
+    class C06951 implements Runnable {
+        C06951() {
         }
 
         public void run() {
@@ -87,19 +93,13 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$2 */
-    class C06162 implements Runnable {
-        C06162() {
+    class C06962 implements Runnable {
+        C06962() {
         }
 
         public void run() {
             HlsSampleStreamWrapper.this.onTracksEnded();
         }
-    }
-
-    public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
-        void onPlaylistRefreshRequired(HlsUrl hlsUrl);
-
-        void onPrepared();
     }
 
     public HlsSampleStreamWrapper(int trackType, Callback callback, HlsChunkSource chunkSource, Allocator allocator, long positionUs, Format muxedAudioFormat, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
@@ -225,7 +225,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 if (this.seenFirstTrackSelection) {
                     primarySampleQueueDirty = true;
                 } else {
-                    primaryTrackSelection.updateSelectedTrack(positionUs, positionUs < 0 ? -positionUs : 0, C0542C.TIME_UNSET);
+                    primaryTrackSelection.updateSelectedTrack(positionUs, positionUs < 0 ? -positionUs : 0, C0600C.TIME_UNSET);
                     if (primaryTrackSelection.getSelectedIndexInTrackGroup() != this.chunkSource.getTrackGroup().indexOf(getLastMediaChunk().trackFormat)) {
                         primarySampleQueueDirty = true;
                     }
@@ -391,7 +391,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         HlsUrl playlistToLoad = this.nextChunkHolder.playlist;
         this.nextChunkHolder.clear();
         if (endOfStream) {
-            this.pendingResetPositionUs = C0542C.TIME_UNSET;
+            this.pendingResetPositionUs = C0600C.TIME_UNSET;
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
@@ -401,7 +401,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
             return false;
         } else {
             if (isMediaChunk(loadable)) {
-                this.pendingResetPositionUs = C0542C.TIME_UNSET;
+                this.pendingResetPositionUs = C0600C.TIME_UNSET;
                 HlsMediaChunk mediaChunk = (HlsMediaChunk) loadable;
                 mediaChunk.init(this);
                 this.mediaChunks.add(mediaChunk);
@@ -675,7 +675,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     private boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0542C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0600C.TIME_UNSET;
     }
 
     private boolean seekInsideBufferUs(long positionUs) {

@@ -24,12 +24,12 @@ import android.widget.ScrollView;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
-    private static final OnScrollChangedListener NOP = new C07301();
+    private static final OnScrollChangedListener NOP = new C08551();
     private static final boolean allowAnimation;
     private static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private static final Field superListenerField;
@@ -38,9 +38,13 @@ public class ActionBarPopupWindow extends PopupWindow {
     private ViewTreeObserver mViewTreeObserver;
     private AnimatorSet windowAnimatorSet;
 
+    public interface OnDispatchKeyEventListener {
+        void onDispatchKeyEvent(KeyEvent keyEvent);
+    }
+
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
-    static class C07301 implements OnScrollChangedListener {
-        C07301() {
+    static class C08551 implements OnScrollChangedListener {
+        C08551() {
         }
 
         public void onScrollChanged() {
@@ -48,8 +52,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$2 */
-    class C07312 implements AnimatorListener {
-        C07312() {
+    class C08562 implements AnimatorListener {
+        C08562() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -68,8 +72,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$3 */
-    class C07323 implements AnimatorListener {
-        C07323() {
+    class C08573 implements AnimatorListener {
+        C08573() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -98,7 +102,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
-        protected Drawable backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
+        protected Drawable backgroundDrawable = getResources().getDrawable(C0488R.drawable.popup_fixed).mutate();
         private int lastStartedChild = 0;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -269,10 +273,6 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
     }
 
-    public interface OnDispatchKeyEventListener {
-        void onDispatchKeyEvent(KeyEvent keyEvent);
-    }
-
     static {
         boolean z = true;
         if (VERSION.SDK_INT < 18) {
@@ -391,7 +391,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.windowAnimatorSet = new AnimatorSet();
             this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
-            this.windowAnimatorSet.addListener(new C07312());
+            this.windowAnimatorSet.addListener(new C08562());
             this.windowAnimatorSet.start();
         }
     }
@@ -432,7 +432,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             animatorArr[1] = ObjectAnimator.ofFloat(content, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.windowAnimatorSet.setDuration(150);
-            this.windowAnimatorSet.addListener(new C07323());
+            this.windowAnimatorSet.addListener(new C08573());
             this.windowAnimatorSet.start();
             return;
         }

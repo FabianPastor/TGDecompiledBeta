@@ -47,8 +47,8 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
     }
 
     /* renamed from: org.telegram.ui.Components.AvatarUpdater$1 */
-    class C20441 implements PhotoAlbumPickerActivityDelegate {
-        C20441() {
+    class C13831 implements PhotoAlbumPickerActivityDelegate {
+        C13831() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
@@ -85,7 +85,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                     File image = AndroidUtilities.generatePicturePath();
                     if (image != null) {
                         if (VERSION.SDK_INT >= 24) {
-                            takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", image));
+                            takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.provider", image));
                             takePictureIntent.addFlags(2);
                             takePictureIntent.addFlags(1);
                         } else {
@@ -107,7 +107,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         if (this.parentFragment != null) {
             if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-                fragment.setDelegate(new C20441());
+                fragment.setDelegate(new C13831());
                 this.parentFragment.presentFragment(fragment);
                 return;
             }

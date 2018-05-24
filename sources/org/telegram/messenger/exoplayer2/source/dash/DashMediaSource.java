@@ -15,12 +15,13 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
+import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
 import org.telegram.messenger.exoplayer2.source.DefaultCompositeSequenceableLoaderFactory;
@@ -35,7 +36,6 @@ import org.telegram.messenger.exoplayer2.source.dash.PlayerEmsgHandler.PlayerEms
 import org.telegram.messenger.exoplayer2.source.dash.manifest.AdaptationSet;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifest;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifestParser;
-import org.telegram.messenger.exoplayer2.source.dash.manifest.Period;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.Representation;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.UtcTimingElement;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
@@ -88,8 +88,8 @@ public final class DashMediaSource implements MediaSource {
     private int staleManifestReloadAttempt;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.dash.DashMediaSource$1 */
-    class C06101 implements Runnable {
-        C06101() {
+    class C06901 implements Runnable {
+        C06901() {
         }
 
         public void run() {
@@ -98,53 +98,12 @@ public final class DashMediaSource implements MediaSource {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.dash.DashMediaSource$2 */
-    class C06112 implements Runnable {
-        C06112() {
+    class C06912 implements Runnable {
+        C06912() {
         }
 
         public void run() {
             DashMediaSource.this.processManifest(false);
-        }
-    }
-
-    private static final class PeriodSeekInfo {
-        public final long availableEndTimeUs;
-        public final long availableStartTimeUs;
-        public final boolean isIndexExplicit;
-
-        public static PeriodSeekInfo createPeriodSeekInfo(Period period, long durationUs) {
-            int adaptationSetCount = period.adaptationSets.size();
-            long availableStartTimeUs = 0;
-            long availableEndTimeUs = Long.MAX_VALUE;
-            boolean isIndexExplicit = false;
-            boolean seenEmptyIndex = false;
-            for (int i = 0; i < adaptationSetCount; i++) {
-                DashSegmentIndex index = ((Representation) ((AdaptationSet) period.adaptationSets.get(i)).representations.get(0)).getIndex();
-                if (index == null) {
-                    return new PeriodSeekInfo(true, 0, durationUs);
-                }
-                isIndexExplicit |= index.isExplicit();
-                int segmentCount = index.getSegmentCount(durationUs);
-                if (segmentCount == 0) {
-                    seenEmptyIndex = true;
-                    availableStartTimeUs = 0;
-                    availableEndTimeUs = 0;
-                } else if (!seenEmptyIndex) {
-                    int firstSegmentNum = index.getFirstSegmentNum();
-                    availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
-                    if (segmentCount != -1) {
-                        int lastSegmentNum = (firstSegmentNum + segmentCount) - 1;
-                        availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
-                    }
-                }
-            }
-            return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
-        }
-
-        private PeriodSeekInfo(boolean isIndexExplicit, long availableStartTimeUs, long availableEndTimeUs) {
-            this.isIndexExplicit = isIndexExplicit;
-            this.availableStartTimeUs = availableStartTimeUs;
-            this.availableEndTimeUs = availableEndTimeUs;
         }
     }
 
@@ -171,7 +130,7 @@ public final class DashMediaSource implements MediaSource {
             return this.manifest.getPeriodCount();
         }
 
-        public Timeline.Period getPeriod(int periodIndex, Timeline.Period period, boolean setIdentifiers) {
+        public Period getPeriod(int periodIndex, Period period, boolean setIdentifiers) {
             String id;
             Integer uid = null;
             Assertions.checkIndex(periodIndex, 0, this.manifest.getPeriodCount());
@@ -183,7 +142,7 @@ public final class DashMediaSource implements MediaSource {
             if (setIdentifiers) {
                 uid = Integer.valueOf(this.firstPeriodId + Assertions.checkIndex(periodIndex, 0, this.manifest.getPeriodCount()));
             }
-            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C0542C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs);
+            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C0600C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs);
         }
 
         public int getWindowCount() {
@@ -214,7 +173,7 @@ public final class DashMediaSource implements MediaSource {
                     windowDefaultStartPositionUs += defaultPositionProjectionUs;
                     if (windowDefaultStartPositionUs > this.windowDurationUs) {
                         j = windowDefaultStartPositionUs;
-                        return C0542C.TIME_UNSET;
+                        return C0600C.TIME_UNSET;
                     }
                 }
                 int periodIndex = 0;
@@ -225,7 +184,7 @@ public final class DashMediaSource implements MediaSource {
                     periodIndex++;
                     periodDurationUs = this.manifest.getPeriodDurationUs(periodIndex);
                 }
-                Period period = this.manifest.getPeriod(periodIndex);
+                org.telegram.messenger.exoplayer2.source.dash.manifest.Period period = this.manifest.getPeriod(periodIndex);
                 int videoAdaptationSetIndex = period.getAdaptationSetIndex(2);
                 if (videoAdaptationSetIndex == -1) {
                     j = windowDefaultStartPositionUs;
@@ -389,6 +348,47 @@ public final class DashMediaSource implements MediaSource {
         }
     }
 
+    private static final class PeriodSeekInfo {
+        public final long availableEndTimeUs;
+        public final long availableStartTimeUs;
+        public final boolean isIndexExplicit;
+
+        public static PeriodSeekInfo createPeriodSeekInfo(org.telegram.messenger.exoplayer2.source.dash.manifest.Period period, long durationUs) {
+            int adaptationSetCount = period.adaptationSets.size();
+            long availableStartTimeUs = 0;
+            long availableEndTimeUs = Long.MAX_VALUE;
+            boolean isIndexExplicit = false;
+            boolean seenEmptyIndex = false;
+            for (int i = 0; i < adaptationSetCount; i++) {
+                DashSegmentIndex index = ((Representation) ((AdaptationSet) period.adaptationSets.get(i)).representations.get(0)).getIndex();
+                if (index == null) {
+                    return new PeriodSeekInfo(true, 0, durationUs);
+                }
+                isIndexExplicit |= index.isExplicit();
+                int segmentCount = index.getSegmentCount(durationUs);
+                if (segmentCount == 0) {
+                    seenEmptyIndex = true;
+                    availableStartTimeUs = 0;
+                    availableEndTimeUs = 0;
+                } else if (!seenEmptyIndex) {
+                    int firstSegmentNum = index.getFirstSegmentNum();
+                    availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
+                    if (segmentCount != -1) {
+                        int lastSegmentNum = (firstSegmentNum + segmentCount) - 1;
+                        availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
+                    }
+                }
+            }
+            return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
+        }
+
+        private PeriodSeekInfo(boolean isIndexExplicit, long availableStartTimeUs, long availableEndTimeUs) {
+            this.isIndexExplicit = isIndexExplicit;
+            this.availableStartTimeUs = availableStartTimeUs;
+            this.availableEndTimeUs = availableEndTimeUs;
+        }
+    }
+
     private final class UtcTimestampCallback implements Callback<ParsingLoadable<Long>> {
         private UtcTimestampCallback() {
         }
@@ -458,7 +458,7 @@ public final class DashMediaSource implements MediaSource {
         this.manifestUriLock = new Object();
         this.periodsById = new SparseArray();
         this.playerEmsgCallback = new DefaultPlayerEmsgCallback();
-        this.expiredManifestPublishTimeUs = C0542C.TIME_UNSET;
+        this.expiredManifestPublishTimeUs = C0600C.TIME_UNSET;
         if (this.sideloadedManifest) {
             Assertions.checkState(!manifest.dynamic);
             this.manifestCallback = null;
@@ -467,8 +467,8 @@ public final class DashMediaSource implements MediaSource {
             return;
         }
         this.manifestCallback = new ManifestCallback();
-        this.refreshManifestRunnable = new C06101();
-        this.simulateManifestRefreshRunnable = new C06112();
+        this.refreshManifestRunnable = new C06901();
+        this.simulateManifestRefreshRunnable = new C06912();
     }
 
     public void replaceManifestUri(Uri manifestUri) {
@@ -538,7 +538,7 @@ public final class DashMediaSource implements MediaSource {
     }
 
     void onDashManifestPublishTimeExpired(long expiredManifestPublishTimeUs) {
-        if (this.expiredManifestPublishTimeUs == C0542C.TIME_UNSET || this.expiredManifestPublishTimeUs < expiredManifestPublishTimeUs) {
+        if (this.expiredManifestPublishTimeUs == C0600C.TIME_UNSET || this.expiredManifestPublishTimeUs < expiredManifestPublishTimeUs) {
             this.expiredManifestPublishTimeUs = expiredManifestPublishTimeUs;
         }
     }
@@ -666,9 +666,9 @@ public final class DashMediaSource implements MediaSource {
         long currentStartTimeUs = firstPeriodSeekInfo.availableStartTimeUs;
         long currentEndTimeUs = lastPeriodSeekInfo.availableEndTimeUs;
         if (this.manifest.dynamic && !lastPeriodSeekInfo.isIndexExplicit) {
-            currentEndTimeUs = Math.min((getNowUnixTimeUs() - C0542C.msToUs(this.manifest.availabilityStartTimeMs)) - C0542C.msToUs(this.manifest.getPeriod(lastPeriodIndex).startMs), currentEndTimeUs);
-            if (this.manifest.timeShiftBufferDepthMs != C0542C.TIME_UNSET) {
-                long offsetInPeriodUs = currentEndTimeUs - C0542C.msToUs(this.manifest.timeShiftBufferDepthMs);
+            currentEndTimeUs = Math.min((getNowUnixTimeUs() - C0600C.msToUs(this.manifest.availabilityStartTimeMs)) - C0600C.msToUs(this.manifest.getPeriod(lastPeriodIndex).startMs), currentEndTimeUs);
+            if (this.manifest.timeShiftBufferDepthMs != C0600C.TIME_UNSET) {
+                long offsetInPeriodUs = currentEndTimeUs - C0600C.msToUs(this.manifest.timeShiftBufferDepthMs);
                 int periodIndex = lastPeriodIndex;
                 while (offsetInPeriodUs < 0 && periodIndex > 0) {
                     periodIndex--;
@@ -690,14 +690,14 @@ public final class DashMediaSource implements MediaSource {
         if (this.manifest.dynamic) {
             long presentationDelayForManifestMs = this.livePresentationDelayMs;
             if (presentationDelayForManifestMs == -1) {
-                presentationDelayForManifestMs = this.manifest.suggestedPresentationDelayMs != C0542C.TIME_UNSET ? this.manifest.suggestedPresentationDelayMs : 30000;
+                presentationDelayForManifestMs = this.manifest.suggestedPresentationDelayMs != C0600C.TIME_UNSET ? this.manifest.suggestedPresentationDelayMs : 30000;
             }
-            windowDefaultStartPositionUs = windowDurationUs - C0542C.msToUs(presentationDelayForManifestMs);
+            windowDefaultStartPositionUs = windowDurationUs - C0600C.msToUs(presentationDelayForManifestMs);
             if (windowDefaultStartPositionUs < MIN_LIVE_DEFAULT_START_POSITION_US) {
                 windowDefaultStartPositionUs = Math.min(MIN_LIVE_DEFAULT_START_POSITION_US, windowDurationUs / 2);
             }
         }
-        this.sourceListener.onSourceInfoRefreshed(this, new DashTimeline(this.manifest.availabilityStartTimeMs, (this.manifest.availabilityStartTimeMs + this.manifest.getPeriod(0).startMs) + C0542C.usToMs(currentStartTimeUs), this.firstPeriodId, currentStartTimeUs, windowDurationUs, windowDefaultStartPositionUs, this.manifest), this.manifest);
+        this.sourceListener.onSourceInfoRefreshed(this, new DashTimeline(this.manifest.availabilityStartTimeMs, (this.manifest.availabilityStartTimeMs + this.manifest.getPeriod(0).startMs) + C0600C.usToMs(currentStartTimeUs), this.firstPeriodId, currentStartTimeUs, windowDurationUs, windowDefaultStartPositionUs, this.manifest), this.manifest);
         if (!this.sideloadedManifest) {
             this.handler.removeCallbacks(this.simulateManifestRefreshRunnable);
             if (windowChangingImplicitly) {
@@ -743,8 +743,8 @@ public final class DashMediaSource implements MediaSource {
 
     private long getNowUnixTimeUs() {
         if (this.elapsedRealtimeOffsetMs != 0) {
-            return C0542C.msToUs(SystemClock.elapsedRealtime() + this.elapsedRealtimeOffsetMs);
+            return C0600C.msToUs(SystemClock.elapsedRealtime() + this.elapsedRealtimeOffsetMs);
         }
-        return C0542C.msToUs(System.currentTimeMillis());
+        return C0600C.msToUs(System.currentTimeMillis());
     }
 }

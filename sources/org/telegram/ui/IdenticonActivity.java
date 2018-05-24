@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLog;
@@ -32,7 +33,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -57,9 +57,21 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private TextView textView;
     private int textWidth;
 
+    /* renamed from: org.telegram.ui.IdenticonActivity$1 */
+    class C18361 extends ActionBarMenuOnItemClick {
+        C18361() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                IdenticonActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.IdenticonActivity$2 */
-    class C14232 implements OnTouchListener {
-        C14232() {
+    class C18372 implements OnTouchListener {
+        C18372() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -68,8 +80,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$4 */
-    class C14254 extends AnimatorListenerAdapter {
-        C14254() {
+    class C18394 extends AnimatorListenerAdapter {
+        C18394() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -80,8 +92,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$5 */
-    class C14265 implements OnPreDrawListener {
-        C14265() {
+    class C18405 implements OnPreDrawListener {
+        C18405() {
         }
 
         public boolean onPreDraw() {
@@ -113,18 +125,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    /* renamed from: org.telegram.ui.IdenticonActivity$1 */
-    class C21551 extends ActionBarMenuOnItemClick {
-        C21551() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                IdenticonActivity.this.finishFragment();
-            }
-        }
-    }
-
     public IdenticonActivity(Bundle args) {
         super(args);
     }
@@ -141,14 +141,14 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0488R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("EncryptionKey", R.string.EncryptionKey));
-        this.actionBar.setActionBarMenuOnItemClick(new C21551());
+        this.actionBar.setTitle(LocaleController.getString("EncryptionKey", C0488R.string.EncryptionKey));
+        this.actionBar.setActionBarMenuOnItemClick(new C18361());
         this.fragmentView = new FrameLayout(context);
         FrameLayout parentFrameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        this.fragmentView.setOnTouchListener(new C14232());
+        this.fragmentView.setOnTouchListener(new C18372());
         this.linearLayout = new LinearLayout(context);
         this.linearLayout.setOrientation(1);
         this.linearLayout.setWeightSum(100.0f);
@@ -229,11 +229,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             }
             this.codeTextView.setText(hash.toString());
             hash.clear();
-            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
+            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", C0488R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
             String url = "telegram.org";
             int index = hash.toString().indexOf("telegram.org");
             if (index != -1) {
-                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", R.string.EncryptionKeyLink)), index, "telegram.org".length() + index, 33);
+                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", C0488R.string.EncryptionKeyLink)), index, "telegram.org".length() + index, 33);
             }
             this.textView.setText(hash);
         }
@@ -317,7 +317,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             fArr[0] = f;
             animatorArr[5] = ObjectAnimator.ofFloat(textView, str, fArr);
             animatorSet.playTogether(animatorArr);
-            this.animatorSet.addListener(new C14254());
+            this.animatorSet.addListener(new C18394());
             this.animatorSet.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(150);
             this.animatorSet.start();
@@ -361,7 +361,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     private void fixLayout() {
-        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C14265());
+        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C18405());
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

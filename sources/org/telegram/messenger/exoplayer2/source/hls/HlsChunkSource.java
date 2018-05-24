@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.BehindLiveWindowException;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
@@ -35,7 +35,7 @@ class HlsChunkSource {
     private IOException fatalError;
     private boolean independentSegments;
     private boolean isTimestampMaster;
-    private long liveEdgeTimeUs = C0542C.TIME_UNSET;
+    private long liveEdgeTimeUs = C0600C.TIME_UNSET;
     private final DataSource mediaDataSource;
     private final List<Format> muxedCaptionFormats;
     private final HlsPlaylistTracker playlistTracker;
@@ -44,6 +44,24 @@ class HlsChunkSource {
     private final TrackGroup trackGroup;
     private TrackSelection trackSelection;
     private final HlsUrl[] variants;
+
+    private static final class EncryptionKeyChunk extends DataChunk {
+        public final String iv;
+        private byte[] result;
+
+        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] scratchSpace, String iv) {
+            super(dataSource, dataSpec, 3, trackFormat, trackSelectionReason, trackSelectionData, scratchSpace);
+            this.iv = iv;
+        }
+
+        protected void consume(byte[] data, int limit) throws IOException {
+            this.result = Arrays.copyOf(data, limit);
+        }
+
+        public byte[] getResult() {
+            return this.result;
+        }
+    }
 
     public static final class HlsChunkHolder {
         public Chunk chunk;
@@ -95,24 +113,6 @@ class HlsChunkSource {
 
         public Object getSelectionData() {
             return null;
-        }
-    }
-
-    private static final class EncryptionKeyChunk extends DataChunk {
-        public final String iv;
-        private byte[] result;
-
-        public EncryptionKeyChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] scratchSpace, String iv) {
-            super(dataSource, dataSpec, 3, trackFormat, trackSelectionReason, trackSelectionData, scratchSpace);
-            this.iv = iv;
-        }
-
-        protected void consume(byte[] data, int limit) throws IOException {
-            this.result = Arrays.copyOf(data, limit);
-        }
-
-        public byte[] getResult() {
-            return this.result;
         }
     }
 
@@ -175,7 +175,7 @@ class HlsChunkSource {
         if (!(previous == null || this.independentSegments)) {
             long subtractedDurationUs = previous.getDurationUs();
             bufferedDurationUs = Math.max(0, bufferedDurationUs - subtractedDurationUs);
-            if (timeToLiveEdgeUs != C0542C.TIME_UNSET) {
+            if (timeToLiveEdgeUs != C0600C.TIME_UNSET) {
                 timeToLiveEdgeUs = Math.max(0, timeToLiveEdgeUs - subtractedDurationUs);
             }
         }
@@ -270,14 +270,14 @@ class HlsChunkSource {
     }
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
-        if (this.liveEdgeTimeUs != C0542C.TIME_UNSET) {
+        if (this.liveEdgeTimeUs != C0600C.TIME_UNSET) {
             return this.liveEdgeTimeUs - playbackPositionUs;
         }
-        return C0542C.TIME_UNSET;
+        return C0600C.TIME_UNSET;
     }
 
     private void updateLiveEdgeTimeUs(HlsMediaPlaylist mediaPlaylist) {
-        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0542C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
+        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0600C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
     }
 
     private EncryptionKeyChunk newEncryptionKeyChunk(Uri keyUri, String iv, int variantIndex, int trackSelectionReason, Object trackSelectionData) {

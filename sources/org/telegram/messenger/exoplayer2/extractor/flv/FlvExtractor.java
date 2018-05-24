@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.flv;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0600C;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -15,7 +15,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public final class FlvExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18391();
+    public static final ExtractorsFactory FACTORY = new C06331();
     private static final int FLV_HEADER_SIZE = 9;
     private static final int FLV_TAG = Util.getIntegerCodeForString("FLV");
     private static final int FLV_TAG_HEADER_SIZE = 11;
@@ -30,7 +30,7 @@ public final class FlvExtractor implements Extractor {
     private int bytesToNextTagHeader;
     private ExtractorOutput extractorOutput;
     private final ParsableByteArray headerBuffer = new ParsableByteArray(9);
-    private long mediaTagTimestampOffsetUs = C0542C.TIME_UNSET;
+    private long mediaTagTimestampOffsetUs = C0600C.TIME_UNSET;
     private final ScriptTagPayloadReader metadataReader = new ScriptTagPayloadReader();
     private boolean outputSeekMap;
     private final ParsableByteArray scratch = new ParsableByteArray(4);
@@ -42,18 +42,18 @@ public final class FlvExtractor implements Extractor {
     private int tagType;
     private VideoTagPayloadReader videoReader;
 
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface States {
-    }
-
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.flv.FlvExtractor$1 */
-    static class C18391 implements ExtractorsFactory {
-        C18391() {
+    static class C06331 implements ExtractorsFactory {
+        C06331() {
         }
 
         public Extractor[] createExtractors() {
             return new Extractor[]{new FlvExtractor()};
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface States {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
@@ -86,7 +86,7 @@ public final class FlvExtractor implements Extractor {
 
     public void seek(long position, long timeUs) {
         this.state = 1;
-        this.mediaTagTimestampOffsetUs = C0542C.TIME_UNSET;
+        this.mediaTagTimestampOffsetUs = C0600C.TIME_UNSET;
         this.bytesToNextTagHeader = 0;
     }
 
@@ -185,7 +185,7 @@ public final class FlvExtractor implements Extractor {
         } else {
             this.metadataReader.consume(prepareTagData(input), this.tagTimestampUs);
             long durationUs = this.metadataReader.getDurationUs();
-            if (durationUs != C0542C.TIME_UNSET) {
+            if (durationUs != C0600C.TIME_UNSET) {
                 this.extractorOutput.seekMap(new Unseekable(durationUs));
                 this.outputSeekMap = true;
             }
@@ -208,11 +208,11 @@ public final class FlvExtractor implements Extractor {
 
     private void ensureReadyForMediaOutput() {
         if (!this.outputSeekMap) {
-            this.extractorOutput.seekMap(new Unseekable(C0542C.TIME_UNSET));
+            this.extractorOutput.seekMap(new Unseekable(C0600C.TIME_UNSET));
             this.outputSeekMap = true;
         }
-        if (this.mediaTagTimestampOffsetUs == C0542C.TIME_UNSET) {
-            this.mediaTagTimestampOffsetUs = this.metadataReader.getDurationUs() == C0542C.TIME_UNSET ? -this.tagTimestampUs : 0;
+        if (this.mediaTagTimestampOffsetUs == C0600C.TIME_UNSET) {
+            this.mediaTagTimestampOffsetUs = this.metadataReader.getDurationUs() == C0600C.TIME_UNSET ? -this.tagTimestampUs : 0;
         }
     }
 }

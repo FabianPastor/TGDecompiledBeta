@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ChatBigEmptyView extends LinearLayout {
@@ -19,7 +19,7 @@ public class ChatBigEmptyView extends LinearLayout {
 
     public ChatBigEmptyView(Context context, boolean secretChat) {
         super(context);
-        setBackgroundResource(R.drawable.system);
+        setBackgroundResource(C0488R.drawable.system);
         getBackground().setColorFilter(Theme.colorFilter);
         setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
         setOrientation(1);
@@ -33,15 +33,15 @@ public class ChatBigEmptyView extends LinearLayout {
             addView(this.secretViewStatusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {
             ImageView imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.cloud_big);
+            imageView.setImageResource(C0488R.drawable.cloud_big);
             addView(imageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
         }
         TextView textView = new TextView(context);
         if (secretChat) {
-            textView.setText(LocaleController.getString("EncryptedDescriptionTitle", R.string.EncryptedDescriptionTitle));
+            textView.setText(LocaleController.getString("EncryptedDescriptionTitle", C0488R.string.EncryptedDescriptionTitle));
             textView.setTextSize(1, 15.0f);
         } else {
-            textView.setText(LocaleController.getString("ChatYourSelfTitle", R.string.ChatYourSelfTitle));
+            textView.setText(LocaleController.getString("ChatYourSelfTitle", C0488R.string.ChatYourSelfTitle));
             textView.setTextSize(1, 16.0f);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setGravity(1);
@@ -57,7 +57,7 @@ public class ChatBigEmptyView extends LinearLayout {
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
             imageView = new ImageView(context);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), Mode.MULTIPLY));
-            imageView.setImageResource(secretChat ? R.drawable.ic_lock_white : R.drawable.list_circle);
+            imageView.setImageResource(secretChat ? C0488R.drawable.ic_lock_white : C0488R.drawable.list_circle);
             this.imageViews.add(imageView);
             textView = new TextView(context);
             textView.setTextSize(1, 15.0f);
@@ -68,34 +68,34 @@ public class ChatBigEmptyView extends LinearLayout {
             switch (a) {
                 case 0:
                     if (!secretChat) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription1", R.string.ChatYourSelfDescription1));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription1", C0488R.string.ChatYourSelfDescription1));
                         break;
                     } else {
-                        textView.setText(LocaleController.getString("EncryptedDescription1", R.string.EncryptedDescription1));
+                        textView.setText(LocaleController.getString("EncryptedDescription1", C0488R.string.EncryptedDescription1));
                         break;
                     }
                 case 1:
                     if (!secretChat) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription2", R.string.ChatYourSelfDescription2));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription2", C0488R.string.ChatYourSelfDescription2));
                         break;
                     } else {
-                        textView.setText(LocaleController.getString("EncryptedDescription2", R.string.EncryptedDescription2));
+                        textView.setText(LocaleController.getString("EncryptedDescription2", C0488R.string.EncryptedDescription2));
                         break;
                     }
                 case 2:
                     if (!secretChat) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription3", R.string.ChatYourSelfDescription3));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription3", C0488R.string.ChatYourSelfDescription3));
                         break;
                     } else {
-                        textView.setText(LocaleController.getString("EncryptedDescription3", R.string.EncryptedDescription3));
+                        textView.setText(LocaleController.getString("EncryptedDescription3", C0488R.string.EncryptedDescription3));
                         break;
                     }
                 case 3:
                     if (!secretChat) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription4", R.string.ChatYourSelfDescription4));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription4", C0488R.string.ChatYourSelfDescription4));
                         break;
                     } else {
-                        textView.setText(LocaleController.getString("EncryptedDescription4", R.string.EncryptedDescription4));
+                        textView.setText(LocaleController.getString("EncryptedDescription4", C0488R.string.EncryptedDescription4));
                         break;
                     }
             }

@@ -16,7 +16,7 @@ final class PlaybackInfo {
     public final TrackSelectorResult trackSelectorResult;
 
     public PlaybackInfo(Timeline timeline, long startPositionUs, TrackSelectorResult trackSelectorResult) {
-        this(timeline, null, new MediaPeriodId(0), startPositionUs, C0542C.TIME_UNSET, 1, false, trackSelectorResult);
+        this(timeline, null, new MediaPeriodId(0), startPositionUs, C0600C.TIME_UNSET, 1, false, trackSelectorResult);
     }
 
     public PlaybackInfo(Timeline timeline, Object manifest, MediaPeriodId periodId, long startPositionUs, long contentPositionUs, int playbackState, boolean isLoading, TrackSelectorResult trackSelectorResult) {

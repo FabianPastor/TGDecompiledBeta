@@ -18,8 +18,8 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.C0488R;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -36,8 +36,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     private ActionBarLayout layersActionBarLayout;
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$1 */
-    class C15211 implements OnTouchListener {
-        C15211() {
+    class C19771 implements OnTouchListener {
+        C19771() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -66,8 +66,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     }
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$2 */
-    class C15222 implements OnClickListener {
-        C15222() {
+    class C19782 implements OnClickListener {
+        C19782() {
         }
 
         public void onClick(View v) {
@@ -75,8 +75,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     }
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$3 */
-    class C15233 implements OnGlobalLayoutListener {
-        C15233() {
+    class C19793 implements OnGlobalLayoutListener {
+        C19793() {
         }
 
         public void onGlobalLayout() {
@@ -91,8 +91,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         boolean z = true;
         ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
-        setTheme(R.style.Theme.TMessages);
-        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+        setTheme(C0488R.style.Theme.TMessages);
+        getWindow().setBackgroundDrawableResource(C0488R.drawable.transparent);
         super.onCreate(savedInstanceState);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -112,7 +112,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             layoutParams1.height = -1;
             launchLayout.setLayoutParams(layoutParams1);
             View backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0488R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -120,13 +120,13 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             FrameLayout shadowTablet = new FrameLayout(this);
             shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
-            shadowTablet.setOnTouchListener(new C15211());
-            shadowTablet.setOnClickListener(new C15222());
+            shadowTablet.setOnTouchListener(new C19771());
+            shadowTablet.setOnClickListener(new C19782());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(C0488R.drawable.boxshadow);
             launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 528));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
@@ -219,7 +219,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C15233());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C19793());
         }
     }
 
