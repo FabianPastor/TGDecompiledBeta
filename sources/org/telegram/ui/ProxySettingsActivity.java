@@ -459,7 +459,7 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     private void checkShareButton() {
-        if (this.shareCell != null && this.doneItem != null && this.inputFields[0] != null && this.inputFields[1].toString() != null) {
+        if (this.shareCell != null && this.doneItem != null && this.inputFields[0] != null && this.inputFields[1] != null) {
             if (this.inputFields[0].length() == 0 || Utilities.parseInt(this.inputFields[1].getText().toString()).intValue() == 0) {
                 this.shareCell.getTextView().setAlpha(0.5f);
                 this.doneItem.setAlpha(0.5f);
