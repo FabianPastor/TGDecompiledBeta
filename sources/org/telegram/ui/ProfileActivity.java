@@ -50,7 +50,7 @@ import java.util.concurrent.CountDownLatch;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -218,7 +218,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int phoneRow;
     private boolean playProfileAnimation;
-    private PhotoViewerProvider provider = new C23481();
+    private PhotoViewerProvider provider = new C21741();
     private boolean recreateMenuAfterAnimation;
     private int rowCount = 0;
     private int sectionRow;
@@ -243,8 +243,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private AnimatorSet writeButtonAnimation;
 
     /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class C23481 extends EmptyPhotoViewerProvider {
-        C23481() {
+    class C21741 extends EmptyPhotoViewerProvider {
+        C21741() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -295,8 +295,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$3 */
-    class C22573 implements AvatarUpdaterDelegate {
-        C22573() {
+    class C21773 implements AvatarUpdaterDelegate {
+        C21773() {
         }
 
         public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big) {
@@ -307,11 +307,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$5 */
-    class C22605 extends ActionBarMenuOnItemClick {
+    class C21825 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ProfileActivity$5$1 */
-        class C16441 implements OnClickListener {
-            C16441() {
+        class C21791 implements OnClickListener {
+            C21791() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -323,7 +323,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22605() {
+        C21825() {
         }
 
         public void onItemClick(int id) {
@@ -337,13 +337,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (!ProfileActivity.this.isBot) {
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         if (ProfileActivity.this.userBlocked) {
-                            builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", C0446R.string.AreYouSureUnblockContact));
+                            builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", C0493R.string.AreYouSureUnblockContact));
                         } else {
-                            builder.setMessage(LocaleController.getString("AreYouSureBlockContact", C0446R.string.AreYouSureBlockContact));
+                            builder.setMessage(LocaleController.getString("AreYouSureBlockContact", C0493R.string.AreYouSureBlockContact));
                         }
-                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C16441());
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C21791());
+                        builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (ProfileActivity.this.userBlocked) {
                         MessagesController.getInstance(ProfileActivity.this.currentAccount).unblockUser(ProfileActivity.this.user_id);
@@ -361,8 +361,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 } else if (id == 3) {
                     args = new Bundle();
                     args.putBoolean("onlySelect", true);
-                    args.putString("selectAlertString", LocaleController.getString("SendContactTo", C0446R.string.SendContactTo));
-                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", C0446R.string.SendContactToGroup));
+                    args.putString("selectAlertString", LocaleController.getString("SendContactTo", C0493R.string.SendContactTo));
+                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", C0493R.string.SendContactToGroup));
                     r0 = new DialogsActivity(args);
                     r0.setDelegate(ProfileActivity.this);
                     ProfileActivity.this.presentFragment(r0);
@@ -374,17 +374,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
                     if (user != null && ProfileActivity.this.getParentActivity() != null) {
                         builder = new Builder(ProfileActivity.this.getParentActivity());
-                        builder.setMessage(LocaleController.getString("AreYouSureDeleteContact", C0446R.string.AreYouSureDeleteContact));
-                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                        builder.setMessage(LocaleController.getString("AreYouSureDeleteContact", C0493R.string.AreYouSureDeleteContact));
+                        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                         r1 = user;
-                        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
+                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ArrayList<User> arrayList = new ArrayList();
                                 arrayList.add(r1);
                                 ContactsController.getInstance(ProfileActivity.this.currentAccount).deleteContact(arrayList);
                             }
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     }
                 } else if (id == 7) {
@@ -405,7 +405,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         args = new Bundle();
                         args.putBoolean("onlySelect", true);
                         args.putInt("dialogsType", 2);
-                        args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0446R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
+                        args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0493R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                         r0 = new DialogsActivity(args);
                         r1 = user;
                         r0.setDelegate(new DialogsActivityDelegate() {
@@ -438,7 +438,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 intent = intent;
                                 intent.putExtra("android.intent.extra.TEXT", String.format("%s https://" + MessagesController.getInstance(ProfileActivity.this.currentAccount).linkPrefix + "/%s", new Object[]{userFull.about, user.username}));
                             }
-                            ProfileActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", C0446R.string.BotShare)), 500);
+                            ProfileActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", C0493R.string.BotShare)), 500);
                         }
                     } catch (Throwable e) {
                         FileLog.m3e(e);
@@ -492,11 +492,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
-    class C22619 implements OnItemClickListener {
+    class C21899 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$2 */
-        class C16482 implements OnClickListener {
-            C16482() {
+        class C21872 implements OnClickListener {
+            C21872() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -506,8 +506,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$3 */
-        class C16493 implements OnClickListener {
-            C16493() {
+        class C21883 implements OnClickListener {
+            C21883() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -515,7 +515,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22619() {
+        C21899() {
         }
 
         public void onItemClick(View view, int position) {
@@ -549,13 +549,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         did = (long) (-ProfileActivity.this.chat_id);
                     }
                     String[] descriptions = new String[5];
-                    descriptions[0] = LocaleController.getString("NotificationsTurnOn", C0446R.string.NotificationsTurnOn);
-                    descriptions[1] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
-                    descriptions[2] = LocaleController.formatString("MuteFor", C0446R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
-                    descriptions[3] = LocaleController.getString("NotificationsCustomize", C0446R.string.NotificationsCustomize);
-                    descriptions[4] = LocaleController.getString("NotificationsTurnOff", C0446R.string.NotificationsTurnOff);
+                    descriptions[0] = LocaleController.getString("NotificationsTurnOn", C0493R.string.NotificationsTurnOn);
+                    descriptions[1] = LocaleController.formatString("MuteFor", C0493R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
+                    descriptions[2] = LocaleController.formatString("MuteFor", C0493R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
+                    descriptions[3] = LocaleController.getString("NotificationsCustomize", C0493R.string.NotificationsCustomize);
+                    descriptions[4] = LocaleController.getString("NotificationsTurnOff", C0493R.string.NotificationsTurnOff);
                     int i = 5;
-                    int[] icons = new int[]{C0446R.drawable.notifications_s_on, C0446R.drawable.notifications_s_1h, C0446R.drawable.notifications_s_2d, C0446R.drawable.notifications_s_custom, C0446R.drawable.notifications_s_off};
+                    int[] icons = new int[]{C0493R.drawable.notifications_s_on, C0493R.drawable.notifications_s_1h, C0493R.drawable.notifications_s_2d, C0493R.drawable.notifications_s_custom, C0493R.drawable.notifications_s_off};
                     View linearLayout = new LinearLayout(ProfileActivity.this.getParentActivity());
                     linearLayout.setOrientation(1);
                     for (int a = 0; a < descriptions.length; a++) {
@@ -629,15 +629,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         });
                     }
                     builder = new Builder(ProfileActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("Notifications", C0446R.string.Notifications));
+                    builder.setTitle(LocaleController.getString("Notifications", C0493R.string.Notifications));
                     builder.setView(linearLayout);
                     ProfileActivity.this.showDialog(builder.create());
                 } else if (position == ProfileActivity.this.startSecretChatRow) {
                     builder = new Builder(ProfileActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.getString("AreYouSureSecretChat", C0446R.string.AreYouSureSecretChat));
-                    builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C16482());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("AreYouSureSecretChat", C0493R.string.AreYouSureSecretChat));
+                    builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C21872());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else if (position > ProfileActivity.this.emptyRowChat2 && position < ProfileActivity.this.membersEndRow) {
                     int user_id;
@@ -662,7 +662,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             intent.putExtra("android.intent.extra.TEXT", ProfileActivity.this.currentChat.title + "\n" + ProfileActivity.this.info.about + "\nhttps://" + MessagesController.getInstance(ProfileActivity.this.currentAccount).linkPrefix + "/" + ProfileActivity.this.currentChat.username);
                         }
-                        ProfileActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", C0446R.string.BotShare)), 500);
+                        ProfileActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", C0493R.string.BotShare)), 500);
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
@@ -675,10 +675,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     ProfileActivity.this.presentFragment(new ChannelUsersActivity(args));
                 } else if (position == ProfileActivity.this.convertRow) {
                     builder = new Builder(ProfileActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0446R.string.ConvertGroupAlert));
-                    builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0446R.string.ConvertGroupAlertWarning));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C16493());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0493R.string.ConvertGroupAlert));
+                    builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0493R.string.ConvertGroupAlertWarning));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C21883());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else {
                     ProfileActivity.this.processOnClickOrPress(position);
@@ -691,8 +691,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ProfileActivity$ListAdapter$1 */
-        class C22621 implements AboutLinkCellDelegate {
-            C22621() {
+        class C21901 implements AboutLinkCellDelegate {
+            C21901() {
             }
 
             public void didPressUrl(String url) {
@@ -738,24 +738,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
                 case 5:
                     view = new ShadowSectionCell(this.mContext);
-                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
                     break;
                 case 6:
                     view = new TextInfoPrivacyCell(this.mContext);
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
-                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     combinedDrawable.setFullsize(true);
                     cell.setBackgroundDrawable(combinedDrawable);
-                    cell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ConvertGroupInfo", C0446R.string.ConvertGroupInfo, LocaleController.formatPluralString("Members", MessagesController.getInstance(ProfileActivity.this.currentAccount).maxMegagroupCount))));
+                    cell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ConvertGroupInfo", C0493R.string.ConvertGroupInfo, LocaleController.formatPluralString("Members", MessagesController.getInstance(ProfileActivity.this.currentAccount).maxMegagroupCount))));
                     break;
                 case 7:
                     view = new LoadingCell(this.mContext);
                     break;
                 case 8:
                     view = new AboutLinkCell(this.mContext);
-                    ((AboutLinkCell) view).setDelegate(new C22621());
+                    ((AboutLinkCell) view).setDelegate(new C21901());
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -781,11 +781,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (i == ProfileActivity.this.phoneRow) {
                         user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
                         if (user.phone == null || user.phone.length() == 0) {
-                            text = LocaleController.getString("NumberUnknown", C0446R.string.NumberUnknown);
+                            text = LocaleController.getString("NumberUnknown", C0493R.string.NumberUnknown);
                         } else {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         }
-                        textDetailCell.setTextAndValueAndIcon(text, LocaleController.getString("PhoneMobile", C0446R.string.PhoneMobile), C0446R.drawable.profile_phone, 0);
+                        textDetailCell.setTextAndValueAndIcon(text, LocaleController.getString("PhoneMobile", C0493R.string.PhoneMobile), C0493R.drawable.profile_phone, 0);
                         return;
                     } else if (i == ProfileActivity.this.usernameRow) {
                         user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
@@ -795,10 +795,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             text = "@" + user.username;
                         }
                         if (ProfileActivity.this.phoneRow == -1 && ProfileActivity.this.userInfoRow == -1 && ProfileActivity.this.userInfoDetailedRow == -1) {
-                            textDetailCell.setTextAndValueAndIcon(text, LocaleController.getString("Username", C0446R.string.Username), C0446R.drawable.profile_info, 11);
+                            textDetailCell.setTextAndValueAndIcon(text, LocaleController.getString("Username", C0493R.string.Username), C0493R.drawable.profile_info, 11);
                             return;
                         } else {
-                            textDetailCell.setTextAndValue(text, LocaleController.getString("Username", C0446R.string.Username));
+                            textDetailCell.setTextAndValue(text, LocaleController.getString("Username", C0493R.string.Username));
                             return;
                         }
                     } else if (i == ProfileActivity.this.channelNameRow) {
@@ -812,7 +812,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (i == ProfileActivity.this.userInfoDetailedRow) {
                         userFull = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUserFull(ProfileActivity.this.user_id);
                         textDetailCell.setMultiline(true);
-                        textDetailCell.setTextAndValueAndIcon(userFull != null ? userFull.about : null, LocaleController.getString("UserBio", C0446R.string.UserBio), C0446R.drawable.profile_info, 11);
+                        textDetailCell.setTextAndValueAndIcon(userFull != null ? userFull.about : null, LocaleController.getString("UserBio", C0493R.string.UserBio), C0493R.drawable.profile_info, 11);
                         return;
                     } else {
                         return;
@@ -825,7 +825,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     String str;
                     if (i == ProfileActivity.this.sharedMediaRow) {
                         if (ProfileActivity.this.totalMediaCount == -1) {
-                            value = LocaleController.getString("Loading", C0446R.string.Loading);
+                            value = LocaleController.getString("Loading", C0493R.string.Loading);
                         } else {
                             str = "%d";
                             Object[] objArr = new Object[1];
@@ -833,15 +833,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             value = String.format(str, objArr);
                         }
                         if (ProfileActivity.this.user_id == 0 || UserConfig.getInstance(ProfileActivity.this.currentAccount).getClientUserId() != ProfileActivity.this.user_id) {
-                            textCell.setTextAndValue(LocaleController.getString("SharedMedia", C0446R.string.SharedMedia), value);
+                            textCell.setTextAndValue(LocaleController.getString("SharedMedia", C0493R.string.SharedMedia), value);
                             return;
                         } else {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("SharedMedia", C0446R.string.SharedMedia), value, C0446R.drawable.profile_list);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("SharedMedia", C0493R.string.SharedMedia), value, C0493R.drawable.profile_list);
                             return;
                         }
                     } else if (i == ProfileActivity.this.groupsInCommonRow) {
                         userFull = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUserFull(ProfileActivity.this.user_id);
-                        str = LocaleController.getString("GroupsInCommon", C0446R.string.GroupsInCommon);
+                        str = LocaleController.getString("GroupsInCommon", C0493R.string.GroupsInCommon);
                         String str2 = "%d";
                         Object[] objArr2 = new Object[1];
                         objArr2[0] = Integer.valueOf(userFull != null ? userFull.common_chats_count : 0);
@@ -850,11 +850,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (i == ProfileActivity.this.settingsTimerRow) {
                         EncryptedChat encryptedChat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32)));
                         if (encryptedChat.ttl == 0) {
-                            value = LocaleController.getString("ShortMessageLifetimeForever", C0446R.string.ShortMessageLifetimeForever);
+                            value = LocaleController.getString("ShortMessageLifetimeForever", C0493R.string.ShortMessageLifetimeForever);
                         } else {
                             value = LocaleController.formatTTLString(encryptedChat.ttl);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("MessageLifetime", C0446R.string.MessageLifetime), value);
+                        textCell.setTextAndValue(LocaleController.getString("MessageLifetime", C0493R.string.MessageLifetime), value);
                         return;
                     } else if (i == ProfileActivity.this.settingsNotificationsRow) {
                         long did;
@@ -889,61 +889,61 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 enabled = false;
                             }
                             if (enabled && custom) {
-                                val = LocaleController.getString("NotificationsCustom", C0446R.string.NotificationsCustom);
+                                val = LocaleController.getString("NotificationsCustom", C0493R.string.NotificationsCustom);
                             } else {
-                                val = enabled ? LocaleController.getString("NotificationsOn", C0446R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", C0446R.string.NotificationsOff);
+                                val = enabled ? LocaleController.getString("NotificationsOn", C0493R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", C0493R.string.NotificationsOff);
                             }
                         } else {
                             delta -= ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).getCurrentTime();
                             if (delta <= 0) {
                                 if (custom) {
-                                    val = LocaleController.getString("NotificationsCustom", C0446R.string.NotificationsCustom);
+                                    val = LocaleController.getString("NotificationsCustom", C0493R.string.NotificationsCustom);
                                 } else {
-                                    val = LocaleController.getString("NotificationsOn", C0446R.string.NotificationsOn);
+                                    val = LocaleController.getString("NotificationsOn", C0493R.string.NotificationsOn);
                                 }
                             } else if (delta < 3600) {
-                                val = LocaleController.formatString("WillUnmuteIn", C0446R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                                val = LocaleController.formatString("WillUnmuteIn", C0493R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
                             } else if (delta < 86400) {
-                                val = LocaleController.formatString("WillUnmuteIn", C0446R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
+                                val = LocaleController.formatString("WillUnmuteIn", C0493R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
                             } else if (delta < 31536000) {
-                                val = LocaleController.formatString("WillUnmuteIn", C0446R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
+                                val = LocaleController.formatString("WillUnmuteIn", C0493R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
                             } else {
                                 val = null;
                             }
                         }
                         if (val != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", C0446R.string.Notifications), val, C0446R.drawable.profile_list);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", C0493R.string.Notifications), val, C0493R.drawable.profile_list);
                             return;
                         } else {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", C0446R.string.Notifications), LocaleController.getString("NotificationsOff", C0446R.string.NotificationsOff), C0446R.drawable.profile_list);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", C0493R.string.Notifications), LocaleController.getString("NotificationsOff", C0493R.string.NotificationsOff), C0493R.drawable.profile_list);
                             return;
                         }
                     } else if (i == ProfileActivity.this.startSecretChatRow) {
-                        textCell.setText(LocaleController.getString("StartEncryptedChat", C0446R.string.StartEncryptedChat));
+                        textCell.setText(LocaleController.getString("StartEncryptedChat", C0493R.string.StartEncryptedChat));
                         textCell.setTag(Theme.key_windowBackgroundWhiteGreenText2);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText2));
                         return;
                     } else if (i == ProfileActivity.this.settingsKeyRow) {
                         Drawable identiconDrawable = new IdenticonDrawable();
                         identiconDrawable.setEncryptedChat(MessagesController.getInstance(ProfileActivity.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32))));
-                        textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", C0446R.string.EncryptionKey), identiconDrawable);
+                        textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", C0493R.string.EncryptionKey), identiconDrawable);
                         return;
                     } else if (i == ProfileActivity.this.leaveChannelRow) {
                         textCell.setTag(Theme.key_windowBackgroundWhiteRedText5);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
-                        textCell.setText(LocaleController.getString("LeaveChannel", C0446R.string.LeaveChannel));
+                        textCell.setText(LocaleController.getString("LeaveChannel", C0493R.string.LeaveChannel));
                         return;
                     } else if (i == ProfileActivity.this.convertRow) {
-                        textCell.setText(LocaleController.getString("UpgradeGroup", C0446R.string.UpgradeGroup));
+                        textCell.setText(LocaleController.getString("UpgradeGroup", C0493R.string.UpgradeGroup));
                         textCell.setTag(Theme.key_windowBackgroundWhiteGreenText2);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText2));
                         return;
                     } else if (i == ProfileActivity.this.addMemberRow) {
                         if (ProfileActivity.this.chat_id > 0) {
-                            textCell.setText(LocaleController.getString("AddMember", C0446R.string.AddMember));
+                            textCell.setText(LocaleController.getString("AddMember", C0493R.string.AddMember));
                             return;
                         } else {
-                            textCell.setText(LocaleController.getString("AddRecipient", C0446R.string.AddRecipient));
+                            textCell.setText(LocaleController.getString("AddRecipient", C0493R.string.AddRecipient));
                             return;
                         }
                     } else if (i != ProfileActivity.this.membersRow) {
@@ -951,17 +951,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else {
                         if (ProfileActivity.this.info != null) {
                             if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
-                                textCell.setTextAndValue(LocaleController.getString("ChannelMembers", C0446R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
+                                textCell.setTextAndValue(LocaleController.getString("ChannelMembers", C0493R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
                                 return;
                             } else {
-                                textCell.setTextAndValue(LocaleController.getString("ChannelSubscribers", C0446R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
+                                textCell.setTextAndValue(LocaleController.getString("ChannelSubscribers", C0493R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
                                 return;
                             }
                         } else if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
-                            textCell.setText(LocaleController.getString("ChannelMembers", C0446R.string.ChannelMembers));
+                            textCell.setText(LocaleController.getString("ChannelMembers", C0493R.string.ChannelMembers));
                             return;
                         } else {
-                            textCell.setText(LocaleController.getString("ChannelSubscribers", C0446R.string.ChannelSubscribers));
+                            textCell.setText(LocaleController.getString("ChannelSubscribers", C0493R.string.ChannelSubscribers));
                             return;
                         }
                     }
@@ -993,7 +993,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         TLObject user2 = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(part.user_id));
                         if (i == ProfileActivity.this.emptyRowChat2 + 1) {
-                            i2 = C0446R.drawable.menu_newgroup;
+                            i2 = C0493R.drawable.menu_newgroup;
                         } else {
                             i2 = 0;
                         }
@@ -1005,14 +1005,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     AboutLinkCell aboutLinkCell = holder.itemView;
                     if (i == ProfileActivity.this.userInfoRow) {
                         userFull = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUserFull(ProfileActivity.this.user_id);
-                        aboutLinkCell.setTextAndIcon(userFull != null ? userFull.about : null, C0446R.drawable.profile_info, ProfileActivity.this.isBot);
+                        aboutLinkCell.setTextAndIcon(userFull != null ? userFull.about : null, C0493R.drawable.profile_info, ProfileActivity.this.isBot);
                         return;
                     } else if (i == ProfileActivity.this.channelInfoRow) {
                         text = ProfileActivity.this.info.about;
                         while (text.contains("\n\n\n")) {
                             text = text.replace("\n\n\n", "\n\n");
                         }
-                        aboutLinkCell.setTextAndIcon(text, C0446R.drawable.profile_info, true);
+                        aboutLinkCell.setTextAndIcon(text, C0493R.drawable.profile_info, true);
                         return;
                     } else {
                         return;
@@ -1168,7 +1168,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.sortedUsers = new ArrayList();
             updateOnlineCount();
             this.avatarUpdater = new AvatarUpdater();
-            this.avatarUpdater.delegate = new C22573();
+            this.avatarUpdater.delegate = new C21773();
             this.avatarUpdater.parentFragment = this;
             if (ChatObject.isChannel(this.currentChat)) {
                 MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
@@ -1241,7 +1241,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         Theme.createProfileResources(context);
         this.hasOwnBackground = true;
         this.extraHeight = AndroidUtilities.dp(88.0f);
-        this.actionBar.setActionBarMenuOnItemClick(new C22605());
+        this.actionBar.setActionBarMenuOnItemClick(new C21825());
         createActionBarMenu();
         this.listAdapter = new ListAdapter(context);
         this.avatarDrawable = new AvatarDrawable();
@@ -1284,7 +1284,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setGlowColor(AvatarDrawable.getProfileBackColorForId(i));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22619());
+        this.listView.setOnItemClickListener(new C21899());
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemClick(View view, int position) {
                 if (position <= ProfileActivity.this.emptyRowChat2 || position >= ProfileActivity.this.membersEndRow) {
@@ -1334,17 +1334,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 final ArrayList<Integer> actions = new ArrayList();
                 if (ProfileActivity.this.currentChat.megagroup) {
                     if (allowSetAdmin && ChatObject.canAddAdmins(ProfileActivity.this.currentChat)) {
-                        items.add(LocaleController.getString("SetAsAdmin", C0446R.string.SetAsAdmin));
+                        items.add(LocaleController.getString("SetAsAdmin", C0493R.string.SetAsAdmin));
                         actions.add(Integer.valueOf(0));
                     }
                     if (ChatObject.canBlockUsers(ProfileActivity.this.currentChat) && canEditAdmin) {
-                        items.add(LocaleController.getString("KickFromSupergroup", C0446R.string.KickFromSupergroup));
+                        items.add(LocaleController.getString("KickFromSupergroup", C0493R.string.KickFromSupergroup));
                         actions.add(Integer.valueOf(1));
-                        items.add(LocaleController.getString("KickFromGroup", C0446R.string.KickFromGroup));
+                        items.add(LocaleController.getString("KickFromGroup", C0493R.string.KickFromGroup));
                         actions.add(Integer.valueOf(2));
                     }
                 } else {
-                    items.add(ProfileActivity.this.chat_id > 0 ? LocaleController.getString("KickFromGroup", C0446R.string.KickFromGroup) : LocaleController.getString("KickFromBroadcast", C0446R.string.KickFromBroadcast));
+                    items.add(ProfileActivity.this.chat_id > 0 ? LocaleController.getString("KickFromGroup", C0493R.string.KickFromGroup) : LocaleController.getString("KickFromBroadcast", C0493R.string.KickFromBroadcast));
                     actions.add(Integer.valueOf(2));
                 }
                 if (items.isEmpty()) {
@@ -1450,8 +1450,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             frameLayout1.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$13$1 */
-                class C22561 implements ChannelRightsEditActivityDelegate {
-                    C22561() {
+                class C21721 implements ChannelRightsEditActivityDelegate {
+                    C21721() {
                     }
 
                     public void didSetRights(int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {
@@ -1469,7 +1469,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         tL_channelBannedRights = null;
                     }
                     ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(access$000, access$8500, null, tL_channelBannedRights, 1, true);
-                    fragment.setDelegate(new C22561());
+                    fragment.setDelegate(new C21721());
                     ProfileActivity.this.presentFragment(fragment);
                 }
             });
@@ -1478,7 +1478,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             textView.setTextSize(1, 15.0f);
             textView.setGravity(17);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setText(LocaleController.getString("BanFromTheGroup", C0446R.string.BanFromTheGroup));
+            textView.setText(LocaleController.getString("BanFromTheGroup", C0493R.string.BanFromTheGroup));
             frameLayout1.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 1.0f, 0.0f, 0.0f));
             this.listView.setPadding(0, AndroidUtilities.dp(88.0f), 0, AndroidUtilities.dp(48.0f));
             this.listView.setBottomGlowOffset(AndroidUtilities.dp(48.0f));
@@ -1556,7 +1556,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.writeButton = new ImageView(context);
             Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
             if (VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(C0446R.drawable.floating_shadow_profile).mutate();
+                Drawable shadowDrawable = context.getResources().getDrawable(C0493R.drawable.floating_shadow_profile).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
                 Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -1566,14 +1566,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.writeButton.setScaleType(ScaleType.CENTER);
             this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), Mode.MULTIPLY));
             if (this.user_id != 0) {
-                this.writeButton.setImageResource(C0446R.drawable.floating_message);
+                this.writeButton.setImageResource(C0493R.drawable.floating_message);
                 this.writeButton.setPadding(0, AndroidUtilities.dp(3.0f), 0, 0);
             } else if (this.chat_id != 0) {
                 boolean isChannel = ChatObject.isChannel(this.currentChat);
                 if ((!isChannel || ChatObject.canEditInfo(this.currentChat)) && (isChannel || this.currentChat.admin || this.currentChat.creator || !this.currentChat.admins_enabled)) {
-                    this.writeButton.setImageResource(C0446R.drawable.floating_camera);
+                    this.writeButton.setImageResource(C0493R.drawable.floating_camera);
                 } else {
-                    this.writeButton.setImageResource(C0446R.drawable.floating_message);
+                    this.writeButton.setImageResource(C0493R.drawable.floating_message);
                     this.writeButton.setPadding(0, AndroidUtilities.dp(3.0f), 0, 0);
                 }
             }
@@ -1593,8 +1593,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.writeButton.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$16$1 */
-                class C16411 implements OnClickListener {
-                    C16411() {
+                class C21731 implements OnClickListener {
+                    C21731() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1631,8 +1631,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             if ((!isChannel || ChatObject.canEditInfo(ProfileActivity.this.currentChat)) && (isChannel || ProfileActivity.this.currentChat.admin || ProfileActivity.this.currentChat.creator || !ProfileActivity.this.currentChat.admins_enabled)) {
                                 Builder builder = new Builder(ProfileActivity.this.getParentActivity());
                                 Chat chat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getChat(Integer.valueOf(ProfileActivity.this.chat_id));
-                                CharSequence[] items = (chat.photo == null || chat.photo.photo_big == null || (chat.photo instanceof TL_chatPhotoEmpty)) ? new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley)} : new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("DeletePhoto", C0446R.string.DeletePhoto)};
-                                builder.setItems(items, new C16411());
+                                CharSequence[] items = (chat.photo == null || chat.photo.photo_big == null || (chat.photo instanceof TL_chatPhotoEmpty)) ? new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley)} : new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley), LocaleController.getString("DeletePhoto", C0493R.string.DeletePhoto)};
+                                builder.setItems(items, new C21731());
                                 ProfileActivity.this.showDialog(builder.create());
                             } else if (ProfileActivity.this.playProfileAnimation && (ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity)) {
                                 ProfileActivity.this.finishFragment();
@@ -1681,7 +1681,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 username = chat.username;
             }
             builder = new Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", C0446R.string.Copy)}, new OnClickListener() {
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", C0493R.string.Copy)}, new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (i == 0) {
                         try {
@@ -1704,12 +1704,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             final ArrayList<Integer> actions = new ArrayList();
             TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(user.id);
             if (userFull != null && userFull.phone_calls_available) {
-                items.add(LocaleController.getString("CallViaTelegram", C0446R.string.CallViaTelegram));
+                items.add(LocaleController.getString("CallViaTelegram", C0493R.string.CallViaTelegram));
                 actions.add(Integer.valueOf(2));
             }
-            items.add(LocaleController.getString("Call", C0446R.string.Call));
+            items.add(LocaleController.getString("Call", C0493R.string.Call));
             actions.add(Integer.valueOf(0));
-            items.add(LocaleController.getString("Copy", C0446R.string.Copy));
+            items.add(LocaleController.getString("Copy", C0493R.string.Copy));
             actions.add(Integer.valueOf(1));
             builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1739,7 +1739,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             return false;
         } else {
             builder = new Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", C0446R.string.Copy)}, new OnClickListener() {
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", C0493R.string.Copy)}, new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         String about;
@@ -1765,17 +1765,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private void leaveChatPressed() {
         Builder builder = new Builder(getParentActivity());
         if (!ChatObject.isChannel(this.chat_id, this.currentAccount) || this.currentChat.megagroup) {
-            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", C0446R.string.AreYouSureDeleteAndExit));
+            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", C0493R.string.AreYouSureDeleteAndExit));
         } else {
-            builder.setMessage(ChatObject.isChannel(this.chat_id, this.currentAccount) ? LocaleController.getString("ChannelLeaveAlert", C0446R.string.ChannelLeaveAlert) : LocaleController.getString("AreYouSureDeleteAndExit", C0446R.string.AreYouSureDeleteAndExit));
+            builder.setMessage(ChatObject.isChannel(this.chat_id, this.currentAccount) ? LocaleController.getString("ChannelLeaveAlert", C0493R.string.ChannelLeaveAlert) : LocaleController.getString("AreYouSureDeleteAndExit", C0493R.string.AreYouSureDeleteAndExit));
         }
-        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
+        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 ProfileActivity.this.kickUser(0);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -1874,7 +1874,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (ChatObject.canAddViaLink(this.currentChat)) {
                 args.putInt("chat_id", this.currentChat.id);
             }
-            args.putString("selectAlertString", LocaleController.getString("AddToTheGroup", C0446R.string.AddToTheGroup));
+            args.putString("selectAlertString", LocaleController.getString("AddToTheGroup", C0493R.string.AddToTheGroup));
         }
         ContactsActivity fragment = new ContactsActivity(args);
         fragment.setDelegate(new ContactsActivityDelegate() {
@@ -2330,7 +2330,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.listView.setLayerType(2, null);
         ActionBarMenu menu = this.actionBar.createMenu();
         if (menu.getItem(10) == null && this.animatingItem == null) {
-            this.animatingItem = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+            this.animatingItem = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
         }
         ArrayList<Animator> animators;
         int a;
@@ -2790,7 +2790,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00d8;
     L_0x0025:
         r19 = "WaitingForNetwork";
-        r20 = NUM; // 0x7f0c06dd float:1.8612756E38 double:1.0530982665E-314;
+        r20 = NUM; // 0x7f0c06ea float:1.8612782E38 double:1.053098273E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x002f:
         r0 = r25;
@@ -2856,10 +2856,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x0111;
     L_0x00b0:
         r19 = "ChatYourSelf";
-        r20 = NUM; // 0x7f0c0171 float:1.860994E38 double:1.053097581E-314;
+        r20 = NUM; // 0x7f0c0173 float:1.8609944E38 double:1.053097582E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r19 = "ChatYourSelfName";
-        r20 = NUM; // 0x7f0c0176 float:1.860995E38 double:1.053097583E-314;
+        r20 = NUM; // 0x7f0c0178 float:1.8609955E38 double:1.053097584E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x00c4:
         r4 = 0;
@@ -2882,7 +2882,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00ea;
     L_0x00de:
         r19 = "Connecting";
-        r20 = NUM; // 0x7f0c01a2 float:1.861004E38 double:1.053097605E-314;
+        r20 = NUM; // 0x7f0c01a6 float:1.8610048E38 double:1.053097607E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00ea:
@@ -2891,7 +2891,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00fc;
     L_0x00f0:
         r19 = "Updating";
-        r20 = NUM; // 0x7f0c067f float:1.8612565E38 double:1.05309822E-314;
+        r20 = NUM; // 0x7f0c0684 float:1.8612575E38 double:1.0530982226E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00fc:
@@ -2900,7 +2900,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x010e;
     L_0x0102:
         r19 = "ConnectingToProxy";
-        r20 = NUM; // 0x7f0c01a3 float:1.8610042E38 double:1.0530976055E-314;
+        r20 = NUM; // 0x7f0c01a8 float:1.8610052E38 double:1.053097608E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x010e:
@@ -2924,7 +2924,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x013a;
     L_0x012f:
         r19 = "ServiceNotifications";
-        r20 = NUM; // 0x7f0c05dd float:1.8612236E38 double:1.05309814E-314;
+        r20 = NUM; // 0x7f0c05e1 float:1.8612244E38 double:1.053098142E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x013a:
@@ -2934,7 +2934,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x014e;
     L_0x0142:
         r19 = "Bot";
-        r20 = NUM; // 0x7f0c00de float:1.8609642E38 double:1.053097508E-314;
+        r20 = NUM; // 0x7f0c00e0 float:1.8609646E38 double:1.053097509E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x014e:
@@ -3256,7 +3256,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x03d4;
     L_0x03ad:
         r19 = "Loading";
-        r20 = NUM; // 0x7f0c0382 float:1.8611013E38 double:1.053097842E-314;
+        r20 = NUM; // 0x7f0c0383 float:1.8611015E38 double:1.0530978426E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
     L_0x03bb:
@@ -3285,13 +3285,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x03eb;
     L_0x03dc:
         r19 = "ChannelPublic";
-        r20 = NUM; // 0x7f0c0150 float:1.8609873E38 double:1.0530975645E-314;
+        r20 = NUM; // 0x7f0c0152 float:1.8609877E38 double:1.0530975655E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
         goto L_0x03bb;
     L_0x03eb:
         r19 = "ChannelPrivate";
-        r20 = NUM; // 0x7f0c014d float:1.8609867E38 double:1.053097563E-314;
+        r20 = NUM; // 0x7f0c014f float:1.8609871E38 double:1.053097564E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
         goto L_0x03bb;
@@ -3808,45 +3808,45 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (UserConfig.getInstance(this.currentAccount).getClientUserId() != this.user_id) {
                 TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(this.user_id);
                 if (userFull != null && userFull.phone_calls_available) {
-                    this.callItem = menu.addItem(15, (int) C0446R.drawable.ic_call_white_24dp);
+                    this.callItem = menu.addItem(15, (int) C0493R.drawable.ic_call_white_24dp);
                 }
                 if (ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user_id)) == null) {
                     User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
                     if (user != null) {
-                        item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+                        item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
                         if (this.isBot) {
                             if (!user.bot_nochats) {
-                                item.addSubItem(9, LocaleController.getString("BotInvite", C0446R.string.BotInvite));
+                                item.addSubItem(9, LocaleController.getString("BotInvite", C0493R.string.BotInvite));
                             }
-                            item.addSubItem(10, LocaleController.getString("BotShare", C0446R.string.BotShare));
+                            item.addSubItem(10, LocaleController.getString("BotShare", C0493R.string.BotShare));
                         }
                         if (user.phone != null && user.phone.length() != 0) {
                             String string;
-                            item.addSubItem(1, LocaleController.getString("AddContact", C0446R.string.AddContact));
-                            item.addSubItem(3, LocaleController.getString("ShareContact", C0446R.string.ShareContact));
+                            item.addSubItem(1, LocaleController.getString("AddContact", C0493R.string.AddContact));
+                            item.addSubItem(3, LocaleController.getString("ShareContact", C0493R.string.ShareContact));
                             if (this.userBlocked) {
-                                string = LocaleController.getString("Unblock", C0446R.string.Unblock);
+                                string = LocaleController.getString("Unblock", C0493R.string.Unblock);
                             } else {
-                                string = LocaleController.getString("BlockContact", C0446R.string.BlockContact);
+                                string = LocaleController.getString("BlockContact", C0493R.string.BlockContact);
                             }
                             item.addSubItem(2, string);
                         } else if (this.isBot) {
-                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BotStop", C0446R.string.BotStop) : LocaleController.getString("BotRestart", C0446R.string.BotRestart));
+                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BotStop", C0493R.string.BotStop) : LocaleController.getString("BotRestart", C0493R.string.BotRestart));
                         } else {
-                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", C0446R.string.BlockContact) : LocaleController.getString("Unblock", C0446R.string.Unblock));
+                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", C0493R.string.BlockContact) : LocaleController.getString("Unblock", C0493R.string.Unblock));
                         }
                     } else {
                         return;
                     }
                 }
-                item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
-                item.addSubItem(3, LocaleController.getString("ShareContact", C0446R.string.ShareContact));
-                item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", C0446R.string.BlockContact) : LocaleController.getString("Unblock", C0446R.string.Unblock));
-                item.addSubItem(4, LocaleController.getString("EditContact", C0446R.string.EditContact));
-                item.addSubItem(5, LocaleController.getString("DeleteContact", C0446R.string.DeleteContact));
+                item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
+                item.addSubItem(3, LocaleController.getString("ShareContact", C0493R.string.ShareContact));
+                item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", C0493R.string.BlockContact) : LocaleController.getString("Unblock", C0493R.string.Unblock));
+                item.addSubItem(4, LocaleController.getString("EditContact", C0493R.string.EditContact));
+                item.addSubItem(5, LocaleController.getString("DeleteContact", C0493R.string.DeleteContact));
             } else {
-                item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
-                item.addSubItem(3, LocaleController.getString("ShareContact", C0446R.string.ShareContact));
+                item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
+                item.addSubItem(3, LocaleController.getString("ShareContact", C0493R.string.ShareContact));
             }
         } else if (this.chat_id != 0) {
             if (this.chat_id > 0) {
@@ -3854,60 +3854,60 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.writeButton != null) {
                     boolean isChannel = ChatObject.isChannel(this.currentChat);
                     if ((!isChannel || ChatObject.canChangeChatInfo(this.currentChat)) && (isChannel || this.currentChat.admin || this.currentChat.creator || !this.currentChat.admins_enabled)) {
-                        this.writeButton.setImageResource(C0446R.drawable.floating_camera);
+                        this.writeButton.setImageResource(C0493R.drawable.floating_camera);
                         this.writeButton.setPadding(0, 0, 0, 0);
                     } else {
-                        this.writeButton.setImageResource(C0446R.drawable.floating_message);
+                        this.writeButton.setImageResource(C0493R.drawable.floating_message);
                         this.writeButton.setPadding(0, AndroidUtilities.dp(3.0f), 0, 0);
                     }
                 }
                 if (ChatObject.isChannel(chat)) {
                     if (ChatObject.hasAdminRights(chat)) {
-                        this.editItem = menu.addItem(12, (int) C0446R.drawable.menu_settings);
+                        this.editItem = menu.addItem(12, (int) C0493R.drawable.menu_settings);
                         if (null == null) {
-                            item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+                            item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
                         }
                         if (chat.megagroup) {
-                            item.addSubItem(12, LocaleController.getString("ManageGroupMenu", C0446R.string.ManageGroupMenu));
+                            item.addSubItem(12, LocaleController.getString("ManageGroupMenu", C0493R.string.ManageGroupMenu));
                         } else {
-                            item.addSubItem(12, LocaleController.getString("ManageChannelMenu", C0446R.string.ManageChannelMenu));
+                            item.addSubItem(12, LocaleController.getString("ManageChannelMenu", C0493R.string.ManageChannelMenu));
                         }
                     }
                     if (chat.megagroup) {
                         if (item == null) {
-                            item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+                            item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
                         }
-                        item.addSubItem(16, LocaleController.getString("SearchMembers", C0446R.string.SearchMembers));
+                        item.addSubItem(16, LocaleController.getString("SearchMembers", C0493R.string.SearchMembers));
                         if (!(chat.creator || chat.left || chat.kicked)) {
-                            item.addSubItem(7, LocaleController.getString("LeaveMegaMenu", C0446R.string.LeaveMegaMenu));
+                            item.addSubItem(7, LocaleController.getString("LeaveMegaMenu", C0493R.string.LeaveMegaMenu));
                         }
                     }
                 } else {
                     if (!chat.admins_enabled || chat.creator || chat.admin) {
-                        this.editItem = menu.addItem(8, (int) C0446R.drawable.group_edit_profile);
+                        this.editItem = menu.addItem(8, (int) C0493R.drawable.group_edit_profile);
                     }
-                    item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+                    item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
                     if (chat.creator && this.chat_id > 0) {
-                        item.addSubItem(11, LocaleController.getString("SetAdmins", C0446R.string.SetAdmins));
+                        item.addSubItem(11, LocaleController.getString("SetAdmins", C0493R.string.SetAdmins));
                     }
                     if (!chat.admins_enabled || chat.creator || chat.admin) {
-                        item.addSubItem(8, LocaleController.getString("ChannelEdit", C0446R.string.ChannelEdit));
+                        item.addSubItem(8, LocaleController.getString("ChannelEdit", C0493R.string.ChannelEdit));
                     }
-                    item.addSubItem(16, LocaleController.getString("SearchMembers", C0446R.string.SearchMembers));
+                    item.addSubItem(16, LocaleController.getString("SearchMembers", C0493R.string.SearchMembers));
                     if (chat.creator && (this.info == null || this.info.participants.participants.size() > 0)) {
-                        item.addSubItem(13, LocaleController.getString("ConvertGroupMenu", C0446R.string.ConvertGroupMenu));
+                        item.addSubItem(13, LocaleController.getString("ConvertGroupMenu", C0493R.string.ConvertGroupMenu));
                     }
-                    item.addSubItem(7, LocaleController.getString("DeleteAndExit", C0446R.string.DeleteAndExit));
+                    item.addSubItem(7, LocaleController.getString("DeleteAndExit", C0493R.string.DeleteAndExit));
                 }
             } else {
-                item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
-                item.addSubItem(8, LocaleController.getString("EditName", C0446R.string.EditName));
+                item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
+                item.addSubItem(8, LocaleController.getString("EditName", C0493R.string.EditName));
             }
         }
         if (item == null) {
-            item = menu.addItem(10, (int) C0446R.drawable.ic_ab_other);
+            item = menu.addItem(10, (int) C0493R.drawable.ic_ab_other);
         }
-        item.addSubItem(14, LocaleController.getString("AddShortcut", C0446R.string.AddShortcut));
+        item.addSubItem(14, LocaleController.getString("AddShortcut", C0493R.string.AddShortcut));
     }
 
     protected void onDialogDismiss(Dialog dialog) {

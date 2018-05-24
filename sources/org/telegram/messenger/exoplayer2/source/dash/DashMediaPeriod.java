@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -287,7 +287,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
     }
 
     public long readDiscontinuity() {
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

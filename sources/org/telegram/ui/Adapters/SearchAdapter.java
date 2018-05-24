@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -48,8 +48,8 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean useUserCell;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
-    class C18991 implements SearchAdapterHelperDelegate {
-        C18991() {
+    class C09391 implements SearchAdapterHelperDelegate {
+        C09391() {
         }
 
         public void onDataSetChanged() {
@@ -69,7 +69,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowBots = bots;
         this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C18991());
+        this.searchAdapterHelper.setDelegate(new C09391());
     }
 
     public void setCheckedMap(SparseArray<?> map) {
@@ -236,7 +236,7 @@ public class SearchAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0446R.string.GlobalSearch));
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0493R.string.GlobalSearch));
                 break;
         }
         return new Holder(view);

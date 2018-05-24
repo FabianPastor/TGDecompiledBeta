@@ -45,12 +45,16 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.telephony.TelephonyManager;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -60,8 +64,11 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -82,6 +89,7 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -89,15 +97,20 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.ForegroundDetector;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.Components.TypefaceSpan;
 
 public class AndroidUtilities {
-    public static final int FLAG_TAG_ALL = 3;
+    public static final int FLAG_TAG_ALL = 11;
     public static final int FLAG_TAG_BOLD = 2;
     public static final int FLAG_TAG_BR = 1;
     public static final int FLAG_TAG_COLOR = 4;
+    public static final int FLAG_TAG_URL = 8;
     public static Pattern WEB_URL;
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private static int adjustOwnerClassGuid = 0;
@@ -129,12 +142,28 @@ public class AndroidUtilities {
     private static boolean waitingForSms = false;
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C17885 extends CrashManagerListener {
-        C17885() {
+    static class C00765 extends CrashManagerListener {
+        C00765() {
         }
 
         public boolean includeDeviceData() {
             return true;
+        }
+    }
+
+    public static class LinkMovementMethodMy extends LinkMovementMethod {
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() != 1 && event.getAction() != 3) {
+                    return result;
+                }
+                Selection.removeSelection(buffer);
+                return result;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+                return false;
+            }
         }
     }
 
@@ -376,7 +405,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             Builder builder = new Builder(fragment.getParentActivity());
             builder.setMessage("Install Google Maps?");
-            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
@@ -385,7 +414,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
             fragment.showDialog(builder.create());
             return false;
         }
@@ -706,7 +735,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0446R.bool.isTablet));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0493R.bool.isTablet));
         }
         return isTablet.booleanValue();
     }
@@ -818,7 +847,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00612 = new ContentObserver(new Handler()) {
+                ContentObserver c00732 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -828,16 +857,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00612;
-                contentResolver.registerContentObserver(uri, true, c00612);
-                Runnable c00623 = new Runnable() {
+                callLogContentObserver = c00732;
+                contentResolver.registerContentObserver(uri, true, c00732);
+                Runnable c00743 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00623;
-                runOnUIThread(c00623, 10000);
+                unregisterRunnable = c00743;
+                runOnUIThread(c00743, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -994,12 +1023,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static SpannableStringBuilder replaceTags(String str) {
-        return replaceTags(str, 3);
+        return replaceTags(str, 11, new Object[0]);
     }
 
-    public static SpannableStringBuilder replaceTags(String str, int flag) {
+    public static SpannableStringBuilder replaceTags(String str, int flag, Object... args) {
         try {
             int start;
+            int end;
             StringBuilder stringBuilder = new StringBuilder(str);
             if ((flag & 1) != 0) {
                 while (true) {
@@ -1020,7 +1050,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             ArrayList<Integer> bolds = new ArrayList();
             if ((flag & 2) != 0) {
-                int end;
                 while (true) {
                     start = stringBuilder.indexOf("<b>");
                     if (start == -1) {
@@ -1035,6 +1064,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     bolds.add(Integer.valueOf(start));
                     bolds.add(Integer.valueOf(end));
                 }
+                while (true) {
+                    start = stringBuilder.indexOf("**");
+                    if (start == -1) {
+                        break;
+                    }
+                    stringBuilder.replace(start, start + 2, TtmlNode.ANONYMOUS_REGION_ID);
+                    end = stringBuilder.indexOf("**");
+                    if (end >= 0) {
+                        stringBuilder.replace(end, end + 2, TtmlNode.ANONYMOUS_REGION_ID);
+                        bolds.add(Integer.valueOf(start));
+                        bolds.add(Integer.valueOf(end));
+                    }
+                }
+            }
+            if ((flag & 8) != 0) {
                 while (true) {
                     start = stringBuilder.indexOf("**");
                     if (start == -1) {
@@ -1069,25 +1113,27 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void shakeView(final View view, final float x, final int num) {
-        if (num == 6) {
-            view.setTranslationX(0.0f);
-            return;
-        }
-        AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[1];
-        animatorArr[0] = ObjectAnimator.ofFloat(view, "translationX", new float[]{(float) dp(x)});
-        animatorSet.playTogether(animatorArr);
-        animatorSet.setDuration(50);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                AndroidUtilities.shakeView(view, num == 5 ? 0.0f : -x, num + 1);
+        if (view != null) {
+            if (num == 6) {
+                view.setTranslationX(0.0f);
+                return;
             }
-        });
-        animatorSet.start();
+            AnimatorSet animatorSet = new AnimatorSet();
+            Animator[] animatorArr = new Animator[1];
+            animatorArr[0] = ObjectAnimator.ofFloat(view, "translationX", new float[]{(float) dp(x)});
+            animatorSet.playTogether(animatorArr);
+            animatorSet.setDuration(50);
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    AndroidUtilities.shakeView(view, num == 5 ? 0.0f : -x, num + 1);
+                }
+            });
+            animatorSet.start();
+        }
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17885());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C00765());
     }
 
     public static void checkForUpdates(Activity context) {
@@ -1540,9 +1586,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return;
             }
             Builder builder = new Builder((Context) activity);
-            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", C0446R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0446R.string.PermissionOpenSettings), new OnClickListener() {
+            builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+            builder.setMessage(LocaleController.getString("ApkRestricted", C0493R.string.ApkRestricted));
+            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0493R.string.PermissionOpenSettings), new OnClickListener() {
                 @TargetApi(26)
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
@@ -1552,7 +1598,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
             builder.show();
         }
     }
@@ -1649,93 +1695,159 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return false;
             }
             Uri data = intent.getData();
-            if (data == null) {
-                return false;
-            }
-            String user = null;
-            String password = null;
-            String port = null;
-            String address = null;
-            String scheme = data.getScheme();
-            if (scheme != null) {
-                if (scheme.equals("http") || scheme.equals("https")) {
-                    String host = data.getHost().toLowerCase();
-                    if (host.equals("telegram.me") || host.equals("t.me") || host.equals("telegram.dog") || host.equals("telesco.pe")) {
-                        String path = data.getPath();
-                        if (path != null && path.startsWith("/socks")) {
+            if (data != null) {
+                String user = null;
+                String password = null;
+                String port = null;
+                String address = null;
+                String secret = null;
+                String scheme = data.getScheme();
+                if (scheme != null) {
+                    if (scheme.equals("http") || scheme.equals("https")) {
+                        String host = data.getHost().toLowerCase();
+                        if (host.equals("telegram.me") || host.equals("t.me") || host.equals("telegram.dog") || host.equals("telesco.pe")) {
+                            String path = data.getPath();
+                            if (path != null && (path.startsWith("/socks") || path.startsWith("/proxy"))) {
+                                address = data.getQueryParameter("server");
+                                port = data.getQueryParameter("port");
+                                user = data.getQueryParameter("user");
+                                password = data.getQueryParameter("pass");
+                                secret = data.getQueryParameter("secret");
+                            }
+                        }
+                    } else if (scheme.equals("tg")) {
+                        String url = data.toString();
+                        if (url.startsWith("tg:proxy") || url.startsWith("tg://proxy") || url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
+                            data = Uri.parse(url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org").replace("tg://socks", "tg://telegram.org").replace("tg:socks", "tg://telegram.org"));
                             address = data.getQueryParameter("server");
                             port = data.getQueryParameter("port");
                             user = data.getQueryParameter("user");
                             password = data.getQueryParameter("pass");
+                            secret = data.getQueryParameter("secret");
                         }
                     }
-                } else if (scheme.equals("tg")) {
-                    String url = data.toString();
-                    if (url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
-                        data = Uri.parse(url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org"));
-                        address = data.getQueryParameter("server");
-                        port = data.getQueryParameter("port");
-                        user = data.getQueryParameter("user");
-                        password = data.getQueryParameter("pass");
+                }
+                if (!(TextUtils.isEmpty(address) || TextUtils.isEmpty(port))) {
+                    if (user == null) {
+                        user = TtmlNode.ANONYMOUS_REGION_ID;
                     }
+                    if (password == null) {
+                        password = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    if (secret == null) {
+                        secret = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    showProxyAlert(activity, address, port, user, password, secret);
+                    return true;
                 }
             }
-            if (TextUtils.isEmpty(address) || TextUtils.isEmpty(port)) {
-                return false;
-            }
-            if (user == null) {
-                user = TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            if (password == null) {
-                password = TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            showProxyAlert(activity, address, port, user, password);
-            return true;
-        } catch (Exception e) {
             return false;
+        } catch (Exception e) {
         }
     }
 
-    public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password) {
-        Builder builder = new Builder((Context) activity);
-        builder.setTitle(LocaleController.getString("Proxy", C0446R.string.Proxy));
-        StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", C0446R.string.EnableProxyAlert));
-        stringBuilder.append("\n\n");
-        stringBuilder.append(LocaleController.getString("UseProxyAddress", C0446R.string.UseProxyAddress)).append(": ").append(address).append("\n");
-        stringBuilder.append(LocaleController.getString("UseProxyPort", C0446R.string.UseProxyPort)).append(": ").append(port).append("\n");
-        if (!TextUtils.isEmpty(user)) {
-            stringBuilder.append(LocaleController.getString("UseProxyUsername", C0446R.string.UseProxyUsername)).append(": ").append(user).append("\n");
+    public static void showProxyAlert(Activity activity, String address, String port, String user, String password, String secret) {
+        View textView;
+        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
+        final Runnable dismissRunnable = builder.getDismissRunnable();
+        builder.setApplyTopPadding(false);
+        builder.setApplyBottomPadding(false);
+        LinearLayout linearLayout = new LinearLayout(activity);
+        builder.setCustomView(linearLayout);
+        linearLayout.setOrientation(1);
+        if (!TextUtils.isEmpty(secret)) {
+            textView = new TextView(activity);
+            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", C0493R.string.UseProxyTelegramInfo2));
+            textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray4));
+            textView.setTextSize(1, 14.0f);
+            textView.setGravity(49);
+            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 8, 17, 8));
+            View lineView = new View(activity);
+            lineView.setBackgroundColor(Theme.getColor(Theme.key_divider));
+            linearLayout.addView(lineView, new LayoutParams(-1, 1));
         }
-        if (!TextUtils.isEmpty(password)) {
-            stringBuilder.append(LocaleController.getString("UseProxyPassword", C0446R.string.UseProxyPassword)).append(": ").append(password).append("\n");
+        for (int a = 0; a < 5; a++) {
+            String text = null;
+            String detail = null;
+            if (a == 0) {
+                text = address;
+                detail = LocaleController.getString("UseProxyAddress", C0493R.string.UseProxyAddress);
+            } else if (a == 1) {
+                text = TtmlNode.ANONYMOUS_REGION_ID + port;
+                detail = LocaleController.getString("UseProxyPort", C0493R.string.UseProxyPort);
+            } else if (a == 2) {
+                text = secret;
+                detail = LocaleController.getString("UseProxySecret", C0493R.string.UseProxySecret);
+            } else if (a == 3) {
+                text = user;
+                detail = LocaleController.getString("UseProxyUsername", C0493R.string.UseProxyUsername);
+            } else if (a == 4) {
+                text = password;
+                detail = LocaleController.getString("UseProxyPassword", C0493R.string.UseProxyPassword);
+            }
+            if (!TextUtils.isEmpty(text)) {
+                TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
+                cell.setTextAndValue(text, detail, true);
+                cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
+                linearLayout.addView(cell, LayoutHelper.createLinear(-1, -2));
+                if (a == 2) {
+                    break;
+                }
+            }
         }
-        stringBuilder.append("\n").append(LocaleController.getString("EnableProxyAlert2", C0446R.string.EnableProxyAlert2));
-        builder.setMessage(stringBuilder.toString());
-        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", C0446R.string.ConnectingToProxyEnable), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Editor editor = MessagesController.getGlobalMainSettings().edit();
-                editor.putBoolean("proxy_enabled", true);
-                editor.putString("proxy_ip", address);
-                int p = Utilities.parseInt(port).intValue();
-                editor.putInt("proxy_port", p);
-                if (TextUtils.isEmpty(password)) {
-                    editor.remove("proxy_pass");
-                } else {
-                    editor.putString("proxy_pass", password);
-                }
-                if (TextUtils.isEmpty(user)) {
-                    editor.remove("proxy_user");
-                } else {
-                    editor.putString("proxy_user", user);
-                }
-                editor.commit();
-                for (int a = 0; a < 3; a++) {
-                    ConnectionsManager.native_setProxySettings(a, address, p, user, password);
-                }
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+        textView = new PickerBottomLayout(activity, false);
+        textView.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        linearLayout.addView(textView, LayoutHelper.createFrame(-1, 48, 83));
+        textView.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
+        textView.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+        textView.cancelButton.setText(LocaleController.getString("Cancel", C0493R.string.Cancel).toUpperCase());
+        textView.cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                dismissRunnable.run();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-        builder.show().setCanceledOnTouchOutside(true);
+        textView.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+        textView.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
+        textView.doneButtonBadgeTextView.setVisibility(8);
+        textView.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", C0493R.string.ConnectingConnectProxy).toUpperCase());
+        final String str = address;
+        final String str2 = port;
+        final String str3 = secret;
+        final String str4 = password;
+        final String str5 = user;
+        final Runnable runnable = dismissRunnable;
+        textView.doneButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Editor editor = MessagesController.getGlobalMainSettings().edit();
+                editor.putBoolean("proxy_enabled", true);
+                editor.putString("proxy_ip", str);
+                int p = Utilities.parseInt(str2).intValue();
+                editor.putInt("proxy_port", p);
+                if (TextUtils.isEmpty(str3)) {
+                    editor.remove("proxy_secret");
+                    if (TextUtils.isEmpty(str4)) {
+                        editor.remove("proxy_pass");
+                    } else {
+                        editor.putString("proxy_pass", str4);
+                    }
+                    if (TextUtils.isEmpty(str5)) {
+                        editor.remove("proxy_user");
+                    } else {
+                        editor.putString("proxy_user", str5);
+                    }
+                } else {
+                    editor.remove("proxy_pass");
+                    editor.remove("proxy_user");
+                    editor.putString("proxy_secret", str3);
+                }
+                editor.commit();
+                SharedConfig.currentProxy = SharedConfig.addProxy(new ProxyInfo(str, p, str5, str4, str3));
+                ConnectionsManager.setProxySettings(true, str, p, str5, str4, str3);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                runnable.run();
+            }
+        });
+        builder.show();
     }
 }

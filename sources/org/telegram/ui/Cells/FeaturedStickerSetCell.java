@@ -23,7 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
@@ -54,10 +54,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
     private boolean wasLayout;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$2 */
-    class C08772 extends Drawable {
+    class C10672 extends Drawable {
         Paint paint = new Paint(1);
 
-        C08772() {
+        C10672() {
         }
 
         public void draw(Canvas canvas) {
@@ -85,8 +85,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$3 */
-    class C08783 extends AnimatorListenerAdapter {
-        C08783() {
+    class C10683 extends AnimatorListenerAdapter {
+        C10683() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -103,8 +103,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$4 */
-    class C08794 extends AnimatorListenerAdapter {
-        C08794() {
+    class C10694 extends AnimatorListenerAdapter {
+        C10694() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -225,7 +225,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
-        this.addButton.setText(LocaleController.getString("Add", C0446R.string.Add).toUpperCase());
+        this.addButton.setText(LocaleController.getString("Add", C0493R.string.Add).toUpperCase());
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         view = this.addButton;
         if (!LocaleController.isRTL) {
@@ -234,7 +234,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-2, 28.0f, i3 | 48, LocaleController.isRTL ? 14.0f : 0.0f, 18.0f, LocaleController.isRTL ? 0.0f : 14.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(C0446R.drawable.sticker_added);
+        this.checkImage.setImageResource(C0493R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
 
@@ -279,7 +279,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         if (unread) {
             Drawable drawable;
-            Drawable drawable2 = new C08772();
+            Drawable drawable2 = new C10672();
             TextView textView = this.textView;
             if (LocaleController.isRTL) {
                 drawable = null;
@@ -310,7 +310,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(200);
                     this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, 1.0f})});
-                    this.currentAnimation.addListener(new C08783());
+                    this.currentAnimation.addListener(new C10683());
                     this.currentAnimation.start();
                     return;
                 }
@@ -321,7 +321,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(200);
                 this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, 1.0f})});
-                this.currentAnimation.addListener(new C08794());
+                this.currentAnimation.addListener(new C10694());
                 this.currentAnimation.start();
                 return;
             } else {

@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import android.util.SparseArray;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
@@ -18,7 +18,7 @@ import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 public final class PsExtractor implements Extractor {
     public static final int AUDIO_STREAM = 192;
     public static final int AUDIO_STREAM_MASK = 224;
-    public static final ExtractorsFactory FACTORY = new C18451();
+    public static final ExtractorsFactory FACTORY = new C06511();
     private static final long MAX_SEARCH_LENGTH = 1048576;
     private static final int MAX_STREAM_ID_PLUS_ONE = 256;
     private static final int MPEG_PROGRAM_END_CODE = 441;
@@ -37,8 +37,8 @@ public final class PsExtractor implements Extractor {
     private final TimestampAdjuster timestampAdjuster;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
-    static class C18451 implements ExtractorsFactory {
-        C18451() {
+    static class C06511 implements ExtractorsFactory {
+        C06511() {
         }
 
         public Extractor[] createExtractors() {
@@ -140,7 +140,7 @@ public final class PsExtractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         this.output = output;
-        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0605C.TIME_UNSET));
     }
 
     public void seek(long position, long timeUs) {

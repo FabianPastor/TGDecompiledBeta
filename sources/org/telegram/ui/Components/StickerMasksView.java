@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -61,8 +61,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$2 */
-    class C20862 extends SpanSizeLookup {
-        C20862() {
+    class C16612 extends SpanSizeLookup {
+        C16612() {
         }
 
         public int getSpanSize(int position) {
@@ -74,8 +74,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$3 */
-    class C13093 implements OnTouchListener {
-        C13093() {
+    class C16623 implements OnTouchListener {
+        C16623() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -84,8 +84,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$4 */
-    class C20874 implements OnItemClickListener {
-        C20874() {
+    class C16634 implements OnItemClickListener {
+        C16634() {
         }
 
         public void onItemClick(View view, int position) {
@@ -103,8 +103,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$5 */
-    class C20885 implements ScrollSlidingTabStripDelegate {
-        C20885() {
+    class C16645 implements ScrollSlidingTabStripDelegate {
+        C16645() {
         }
 
         public void onPageSelected(int page) {
@@ -137,8 +137,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$6 */
-    class C20896 extends OnScrollListener {
-        C20896() {
+    class C16656 extends OnScrollListener {
+        C16656() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -147,8 +147,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$7 */
-    class C13107 implements Runnable {
-        C13107() {
+    class C16667 implements Runnable {
+        C16667() {
         }
 
         public void run() {
@@ -305,15 +305,15 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         LayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
         this.stickersLayoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.stickersLayoutManager.setSpanSizeLookup(new C20862());
+        this.stickersLayoutManager.setSpanSizeLookup(new C16612());
         this.stickersGridView.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
         this.stickersGridView.setClipToPadding(false);
         recyclerListView = this.stickersGridView;
         Adapter stickersGridAdapter = new StickersGridAdapter(context);
         this.stickersGridAdapter = stickersGridAdapter;
         recyclerListView.setAdapter(stickersGridAdapter);
-        this.stickersGridView.setOnTouchListener(new C13093());
-        this.stickersOnItemClickListener = new C20874();
+        this.stickersGridView.setOnTouchListener(new C16623());
+        this.stickersOnItemClickListener = new C16634();
         this.stickersGridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.stickersGridView.setGlowColor(-657673);
         addView(this.stickersGridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
@@ -330,8 +330,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         this.scrollSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(1.0f) + 1);
         addView(this.scrollSlidingTabStrip, LayoutHelper.createFrame(-1, 48, 51));
         updateStickerTabs();
-        this.scrollSlidingTabStrip.setDelegate(new C20885());
-        this.stickersGridView.setOnScrollListener(new C20896());
+        this.scrollSlidingTabStrip.setDelegate(new C16645());
+        this.stickersGridView.setOnScrollListener(new C16656());
     }
 
     private void checkScroll() {
@@ -360,20 +360,20 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             this.scrollSlidingTabStrip.removeTabs();
             Drawable drawable;
             if (this.currentType == 0) {
-                drawable = getContext().getResources().getDrawable(C0446R.drawable.ic_masks_msk1);
+                drawable = getContext().getResources().getDrawable(C0493R.drawable.ic_masks_msk1);
                 Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
                 this.scrollSlidingTabStrip.addIconTab(drawable);
-                this.stickersEmptyView.setText(LocaleController.getString("NoStickers", C0446R.string.NoStickers));
+                this.stickersEmptyView.setText(LocaleController.getString("NoStickers", C0493R.string.NoStickers));
             } else {
-                drawable = getContext().getResources().getDrawable(C0446R.drawable.ic_masks_sticker1);
+                drawable = getContext().getResources().getDrawable(C0493R.drawable.ic_masks_sticker1);
                 Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
                 this.scrollSlidingTabStrip.addIconTab(drawable);
-                this.stickersEmptyView.setText(LocaleController.getString("NoMasks", C0446R.string.NoMasks));
+                this.stickersEmptyView.setText(LocaleController.getString("NoMasks", C0493R.string.NoMasks));
             }
             if (!this.recentStickers[this.currentType].isEmpty()) {
                 this.recentTabBum = this.stickersTabOffset;
                 this.stickersTabOffset++;
-                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), C0446R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
+                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), C0493R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
             }
             this.stickerSets[this.currentType].clear();
             ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
@@ -443,7 +443,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
-        AndroidUtilities.runOnUIThread(new C13107());
+        AndroidUtilities.runOnUIThread(new C16667());
     }
 
     public void setVisibility(int visibility) {

@@ -6,7 +6,10 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
-import org.telegram.messenger.exoplayer2.C0542C;
+import java.util.ArrayList;
+import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.SerializedData;
 
 public class SharedConfig {
     public static boolean allowBigEmoji;
@@ -15,6 +18,7 @@ public class SharedConfig {
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
     private static boolean configLoaded;
+    public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
     public static boolean directShare = true;
     public static int fontSize = AndroidUtilities.dp(16.0f);
@@ -30,6 +34,7 @@ public class SharedConfig {
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
     public static boolean playOrderReversed;
+    public static ArrayList<ProxyInfo> proxyList = new ArrayList();
     public static byte[] pushAuthKey;
     public static byte[] pushAuthKeyId;
     public static String pushString = TtmlNode.ANONYMOUS_REGION_ID;
@@ -46,6 +51,39 @@ public class SharedConfig {
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
     public static boolean useSystemEmoji;
+
+    public static class ProxyInfo {
+        public String address;
+        public boolean available;
+        public long availableCheckTime;
+        public boolean checking;
+        public String password;
+        public long ping;
+        public int port;
+        public long proxyCheckPingId;
+        public String secret;
+        public String username;
+
+        public ProxyInfo(String a, int p, String u, String pw, String s) {
+            this.address = a;
+            this.port = p;
+            this.username = u;
+            this.password = pw;
+            this.secret = s;
+            if (this.address == null) {
+                this.address = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            if (this.password == null) {
+                this.password = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            if (this.username == null) {
+                this.username = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            if (this.secret == null) {
+                this.secret = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+        }
+    }
 
     static {
         loadConfig();
@@ -149,7 +187,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
+                    passcodeBytes = passcode.getBytes(C0605C.UTF8_NAME);
                     bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -162,7 +200,7 @@ public class SharedConfig {
             }
         } else {
             try {
-                passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(C0605C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -303,6 +341,95 @@ public class SharedConfig {
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
         editor.commit();
+    }
+
+    public static void loadProxyList() {
+        if (proxyList.isEmpty()) {
+            ProxyInfo info;
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            String proxyAddress = preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
+            String proxyUsername = preferences.getString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID);
+            String proxyPassword = preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
+            String proxySecret = preferences.getString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
+            int proxyPort = preferences.getInt("proxy_port", 1080);
+            proxyList.clear();
+            currentProxy = null;
+            String list = preferences.getString("proxy_list", null);
+            if (!TextUtils.isEmpty(list)) {
+                SerializedData data = new SerializedData(Base64.decode(list, 0));
+                int count = data.readInt32(false);
+                for (int a = 0; a < count; a++) {
+                    info = new ProxyInfo(data.readString(false), data.readInt32(false), data.readString(false), data.readString(false), data.readString(false));
+                    proxyList.add(info);
+                    if (currentProxy == null && !TextUtils.isEmpty(proxyAddress) && proxyAddress.equals(info.address) && proxyPort == info.port) {
+                        if (proxyUsername.equals(info.username) && proxyPassword.equals(info.password)) {
+                            currentProxy = info;
+                        }
+                    }
+                }
+            }
+            if (currentProxy == null && !TextUtils.isEmpty(proxyAddress)) {
+                info = new ProxyInfo(proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
+                currentProxy = info;
+                proxyList.add(0, info);
+            }
+        }
+    }
+
+    private static void saveProxyList() {
+        SerializedData serializedData = new SerializedData();
+        int count = proxyList.size();
+        serializedData.writeInt32(count);
+        for (int a = 0; a < count; a++) {
+            String str;
+            ProxyInfo info = (ProxyInfo) proxyList.get(a);
+            serializedData.writeString(info.address != null ? info.address : TtmlNode.ANONYMOUS_REGION_ID);
+            serializedData.writeInt32(info.port);
+            serializedData.writeString(info.username != null ? info.username : TtmlNode.ANONYMOUS_REGION_ID);
+            serializedData.writeString(info.password != null ? info.password : TtmlNode.ANONYMOUS_REGION_ID);
+            if (info.secret != null) {
+                str = info.secret;
+            } else {
+                str = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            serializedData.writeString(str);
+        }
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("proxy_list", Base64.encodeToString(serializedData.toByteArray(), 2)).commit();
+    }
+
+    public static ProxyInfo addProxy(ProxyInfo proxyInfo) {
+        loadProxyList();
+        int count = proxyList.size();
+        for (int a = 0; a < count; a++) {
+            ProxyInfo info = (ProxyInfo) proxyList.get(a);
+            if (proxyInfo.address.equals(info.address) && proxyInfo.port == info.port && proxyInfo.username.equals(info.username) && proxyInfo.password.equals(info.password) && proxyInfo.secret.equals(info.secret)) {
+                return info;
+            }
+        }
+        proxyList.add(proxyInfo);
+        saveProxyList();
+        return proxyInfo;
+    }
+
+    public static void deleteProxy(ProxyInfo proxyInfo) {
+        if (currentProxy == proxyInfo) {
+            currentProxy = null;
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            boolean enabled = preferences.getBoolean("proxy_enabled", false);
+            Editor editor = preferences.edit();
+            editor.putString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
+            editor.putString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
+            editor.putString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID);
+            editor.putString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
+            editor.putInt("proxy_port", 1080);
+            editor.putBoolean("proxy_enabled", false);
+            editor.commit();
+            if (enabled) {
+                ConnectionsManager.setProxySettings(false, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+            }
+        }
+        proxyList.remove(proxyInfo);
+        saveProxyList();
     }
 
     public static void checkSaveToGalleryFiles() {

@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.upstream.cache;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -18,15 +18,15 @@ final class SimpleCacheSpan extends CacheSpan {
     }
 
     public static SimpleCacheSpan createLookup(String key, long position) {
-        return new SimpleCacheSpan(key, position, -1, C0542C.TIME_UNSET, null);
+        return new SimpleCacheSpan(key, position, -1, C0605C.TIME_UNSET, null);
     }
 
     public static SimpleCacheSpan createOpenHole(String key, long position) {
-        return new SimpleCacheSpan(key, position, -1, C0542C.TIME_UNSET, null);
+        return new SimpleCacheSpan(key, position, -1, C0605C.TIME_UNSET, null);
     }
 
     public static SimpleCacheSpan createClosedHole(String key, long position, long length) {
-        return new SimpleCacheSpan(key, position, length, C0542C.TIME_UNSET, null);
+        return new SimpleCacheSpan(key, position, length, C0605C.TIME_UNSET, null);
     }
 
     public static SimpleCacheSpan createCacheEntry(File file, CachedContentIndex index) {

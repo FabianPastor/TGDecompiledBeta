@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
@@ -42,7 +42,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
     private final DataSource dataSource;
     private final long elapsedRealtimeOffsetMs;
     private IOException fatalError;
-    private long liveEdgeTimeUs = C0542C.TIME_UNSET;
+    private long liveEdgeTimeUs = C0605C.TIME_UNSET;
     private DashManifest manifest;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int maxSegmentsPerLoad;
@@ -235,7 +235,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         if (this.fatalError == null) {
             long bufferedDurationUs = loadPositionUs - playbackPositionUs;
             long timeToLiveEdgeUs = resolveTimeToLiveEdgeUs(playbackPositionUs);
-            long presentationPositionUs = (C0542C.msToUs(this.manifest.availabilityStartTimeMs) + C0542C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs)) + loadPositionUs;
+            long presentationPositionUs = (C0605C.msToUs(this.manifest.availabilityStartTimeMs) + C0605C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs)) + loadPositionUs;
             if (this.playerTrackEmsgHandler == null || !this.playerTrackEmsgHandler.maybeRefreshManifestBeforeLoadingNextChunk(presentationPositionUs)) {
                 this.trackSelection.updateSelectedTrack(playbackPositionUs, bufferedDurationUs, timeToLiveEdgeUs);
                 RepresentationHolder representationHolder = this.representationHolders[this.trackSelection.getSelectedIndex()];
@@ -265,9 +265,9 @@ public class DefaultDashChunkSource implements DashChunkSource {
                 int segmentNum;
                 int firstAvailableSegmentNum = representationHolder.getFirstSegmentNum();
                 if (availableSegmentCount == -1) {
-                    long liveEdgeTimeInPeriodUs = (getNowUnixTimeUs() - C0542C.msToUs(this.manifest.availabilityStartTimeMs)) - C0542C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs);
-                    if (this.manifest.timeShiftBufferDepthMs != C0542C.TIME_UNSET) {
-                        firstAvailableSegmentNum = Math.max(firstAvailableSegmentNum, representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs - C0542C.msToUs(this.manifest.timeShiftBufferDepthMs)));
+                    long liveEdgeTimeInPeriodUs = (getNowUnixTimeUs() - C0605C.msToUs(this.manifest.availabilityStartTimeMs)) - C0605C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs);
+                    if (this.manifest.timeShiftBufferDepthMs != C0605C.TIME_UNSET) {
+                        firstAvailableSegmentNum = Math.max(firstAvailableSegmentNum, representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs - C0605C.msToUs(this.manifest.timeShiftBufferDepthMs)));
                     }
                     lastAvailableSegmentNum = representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs) - 1;
                 } else {
@@ -340,7 +340,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
     }
 
     private void updateLiveEdgeTimeUs(RepresentationHolder representationHolder, int lastAvailableSegmentNum) {
-        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C0542C.TIME_UNSET;
+        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C0605C.TIME_UNSET;
     }
 
     private long getNowUnixTimeUs() {
@@ -351,11 +351,11 @@ public class DefaultDashChunkSource implements DashChunkSource {
     }
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
-        boolean resolveTimeToLiveEdgePossible = this.manifest.dynamic && this.liveEdgeTimeUs != C0542C.TIME_UNSET;
+        boolean resolveTimeToLiveEdgePossible = this.manifest.dynamic && this.liveEdgeTimeUs != C0605C.TIME_UNSET;
         if (resolveTimeToLiveEdgePossible) {
             return this.liveEdgeTimeUs - playbackPositionUs;
         }
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 
     protected static Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, RangedUri initializationUri, RangedUri indexUri) {

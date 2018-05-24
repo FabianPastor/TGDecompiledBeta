@@ -15,7 +15,7 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.UserObject;
@@ -56,7 +56,7 @@ public class GroupCreateSpan extends View {
         this.rect = new RectF();
         this.colors = new int[6];
         this.currentContact = contact;
-        this.deleteDrawable = getResources().getDrawable(C0446R.drawable.delete);
+        this.deleteDrawable = getResources().getDrawable(C0493R.drawable.delete);
         textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));

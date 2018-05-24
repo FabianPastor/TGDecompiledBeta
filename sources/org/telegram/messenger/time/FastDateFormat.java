@@ -14,14 +14,14 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
     public static final int LONG = 1;
     public static final int MEDIUM = 2;
     public static final int SHORT = 3;
-    private static final FormatCache<FastDateFormat> cache = new C18781();
+    private static final FormatCache<FastDateFormat> cache = new C07841();
     private static final long serialVersionUID = 2;
     private final FastDateParser parser;
     private final FastDatePrinter printer;
 
     /* renamed from: org.telegram.messenger.time.FastDateFormat$1 */
-    static class C18781 extends FormatCache<FastDateFormat> {
-        C18781() {
+    static class C07841 extends FormatCache<FastDateFormat> {
+        C07841() {
         }
 
         protected FastDateFormat createInstance(String pattern, TimeZone timeZone, Locale locale) {

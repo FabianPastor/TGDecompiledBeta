@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -365,7 +365,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         Chunk loadable = this.nextChunkHolder.chunk;
         this.nextChunkHolder.clear();
         if (endOfStream) {
-            this.pendingResetPositionUs = C0542C.TIME_UNSET;
+            this.pendingResetPositionUs = C0605C.TIME_UNSET;
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
@@ -375,7 +375,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
                 BaseMediaChunk mediaChunk = (BaseMediaChunk) loadable;
                 if (pendingReset) {
                     this.decodeOnlyUntilPositionUs = (mediaChunk.startTimeUs > this.pendingResetPositionUs ? 1 : (mediaChunk.startTimeUs == this.pendingResetPositionUs ? 0 : -1)) == 0 ? Long.MIN_VALUE : this.pendingResetPositionUs;
-                    this.pendingResetPositionUs = C0542C.TIME_UNSET;
+                    this.pendingResetPositionUs = C0605C.TIME_UNSET;
                 }
                 mediaChunk.init(this.mediaChunkOutput);
                 this.mediaChunks.add(mediaChunk);
@@ -435,7 +435,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     }
 
     boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0542C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0605C.TIME_UNSET;
     }
 
     private void discardDownstreamMediaChunks(int discardToPrimaryStreamIndex) {

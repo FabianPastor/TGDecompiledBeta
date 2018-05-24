@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -44,8 +44,8 @@ public class ManageChatUserCell extends FrameLayout {
     private SimpleTextView statusTextView;
 
     /* renamed from: org.telegram.ui.Cells.ManageChatUserCell$1 */
-    class C08821 implements OnClickListener {
-        C08821() {
+    class C10721 implements OnClickListener {
+        C10721() {
         }
 
         public void onClick(View v) {
@@ -103,7 +103,7 @@ public class ManageChatUserCell extends FrameLayout {
             this.optionsButton = new ImageView(context);
             this.optionsButton.setFocusable(false);
             this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            this.optionsButton.setImageResource(C0446R.drawable.ic_ab_other);
+            this.optionsButton.setImageResource(C0493R.drawable.ic_ab_other);
             this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
             this.optionsButton.setScaleType(ScaleType.CENTER);
             View view2 = this.optionsButton;
@@ -111,7 +111,7 @@ public class ManageChatUserCell extends FrameLayout {
                 i3 = 5;
             }
             addView(view2, LayoutHelper.createFrame(48, 64, i3 | 48));
-            this.optionsButton.setOnClickListener(new C08821());
+            this.optionsButton.setOnClickListener(new C10721());
         }
     }
 
@@ -201,13 +201,13 @@ public class ManageChatUserCell extends FrameLayout {
                 if (this.currentUser.bot) {
                     this.statusTextView.setTextColor(this.statusColor);
                     if (this.currentUser.bot_chat_history || this.isAdmin) {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", C0446R.string.BotStatusRead));
+                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", C0493R.string.BotStatusRead));
                     } else {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", C0446R.string.BotStatusCantRead));
+                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", C0493R.string.BotStatusCantRead));
                     }
                 } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
-                    this.statusTextView.setText(LocaleController.getString("Online", C0446R.string.Online));
+                    this.statusTextView.setText(LocaleController.getString("Online", C0493R.string.Online));
                 } else {
                     this.statusTextView.setTextColor(this.statusColor);
                     this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));

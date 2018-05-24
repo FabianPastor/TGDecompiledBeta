@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.metadata.emsg;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -18,7 +18,7 @@ public final class EventMessageEncoder {
             writeNullTerminatedString(this.dataOutputStream, eventMessage.schemeIdUri);
             writeNullTerminatedString(this.dataOutputStream, eventMessage.value != null ? eventMessage.value : TtmlNode.ANONYMOUS_REGION_ID);
             writeUnsignedInt(this.dataOutputStream, timescale);
-            writeUnsignedInt(this.dataOutputStream, Util.scaleLargeTimestamp(eventMessage.presentationTimeUs, timescale, C0542C.MICROS_PER_SECOND));
+            writeUnsignedInt(this.dataOutputStream, Util.scaleLargeTimestamp(eventMessage.presentationTimeUs, timescale, C0605C.MICROS_PER_SECOND));
             writeUnsignedInt(this.dataOutputStream, Util.scaleLargeTimestamp(eventMessage.durationMs, timescale, 1000));
             writeUnsignedInt(this.dataOutputStream, eventMessage.id);
             this.dataOutputStream.write(eventMessage.messageData);

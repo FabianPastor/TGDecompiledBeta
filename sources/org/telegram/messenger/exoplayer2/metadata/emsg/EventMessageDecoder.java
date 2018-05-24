@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.metadata.emsg;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.MetadataDecoder;
 import org.telegram.messenger.exoplayer2.metadata.MetadataInputBuffer;
@@ -16,7 +16,7 @@ public final class EventMessageDecoder implements MetadataDecoder {
         String schemeIdUri = parsableByteArray.readNullTerminatedString();
         String value = parsableByteArray.readNullTerminatedString();
         long timescale = parsableByteArray.readUnsignedInt();
-        long presentationTimeUs = Util.scaleLargeTimestamp(parsableByteArray.readUnsignedInt(), C0542C.MICROS_PER_SECOND, timescale);
+        long presentationTimeUs = Util.scaleLargeTimestamp(parsableByteArray.readUnsignedInt(), C0605C.MICROS_PER_SECOND, timescale);
         long durationMs = Util.scaleLargeTimestamp(parsableByteArray.readUnsignedInt(), 1000, timescale);
         long id = parsableByteArray.readUnsignedInt();
         int position = parsableByteArray.getPosition();

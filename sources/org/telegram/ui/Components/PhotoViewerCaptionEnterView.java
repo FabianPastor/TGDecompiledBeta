@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -68,8 +68,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private View windowView;
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$1 */
-    class C12611 implements OnClickListener {
-        C12611() {
+    class C15991 implements OnClickListener {
+        C15991() {
         }
 
         public void onClick(View view) {
@@ -82,8 +82,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$3 */
-    class C12623 implements ActionMode.Callback {
-        C12623() {
+    class C16013 implements ActionMode.Callback {
+        C16013() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -110,8 +110,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$4 */
-    class C12634 implements ActionMode.Callback {
-        C12634() {
+    class C16024 implements ActionMode.Callback {
+        C16024() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -138,8 +138,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$5 */
-    class C12645 implements OnKeyListener {
-        C12645() {
+    class C16035 implements OnKeyListener {
+        C16035() {
         }
 
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -160,8 +160,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$6 */
-    class C12656 implements OnClickListener {
-        C12656() {
+    class C16046 implements OnClickListener {
+        C16046() {
         }
 
         public void onClick(View view) {
@@ -172,10 +172,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$7 */
-    class C12667 implements TextWatcher {
+    class C16057 implements TextWatcher {
         boolean processChange = false;
 
-        C12667() {
+        C16057() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -205,8 +205,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$8 */
-    class C12678 implements OnClickListener {
-        C12678() {
+    class C16068 implements OnClickListener {
+        C16068() {
         }
 
         public void onClick(View view) {
@@ -215,8 +215,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$9 */
-    class C20759 implements Listener {
-        C20759() {
+    class C16079 implements Listener {
+        C16079() {
         }
 
         public boolean onBackspace() {
@@ -310,11 +310,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         FrameLayout frameLayout = new FrameLayout(context);
         textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
         this.emojiButton = new ImageView(context);
-        this.emojiButton.setImageResource(C0446R.drawable.ic_smile_w);
+        this.emojiButton.setImageResource(C0493R.drawable.ic_smile_w);
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new C12611());
+        this.emojiButton.setOnClickListener(new C15991());
         this.messageEditText = new EditTextCaption(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
@@ -326,10 +326,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         };
         if (VERSION.SDK_INT >= 23 && this.windowView != null) {
-            this.messageEditText.setCustomSelectionActionModeCallback(new C12623());
-            this.messageEditText.setCustomInsertionActionModeCallback(new C12634());
+            this.messageEditText.setCustomSelectionActionModeCallback(new C16013());
+            this.messageEditText.setCustomInsertionActionModeCallback(new C16024());
         }
-        this.messageEditText.setHint(LocaleController.getString("AddCaption", C0446R.string.AddCaption));
+        this.messageEditText.setHint(LocaleController.getString("AddCaption", C0493R.string.AddCaption));
         this.messageEditText.setImeOptions(268435456);
         this.messageEditText.setInputType(this.messageEditText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
         this.messageEditText.setMaxLines(4);
@@ -344,17 +344,17 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHintTextColor(-NUM);
         this.messageEditText.setFilters(new InputFilter[]{new LengthFilter(Callback.DEFAULT_DRAG_ANIMATION_DURATION)});
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new C12645());
-        this.messageEditText.setOnClickListener(new C12656());
-        this.messageEditText.addTextChangedListener(new C12667());
+        this.messageEditText.setOnKeyListener(new C16035());
+        this.messageEditText.setOnClickListener(new C16046());
+        this.messageEditText.addTextChangedListener(new C16057());
         ImageView doneButton = new ImageView(context);
         doneButton.setScaleType(ScaleType.CENTER);
-        doneButton.setImageResource(C0446R.drawable.ic_done);
+        doneButton.setImageResource(C0493R.drawable.ic_done);
         textFieldContainer.addView(doneButton, LayoutHelper.createLinear(48, 48, 80));
         if (VERSION.SDK_INT >= 21) {
             doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         }
-        doneButton.setOnClickListener(new C12678());
+        doneButton.setOnClickListener(new C16068());
     }
 
     public void setForceFloatingEmoji(boolean value) {
@@ -464,7 +464,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void createEmojiView() {
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(false, false, getContext(), null);
-            this.emojiView.setListener(new C20759());
+            this.emojiView.setListener(new C16079());
             this.sizeNotifierLayout.addView(this.emojiView);
         }
     }
@@ -549,14 +549,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (this.sizeNotifierLayout != null) {
                 this.emojiPadding = currentHeight;
                 this.sizeNotifierLayout.requestLayout();
-                this.emojiButton.setImageResource(C0446R.drawable.ic_keyboard_w);
+                this.emojiButton.setImageResource(C0493R.drawable.ic_keyboard_w);
                 onWindowSizeChanged();
                 return;
             }
             return;
         }
         if (this.emojiButton != null) {
-            this.emojiButton.setImageResource(C0446R.drawable.ic_smile_w);
+            this.emojiButton.setImageResource(C0493R.drawable.ic_smile_w);
         }
         if (this.emojiView != null) {
             this.emojiView.setVisibility(8);

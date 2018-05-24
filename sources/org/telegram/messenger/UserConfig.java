@@ -186,6 +186,14 @@ public class UserConfig {
         return i;
     }
 
+    public String getClientPhone() {
+        String str;
+        synchronized (this.sync) {
+            str = (this.currentUser == null || this.currentUser.phone == null) ? TtmlNode.ANONYMOUS_REGION_ID : this.currentUser.phone;
+        }
+        return str;
+    }
+
     public User getCurrentUser() {
         User user;
         synchronized (this.sync) {

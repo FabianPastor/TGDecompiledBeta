@@ -23,7 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -53,8 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C11231 implements OnPreDrawListener {
-        C11231() {
+    class C14361 implements OnPreDrawListener {
+        C14361() {
         }
 
         public boolean onPreDraw() {
@@ -65,8 +65,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C11297 implements OnCancelListener {
-        C11297() {
+    class C14427 implements OnCancelListener {
+        C14427() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -110,15 +110,15 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         private float scale;
         private float width;
         /* renamed from: x */
-        private float f13x;
+        private float f43x;
         /* renamed from: y */
-        private float f14y;
+        private float f44y;
 
         private CropState(Bitmap bitmap, int bRotation) {
             this.width = (float) bitmap.getWidth();
             this.height = (float) bitmap.getHeight();
-            this.f13x = 0.0f;
-            this.f14y = 0.0f;
+            this.f43x = 0.0f;
+            this.f44y = 0.0f;
             this.scale = 1.0f;
             this.baseRotation = (float) bRotation;
             this.rotation = 0.0f;
@@ -126,7 +126,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private boolean hasChanges() {
-            return Math.abs(this.f13x) > CropView.EPSILON || Math.abs(this.f14y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
+            return Math.abs(this.f43x) > CropView.EPSILON || Math.abs(this.f44y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
         }
 
         private float getWidth() {
@@ -146,17 +146,17 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private void translate(float x, float y) {
-            this.f13x += x;
-            this.f14y += y;
+            this.f43x += x;
+            this.f44y += y;
             this.matrix.postTranslate(x, y);
         }
 
         private float getX() {
-            return this.f13x;
+            return this.f43x;
         }
 
         private float getY() {
-            return this.f14y;
+            return this.f44y;
         }
 
         private void scale(float s, float pivotX, float pivotY) {
@@ -191,8 +191,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
         private void reset(CropAreaView areaView, float orient, boolean freeform) {
             this.matrix.reset();
-            this.f13x = 0.0f;
-            this.f14y = 0.0f;
+            this.f43x = 0.0f;
+            this.f44y = 0.0f;
             this.rotation = 0.0f;
             this.orientation = orient;
             float w = (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.height : this.width;
@@ -262,7 +262,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11231());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C14361());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -665,8 +665,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
             ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
             ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
-            actions[0] = LocaleController.getString("CropOriginal", C0446R.string.CropOriginal);
-            actions[1] = LocaleController.getString("CropSquare", C0446R.string.CropSquare);
+            actions[0] = LocaleController.getString("CropOriginal", C0493R.string.CropOriginal);
+            actions[1] = LocaleController.getString("CropSquare", C0493R.string.CropSquare);
             int i = 2;
             for (Integer[] ratioPair : ratios) {
                 if (this.areaView.getAspectRatio() > 1.0f) {
@@ -699,7 +699,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C11297());
+            dialog.setOnCancelListener(new C14427());
             dialog.show();
         }
     }

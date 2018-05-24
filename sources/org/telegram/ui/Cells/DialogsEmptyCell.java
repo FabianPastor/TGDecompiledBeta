@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -25,8 +25,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
-    class C08741 implements OnTouchListener {
-        C08741() {
+    class C10641 implements OnTouchListener {
+        C10641() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -38,15 +38,15 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(new C08741());
+        setOnTouchListener(new C10641());
         this.emptyTextView1 = new TextView(context);
-        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0446R.string.NoChats));
+        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0493R.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView1.setGravity(17);
         this.emptyTextView1.setTextSize(1, 20.0f);
         addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2));
         this.emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", C0446R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", C0493R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace('\n', ' ');
         }

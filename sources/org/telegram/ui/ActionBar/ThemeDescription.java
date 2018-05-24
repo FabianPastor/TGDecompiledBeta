@@ -23,7 +23,7 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -67,7 +67,7 @@ public class ThemeDescription {
     public static int FLAG_CHECKBOXCHECK = MessagesController.UPDATE_MASK_CHAT_ADMINS;
     public static int FLAG_CHECKTAG = 262144;
     public static int FLAG_CURSORCOLOR = 16777216;
-    public static int FLAG_DRAWABLESELECTEDSTATE = C0542C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    public static int FLAG_DRAWABLESELECTEDSTATE = C0605C.DEFAULT_BUFFER_SEGMENT_SIZE;
     public static int FLAG_FASTSCROLL = ConnectionsManager.FileTypeVideo;
     public static int FLAG_HINTTEXTCOLOR = 8388608;
     public static int FLAG_IMAGECOLOR = 8;

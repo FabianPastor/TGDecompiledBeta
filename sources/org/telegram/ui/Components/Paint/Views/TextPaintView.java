@@ -22,11 +22,11 @@ public class TextPaintView extends EntityView {
     private Swatch swatch;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.TextPaintView$1 */
-    class C12231 implements TextWatcher {
+    class C15521 implements TextWatcher {
         private int beforeCursorPosition = 0;
         private String text;
 
-        C12231() {
+        C15521() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,7 +125,7 @@ public class TextPaintView extends EntityView {
         setSwatch(swatch);
         setStroke(stroke);
         updatePosition();
-        this.editText.addTextChangedListener(new C12231());
+        this.editText.addTextChangedListener(new C15521());
     }
 
     public TextPaintView(Context context, TextPaintView textPaintView, Point position) {
@@ -199,7 +199,7 @@ public class TextPaintView extends EntityView {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.dp(46.0f)) / scale);
         float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.dp(20.0f)) / scale);
-        return new Rect((this.position.f24x - (width / 2.0f)) * scale, (this.position.f25y - (height / 2.0f)) * scale, width * scale, height * scale);
+        return new Rect((this.position.f54x - (width / 2.0f)) * scale, (this.position.f55y - (height / 2.0f)) * scale, width * scale, height * scale);
     }
 
     protected TextViewSelectionView createSelectionView() {

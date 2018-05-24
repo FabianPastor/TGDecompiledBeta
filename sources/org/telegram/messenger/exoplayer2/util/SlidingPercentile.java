@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class SlidingPercentile {
-    private static final Comparator<Sample> INDEX_COMPARATOR = new C06251();
+    private static final Comparator<Sample> INDEX_COMPARATOR = new C07131();
     private static final int MAX_RECYCLED_SAMPLES = 5;
     private static final int SORT_ORDER_BY_INDEX = 1;
     private static final int SORT_ORDER_BY_VALUE = 0;
     private static final int SORT_ORDER_NONE = -1;
-    private static final Comparator<Sample> VALUE_COMPARATOR = new C06262();
+    private static final Comparator<Sample> VALUE_COMPARATOR = new C07142();
     private int currentSortOrder = -1;
     private final int maxWeight;
     private int nextSampleIndex;
@@ -20,8 +20,8 @@ public class SlidingPercentile {
     private int totalWeight;
 
     /* renamed from: org.telegram.messenger.exoplayer2.util.SlidingPercentile$1 */
-    static class C06251 implements Comparator<Sample> {
-        C06251() {
+    static class C07131 implements Comparator<Sample> {
+        C07131() {
         }
 
         public int compare(Sample a, Sample b) {
@@ -30,8 +30,8 @@ public class SlidingPercentile {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.util.SlidingPercentile$2 */
-    static class C06262 implements Comparator<Sample> {
-        C06262() {
+    static class C07142 implements Comparator<Sample> {
+        C07142() {
         }
 
         public int compare(Sample a, Sample b) {

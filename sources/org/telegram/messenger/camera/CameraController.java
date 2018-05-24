@@ -54,11 +54,11 @@ public class CameraController implements OnInfoListener {
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
     /* renamed from: org.telegram.messenger.camera.CameraController$1 */
-    class C05291 implements Runnable {
+    class C05921 implements Runnable {
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$1 */
-        class C05251 implements Comparator<Size> {
-            C05251() {
+        class C05881 implements Comparator<Size> {
+            C05881() {
             }
 
             public int compare(Size o1, Size o2) {
@@ -79,8 +79,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$2 */
-        class C05262 implements Runnable {
-            C05262() {
+        class C05892 implements Runnable {
+            C05892() {
             }
 
             public void run() {
@@ -91,8 +91,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$3 */
-        class C05273 implements Runnable {
-            C05273() {
+        class C05903 implements Runnable {
+            C05903() {
             }
 
             public void run() {
@@ -101,7 +101,7 @@ public class CameraController implements OnInfoListener {
             }
         }
 
-        C05291() {
+        C05921() {
         }
 
         public void run() {
@@ -139,23 +139,23 @@ public class CameraController implements OnInfoListener {
                         }
                         camera.release();
                         result.add(cameraInfo);
-                        Comparator<Size> comparator = new C05251();
+                        Comparator<Size> comparator = new C05881();
                         Collections.sort(cameraInfo.previewSizes, comparator);
                         Collections.sort(cameraInfo.pictureSizes, comparator);
                     }
                     CameraController.this.cameraInfos = result;
                 }
-                AndroidUtilities.runOnUIThread(new C05262());
+                AndroidUtilities.runOnUIThread(new C05892());
             } catch (Throwable e) {
-                AndroidUtilities.runOnUIThread(new C05273());
+                AndroidUtilities.runOnUIThread(new C05903());
                 FileLog.m3e(e);
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraController$2 */
-    class C05302 implements Runnable {
-        C05302() {
+    class C05932 implements Runnable {
+        C05932() {
         }
 
         public void run() {
@@ -216,7 +216,7 @@ public class CameraController implements OnInfoListener {
     public void initCamera() {
         if (!this.loadingCameras && !this.cameraInitied) {
             this.loadingCameras = true;
-            this.threadPool.execute(new C05291());
+            this.threadPool.execute(new C05921());
         }
     }
 
@@ -225,7 +225,7 @@ public class CameraController implements OnInfoListener {
     }
 
     public void cleanup() {
-        this.threadPool.execute(new C05302());
+        this.threadPool.execute(new C05932());
     }
 
     public void close(final CameraSession session, final CountDownLatch countDownLatch, final Runnable beforeDestroyRunnable) {

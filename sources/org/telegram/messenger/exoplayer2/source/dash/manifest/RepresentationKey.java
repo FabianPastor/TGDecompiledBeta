@@ -5,14 +5,14 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 
 public final class RepresentationKey implements Parcelable, Comparable<RepresentationKey> {
-    public static final Creator<RepresentationKey> CREATOR = new C06131();
+    public static final Creator<RepresentationKey> CREATOR = new C06981();
     public final int adaptationSetIndex;
     public final int periodIndex;
     public final int representationIndex;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.dash.manifest.RepresentationKey$1 */
-    static class C06131 implements Creator<RepresentationKey> {
-        C06131() {
+    static class C06981 implements Creator<RepresentationKey> {
+        C06981() {
         }
 
         public RepresentationKey createFromParcel(Parcel in) {

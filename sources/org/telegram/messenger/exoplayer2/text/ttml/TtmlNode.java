@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
@@ -66,7 +66,7 @@ final class TtmlNode {
     public final String text;
 
     public static TtmlNode buildTextNode(String text) {
-        return new TtmlNode(null, TtmlRenderUtil.applyTextElementSpacePolicy(text), C0542C.TIME_UNSET, C0542C.TIME_UNSET, null, null, ANONYMOUS_REGION_ID);
+        return new TtmlNode(null, TtmlRenderUtil.applyTextElementSpacePolicy(text), C0605C.TIME_UNSET, C0605C.TIME_UNSET, null, null, ANONYMOUS_REGION_ID);
     }
 
     public static TtmlNode buildNode(String tag, long startTimeUs, long endTimeUs, TtmlStyle style, String[] styleIds, String regionId) {
@@ -87,7 +87,7 @@ final class TtmlNode {
     }
 
     public boolean isActive(long timeUs) {
-        return (this.startTimeUs == C0542C.TIME_UNSET && this.endTimeUs == C0542C.TIME_UNSET) || ((this.startTimeUs <= timeUs && this.endTimeUs == C0542C.TIME_UNSET) || ((this.startTimeUs == C0542C.TIME_UNSET && timeUs < this.endTimeUs) || (this.startTimeUs <= timeUs && timeUs < this.endTimeUs)));
+        return (this.startTimeUs == C0605C.TIME_UNSET && this.endTimeUs == C0605C.TIME_UNSET) || ((this.startTimeUs <= timeUs && this.endTimeUs == C0605C.TIME_UNSET) || ((this.startTimeUs == C0605C.TIME_UNSET && timeUs < this.endTimeUs) || (this.startTimeUs <= timeUs && timeUs < this.endTimeUs)));
     }
 
     public void addChild(TtmlNode child) {
@@ -125,10 +125,10 @@ final class TtmlNode {
     private void getEventTimes(TreeSet<Long> out, boolean descendsPNode) {
         boolean isPNode = TAG_P.equals(this.tag);
         if (descendsPNode || isPNode) {
-            if (this.startTimeUs != C0542C.TIME_UNSET) {
+            if (this.startTimeUs != C0605C.TIME_UNSET) {
                 out.add(Long.valueOf(this.startTimeUs));
             }
-            if (this.endTimeUs != C0542C.TIME_UNSET) {
+            if (this.endTimeUs != C0605C.TIME_UNSET) {
                 out.add(Long.valueOf(this.endTimeUs));
             }
         }

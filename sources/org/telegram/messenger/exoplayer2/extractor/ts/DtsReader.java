@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.DtsUtil;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -117,6 +117,6 @@ public final class DtsReader implements ElementaryStreamReader {
             this.output.format(this.format);
         }
         this.sampleSize = DtsUtil.getDtsFrameSize(frameData);
-        this.sampleDurationUs = (long) ((int) ((C0542C.MICROS_PER_SECOND * ((long) DtsUtil.parseDtsAudioSampleCount(frameData))) / ((long) this.format.sampleRate)));
+        this.sampleDurationUs = (long) ((int) ((C0605C.MICROS_PER_SECOND * ((long) DtsUtil.parseDtsAudioSampleCount(frameData))) / ((long) this.format.sampleRate)));
     }
 }

@@ -101,7 +101,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.DispatchQueue;
@@ -129,7 +129,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -358,7 +358,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private float minX;
     private float minY;
     private AnimatorSet miniProgressAnimator;
-    private Runnable miniProgressShowRunnable = new C15891();
+    private Runnable miniProgressShowRunnable = new C20961();
     private RadialProgressView miniProgressView;
     private float moveStartX;
     private float moveStartY;
@@ -423,10 +423,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private long startTime;
     private long startedPlayTime;
     private boolean streamingAlertShown;
-    private SurfaceTextureListener surfaceTextureListener = new C16044();
+    private SurfaceTextureListener surfaceTextureListener = new C21124();
     private TextView switchCaptionTextView;
     private int switchImageAfterAnimation;
-    private Runnable switchToInlineRunnable = new C15993();
+    private Runnable switchToInlineRunnable = new C21073();
     private boolean switchingInlineMode;
     private int switchingToIndex;
     private ImageView textureImageView;
@@ -439,7 +439,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private float translationY;
     private boolean tryStartRequestPreviewOnFinish;
     private ImageView tuneItem;
-    private Runnable updateProgressRunnable = new C15952();
+    private Runnable updateProgressRunnable = new C21032();
     private VelocityTracker velocityTracker;
     private ImageView videoBackwardButton;
     private float videoCrossfadeAlpha;
@@ -580,8 +580,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$1 */
-    class C15891 implements Runnable {
-        C15891() {
+    class C20961 implements Runnable {
+        C20961() {
         }
 
         public void run() {
@@ -590,8 +590,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$2 */
-    class C15952 implements Runnable {
-        C15952() {
+    class C21032 implements Runnable {
+        C21032() {
         }
 
         public void run() {
@@ -682,8 +682,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$3 */
-    class C15993 implements Runnable {
-        C15993() {
+    class C21073 implements Runnable {
+        C21073() {
         }
 
         public void run() {
@@ -720,14 +720,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$4 */
-    class C16044 implements SurfaceTextureListener {
+    class C21124 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.PhotoViewer$4$1 */
-        class C16011 implements OnPreDrawListener {
+        class C21091 implements OnPreDrawListener {
 
             /* renamed from: org.telegram.ui.PhotoViewer$4$1$1 */
-            class C16001 implements Runnable {
-                C16001() {
+            class C21081 implements Runnable {
+                C21081() {
                 }
 
                 public void run() {
@@ -737,7 +737,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
             }
 
-            C16011() {
+            C21091() {
             }
 
             public boolean onPreDraw() {
@@ -750,13 +750,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.currentBitmap = null;
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C16001());
+                AndroidUtilities.runOnUIThread(new C21081());
                 PhotoViewer.this.waitingForFirstTextureUpload = 0;
                 return true;
             }
         }
 
-        C16044() {
+        C21124() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -781,15 +781,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
 
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             if (PhotoViewer.this.waitingForFirstTextureUpload == 1) {
-                PhotoViewer.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C16011());
+                PhotoViewer.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C21091());
                 PhotoViewer.this.changedTextureView.invalidate();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$6 */
-    class C16146 implements OnApplyWindowInsetsListener {
-        C16146() {
+    class C21226 implements OnApplyWindowInsetsListener {
+        C21226() {
         }
 
         @SuppressLint({"NewApi"})
@@ -808,8 +808,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     /* renamed from: org.telegram.ui.PhotoViewer$8 */
-    class C22368 extends ActionBarMenuOnItemClick {
-        C22368() {
+    class C21318 extends ActionBarMenuOnItemClick {
+        C21318() {
         }
 
         public void onItemClick(int id) {
@@ -940,13 +940,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     final boolean[] zArr;
                     Builder builder = new Builder(PhotoViewer.this.parentActivity);
                     if (PhotoViewer.this.currentMessageObject != null && PhotoViewer.this.currentMessageObject.isVideo()) {
-                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", C0446R.string.AreYouSureDeleteVideo, new Object[0]));
+                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", C0493R.string.AreYouSureDeleteVideo, new Object[0]));
                     } else if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isGif()) {
-                        builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", C0446R.string.AreYouSureDeletePhoto, new Object[0]));
+                        builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", C0493R.string.AreYouSureDeletePhoto, new Object[0]));
                     } else {
-                        builder.setMessage(LocaleController.formatString("AreYouSure", C0446R.string.AreYouSure, new Object[0]));
+                        builder.setMessage(LocaleController.formatString("AreYouSure", C0493R.string.AreYouSure, new Object[0]));
                     }
-                    builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                    builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                     boolean[] deleteForAll = new boolean[1];
                     if (PhotoViewer.this.currentMessageObject != null) {
                         int lower_id = (int) PhotoViewer.this.currentMessageObject.getDialogId();
@@ -968,9 +968,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity, 1);
                                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                     if (currentChat != null) {
-                                        cell.setText(LocaleController.getString("DeleteForAll", C0446R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                        cell.setText(LocaleController.getString("DeleteForAll", C0493R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                     } else {
-                                        cell.setText(LocaleController.formatString("DeleteForUser", C0446R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                        cell.setText(LocaleController.formatString("DeleteForUser", C0493R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                     }
                                     if (LocaleController.isRTL) {
                                         r2 = AndroidUtilities.dp(16.0f);
@@ -1005,7 +1005,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         }
                     }
                     zArr = deleteForAll;
-                    builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (PhotoViewer.this.imagesArr.isEmpty()) {
                                 if (!PhotoViewer.this.avatarsArr.isEmpty() && PhotoViewer.this.currentIndex >= 0 && PhotoViewer.this.currentIndex < PhotoViewer.this.avatarsArr.size()) {
@@ -1075,7 +1075,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             }
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                     PhotoViewer.this.showAlertDialog(builder);
                 }
             } else if (id == 10) {
@@ -1124,8 +1124,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         private Runnable drawRunnable;
 
         /* renamed from: org.telegram.ui.PhotoViewer$BackgroundDrawable$1 */
-        class C16211 implements Runnable {
-            C16211() {
+        class C21331 implements Runnable {
+            C21331() {
             }
 
             public void run() {
@@ -1147,7 +1147,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 ((LaunchActivity) PhotoViewer.this.parentActivity).drawerLayoutContainer.setAllowDrawContent(this.allowDrawContent);
                 if (PhotoViewer.this.parentAlert != null) {
                     if (!this.allowDrawContent) {
-                        AndroidUtilities.runOnUIThread(new C16211(), 50);
+                        AndroidUtilities.runOnUIThread(new C21331(), 50);
                     } else if (PhotoViewer.this.parentAlert != null) {
                         PhotoViewer.this.parentAlert.setAllowDrawContent(this.allowDrawContent);
                     }
@@ -1855,7 +1855,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 TLObject object = (TLObject) this.currentPhotos.get(this.currentImage);
                 if (object instanceof PhotoSize) {
                     photoSize = (PhotoSize) object;
-                    trueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f43w) * (((float) this.itemHeight) / ((float) photoSize.f42h))));
+                    trueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f25w) * (((float) this.itemHeight) / ((float) photoSize.f24h))));
                 } else {
                     trueWidth = this.itemHeight;
                 }
@@ -1867,7 +1867,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     object = (TLObject) this.currentPhotos.get(this.nextImage);
                     if (object instanceof PhotoSize) {
                         photoSize = (PhotoSize) object;
-                        nextTrueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f43w) * (((float) this.itemHeight) / ((float) photoSize.f42h))));
+                        nextTrueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f25w) * (((float) this.itemHeight) / ((float) photoSize.f24h))));
                     } else {
                         nextTrueWidth = this.itemHeight;
                     }
@@ -1998,8 +1998,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         private Context mContext;
 
         /* renamed from: org.telegram.ui.PhotoViewer$ListAdapter$1 */
-        class C16221 implements OnClickListener {
-            C16221() {
+        class C21341 implements OnClickListener {
+            C21341() {
             }
 
             public void onClick(View v) {
@@ -2044,7 +2044,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             switch (viewType) {
                 case 0:
                     View cell = new PhotoPickerPhotoCell(this.mContext, false);
-                    cell.checkFrame.setOnClickListener(new C16221());
+                    cell.checkFrame.setOnClickListener(new C21341());
                     view = cell;
                     break;
                 default:
@@ -2054,7 +2054,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         }
                     };
                     imageView.setScaleType(ScaleType.CENTER);
-                    imageView.setImageResource(C0446R.drawable.photos_group);
+                    imageView.setImageResource(C0493R.drawable.photos_group);
                     view = imageView;
                     break;
             }
@@ -2078,19 +2078,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         cell.setTag(photoEntry);
                         cell.videoInfoContainer.setVisibility(4);
                         if (photoEntry.thumbPath != null) {
-                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                         } else if (photoEntry.path != null) {
                             imageView.setOrientation(photoEntry.orientation, true);
                             if (photoEntry.isVideo) {
                                 cell.videoInfoContainer.setVisibility(0);
                                 int seconds = photoEntry.duration - ((photoEntry.duration / 60) * 60);
                                 cell.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
-                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                             } else {
-                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                             }
                         } else {
-                            imageView.setImageResource(C0446R.drawable.nophotos);
+                            imageView.setImageResource(C0493R.drawable.nophotos);
                         }
                         cell.setChecked(-1, true, false);
                         cell.checkBox.setVisibility(0);
@@ -2099,13 +2099,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         SearchImage photoEntry2 = (SearchImage) object;
                         cell.setTag(photoEntry2);
                         if (photoEntry2.thumbPath != null) {
-                            imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                         } else if (photoEntry2.thumbUrl != null && photoEntry2.thumbUrl.length() > 0) {
-                            imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                         } else if (photoEntry2.document == null || photoEntry2.document.thumb == null) {
-                            imageView.setImageResource(C0446R.drawable.nophotos);
+                            imageView.setImageResource(C0493R.drawable.nophotos);
                         } else {
-                            imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(C0446R.drawable.nophotos));
+                            imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(C0493R.drawable.nophotos));
                         }
                         cell.videoInfoContainer.setVisibility(4);
                         cell.setChecked(-1, true, false);
@@ -2495,7 +2495,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 if (this.seekToProgressPending == 0.0f) {
                                     long duration = this.videoPlayer.getDuration();
                                     long position = this.videoPlayer.getCurrentPosition();
-                                    if (duration < 0 || duration == C0542C.TIME_UNSET || position < 0) {
+                                    if (duration < 0 || duration == C0605C.TIME_UNSET || position < 0) {
                                         progress = 0.0f;
                                     } else {
                                         progress = ((float) position) / ((float) duration);
@@ -2585,9 +2585,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     DataQuery.getInstance(this.currentAccount).loadMedia(this.currentDialogId, 80, 0, 0, true, this.classGuid);
                 } else if (!this.imagesArr.isEmpty()) {
                     if (this.opennedFromMedia) {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", C0446R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
+                        this.actionBar.setTitle(LocaleController.formatString("Of", C0493R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
                     } else {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", C0446R.string.Of, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.currentIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
+                        this.actionBar.setTitle(LocaleController.formatString("Of", C0493R.string.Of, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.currentIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
                     }
                 }
             }
@@ -2743,15 +2743,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private void showDownloadAlert() {
         boolean alreadyDownloading = false;
         Builder builder = new Builder(this.parentActivity);
-        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
         if (this.currentMessageObject != null && this.currentMessageObject.isVideo() && FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingFile(this.currentFileNames[0])) {
             alreadyDownloading = true;
         }
         if (alreadyDownloading) {
-            builder.setMessage(LocaleController.getString("PleaseStreamDownload", C0446R.string.PleaseStreamDownload));
+            builder.setMessage(LocaleController.getString("PleaseStreamDownload", C0493R.string.PleaseStreamDownload));
         } else {
-            builder.setMessage(LocaleController.getString("PleaseDownload", C0446R.string.PleaseDownload));
+            builder.setMessage(LocaleController.getString("PleaseDownload", C0493R.string.PleaseDownload));
         }
         showAlertDialog(builder);
     }
@@ -2808,7 +2808,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
                     }
-                    this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0446R.string.ShareFile)), 500);
+                    this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0493R.string.ShareFile)), 500);
                     return;
                 }
                 showDownloadAlert();
@@ -2841,21 +2841,21 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (this.parentActivity != activity) {
             FrameLayout.LayoutParams layoutParams;
             this.parentActivity = activity;
-            this.actvityContext = new ContextThemeWrapper(this.parentActivity, C0446R.style.Theme.TMessages);
+            this.actvityContext = new ContextThemeWrapper(this.parentActivity, C0493R.style.Theme.TMessages);
             if (progressDrawables == null) {
                 progressDrawables = new Drawable[4];
-                progressDrawables[0] = this.parentActivity.getResources().getDrawable(C0446R.drawable.circle_big);
-                progressDrawables[1] = this.parentActivity.getResources().getDrawable(C0446R.drawable.cancel_big);
-                progressDrawables[2] = this.parentActivity.getResources().getDrawable(C0446R.drawable.load_big);
-                progressDrawables[3] = this.parentActivity.getResources().getDrawable(C0446R.drawable.play_big);
+                progressDrawables[0] = this.parentActivity.getResources().getDrawable(C0493R.drawable.circle_big);
+                progressDrawables[1] = this.parentActivity.getResources().getDrawable(C0493R.drawable.cancel_big);
+                progressDrawables[2] = this.parentActivity.getResources().getDrawable(C0493R.drawable.load_big);
+                progressDrawables[3] = this.parentActivity.getResources().getDrawable(C0493R.drawable.play_big);
             }
             this.scroller = new Scroller(activity);
             this.windowView = new FrameLayout(activity) {
                 private Runnable attachRunnable;
 
                 /* renamed from: org.telegram.ui.PhotoViewer$5$1 */
-                class C16051 implements Runnable {
-                    C16051() {
+                class C21131 implements Runnable {
+                    C21131() {
                     }
 
                     public void run() {
@@ -2931,7 +2931,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
                         }
                         if (PhotoViewer.this.checkImageView != null) {
-                            PhotoViewer.this.checkImageView.post(new C16051());
+                            PhotoViewer.this.checkImageView.post(new C21131());
                         }
                     }
                     if (PhotoViewer.this.dontResetZoomOnFirstLayout) {
@@ -2988,7 +2988,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new C16146());
+                this.containerView.setOnApplyWindowInsetsListener(new C21226());
                 this.containerView.setSystemUiVisibility(1280);
             }
             this.windowLayoutParams = new LayoutParams();
@@ -3013,22 +3013,22 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-            this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
-            this.actionBar.setTitle(LocaleController.formatString("Of", C0446R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
+            this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
+            this.actionBar.setTitle(LocaleController.formatString("Of", C0493R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C22368());
+            this.actionBar.setActionBarMenuOnItemClick(new C21318());
             ActionBarMenu menu = this.actionBar.createMenu();
-            this.masksItem = menu.addItem(13, (int) C0446R.drawable.ic_masks_msk1);
-            this.pipItem = menu.addItem(5, (int) C0446R.drawable.ic_goinline);
-            this.sendItem = menu.addItem(3, (int) C0446R.drawable.msg_panel_reply);
-            this.menuItem = menu.addItem(0, (int) C0446R.drawable.ic_ab_other);
-            this.menuItem.addSubItem(11, LocaleController.getString("OpenInExternalApp", C0446R.string.OpenInExternalApp)).setTextColor(-328966);
-            this.menuItem.addSubItem(2, LocaleController.getString("ShowAllMedia", C0446R.string.ShowAllMedia)).setTextColor(-328966);
-            this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", C0446R.string.ShowInChat)).setTextColor(-328966);
-            this.menuItem.addSubItem(10, LocaleController.getString("ShareFile", C0446R.string.ShareFile)).setTextColor(-328966);
-            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", C0446R.string.SaveToGallery)).setTextColor(-328966);
-            this.menuItem.addSubItem(6, LocaleController.getString("Delete", C0446R.string.Delete)).setTextColor(-328966);
-            this.menuItem.addSubItem(7, LocaleController.getString("StopDownload", C0446R.string.StopDownload)).setTextColor(-328966);
+            this.masksItem = menu.addItem(13, (int) C0493R.drawable.ic_masks_msk1);
+            this.pipItem = menu.addItem(5, (int) C0493R.drawable.ic_goinline);
+            this.sendItem = menu.addItem(3, (int) C0493R.drawable.msg_panel_reply);
+            this.menuItem = menu.addItem(0, (int) C0493R.drawable.ic_ab_other);
+            this.menuItem.addSubItem(11, LocaleController.getString("OpenInExternalApp", C0493R.string.OpenInExternalApp)).setTextColor(-328966);
+            this.menuItem.addSubItem(2, LocaleController.getString("ShowAllMedia", C0493R.string.ShowAllMedia)).setTextColor(-328966);
+            this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", C0493R.string.ShowInChat)).setTextColor(-328966);
+            this.menuItem.addSubItem(10, LocaleController.getString("ShareFile", C0493R.string.ShareFile)).setTextColor(-328966);
+            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", C0493R.string.SaveToGallery)).setTextColor(-328966);
+            this.menuItem.addSubItem(6, LocaleController.getString("Delete", C0493R.string.Delete)).setTextColor(-328966);
+            this.menuItem.addSubItem(7, LocaleController.getString("StopDownload", C0493R.string.StopDownload)).setTextColor(-328966);
             this.menuItem.redrawPopup(-115203550);
             this.bottomLayout = new FrameLayout(this.actvityContext);
             this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
@@ -3059,12 +3059,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.miniProgressView.setUseSelfAlpha(true);
             this.miniProgressView.setProgressColor(-1);
             this.miniProgressView.setSize(AndroidUtilities.dp(54.0f));
-            this.miniProgressView.setBackgroundResource(C0446R.drawable.circle_big);
+            this.miniProgressView.setBackgroundResource(C0493R.drawable.circle_big);
             this.miniProgressView.setVisibility(4);
             this.miniProgressView.setAlpha(0.0f);
             this.containerView.addView(this.miniProgressView, LayoutHelper.createFrame(64, 64, 17));
             this.shareButton = new ImageView(this.containerView.getContext());
-            this.shareButton.setImageResource(C0446R.drawable.share);
+            this.shareButton.setImageResource(C0493R.drawable.share);
             this.shareButton.setScaleType(ScaleType.CENTER);
             this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.bottomLayout.addView(this.shareButton, LayoutHelper.createFrame(50, -1, 53));
@@ -3094,14 +3094,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             createVideoControlsInterface();
             this.progressView = new RadialProgressView(this.parentActivity);
             this.progressView.setProgressColor(-1);
-            this.progressView.setBackgroundResource(C0446R.drawable.circle_big);
+            this.progressView.setBackgroundResource(C0493R.drawable.circle_big);
             this.progressView.setVisibility(4);
             this.containerView.addView(this.progressView, LayoutHelper.createFrame(54, 54, 17));
             this.qualityPicker = new PickerBottomLayoutViewer(this.parentActivity);
             this.qualityPicker.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.qualityPicker.updateSelectedCount(0, false);
             this.qualityPicker.setTranslationY((float) AndroidUtilities.dp(120.0f));
-            this.qualityPicker.doneButton.setText(LocaleController.getString("Done", C0446R.string.Done).toUpperCase());
+            this.qualityPicker.doneButton.setText(LocaleController.getString("Done", C0493R.string.Done).toUpperCase());
             this.containerView.addView(this.qualityPicker, LayoutHelper.createFrame(-1, 48, 83));
             this.qualityPicker.cancelButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
@@ -3183,7 +3183,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.pickerViewSendButton.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), -10043398, -10043398));
             this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
             this.pickerViewSendButton.setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
-            this.pickerViewSendButton.setImageResource(C0446R.drawable.ic_send);
+            this.pickerViewSendButton.setImageResource(C0493R.drawable.ic_send);
             this.containerView.addView(this.pickerViewSendButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 14.0f, 14.0f));
             this.pickerViewSendButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -3199,7 +3199,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.pickerView.addView(this.itemsLayout, LayoutHelper.createFrame(-2, 48.0f, 81, 0.0f, 0.0f, 34.0f, 0.0f));
             this.cropItem = new ImageView(this.parentActivity);
             this.cropItem.setScaleType(ScaleType.CENTER);
-            this.cropItem.setImageResource(C0446R.drawable.photo_crop);
+            this.cropItem.setImageResource(C0493R.drawable.photo_crop);
             this.cropItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.itemsLayout.addView(this.cropItem, LayoutHelper.createLinear(70, 48));
             this.cropItem.setOnClickListener(new OnClickListener() {
@@ -3211,7 +3211,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             });
             this.paintItem = new ImageView(this.parentActivity);
             this.paintItem.setScaleType(ScaleType.CENTER);
-            this.paintItem.setImageResource(C0446R.drawable.photo_paint);
+            this.paintItem.setImageResource(C0493R.drawable.photo_paint);
             this.paintItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.itemsLayout.addView(this.paintItem, LayoutHelper.createLinear(70, 48));
             this.paintItem.setOnClickListener(new OnClickListener() {
@@ -3227,15 +3227,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.compressItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.selectedCompression = MessagesController.getGlobalMainSettings().getInt("compress_video2", 1);
             if (this.selectedCompression <= 0) {
-                this.compressItem.setImageResource(C0446R.drawable.video_240);
+                this.compressItem.setImageResource(C0493R.drawable.video_240);
             } else if (this.selectedCompression == 1) {
-                this.compressItem.setImageResource(C0446R.drawable.video_360);
+                this.compressItem.setImageResource(C0493R.drawable.video_360);
             } else if (this.selectedCompression == 2) {
-                this.compressItem.setImageResource(C0446R.drawable.video_480);
+                this.compressItem.setImageResource(C0493R.drawable.video_480);
             } else if (this.selectedCompression == 3) {
-                this.compressItem.setImageResource(C0446R.drawable.video_720);
+                this.compressItem.setImageResource(C0493R.drawable.video_720);
             } else if (this.selectedCompression == 4) {
-                this.compressItem.setImageResource(C0446R.drawable.video_1080);
+                this.compressItem.setImageResource(C0493R.drawable.video_1080);
             }
             this.itemsLayout.addView(this.compressItem, LayoutHelper.createLinear(70, 48));
             this.compressItem.setOnClickListener(new OnClickListener() {
@@ -3268,7 +3268,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             });
             this.cameraItem = new ImageView(this.parentActivity);
             this.cameraItem.setScaleType(ScaleType.CENTER);
-            this.cameraItem.setImageResource(C0446R.drawable.photo_add);
+            this.cameraItem.setImageResource(C0493R.drawable.photo_add);
             this.cameraItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.containerView.addView(this.cameraItem, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 16.0f, 0.0f));
             this.cameraItem.setOnClickListener(new OnClickListener() {
@@ -3281,7 +3281,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             });
             this.tuneItem = new ImageView(this.parentActivity);
             this.tuneItem.setScaleType(ScaleType.CENTER);
-            this.tuneItem.setImageResource(C0446R.drawable.photo_tools);
+            this.tuneItem.setImageResource(C0493R.drawable.photo_tools);
             this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.itemsLayout.addView(this.tuneItem, LayoutHelper.createLinear(70, 48));
             this.tuneItem.setOnClickListener(new OnClickListener() {
@@ -3293,14 +3293,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             });
             this.timeItem = new ImageView(this.parentActivity);
             this.timeItem.setScaleType(ScaleType.CENTER);
-            this.timeItem.setImageResource(C0446R.drawable.photo_timer);
+            this.timeItem.setImageResource(C0493R.drawable.photo_timer);
             this.timeItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.itemsLayout.addView(this.timeItem, LayoutHelper.createLinear(70, 48));
             this.timeItem.setOnClickListener(new OnClickListener() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$22$1 */
-                class C15901 implements OnTouchListener {
-                    C15901() {
+                class C20971 implements OnTouchListener {
+                    C20971() {
                     }
 
                     public boolean onTouch(View v, MotionEvent event) {
@@ -3309,8 +3309,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
 
                 /* renamed from: org.telegram.ui.PhotoViewer$22$2 */
-                class C15912 implements OnTouchListener {
-                    C15912() {
+                class C20982 implements OnTouchListener {
+                    C20982() {
                     }
 
                     public boolean onTouch(View v, MotionEvent event) {
@@ -3319,13 +3319,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
 
                 /* renamed from: org.telegram.ui.PhotoViewer$22$3 */
-                class C22333 implements Formatter {
-                    C22333() {
+                class C20993 implements Formatter {
+                    C20993() {
                     }
 
                     public String format(int value) {
                         if (value == 0) {
-                            return LocaleController.getString("ShortMessageLifetimeForever", C0446R.string.ShortMessageLifetimeForever);
+                            return LocaleController.getString("ShortMessageLifetimeForever", C0493R.string.ShortMessageLifetimeForever);
                         }
                         if (value < 1 || value >= 21) {
                             return LocaleController.formatTTLString((value - 16) * 5);
@@ -3346,19 +3346,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         TextView titleView = new TextView(PhotoViewer.this.parentActivity);
                         titleView.setLines(1);
                         titleView.setSingleLine(true);
-                        titleView.setText(LocaleController.getString("MessageLifetime", C0446R.string.MessageLifetime));
+                        titleView.setText(LocaleController.getString("MessageLifetime", C0493R.string.MessageLifetime));
                         titleView.setTextColor(-1);
                         titleView.setTextSize(1, 16.0f);
                         titleView.setEllipsize(TruncateAt.MIDDLE);
                         titleView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(4.0f));
                         titleView.setGravity(16);
                         linearLayout.addView(titleView, LayoutHelper.createFrame(-1, -2.0f));
-                        titleView.setOnTouchListener(new C15901());
+                        titleView.setOnTouchListener(new C20971());
                         titleView = new TextView(PhotoViewer.this.parentActivity);
                         if (PhotoViewer.this.isCurrentVideo) {
-                            string = LocaleController.getString("MessageLifetimeVideo", C0446R.string.MessageLifetimeVideo);
+                            string = LocaleController.getString("MessageLifetimeVideo", C0493R.string.MessageLifetimeVideo);
                         } else {
-                            string = LocaleController.getString("MessageLifetimePhoto", C0446R.string.MessageLifetimePhoto);
+                            string = LocaleController.getString("MessageLifetimePhoto", C0493R.string.MessageLifetimePhoto);
                         }
                         titleView.setText(string);
                         titleView.setTextColor(-8355712);
@@ -3367,7 +3367,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         titleView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
                         titleView.setGravity(16);
                         linearLayout.addView(titleView, LayoutHelper.createFrame(-1, -2.0f));
-                        titleView.setOnTouchListener(new C15912());
+                        titleView.setOnTouchListener(new C20982());
                         final BottomSheet bottomSheet = builder.create();
                         final NumberPicker numberPicker = new NumberPicker(PhotoViewer.this.parentActivity);
                         numberPicker.setMinValue(0);
@@ -3389,7 +3389,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         }
                         numberPicker.setTextColor(-1);
                         numberPicker.setSelectorColor(-11711155);
-                        numberPicker.setFormatter(new C22333());
+                        numberPicker.setFormatter(new C20993());
                         linearLayout.addView(numberPicker, LayoutHelper.createLinear(-1, -2));
                         FrameLayout buttonsLayout = new FrameLayout(PhotoViewer.this.parentActivity) {
                             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -3422,7 +3422,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         textView.setTextColor(-11944718);
                         textView.setGravity(17);
                         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        textView.setText(LocaleController.getString("Done", C0446R.string.Done).toUpperCase());
+                        textView.setText(LocaleController.getString("Done", C0493R.string.Done).toUpperCase());
                         textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
                         textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                         buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
@@ -3458,7 +3458,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         textView.setTextColor(-11944718);
                         textView.setGravity(17);
                         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        textView.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
+                        textView.setText(LocaleController.getString("Cancel", C0493R.string.Cancel).toUpperCase());
                         textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
                         textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                         buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
@@ -3500,7 +3500,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.resetButton.setGravity(17);
             this.resetButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
             this.resetButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-            this.resetButton.setText(LocaleController.getString("Reset", C0446R.string.CropReset).toUpperCase());
+            this.resetButton.setText(LocaleController.getString("Reset", C0493R.string.CropReset).toUpperCase());
             this.resetButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.editorDoneLayout.addView(this.resetButton, LayoutHelper.createFrame(-2, -1, 49));
             this.resetButton.setOnClickListener(new OnClickListener() {
@@ -3541,7 +3541,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.rightImage.setInvalidateAll(true);
             this.rightImage.setDelegate(imageReceiverDelegate);
             int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
-            this.checkImageView = new CheckBox(this.containerView.getContext(), C0446R.drawable.selectphoto_large) {
+            this.checkImageView = new CheckBox(this.containerView.getContext(), C0493R.drawable.selectphoto_large) {
                 public boolean onTouchEvent(MotionEvent event) {
                     return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
                 }
@@ -3726,8 +3726,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             listAdapter = new MentionsAdapter(this.actvityContext, true, 0, new MentionsAdapterDelegate() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$37$1 */
-                class C15961 extends AnimatorListenerAdapter {
-                    C15961() {
+                class C21041 extends AnimatorListenerAdapter {
+                    C21041() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -3738,8 +3738,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
 
                 /* renamed from: org.telegram.ui.PhotoViewer$37$2 */
-                class C15972 extends AnimatorListenerAdapter {
-                    C15972() {
+                class C21052 extends AnimatorListenerAdapter {
+                    C21052() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -3777,7 +3777,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.mentionListView.setVisibility(0);
                             PhotoViewer.this.mentionListAnimation = new AnimatorSet();
                             PhotoViewer.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f, 1.0f})});
-                            PhotoViewer.this.mentionListAnimation.addListener(new C15961());
+                            PhotoViewer.this.mentionListAnimation.addListener(new C21041());
                             PhotoViewer.this.mentionListAnimation.setDuration(200);
                             PhotoViewer.this.mentionListAnimation.start();
                             return;
@@ -3799,7 +3799,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
                         access$12200.playTogether(animatorArr);
-                        PhotoViewer.this.mentionListAnimation.addListener(new C15972());
+                        PhotoViewer.this.mentionListAnimation.addListener(new C21052());
                         PhotoViewer.this.mentionListAnimation.setDuration(200);
                         PhotoViewer.this.mentionListAnimation.start();
                         return;
@@ -3841,8 +3841,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.mentionListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$39$1 */
-                class C15981 implements DialogInterface.OnClickListener {
-                    C15981() {
+                class C21061 implements DialogInterface.OnClickListener {
+                    C21061() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -3855,10 +3855,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         return false;
                     }
                     Builder builder = new Builder(PhotoViewer.this.parentActivity);
-                    builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                    builder.setMessage(LocaleController.getString("ClearSearch", C0446R.string.ClearSearch));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", C0446R.string.ClearButton).toUpperCase(), new C15981());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                    builder.setMessage(LocaleController.getString("ClearSearch", C0493R.string.ClearSearch));
+                    builder.setPositiveButton(LocaleController.getString("ClearButton", C0493R.string.ClearButton).toUpperCase(), new C21061());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                     PhotoViewer.this.showAlertDialog(builder);
                     return true;
                 }
@@ -3873,7 +3873,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this.parentActivity)) {
             return true;
         }
-        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", C0446R.string.AppName)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", C0446R.string.PermissionDrawAboveOtherApps)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0446R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", C0493R.string.AppName)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", C0493R.string.PermissionDrawAboveOtherApps)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0493R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
             @TargetApi(23)
             public void onClick(DialogInterface dialog, int which) {
                 if (PhotoViewer.this.parentActivity != null) {
@@ -3947,17 +3947,17 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.pipAnimationInProgress = true;
                 org.telegram.ui.Components.Rect rect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
                 float scale = rect.width / ((float) this.videoTextureView.getWidth());
-                rect.f27y += (float) AndroidUtilities.statusBarHeight;
+                rect.f57y += (float) AndroidUtilities.statusBarHeight;
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[13];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.textureImageView, "scaleX", new float[]{scale});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.textureImageView, "scaleY", new float[]{scale});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.textureImageView, "translationX", new float[]{rect.f26x});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.textureImageView, "translationY", new float[]{rect.f27y});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.textureImageView, "translationX", new float[]{rect.f56x});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.textureImageView, "translationY", new float[]{rect.f57y});
                 animatorArr[4] = ObjectAnimator.ofFloat(this.videoTextureView, "scaleX", new float[]{scale});
                 animatorArr[5] = ObjectAnimator.ofFloat(this.videoTextureView, "scaleY", new float[]{scale});
-                animatorArr[6] = ObjectAnimator.ofFloat(this.videoTextureView, "translationX", new float[]{rect.f26x - this.aspectRatioFrameLayout.getX()});
-                animatorArr[7] = ObjectAnimator.ofFloat(this.videoTextureView, "translationY", new float[]{rect.f27y - this.aspectRatioFrameLayout.getY()});
+                animatorArr[6] = ObjectAnimator.ofFloat(this.videoTextureView, "translationX", new float[]{rect.f56x - this.aspectRatioFrameLayout.getX()});
+                animatorArr[7] = ObjectAnimator.ofFloat(this.videoTextureView, "translationY", new float[]{rect.f57y - this.aspectRatioFrameLayout.getY()});
                 animatorArr[8] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
                 animatorArr[9] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
                 animatorArr[10] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
@@ -4011,15 +4011,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.pipAnimationInProgress = true;
                 org.telegram.ui.Components.Rect rect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
                 float scale = rect.width / ((float) this.textureImageView.getLayoutParams().width);
-                rect.f27y += (float) AndroidUtilities.statusBarHeight;
+                rect.f57y += (float) AndroidUtilities.statusBarHeight;
                 this.textureImageView.setScaleX(scale);
                 this.textureImageView.setScaleY(scale);
-                this.textureImageView.setTranslationX(rect.f26x);
-                this.textureImageView.setTranslationY(rect.f27y);
+                this.textureImageView.setTranslationX(rect.f56x);
+                this.textureImageView.setTranslationY(rect.f57y);
                 this.videoTextureView.setScaleX(scale);
                 this.videoTextureView.setScaleY(scale);
-                this.videoTextureView.setTranslationX(rect.f26x - this.aspectRatioFrameLayout.getX());
-                this.videoTextureView.setTranslationY(rect.f27y - this.aspectRatioFrameLayout.getY());
+                this.videoTextureView.setTranslationX(rect.f56x - this.aspectRatioFrameLayout.getX());
+                this.videoTextureView.setTranslationY(rect.f57y - this.aspectRatioFrameLayout.getY());
             } else {
                 this.pipVideoView.close();
                 this.pipVideoView = null;
@@ -4050,7 +4050,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         progress = PhotoViewer.this.videoTimelineView.getLeftProgress() + ((PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress()) * progress);
                     }
                     long duration = PhotoViewer.this.videoPlayer.getDuration();
-                    if (duration == C0542C.TIME_UNSET) {
+                    if (duration == C0605C.TIME_UNSET) {
                         PhotoViewer.this.seekToProgressPending = progress;
                     } else {
                         PhotoViewer.this.videoPlayer.seekTo((long) ((int) (((float) duration) * progress)));
@@ -4074,7 +4074,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 if (PhotoViewer.this.videoPlayer != null) {
                     duration = PhotoViewer.this.videoPlayer.getDuration();
-                    if (duration == C0542C.TIME_UNSET) {
+                    if (duration == C0605C.TIME_UNSET) {
                         duration = 0;
                     }
                 } else {
@@ -4154,11 +4154,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.captionEditText.openKeyboard();
             this.lastTitle = this.actionBar.getTitle();
             if (this.isCurrentVideo) {
-                this.actionBar.setTitle(this.muteVideo ? LocaleController.getString("GifCaption", C0446R.string.GifCaption) : LocaleController.getString("VideoCaption", C0446R.string.VideoCaption));
+                this.actionBar.setTitle(this.muteVideo ? LocaleController.getString("GifCaption", C0493R.string.GifCaption) : LocaleController.getString("VideoCaption", C0493R.string.VideoCaption));
                 this.actionBar.setSubtitle(null);
                 return;
             }
-            this.actionBar.setTitle(LocaleController.getString("PhotoCaption", C0446R.string.PhotoCaption));
+            this.actionBar.setTitle(LocaleController.getString("PhotoCaption", C0493R.string.PhotoCaption));
         }
     }
 
@@ -4251,7 +4251,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             if (total < 0) {
                 total = 0;
             }
-            if (total == C0542C.TIME_UNSET || current == C0542C.TIME_UNSET) {
+            if (total == C0605C.TIME_UNSET || current == C0605C.TIME_UNSET) {
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
             } else {
                 if (!this.inPreview && this.videoTimelineView.getVisibility() == 0) {
@@ -4273,9 +4273,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (this.isStreaming && this.parentActivity != null && !this.streamingAlertShown && this.videoPlayer != null && this.currentMessageObject != null) {
             Document document = this.currentMessageObject.getDocument();
             if (document != null && progress < 0.9f) {
-                if ((((float) document.size) * progress >= 5242880.0f || progress >= 0.5f) && Math.abs(SystemClock.elapsedRealtime() - this.startedPlayTime) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
-                    if (this.videoPlayer.getDuration() == C0542C.TIME_UNSET) {
-                        Toast.makeText(this.parentActivity, LocaleController.getString("VideoDoesNotSupportStreaming", C0446R.string.VideoDoesNotSupportStreaming), 1).show();
+                if ((((float) document.size) * progress >= 5242880.0f || (progress >= 0.5f && document.size >= 2097152)) && Math.abs(SystemClock.elapsedRealtime() - this.startedPlayTime) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
+                    if (this.videoPlayer.getDuration() == C0605C.TIME_UNSET) {
+                        Toast.makeText(this.parentActivity, LocaleController.getString("VideoDoesNotSupportStreaming", C0493R.string.VideoDoesNotSupportStreaming), 1).show();
                     }
                     this.streamingAlertShown = true;
                 }
@@ -4329,15 +4329,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             TextureView textureView = this.videoTextureView;
             this.videoCrossfadeAlpha = 0.0f;
             textureView.setAlpha(0.0f);
-            this.videoPlayButton.setImageResource(C0446R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(C0493R.drawable.inline_video_play);
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
                 this.videoPlayer.setDelegate(new VideoPlayerDelegate() {
 
                     /* renamed from: org.telegram.ui.PhotoViewer$48$1 */
-                    class C16021 implements DialogInterface.OnClickListener {
-                        C16021() {
+                    class C21101 implements DialogInterface.OnClickListener {
+                        C21101() {
                         }
 
                         public void onClick(DialogInterface dialog, int which) {
@@ -4351,8 +4351,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
 
                     /* renamed from: org.telegram.ui.PhotoViewer$48$2 */
-                    class C16032 extends AnimatorListenerAdapter {
-                        C16032() {
+                    class C21112 extends AnimatorListenerAdapter {
+                        C21112() {
                         }
 
                         public void onAnimationEnd(Animator animation) {
@@ -4397,7 +4397,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             if (!PhotoViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
                                 if (PhotoViewer.this.isPlaying) {
                                     PhotoViewer.this.isPlaying = false;
-                                    PhotoViewer.this.videoPlayButton.setImageResource(C0446R.drawable.inline_video_play);
+                                    PhotoViewer.this.videoPlayButton.setImageResource(C0493R.drawable.inline_video_play);
                                     AndroidUtilities.cancelRunOnUIThread(PhotoViewer.this.updateProgressRunnable);
                                     if (playbackState == 4) {
                                         if (!PhotoViewer.this.isCurrentVideo) {
@@ -4431,7 +4431,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 }
                             } else if (!PhotoViewer.this.isPlaying) {
                                 PhotoViewer.this.isPlaying = true;
-                                PhotoViewer.this.videoPlayButton.setImageResource(C0446R.drawable.inline_video_pause);
+                                PhotoViewer.this.videoPlayButton.setImageResource(C0493R.drawable.inline_video_pause);
                                 AndroidUtilities.runOnUIThread(PhotoViewer.this.updateProgressRunnable);
                             }
                             if (PhotoViewer.this.pipVideoView != null) {
@@ -4445,10 +4445,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         FileLog.m3e((Throwable) e);
                         if (PhotoViewer.this.menuItem.isSubItemVisible(11)) {
                             Builder builder = new Builder(PhotoViewer.this.parentActivity);
-                            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                            builder.setMessage(LocaleController.getString("CantPlayVideo", C0446R.string.CantPlayVideo));
-                            builder.setPositiveButton(LocaleController.getString("Open", C0446R.string.Open), new C16021());
-                            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                            builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                            builder.setMessage(LocaleController.getString("CantPlayVideo", C0493R.string.CantPlayVideo));
+                            builder.setPositiveButton(LocaleController.getString("Open", C0493R.string.Open), new C21101());
+                            builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                             PhotoViewer.this.showAlertDialog(builder);
                         }
                     }
@@ -4522,7 +4522,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 animatorSet.playTogether(animatorArr);
                                 animatorSet.setInterpolator(new DecelerateInterpolator());
                                 animatorSet.setDuration(250);
-                                animatorSet.addListener(new C16032());
+                                animatorSet.addListener(new C21112());
                                 animatorSet.start();
                             }
                             PhotoViewer.this.waitingForFirstTextureUpload = 0;
@@ -4582,7 +4582,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
         if (this.isPlaying) {
             this.isPlaying = false;
-            this.videoPlayButton.setImageResource(C0446R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(C0493R.drawable.inline_video_play);
             AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
         }
         if (!this.inPreview && !this.requestingPreview) {
@@ -4839,8 +4839,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$50$1 */
-                class C16061 extends AnimatorListenerAdapter {
-                    C16061() {
+                class C21141 extends AnimatorListenerAdapter {
+                    C21141() {
                     }
 
                     public void onAnimationStart(Animator animation) {
@@ -4895,7 +4895,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                     animatorSet.playTogether(arrayList);
                     animatorSet.setDuration(200);
-                    animatorSet.addListener(new C16061());
+                    animatorSet.addListener(new C21141());
                     animatorSet.start();
                 }
             });
@@ -4928,7 +4928,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 });
             }
             this.photoCropView.onAppear();
-            this.editorDoneLayout.doneButton.setText(LocaleController.getString("Crop", C0446R.string.Crop));
+            this.editorDoneLayout.doneButton.setText(LocaleController.getString("Crop", C0493R.string.Crop));
             this.editorDoneLayout.doneButton.setTextColor(-11420173);
             this.changeModeAnimation = new AnimatorSet();
             arrayList = new ArrayList();
@@ -4954,8 +4954,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$52$1 */
-                class C16071 extends AnimatorListenerAdapter {
-                    C16071() {
+                class C21151 extends AnimatorListenerAdapter {
+                    C21151() {
                     }
 
                     public void onAnimationStart(Animator animation) {
@@ -5041,7 +5041,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
                     access$14500.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new C16071());
+                    PhotoViewer.this.imageMoveAnimation.addListener(new C21151());
                     PhotoViewer.this.imageMoveAnimation.start();
                 }
             });
@@ -5084,8 +5084,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.photoFilterView.getCancelTextView().setOnClickListener(new OnClickListener() {
 
                     /* renamed from: org.telegram.ui.PhotoViewer$54$1 */
-                    class C16081 implements DialogInterface.OnClickListener {
-                        C16081() {
+                    class C21161 implements DialogInterface.OnClickListener {
+                        C21161() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -5098,10 +5098,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.switchToEditMode(0);
                         } else if (PhotoViewer.this.parentActivity != null) {
                             Builder builder = new Builder(PhotoViewer.this.parentActivity);
-                            builder.setMessage(LocaleController.getString("DiscardChanges", C0446R.string.DiscardChanges));
-                            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C16081());
-                            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                            builder.setMessage(LocaleController.getString("DiscardChanges", C0493R.string.DiscardChanges));
+                            builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C21161());
+                            builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                             PhotoViewer.this.showAlertDialog(builder);
                         }
                     }
@@ -5129,8 +5129,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$55$1 */
-                class C16091 extends AnimatorListenerAdapter {
-                    C16091() {
+                class C21171 extends AnimatorListenerAdapter {
+                    C21171() {
                     }
 
                     public void onAnimationStart(Animator animation) {
@@ -5201,7 +5201,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(186.0f), 0.0f});
                     access$14500.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new C16091());
+                    PhotoViewer.this.imageMoveAnimation.addListener(new C21171());
                     PhotoViewer.this.imageMoveAnimation.start();
                 }
             });
@@ -5219,8 +5219,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.photoPaintView.getCancelTextView().setOnClickListener(new OnClickListener() {
 
                     /* renamed from: org.telegram.ui.PhotoViewer$57$1 */
-                    class C16101 implements Runnable {
-                        C16101() {
+                    class C21181 implements Runnable {
+                        C21181() {
                         }
 
                         public void run() {
@@ -5229,7 +5229,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
 
                     public void onClick(View v) {
-                        PhotoViewer.this.photoPaintView.maybeShowDismissalAlert(PhotoViewer.this, PhotoViewer.this.parentActivity, new C16101());
+                        PhotoViewer.this.photoPaintView.maybeShowDismissalAlert(PhotoViewer.this, PhotoViewer.this.parentActivity, new C21181());
                     }
                 });
                 this.photoPaintView.getColorPicker().setTranslationY((float) AndroidUtilities.dp(126.0f));
@@ -5259,8 +5259,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$58$1 */
-                class C16111 extends AnimatorListenerAdapter {
-                    C16111() {
+                class C21191 extends AnimatorListenerAdapter {
+                    C21191() {
                     }
 
                     public void onAnimationStart(Animator animation) {
@@ -5331,7 +5331,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
                     access$14500.playTogether(animatorArr);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new C16111());
+                    PhotoViewer.this.imageMoveAnimation.addListener(new C21191());
                     PhotoViewer.this.imageMoveAnimation.start();
                 }
             });
@@ -5893,7 +5893,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.actionBar.setSubtitle(null);
         this.masksItem.setVisibility(8);
         this.muteVideo = false;
-        this.muteItem.setImageResource(C0446R.drawable.volume_on);
+        this.muteItem.setImageResource(C0493R.drawable.volume_on);
         this.editorDoneLayout.setVisibility(8);
         this.captionTextView.setTag(null);
         this.captionTextView.setVisibility(4);
@@ -5936,7 +5936,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         this.needSearchImageInArr = false;
                         this.imagesArr.addAll(arrayList);
                         this.totalImagesCount = this.imagesArr.size();
-                        setImageIndex(this.imagesArr.indexOf(messageObject), true);
+                        int idx = this.imagesArr.indexOf(messageObject);
+                        if (idx < 0) {
+                            idx = 0;
+                        }
+                        setImageIndex(idx, true);
                     }
                 }
             }
@@ -6201,7 +6205,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachGif";
-        r7 = NUM; // 0x7f0c00a4 float:1.8609525E38 double:1.0530974795E-314;
+        r7 = NUM; // 0x7f0c00a5 float:1.8609527E38 double:1.05309748E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
     L_0x00dc:
@@ -6294,7 +6298,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = r6 * r10;
     L_0x016f:
         r5 = "formatDateAtTime";
-        r6 = NUM; // 0x7f0c0728 float:1.8612908E38 double:1.0530983036E-314;
+        r6 = NUM; // 0x7f0c0735 float:1.8612934E38 double:1.05309831E-314;
         r7 = 2;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -6523,7 +6527,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "Of";
-        r7 = NUM; // 0x7f0c048d float:1.8611555E38 double:1.053097974E-314;
+        r7 = NUM; // 0x7f0c048e float:1.8611557E38 double:1.0530979745E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r10 = 0;
@@ -6674,7 +6678,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "Of";
-        r7 = NUM; // 0x7f0c048d float:1.8611555E38 double:1.053097974E-314;
+        r7 = NUM; // 0x7f0c048e float:1.8611557E38 double:1.0530979745E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r10 = 0;
@@ -6733,7 +6737,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachVideo";
-        r7 = NUM; // 0x7f0c00b3 float:1.8609555E38 double:1.053097487E-314;
+        r7 = NUM; // 0x7f0c00b4 float:1.8609557E38 double:1.0530974874E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
         goto L_0x0357;
@@ -6741,7 +6745,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachPhoto";
-        r7 = NUM; // 0x7f0c00ad float:1.8609543E38 double:1.053097484E-314;
+        r7 = NUM; // 0x7f0c00ae float:1.8609545E38 double:1.0530974844E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
         goto L_0x0357;
@@ -6840,7 +6844,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachPhoto";
-        r7 = NUM; // 0x7f0c00ad float:1.8609543E38 double:1.053097484E-314;
+        r7 = NUM; // 0x7f0c00ae float:1.8609545E38 double:1.0530974844E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
     L_0x058f:
@@ -6885,7 +6889,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "Of";
-        r7 = NUM; // 0x7f0c048d float:1.8611555E38 double:1.053097974E-314;
+        r7 = NUM; // 0x7f0c048e float:1.8611557E38 double:1.0530979745E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r10 = 0;
@@ -6981,7 +6985,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachVideo";
-        r7 = NUM; // 0x7f0c00b3 float:1.8609555E38 double:1.053097487E-314;
+        r7 = NUM; // 0x7f0c00b4 float:1.8609557E38 double:1.0530974874E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
     L_0x0699:
@@ -7310,7 +7314,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "AttachPhoto";
-        r7 = NUM; // 0x7f0c00ad float:1.8609543E38 double:1.053097484E-314;
+        r7 = NUM; // 0x7f0c00ae float:1.8609545E38 double:1.0530974844E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5.setTitle(r6);
         goto L_0x0699;
@@ -7318,7 +7322,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r36;
         r5 = r0.actionBar;
         r6 = "Of";
-        r7 = NUM; // 0x7f0c048d float:1.8611555E38 double:1.053097974E-314;
+        r7 = NUM; // 0x7f0c048e float:1.8611557E38 double:1.0530979745E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r10 = 0;
@@ -7600,7 +7604,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.captionTextView.setAlpha(0.0f);
             }
         } else if (this.needCaptionLayout) {
-            this.captionTextView.setText(LocaleController.getString("AddCaption", C0446R.string.AddCaption));
+            this.captionTextView.setText(LocaleController.getString("AddCaption", C0493R.string.AddCaption));
             this.captionTextView.setTag("empty");
             this.captionTextView.setVisibility(0);
             this.captionTextView.setTextColor(-NUM);
@@ -8500,12 +8504,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.itemsLayout.getLayoutParams();
             if (this.sendPhotoType == 1) {
                 this.pickerView.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
-                this.pickerViewSendButton.setImageResource(C0446R.drawable.bigcheck);
+                this.pickerViewSendButton.setImageResource(C0493R.drawable.bigcheck);
                 this.pickerViewSendButton.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
                 layoutParams.bottomMargin = AndroidUtilities.dp(16.0f);
             } else {
                 this.pickerView.setPadding(0, 0, 0, 0);
-                this.pickerViewSendButton.setImageResource(C0446R.drawable.ic_send);
+                this.pickerViewSendButton.setImageResource(C0493R.drawable.ic_send);
                 this.pickerViewSendButton.setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
                 layoutParams.bottomMargin = 0;
             }
@@ -8557,7 +8561,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             wm.addView(this.windowView, this.windowLayoutParams);
             this.doneButtonPressed = false;
             this.parentChatActivity = chatActivity;
-            this.actionBar.setTitle(LocaleController.formatString("Of", C0446R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
+            this.actionBar.setTitle(LocaleController.formatString("Of", C0493R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
@@ -8687,8 +8691,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 animatorSet.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.PhotoViewer$65$1 */
-                    class C16131 implements Runnable {
-                        C16131() {
+                    class C21211 implements Runnable {
+                        C21211() {
                         }
 
                         public void run() {
@@ -8701,7 +8705,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
 
                     public void onAnimationEnd(Animator animation) {
-                        AndroidUtilities.runOnUIThread(new C16131());
+                        AndroidUtilities.runOnUIThread(new C21211());
                     }
                 });
                 this.transitionAnimationStartTime = System.currentTimeMillis();
@@ -8910,8 +8914,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             animatorSet.addListener(new AnimatorListenerAdapter() {
 
                                 /* renamed from: org.telegram.ui.PhotoViewer$70$1 */
-                                class C16151 implements Runnable {
-                                    C16151() {
+                                class C21231 implements Runnable {
+                                    C21231() {
                                     }
 
                                     public void run() {
@@ -8923,7 +8927,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
 
                                 public void onAnimationEnd(Animator animation) {
-                                    AndroidUtilities.runOnUIThread(new C16151());
+                                    AndroidUtilities.runOnUIThread(new C21231());
                                 }
                             });
                             this.transitionAnimationStartTime = System.currentTimeMillis();
@@ -9550,7 +9554,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 hideHint();
                 return;
             }
-            this.hintTextView.setText(enabled ? LocaleController.getString("GroupPhotosHelp", C0446R.string.GroupPhotosHelp) : LocaleController.getString("SinglePhotosHelp", C0446R.string.SinglePhotosHelp));
+            this.hintTextView.setText(enabled ? LocaleController.getString("GroupPhotosHelp", C0493R.string.GroupPhotosHelp) : LocaleController.getString("SinglePhotosHelp", C0493R.string.SinglePhotosHelp));
             if (this.hintHideRunnable != null) {
                 if (this.hintAnimation != null) {
                     this.hintAnimation.cancel();
@@ -9578,8 +9582,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.hintAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.PhotoViewer$78$1 */
-                class C16161 implements Runnable {
-                    C16161() {
+                class C21241 implements Runnable {
+                    C21241() {
                     }
 
                     public void run() {
@@ -9590,7 +9594,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onAnimationEnd(Animator animation) {
                     if (animation.equals(PhotoViewer.this.hintAnimation)) {
                         PhotoViewer.this.hintAnimation = null;
-                        AndroidUtilities.runOnUIThread(PhotoViewer.this.hintHideRunnable = new C16161(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                        AndroidUtilities.runOnUIThread(PhotoViewer.this.hintHideRunnable = new C21241(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     }
                 }
 
@@ -9901,7 +9905,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             try {
                                 FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
                                 Document document = this.currentMessageObject.getDocument();
-                                uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + ("?account=" + this.currentMessageObject.currentAccount + "&id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C0542C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C0542C.UTF8_NAME)));
+                                uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + ("?account=" + this.currentMessageObject.currentAccount + "&id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C0605C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C0605C.UTF8_NAME)));
                                 this.isStreaming = true;
                                 checkProgress(0, false);
                             } catch (Exception e) {
@@ -10045,7 +10049,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (this.videoPlayer != null && this.videoPlayerControlFrameLayout.getVisibility() == 0) {
             long current = this.videoPlayer.getCurrentPosition();
             long total = this.videoPlayer.getDuration();
-            if (total >= 0 && current >= 0 && total != C0542C.TIME_UNSET && current != C0542C.TIME_UNSET) {
+            if (total >= 0 && current >= 0 && total != C0605C.TIME_UNSET && current != C0605C.TIME_UNSET) {
                 int width = getContainerViewWidth();
                 float x = e.getX();
                 long old = current;
@@ -10110,7 +10114,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.muteItem.setAlpha(1.0f);
             if (this.muteVideo) {
                 this.actionBar.setSubtitle(null);
-                this.muteItem.setImageResource(C0446R.drawable.volume_off);
+                this.muteItem.setImageResource(C0493R.drawable.volume_off);
                 this.muteItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
                 if (this.compressItem.getTag() != null) {
                     this.compressItem.setClickable(false);
@@ -10122,7 +10126,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             this.muteItem.setColorFilter(null);
             this.actionBar.setSubtitle(this.currentSubtitle);
-            this.muteItem.setImageResource(C0446R.drawable.volume_on);
+            this.muteItem.setImageResource(C0493R.drawable.volume_on);
             if (this.compressItem.getTag() != null) {
                 this.compressItem.setClickable(true);
                 this.compressItem.setAlpha(1.0f);
@@ -10157,15 +10161,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             int height;
             CharSequence charSequence;
             if (this.selectedCompression == 0) {
-                this.compressItem.setImageResource(C0446R.drawable.video_240);
+                this.compressItem.setImageResource(C0493R.drawable.video_240);
             } else if (this.selectedCompression == 1) {
-                this.compressItem.setImageResource(C0446R.drawable.video_360);
+                this.compressItem.setImageResource(C0493R.drawable.video_360);
             } else if (this.selectedCompression == 2) {
-                this.compressItem.setImageResource(C0446R.drawable.video_480);
+                this.compressItem.setImageResource(C0493R.drawable.video_480);
             } else if (this.selectedCompression == 3) {
-                this.compressItem.setImageResource(C0446R.drawable.video_720);
+                this.compressItem.setImageResource(C0493R.drawable.video_720);
             } else if (this.selectedCompression == 4) {
-                this.compressItem.setImageResource(C0446R.drawable.video_1080);
+                this.compressItem.setImageResource(C0493R.drawable.video_1080);
             }
             this.estimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
             if (this.compressItem.getTag() == null || this.selectedCompression == this.compressionsCount - 1) {
@@ -10340,8 +10344,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
 
             /* renamed from: org.telegram.ui.PhotoViewer$81$1 */
-            class C16191 extends AnimatorListenerAdapter {
-                C16191() {
+            class C21291 extends AnimatorListenerAdapter {
+                C21291() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -10375,7 +10379,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
                         access$17600.playTogether(animatorArr);
                     }
-                    PhotoViewer.this.qualityChooseViewAnimation.addListener(new C16191());
+                    PhotoViewer.this.qualityChooseViewAnimation.addListener(new C21291());
                     PhotoViewer.this.qualityChooseViewAnimation.setDuration(200);
                     PhotoViewer.this.qualityChooseViewAnimation.setInterpolator(new AccelerateInterpolator());
                     PhotoViewer.this.qualityChooseViewAnimation.start();

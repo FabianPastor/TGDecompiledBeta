@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source.smoothstreaming;
 import android.util.Base64;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.mp4.TrackEncryptionBox;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -128,7 +128,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     }
 
     public long readDiscontinuity() {
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

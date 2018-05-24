@@ -99,6 +99,7 @@ public class NotificationCenter {
     public static final int peerSettingsDidLoaded;
     public static final int playerDidStartPlaying;
     public static final int privacyRulesUpdated;
+    public static final int proxyCheckDone;
     public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
     public static final int recentDocumentsDidLoaded;
@@ -484,6 +485,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         proxySettingsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        proxyCheckDone = i;
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsChanged = i;

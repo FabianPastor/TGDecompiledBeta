@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0446R {
+public final class C0493R {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -931,6 +931,7 @@ public final class C0446R {
         public static final int AddMasksInstalled = NUM;
         public static final int AddMember = NUM;
         public static final int AddMutual = NUM;
+        public static final int AddProxy = NUM;
         public static final int AddRecipient = NUM;
         public static final int AddShortcut = NUM;
         public static final int AddStickers = NUM;
@@ -1072,6 +1073,7 @@ public final class C0446R {
         public static final int AutodownloadSizeLimitUpTo = NUM;
         public static final int AutomaticMediaDownload = NUM;
         public static final int AutoplayGifs = NUM;
+        public static final int Available = NUM;
         public static final int AwaitingEncryption = NUM;
         public static final int BackgroundRestricted = NUM;
         public static final int BadgeNumber = NUM;
@@ -1243,6 +1245,7 @@ public final class C0446R {
         public static final int Chats_other = NUM;
         public static final int Chats_two = NUM;
         public static final int Chats_zero = NUM;
+        public static final int Checking = NUM;
         public static final int ChooseCountry = NUM;
         public static final int ChooseFromYourStickers = NUM;
         public static final int ChooseStickerSet = NUM;
@@ -1279,12 +1282,11 @@ public final class C0446R {
         public static final int ColorYellow = NUM;
         public static final int CompatibilityChat = NUM;
         public static final int ConfirmDeleteCallLog = NUM;
+        public static final int Connected = NUM;
         public static final int Connecting = NUM;
+        public static final int ConnectingConnectProxy = NUM;
         public static final int ConnectingToProxy = NUM;
-        public static final int ConnectingToProxyDisable = NUM;
-        public static final int ConnectingToProxyDisableAlert = NUM;
         public static final int ConnectingToProxyEnable = NUM;
-        public static final int ConnectingToProxyTapToDisable = NUM;
         public static final int ContactJoined = NUM;
         public static final int ContactNotRegistered = NUM;
         public static final int Contacts = NUM;
@@ -1372,6 +1374,7 @@ public final class C0446R {
         public static final int DeleteMega = NUM;
         public static final int DeleteMegaMenu = NUM;
         public static final int DeletePhoto = NUM;
+        public static final int DeleteProxy = NUM;
         public static final int DeleteReportSpam = NUM;
         public static final int DeleteThemeAlert = NUM;
         public static final int DeleteThisChat = NUM;
@@ -1422,8 +1425,6 @@ public final class C0446R {
         public static final int EmpryUsersPlaceholder = NUM;
         public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
-        public static final int EnableProxyAlert = NUM;
-        public static final int EnableProxyAlert2 = NUM;
         public static final int EnableStreaming = NUM;
         public static final int EnabledPasswordText = NUM;
         public static final int EncryptedChatStartedIncoming = NUM;
@@ -2168,6 +2169,7 @@ public final class C0446R {
         public static final int PinMessageAlertChannel = NUM;
         public static final int PinNotify = NUM;
         public static final int PinToTop = NUM;
+        public static final int Ping = NUM;
         public static final int PinnedMessage = NUM;
         public static final int PinnedMessages = NUM;
         public static final int PleaseDownload = NUM;
@@ -2204,6 +2206,8 @@ public final class C0446R {
         public static final int ProfilePopupNotification = NUM;
         public static final int ProfilePopupNotificationInfo = NUM;
         public static final int Proxy = NUM;
+        public static final int ProxyConnections = NUM;
+        public static final int ProxyDetails = NUM;
         public static final int ProxySettings = NUM;
         public static final int QuickReplyCustom = NUM;
         public static final int QuickReplyDefault1 = NUM;
@@ -2501,6 +2505,7 @@ public final class C0446R {
         public static final int TwoStepVerification = NUM;
         public static final int TypeMessage = NUM;
         public static final int Typing = NUM;
+        public static final int Unavailable = NUM;
         public static final int Unban = NUM;
         public static final int UnbanText = NUM;
         public static final int Unblock = NUM;
@@ -2536,7 +2541,15 @@ public final class C0446R {
         public static final int UseProxyInfo = NUM;
         public static final int UseProxyPassword = NUM;
         public static final int UseProxyPort = NUM;
+        public static final int UseProxySecret = NUM;
         public static final int UseProxySettings = NUM;
+        public static final int UseProxySocks5 = NUM;
+        public static final int UseProxySponsor = NUM;
+        public static final int UseProxySponsorInfo = NUM;
+        public static final int UseProxyTelegram = NUM;
+        public static final int UseProxyTelegramError = NUM;
+        public static final int UseProxyTelegramInfo = NUM;
+        public static final int UseProxyTelegramInfo2 = NUM;
         public static final int UseProxyUsername = NUM;
         public static final int UserBio = NUM;
         public static final int UserBioEmpty = NUM;
@@ -2853,8 +2866,8 @@ public final class C0446R {
 
     /* renamed from: org.telegram.messenger.R$styleable */
     public static final class styleable {
-        public static final int[] CoordinatorLayout = new int[]{C0446R.attr.keylines, C0446R.attr.statusBarBackground};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0446R.attr.layout_anchor, C0446R.attr.layout_anchorGravity, C0446R.attr.layout_behavior, C0446R.attr.layout_dodgeInsetEdges, C0446R.attr.layout_insetEdge, C0446R.attr.layout_keyline};
+        public static final int[] CoordinatorLayout = new int[]{C0493R.attr.keylines, C0493R.attr.statusBarBackground};
+        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0493R.attr.layout_anchor, C0493R.attr.layout_anchorGravity, C0493R.attr.layout_behavior, C0493R.attr.layout_dodgeInsetEdges, C0493R.attr.layout_insetEdge, C0493R.attr.layout_keyline};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -2864,12 +2877,12 @@ public final class C0446R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{C0446R.attr.customThemeStyle, C0446R.attr.toolbarTextColorStyle, C0446R.attr.windowTransitionStyle};
+        public static final int[] CustomWalletTheme = new int[]{C0493R.attr.customThemeStyle, C0493R.attr.toolbarTextColorStyle, C0493R.attr.windowTransitionStyle};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{C0446R.attr.fontProviderAuthority, C0446R.attr.fontProviderCerts, C0446R.attr.fontProviderFetchStrategy, C0446R.attr.fontProviderFetchTimeout, C0446R.attr.fontProviderPackage, C0446R.attr.fontProviderQuery};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, C0446R.attr.font, C0446R.attr.fontStyle, C0446R.attr.fontWeight};
+        public static final int[] FontFamily = new int[]{C0493R.attr.fontProviderAuthority, C0493R.attr.fontProviderCerts, C0493R.attr.fontProviderFetchStrategy, C0493R.attr.fontProviderFetchTimeout, C0493R.attr.fontProviderPackage, C0493R.attr.fontProviderQuery};
+        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, C0493R.attr.font, C0493R.attr.fontStyle, C0493R.attr.fontWeight};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontWeight = 1;
@@ -2882,11 +2895,11 @@ public final class C0446R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
-        public static final int[] LoadingImageView = new int[]{C0446R.attr.circleCrop, C0446R.attr.imageAspectRatio, C0446R.attr.imageAspectRatioAdjust};
+        public static final int[] LoadingImageView = new int[]{C0493R.attr.circleCrop, C0493R.attr.imageAspectRatio, C0493R.attr.imageAspectRatioAdjust};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{C0446R.attr.ambientEnabled, C0446R.attr.cameraBearing, C0446R.attr.cameraMaxZoomPreference, C0446R.attr.cameraMinZoomPreference, C0446R.attr.cameraTargetLat, C0446R.attr.cameraTargetLng, C0446R.attr.cameraTilt, C0446R.attr.cameraZoom, C0446R.attr.latLngBoundsNorthEastLatitude, C0446R.attr.latLngBoundsNorthEastLongitude, C0446R.attr.latLngBoundsSouthWestLatitude, C0446R.attr.latLngBoundsSouthWestLongitude, C0446R.attr.liteMode, C0446R.attr.mapType, C0446R.attr.uiCompass, C0446R.attr.uiMapToolbar, C0446R.attr.uiRotateGestures, C0446R.attr.uiScrollGestures, C0446R.attr.uiTiltGestures, C0446R.attr.uiZoomControls, C0446R.attr.uiZoomGestures, C0446R.attr.useViewLifecycle, C0446R.attr.zOrderOnTop};
+        public static final int[] MapAttrs = new int[]{C0493R.attr.ambientEnabled, C0493R.attr.cameraBearing, C0493R.attr.cameraMaxZoomPreference, C0493R.attr.cameraMinZoomPreference, C0493R.attr.cameraTargetLat, C0493R.attr.cameraTargetLng, C0493R.attr.cameraTilt, C0493R.attr.cameraZoom, C0493R.attr.latLngBoundsNorthEastLatitude, C0493R.attr.latLngBoundsNorthEastLongitude, C0493R.attr.latLngBoundsSouthWestLatitude, C0493R.attr.latLngBoundsSouthWestLongitude, C0493R.attr.liteMode, C0493R.attr.mapType, C0493R.attr.uiCompass, C0493R.attr.uiMapToolbar, C0493R.attr.uiRotateGestures, C0493R.attr.uiScrollGestures, C0493R.attr.uiTiltGestures, C0493R.attr.uiZoomControls, C0493R.attr.uiZoomGestures, C0493R.attr.useViewLifecycle, C0493R.attr.zOrderOnTop};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -2910,16 +2923,16 @@ public final class C0446R {
         public static final int MapAttrs_uiZoomGestures = 20;
         public static final int MapAttrs_useViewLifecycle = 21;
         public static final int MapAttrs_zOrderOnTop = 22;
-        public static final int[] SignInButton = new int[]{C0446R.attr.buttonSize, C0446R.attr.colorScheme, C0446R.attr.scopeUris};
+        public static final int[] SignInButton = new int[]{C0493R.attr.buttonSize, C0493R.attr.colorScheme, C0493R.attr.scopeUris};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{C0446R.attr.appTheme, C0446R.attr.environment, C0446R.attr.fragmentMode, C0446R.attr.fragmentStyle};
+        public static final int[] WalletFragmentOptions = new int[]{C0493R.attr.appTheme, C0493R.attr.environment, C0493R.attr.fragmentMode, C0493R.attr.fragmentStyle};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{C0446R.attr.buyButtonAppearance, C0446R.attr.buyButtonHeight, C0446R.attr.buyButtonText, C0446R.attr.buyButtonWidth, C0446R.attr.maskedWalletDetailsBackground, C0446R.attr.maskedWalletDetailsButtonBackground, C0446R.attr.maskedWalletDetailsButtonTextAppearance, C0446R.attr.maskedWalletDetailsHeaderTextAppearance, C0446R.attr.maskedWalletDetailsLogoImageType, C0446R.attr.maskedWalletDetailsLogoTextColor, C0446R.attr.maskedWalletDetailsTextAppearance};
+        public static final int[] WalletFragmentStyle = new int[]{C0493R.attr.buyButtonAppearance, C0493R.attr.buyButtonHeight, C0493R.attr.buyButtonText, C0493R.attr.buyButtonWidth, C0493R.attr.maskedWalletDetailsBackground, C0493R.attr.maskedWalletDetailsButtonBackground, C0493R.attr.maskedWalletDetailsButtonTextAppearance, C0493R.attr.maskedWalletDetailsHeaderTextAppearance, C0493R.attr.maskedWalletDetailsLogoImageType, C0493R.attr.maskedWalletDetailsLogoTextColor, C0493R.attr.maskedWalletDetailsTextAppearance};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

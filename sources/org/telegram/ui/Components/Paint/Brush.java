@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 
 public interface Brush {
 
@@ -32,7 +32,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0446R.drawable.paint_elliptical_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0493R.drawable.paint_elliptical_brush, options);
         }
     }
 
@@ -60,7 +60,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0446R.drawable.paint_neon_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0493R.drawable.paint_neon_brush, options);
         }
     }
 
@@ -88,7 +88,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0446R.drawable.paint_radial_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0493R.drawable.paint_radial_brush, options);
         }
     }
 

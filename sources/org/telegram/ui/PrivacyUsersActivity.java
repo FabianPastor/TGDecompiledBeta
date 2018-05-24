@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -53,11 +53,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$1 */
-    class C22511 extends ActionBarMenuOnItemClick {
+    class C21641 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$1$1 */
-        class C22501 implements GroupCreateActivityDelegate {
-            C22501() {
+        class C21631 implements GroupCreateActivityDelegate {
+            C21631() {
             }
 
             public void didSelectUsers(ArrayList<Integer> ids) {
@@ -75,7 +75,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22511() {
+        C21641() {
         }
 
         public void onItemClick(int id) {
@@ -86,15 +86,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
                 args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
                 GroupCreateActivity fragment = new GroupCreateActivity(args);
-                fragment.setDelegate(new C22501());
+                fragment.setDelegate(new C21631());
                 PrivacyUsersActivity.this.presentFragment(fragment);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$2 */
-    class C22522 implements OnItemClickListener {
-        C22522() {
+    class C21652 implements OnItemClickListener {
+        C21652() {
         }
 
         public void onItemClick(View view, int position) {
@@ -107,11 +107,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$3 */
-    class C22533 implements OnItemLongClickListener {
+    class C21673 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$3$1 */
-        class C16381 implements OnClickListener {
-            C16381() {
+        class C21661 implements OnClickListener {
+            C21661() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -125,7 +125,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22533() {
+        C21673() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -134,15 +134,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
             PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
             Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", C0446R.string.Delete)}, new C16381());
+            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", C0493R.string.Delete)}, new C21661());
             PrivacyUsersActivity.this.showDialog(builder.create());
             return true;
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$4 */
-    class C22544 implements ThemeDescriptionDelegate {
-        C22544() {
+    class C21684 implements ThemeDescriptionDelegate {
+        C21684() {
         }
 
         public void didSetColor() {
@@ -184,7 +184,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", C0446R.string.RemoveFromListText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", C0493R.string.RemoveFromListText));
                     break;
             }
             return new Holder(view);
@@ -194,7 +194,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (holder.getItemViewType() == 0) {
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", C0446R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
+                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", C0493R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -226,26 +226,26 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0446R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0493R.string.AlwaysAllow));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0446R.string.NeverAllow));
+                this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0493R.string.NeverAllow));
             }
         } else if (this.isAlwaysShare) {
-            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0446R.string.AlwaysShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0493R.string.AlwaysShareWithTitle));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0446R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0493R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22511());
-        this.actionBar.createMenu().addItem(1, (int) C0446R.drawable.plus);
+        this.actionBar.setActionBarMenuOnItemClick(new C21641());
+        this.actionBar.createMenu().addItem(1, (int) C0493R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0446R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0493R.string.NoContacts));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -261,8 +261,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22522());
-        this.listView.setOnItemLongClickListener(new C22533());
+        this.listView.setOnItemClickListener(new C21652());
+        this.listView.setOnItemLongClickListener(new C21673());
         return this.fragmentView;
     }
 
@@ -299,7 +299,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C22544();
+        ThemeDescriptionDelegate сellDelegate = new C21684();
         r10 = new ThemeDescription[19];
         r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);

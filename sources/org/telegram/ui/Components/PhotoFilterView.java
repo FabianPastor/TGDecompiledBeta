@@ -40,7 +40,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -119,11 +119,11 @@ public class PhotoFilterView extends FrameLayout {
     private float warmthValue;
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$1 */
-    class C12411 implements SurfaceTextureListener {
+    class C15721 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$1$1 */
-        class C12401 implements Runnable {
-            C12401() {
+        class C15711 implements Runnable {
+            C15711() {
             }
 
             public void run() {
@@ -133,7 +133,7 @@ public class PhotoFilterView extends FrameLayout {
             }
         }
 
-        C12411() {
+        C15721() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -148,7 +148,7 @@ public class PhotoFilterView extends FrameLayout {
             if (PhotoFilterView.this.eglThread != null) {
                 PhotoFilterView.this.eglThread.setSurfaceTextureSize(width, height);
                 PhotoFilterView.this.eglThread.requestRender(false, true);
-                PhotoFilterView.this.eglThread.postRunnable(new C12401());
+                PhotoFilterView.this.eglThread.postRunnable(new C15711());
             }
         }
 
@@ -165,8 +165,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
-    class C20682 implements PhotoFilterLinearBlurControlDelegate {
-        C20682() {
+    class C15732 implements PhotoFilterLinearBlurControlDelegate {
+        C15732() {
         }
 
         public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
@@ -181,8 +181,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
-    class C20693 implements PhotoFilterCurvesControlDelegate {
-        C20693() {
+    class C15743 implements PhotoFilterCurvesControlDelegate {
+        C15743() {
         }
 
         public void valueChanged() {
@@ -193,8 +193,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$4 */
-    class C12424 implements OnClickListener {
-        C12424() {
+    class C15754 implements OnClickListener {
+        C15754() {
         }
 
         public void onClick(View v) {
@@ -207,8 +207,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$5 */
-    class C12435 implements OnClickListener {
-        C12435() {
+    class C15765 implements OnClickListener {
+        C15765() {
         }
 
         public void onClick(View v) {
@@ -221,8 +221,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$6 */
-    class C12446 implements OnClickListener {
-        C12446() {
+    class C15776 implements OnClickListener {
+        C15776() {
         }
 
         public void onClick(View v) {
@@ -235,8 +235,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$7 */
-    class C12457 implements OnClickListener {
-        C12457() {
+    class C15787 implements OnClickListener {
+        C15787() {
         }
 
         public void onClick(View v) {
@@ -252,8 +252,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$8 */
-    class C12468 implements OnClickListener {
-        C12468() {
+    class C15798 implements OnClickListener {
+        C15798() {
         }
 
         public void onClick(View v) {
@@ -267,8 +267,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$9 */
-    class C12479 implements OnClickListener {
-        C12479() {
+    class C15809 implements OnClickListener {
+        C15809() {
         }
 
         public void onClick(View v) {
@@ -439,7 +439,7 @@ public class PhotoFilterView extends FrameLayout {
         private Bitmap currentBitmap;
         private int[] curveTextures = new int[1];
         private int curvesImageHandle;
-        private Runnable drawRunnable = new C12481();
+        private Runnable drawRunnable = new C15811();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -522,8 +522,8 @@ public class PhotoFilterView extends FrameLayout {
         private int widthHandle;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$1 */
-        class C12481 implements Runnable {
-            C12481() {
+        class C15811 implements Runnable {
+            C15811() {
             }
 
             public void run() {
@@ -556,8 +556,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$3 */
-        class C12503 implements Runnable {
-            C12503() {
+        class C15833 implements Runnable {
+            C15833() {
             }
 
             public void run() {
@@ -1091,7 +1091,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1i(this.radialBlurSourceImage2Handle, 1);
                 GLES20.glUniform1f(this.radialBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.radialBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
-                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f24x, PhotoFilterView.this.blurExcludePoint.f25y);
+                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f54x, PhotoFilterView.this.blurExcludePoint.f55y);
                 GLES20.glUniform1f(this.radialBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.radialBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.radialBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1104,7 +1104,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1f(this.linearBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.linearBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
                 GLES20.glUniform1f(this.linearBlurAngleHandle, PhotoFilterView.this.blurAngle);
-                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f24x, PhotoFilterView.this.blurExcludePoint.f25y);
+                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f54x, PhotoFilterView.this.blurExcludePoint.f55y);
                 GLES20.glUniform1f(this.linearBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.linearBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.linearBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1213,7 +1213,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public void shutdown() {
-            postRunnable(new C12503());
+            postRunnable(new C15833());
         }
 
         public void setSurfaceTextureSize(int width, int height) {
@@ -1250,8 +1250,8 @@ public class PhotoFilterView extends FrameLayout {
         private Context mContext;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$1 */
-        class C20701 implements PhotoEditorSeekBarDelegate {
-            C20701() {
+        class C15851 implements PhotoEditorSeekBarDelegate {
+            C15851() {
             }
 
             public void onProgressChanged(int i, int progress) {
@@ -1285,8 +1285,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$2 */
-        class C12522 implements OnClickListener {
-            C12522() {
+        class C15862 implements OnClickListener {
+            C15862() {
             }
 
             public void onClick(View v) {
@@ -1319,10 +1319,10 @@ public class PhotoFilterView extends FrameLayout {
             if (i == 0) {
                 View cell = new PhotoEditToolCell(this.mContext);
                 view = cell;
-                cell.setSeekBarDelegate(new C20701());
+                cell.setSeekBarDelegate(new C15851());
             } else {
                 view = new PhotoEditRadioCell(this.mContext);
-                view.setOnClickListener(new C12522());
+                view.setOnClickListener(new C15862());
             }
             return new Holder(view);
         }
@@ -1337,37 +1337,37 @@ public class PhotoFilterView extends FrameLayout {
                     PhotoEditToolCell cell = holder.itemView;
                     cell.setTag(Integer.valueOf(i));
                     if (i == PhotoFilterView.this.enhanceTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", C0446R.string.Enhance), PhotoFilterView.this.enhanceValue, 0, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", C0493R.string.Enhance), PhotoFilterView.this.enhanceValue, 0, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.highlightsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", C0446R.string.Highlights), PhotoFilterView.this.highlightsValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", C0493R.string.Highlights), PhotoFilterView.this.highlightsValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.contrastTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", C0446R.string.Contrast), PhotoFilterView.this.contrastValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", C0493R.string.Contrast), PhotoFilterView.this.contrastValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.exposureTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", C0446R.string.Exposure), PhotoFilterView.this.exposureValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", C0493R.string.Exposure), PhotoFilterView.this.exposureValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.warmthTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", C0446R.string.Warmth), PhotoFilterView.this.warmthValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", C0493R.string.Warmth), PhotoFilterView.this.warmthValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.saturationTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", C0446R.string.Saturation), PhotoFilterView.this.saturationValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", C0493R.string.Saturation), PhotoFilterView.this.saturationValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.vignetteTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", C0446R.string.Vignette), PhotoFilterView.this.vignetteValue, 0, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", C0493R.string.Vignette), PhotoFilterView.this.vignetteValue, 0, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.shadowsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", C0446R.string.Shadows), PhotoFilterView.this.shadowsValue, -100, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", C0493R.string.Shadows), PhotoFilterView.this.shadowsValue, -100, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.grainTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", C0446R.string.Grain), PhotoFilterView.this.grainValue, 0, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", C0493R.string.Grain), PhotoFilterView.this.grainValue, 0, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.sharpenTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", C0446R.string.Sharpen), PhotoFilterView.this.sharpenValue, 0, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", C0493R.string.Sharpen), PhotoFilterView.this.sharpenValue, 0, PhotoFilterView.curveGranularity);
                         return;
                     } else if (i == PhotoFilterView.this.fadeTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", C0446R.string.Fade), PhotoFilterView.this.fadeValue, 0, PhotoFilterView.curveGranularity);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", C0493R.string.Fade), PhotoFilterView.this.fadeValue, 0, PhotoFilterView.curveGranularity);
                         return;
                     } else {
                         return;
@@ -1376,10 +1376,10 @@ public class PhotoFilterView extends FrameLayout {
                     PhotoEditRadioCell cell2 = holder.itemView;
                     cell2.setTag(Integer.valueOf(i));
                     if (i == PhotoFilterView.this.tintShadowsTool) {
-                        cell2.setIconAndTextAndValue(LocaleController.getString("TintShadows", C0446R.string.TintShadows), 0, PhotoFilterView.this.tintShadowsColor);
+                        cell2.setIconAndTextAndValue(LocaleController.getString("TintShadows", C0493R.string.TintShadows), 0, PhotoFilterView.this.tintShadowsColor);
                         return;
                     } else if (i == PhotoFilterView.this.tintHighlightsTool) {
-                        cell2.setIconAndTextAndValue(LocaleController.getString("TintHighlights", C0446R.string.TintHighlights), 0, PhotoFilterView.this.tintHighlightsColor);
+                        cell2.setIconAndTextAndValue(LocaleController.getString("TintHighlights", C0493R.string.TintHighlights), 0, PhotoFilterView.this.tintHighlightsColor);
                         return;
                     } else {
                         return;
@@ -1432,13 +1432,13 @@ public class PhotoFilterView extends FrameLayout {
         this.textureView = new TextureView(context);
         addView(this.textureView, LayoutHelper.createFrame(-1, -1, 51));
         this.textureView.setVisibility(4);
-        this.textureView.setSurfaceTextureListener(new C12411());
+        this.textureView.setSurfaceTextureListener(new C15721());
         this.blurControl = new PhotoFilterBlurControl(context);
         this.blurControl.setVisibility(4);
         addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new C20682());
+        this.blurControl.setDelegate(new C15732());
         this.curvesControl = new PhotoFilterCurvesControl(context, this.curvesToolValue);
-        this.curvesControl.setDelegate(new C20693());
+        this.curvesControl.setDelegate(new C15743());
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context);
@@ -1452,7 +1452,7 @@ public class PhotoFilterView extends FrameLayout {
         this.cancelTextView.setGravity(17);
         this.cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         this.cancelTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.cancelTextView.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
+        this.cancelTextView.setText(LocaleController.getString("Cancel", C0493R.string.Cancel).toUpperCase());
         this.cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
         this.doneTextView = new TextView(context);
@@ -1461,30 +1461,30 @@ public class PhotoFilterView extends FrameLayout {
         this.doneTextView.setGravity(17);
         this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.doneTextView.setText(LocaleController.getString("Done", C0446R.string.Done).toUpperCase());
+        this.doneTextView.setText(LocaleController.getString("Done", C0493R.string.Done).toUpperCase());
         this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
         LinearLayout linearLayout = new LinearLayout(context);
         frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 1));
         this.tuneItem = new ImageView(context);
         this.tuneItem.setScaleType(ScaleType.CENTER);
-        this.tuneItem.setImageResource(C0446R.drawable.photo_tools);
+        this.tuneItem.setImageResource(C0493R.drawable.photo_tools);
         this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
         this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new C12424());
+        this.tuneItem.setOnClickListener(new C15754());
         this.blurItem = new ImageView(context);
         this.blurItem.setScaleType(ScaleType.CENTER);
-        this.blurItem.setImageResource(C0446R.drawable.tool_blur);
+        this.blurItem.setImageResource(C0493R.drawable.tool_blur);
         this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new C12435());
+        this.blurItem.setOnClickListener(new C15765());
         this.curveItem = new ImageView(context);
         this.curveItem.setScaleType(ScaleType.CENTER);
-        this.curveItem.setImageResource(C0446R.drawable.tool_curve);
+        this.curveItem.setImageResource(C0493R.drawable.tool_curve);
         this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new C12446());
+        this.curveItem.setOnClickListener(new C15776());
         this.recyclerListView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(1);
@@ -1511,29 +1511,29 @@ public class PhotoFilterView extends FrameLayout {
             curveTextView.setGravity(16);
             String str;
             if (a == 0) {
-                str = LocaleController.getString("CurvesAll", C0446R.string.CurvesAll);
+                str = LocaleController.getString("CurvesAll", C0493R.string.CurvesAll);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(-1);
                 this.curveRadioButton[a].setColor(-1, -1);
             } else if (a == 1) {
-                str = LocaleController.getString("CurvesRed", C0446R.string.CurvesRed);
+                str = LocaleController.getString("CurvesRed", C0493R.string.CurvesRed);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(-1684147);
                 this.curveRadioButton[a].setColor(-1684147, -1684147);
             } else if (a == 2) {
-                str = LocaleController.getString("CurvesGreen", C0446R.string.CurvesGreen);
+                str = LocaleController.getString("CurvesGreen", C0493R.string.CurvesGreen);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(-10831009);
                 this.curveRadioButton[a].setColor(-10831009, -10831009);
             } else if (a == 3) {
-                str = LocaleController.getString("CurvesBlue", C0446R.string.CurvesBlue);
+                str = LocaleController.getString("CurvesBlue", C0493R.string.CurvesBlue);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(-12734994);
                 this.curveRadioButton[a].setColor(-12734994, -12734994);
             }
             frameLayout1.addView(curveTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
             curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout1.setOnClickListener(new C12457());
+            frameLayout1.setOnClickListener(new C15787());
             a++;
         }
         this.blurLayout = new FrameLayout(context);
@@ -1543,21 +1543,21 @@ public class PhotoFilterView extends FrameLayout {
         this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurOffButton.setTextSize(1, 13.0f);
         this.blurOffButton.setGravity(1);
-        this.blurOffButton.setText(LocaleController.getString("BlurOff", C0446R.string.BlurOff));
+        this.blurOffButton.setText(LocaleController.getString("BlurOff", C0493R.string.BlurOff));
         this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new C12468());
+        this.blurOffButton.setOnClickListener(new C15798());
         this.blurRadialButton = new TextView(context);
         this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurRadialButton.setTextSize(1, 13.0f);
         this.blurRadialButton.setGravity(1);
-        this.blurRadialButton.setText(LocaleController.getString("BlurRadial", C0446R.string.BlurRadial));
+        this.blurRadialButton.setText(LocaleController.getString("BlurRadial", C0493R.string.BlurRadial));
         this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new C12479());
+        this.blurRadialButton.setOnClickListener(new C15809());
         this.blurLinearButton = new TextView(context);
         this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurLinearButton.setTextSize(1, 13.0f);
         this.blurLinearButton.setGravity(1);
-        this.blurLinearButton.setText(LocaleController.getString("BlurLinear", C0446R.string.BlurLinear));
+        this.blurLinearButton.setText(LocaleController.getString("BlurLinear", C0493R.string.BlurLinear));
         this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
         this.blurLinearButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -1580,29 +1580,29 @@ public class PhotoFilterView extends FrameLayout {
     private void updateSelectedBlurType() {
         Drawable drawable;
         if (this.blurType == 0) {
-            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0446R.drawable.blur_off).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0493R.drawable.blur_off).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurOffButton.setTextColor(-11420173);
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_radial, 0, 0);
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_linear, 0, 0);
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_linear, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (this.blurType == 1) {
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_off, 0, 0);
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0446R.drawable.blur_radial).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0493R.drawable.blur_radial).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurRadialButton.setTextColor(-11420173);
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_linear, 0, 0);
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_linear, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (this.blurType == 2) {
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_off, 0, 0);
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, C0446R.drawable.blur_radial, 0, 0);
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, C0493R.drawable.blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0446R.drawable.blur_linear).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(C0493R.drawable.blur_linear).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurLinearButton.setTextColor(-11420173);

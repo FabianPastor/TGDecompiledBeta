@@ -27,7 +27,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -56,8 +56,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$1 */
-    class C07551 implements OnApplyWindowInsetsListener {
-        C07551() {
+    class C08871 implements OnApplyWindowInsetsListener {
+        C08871() {
         }
 
         @SuppressLint({"NewApi"})
@@ -73,8 +73,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
-    class C07562 extends AnimatorListenerAdapter {
-        C07562() {
+    class C08882 extends AnimatorListenerAdapter {
+        C08882() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -83,8 +83,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$3 */
-    class C07573 extends AnimatorListenerAdapter {
-        C07573() {
+    class C08893 extends AnimatorListenerAdapter {
+        C08893() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -98,10 +98,10 @@ public class DrawerLayoutContainer extends FrameLayout {
         setFocusableInTouchMode(true);
         if (VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
-            setOnApplyWindowInsetsListener(new C07551());
+            setOnApplyWindowInsetsListener(new C08871());
             setSystemUiVisibility(1280);
         }
-        this.shadowLeft = getResources().getDrawable(C0446R.drawable.menu_shadow);
+        this.shadowLeft = getResources().getDrawable(C0493R.drawable.menu_shadow);
     }
 
     @SuppressLint({"NewApi"})
@@ -195,7 +195,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else {
                 animatorSet.setDuration(300);
             }
-            animatorSet.addListener(new C07562());
+            animatorSet.addListener(new C08882());
             animatorSet.start();
             this.currentAnimation = animatorSet;
         }
@@ -213,7 +213,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         } else {
             animatorSet.setDuration(300);
         }
-        animatorSet.addListener(new C07573());
+        animatorSet.addListener(new C08893());
         animatorSet.start();
     }
 

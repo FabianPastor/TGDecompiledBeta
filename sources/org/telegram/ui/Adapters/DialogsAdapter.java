@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -39,8 +39,8 @@ public class DialogsAdapter extends SelectionAdapter {
     private ArrayList<Long> selectedDialogs;
 
     /* renamed from: org.telegram.ui.Adapters.DialogsAdapter$1 */
-    class C07711 implements OnClickListener {
-        C07711() {
+    class C09061 implements OnClickListener {
+        C09061() {
         }
 
         public void onClick(View view) {
@@ -175,12 +175,12 @@ public class DialogsAdapter extends SelectionAdapter {
             case 2:
                 int i;
                 View headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("RecentlyViewed", C0446R.string.RecentlyViewed));
+                headerCell.setText(LocaleController.getString("RecentlyViewed", C0493R.string.RecentlyViewed));
                 TextView textView = new TextView(this.mContext);
                 textView.setTextSize(1, 15.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
-                textView.setText(LocaleController.getString("RecentlyViewedHide", C0446R.string.RecentlyViewedHide));
+                textView.setText(LocaleController.getString("RecentlyViewedHide", C0493R.string.RecentlyViewedHide));
                 if (LocaleController.isRTL) {
                     i = 3;
                 } else {
@@ -193,7 +193,7 @@ public class DialogsAdapter extends SelectionAdapter {
                     i = 5;
                 }
                 headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
-                textView.setOnClickListener(new C07711());
+                textView.setOnClickListener(new C09061());
                 view = headerCell;
                 break;
             case 3:
@@ -204,7 +204,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 };
                 frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
                 View v = new View(this.mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0446R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
                 view = frameLayout;
                 break;

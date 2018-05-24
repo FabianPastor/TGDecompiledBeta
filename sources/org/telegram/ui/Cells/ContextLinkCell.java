@@ -467,10 +467,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x04a4;
     L_0x02b3:
         r0 = r33;
-        r0 = r0.f36w;
+        r0 = r0.f18w;
         r48 = r0;
         r0 = r33;
-        r0 = r0.f35h;
+        r0 = r0.f17h;
         r37 = r0;
     L_0x02bf:
         if (r48 == 0) goto L_0x02c3;
@@ -489,11 +489,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x02d0:
         r0 = r52;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f43w;
+        r0 = r4.f25w;
         r48 = r0;
         r0 = r52;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f42h;
+        r0 = r4.f24h;
         r37 = r0;
     L_0x02e0:
         if (r48 == 0) goto L_0x02e4;

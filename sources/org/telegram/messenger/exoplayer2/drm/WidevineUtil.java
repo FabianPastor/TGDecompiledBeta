@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.drm;
 
 import android.util.Pair;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 
 public final class WidevineUtil {
     public static final String PROPERTY_LICENSE_DURATION_REMAINING = "LicenseDurationRemaining";
@@ -29,6 +29,6 @@ public final class WidevineUtil {
             } catch (NumberFormatException e) {
             }
         }
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -141,22 +141,22 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
             return;
         }
         long startTimeUs = parseTimecodeUs(lineValues[this.formatStartIndex]);
-        if (startTimeUs == C0542C.TIME_UNSET) {
+        if (startTimeUs == C0605C.TIME_UNSET) {
             Log.w(TAG, "Skipping invalid timing: " + dialogueLine);
             return;
         }
-        long endTimeUs = C0542C.TIME_UNSET;
+        long endTimeUs = C0605C.TIME_UNSET;
         String endTimeString = lineValues[this.formatEndIndex];
         if (!endTimeString.trim().isEmpty()) {
             endTimeUs = parseTimecodeUs(endTimeString);
-            if (endTimeUs == C0542C.TIME_UNSET) {
+            if (endTimeUs == C0605C.TIME_UNSET) {
                 Log.w(TAG, "Skipping invalid timing: " + dialogueLine);
                 return;
             }
         }
         cues.add(new Cue(lineValues[this.formatTextIndex].replaceAll("\\{.*?\\}", TtmlNode.ANONYMOUS_REGION_ID).replaceAll("\\\\N", "\n").replaceAll("\\\\n", "\n")));
         cueTimesUs.add(startTimeUs);
-        if (endTimeUs != C0542C.TIME_UNSET) {
+        if (endTimeUs != C0605C.TIME_UNSET) {
             cues.add(null);
             cueTimesUs.add(endTimeUs);
         }
@@ -165,8 +165,8 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
     public static long parseTimecodeUs(String timeString) {
         Matcher matcher = SSA_TIMECODE_PATTERN.matcher(timeString);
         if (matcher.matches()) {
-            return (((((Long.parseLong(matcher.group(1)) * 60) * 60) * C0542C.MICROS_PER_SECOND) + ((Long.parseLong(matcher.group(2)) * 60) * C0542C.MICROS_PER_SECOND)) + (Long.parseLong(matcher.group(3)) * C0542C.MICROS_PER_SECOND)) + (Long.parseLong(matcher.group(4)) * 10000);
+            return (((((Long.parseLong(matcher.group(1)) * 60) * 60) * C0605C.MICROS_PER_SECOND) + ((Long.parseLong(matcher.group(2)) * 60) * C0605C.MICROS_PER_SECOND)) + (Long.parseLong(matcher.group(3)) * C0605C.MICROS_PER_SECOND)) + (Long.parseLong(matcher.group(4)) * 10000);
         }
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 }

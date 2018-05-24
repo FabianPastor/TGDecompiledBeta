@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
@@ -73,7 +73,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
                 return false;
             }
             long currentTimeMs = SystemClock.elapsedRealtime();
-            long snapshotValidityDurationMs = Math.max(30000, C0542C.usToMs(this.playlistSnapshot.durationUs));
+            long snapshotValidityDurationMs = Math.max(30000, C0605C.usToMs(this.playlistSnapshot.durationUs));
             if (this.playlistSnapshot.hasEndTag || this.playlistSnapshot.playlistType == 2 || this.playlistSnapshot.playlistType == 1 || this.lastSnapshotLoadMs + snapshotValidityDurationMs > currentTimeMs) {
                 return true;
             }
@@ -152,12 +152,12 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
             } else if (!this.playlistSnapshot.hasEndTag) {
                 if (loadedPlaylist.mediaSequence + loadedPlaylist.segments.size() < this.playlistSnapshot.mediaSequence) {
                     this.playlistError = new PlaylistResetException(this.playlistUrl.url);
-                } else if (((double) (currentTimeMs - this.lastSnapshotChangeMs)) > ((double) C0542C.usToMs(this.playlistSnapshot.targetDurationUs)) * HlsPlaylistTracker.PLAYLIST_STUCK_TARGET_DURATION_COEFFICIENT) {
+                } else if (((double) (currentTimeMs - this.lastSnapshotChangeMs)) > ((double) C0605C.usToMs(this.playlistSnapshot.targetDurationUs)) * HlsPlaylistTracker.PLAYLIST_STUCK_TARGET_DURATION_COEFFICIENT) {
                     this.playlistError = new PlaylistStuckException(this.playlistUrl.url);
                     blacklistPlaylist();
                 }
             }
-            this.earliestNextLoadTimeMs = C0542C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2) + currentTimeMs;
+            this.earliestNextLoadTimeMs = C0605C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2) + currentTimeMs;
             if (this.playlistUrl == HlsPlaylistTracker.this.primaryHlsUrl && !this.playlistSnapshot.hasEndTag) {
                 loadPlaylist();
             }

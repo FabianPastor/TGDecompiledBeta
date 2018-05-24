@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -39,8 +39,8 @@ public class JoinGroupAlert extends BottomSheet {
     private String hash;
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$1 */
-    class C11921 implements OnClickListener {
-        C11921() {
+    class C15191 implements OnClickListener {
+        C15191() {
         }
 
         public void onClick(View view) {
@@ -49,8 +49,8 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$2 */
-    class C11942 implements OnClickListener {
-        C11942() {
+    class C15222 implements OnClickListener {
+        C15222() {
         }
 
         public void onClick(View v) {
@@ -212,19 +212,19 @@ public class JoinGroupAlert extends BottomSheet {
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
         textView = new View(context);
-        textView.setBackgroundResource(C0446R.drawable.header_shadow_reverse);
+        textView.setBackgroundResource(C0493R.drawable.header_shadow_reverse);
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", C0446R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new C11921());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", C0493R.string.Cancel).toUpperCase());
+        pickerBottomLayout.cancelButton.setOnClickListener(new C15191());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", C0446R.string.JoinGroup));
-        pickerBottomLayout.doneButton.setOnClickListener(new C11942());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", C0493R.string.JoinGroup));
+        pickerBottomLayout.doneButton.setOnClickListener(new C15222());
     }
 }

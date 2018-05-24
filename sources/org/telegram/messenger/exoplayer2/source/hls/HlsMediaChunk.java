@@ -4,7 +4,7 @@ import android.util.Pair;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
@@ -154,7 +154,7 @@ final class HlsMediaChunk extends MediaChunk {
             if (this.isPackedAudioExtractor && !this.id3TimestampPeeked) {
                 long id3Timestamp = peekId3PrivTimestamp(input);
                 this.id3TimestampPeeked = true;
-                this.output.setSampleOffsetUs(id3Timestamp != C0542C.TIME_UNSET ? this.timestampAdjuster.adjustTsTimestamp(id3Timestamp) : this.startTimeUs);
+                this.output.setSampleOffsetUs(id3Timestamp != C0605C.TIME_UNSET ? this.timestampAdjuster.adjustTsTimestamp(id3Timestamp) : this.startTimeUs);
             }
             if (skipLoadedBytes) {
                 input.skipFully(this.bytesLoaded);
@@ -177,11 +177,11 @@ final class HlsMediaChunk extends MediaChunk {
     private long peekId3PrivTimestamp(ExtractorInput input) throws IOException, InterruptedException {
         input.resetPeekPosition();
         if (!input.peekFully(this.id3Data.data, 0, 10, true)) {
-            return C0542C.TIME_UNSET;
+            return C0605C.TIME_UNSET;
         }
         this.id3Data.reset(10);
         if (this.id3Data.readUnsignedInt24() != Id3Decoder.ID3_TAG) {
-            return C0542C.TIME_UNSET;
+            return C0605C.TIME_UNSET;
         }
         this.id3Data.skipBytes(3);
         int id3Size = this.id3Data.readSynchSafeInt();
@@ -192,11 +192,11 @@ final class HlsMediaChunk extends MediaChunk {
             System.arraycopy(data, 0, this.id3Data.data, 0, 10);
         }
         if (!input.peekFully(this.id3Data.data, 10, id3Size, true)) {
-            return C0542C.TIME_UNSET;
+            return C0605C.TIME_UNSET;
         }
         Metadata metadata = this.id3Decoder.decode(this.id3Data.data, id3Size);
         if (metadata == null) {
-            return C0542C.TIME_UNSET;
+            return C0605C.TIME_UNSET;
         }
         int metadataLength = metadata.length();
         for (int i = 0; i < metadataLength; i++) {
@@ -210,7 +210,7 @@ final class HlsMediaChunk extends MediaChunk {
                 }
             }
         }
-        return C0542C.TIME_UNSET;
+        return C0605C.TIME_UNSET;
     }
 
     private static DataSource buildDataSource(DataSource dataSource, byte[] fullSegmentEncryptionKey, byte[] encryptionIv) {

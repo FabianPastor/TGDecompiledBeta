@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -82,8 +82,8 @@ public class PasscodeView extends FrameLayout {
     private boolean selfCancelled;
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$1 */
-    class C12241 implements OnEditorActionListener {
-        C12241() {
+    class C15531 implements OnEditorActionListener {
+        C15531() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -96,8 +96,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$2 */
-    class C12252 implements TextWatcher {
-        C12252() {
+    class C15542 implements TextWatcher {
+        C15542() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -114,8 +114,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$3 */
-    class C12263 implements Callback {
-        C12263() {
+    class C15553 implements Callback {
+        C15553() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -135,8 +135,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$4 */
-    class C12274 implements OnClickListener {
-        C12274() {
+    class C15564 implements OnClickListener {
+        C15564() {
         }
 
         public void onClick(View v) {
@@ -145,8 +145,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$5 */
-    class C12285 implements OnLongClickListener {
-        C12285() {
+    class C15575 implements OnLongClickListener {
+        C15575() {
         }
 
         public boolean onLongClick(View v) {
@@ -157,8 +157,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$6 */
-    class C12296 implements OnClickListener {
-        C12296() {
+    class C15586 implements OnClickListener {
+        C15586() {
         }
 
         public void onClick(View v) {
@@ -204,8 +204,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$7 */
-    class C12307 extends AnimatorListenerAdapter {
-        C12307() {
+    class C15597 extends AnimatorListenerAdapter {
+        C15597() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -214,8 +214,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$9 */
-    class C12329 implements Runnable {
-        C12329() {
+    class C15619 implements Runnable {
+        C15619() {
         }
 
         public void run() {
@@ -235,8 +235,8 @@ public class PasscodeView extends FrameLayout {
         private StringBuilder stringBuilder = new StringBuilder(4);
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$2 */
-        class C12352 extends AnimatorListenerAdapter {
-            C12352() {
+        class C15642 extends AnimatorListenerAdapter {
+            C15642() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -247,8 +247,8 @@ public class PasscodeView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$3 */
-        class C12363 extends AnimatorListenerAdapter {
-            C12363() {
+        class C15653 extends AnimatorListenerAdapter {
+            C15653() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -259,8 +259,8 @@ public class PasscodeView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$4 */
-        class C12374 extends AnimatorListenerAdapter {
-            C12374() {
+        class C15664 extends AnimatorListenerAdapter {
+            C15664() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -353,8 +353,8 @@ public class PasscodeView extends FrameLayout {
                 this.dotRunnable = new Runnable() {
 
                     /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$1$1 */
-                    class C12331 extends AnimatorListenerAdapter {
-                        C12331() {
+                    class C15621 extends AnimatorListenerAdapter {
+                        C15621() {
                         }
 
                         public void onAnimationEnd(Animator animation) {
@@ -378,7 +378,7 @@ public class PasscodeView extends FrameLayout {
                             AnimatingTextView.this.currentAnimation = new AnimatorSet();
                             AnimatingTextView.this.currentAnimation.setDuration(150);
                             AnimatingTextView.this.currentAnimation.playTogether(animators);
-                            AnimatingTextView.this.currentAnimation.addListener(new C12331());
+                            AnimatingTextView.this.currentAnimation.addListener(new C15621());
                             AnimatingTextView.this.currentAnimation.start();
                         }
                     }
@@ -404,7 +404,7 @@ public class PasscodeView extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(150);
                 this.currentAnimation.playTogether(animators);
-                this.currentAnimation.addListener(new C12352());
+                this.currentAnimation.addListener(new C15642());
                 this.currentAnimation.start();
             }
         }
@@ -465,7 +465,7 @@ public class PasscodeView extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(150);
                 this.currentAnimation.playTogether(animators);
-                this.currentAnimation.addListener(new C12363());
+                this.currentAnimation.addListener(new C15653());
                 this.currentAnimation.start();
             }
         }
@@ -501,7 +501,7 @@ public class PasscodeView extends FrameLayout {
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(150);
                     this.currentAnimation.playTogether(animators);
-                    this.currentAnimation.addListener(new C12374());
+                    this.currentAnimation.addListener(new C15664());
                     this.currentAnimation.start();
                     return;
                 }
@@ -568,7 +568,7 @@ public class PasscodeView extends FrameLayout {
         this.passwordFrameLayout.setLayoutParams(layoutParams);
         ImageView imageView = new ImageView(context);
         imageView.setScaleType(ScaleType.FIT_XY);
-        imageView.setImageResource(C0446R.drawable.passcode_logo);
+        imageView.setImageResource(C0493R.drawable.passcode_logo);
         this.passwordFrameLayout.addView(imageView);
         layoutParams = (LayoutParams) imageView.getLayoutParams();
         if (AndroidUtilities.density < 1.0f) {
@@ -622,13 +622,13 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.dp(70.0f);
         layoutParams.gravity = 81;
         this.passwordEditText.setLayoutParams(layoutParams);
-        this.passwordEditText.setOnEditorActionListener(new C12241());
-        this.passwordEditText.addTextChangedListener(new C12252());
-        this.passwordEditText.setCustomSelectionActionModeCallback(new C12263());
+        this.passwordEditText.setOnEditorActionListener(new C15531());
+        this.passwordEditText.addTextChangedListener(new C15542());
+        this.passwordEditText.setCustomSelectionActionModeCallback(new C15553());
         this.checkImage = new ImageView(context);
-        this.checkImage.setImageResource(C0446R.drawable.passcode_check);
+        this.checkImage.setImageResource(C0493R.drawable.passcode_check);
         this.checkImage.setScaleType(ScaleType.CENTER);
-        this.checkImage.setBackgroundResource(C0446R.drawable.bar_selector_lock);
+        this.checkImage.setBackgroundResource(C0493R.drawable.bar_selector_lock);
         this.passwordFrameLayout.addView(this.checkImage);
         layoutParams = (LayoutParams) this.checkImage.getLayoutParams();
         layoutParams.width = AndroidUtilities.dp(60.0f);
@@ -637,7 +637,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.dp(10.0f);
         layoutParams.gravity = 85;
         this.checkImage.setLayoutParams(layoutParams);
-        this.checkImage.setOnClickListener(new C12274());
+        this.checkImage.setOnClickListener(new C15564());
         FrameLayout lineFrameLayout = new FrameLayout(context);
         lineFrameLayout.setBackgroundColor(654311423);
         this.passwordFrameLayout.addView(lineFrameLayout);
@@ -716,7 +716,7 @@ public class PasscodeView extends FrameLayout {
         }
         this.eraseView = new ImageView(context);
         this.eraseView.setScaleType(ScaleType.CENTER);
-        this.eraseView.setImageResource(C0446R.drawable.passcode_delete);
+        this.eraseView.setImageResource(C0493R.drawable.passcode_delete);
         this.numbersFrameLayout.addView(this.eraseView);
         layoutParams = (LayoutParams) this.eraseView.getLayoutParams();
         layoutParams.width = AndroidUtilities.dp(50.0f);
@@ -725,12 +725,12 @@ public class PasscodeView extends FrameLayout {
         this.eraseView.setLayoutParams(layoutParams);
         for (a = 0; a < 11; a++) {
             FrameLayout frameLayout = new FrameLayout(context);
-            frameLayout.setBackgroundResource(C0446R.drawable.bar_selector_lock);
+            frameLayout.setBackgroundResource(C0493R.drawable.bar_selector_lock);
             frameLayout.setTag(Integer.valueOf(a));
             if (a == 10) {
-                frameLayout.setOnLongClickListener(new C12285());
+                frameLayout.setOnLongClickListener(new C15575());
             }
-            frameLayout.setOnClickListener(new C12296());
+            frameLayout.setOnClickListener(new C15586());
             this.numberFrameLayouts.add(frameLayout);
         }
         for (a = 10; a >= 0; a--) {
@@ -774,7 +774,7 @@ public class PasscodeView extends FrameLayout {
         r2[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) AndroidUtilities.dp(20.0f)});
         r2[1] = ObjectAnimator.ofFloat(this, "alpha", new float[]{(float) AndroidUtilities.dp(0.0f)});
         AnimatorSet.playTogether(r2);
-        AnimatorSet.addListener(new C12307());
+        AnimatorSet.addListener(new C15597());
         AnimatorSet.start();
         SharedConfig.appLocked = false;
         SharedConfig.saveConfig();
@@ -815,7 +815,7 @@ public class PasscodeView extends FrameLayout {
                 this.passwordEditText.requestFocus();
                 AndroidUtilities.showKeyboard(this.passwordEditText);
             }
-            AndroidUtilities.runOnUIThread(new C12329(), 200);
+            AndroidUtilities.runOnUIThread(new C15619(), 200);
         }
         checkFingerprint();
     }
@@ -860,19 +860,19 @@ public class PasscodeView extends FrameLayout {
                     fingerprintTextView.setId(id_fingerprint_textview);
                     fingerprintTextView.setTextAppearance(16974344);
                     fingerprintTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                    fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", C0446R.string.FingerprintInfo));
+                    fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", C0493R.string.FingerprintInfo));
                     relativeLayout.addView(fingerprintTextView);
                     RelativeLayout.LayoutParams layoutParams = LayoutHelper.createRelative(-2, -2);
                     layoutParams.addRule(10);
                     layoutParams.addRule(20);
                     fingerprintTextView.setLayoutParams(layoutParams);
                     this.fingerprintImageView = new ImageView(getContext());
-                    this.fingerprintImageView.setImageResource(C0446R.drawable.ic_fp_40px);
+                    this.fingerprintImageView.setImageResource(C0493R.drawable.ic_fp_40px);
                     this.fingerprintImageView.setId(id_fingerprint_imageview);
                     relativeLayout.addView(this.fingerprintImageView, LayoutHelper.createRelative(-2.0f, -2.0f, 0, 20, 0, 0, 20, 3, id_fingerprint_textview));
                     this.fingerprintStatusTextView = new TextView(getContext());
                     this.fingerprintStatusTextView.setGravity(16);
-                    this.fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", C0446R.string.FingerprintHelp));
+                    this.fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", C0493R.string.FingerprintHelp));
                     this.fingerprintStatusTextView.setTextAppearance(16974320);
                     this.fingerprintStatusTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack) & NUM);
                     relativeLayout.addView(this.fingerprintStatusTextView);
@@ -883,9 +883,9 @@ public class PasscodeView extends FrameLayout {
                     layoutParams.addRule(17, id_fingerprint_imageview);
                     this.fingerprintStatusTextView.setLayoutParams(layoutParams);
                     Builder builder = new Builder(getContext());
-                    builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                    builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                     builder.setView(relativeLayout);
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                     builder.setOnDismissListener(new OnDismissListener() {
                         public void onDismiss(DialogInterface dialog) {
                             if (PasscodeView.this.cancellationSignal != null) {
@@ -915,7 +915,7 @@ public class PasscodeView extends FrameLayout {
                         }
 
                         public void onAuthenticationFailed() {
-                            PasscodeView.this.showFingerprintError(LocaleController.getString("FingerprintNotRecognized", C0446R.string.FingerprintNotRecognized));
+                            PasscodeView.this.showFingerprintError(LocaleController.getString("FingerprintNotRecognized", C0493R.string.FingerprintNotRecognized));
                         }
 
                         public void onAuthenticationSucceeded(AuthenticationResult result) {
@@ -969,7 +969,7 @@ public class PasscodeView extends FrameLayout {
                     this.backgroundFrameLayout.setBackgroundColor(-11436898);
                 }
             }
-            this.passcodeTextView.setText(LocaleController.getString("EnterYourPasscode", C0446R.string.EnterYourPasscode));
+            this.passcodeTextView.setText(LocaleController.getString("EnterYourPasscode", C0493R.string.EnterYourPasscode));
             if (SharedConfig.passcodeType == 0) {
                 this.numbersFrameLayout.setVisibility(0);
                 this.passwordEditText.setVisibility(8);
@@ -998,7 +998,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     private void showFingerprintError(CharSequence error) {
-        this.fingerprintImageView.setImageResource(C0446R.drawable.ic_fingerprint_error);
+        this.fingerprintImageView.setImageResource(C0493R.drawable.ic_fingerprint_error);
         this.fingerprintStatusTextView.setText(error);
         this.fingerprintStatusTextView.setTextColor(-765666);
         Vibrator v = (Vibrator) getContext().getSystemService("vibrator");

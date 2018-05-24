@@ -47,8 +47,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     private RemoteControlClient remoteControlClient;
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$1 */
-    class C04101 extends Callback {
-        C04101() {
+    class C04571 extends Callback {
+        C04571() {
         }
 
         public void onPlay() {
@@ -72,8 +72,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$2 */
-    class C04112 implements Runnable {
-        C04112() {
+    class C04582 implements Runnable {
+        C04582() {
         }
 
         public void run() {
@@ -110,10 +110,10 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             this.mediaSession = new MediaSession(this, "telegramAudioPlayer");
             this.playbackState = new Builder();
             this.albumArtPlaceholder = Bitmap.createBitmap(AndroidUtilities.dp(102.0f), AndroidUtilities.dp(102.0f), Config.ARGB_8888);
-            Drawable placeholder = getResources().getDrawable(C0446R.drawable.nocover_big);
+            Drawable placeholder = getResources().getDrawable(C0493R.drawable.nocover_big);
             placeholder.setBounds(0, 0, this.albumArtPlaceholder.getWidth(), this.albumArtPlaceholder.getHeight());
             placeholder.draw(new Canvas(this.albumArtPlaceholder));
-            this.mediaSession.setCallback(new C04101());
+            this.mediaSession.setCallback(new C04571());
             this.mediaSession.setActive(true);
         }
         super.onCreate();
@@ -134,7 +134,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         }
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject == null) {
-            AndroidUtilities.runOnUIThread(new C04112());
+            AndroidUtilities.runOnUIThread(new C04582());
             return 1;
         }
         if (supportLockScreenControls) {
@@ -177,7 +177,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             PendingIntent pendingNext = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), 268435456);
             Notification.Builder bldr = new Notification.Builder(this);
             int[] iArr = new int[3];
-            bldr.setSmallIcon(C0446R.drawable.player).setOngoing(isPlaying).setContentTitle(songName).setContentText(authorName).setSubText(audioInfo != null ? audioInfo.getAlbum() : null).setContentIntent(contentIntent).setDeleteIntent(pendingStop).setShowWhen(false).setCategory("transport").setPriority(2).setStyle(new MediaStyle().setMediaSession(this.mediaSession.getSessionToken()).setShowActionsInCompactView(new int[]{0, 1, 2}));
+            bldr.setSmallIcon(C0493R.drawable.player).setOngoing(isPlaying).setContentTitle(songName).setContentText(authorName).setSubText(audioInfo != null ? audioInfo.getAlbum() : null).setContentIntent(contentIntent).setDeleteIntent(pendingStop).setShowWhen(false).setCategory("transport").setPriority(2).setStyle(new MediaStyle().setMediaSession(this.mediaSession.getSessionToken()).setShowActionsInCompactView(new int[]{0, 1, 2}));
             if (VERSION.SDK_INT >= 26) {
                 bldr.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             }
@@ -188,10 +188,10 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             }
             if (MediaController.getInstance().isDownloadingCurrentMessage()) {
                 this.playbackState.setState(6, 0, 1.0f).setActions(0);
-                bldr.addAction(new Action.Builder(C0446R.drawable.ic_action_previous, TtmlNode.ANONYMOUS_REGION_ID, pendingPrev).build()).addAction(new Action.Builder(C0446R.drawable.loading_animation2, TtmlNode.ANONYMOUS_REGION_ID, null).build()).addAction(new Action.Builder(C0446R.drawable.ic_action_next, TtmlNode.ANONYMOUS_REGION_ID, pendingNext).build());
+                bldr.addAction(new Action.Builder(C0493R.drawable.ic_action_previous, TtmlNode.ANONYMOUS_REGION_ID, pendingPrev).build()).addAction(new Action.Builder(C0493R.drawable.loading_animation2, TtmlNode.ANONYMOUS_REGION_ID, null).build()).addAction(new Action.Builder(C0493R.drawable.ic_action_next, TtmlNode.ANONYMOUS_REGION_ID, pendingNext).build());
             } else {
                 this.playbackState.setState(isPlaying ? 3 : 2, ((long) MediaController.getInstance().getPlayingMessageObject().audioProgressSec) * 1000, isPlaying ? 1.0f : 0.0f).setActions(566);
-                bldr.addAction(new Action.Builder(C0446R.drawable.ic_action_previous, TtmlNode.ANONYMOUS_REGION_ID, pendingPrev).build()).addAction(new Action.Builder(isPlaying ? C0446R.drawable.ic_action_pause : C0446R.drawable.ic_action_play, TtmlNode.ANONYMOUS_REGION_ID, pendingPlaypause).build()).addAction(new Action.Builder(C0446R.drawable.ic_action_next, TtmlNode.ANONYMOUS_REGION_ID, pendingNext).build());
+                bldr.addAction(new Action.Builder(C0493R.drawable.ic_action_previous, TtmlNode.ANONYMOUS_REGION_ID, pendingPrev).build()).addAction(new Action.Builder(isPlaying ? C0493R.drawable.ic_action_pause : C0493R.drawable.ic_action_play, TtmlNode.ANONYMOUS_REGION_ID, pendingPlaypause).build()).addAction(new Action.Builder(C0493R.drawable.ic_action_next, TtmlNode.ANONYMOUS_REGION_ID, pendingNext).build());
             }
             this.mediaSession.setPlaybackState(this.playbackState.build());
             this.mediaSession.setMetadata(new MediaMetadata.Builder().putBitmap("android.media.metadata.ALBUM_ART", fullAlbumArt).putString("android.media.metadata.ALBUM_ARTIST", authorName).putString("android.media.metadata.TITLE", songName).putString("android.media.metadata.ALBUM", audioInfo != null ? audioInfo.getAlbum() : null).build());
@@ -204,12 +204,12 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                 ((NotificationManager) getSystemService("notification")).notify(5, notification);
             }
         } else {
-            RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), C0446R.layout.player_small_notification);
+            RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), C0493R.layout.player_small_notification);
             RemoteViews expandedView = null;
             if (supportBigNotifications) {
-                expandedView = new RemoteViews(getApplicationContext().getPackageName(), C0446R.layout.player_big_notification);
+                expandedView = new RemoteViews(getApplicationContext().getPackageName(), C0493R.layout.player_big_notification);
             }
-            notification = new NotificationCompat.Builder(getApplicationContext()).setSmallIcon(C0446R.drawable.player).setContentIntent(contentIntent).setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setContentTitle(songName).build();
+            notification = new NotificationCompat.Builder(getApplicationContext()).setSmallIcon(C0493R.drawable.player).setContentIntent(contentIntent).setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setContentTitle(songName).build();
             notification.contentView = remoteViews;
             if (supportBigNotifications) {
                 notification.bigContentView = expandedView;
@@ -220,62 +220,62 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             }
             albumArt = audioInfo != null ? audioInfo.getSmallCover() : null;
             if (albumArt != null) {
-                notification.contentView.setImageViewBitmap(C0446R.id.player_album_art, albumArt);
+                notification.contentView.setImageViewBitmap(C0493R.id.player_album_art, albumArt);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setImageViewBitmap(C0446R.id.player_album_art, albumArt);
+                    notification.bigContentView.setImageViewBitmap(C0493R.id.player_album_art, albumArt);
                 }
             } else {
-                notification.contentView.setImageViewResource(C0446R.id.player_album_art, C0446R.drawable.nocover_small);
+                notification.contentView.setImageViewResource(C0493R.id.player_album_art, C0493R.drawable.nocover_small);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setImageViewResource(C0446R.id.player_album_art, C0446R.drawable.nocover_big);
+                    notification.bigContentView.setImageViewResource(C0493R.id.player_album_art, C0493R.drawable.nocover_big);
                 }
             }
             if (MediaController.getInstance().isDownloadingCurrentMessage()) {
-                notification.contentView.setViewVisibility(C0446R.id.player_pause, 8);
-                notification.contentView.setViewVisibility(C0446R.id.player_play, 8);
-                notification.contentView.setViewVisibility(C0446R.id.player_next, 8);
-                notification.contentView.setViewVisibility(C0446R.id.player_previous, 8);
-                notification.contentView.setViewVisibility(C0446R.id.player_progress_bar, 0);
+                notification.contentView.setViewVisibility(C0493R.id.player_pause, 8);
+                notification.contentView.setViewVisibility(C0493R.id.player_play, 8);
+                notification.contentView.setViewVisibility(C0493R.id.player_next, 8);
+                notification.contentView.setViewVisibility(C0493R.id.player_previous, 8);
+                notification.contentView.setViewVisibility(C0493R.id.player_progress_bar, 0);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_pause, 8);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_play, 8);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_next, 8);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_previous, 8);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_progress_bar, 0);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_pause, 8);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_play, 8);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_next, 8);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_previous, 8);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_progress_bar, 0);
                 }
             } else {
-                notification.contentView.setViewVisibility(C0446R.id.player_progress_bar, 8);
-                notification.contentView.setViewVisibility(C0446R.id.player_next, 0);
-                notification.contentView.setViewVisibility(C0446R.id.player_previous, 0);
+                notification.contentView.setViewVisibility(C0493R.id.player_progress_bar, 8);
+                notification.contentView.setViewVisibility(C0493R.id.player_next, 0);
+                notification.contentView.setViewVisibility(C0493R.id.player_previous, 0);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_next, 0);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_previous, 0);
-                    notification.bigContentView.setViewVisibility(C0446R.id.player_progress_bar, 8);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_next, 0);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_previous, 0);
+                    notification.bigContentView.setViewVisibility(C0493R.id.player_progress_bar, 8);
                 }
                 if (MediaController.getInstance().isMessagePaused()) {
-                    notification.contentView.setViewVisibility(C0446R.id.player_pause, 8);
-                    notification.contentView.setViewVisibility(C0446R.id.player_play, 0);
+                    notification.contentView.setViewVisibility(C0493R.id.player_pause, 8);
+                    notification.contentView.setViewVisibility(C0493R.id.player_play, 0);
                     if (supportBigNotifications) {
-                        notification.bigContentView.setViewVisibility(C0446R.id.player_pause, 8);
-                        notification.bigContentView.setViewVisibility(C0446R.id.player_play, 0);
+                        notification.bigContentView.setViewVisibility(C0493R.id.player_pause, 8);
+                        notification.bigContentView.setViewVisibility(C0493R.id.player_play, 0);
                     }
                 } else {
-                    notification.contentView.setViewVisibility(C0446R.id.player_pause, 0);
-                    notification.contentView.setViewVisibility(C0446R.id.player_play, 8);
+                    notification.contentView.setViewVisibility(C0493R.id.player_pause, 0);
+                    notification.contentView.setViewVisibility(C0493R.id.player_play, 8);
                     if (supportBigNotifications) {
-                        notification.bigContentView.setViewVisibility(C0446R.id.player_pause, 0);
-                        notification.bigContentView.setViewVisibility(C0446R.id.player_play, 8);
+                        notification.bigContentView.setViewVisibility(C0493R.id.player_pause, 0);
+                        notification.bigContentView.setViewVisibility(C0493R.id.player_play, 8);
                     }
                 }
             }
-            notification.contentView.setTextViewText(C0446R.id.player_song_name, songName);
-            notification.contentView.setTextViewText(C0446R.id.player_author_name, authorName);
+            notification.contentView.setTextViewText(C0493R.id.player_song_name, songName);
+            notification.contentView.setTextViewText(C0493R.id.player_author_name, authorName);
             if (supportBigNotifications) {
-                notification.bigContentView.setTextViewText(C0446R.id.player_song_name, songName);
-                notification.bigContentView.setTextViewText(C0446R.id.player_author_name, authorName);
+                notification.bigContentView.setTextViewText(C0493R.id.player_song_name, songName);
+                notification.bigContentView.setTextViewText(C0493R.id.player_author_name, authorName);
                 RemoteViews remoteViews2 = notification.bigContentView;
                 String album = (audioInfo == null || TextUtils.isEmpty(audioInfo.getAlbum())) ? TtmlNode.ANONYMOUS_REGION_ID : audioInfo.getAlbum();
-                remoteViews2.setTextViewText(C0446R.id.player_album_title, album);
+                remoteViews2.setTextViewText(C0493R.id.player_album_title, album);
             }
             notification.flags |= 2;
             startForeground(5, notification);
@@ -296,11 +296,11 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     }
 
     public void setListeners(RemoteViews view) {
-        view.setOnClickPendingIntent(C0446R.id.player_previous, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PREVIOUS), 134217728));
-        view.setOnClickPendingIntent(C0446R.id.player_close, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_CLOSE), 134217728));
-        view.setOnClickPendingIntent(C0446R.id.player_pause, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PAUSE), 134217728));
-        view.setOnClickPendingIntent(C0446R.id.player_next, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT), 134217728));
-        view.setOnClickPendingIntent(C0446R.id.player_play, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PLAY), 134217728));
+        view.setOnClickPendingIntent(C0493R.id.player_previous, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PREVIOUS), 134217728));
+        view.setOnClickPendingIntent(C0493R.id.player_close, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_CLOSE), 134217728));
+        view.setOnClickPendingIntent(C0493R.id.player_pause, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PAUSE), 134217728));
+        view.setOnClickPendingIntent(C0493R.id.player_next, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT), 134217728));
+        view.setOnClickPendingIntent(C0493R.id.player_play, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PLAY), 134217728));
     }
 
     @SuppressLint({"NewApi"})

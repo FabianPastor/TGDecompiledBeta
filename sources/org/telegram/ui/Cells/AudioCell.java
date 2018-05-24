@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
@@ -42,8 +42,8 @@ public class AudioCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.AudioCell$1 */
-    class C08691 implements OnClickListener {
-        C08691() {
+    class C10571 implements OnClickListener {
+        C10571() {
         }
 
         public void onClick(View v) {
@@ -88,7 +88,7 @@ public class AudioCell extends FrameLayout {
             f2 = 0.0f;
         }
         addView(view, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
-        this.playButton.setOnClickListener(new C08691());
+        this.playButton.setOnClickListener(new C10571());
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.titleTextView.setTextSize(1, 16.0f);
@@ -168,7 +168,7 @@ public class AudioCell extends FrameLayout {
             i3 = 5;
         }
         addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0446R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, C0493R.drawable.round_check2);
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         view2 = this.checkBox;
@@ -180,7 +180,7 @@ public class AudioCell extends FrameLayout {
 
     private void setPlayDrawable(boolean play) {
         Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
-        Drawable drawable = getResources().getDrawable(play ? C0446R.drawable.audiosend_pause : C0446R.drawable.audiosend_play);
+        Drawable drawable = getResources().getDrawable(play ? C0493R.drawable.audiosend_pause : C0493R.drawable.audiosend_play);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
         combinedDrawable.setCustomSize(AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));

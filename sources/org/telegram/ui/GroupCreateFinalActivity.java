@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -84,8 +84,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$2 */
-    class C21432 extends ActionBarMenuOnItemClick {
-        C21432() {
+    class C18182 extends ActionBarMenuOnItemClick {
+        C18182() {
         }
 
         public void onItemClick(int id) {
@@ -114,11 +114,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$4 */
-    class C14084 implements OnClickListener {
+    class C18214 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.GroupCreateFinalActivity$4$1 */
-        class C14071 implements DialogInterface.OnClickListener {
-            C14071() {
+        class C18201 implements DialogInterface.OnClickListener {
+            C18201() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -134,21 +134,21 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         }
 
-        C14084() {
+        C18214() {
         }
 
         public void onClick(View view) {
             if (GroupCreateFinalActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(GroupCreateFinalActivity.this.getParentActivity());
-                builder.setItems(GroupCreateFinalActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley), LocaleController.getString("DeletePhoto", C0446R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", C0446R.string.FromCamera), LocaleController.getString("FromGalley", C0446R.string.FromGalley)}, new C14071());
+                builder.setItems(GroupCreateFinalActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley), LocaleController.getString("DeletePhoto", C0493R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley)}, new C18201());
                 GroupCreateFinalActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$5 */
-    class C14095 implements TextWatcher {
-        C14095() {
+    class C18225 implements TextWatcher {
+        C18225() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -171,8 +171,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$6 */
-    class C21446 extends OnScrollListener {
-        C21446() {
+    class C18236 extends OnScrollListener {
+        C18236() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -183,8 +183,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$9 */
-    class C21459 implements ThemeDescriptionDelegate {
-        C21459() {
+    class C18269 implements ThemeDescriptionDelegate {
+        C18269() {
         }
 
         public void didSetColor() {
@@ -330,11 +330,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public View createView(Context context) {
         float f;
         float f2;
-        this.actionBar.setBackButtonImage(C0446R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NewGroup", C0446R.string.NewGroup));
-        this.actionBar.setActionBarMenuOnItemClick(new C21432());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, C0446R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("NewGroup", C0493R.string.NewGroup));
+        this.actionBar.setActionBarMenuOnItemClick(new C18182());
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, C0493R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView.setVisibility(4);
@@ -370,9 +370,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
         frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 16.0f, f2, 16.0f));
         this.avatarDrawable.setDrawPhoto(true);
-        this.avatarImage.setOnClickListener(new C14084());
+        this.avatarImage.setOnClickListener(new C18214());
         this.editText = new EditTextBoldCursor(context);
-        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", C0446R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", C0446R.string.EnterListName));
+        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", C0493R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", C0493R.string.EnterListName));
         if (this.nameToSet != null) {
             this.editText.setText(this.nameToSet);
             this.nameToSet = null;
@@ -399,7 +399,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             f2 = 16.0f;
         }
         frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f, 0.0f, f2, 0.0f));
-        this.editText.addTextChangedListener(new C14095());
+        this.editText.addTextChangedListener(new C18225());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
         RecyclerView recyclerView = this.listView;
@@ -411,7 +411,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.listView.addItemDecoration(new GroupCreateDividerItemDecoration());
         linearLayout.addView(this.listView, LayoutHelper.createLinear(-1, -1));
-        this.listView.setOnScrollListener(new C21446());
+        this.listView.setOnScrollListener(new C18236());
         return this.fragmentView;
     }
 
@@ -556,7 +556,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C21459();
+        ThemeDescriptionDelegate сellDelegate = new C18269();
         r10 = new ThemeDescription[34];
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
         r10[11] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);

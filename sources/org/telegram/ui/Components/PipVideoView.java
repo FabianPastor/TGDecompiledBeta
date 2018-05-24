@@ -29,7 +29,7 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -49,8 +49,8 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipVideoView$2 */
-    class C12742 extends AnimatorListenerAdapter {
-        C12742() {
+    class C16162 extends AnimatorListenerAdapter {
+        C16162() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -65,7 +65,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new C12751();
+        private Runnable hideRunnable = new C16171();
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -73,11 +73,11 @@ public class PipVideoView {
         private float progress;
         private Paint progressInnerPaint;
         private Paint progressPaint;
-        private Runnable progressRunnable = new C12762();
+        private Runnable progressRunnable = new C16182();
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$1 */
-        class C12751 implements Runnable {
-            C12751() {
+        class C16171 implements Runnable {
+            C16171() {
             }
 
             public void run() {
@@ -86,8 +86,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$2 */
-        class C12762 implements Runnable {
-            C12762() {
+        class C16182 implements Runnable {
+            C16182() {
             }
 
             public void run() {
@@ -105,8 +105,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$6 */
-        class C12806 extends AnimatorListenerAdapter {
-            C12806() {
+        class C16226 extends AnimatorListenerAdapter {
+            C16226() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -115,8 +115,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$7 */
-        class C12817 extends AnimatorListenerAdapter {
-            C12817() {
+        class C16237 extends AnimatorListenerAdapter {
+            C16237() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -128,7 +128,7 @@ public class PipVideoView {
             super(context);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
-            this.inlineButton.setImageResource(C0446R.drawable.ic_outinline);
+            this.inlineButton.setImageResource(C0493R.drawable.ic_outinline);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener(PipVideoView.this) {
                 public void onClick(View v) {
@@ -179,12 +179,12 @@ public class PipVideoView {
                 if (videoPlayer != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
                     if (videoPlayer.isPlaying()) {
-                        this.playButton.setImageResource(C0446R.drawable.ic_pauseinline);
+                        this.playButton.setImageResource(C0493R.drawable.ic_pauseinline);
                         AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
                     } else if (this.isCompleted) {
-                        this.playButton.setImageResource(C0446R.drawable.ic_againinline);
+                        this.playButton.setImageResource(C0493R.drawable.ic_againinline);
                     } else {
-                        this.playButton.setImageResource(C0446R.drawable.ic_playinline);
+                        this.playButton.setImageResource(C0493R.drawable.ic_playinline);
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class PipVideoView {
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C12806());
+                        this.currentAnimation.addListener(new C16226());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -228,7 +228,7 @@ public class PipVideoView {
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C12817());
+                    this.currentAnimation.addListener(new C16237());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -554,7 +554,7 @@ public class PipVideoView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C12742());
+                animatorSet.addListener(new C16162());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

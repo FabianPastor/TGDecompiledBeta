@@ -65,8 +65,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$3 */
-    class C12693 extends ViewOutlineProvider {
-        C12693() {
+    class C16103 extends ViewOutlineProvider {
+        C16103() {
         }
 
         @TargetApi(21)
@@ -76,8 +76,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$5 */
-    class C12705 extends AnimatorListenerAdapter {
-        C12705() {
+    class C16125 extends AnimatorListenerAdapter {
+        C16125() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -88,8 +88,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$7 */
-    class C12727 extends AnimatorListenerAdapter {
-        C12727() {
+    class C16147 extends AnimatorListenerAdapter {
+        C16147() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -209,7 +209,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                         return result;
                     }
                 };
-                this.aspectRatioFrameLayout.setOutlineProvider(new C12693());
+                this.aspectRatioFrameLayout.setOutlineProvider(new C16103());
                 this.aspectRatioFrameLayout.setClipToOutline(true);
             } else {
                 final Paint aspectPaint = new Paint(1);
@@ -399,7 +399,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
-        this.hideShowAnimation.addListener(new C12705());
+        this.hideShowAnimation.addListener(new C16125());
         this.hideShowAnimation.setInterpolator(this.decelerateInterpolator);
         this.hideShowAnimation.start();
     }
@@ -530,7 +530,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C12727());
+                animatorSet.addListener(new C16147());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

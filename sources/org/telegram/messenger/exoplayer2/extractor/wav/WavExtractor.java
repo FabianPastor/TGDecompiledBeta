@@ -12,7 +12,7 @@ import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public final class WavExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18471();
+    public static final ExtractorsFactory FACTORY = new C06531();
     private static final int MAX_INPUT_SIZE = 32768;
     private int bytesPerFrame;
     private ExtractorOutput extractorOutput;
@@ -21,8 +21,8 @@ public final class WavExtractor implements Extractor {
     private WavHeader wavHeader;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.wav.WavExtractor$1 */
-    static class C18471 implements ExtractorsFactory {
-        C18471() {
+    static class C06531 implements ExtractorsFactory {
+        C06531() {
         }
 
         public Extractor[] createExtractors() {

@@ -10,7 +10,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.ActionBar.Theme;
@@ -30,7 +30,7 @@ public class LocationCell extends FrameLayout {
         int i4 = 5;
         super(context);
         this.imageView = new BackupImageView(context);
-        this.imageView.setBackgroundResource(C0446R.drawable.round_grey);
+        this.imageView.setBackgroundResource(C0493R.drawable.round_grey);
         this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));

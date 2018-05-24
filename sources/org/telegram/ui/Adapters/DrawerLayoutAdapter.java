@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -32,8 +32,8 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     private DrawerProfileCell profileCell;
 
     /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$1 */
-    class C07841 implements OnClickListener {
-        C07841() {
+    class C09221 implements OnClickListener {
+        C09221() {
         }
 
         public void onClick(View v) {
@@ -42,8 +42,8 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$2 */
-    class C07852 implements Comparator<Integer> {
-        C07852() {
+    class C09232 implements Comparator<Integer> {
+        C09232() {
         }
 
         public int compare(Integer o1, Integer o2) {
@@ -138,7 +138,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         switch (viewType) {
             case 0:
                 this.profileCell = new DrawerProfileCell(this.mContext);
-                this.profileCell.setOnArrowClickListener(new C07841());
+                this.profileCell.setOnArrowClickListener(new C09221());
                 view = this.profileCell;
                 break;
             case 2:
@@ -221,19 +221,19 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(a));
             }
         }
-        Collections.sort(this.accountNumbers, new C07852());
+        Collections.sort(this.accountNumbers, new C09232());
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
-            this.items.add(new Item(2, LocaleController.getString("NewGroup", C0446R.string.NewGroup), C0446R.drawable.menu_newgroup));
-            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", C0446R.string.NewSecretChat), C0446R.drawable.menu_secret));
-            this.items.add(new Item(4, LocaleController.getString("NewChannel", C0446R.string.NewChannel), C0446R.drawable.menu_broadcast));
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", C0493R.string.NewGroup), C0493R.drawable.menu_newgroup));
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", C0493R.string.NewSecretChat), C0493R.drawable.menu_secret));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", C0493R.string.NewChannel), C0493R.drawable.menu_broadcast));
             this.items.add(null);
-            this.items.add(new Item(6, LocaleController.getString("Contacts", C0446R.string.Contacts), C0446R.drawable.menu_contacts));
-            this.items.add(new Item(11, LocaleController.getString("SavedMessages", C0446R.string.SavedMessages), C0446R.drawable.menu_saved));
-            this.items.add(new Item(10, LocaleController.getString("Calls", C0446R.string.Calls), C0446R.drawable.menu_calls));
-            this.items.add(new Item(7, LocaleController.getString("InviteFriends", C0446R.string.InviteFriends), C0446R.drawable.menu_invite));
-            this.items.add(new Item(8, LocaleController.getString("Settings", C0446R.string.Settings), C0446R.drawable.menu_settings));
-            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", C0446R.string.TelegramFAQ), C0446R.drawable.menu_help));
+            this.items.add(new Item(6, LocaleController.getString("Contacts", C0493R.string.Contacts), C0493R.drawable.menu_contacts));
+            this.items.add(new Item(11, LocaleController.getString("SavedMessages", C0493R.string.SavedMessages), C0493R.drawable.menu_saved));
+            this.items.add(new Item(10, LocaleController.getString("Calls", C0493R.string.Calls), C0493R.drawable.menu_calls));
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", C0493R.string.InviteFriends), C0493R.drawable.menu_invite));
+            this.items.add(new Item(8, LocaleController.getString("Settings", C0493R.string.Settings), C0493R.drawable.menu_settings));
+            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", C0493R.string.TelegramFAQ), C0493R.drawable.menu_help));
         }
     }
 

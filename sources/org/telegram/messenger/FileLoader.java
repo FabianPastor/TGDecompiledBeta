@@ -62,14 +62,14 @@ public class FileLoader {
     private LinkedList<FileUploadOperation> uploadSmallOperationQueue = new LinkedList();
 
     /* renamed from: org.telegram.messenger.FileLoader$5 */
-    class C18025 implements FileLoadOperationDelegate {
+    class C01925 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
         final /* synthetic */ String val$finalFileName;
         final /* synthetic */ int val$finalType;
         final /* synthetic */ FileLocation val$location;
         final /* synthetic */ TL_webDocument val$webDocument;
 
-        C18025(String str, int i, Document document, TL_webDocument tL_webDocument, FileLocation fileLocation) {
+        C01925(String str, int i, Document document, TL_webDocument tL_webDocument, FileLocation fileLocation) {
             this.val$finalFileName = str;
             this.val$finalType = i;
             this.val$document = document;
@@ -223,11 +223,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$3$1 */
-                class C18011 implements FileUploadOperationDelegate {
+                class C01891 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$3$1$2 */
-                    class C01622 implements Runnable {
-                        C01622() {
+                    class C01882 implements Runnable {
+                        C01882() {
                         }
 
                         public void run() {
@@ -264,7 +264,7 @@ public class FileLoader {
                         }
                     }
 
-                    C18011() {
+                    C01891() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -308,7 +308,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01622());
+                        FileLoader.fileLoaderQueue.postRunnable(new C01882());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -337,7 +337,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C18011());
+                    operation.setDelegate(new C01891());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;
@@ -1278,13 +1278,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (obj != null) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.f42h >= obj.f43w ? obj.f43w : obj.f42h;
+                    currentSide = obj.f24h >= obj.f25w ? obj.f25w : obj.f24h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.f43w >= obj.f42h ? obj.f43w : obj.f42h;
+                    currentSide = obj.f25w >= obj.f24h ? obj.f25w : obj.f24h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;

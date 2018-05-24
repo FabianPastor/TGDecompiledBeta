@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
@@ -149,7 +149,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
             if (this.timeline != null) {
                 return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
             }
-            return window.set(setIds ? DUMMY_ID : null, C0542C.TIME_UNSET, C0542C.TIME_UNSET, false, true, 0, C0542C.TIME_UNSET, 0, 0, 0);
+            return window.set(setIds ? DUMMY_ID : null, C0605C.TIME_UNSET, C0605C.TIME_UNSET, false, true, 0, C0605C.TIME_UNSET, 0, 0, 0);
         }
 
         public int getPeriodCount() {
@@ -168,7 +168,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
                 if (setIds) {
                     obj = DUMMY_ID;
                 }
-                return period.set(obj2, obj, 0, C0542C.TIME_UNSET, C0542C.TIME_UNSET);
+                return period.set(obj2, obj, 0, C0605C.TIME_UNSET, C0605C.TIME_UNSET);
             }
             this.timeline.getPeriod(periodIndex, period, setIds);
             if (period.uid != this.replacedID) {

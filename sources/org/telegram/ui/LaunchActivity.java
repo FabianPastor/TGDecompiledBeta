@@ -41,7 +41,7 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0446R;
+import org.telegram.messenger.C0493R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -146,6 +146,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private boolean passcodeSaveIntentIsRestore;
     private PasscodeView passcodeView;
     private ArrayList<SendingMediaInfo> photoPathsArray;
+    private AlertDialog proxyErrorDialog;
     private ActionBarLayout rightActionBarLayout;
     private String sendingText;
     private FrameLayout shadowTablet;
@@ -157,8 +158,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$2 */
-    class C14572 implements OnTouchListener {
-        C14572() {
+    class C18942 implements OnTouchListener {
+        C18942() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -187,8 +188,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C14593 implements OnClickListener {
-        C14593() {
+    class C18953 implements OnClickListener {
+        C18953() {
         }
 
         public void onClick(View v) {
@@ -196,8 +197,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C21674 implements OnItemClickListener {
-        C21674() {
+    class C18964 implements OnItemClickListener {
+        C18964() {
         }
 
         public void onItemClick(View view, int position) {
@@ -257,7 +258,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.presentFragment(new SettingsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", C0446R.string.TelegramFaqUrl));
+                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", C0493R.string.TelegramFaqUrl));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     LaunchActivity.this.presentFragment(new CallLogActivity());
@@ -273,8 +274,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$6 */
-    class C21686 implements PasscodeViewDelegate {
-        C21686() {
+    class C18986 implements PasscodeViewDelegate {
+        C18986() {
         }
 
         public void didAcceptedPassword() {
@@ -293,10 +294,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$7 */
-    class C14617 implements Runnable {
+    class C18997 implements Runnable {
         final /* synthetic */ Bundle val$args;
 
-        C14617(Bundle bundle) {
+        C18997(Bundle bundle) {
             this.val$args = bundle;
         }
 
@@ -306,10 +307,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$8 */
-    class C21708 implements SharingLocationsAlertDelegate {
+    class C19018 implements SharingLocationsAlertDelegate {
         final /* synthetic */ int[] val$intentAccount;
 
-        C21708(int[] iArr) {
+        C19018(int[] iArr) {
             this.val$intentAccount = iArr;
         }
 
@@ -321,7 +322,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             final long dialog_id = info.messageObject.getDialogId();
             locationActivity.setDelegate(new LocationActivityDelegate() {
                 public void didSelectLocation(MessageMedia location, int live) {
-                    SendMessagesHelper.getInstance(C21708.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
+                    SendMessagesHelper.getInstance(C19018.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
                 }
             });
             LaunchActivity.this.presentFragment(locationActivity);
@@ -346,35 +347,44 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         this.currentAccount = UserConfig.selectedAccount;
         if (!UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             Intent intent = getIntent();
-            if (intent == null || intent.getAction() == null || !("android.intent.action.SEND".equals(intent.getAction()) || intent.getAction().equals("android.intent.action.SEND_MULTIPLE"))) {
-                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                long crashed_time = preferences.getLong("intro_crashed_time", 0);
-                boolean fromIntro = intent.getBooleanExtra("fromIntro", false);
-                if (fromIntro) {
-                    preferences.edit().putLong("intro_crashed_time", 0).commit();
-                }
-                if (Math.abs(crashed_time - System.currentTimeMillis()) >= 120000 && intent != null && !fromIntro && ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", 0).getAll().isEmpty()) {
-                    Intent intent2 = new Intent(this, IntroActivity.class);
-                    intent2.setData(intent.getData());
-                    startActivity(intent2);
+            boolean isProxy = false;
+            if (!(intent == null || intent.getAction() == null)) {
+                if ("android.intent.action.SEND".equals(intent.getAction()) || "android.intent.action.SEND_MULTIPLE".equals(intent.getAction())) {
                     super.onCreate(savedInstanceState);
                     finish();
                     return;
+                } else if ("android.intent.action.VIEW".equals(intent.getAction())) {
+                    Uri uri = intent.getData();
+                    if (uri != null) {
+                        String url = uri.toString().toLowerCase();
+                        isProxy = url.startsWith("tg:proxy") || url.startsWith("tg://proxy") || url.startsWith("tg:socks") || url.startsWith("tg://socks");
+                    }
                 }
             }
-            super.onCreate(savedInstanceState);
-            finish();
-            return;
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            long crashed_time = preferences.getLong("intro_crashed_time", 0);
+            boolean fromIntro = intent.getBooleanExtra("fromIntro", false);
+            if (fromIntro) {
+                preferences.edit().putLong("intro_crashed_time", 0).commit();
+            }
+            if (!(isProxy || Math.abs(crashed_time - System.currentTimeMillis()) < 120000 || intent == null || fromIntro || !ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", 0).getAll().isEmpty())) {
+                Intent intent2 = new Intent(this, IntroActivity.class);
+                intent2.setData(intent.getData());
+                startActivity(intent2);
+                super.onCreate(savedInstanceState);
+                finish();
+                return;
+            }
         }
         requestWindowFeature(1);
-        setTheme(C0446R.style.Theme.TMessages);
+        setTheme(C0493R.style.Theme.TMessages);
         if (VERSION.SDK_INT >= 21) {
             try {
                 setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             } catch (Exception e) {
             }
         }
-        getWindow().setBackgroundDrawableResource(C0446R.drawable.transparent);
+        getWindow().setBackgroundDrawableResource(C0493R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -399,7 +409,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c14531 = new RelativeLayout(this) {
+            View c18891 = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -453,36 +463,36 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c14531, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(c18891, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0446R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0493R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c14531.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c14531.addView(this.actionBarLayout);
+            c18891.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            c18891.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c14531.addView(this.rightActionBarLayout);
+            c18891.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c14531.addView(this.shadowTabletSide);
+            c18891.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c14531.addView(this.shadowTablet);
-            this.shadowTablet.setOnTouchListener(new C14572());
-            this.shadowTablet.setOnClickListener(new C14593());
+            c18891.addView(this.shadowTablet);
+            this.shadowTablet.setOnTouchListener(new C18942());
+            this.shadowTablet.setOnClickListener(new C18953());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0446R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(C0493R.drawable.boxshadow);
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c14531.addView(this.layersActionBarLayout);
+            c18891.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -505,7 +515,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         layoutParams.width = dp;
         layoutParams.height = -1;
         this.sideMenu.setLayoutParams(layoutParams);
-        this.sideMenu.setOnItemClickListener(new C21674());
+        this.sideMenu.setOnItemClickListener(new C18964());
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
@@ -516,6 +526,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         checkCurrentAccount();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
         this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needShowAlert);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.reloadInterface);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
@@ -906,7 +917,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
                 final View view2 = view;
-                OnGlobalLayoutListener c14605 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener c18975 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view2.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -920,8 +931,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = c14605;
-                viewTreeObserver.addOnGlobalLayoutListener(c14605);
+                this.onGlobalLayoutListener = c18975;
+                viewTreeObserver.addOnGlobalLayoutListener(c18975);
             }
         } catch (Throwable e222) {
             FileLog.m3e(e222);
@@ -1112,14 +1123,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C21686());
+            this.passcodeView.setDelegate(new C18986());
         }
     }
 
     private boolean handleIntent(android.content.Intent r86, boolean r87, boolean r88, boolean r89) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData) in PHI: PHI: (r32_3 'currentData' org.telegram.ui.LaunchActivity$VcardData) = (r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_4 'currentData' org.telegram.ui.LaunchActivity$VcardData) binds: {(r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:53:0x0197, (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:68:0x020b, (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:70:0x0217, (r32_4 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:71:0x0219}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData) in PHI: PHI: (r32_3 'currentData' org.telegram.ui.LaunchActivity$VcardData) = (r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData), (r32_4 'currentData' org.telegram.ui.LaunchActivity$VcardData) binds: {(r32_2 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:56:0x01b2, (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:71:0x0226, (r32_1 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:73:0x0232, (r32_4 'currentData' org.telegram.ui.LaunchActivity$VcardData)=B:74:0x0234}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -1136,32 +1147,45 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         /*
         r85 = this;
         r4 = org.telegram.messenger.AndroidUtilities.handleProxyIntent(r85, r86);
-        if (r4 == 0) goto L_0x0009;
+        if (r4 == 0) goto L_0x0024;
     L_0x0006:
+        r0 = r85;
+        r4 = r0.actionBarLayout;
+        r4.showLastFragment();
+        r4 = org.telegram.messenger.AndroidUtilities.isTablet();
+        if (r4 == 0) goto L_0x0021;
+    L_0x0013:
+        r0 = r85;
+        r4 = r0.layersActionBarLayout;
+        r4.showLastFragment();
+        r0 = r85;
+        r4 = r0.rightActionBarLayout;
+        r4.showLastFragment();
+    L_0x0021:
         r61 = 1;
-    L_0x0008:
+    L_0x0023:
         return r61;
-    L_0x0009:
+    L_0x0024:
         r4 = org.telegram.ui.PhotoViewer.hasInstance();
-        if (r4 == 0) goto L_0x0034;
-    L_0x000f:
+        if (r4 == 0) goto L_0x004f;
+    L_0x002a:
         r4 = org.telegram.ui.PhotoViewer.getInstance();
         r4 = r4.isVisible();
-        if (r4 == 0) goto L_0x0034;
-    L_0x0019:
-        if (r86 == 0) goto L_0x0028;
-    L_0x001b:
+        if (r4 == 0) goto L_0x004f;
+    L_0x0034:
+        if (r86 == 0) goto L_0x0043;
+    L_0x0036:
         r4 = "android.intent.action.MAIN";
         r5 = r86.getAction();
         r4 = r4.equals(r5);
-        if (r4 != 0) goto L_0x0034;
-    L_0x0028:
+        if (r4 != 0) goto L_0x004f;
+    L_0x0043:
         r4 = org.telegram.ui.PhotoViewer.getInstance();
         r5 = 0;
         r16 = 1;
         r0 = r16;
         r4.closePhoto(r5, r0);
-    L_0x0034:
+    L_0x004f:
         r43 = r86.getFlags();
         r4 = 1;
         r0 = new int[r4];
@@ -1178,15 +1202,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r0 = r85;
         r0.switchToAccount(r4, r5);
-        if (r89 != 0) goto L_0x0087;
-    L_0x0058:
+        if (r89 != 0) goto L_0x00a2;
+    L_0x0073:
         r4 = 1;
         r4 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r4);
-        if (r4 != 0) goto L_0x0063;
-    L_0x005f:
+        if (r4 != 0) goto L_0x007e;
+    L_0x007a:
         r4 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;
-        if (r4 == 0) goto L_0x0087;
-    L_0x0063:
+        if (r4 == 0) goto L_0x00a2;
+    L_0x007e:
         r85.showPasscodeActivity();
         r0 = r86;
         r1 = r85;
@@ -1203,8 +1227,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4.saveConfig(r5);
         r61 = 0;
-        goto L_0x0008;
-    L_0x0087:
+        goto L_0x0023;
+    L_0x00a2:
         r61 = 0;
         r4 = 0;
         r65 = java.lang.Integer.valueOf(r4);
@@ -1220,19 +1244,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r52 = java.lang.Integer.valueOf(r4);
         r36 = 0;
         r4 = org.telegram.messenger.SharedConfig.directShare;
-        if (r4 == 0) goto L_0x00c4;
-    L_0x00ad:
-        if (r86 == 0) goto L_0x01fd;
-    L_0x00af:
+        if (r4 == 0) goto L_0x00df;
+    L_0x00c8:
+        if (r86 == 0) goto L_0x0218;
+    L_0x00ca:
         r4 = r86.getExtras();
-        if (r4 == 0) goto L_0x01fd;
-    L_0x00b5:
+        if (r4 == 0) goto L_0x0218;
+    L_0x00d0:
         r4 = r86.getExtras();
         r5 = "dialogId";
         r16 = 0;
         r0 = r16;
         r36 = r4.getLong(r5, r0);
-    L_0x00c4:
+    L_0x00df:
         r69 = 0;
         r71 = 0;
         r70 = 0;
@@ -1264,247 +1288,247 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.UserConfig.getInstance(r4);
         r4 = r4.isClientActivated();
-        if (r4 == 0) goto L_0x02c1;
-    L_0x0100:
+        if (r4 == 0) goto L_0x02dc;
+    L_0x011b:
         r4 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
         r4 = r4 & r43;
-        if (r4 != 0) goto L_0x02c1;
-    L_0x0106:
-        if (r86 == 0) goto L_0x02c1;
-    L_0x0108:
+        if (r4 != 0) goto L_0x02dc;
+    L_0x0121:
+        if (r86 == 0) goto L_0x02dc;
+    L_0x0123:
         r4 = r86.getAction();
-        if (r4 == 0) goto L_0x02c1;
-    L_0x010e:
-        if (r88 != 0) goto L_0x02c1;
-    L_0x0110:
+        if (r4 == 0) goto L_0x02dc;
+    L_0x0129:
+        if (r88 != 0) goto L_0x02dc;
+    L_0x012b:
         r4 = "android.intent.action.SEND";
         r5 = r86.getAction();
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x05d0;
-    L_0x011d:
+        if (r4 == 0) goto L_0x05eb;
+    L_0x0138:
         r42 = 0;
         r76 = r86.getType();
-        if (r76 == 0) goto L_0x045e;
-    L_0x0125:
+        if (r76 == 0) goto L_0x0479;
+    L_0x0140:
         r4 = "text/x-vcard";
         r0 = r76;
         r4 = r0.equals(r4);
-        if (r4 == 0) goto L_0x045e;
-    L_0x0130:
-        r4 = r86.getExtras();	 Catch:{ Exception -> 0x02ac }
-        r5 = "android.intent.extra.STREAM";	 Catch:{ Exception -> 0x02ac }
-        r77 = r4.get(r5);	 Catch:{ Exception -> 0x02ac }
-        r77 = (android.net.Uri) r77;	 Catch:{ Exception -> 0x02ac }
-        if (r77 == 0) goto L_0x045a;	 Catch:{ Exception -> 0x02ac }
-    L_0x013f:
-        r31 = r85.getContentResolver();	 Catch:{ Exception -> 0x02ac }
-        r0 = r31;	 Catch:{ Exception -> 0x02ac }
-        r1 = r77;	 Catch:{ Exception -> 0x02ac }
-        r72 = r0.openInputStream(r1);	 Catch:{ Exception -> 0x02ac }
-        r84 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02ac }
-        r84.<init>();	 Catch:{ Exception -> 0x02ac }
-        r32 = 0;	 Catch:{ Exception -> 0x02ac }
-        r27 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x02ac }
-        r4 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x02ac }
-        r5 = "UTF-8";	 Catch:{ Exception -> 0x02ac }
-        r0 = r72;	 Catch:{ Exception -> 0x02ac }
-        r4.<init>(r0, r5);	 Catch:{ Exception -> 0x02ac }
-        r0 = r27;	 Catch:{ Exception -> 0x02ac }
-        r0.<init>(r4);	 Catch:{ Exception -> 0x02ac }
-    L_0x0163:
-        r48 = r27.readLine();	 Catch:{ Exception -> 0x02ac }
-        if (r48 == 0) goto L_0x03d4;	 Catch:{ Exception -> 0x02ac }
-    L_0x0169:
-        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0170;	 Catch:{ Exception -> 0x02ac }
-    L_0x016d:
-        org.telegram.messenger.FileLog.m0d(r48);	 Catch:{ Exception -> 0x02ac }
-    L_0x0170:
-        r4 = ":";	 Catch:{ Exception -> 0x02ac }
-        r0 = r48;	 Catch:{ Exception -> 0x02ac }
-        r24 = r0.split(r4);	 Catch:{ Exception -> 0x02ac }
-        r0 = r24;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.length;	 Catch:{ Exception -> 0x02ac }
-        r5 = 2;	 Catch:{ Exception -> 0x02ac }
-        if (r4 != r5) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x017f:
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "BEGIN";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0201;	 Catch:{ Exception -> 0x02ac }
+        if (r4 == 0) goto L_0x0479;
+    L_0x014b:
+        r4 = r86.getExtras();	 Catch:{ Exception -> 0x02c7 }
+        r5 = "android.intent.extra.STREAM";	 Catch:{ Exception -> 0x02c7 }
+        r77 = r4.get(r5);	 Catch:{ Exception -> 0x02c7 }
+        r77 = (android.net.Uri) r77;	 Catch:{ Exception -> 0x02c7 }
+        if (r77 == 0) goto L_0x0475;	 Catch:{ Exception -> 0x02c7 }
+    L_0x015a:
+        r31 = r85.getContentResolver();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r31;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r77;	 Catch:{ Exception -> 0x02c7 }
+        r72 = r0.openInputStream(r1);	 Catch:{ Exception -> 0x02c7 }
+        r84 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02c7 }
+        r84.<init>();	 Catch:{ Exception -> 0x02c7 }
+        r32 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r27 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x02c7 }
+        r4 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x02c7 }
+        r5 = "UTF-8";	 Catch:{ Exception -> 0x02c7 }
+        r0 = r72;	 Catch:{ Exception -> 0x02c7 }
+        r4.<init>(r0, r5);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r27;	 Catch:{ Exception -> 0x02c7 }
+        r0.<init>(r4);	 Catch:{ Exception -> 0x02c7 }
+    L_0x017e:
+        r48 = r27.readLine();	 Catch:{ Exception -> 0x02c7 }
+        if (r48 == 0) goto L_0x03ef;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0184:
+        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x018b;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0188:
+        org.telegram.messenger.FileLog.m0d(r48);	 Catch:{ Exception -> 0x02c7 }
     L_0x018b:
-        r4 = 1;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "VCARD";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0201;	 Catch:{ Exception -> 0x02ac }
-    L_0x0197:
-        r32 = new org.telegram.ui.LaunchActivity$VcardData;	 Catch:{ Exception -> 0x02ac }
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r1 = r85;	 Catch:{ Exception -> 0x02ac }
-        r0.<init>();	 Catch:{ Exception -> 0x02ac }
-        r0 = r84;	 Catch:{ Exception -> 0x02ac }
-        r1 = r32;	 Catch:{ Exception -> 0x02ac }
-        r0.add(r1);	 Catch:{ Exception -> 0x02ac }
-    L_0x01a8:
-        if (r32 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x01aa:
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "FN";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 != 0) goto L_0x01cc;	 Catch:{ Exception -> 0x02ac }
-    L_0x01b6:
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "ORG";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x03af;	 Catch:{ Exception -> 0x02ac }
-    L_0x01c2:
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r4 = android.text.TextUtils.isEmpty(r4);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x03af;	 Catch:{ Exception -> 0x02ac }
-    L_0x01cc:
-        r51 = 0;	 Catch:{ Exception -> 0x02ac }
-        r50 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = ";";	 Catch:{ Exception -> 0x02ac }
-        r56 = r4.split(r5);	 Catch:{ Exception -> 0x02ac }
-        r0 = r56;	 Catch:{ Exception -> 0x02ac }
-        r5 = r0.length;	 Catch:{ Exception -> 0x02ac }
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-    L_0x01de:
-        if (r4 >= r5) goto L_0x0240;	 Catch:{ Exception -> 0x02ac }
-    L_0x01e0:
-        r55 = r56[r4];	 Catch:{ Exception -> 0x02ac }
-        r16 = "=";	 Catch:{ Exception -> 0x02ac }
-        r0 = r55;	 Catch:{ Exception -> 0x02ac }
-        r1 = r16;	 Catch:{ Exception -> 0x02ac }
-        r25 = r0.split(r1);	 Catch:{ Exception -> 0x02ac }
-        r0 = r25;	 Catch:{ Exception -> 0x02ac }
-        r0 = r0.length;	 Catch:{ Exception -> 0x02ac }
-        r16 = r0;	 Catch:{ Exception -> 0x02ac }
-        r17 = 2;	 Catch:{ Exception -> 0x02ac }
-        r0 = r16;	 Catch:{ Exception -> 0x02ac }
-        r1 = r17;	 Catch:{ Exception -> 0x02ac }
-        if (r0 == r1) goto L_0x021c;	 Catch:{ Exception -> 0x02ac }
-    L_0x01fa:
-        r4 = r4 + 1;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x01de;	 Catch:{ Exception -> 0x02ac }
-    L_0x01fd:
-        r36 = 0;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x00c4;	 Catch:{ Exception -> 0x02ac }
-    L_0x0201:
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "END";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x01a8;	 Catch:{ Exception -> 0x02ac }
-    L_0x020d:
-        r4 = 1;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "VCARD";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x01a8;	 Catch:{ Exception -> 0x02ac }
-    L_0x0219:
-        r32 = 0;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x01a8;	 Catch:{ Exception -> 0x02ac }
+        r4 = ":";	 Catch:{ Exception -> 0x02c7 }
+        r0 = r48;	 Catch:{ Exception -> 0x02c7 }
+        r24 = r0.split(r4);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r24;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.length;	 Catch:{ Exception -> 0x02c7 }
+        r5 = 2;	 Catch:{ Exception -> 0x02c7 }
+        if (r4 != r5) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x019a:
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "BEGIN";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x021c;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01a6:
+        r4 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "VCARD";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x021c;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01b2:
+        r32 = new org.telegram.ui.LaunchActivity$VcardData;	 Catch:{ Exception -> 0x02c7 }
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r85;	 Catch:{ Exception -> 0x02c7 }
+        r0.<init>();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r84;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r0.add(r1);	 Catch:{ Exception -> 0x02c7 }
+    L_0x01c3:
+        if (r32 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01c5:
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "FN";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 != 0) goto L_0x01e7;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01d1:
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "ORG";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x03ca;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01dd:
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r4 = android.text.TextUtils.isEmpty(r4);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x03ca;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01e7:
+        r51 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r50 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = ";";	 Catch:{ Exception -> 0x02c7 }
+        r56 = r4.split(r5);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r56;	 Catch:{ Exception -> 0x02c7 }
+        r5 = r0.length;	 Catch:{ Exception -> 0x02c7 }
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01f9:
+        if (r4 >= r5) goto L_0x025b;	 Catch:{ Exception -> 0x02c7 }
+    L_0x01fb:
+        r55 = r56[r4];	 Catch:{ Exception -> 0x02c7 }
+        r16 = "=";	 Catch:{ Exception -> 0x02c7 }
+        r0 = r55;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r16;	 Catch:{ Exception -> 0x02c7 }
+        r25 = r0.split(r1);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r25;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r0.length;	 Catch:{ Exception -> 0x02c7 }
+        r16 = r0;	 Catch:{ Exception -> 0x02c7 }
+        r17 = 2;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r16;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r17;	 Catch:{ Exception -> 0x02c7 }
+        if (r0 == r1) goto L_0x0237;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0215:
+        r4 = r4 + 1;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x01f9;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0218:
+        r36 = 0;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x00df;	 Catch:{ Exception -> 0x02c7 }
     L_0x021c:
-        r16 = 0;	 Catch:{ Exception -> 0x02ac }
-        r16 = r25[r16];	 Catch:{ Exception -> 0x02ac }
-        r17 = "CHARSET";	 Catch:{ Exception -> 0x02ac }
-        r16 = r16.equals(r17);	 Catch:{ Exception -> 0x02ac }
-        if (r16 == 0) goto L_0x022e;	 Catch:{ Exception -> 0x02ac }
-    L_0x0229:
-        r16 = 1;	 Catch:{ Exception -> 0x02ac }
-        r50 = r25[r16];	 Catch:{ Exception -> 0x02ac }
-        goto L_0x01fa;	 Catch:{ Exception -> 0x02ac }
-    L_0x022e:
-        r16 = 0;	 Catch:{ Exception -> 0x02ac }
-        r16 = r25[r16];	 Catch:{ Exception -> 0x02ac }
-        r17 = "ENCODING";	 Catch:{ Exception -> 0x02ac }
-        r16 = r16.equals(r17);	 Catch:{ Exception -> 0x02ac }
-        if (r16 == 0) goto L_0x01fa;	 Catch:{ Exception -> 0x02ac }
-    L_0x023b:
-        r16 = 1;	 Catch:{ Exception -> 0x02ac }
-        r51 = r25[r16];	 Catch:{ Exception -> 0x02ac }
-        goto L_0x01fa;	 Catch:{ Exception -> 0x02ac }
-    L_0x0240:
-        r4 = 1;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r0.name = r4;	 Catch:{ Exception -> 0x02ac }
-        if (r51 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "END";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x01c3;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0228:
+        r4 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "VCARD";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x01c3;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0234:
+        r32 = 0;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x01c3;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0237:
+        r16 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r16 = r25[r16];	 Catch:{ Exception -> 0x02c7 }
+        r17 = "CHARSET";	 Catch:{ Exception -> 0x02c7 }
+        r16 = r16.equals(r17);	 Catch:{ Exception -> 0x02c7 }
+        if (r16 == 0) goto L_0x0249;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0244:
+        r16 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r50 = r25[r16];	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x0215;	 Catch:{ Exception -> 0x02c7 }
     L_0x0249:
-        r4 = "QUOTED-PRINTABLE";	 Catch:{ Exception -> 0x02ac }
-        r0 = r51;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.equalsIgnoreCase(r4);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x0254:
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r5 = "=";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.endsWith(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0284;	 Catch:{ Exception -> 0x02ac }
-    L_0x0261:
-        if (r51 == 0) goto L_0x0284;	 Catch:{ Exception -> 0x02ac }
-    L_0x0263:
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r5 = 0;	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r0 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r16 = r0;	 Catch:{ Exception -> 0x02ac }
-        r16 = r16.length();	 Catch:{ Exception -> 0x02ac }
-        r16 = r16 + -1;	 Catch:{ Exception -> 0x02ac }
-        r0 = r16;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.substring(r5, r0);	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r0.name = r4;	 Catch:{ Exception -> 0x02ac }
-        r48 = r27.readLine();	 Catch:{ Exception -> 0x02ac }
-        if (r48 != 0) goto L_0x0392;	 Catch:{ Exception -> 0x02ac }
-    L_0x0284:
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.getBytes();	 Catch:{ Exception -> 0x02ac }
-        r28 = org.telegram.messenger.AndroidUtilities.decodeQuotedPrintable(r4);	 Catch:{ Exception -> 0x02ac }
-        if (r28 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x0292:
-        r0 = r28;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.length;	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x0297:
-        r35 = new java.lang.String;	 Catch:{ Exception -> 0x02ac }
-        r0 = r35;	 Catch:{ Exception -> 0x02ac }
-        r1 = r28;	 Catch:{ Exception -> 0x02ac }
-        r2 = r50;	 Catch:{ Exception -> 0x02ac }
-        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x02ac }
-        if (r35 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x02a4:
-        r0 = r35;	 Catch:{ Exception -> 0x02ac }
-        r1 = r32;	 Catch:{ Exception -> 0x02ac }
-        r1.name = r0;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x0163;
-    L_0x02ac:
+        r16 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r16 = r25[r16];	 Catch:{ Exception -> 0x02c7 }
+        r17 = "ENCODING";	 Catch:{ Exception -> 0x02c7 }
+        r16 = r16.equals(r17);	 Catch:{ Exception -> 0x02c7 }
+        if (r16 == 0) goto L_0x0215;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0256:
+        r16 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r51 = r25[r16];	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x0215;	 Catch:{ Exception -> 0x02c7 }
+    L_0x025b:
+        r4 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r0.name = r4;	 Catch:{ Exception -> 0x02c7 }
+        if (r51 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0264:
+        r4 = "QUOTED-PRINTABLE";	 Catch:{ Exception -> 0x02c7 }
+        r0 = r51;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.equalsIgnoreCase(r4);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x026f:
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r5 = "=";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.endsWith(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x029f;	 Catch:{ Exception -> 0x02c7 }
+    L_0x027c:
+        if (r51 == 0) goto L_0x029f;	 Catch:{ Exception -> 0x02c7 }
+    L_0x027e:
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r5 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r16 = r0;	 Catch:{ Exception -> 0x02c7 }
+        r16 = r16.length();	 Catch:{ Exception -> 0x02c7 }
+        r16 = r16 + -1;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r16;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.substring(r5, r0);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r0.name = r4;	 Catch:{ Exception -> 0x02c7 }
+        r48 = r27.readLine();	 Catch:{ Exception -> 0x02c7 }
+        if (r48 != 0) goto L_0x03ad;	 Catch:{ Exception -> 0x02c7 }
+    L_0x029f:
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.getBytes();	 Catch:{ Exception -> 0x02c7 }
+        r28 = org.telegram.messenger.AndroidUtilities.decodeQuotedPrintable(r4);	 Catch:{ Exception -> 0x02c7 }
+        if (r28 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x02ad:
+        r0 = r28;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.length;	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x02b2:
+        r35 = new java.lang.String;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r35;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r28;	 Catch:{ Exception -> 0x02c7 }
+        r2 = r50;	 Catch:{ Exception -> 0x02c7 }
+        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x02c7 }
+        if (r35 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x02bf:
+        r0 = r35;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r1.name = r0;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x017e;
+    L_0x02c7:
         r40 = move-exception;
         org.telegram.messenger.FileLog.m3e(r40);
         r42 = 1;
-    L_0x02b2:
-        if (r42 == 0) goto L_0x02c1;
-    L_0x02b4:
+    L_0x02cd:
+        if (r42 == 0) goto L_0x02dc;
+    L_0x02cf:
         r4 = "Unsupported content";
         r5 = 0;
         r0 = r85;
         r4 = android.widget.Toast.makeText(r0, r4, r5);
         r4.show();
-    L_0x02c1:
+    L_0x02dc:
         r4 = r65.intValue();
-        if (r4 == 0) goto L_0x0d60;
-    L_0x02c7:
+        if (r4 == 0) goto L_0x0d7b;
+    L_0x02e2:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "user_id";
@@ -1512,17 +1536,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r24;
         r0.putInt(r4, r5);
         r4 = r64.intValue();
-        if (r4 == 0) goto L_0x02ea;
-    L_0x02de:
+        if (r4 == 0) goto L_0x0305;
+    L_0x02f9:
         r4 = "message_id";
         r5 = r64.intValue();
         r0 = r24;
         r0.putInt(r4, r5);
-    L_0x02ea:
+    L_0x0305:
         r4 = mainFragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0313;
-    L_0x02f2:
+        if (r4 != 0) goto L_0x032e;
+    L_0x030d:
         r4 = 0;
         r4 = r47[r4];
         r5 = org.telegram.messenger.MessagesController.getInstance(r4);
@@ -1535,8 +1559,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = (org.telegram.ui.ActionBar.BaseFragment) r4;
         r0 = r24;
         r4 = r5.checkCanOpenChat(r0, r4);
-        if (r4 == 0) goto L_0x0333;
-    L_0x0313:
+        if (r4 == 0) goto L_0x034e;
+    L_0x032e:
         r44 = new org.telegram.ui.ChatActivity;
         r0 = r44;
         r1 = r24;
@@ -1550,29 +1574,29 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r16;
         r2 = r17;
         r4 = r4.presentFragment(r0, r5, r1, r2);
-        if (r4 == 0) goto L_0x0333;
-    L_0x0331:
+        if (r4 == 0) goto L_0x034e;
+    L_0x034c:
         r61 = 1;
-    L_0x0333:
-        if (r61 != 0) goto L_0x038a;
-    L_0x0335:
-        if (r87 != 0) goto L_0x038a;
-    L_0x0337:
+    L_0x034e:
+        if (r61 != 0) goto L_0x03a5;
+    L_0x0350:
+        if (r87 != 0) goto L_0x03a5;
+    L_0x0352:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x1188;
-    L_0x033d:
+        if (r4 == 0) goto L_0x11a3;
+    L_0x0358:
         r0 = r85;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.UserConfig.getInstance(r4);
         r4 = r4.isClientActivated();
-        if (r4 != 0) goto L_0x1154;
-    L_0x034b:
+        if (r4 != 0) goto L_0x116f;
+    L_0x0366:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 == 0) goto L_0x036f;
-    L_0x0357:
+        if (r4 == 0) goto L_0x038a;
+    L_0x0372:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r5 = new org.telegram.ui.LoginActivity;
@@ -1584,167 +1608,167 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-    L_0x036f:
+    L_0x038a:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4.showLastFragment();
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x038a;
-    L_0x037c:
+        if (r4 == 0) goto L_0x03a5;
+    L_0x0397:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4.showLastFragment();
         r0 = r85;
         r4 = r0.rightActionBarLayout;
         r4.showLastFragment();
-    L_0x038a:
+    L_0x03a5:
         r4 = 0;
         r0 = r86;
         r0.setAction(r4);
-        goto L_0x0008;
-    L_0x0392:
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02ac }
-        r4.<init>();	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r5 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.append(r5);	 Catch:{ Exception -> 0x02ac }
-        r0 = r48;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.append(r0);	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x02ac }
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r0.name = r4;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x0254;	 Catch:{ Exception -> 0x02ac }
-    L_0x03af:
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = "TEL";	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x03bb:
-        r4 = 1;	 Catch:{ Exception -> 0x02ac }
-        r4 = r24[r4];	 Catch:{ Exception -> 0x02ac }
-        r5 = 1;	 Catch:{ Exception -> 0x02ac }
-        r59 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r4, r5);	 Catch:{ Exception -> 0x02ac }
-        r4 = r59.length();	 Catch:{ Exception -> 0x02ac }
-        if (r4 <= 0) goto L_0x0163;	 Catch:{ Exception -> 0x02ac }
-    L_0x03c9:
-        r0 = r32;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.phones;	 Catch:{ Exception -> 0x02ac }
-        r0 = r59;	 Catch:{ Exception -> 0x02ac }
-        r4.add(r0);	 Catch:{ Exception -> 0x02ac }
-        goto L_0x0163;
-    L_0x03d4:
-        r27.close();	 Catch:{ Exception -> 0x0452 }
-        r72.close();	 Catch:{ Exception -> 0x0452 }
-    L_0x03da:
-        r22 = 0;
-    L_0x03dc:
-        r4 = r84.size();	 Catch:{ Exception -> 0x02ac }
-        r0 = r22;	 Catch:{ Exception -> 0x02ac }
-        if (r0 >= r4) goto L_0x02b2;	 Catch:{ Exception -> 0x02ac }
+        goto L_0x0023;
+    L_0x03ad:
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02c7 }
+        r4.<init>();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r5 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.append(r5);	 Catch:{ Exception -> 0x02c7 }
+        r0 = r48;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.append(r0);	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r0.name = r4;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x026f;	 Catch:{ Exception -> 0x02c7 }
+    L_0x03ca:
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = "TEL";	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.startsWith(r5);	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
+    L_0x03d6:
+        r4 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r24[r4];	 Catch:{ Exception -> 0x02c7 }
+        r5 = 1;	 Catch:{ Exception -> 0x02c7 }
+        r59 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r4, r5);	 Catch:{ Exception -> 0x02c7 }
+        r4 = r59.length();	 Catch:{ Exception -> 0x02c7 }
+        if (r4 <= 0) goto L_0x017e;	 Catch:{ Exception -> 0x02c7 }
     L_0x03e4:
-        r0 = r84;	 Catch:{ Exception -> 0x02ac }
-        r1 = r22;	 Catch:{ Exception -> 0x02ac }
-        r83 = r0.get(r1);	 Catch:{ Exception -> 0x02ac }
-        r83 = (org.telegram.ui.LaunchActivity.VcardData) r83;	 Catch:{ Exception -> 0x02ac }
-        r0 = r83;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        if (r4 == 0) goto L_0x0457;	 Catch:{ Exception -> 0x02ac }
-    L_0x03f4:
-        r0 = r83;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.phones;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.isEmpty();	 Catch:{ Exception -> 0x02ac }
-        if (r4 != 0) goto L_0x0457;	 Catch:{ Exception -> 0x02ac }
-    L_0x03fe:
-        r0 = r85;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.contactsToSend;	 Catch:{ Exception -> 0x02ac }
-        if (r4 != 0) goto L_0x040d;	 Catch:{ Exception -> 0x02ac }
-    L_0x0404:
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02ac }
-        r4.<init>();	 Catch:{ Exception -> 0x02ac }
-        r0 = r85;	 Catch:{ Exception -> 0x02ac }
-        r0.contactsToSend = r4;	 Catch:{ Exception -> 0x02ac }
-    L_0x040d:
-        r26 = 0;	 Catch:{ Exception -> 0x02ac }
+        r0 = r32;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.phones;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r59;	 Catch:{ Exception -> 0x02c7 }
+        r4.add(r0);	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x017e;
+    L_0x03ef:
+        r27.close();	 Catch:{ Exception -> 0x046d }
+        r72.close();	 Catch:{ Exception -> 0x046d }
+    L_0x03f5:
+        r22 = 0;
+    L_0x03f7:
+        r4 = r84.size();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r22;	 Catch:{ Exception -> 0x02c7 }
+        if (r0 >= r4) goto L_0x02cd;	 Catch:{ Exception -> 0x02c7 }
+    L_0x03ff:
+        r0 = r84;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r22;	 Catch:{ Exception -> 0x02c7 }
+        r83 = r0.get(r1);	 Catch:{ Exception -> 0x02c7 }
+        r83 = (org.telegram.ui.LaunchActivity.VcardData) r83;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r83;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        if (r4 == 0) goto L_0x0472;	 Catch:{ Exception -> 0x02c7 }
     L_0x040f:
-        r0 = r83;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.phones;	 Catch:{ Exception -> 0x02ac }
-        r4 = r4.size();	 Catch:{ Exception -> 0x02ac }
-        r0 = r26;	 Catch:{ Exception -> 0x02ac }
-        if (r0 >= r4) goto L_0x0457;	 Catch:{ Exception -> 0x02ac }
-    L_0x041b:
-        r0 = r83;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.phones;	 Catch:{ Exception -> 0x02ac }
-        r0 = r26;	 Catch:{ Exception -> 0x02ac }
-        r59 = r4.get(r0);	 Catch:{ Exception -> 0x02ac }
-        r59 = (java.lang.String) r59;	 Catch:{ Exception -> 0x02ac }
-        r80 = new org.telegram.tgnet.TLRPC$TL_userContact_old2;	 Catch:{ Exception -> 0x02ac }
-        r80.<init>();	 Catch:{ Exception -> 0x02ac }
-        r0 = r59;	 Catch:{ Exception -> 0x02ac }
-        r1 = r80;	 Catch:{ Exception -> 0x02ac }
-        r1.phone = r0;	 Catch:{ Exception -> 0x02ac }
-        r0 = r83;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.name;	 Catch:{ Exception -> 0x02ac }
-        r0 = r80;	 Catch:{ Exception -> 0x02ac }
-        r0.first_name = r4;	 Catch:{ Exception -> 0x02ac }
-        r4 = "";	 Catch:{ Exception -> 0x02ac }
-        r0 = r80;	 Catch:{ Exception -> 0x02ac }
-        r0.last_name = r4;	 Catch:{ Exception -> 0x02ac }
-        r4 = 0;	 Catch:{ Exception -> 0x02ac }
-        r0 = r80;	 Catch:{ Exception -> 0x02ac }
-        r0.id = r4;	 Catch:{ Exception -> 0x02ac }
-        r0 = r85;	 Catch:{ Exception -> 0x02ac }
-        r4 = r0.contactsToSend;	 Catch:{ Exception -> 0x02ac }
-        r0 = r80;	 Catch:{ Exception -> 0x02ac }
-        r4.add(r0);	 Catch:{ Exception -> 0x02ac }
-        r26 = r26 + 1;	 Catch:{ Exception -> 0x02ac }
-        goto L_0x040f;	 Catch:{ Exception -> 0x02ac }
-    L_0x0452:
-        r40 = move-exception;	 Catch:{ Exception -> 0x02ac }
-        org.telegram.messenger.FileLog.m3e(r40);	 Catch:{ Exception -> 0x02ac }
-        goto L_0x03da;
-    L_0x0457:
+        r0 = r83;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.phones;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.isEmpty();	 Catch:{ Exception -> 0x02c7 }
+        if (r4 != 0) goto L_0x0472;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0419:
+        r0 = r85;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.contactsToSend;	 Catch:{ Exception -> 0x02c7 }
+        if (r4 != 0) goto L_0x0428;	 Catch:{ Exception -> 0x02c7 }
+    L_0x041f:
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02c7 }
+        r4.<init>();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r85;	 Catch:{ Exception -> 0x02c7 }
+        r0.contactsToSend = r4;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0428:
+        r26 = 0;	 Catch:{ Exception -> 0x02c7 }
+    L_0x042a:
+        r0 = r83;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.phones;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r4.size();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r26;	 Catch:{ Exception -> 0x02c7 }
+        if (r0 >= r4) goto L_0x0472;	 Catch:{ Exception -> 0x02c7 }
+    L_0x0436:
+        r0 = r83;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.phones;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r26;	 Catch:{ Exception -> 0x02c7 }
+        r59 = r4.get(r0);	 Catch:{ Exception -> 0x02c7 }
+        r59 = (java.lang.String) r59;	 Catch:{ Exception -> 0x02c7 }
+        r80 = new org.telegram.tgnet.TLRPC$TL_userContact_old2;	 Catch:{ Exception -> 0x02c7 }
+        r80.<init>();	 Catch:{ Exception -> 0x02c7 }
+        r0 = r59;	 Catch:{ Exception -> 0x02c7 }
+        r1 = r80;	 Catch:{ Exception -> 0x02c7 }
+        r1.phone = r0;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r83;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.name;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r80;	 Catch:{ Exception -> 0x02c7 }
+        r0.first_name = r4;	 Catch:{ Exception -> 0x02c7 }
+        r4 = "";	 Catch:{ Exception -> 0x02c7 }
+        r0 = r80;	 Catch:{ Exception -> 0x02c7 }
+        r0.last_name = r4;	 Catch:{ Exception -> 0x02c7 }
+        r4 = 0;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r80;	 Catch:{ Exception -> 0x02c7 }
+        r0.id = r4;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r85;	 Catch:{ Exception -> 0x02c7 }
+        r4 = r0.contactsToSend;	 Catch:{ Exception -> 0x02c7 }
+        r0 = r80;	 Catch:{ Exception -> 0x02c7 }
+        r4.add(r0);	 Catch:{ Exception -> 0x02c7 }
+        r26 = r26 + 1;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x042a;	 Catch:{ Exception -> 0x02c7 }
+    L_0x046d:
+        r40 = move-exception;	 Catch:{ Exception -> 0x02c7 }
+        org.telegram.messenger.FileLog.m3e(r40);	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x03f5;
+    L_0x0472:
         r22 = r22 + 1;
-        goto L_0x03dc;
-    L_0x045a:
+        goto L_0x03f7;
+    L_0x0475:
         r42 = 1;
-        goto L_0x02b2;
-    L_0x045e:
+        goto L_0x02cd;
+    L_0x0479:
         r4 = "android.intent.extra.TEXT";
         r0 = r86;
         r74 = r0.getStringExtra(r4);
-        if (r74 != 0) goto L_0x0478;
-    L_0x0469:
+        if (r74 != 0) goto L_0x0493;
+    L_0x0484:
         r4 = "android.intent.extra.TEXT";
         r0 = r86;
         r75 = r0.getCharSequenceExtra(r4);
-        if (r75 == 0) goto L_0x0478;
-    L_0x0474:
+        if (r75 == 0) goto L_0x0493;
+    L_0x048f:
         r74 = r75.toString();
-    L_0x0478:
+    L_0x0493:
         r4 = "android.intent.extra.SUBJECT";
         r0 = r86;
         r73 = r0.getStringExtra(r4);
-        if (r74 == 0) goto L_0x0537;
-    L_0x0483:
+        if (r74 == 0) goto L_0x0552;
+    L_0x049e:
         r4 = r74.length();
-        if (r4 == 0) goto L_0x0537;
-    L_0x0489:
+        if (r4 == 0) goto L_0x0552;
+    L_0x04a4:
         r4 = "http://";
         r0 = r74;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x049f;
-    L_0x0494:
+        if (r4 != 0) goto L_0x04ba;
+    L_0x04af:
         r4 = "https://";
         r0 = r74;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x04c3;
-    L_0x049f:
-        if (r73 == 0) goto L_0x04c3;
-    L_0x04a1:
+        if (r4 == 0) goto L_0x04de;
+    L_0x04ba:
+        if (r73 == 0) goto L_0x04de;
+    L_0x04bc:
         r4 = r73.length();
-        if (r4 == 0) goto L_0x04c3;
-    L_0x04a7:
+        if (r4 == 0) goto L_0x04de;
+    L_0x04c2:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r73;
@@ -1754,58 +1778,58 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r74;
         r4 = r4.append(r0);
         r74 = r4.toString();
-    L_0x04c3:
+    L_0x04de:
         r0 = r74;
         r1 = r85;
         r1.sendingText = r0;
-    L_0x04c9:
+    L_0x04e4:
         r4 = "android.intent.extra.STREAM";
         r0 = r86;
         r57 = r0.getParcelableExtra(r4);
-        if (r57 == 0) goto L_0x05c6;
-    L_0x04d4:
+        if (r57 == 0) goto L_0x05e1;
+    L_0x04ef:
         r0 = r57;
         r4 = r0 instanceof android.net.Uri;
-        if (r4 != 0) goto L_0x04e2;
-    L_0x04da:
+        if (r4 != 0) goto L_0x04fd;
+    L_0x04f5:
         r4 = r57.toString();
         r57 = android.net.Uri.parse(r4);
-    L_0x04e2:
+    L_0x04fd:
         r77 = r57;
         r77 = (android.net.Uri) r77;
-        if (r77 == 0) goto L_0x04f0;
-    L_0x04e8:
+        if (r77 == 0) goto L_0x050b;
+    L_0x0503:
         r4 = org.telegram.messenger.AndroidUtilities.isInternalUri(r77);
-        if (r4 == 0) goto L_0x04f0;
-    L_0x04ee:
+        if (r4 == 0) goto L_0x050b;
+    L_0x0509:
         r42 = 1;
-    L_0x04f0:
-        if (r42 != 0) goto L_0x02b2;
-    L_0x04f2:
-        if (r77 == 0) goto L_0x0546;
-    L_0x04f4:
-        if (r76 == 0) goto L_0x0501;
-    L_0x04f6:
+    L_0x050b:
+        if (r42 != 0) goto L_0x02cd;
+    L_0x050d:
+        if (r77 == 0) goto L_0x0561;
+    L_0x050f:
+        if (r76 == 0) goto L_0x051c;
+    L_0x0511:
         r4 = "image/";
         r0 = r76;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0512;
-    L_0x0501:
+        if (r4 != 0) goto L_0x052d;
+    L_0x051c:
         r4 = r77.toString();
         r4 = r4.toLowerCase();
         r5 = ".jpg";
         r4 = r4.endsWith(r5);
-        if (r4 == 0) goto L_0x0546;
-    L_0x0512:
+        if (r4 == 0) goto L_0x0561;
+    L_0x052d:
         r0 = r85;
         r4 = r0.photoPathsArray;
-        if (r4 != 0) goto L_0x0521;
-    L_0x0518:
+        if (r4 != 0) goto L_0x053c;
+    L_0x0533:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r0 = r85;
         r0.photoPathsArray = r4;
-    L_0x0521:
+    L_0x053c:
         r46 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo;
         r46.<init>();
         r0 = r77;
@@ -1815,47 +1839,47 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.photoPathsArray;
         r0 = r46;
         r4.add(r0);
-        goto L_0x02b2;
-    L_0x0537:
-        if (r73 == 0) goto L_0x04c9;
-    L_0x0539:
+        goto L_0x02cd;
+    L_0x0552:
+        if (r73 == 0) goto L_0x04e4;
+    L_0x0554:
         r4 = r73.length();
-        if (r4 <= 0) goto L_0x04c9;
-    L_0x053f:
+        if (r4 <= 0) goto L_0x04e4;
+    L_0x055a:
         r0 = r73;
         r1 = r85;
         r1.sendingText = r0;
-        goto L_0x04c9;
-    L_0x0546:
+        goto L_0x04e4;
+    L_0x0561:
         r58 = org.telegram.messenger.AndroidUtilities.getPath(r77);
-        if (r58 == 0) goto L_0x05a6;
-    L_0x054c:
+        if (r58 == 0) goto L_0x05c1;
+    L_0x0567:
         r4 = "file:";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0563;
-    L_0x0557:
+        if (r4 == 0) goto L_0x057e;
+    L_0x0572:
         r4 = "file://";
         r5 = "";
         r0 = r58;
         r58 = r0.replace(r4, r5);
-    L_0x0563:
-        if (r76 == 0) goto L_0x0578;
-    L_0x0565:
+    L_0x057e:
+        if (r76 == 0) goto L_0x0593;
+    L_0x0580:
         r4 = "video/";
         r0 = r76;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0578;
-    L_0x0570:
+        if (r4 == 0) goto L_0x0593;
+    L_0x058b:
         r0 = r58;
         r1 = r85;
         r1.videoPath = r0;
-        goto L_0x02b2;
-    L_0x0578:
+        goto L_0x02cd;
+    L_0x0593:
         r0 = r85;
         r4 = r0.documentsPathsArray;
-        if (r4 != 0) goto L_0x0590;
-    L_0x057e:
+        if (r4 != 0) goto L_0x05ab;
+    L_0x0599:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r0 = r85;
@@ -1864,7 +1888,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.<init>();
         r0 = r85;
         r0.documentsOriginalPathsArray = r4;
-    L_0x0590:
+    L_0x05ab:
         r0 = r85;
         r4 = r0.documentsPathsArray;
         r0 = r58;
@@ -1873,17 +1897,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.documentsOriginalPathsArray;
         r5 = r77.toString();
         r4.add(r5);
-        goto L_0x02b2;
-    L_0x05a6:
+        goto L_0x02cd;
+    L_0x05c1:
         r0 = r85;
         r4 = r0.documentsUrisArray;
-        if (r4 != 0) goto L_0x05b5;
-    L_0x05ac:
+        if (r4 != 0) goto L_0x05d0;
+    L_0x05c7:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r0 = r85;
         r0.documentsUrisArray = r4;
-    L_0x05b5:
+    L_0x05d0:
         r0 = r85;
         r4 = r0.documentsUrisArray;
         r0 = r77;
@@ -1891,220 +1915,220 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r76;
         r1 = r85;
         r1.documentsMimeType = r0;
-        goto L_0x02b2;
-    L_0x05c6:
+        goto L_0x02cd;
+    L_0x05e1:
         r0 = r85;
         r4 = r0.sendingText;
-        if (r4 != 0) goto L_0x02b2;
-    L_0x05cc:
+        if (r4 != 0) goto L_0x02cd;
+    L_0x05e7:
         r42 = 1;
-        goto L_0x02b2;
-    L_0x05d0:
-        r4 = r86.getAction();
-        r5 = "android.intent.action.SEND_MULTIPLE";
+        goto L_0x02cd;
+    L_0x05eb:
+        r4 = "android.intent.action.SEND_MULTIPLE";
+        r5 = r86.getAction();
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0742;
-    L_0x05dd:
-        r42 = 0;
-        r4 = "android.intent.extra.STREAM";	 Catch:{ Exception -> 0x0728 }
-        r0 = r86;	 Catch:{ Exception -> 0x0728 }
-        r78 = r0.getParcelableArrayListExtra(r4);	 Catch:{ Exception -> 0x0728 }
-        r76 = r86.getType();	 Catch:{ Exception -> 0x0728 }
-        if (r78 == 0) goto L_0x0632;	 Catch:{ Exception -> 0x0728 }
-    L_0x05ee:
-        r22 = 0;	 Catch:{ Exception -> 0x0728 }
-    L_0x05f0:
-        r4 = r78.size();	 Catch:{ Exception -> 0x0728 }
-        r0 = r22;	 Catch:{ Exception -> 0x0728 }
-        if (r0 >= r4) goto L_0x062a;	 Catch:{ Exception -> 0x0728 }
+        if (r4 == 0) goto L_0x075d;
     L_0x05f8:
-        r0 = r78;	 Catch:{ Exception -> 0x0728 }
-        r1 = r22;	 Catch:{ Exception -> 0x0728 }
-        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0728 }
-        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x0610;	 Catch:{ Exception -> 0x0728 }
-    L_0x0608:
-        r4 = r57.toString();	 Catch:{ Exception -> 0x0728 }
-        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0728 }
-    L_0x0610:
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0728 }
-        r77 = r0;	 Catch:{ Exception -> 0x0728 }
-        if (r77 == 0) goto L_0x0627;	 Catch:{ Exception -> 0x0728 }
-    L_0x0618:
-        r4 = org.telegram.messenger.AndroidUtilities.isInternalUri(r77);	 Catch:{ Exception -> 0x0728 }
-        if (r4 == 0) goto L_0x0627;	 Catch:{ Exception -> 0x0728 }
-    L_0x061e:
-        r0 = r78;	 Catch:{ Exception -> 0x0728 }
-        r1 = r22;	 Catch:{ Exception -> 0x0728 }
-        r0.remove(r1);	 Catch:{ Exception -> 0x0728 }
-        r22 = r22 + -1;	 Catch:{ Exception -> 0x0728 }
-    L_0x0627:
-        r22 = r22 + 1;	 Catch:{ Exception -> 0x0728 }
-        goto L_0x05f0;	 Catch:{ Exception -> 0x0728 }
-    L_0x062a:
-        r4 = r78.isEmpty();	 Catch:{ Exception -> 0x0728 }
-        if (r4 == 0) goto L_0x0632;	 Catch:{ Exception -> 0x0728 }
-    L_0x0630:
-        r78 = 0;	 Catch:{ Exception -> 0x0728 }
-    L_0x0632:
-        if (r78 == 0) goto L_0x073f;	 Catch:{ Exception -> 0x0728 }
-    L_0x0634:
-        if (r76 == 0) goto L_0x068f;	 Catch:{ Exception -> 0x0728 }
-    L_0x0636:
-        r4 = "image/";	 Catch:{ Exception -> 0x0728 }
-        r0 = r76;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.startsWith(r4);	 Catch:{ Exception -> 0x0728 }
-        if (r4 == 0) goto L_0x068f;	 Catch:{ Exception -> 0x0728 }
-    L_0x0641:
-        r22 = 0;	 Catch:{ Exception -> 0x0728 }
-    L_0x0643:
-        r4 = r78.size();	 Catch:{ Exception -> 0x0728 }
-        r0 = r22;	 Catch:{ Exception -> 0x0728 }
-        if (r0 >= r4) goto L_0x072e;	 Catch:{ Exception -> 0x0728 }
+        r42 = 0;
+        r4 = "android.intent.extra.STREAM";	 Catch:{ Exception -> 0x0743 }
+        r0 = r86;	 Catch:{ Exception -> 0x0743 }
+        r78 = r0.getParcelableArrayListExtra(r4);	 Catch:{ Exception -> 0x0743 }
+        r76 = r86.getType();	 Catch:{ Exception -> 0x0743 }
+        if (r78 == 0) goto L_0x064d;	 Catch:{ Exception -> 0x0743 }
+    L_0x0609:
+        r22 = 0;	 Catch:{ Exception -> 0x0743 }
+    L_0x060b:
+        r4 = r78.size();	 Catch:{ Exception -> 0x0743 }
+        r0 = r22;	 Catch:{ Exception -> 0x0743 }
+        if (r0 >= r4) goto L_0x0645;	 Catch:{ Exception -> 0x0743 }
+    L_0x0613:
+        r0 = r78;	 Catch:{ Exception -> 0x0743 }
+        r1 = r22;	 Catch:{ Exception -> 0x0743 }
+        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0743 }
+        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x062b;	 Catch:{ Exception -> 0x0743 }
+    L_0x0623:
+        r4 = r57.toString();	 Catch:{ Exception -> 0x0743 }
+        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0743 }
+    L_0x062b:
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0743 }
+        r77 = r0;	 Catch:{ Exception -> 0x0743 }
+        if (r77 == 0) goto L_0x0642;	 Catch:{ Exception -> 0x0743 }
+    L_0x0633:
+        r4 = org.telegram.messenger.AndroidUtilities.isInternalUri(r77);	 Catch:{ Exception -> 0x0743 }
+        if (r4 == 0) goto L_0x0642;	 Catch:{ Exception -> 0x0743 }
+    L_0x0639:
+        r0 = r78;	 Catch:{ Exception -> 0x0743 }
+        r1 = r22;	 Catch:{ Exception -> 0x0743 }
+        r0.remove(r1);	 Catch:{ Exception -> 0x0743 }
+        r22 = r22 + -1;	 Catch:{ Exception -> 0x0743 }
+    L_0x0642:
+        r22 = r22 + 1;	 Catch:{ Exception -> 0x0743 }
+        goto L_0x060b;	 Catch:{ Exception -> 0x0743 }
+    L_0x0645:
+        r4 = r78.isEmpty();	 Catch:{ Exception -> 0x0743 }
+        if (r4 == 0) goto L_0x064d;	 Catch:{ Exception -> 0x0743 }
     L_0x064b:
-        r0 = r78;	 Catch:{ Exception -> 0x0728 }
-        r1 = r22;	 Catch:{ Exception -> 0x0728 }
-        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0728 }
-        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x0663;	 Catch:{ Exception -> 0x0728 }
-    L_0x065b:
-        r4 = r57.toString();	 Catch:{ Exception -> 0x0728 }
-        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0728 }
-    L_0x0663:
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0728 }
-        r77 = r0;	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.photoPathsArray;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x0678;	 Catch:{ Exception -> 0x0728 }
-    L_0x066f:
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0728 }
-        r4.<init>();	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r0.photoPathsArray = r4;	 Catch:{ Exception -> 0x0728 }
-    L_0x0678:
-        r46 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo;	 Catch:{ Exception -> 0x0728 }
-        r46.<init>();	 Catch:{ Exception -> 0x0728 }
-        r0 = r77;	 Catch:{ Exception -> 0x0728 }
-        r1 = r46;	 Catch:{ Exception -> 0x0728 }
-        r1.uri = r0;	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.photoPathsArray;	 Catch:{ Exception -> 0x0728 }
-        r0 = r46;	 Catch:{ Exception -> 0x0728 }
-        r4.add(r0);	 Catch:{ Exception -> 0x0728 }
-        r22 = r22 + 1;	 Catch:{ Exception -> 0x0728 }
-        goto L_0x0643;	 Catch:{ Exception -> 0x0728 }
-    L_0x068f:
-        r22 = 0;	 Catch:{ Exception -> 0x0728 }
-    L_0x0691:
-        r4 = r78.size();	 Catch:{ Exception -> 0x0728 }
-        r0 = r22;	 Catch:{ Exception -> 0x0728 }
-        if (r0 >= r4) goto L_0x072e;	 Catch:{ Exception -> 0x0728 }
-    L_0x0699:
-        r0 = r78;	 Catch:{ Exception -> 0x0728 }
-        r1 = r22;	 Catch:{ Exception -> 0x0728 }
-        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0728 }
-        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x06b1;	 Catch:{ Exception -> 0x0728 }
-    L_0x06a9:
-        r4 = r57.toString();	 Catch:{ Exception -> 0x0728 }
-        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0728 }
-    L_0x06b1:
-        r0 = r57;	 Catch:{ Exception -> 0x0728 }
-        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0728 }
-        r77 = r0;	 Catch:{ Exception -> 0x0728 }
-        r58 = org.telegram.messenger.AndroidUtilities.getPath(r77);	 Catch:{ Exception -> 0x0728 }
-        r54 = r57.toString();	 Catch:{ Exception -> 0x0728 }
-        if (r54 != 0) goto L_0x06c3;	 Catch:{ Exception -> 0x0728 }
-    L_0x06c1:
-        r54 = r58;	 Catch:{ Exception -> 0x0728 }
-    L_0x06c3:
-        if (r58 == 0) goto L_0x0709;	 Catch:{ Exception -> 0x0728 }
-    L_0x06c5:
-        r4 = "file:";	 Catch:{ Exception -> 0x0728 }
-        r0 = r58;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.startsWith(r4);	 Catch:{ Exception -> 0x0728 }
-        if (r4 == 0) goto L_0x06dc;	 Catch:{ Exception -> 0x0728 }
-    L_0x06d0:
-        r4 = "file://";	 Catch:{ Exception -> 0x0728 }
-        r5 = "";	 Catch:{ Exception -> 0x0728 }
-        r0 = r58;	 Catch:{ Exception -> 0x0728 }
-        r58 = r0.replace(r4, r5);	 Catch:{ Exception -> 0x0728 }
+        r78 = 0;	 Catch:{ Exception -> 0x0743 }
+    L_0x064d:
+        if (r78 == 0) goto L_0x075a;	 Catch:{ Exception -> 0x0743 }
+    L_0x064f:
+        if (r76 == 0) goto L_0x06aa;	 Catch:{ Exception -> 0x0743 }
+    L_0x0651:
+        r4 = "image/";	 Catch:{ Exception -> 0x0743 }
+        r0 = r76;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.startsWith(r4);	 Catch:{ Exception -> 0x0743 }
+        if (r4 == 0) goto L_0x06aa;	 Catch:{ Exception -> 0x0743 }
+    L_0x065c:
+        r22 = 0;	 Catch:{ Exception -> 0x0743 }
+    L_0x065e:
+        r4 = r78.size();	 Catch:{ Exception -> 0x0743 }
+        r0 = r22;	 Catch:{ Exception -> 0x0743 }
+        if (r0 >= r4) goto L_0x0749;	 Catch:{ Exception -> 0x0743 }
+    L_0x0666:
+        r0 = r78;	 Catch:{ Exception -> 0x0743 }
+        r1 = r22;	 Catch:{ Exception -> 0x0743 }
+        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0743 }
+        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x067e;	 Catch:{ Exception -> 0x0743 }
+    L_0x0676:
+        r4 = r57.toString();	 Catch:{ Exception -> 0x0743 }
+        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0743 }
+    L_0x067e:
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0743 }
+        r77 = r0;	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.photoPathsArray;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x0693;	 Catch:{ Exception -> 0x0743 }
+    L_0x068a:
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0743 }
+        r4.<init>();	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r0.photoPathsArray = r4;	 Catch:{ Exception -> 0x0743 }
+    L_0x0693:
+        r46 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo;	 Catch:{ Exception -> 0x0743 }
+        r46.<init>();	 Catch:{ Exception -> 0x0743 }
+        r0 = r77;	 Catch:{ Exception -> 0x0743 }
+        r1 = r46;	 Catch:{ Exception -> 0x0743 }
+        r1.uri = r0;	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.photoPathsArray;	 Catch:{ Exception -> 0x0743 }
+        r0 = r46;	 Catch:{ Exception -> 0x0743 }
+        r4.add(r0);	 Catch:{ Exception -> 0x0743 }
+        r22 = r22 + 1;	 Catch:{ Exception -> 0x0743 }
+        goto L_0x065e;	 Catch:{ Exception -> 0x0743 }
+    L_0x06aa:
+        r22 = 0;	 Catch:{ Exception -> 0x0743 }
+    L_0x06ac:
+        r4 = r78.size();	 Catch:{ Exception -> 0x0743 }
+        r0 = r22;	 Catch:{ Exception -> 0x0743 }
+        if (r0 >= r4) goto L_0x0749;	 Catch:{ Exception -> 0x0743 }
+    L_0x06b4:
+        r0 = r78;	 Catch:{ Exception -> 0x0743 }
+        r1 = r22;	 Catch:{ Exception -> 0x0743 }
+        r57 = r0.get(r1);	 Catch:{ Exception -> 0x0743 }
+        r57 = (android.os.Parcelable) r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0 instanceof android.net.Uri;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x06cc;	 Catch:{ Exception -> 0x0743 }
+    L_0x06c4:
+        r4 = r57.toString();	 Catch:{ Exception -> 0x0743 }
+        r57 = android.net.Uri.parse(r4);	 Catch:{ Exception -> 0x0743 }
+    L_0x06cc:
+        r0 = r57;	 Catch:{ Exception -> 0x0743 }
+        r0 = (android.net.Uri) r0;	 Catch:{ Exception -> 0x0743 }
+        r77 = r0;	 Catch:{ Exception -> 0x0743 }
+        r58 = org.telegram.messenger.AndroidUtilities.getPath(r77);	 Catch:{ Exception -> 0x0743 }
+        r54 = r57.toString();	 Catch:{ Exception -> 0x0743 }
+        if (r54 != 0) goto L_0x06de;	 Catch:{ Exception -> 0x0743 }
     L_0x06dc:
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.documentsPathsArray;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x06f4;	 Catch:{ Exception -> 0x0728 }
-    L_0x06e2:
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0728 }
-        r4.<init>();	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r0.documentsPathsArray = r4;	 Catch:{ Exception -> 0x0728 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0728 }
-        r4.<init>();	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r0.documentsOriginalPathsArray = r4;	 Catch:{ Exception -> 0x0728 }
-    L_0x06f4:
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.documentsPathsArray;	 Catch:{ Exception -> 0x0728 }
-        r0 = r58;	 Catch:{ Exception -> 0x0728 }
-        r4.add(r0);	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.documentsOriginalPathsArray;	 Catch:{ Exception -> 0x0728 }
-        r0 = r54;	 Catch:{ Exception -> 0x0728 }
-        r4.add(r0);	 Catch:{ Exception -> 0x0728 }
-    L_0x0706:
-        r22 = r22 + 1;	 Catch:{ Exception -> 0x0728 }
-        goto L_0x0691;	 Catch:{ Exception -> 0x0728 }
-    L_0x0709:
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.documentsUrisArray;	 Catch:{ Exception -> 0x0728 }
-        if (r4 != 0) goto L_0x0718;	 Catch:{ Exception -> 0x0728 }
+        r54 = r58;	 Catch:{ Exception -> 0x0743 }
+    L_0x06de:
+        if (r58 == 0) goto L_0x0724;	 Catch:{ Exception -> 0x0743 }
+    L_0x06e0:
+        r4 = "file:";	 Catch:{ Exception -> 0x0743 }
+        r0 = r58;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.startsWith(r4);	 Catch:{ Exception -> 0x0743 }
+        if (r4 == 0) goto L_0x06f7;	 Catch:{ Exception -> 0x0743 }
+    L_0x06eb:
+        r4 = "file://";	 Catch:{ Exception -> 0x0743 }
+        r5 = "";	 Catch:{ Exception -> 0x0743 }
+        r0 = r58;	 Catch:{ Exception -> 0x0743 }
+        r58 = r0.replace(r4, r5);	 Catch:{ Exception -> 0x0743 }
+    L_0x06f7:
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.documentsPathsArray;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x070f;	 Catch:{ Exception -> 0x0743 }
+    L_0x06fd:
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0743 }
+        r4.<init>();	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r0.documentsPathsArray = r4;	 Catch:{ Exception -> 0x0743 }
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0743 }
+        r4.<init>();	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r0.documentsOriginalPathsArray = r4;	 Catch:{ Exception -> 0x0743 }
     L_0x070f:
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0728 }
-        r4.<init>();	 Catch:{ Exception -> 0x0728 }
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r0.documentsUrisArray = r4;	 Catch:{ Exception -> 0x0728 }
-    L_0x0718:
-        r0 = r85;	 Catch:{ Exception -> 0x0728 }
-        r4 = r0.documentsUrisArray;	 Catch:{ Exception -> 0x0728 }
-        r0 = r77;	 Catch:{ Exception -> 0x0728 }
-        r4.add(r0);	 Catch:{ Exception -> 0x0728 }
-        r0 = r76;	 Catch:{ Exception -> 0x0728 }
-        r1 = r85;	 Catch:{ Exception -> 0x0728 }
-        r1.documentsMimeType = r0;	 Catch:{ Exception -> 0x0728 }
-        goto L_0x0706;
-    L_0x0728:
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.documentsPathsArray;	 Catch:{ Exception -> 0x0743 }
+        r0 = r58;	 Catch:{ Exception -> 0x0743 }
+        r4.add(r0);	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.documentsOriginalPathsArray;	 Catch:{ Exception -> 0x0743 }
+        r0 = r54;	 Catch:{ Exception -> 0x0743 }
+        r4.add(r0);	 Catch:{ Exception -> 0x0743 }
+    L_0x0721:
+        r22 = r22 + 1;	 Catch:{ Exception -> 0x0743 }
+        goto L_0x06ac;	 Catch:{ Exception -> 0x0743 }
+    L_0x0724:
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.documentsUrisArray;	 Catch:{ Exception -> 0x0743 }
+        if (r4 != 0) goto L_0x0733;	 Catch:{ Exception -> 0x0743 }
+    L_0x072a:
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0743 }
+        r4.<init>();	 Catch:{ Exception -> 0x0743 }
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r0.documentsUrisArray = r4;	 Catch:{ Exception -> 0x0743 }
+    L_0x0733:
+        r0 = r85;	 Catch:{ Exception -> 0x0743 }
+        r4 = r0.documentsUrisArray;	 Catch:{ Exception -> 0x0743 }
+        r0 = r77;	 Catch:{ Exception -> 0x0743 }
+        r4.add(r0);	 Catch:{ Exception -> 0x0743 }
+        r0 = r76;	 Catch:{ Exception -> 0x0743 }
+        r1 = r85;	 Catch:{ Exception -> 0x0743 }
+        r1.documentsMimeType = r0;	 Catch:{ Exception -> 0x0743 }
+        goto L_0x0721;
+    L_0x0743:
         r40 = move-exception;
         org.telegram.messenger.FileLog.m3e(r40);
         r42 = 1;
-    L_0x072e:
-        if (r42 == 0) goto L_0x02c1;
-    L_0x0730:
+    L_0x0749:
+        if (r42 == 0) goto L_0x02dc;
+    L_0x074b:
         r4 = "Unsupported content";
         r5 = 0;
         r0 = r85;
         r4 = android.widget.Toast.makeText(r0, r4, r5);
         r4.show();
-        goto L_0x02c1;
-    L_0x073f:
+        goto L_0x02dc;
+    L_0x075a:
         r42 = 1;
-        goto L_0x072e;
-    L_0x0742:
+        goto L_0x0749;
+    L_0x075d:
         r4 = "android.intent.action.VIEW";
         r5 = r86.getAction();
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0c8d;
-    L_0x074f:
+        if (r4 == 0) goto L_0x0ca8;
+    L_0x076a:
         r34 = r86.getData();
-        if (r34 == 0) goto L_0x02c1;
-    L_0x0755:
+        if (r34 == 0) goto L_0x02dc;
+    L_0x0770:
         r6 = 0;
         r7 = 0;
         r8 = 0;
@@ -2118,77 +2142,77 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r13 = 0;
         r12 = 0;
         r67 = r34.getScheme();
-        if (r67 == 0) goto L_0x07de;
-    L_0x0769:
+        if (r67 == 0) goto L_0x07f9;
+    L_0x0784:
         r4 = "http";
         r0 = r67;
         r4 = r0.equals(r4);
-        if (r4 != 0) goto L_0x077f;
-    L_0x0774:
+        if (r4 != 0) goto L_0x079a;
+    L_0x078f:
         r4 = "https";
         r0 = r67;
         r4 = r0.equals(r4);
-        if (r4 == 0) goto L_0x0971;
-    L_0x077f:
+        if (r4 == 0) goto L_0x098c;
+    L_0x079a:
         r4 = r34.getHost();
         r45 = r4.toLowerCase();
         r4 = "telegram.me";
         r0 = r45;
         r4 = r0.equals(r4);
-        if (r4 != 0) goto L_0x07b3;
-    L_0x0792:
+        if (r4 != 0) goto L_0x07ce;
+    L_0x07ad:
         r4 = "t.me";
         r0 = r45;
         r4 = r0.equals(r4);
-        if (r4 != 0) goto L_0x07b3;
-    L_0x079d:
+        if (r4 != 0) goto L_0x07ce;
+    L_0x07b8:
         r4 = "telegram.dog";
         r0 = r45;
         r4 = r0.equals(r4);
-        if (r4 != 0) goto L_0x07b3;
-    L_0x07a8:
+        if (r4 != 0) goto L_0x07ce;
+    L_0x07c3:
         r4 = "telesco.pe";
         r0 = r45;
         r4 = r0.equals(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x07b3:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x07ce:
         r58 = r34.getPath();
-        if (r58 == 0) goto L_0x07de;
-    L_0x07b9:
+        if (r58 == 0) goto L_0x07f9;
+    L_0x07d4:
         r4 = r58.length();
         r5 = 1;
-        if (r4 <= r5) goto L_0x07de;
-    L_0x07c0:
+        if (r4 <= r5) goto L_0x07f9;
+    L_0x07db:
         r4 = 1;
         r0 = r58;
         r58 = r0.substring(r4);
         r4 = "joinchat/";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0828;
-    L_0x07d2:
+        if (r4 == 0) goto L_0x0843;
+    L_0x07ed:
         r4 = "joinchat/";
         r5 = "";
         r0 = r58;
         r7 = r0.replace(r4, r5);
-    L_0x07de:
-        if (r11 == 0) goto L_0x07fd;
-    L_0x07e0:
+    L_0x07f9:
+        if (r11 == 0) goto L_0x0818;
+    L_0x07fb:
         r4 = "@";
         r4 = r11.startsWith(r4);
-        if (r4 == 0) goto L_0x07fd;
-    L_0x07e9:
+        if (r4 == 0) goto L_0x0818;
+    L_0x0804:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r5 = " ";
         r4 = r4.append(r5);
         r4 = r4.append(r11);
         r11 = r4.toString();
-    L_0x07fd:
-        if (r59 != 0) goto L_0x0801;
-    L_0x07ff:
-        if (r60 == 0) goto L_0x0bec;
-    L_0x0801:
+    L_0x0818:
+        if (r59 != 0) goto L_0x081c;
+    L_0x081a:
+        if (r60 == 0) goto L_0x0c07;
+    L_0x081c:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "phone";
@@ -2204,24 +2228,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r24;
         r4.<init>(r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-        goto L_0x02c1;
-    L_0x0828:
+        goto L_0x02dc;
+    L_0x0843:
         r4 = "addstickers/";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0840;
-    L_0x0833:
+        if (r4 == 0) goto L_0x085b;
+    L_0x084e:
         r4 = "addstickers/";
         r5 = "";
         r0 = r58;
         r8 = r0.replace(r4, r5);
-        goto L_0x07de;
-    L_0x0840:
+        goto L_0x07f9;
+    L_0x085b:
         r4 = "iv/";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0878;
-    L_0x084b:
+        if (r4 == 0) goto L_0x0893;
+    L_0x0866:
         r4 = 0;
         r5 = "url";
         r0 = r34;
@@ -2235,41 +2259,41 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = 0;
         r4 = r15[r4];
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 != 0) goto L_0x0875;
-    L_0x086c:
+        if (r4 != 0) goto L_0x0890;
+    L_0x0887:
         r4 = 1;
         r4 = r15[r4];
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x0875:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x0890:
         r15 = 0;
-        goto L_0x07de;
-    L_0x0878:
+        goto L_0x07f9;
+    L_0x0893:
         r4 = "msg/";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x088e;
-    L_0x0883:
+        if (r4 != 0) goto L_0x08a9;
+    L_0x089e:
         r4 = "share/";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0900;
-    L_0x088e:
+        if (r4 == 0) goto L_0x091b;
+    L_0x08a9:
         r4 = "url";
         r0 = r34;
         r11 = r0.getQueryParameter(r4);
-        if (r11 != 0) goto L_0x089c;
-    L_0x0899:
+        if (r11 != 0) goto L_0x08b7;
+    L_0x08b4:
         r11 = "";
-    L_0x089c:
+    L_0x08b7:
         r4 = "text";
         r0 = r34;
         r4 = r0.getQueryParameter(r4);
-        if (r4 == 0) goto L_0x08dc;
-    L_0x08a7:
+        if (r4 == 0) goto L_0x08f7;
+    L_0x08c2:
         r4 = r11.length();
-        if (r4 <= 0) goto L_0x08c2;
-    L_0x08ad:
+        if (r4 <= 0) goto L_0x08dd;
+    L_0x08c8:
         r12 = 1;
         r4 = new java.lang.StringBuilder;
         r4.<init>();
@@ -2277,7 +2301,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = "\n";
         r4 = r4.append(r5);
         r11 = r4.toString();
-    L_0x08c2:
+    L_0x08dd:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4 = r4.append(r11);
@@ -2286,64 +2310,64 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r0.getQueryParameter(r5);
         r4 = r4.append(r5);
         r11 = r4.toString();
-    L_0x08dc:
+    L_0x08f7:
         r4 = r11.length();
         r5 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
-        if (r4 <= r5) goto L_0x08eb;
-    L_0x08e4:
+        if (r4 <= r5) goto L_0x0906;
+    L_0x08ff:
         r4 = 0;
         r5 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r11 = r11.substring(r4, r5);
-    L_0x08eb:
+    L_0x0906:
         r4 = "\n";
         r4 = r11.endsWith(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x08f4:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x090f:
         r4 = 0;
         r5 = r11.length();
         r5 = r5 + -1;
         r11 = r11.substring(r4, r5);
-        goto L_0x08eb;
-    L_0x0900:
+        goto L_0x0906;
+    L_0x091b:
         r4 = "confirmphone";
         r0 = r58;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x091f;
-    L_0x090b:
+        if (r4 == 0) goto L_0x093a;
+    L_0x0926:
         r4 = "phone";
         r0 = r34;
         r59 = r0.getQueryParameter(r4);
         r4 = "hash";
         r0 = r34;
         r60 = r0.getQueryParameter(r4);
-        goto L_0x07de;
-    L_0x091f:
+        goto L_0x07f9;
+    L_0x093a:
         r4 = r58.length();
         r5 = 1;
-        if (r4 < r5) goto L_0x07de;
-    L_0x0926:
+        if (r4 < r5) goto L_0x07f9;
+    L_0x0941:
         r68 = r34.getPathSegments();
         r4 = r68.size();
-        if (r4 <= 0) goto L_0x0954;
-    L_0x0930:
+        if (r4 <= 0) goto L_0x096f;
+    L_0x094b:
         r4 = 0;
         r0 = r68;
         r6 = r0.get(r4);
         r6 = (java.lang.String) r6;
         r4 = r68.size();
         r5 = 1;
-        if (r4 <= r5) goto L_0x0954;
-    L_0x0940:
+        if (r4 <= r5) goto L_0x096f;
+    L_0x095b:
         r4 = 1;
         r0 = r68;
         r4 = r0.get(r4);
         r4 = (java.lang.String) r4;
         r13 = org.telegram.messenger.Utilities.parseInt(r4);
         r4 = r13.intValue();
-        if (r4 != 0) goto L_0x0954;
-    L_0x0953:
+        if (r4 != 0) goto L_0x096f;
+    L_0x096e:
         r13 = 0;
-    L_0x0954:
+    L_0x096f:
         r4 = "start";
         r0 = r34;
         r9 = r0.getQueryParameter(r4);
@@ -2353,24 +2377,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "game";
         r0 = r34;
         r14 = r0.getQueryParameter(r4);
-        goto L_0x07de;
-    L_0x0971:
+        goto L_0x07f9;
+    L_0x098c:
         r4 = "tg";
         r0 = r67;
         r4 = r0.equals(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x097c:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x0997:
         r79 = r34.toString();
         r4 = "tg:resolve";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0996;
-    L_0x098b:
+        if (r4 != 0) goto L_0x09b1;
+    L_0x09a6:
         r4 = "tg://resolve";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x09ec;
-    L_0x0996:
+        if (r4 == 0) goto L_0x0a07;
+    L_0x09b1:
         r4 = "tg:resolve";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2397,21 +2421,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.getQueryParameter(r4);
         r13 = org.telegram.messenger.Utilities.parseInt(r4);
         r4 = r13.intValue();
-        if (r4 != 0) goto L_0x07de;
-    L_0x09e9:
+        if (r4 != 0) goto L_0x07f9;
+    L_0x0a04:
         r13 = 0;
-        goto L_0x07de;
-    L_0x09ec:
+        goto L_0x07f9;
+    L_0x0a07:
         r4 = "tg:join";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0a02;
-    L_0x09f7:
+        if (r4 != 0) goto L_0x0a1d;
+    L_0x0a12:
         r4 = "tg://join";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0a29;
-    L_0x0a02:
+        if (r4 == 0) goto L_0x0a44;
+    L_0x0a1d:
         r4 = "tg:join";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2424,18 +2448,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "invite";
         r0 = r34;
         r7 = r0.getQueryParameter(r4);
-        goto L_0x07de;
-    L_0x0a29:
+        goto L_0x07f9;
+    L_0x0a44:
         r4 = "tg:addstickers";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0a3f;
-    L_0x0a34:
+        if (r4 != 0) goto L_0x0a5a;
+    L_0x0a4f:
         r4 = "tg://addstickers";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0a66;
-    L_0x0a3f:
+        if (r4 == 0) goto L_0x0a81;
+    L_0x0a5a:
         r4 = "tg:addstickers";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2448,28 +2472,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "set";
         r0 = r34;
         r8 = r0.getQueryParameter(r4);
-        goto L_0x07de;
-    L_0x0a66:
+        goto L_0x07f9;
+    L_0x0a81:
         r4 = "tg:msg";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0a92;
-    L_0x0a71:
+        if (r4 != 0) goto L_0x0aad;
+    L_0x0a8c:
         r4 = "tg://msg";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0a92;
-    L_0x0a7c:
+        if (r4 != 0) goto L_0x0aad;
+    L_0x0a97:
         r4 = "tg://share";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0a92;
-    L_0x0a87:
+        if (r4 != 0) goto L_0x0aad;
+    L_0x0aa2:
         r4 = "tg:share";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0b38;
-    L_0x0a92:
+        if (r4 == 0) goto L_0x0b53;
+    L_0x0aad:
         r4 = "tg:msg";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2490,18 +2514,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "url";
         r0 = r34;
         r11 = r0.getQueryParameter(r4);
-        if (r11 != 0) goto L_0x0ad4;
-    L_0x0ad1:
+        if (r11 != 0) goto L_0x0aef;
+    L_0x0aec:
         r11 = "";
-    L_0x0ad4:
+    L_0x0aef:
         r4 = "text";
         r0 = r34;
         r4 = r0.getQueryParameter(r4);
-        if (r4 == 0) goto L_0x0b14;
-    L_0x0adf:
+        if (r4 == 0) goto L_0x0b2f;
+    L_0x0afa:
         r4 = r11.length();
-        if (r4 <= 0) goto L_0x0afa;
-    L_0x0ae5:
+        if (r4 <= 0) goto L_0x0b15;
+    L_0x0b00:
         r12 = 1;
         r4 = new java.lang.StringBuilder;
         r4.<init>();
@@ -2509,7 +2533,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = "\n";
         r4 = r4.append(r5);
         r11 = r4.toString();
-    L_0x0afa:
+    L_0x0b15:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4 = r4.append(r11);
@@ -2518,35 +2542,35 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r0.getQueryParameter(r5);
         r4 = r4.append(r5);
         r11 = r4.toString();
-    L_0x0b14:
+    L_0x0b2f:
         r4 = r11.length();
         r5 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
-        if (r4 <= r5) goto L_0x0b23;
-    L_0x0b1c:
+        if (r4 <= r5) goto L_0x0b3e;
+    L_0x0b37:
         r4 = 0;
         r5 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r11 = r11.substring(r4, r5);
-    L_0x0b23:
+    L_0x0b3e:
         r4 = "\n";
         r4 = r11.endsWith(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x0b2c:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x0b47:
         r4 = 0;
         r5 = r11.length();
         r5 = r5 + -1;
         r11 = r11.substring(r4, r5);
-        goto L_0x0b23;
-    L_0x0b38:
+        goto L_0x0b3e;
+    L_0x0b53:
         r4 = "tg:confirmphone";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0b4e;
-    L_0x0b43:
+        if (r4 != 0) goto L_0x0b69;
+    L_0x0b5e:
         r4 = "tg://confirmphone";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x0b7e;
-    L_0x0b4e:
+        if (r4 == 0) goto L_0x0b99;
+    L_0x0b69:
         r4 = "tg:confirmphone";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2562,18 +2586,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "hash";
         r0 = r34;
         r60 = r0.getQueryParameter(r4);
-        goto L_0x07de;
-    L_0x0b7e:
+        goto L_0x07f9;
+    L_0x0b99:
         r4 = "tg:openmessage";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0b94;
-    L_0x0b89:
+        if (r4 != 0) goto L_0x0baf;
+    L_0x0ba4:
         r4 = "tg://openmessage";
         r0 = r79;
         r4 = r0.startsWith(r4);
-        if (r4 == 0) goto L_0x07de;
-    L_0x0b94:
+        if (r4 == 0) goto L_0x07f9;
+    L_0x0baf:
         r4 = "tg:openmessage";
         r5 = "tg://telegram.org";
         r0 = r79;
@@ -2592,130 +2616,130 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = "message_id";
         r0 = r34;
         r49 = r0.getQueryParameter(r4);
-        if (r81 == 0) goto L_0x0be1;
-    L_0x0bcd:
-        r4 = java.lang.Integer.parseInt(r81);	 Catch:{ NumberFormatException -> 0x11ea }
-        r65 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x11ea }
-    L_0x0bd5:
-        if (r49 == 0) goto L_0x07de;
-    L_0x0bd7:
-        r4 = java.lang.Integer.parseInt(r49);	 Catch:{ NumberFormatException -> 0x11e4 }
-        r64 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x11e4 }
-        goto L_0x07de;
-    L_0x0be1:
-        if (r29 == 0) goto L_0x0bd5;
-    L_0x0be3:
-        r4 = java.lang.Integer.parseInt(r29);	 Catch:{ NumberFormatException -> 0x11e7 }
-        r62 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x11e7 }
-        goto L_0x0bd5;
-    L_0x0bec:
-        if (r6 != 0) goto L_0x0bf8;
-    L_0x0bee:
-        if (r7 != 0) goto L_0x0bf8;
+        if (r81 == 0) goto L_0x0bfc;
+    L_0x0be8:
+        r4 = java.lang.Integer.parseInt(r81);	 Catch:{ NumberFormatException -> 0x1205 }
+        r65 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x1205 }
     L_0x0bf0:
-        if (r8 != 0) goto L_0x0bf8;
+        if (r49 == 0) goto L_0x07f9;
     L_0x0bf2:
-        if (r11 != 0) goto L_0x0bf8;
-    L_0x0bf4:
-        if (r14 != 0) goto L_0x0bf8;
-    L_0x0bf6:
-        if (r15 == 0) goto L_0x0c04;
-    L_0x0bf8:
+        r4 = java.lang.Integer.parseInt(r49);	 Catch:{ NumberFormatException -> 0x11ff }
+        r64 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x11ff }
+        goto L_0x07f9;
+    L_0x0bfc:
+        if (r29 == 0) goto L_0x0bf0;
+    L_0x0bfe:
+        r4 = java.lang.Integer.parseInt(r29);	 Catch:{ NumberFormatException -> 0x1202 }
+        r62 = java.lang.Integer.valueOf(r4);	 Catch:{ NumberFormatException -> 0x1202 }
+        goto L_0x0bf0;
+    L_0x0c07:
+        if (r6 != 0) goto L_0x0c13;
+    L_0x0c09:
+        if (r7 != 0) goto L_0x0c13;
+    L_0x0c0b:
+        if (r8 != 0) goto L_0x0c13;
+    L_0x0c0d:
+        if (r11 != 0) goto L_0x0c13;
+    L_0x0c0f:
+        if (r14 != 0) goto L_0x0c13;
+    L_0x0c11:
+        if (r15 == 0) goto L_0x0c1f;
+    L_0x0c13:
         r4 = 0;
         r5 = r47[r4];
         r16 = 0;
         r4 = r85;
         r4.runLinkRequest(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16);
-        goto L_0x02c1;
-    L_0x0c04:
-        r16 = r85.getContentResolver();	 Catch:{ Exception -> 0x0c84 }
-        r17 = r86.getData();	 Catch:{ Exception -> 0x0c84 }
-        r18 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r19 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r20 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r21 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r33 = r16.query(r17, r18, r19, r20, r21);	 Catch:{ Exception -> 0x0c84 }
-        if (r33 == 0) goto L_0x02c1;	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c1a:
-        r4 = r33.moveToFirst();	 Catch:{ Exception -> 0x0c84 }
-        if (r4 == 0) goto L_0x0c7f;	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c20:
-        r4 = "account_name";	 Catch:{ Exception -> 0x0c84 }
-        r0 = r33;	 Catch:{ Exception -> 0x0c84 }
-        r4 = r0.getColumnIndex(r4);	 Catch:{ Exception -> 0x0c84 }
-        r0 = r33;	 Catch:{ Exception -> 0x0c84 }
-        r4 = r0.getString(r4);	 Catch:{ Exception -> 0x0c84 }
-        r4 = org.telegram.messenger.Utilities.parseInt(r4);	 Catch:{ Exception -> 0x0c84 }
-        r23 = r4.intValue();	 Catch:{ Exception -> 0x0c84 }
-        r22 = 0;	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c39:
-        r4 = 3;	 Catch:{ Exception -> 0x0c84 }
-        r0 = r22;	 Catch:{ Exception -> 0x0c84 }
-        if (r0 >= r4) goto L_0x0c56;	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c3e:
-        r4 = org.telegram.messenger.UserConfig.getInstance(r22);	 Catch:{ Exception -> 0x0c84 }
-        r4 = r4.getClientUserId();	 Catch:{ Exception -> 0x0c84 }
-        r0 = r23;	 Catch:{ Exception -> 0x0c84 }
-        if (r4 != r0) goto L_0x0c8a;	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c4a:
-        r4 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r47[r4] = r22;	 Catch:{ Exception -> 0x0c84 }
-        r4 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r4 = r47[r4];	 Catch:{ Exception -> 0x0c84 }
-        r5 = 1;	 Catch:{ Exception -> 0x0c84 }
-        r0 = r85;	 Catch:{ Exception -> 0x0c84 }
-        r0.switchToAccount(r4, r5);	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c56:
-        r4 = "DATA4";	 Catch:{ Exception -> 0x0c84 }
-        r0 = r33;	 Catch:{ Exception -> 0x0c84 }
-        r4 = r0.getColumnIndex(r4);	 Catch:{ Exception -> 0x0c84 }
-        r0 = r33;	 Catch:{ Exception -> 0x0c84 }
-        r82 = r0.getInt(r4);	 Catch:{ Exception -> 0x0c84 }
-        r4 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r4 = r47[r4];	 Catch:{ Exception -> 0x0c84 }
-        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);	 Catch:{ Exception -> 0x0c84 }
-        r5 = org.telegram.messenger.NotificationCenter.closeChats;	 Catch:{ Exception -> 0x0c84 }
-        r16 = 0;	 Catch:{ Exception -> 0x0c84 }
-        r0 = r16;	 Catch:{ Exception -> 0x0c84 }
-        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x0c84 }
-        r16 = r0;	 Catch:{ Exception -> 0x0c84 }
-        r0 = r16;	 Catch:{ Exception -> 0x0c84 }
-        r4.postNotificationName(r5, r0);	 Catch:{ Exception -> 0x0c84 }
-        r65 = java.lang.Integer.valueOf(r82);	 Catch:{ Exception -> 0x0c84 }
-    L_0x0c7f:
-        r33.close();	 Catch:{ Exception -> 0x0c84 }
-        goto L_0x02c1;
-    L_0x0c84:
+        goto L_0x02dc;
+    L_0x0c1f:
+        r16 = r85.getContentResolver();	 Catch:{ Exception -> 0x0c9f }
+        r17 = r86.getData();	 Catch:{ Exception -> 0x0c9f }
+        r18 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r19 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r20 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r21 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r33 = r16.query(r17, r18, r19, r20, r21);	 Catch:{ Exception -> 0x0c9f }
+        if (r33 == 0) goto L_0x02dc;	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c35:
+        r4 = r33.moveToFirst();	 Catch:{ Exception -> 0x0c9f }
+        if (r4 == 0) goto L_0x0c9a;	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c3b:
+        r4 = "account_name";	 Catch:{ Exception -> 0x0c9f }
+        r0 = r33;	 Catch:{ Exception -> 0x0c9f }
+        r4 = r0.getColumnIndex(r4);	 Catch:{ Exception -> 0x0c9f }
+        r0 = r33;	 Catch:{ Exception -> 0x0c9f }
+        r4 = r0.getString(r4);	 Catch:{ Exception -> 0x0c9f }
+        r4 = org.telegram.messenger.Utilities.parseInt(r4);	 Catch:{ Exception -> 0x0c9f }
+        r23 = r4.intValue();	 Catch:{ Exception -> 0x0c9f }
+        r22 = 0;	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c54:
+        r4 = 3;	 Catch:{ Exception -> 0x0c9f }
+        r0 = r22;	 Catch:{ Exception -> 0x0c9f }
+        if (r0 >= r4) goto L_0x0c71;	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c59:
+        r4 = org.telegram.messenger.UserConfig.getInstance(r22);	 Catch:{ Exception -> 0x0c9f }
+        r4 = r4.getClientUserId();	 Catch:{ Exception -> 0x0c9f }
+        r0 = r23;	 Catch:{ Exception -> 0x0c9f }
+        if (r4 != r0) goto L_0x0ca5;	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c65:
+        r4 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r47[r4] = r22;	 Catch:{ Exception -> 0x0c9f }
+        r4 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r4 = r47[r4];	 Catch:{ Exception -> 0x0c9f }
+        r5 = 1;	 Catch:{ Exception -> 0x0c9f }
+        r0 = r85;	 Catch:{ Exception -> 0x0c9f }
+        r0.switchToAccount(r4, r5);	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c71:
+        r4 = "DATA4";	 Catch:{ Exception -> 0x0c9f }
+        r0 = r33;	 Catch:{ Exception -> 0x0c9f }
+        r4 = r0.getColumnIndex(r4);	 Catch:{ Exception -> 0x0c9f }
+        r0 = r33;	 Catch:{ Exception -> 0x0c9f }
+        r82 = r0.getInt(r4);	 Catch:{ Exception -> 0x0c9f }
+        r4 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r4 = r47[r4];	 Catch:{ Exception -> 0x0c9f }
+        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);	 Catch:{ Exception -> 0x0c9f }
+        r5 = org.telegram.messenger.NotificationCenter.closeChats;	 Catch:{ Exception -> 0x0c9f }
+        r16 = 0;	 Catch:{ Exception -> 0x0c9f }
+        r0 = r16;	 Catch:{ Exception -> 0x0c9f }
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x0c9f }
+        r16 = r0;	 Catch:{ Exception -> 0x0c9f }
+        r0 = r16;	 Catch:{ Exception -> 0x0c9f }
+        r4.postNotificationName(r5, r0);	 Catch:{ Exception -> 0x0c9f }
+        r65 = java.lang.Integer.valueOf(r82);	 Catch:{ Exception -> 0x0c9f }
+    L_0x0c9a:
+        r33.close();	 Catch:{ Exception -> 0x0c9f }
+        goto L_0x02dc;
+    L_0x0c9f:
         r40 = move-exception;
         org.telegram.messenger.FileLog.m3e(r40);
-        goto L_0x02c1;
-    L_0x0c8a:
+        goto L_0x02dc;
+    L_0x0ca5:
         r22 = r22 + 1;
-        goto L_0x0c39;
-    L_0x0c8d:
+        goto L_0x0c54;
+    L_0x0ca8:
         r4 = r86.getAction();
         r5 = "org.telegram.messenger.OPEN_ACCOUNT";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0ca1;
-    L_0x0c9a:
+        if (r4 == 0) goto L_0x0cbc;
+    L_0x0cb5:
         r4 = 1;
         r53 = java.lang.Integer.valueOf(r4);
-        goto L_0x02c1;
-    L_0x0ca1:
+        goto L_0x02dc;
+    L_0x0cbc:
         r4 = r86.getAction();
         r5 = "new_dialog";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0cb5;
-    L_0x0cae:
+        if (r4 == 0) goto L_0x0cd0;
+    L_0x0cc9:
         r4 = 1;
         r52 = java.lang.Integer.valueOf(r4);
-        goto L_0x02c1;
-    L_0x0cb5:
+        goto L_0x02dc;
+    L_0x0cd0:
         r4 = r86.getAction();
         r5 = "com.tmessages.openchat";
         r4 = r4.startsWith(r5);
-        if (r4 == 0) goto L_0x0d3e;
-    L_0x0cc2:
+        if (r4 == 0) goto L_0x0d59;
+    L_0x0cdd:
         r4 = "chatId";
         r5 = 0;
         r0 = r86;
@@ -2728,8 +2752,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r0 = r86;
         r41 = r0.getIntExtra(r4, r5);
-        if (r30 == 0) goto L_0x0cfe;
-    L_0x0ce2:
+        if (r30 == 0) goto L_0x0d19;
+    L_0x0cfd:
         r4 = 0;
         r4 = r47[r4];
         r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
@@ -2741,10 +2765,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r16;
         r4.postNotificationName(r5, r0);
         r62 = java.lang.Integer.valueOf(r30);
-        goto L_0x02c1;
-    L_0x0cfe:
-        if (r82 == 0) goto L_0x0d1c;
-    L_0x0d00:
+        goto L_0x02dc;
+    L_0x0d19:
+        if (r82 == 0) goto L_0x0d37;
+    L_0x0d1b:
         r4 = 0;
         r4 = r47[r4];
         r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
@@ -2756,10 +2780,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r16;
         r4.postNotificationName(r5, r0);
         r65 = java.lang.Integer.valueOf(r82);
-        goto L_0x02c1;
-    L_0x0d1c:
-        if (r41 == 0) goto L_0x0d3a;
-    L_0x0d1e:
+        goto L_0x02dc;
+    L_0x0d37:
+        if (r41 == 0) goto L_0x0d55;
+    L_0x0d39:
         r4 = 0;
         r4 = r47[r4];
         r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
@@ -2771,30 +2795,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r16;
         r4.postNotificationName(r5, r0);
         r63 = java.lang.Integer.valueOf(r41);
-        goto L_0x02c1;
-    L_0x0d3a:
+        goto L_0x02dc;
+    L_0x0d55:
         r69 = 1;
-        goto L_0x02c1;
-    L_0x0d3e:
+        goto L_0x02dc;
+    L_0x0d59:
         r4 = r86.getAction();
         r5 = "com.tmessages.openplayer";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0d4f;
-    L_0x0d4b:
+        if (r4 == 0) goto L_0x0d6a;
+    L_0x0d66:
         r71 = 1;
-        goto L_0x02c1;
-    L_0x0d4f:
+        goto L_0x02dc;
+    L_0x0d6a:
         r4 = r86.getAction();
         r5 = "org.tmessages.openlocations";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x02c1;
-    L_0x0d5c:
+        if (r4 == 0) goto L_0x02dc;
+    L_0x0d77:
         r70 = 1;
-        goto L_0x02c1;
-    L_0x0d60:
+        goto L_0x02dc;
+    L_0x0d7b:
         r4 = r62.intValue();
-        if (r4 == 0) goto L_0x0dd4;
-    L_0x0d66:
+        if (r4 == 0) goto L_0x0def;
+    L_0x0d81:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "chat_id";
@@ -2802,17 +2826,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r24;
         r0.putInt(r4, r5);
         r4 = r64.intValue();
-        if (r4 == 0) goto L_0x0d89;
-    L_0x0d7d:
+        if (r4 == 0) goto L_0x0da4;
+    L_0x0d98:
         r4 = "message_id";
         r5 = r64.intValue();
         r0 = r24;
         r0.putInt(r4, r5);
-    L_0x0d89:
+    L_0x0da4:
         r4 = mainFragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0db2;
-    L_0x0d91:
+        if (r4 != 0) goto L_0x0dcd;
+    L_0x0dac:
         r4 = 0;
         r4 = r47[r4];
         r5 = org.telegram.messenger.MessagesController.getInstance(r4);
@@ -2825,8 +2849,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = (org.telegram.ui.ActionBar.BaseFragment) r4;
         r0 = r24;
         r4 = r5.checkCanOpenChat(r0, r4);
-        if (r4 == 0) goto L_0x0333;
-    L_0x0db2:
+        if (r4 == 0) goto L_0x034e;
+    L_0x0dcd:
         r44 = new org.telegram.ui.ChatActivity;
         r0 = r44;
         r1 = r24;
@@ -2840,14 +2864,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r16;
         r2 = r17;
         r4 = r4.presentFragment(r0, r5, r1, r2);
-        if (r4 == 0) goto L_0x0333;
-    L_0x0dd0:
+        if (r4 == 0) goto L_0x034e;
+    L_0x0deb:
         r61 = 1;
-        goto L_0x0333;
-    L_0x0dd4:
+        goto L_0x034e;
+    L_0x0def:
         r4 = r63.intValue();
-        if (r4 == 0) goto L_0x0e0d;
-    L_0x0dda:
+        if (r4 == 0) goto L_0x0e28;
+    L_0x0df5:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "enc_id";
@@ -2867,39 +2891,39 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r16;
         r2 = r17;
         r4 = r4.presentFragment(r0, r5, r1, r2);
-        if (r4 == 0) goto L_0x0333;
-    L_0x0e09:
+        if (r4 == 0) goto L_0x034e;
+    L_0x0e24:
         r61 = 1;
-        goto L_0x0333;
-    L_0x0e0d:
-        if (r69 == 0) goto L_0x0e63;
-    L_0x0e0f:
+        goto L_0x034e;
+    L_0x0e28:
+        if (r69 == 0) goto L_0x0e7e;
+    L_0x0e2a:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 != 0) goto L_0x0e22;
-    L_0x0e15:
+        if (r4 != 0) goto L_0x0e3d;
+    L_0x0e30:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4.removeAllFragments();
-    L_0x0e1c:
+    L_0x0e37:
         r61 = 0;
         r87 = 0;
-        goto L_0x0333;
-    L_0x0e22:
+        goto L_0x034e;
+    L_0x0e3d:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0e1c;
-    L_0x0e2e:
+        if (r4 != 0) goto L_0x0e37;
+    L_0x0e49:
         r22 = 0;
-    L_0x0e30:
+    L_0x0e4b:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.size();
         r4 = r4 + -1;
-        if (r4 <= 0) goto L_0x0e5a;
-    L_0x0e3e:
+        if (r4 <= 0) goto L_0x0e75;
+    L_0x0e59:
         r0 = r85;
         r5 = r0.layersActionBarLayout;
         r0 = r85;
@@ -2912,22 +2936,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5.removeFragmentFromStack(r4);
         r22 = r22 + -1;
         r22 = r22 + 1;
-        goto L_0x0e30;
-    L_0x0e5a:
+        goto L_0x0e4b;
+    L_0x0e75:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r5 = 0;
         r4.closeLastFragment(r5);
-        goto L_0x0e1c;
-    L_0x0e63:
-        if (r71 == 0) goto L_0x0e8e;
-    L_0x0e65:
+        goto L_0x0e37;
+    L_0x0e7e:
+        if (r71 == 0) goto L_0x0ea9;
+    L_0x0e80:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0e8a;
-    L_0x0e71:
+        if (r4 != 0) goto L_0x0ea5;
+    L_0x0e8c:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
@@ -2939,18 +2963,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.<init>(r0);
         r0 = r44;
         r0.showDialog(r4);
-    L_0x0e8a:
+    L_0x0ea5:
         r61 = 0;
-        goto L_0x0333;
-    L_0x0e8e:
-        if (r70 == 0) goto L_0x0ec2;
-    L_0x0e90:
+        goto L_0x034e;
+    L_0x0ea9:
+        if (r70 == 0) goto L_0x0edd;
+    L_0x0eab:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0ebe;
-    L_0x0e9c:
+        if (r4 != 0) goto L_0x0ed9;
+    L_0x0eb7:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
@@ -2966,37 +2990,37 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.<init>(r0, r5);
         r0 = r44;
         r0.showDialog(r4);
-    L_0x0ebe:
+    L_0x0ed9:
         r61 = 0;
-        goto L_0x0333;
-    L_0x0ec2:
+        goto L_0x034e;
+    L_0x0edd:
         r0 = r85;
         r4 = r0.videoPath;
-        if (r4 != 0) goto L_0x0ee6;
-    L_0x0ec8:
+        if (r4 != 0) goto L_0x0f01;
+    L_0x0ee3:
         r0 = r85;
         r4 = r0.photoPathsArray;
-        if (r4 != 0) goto L_0x0ee6;
-    L_0x0ece:
+        if (r4 != 0) goto L_0x0f01;
+    L_0x0ee9:
         r0 = r85;
         r4 = r0.sendingText;
-        if (r4 != 0) goto L_0x0ee6;
-    L_0x0ed4:
+        if (r4 != 0) goto L_0x0f01;
+    L_0x0eef:
         r0 = r85;
         r4 = r0.documentsPathsArray;
-        if (r4 != 0) goto L_0x0ee6;
-    L_0x0eda:
+        if (r4 != 0) goto L_0x0f01;
+    L_0x0ef5:
         r0 = r85;
         r4 = r0.contactsToSend;
-        if (r4 != 0) goto L_0x0ee6;
-    L_0x0ee0:
+        if (r4 != 0) goto L_0x0f01;
+    L_0x0efb:
         r0 = r85;
         r4 = r0.documentsUrisArray;
-        if (r4 == 0) goto L_0x10a6;
-    L_0x0ee6:
+        if (r4 == 0) goto L_0x10c1;
+    L_0x0f01:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 != 0) goto L_0x0f02;
-    L_0x0eec:
+        if (r4 != 0) goto L_0x0f1d;
+    L_0x0f07:
         r4 = 0;
         r4 = r47[r4];
         r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
@@ -3007,11 +3031,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = r0;
         r0 = r16;
         r4.postNotificationName(r5, r0);
-    L_0x0f02:
+    L_0x0f1d:
         r4 = 0;
         r4 = (r36 > r4 ? 1 : (r36 == r4 ? 0 : -1));
-        if (r4 != 0) goto L_0x1089;
-    L_0x0f08:
+        if (r4 != 0) goto L_0x10a4;
+    L_0x0f23:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "onlySelect";
@@ -3028,23 +3052,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0.putBoolean(r4, r5);
         r0 = r85;
         r4 = r0.contactsToSend;
-        if (r4 == 0) goto L_0x0fe4;
-    L_0x0f2e:
+        if (r4 == 0) goto L_0x0fff;
+    L_0x0f49:
         r4 = "selectAlertString";
         r5 = "SendContactTo";
-        r16 = NUM; // 0x7f0c05cd float:1.8612204E38 double:1.053098132E-314;
+        r16 = NUM; // 0x7f0c05d1 float:1.8612212E38 double:1.053098134E-314;
         r0 = r16;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r0 = r24;
         r0.putString(r4, r5);
         r4 = "selectAlertStringGroup";
         r5 = "SendContactToGroup";
-        r16 = NUM; // 0x7f0c05c0 float:1.8612178E38 double:1.0530981257E-314;
+        r16 = NUM; // 0x7f0c05c4 float:1.8612186E38 double:1.0530981277E-314;
         r0 = r16;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r0 = r24;
         r0.putString(r4, r5);
-    L_0x0f56:
+    L_0x0f71:
         r44 = new org.telegram.ui.DialogsActivity;
         r0 = r44;
         r1 = r24;
@@ -3053,14 +3077,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r85;
         r0.setDelegate(r1);
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x1011;
-    L_0x0f6c:
+        if (r4 == 0) goto L_0x102c;
+    L_0x0f87:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.size();
-        if (r4 <= 0) goto L_0x100e;
-    L_0x0f78:
+        if (r4 <= 0) goto L_0x1029;
+    L_0x0f93:
         r0 = r85;
         r4 = r0.layersActionBarLayout;
         r4 = r4.fragmentsStack;
@@ -3071,10 +3095,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r5 + -1;
         r4 = r4.get(r5);
         r4 = r4 instanceof org.telegram.ui.DialogsActivity;
-        if (r4 == 0) goto L_0x100e;
-    L_0x0f92:
+        if (r4 == 0) goto L_0x1029;
+    L_0x0fad:
         r66 = 1;
-    L_0x0f94:
+    L_0x0faf:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r5 = 1;
@@ -3085,18 +3109,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.presentFragment(r0, r1, r5, r2);
         r61 = 1;
         r4 = org.telegram.ui.SecretMediaViewer.hasInstance();
-        if (r4 == 0) goto L_0x103f;
-    L_0x0fac:
+        if (r4 == 0) goto L_0x105a;
+    L_0x0fc7:
         r4 = org.telegram.ui.SecretMediaViewer.getInstance();
         r4 = r4.isVisible();
-        if (r4 == 0) goto L_0x103f;
-    L_0x0fb6:
+        if (r4 == 0) goto L_0x105a;
+    L_0x0fd1:
         r4 = org.telegram.ui.SecretMediaViewer.getInstance();
         r5 = 0;
         r16 = 0;
         r0 = r16;
         r4.closePhoto(r5, r0);
-    L_0x0fc2:
+    L_0x0fdd:
         r0 = r85;
         r4 = r0.drawerLayoutContainer;
         r5 = 0;
@@ -3104,42 +3128,42 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x107b;
-    L_0x0fd4:
+        if (r4 == 0) goto L_0x1096;
+    L_0x0fef:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4.showLastFragment();
         r0 = r85;
         r4 = r0.rightActionBarLayout;
         r4.showLastFragment();
-        goto L_0x0333;
-    L_0x0fe4:
+        goto L_0x034e;
+    L_0x0fff:
         r4 = "selectAlertString";
         r5 = "SendMessagesTo";
-        r16 = NUM; // 0x7f0c05cd float:1.8612204E38 double:1.053098132E-314;
+        r16 = NUM; // 0x7f0c05d1 float:1.8612212E38 double:1.053098134E-314;
         r0 = r16;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r0 = r24;
         r0.putString(r4, r5);
         r4 = "selectAlertStringGroup";
         r5 = "SendMessagesToGroup";
-        r16 = NUM; // 0x7f0c05ce float:1.8612206E38 double:1.0530981326E-314;
+        r16 = NUM; // 0x7f0c05d2 float:1.8612214E38 double:1.0530981346E-314;
         r0 = r16;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r0 = r24;
         r0.putString(r4, r5);
-        goto L_0x0f56;
-    L_0x100e:
+        goto L_0x0f71;
+    L_0x1029:
         r66 = 0;
-        goto L_0x0f94;
-    L_0x1011:
+        goto L_0x0faf;
+    L_0x102c:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.size();
         r5 = 1;
-        if (r4 <= r5) goto L_0x103c;
-    L_0x101e:
+        if (r4 <= r5) goto L_0x1057;
+    L_0x1039:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
@@ -3150,51 +3174,51 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r5 + -1;
         r4 = r4.get(r5);
         r4 = r4 instanceof org.telegram.ui.DialogsActivity;
-        if (r4 == 0) goto L_0x103c;
-    L_0x1038:
+        if (r4 == 0) goto L_0x1057;
+    L_0x1053:
         r66 = 1;
-    L_0x103a:
-        goto L_0x0f94;
-    L_0x103c:
+    L_0x1055:
+        goto L_0x0faf;
+    L_0x1057:
         r66 = 0;
-        goto L_0x103a;
-    L_0x103f:
+        goto L_0x1055;
+    L_0x105a:
         r4 = org.telegram.ui.PhotoViewer.hasInstance();
-        if (r4 == 0) goto L_0x105d;
-    L_0x1045:
+        if (r4 == 0) goto L_0x1078;
+    L_0x1060:
         r4 = org.telegram.ui.PhotoViewer.getInstance();
         r4 = r4.isVisible();
-        if (r4 == 0) goto L_0x105d;
-    L_0x104f:
+        if (r4 == 0) goto L_0x1078;
+    L_0x106a:
         r4 = org.telegram.ui.PhotoViewer.getInstance();
         r5 = 0;
         r16 = 1;
         r0 = r16;
         r4.closePhoto(r5, r0);
-        goto L_0x0fc2;
-    L_0x105d:
+        goto L_0x0fdd;
+    L_0x1078:
         r4 = org.telegram.ui.ArticleViewer.hasInstance();
-        if (r4 == 0) goto L_0x0fc2;
-    L_0x1063:
+        if (r4 == 0) goto L_0x0fdd;
+    L_0x107e:
         r4 = org.telegram.ui.ArticleViewer.getInstance();
         r4 = r4.isVisible();
-        if (r4 == 0) goto L_0x0fc2;
-    L_0x106d:
+        if (r4 == 0) goto L_0x0fdd;
+    L_0x1088:
         r4 = org.telegram.ui.ArticleViewer.getInstance();
         r5 = 0;
         r16 = 1;
         r0 = r16;
         r4.close(r5, r0);
-        goto L_0x0fc2;
-    L_0x107b:
+        goto L_0x0fdd;
+    L_0x1096:
         r0 = r85;
         r4 = r0.drawerLayoutContainer;
         r5 = 1;
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x0333;
-    L_0x1089:
+        goto L_0x034e;
+    L_0x10a4:
         r39 = new java.util.ArrayList;
         r39.<init>();
         r4 = java.lang.Long.valueOf(r36);
@@ -3207,11 +3231,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r39;
         r2 = r16;
         r0.didSelectDialogs(r4, r1, r5, r2);
-        goto L_0x0333;
-    L_0x10a6:
+        goto L_0x034e;
+    L_0x10c1:
         r4 = r53.intValue();
-        if (r4 == 0) goto L_0x10f5;
-    L_0x10ac:
+        if (r4 == 0) goto L_0x1110;
+    L_0x10c7:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r5 = new org.telegram.ui.SettingsActivity;
@@ -3224,8 +3248,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r2 = r18;
         r4.presentFragment(r5, r0, r1, r2);
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x10e8;
-    L_0x10ca:
+        if (r4 == 0) goto L_0x1103;
+    L_0x10e5:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4.showLastFragment();
@@ -3238,21 +3262,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-    L_0x10e4:
+    L_0x10ff:
         r61 = 1;
-        goto L_0x0333;
-    L_0x10e8:
+        goto L_0x034e;
+    L_0x1103:
         r0 = r85;
         r4 = r0.drawerLayoutContainer;
         r5 = 1;
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x10e4;
-    L_0x10f5:
+        goto L_0x10ff;
+    L_0x1110:
         r4 = r52.intValue();
-        if (r4 == 0) goto L_0x0333;
-    L_0x10fb:
+        if (r4 == 0) goto L_0x034e;
+    L_0x1116:
         r24 = new android.os.Bundle;
         r24.<init>();
         r4 = "destroyAfterSelect";
@@ -3272,8 +3296,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r2 = r18;
         r4.presentFragment(r5, r0, r1, r2);
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x1147;
-    L_0x1129:
+        if (r4 == 0) goto L_0x1162;
+    L_0x1144:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4.showLastFragment();
@@ -3286,24 +3310,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-    L_0x1143:
+    L_0x115e:
         r61 = 1;
-        goto L_0x0333;
-    L_0x1147:
+        goto L_0x034e;
+    L_0x1162:
         r0 = r85;
         r4 = r0.drawerLayoutContainer;
         r5 = 1;
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x1143;
-    L_0x1154:
+        goto L_0x115e;
+    L_0x116f:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 == 0) goto L_0x036f;
-    L_0x1160:
+        if (r4 == 0) goto L_0x038a;
+    L_0x117b:
         r38 = new org.telegram.ui.DialogsActivity;
         r4 = 0;
         r0 = r38;
@@ -3322,20 +3346,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x036f;
-    L_0x1188:
+        goto L_0x038a;
+    L_0x11a3:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r4 = r4.fragmentsStack;
         r4 = r4.isEmpty();
-        if (r4 == 0) goto L_0x036f;
-    L_0x1194:
+        if (r4 == 0) goto L_0x038a;
+    L_0x11af:
         r0 = r85;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.UserConfig.getInstance(r4);
         r4 = r4.isClientActivated();
-        if (r4 != 0) goto L_0x11bc;
-    L_0x11a2:
+        if (r4 != 0) goto L_0x11d7;
+    L_0x11bd:
         r0 = r85;
         r4 = r0.actionBarLayout;
         r5 = new org.telegram.ui.LoginActivity;
@@ -3347,8 +3371,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x036f;
-    L_0x11bc:
+        goto L_0x038a;
+    L_0x11d7:
         r38 = new org.telegram.ui.DialogsActivity;
         r4 = 0;
         r0 = r38;
@@ -3367,23 +3391,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r16 = 0;
         r0 = r16;
         r4.setAllowOpenDrawer(r5, r0);
-        goto L_0x036f;
-    L_0x11e4:
+        goto L_0x038a;
+    L_0x11ff:
         r4 = move-exception;
-        goto L_0x07de;
-    L_0x11e7:
+        goto L_0x07f9;
+    L_0x1202:
         r4 = move-exception;
-        goto L_0x0bd5;
-    L_0x11ea:
+        goto L_0x0bf0;
+    L_0x1205:
         r4 = move-exception;
-        goto L_0x0bd5;
+        goto L_0x0bf0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.handleIntent(android.content.Intent, boolean, boolean, boolean):boolean");
     }
 
     private void runLinkRequest(int intentAccount, String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, String[] instantView, int state) {
         final AlertDialog progressDialog = new AlertDialog(this, 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", C0446R.string.Loading));
+        progressDialog.setMessage(LocaleController.getString("Loading", C0493R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         int requestId = 0;
@@ -3411,7 +3435,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 final TL_contacts_resolvedPeer res = response;
                                 if (error != null || LaunchActivity.this.actionBarLayout == null || (str3 != null && (str3 == null || res.users.isEmpty()))) {
                                     try {
-                                        Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", C0446R.string.NoUsernameFound), 0).show();
+                                        Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", C0493R.string.NoUsernameFound), 0).show();
                                         return;
                                     } catch (Throwable e2) {
                                         FileLog.m3e(e2);
@@ -3428,8 +3452,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     args.putBoolean("onlySelect", true);
                                     args.putBoolean("cantSendToChannels", true);
                                     args.putInt("dialogsType", 1);
-                                    args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0446R.string.SendGameTo));
-                                    args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0446R.string.SendGameToGroup));
+                                    args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0493R.string.SendGameTo));
+                                    args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0493R.string.SendGameToGroup));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
                                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -3478,7 +3502,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     final User user = !res.users.isEmpty() ? (User) res.users.get(0) : null;
                                     if (user == null || (user.bot && user.bot_nochats)) {
                                         try {
-                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", C0446R.string.BotCantJoinGroups), 0).show();
+                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", C0493R.string.BotCantJoinGroups), 0).show();
                                             return;
                                         } catch (Throwable e22) {
                                             FileLog.m3e(e22);
@@ -3488,7 +3512,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     args = new Bundle();
                                     args.putBoolean("onlySelect", true);
                                     args.putInt("dialogsType", 2);
-                                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0446R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
+                                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0493R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
                                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -3559,8 +3583,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.LaunchActivity$10$1$1 */
-                            class C14501 implements DialogInterface.OnClickListener {
-                                C14501() {
+                            class C18861 implements DialogInterface.OnClickListener {
+                                C18861() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -3578,13 +3602,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     Builder builder;
                                     if (error != null || LaunchActivity.this.actionBarLayout == null) {
                                         builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                                         if (error.text.startsWith("FLOOD_WAIT")) {
-                                            builder.setMessage(LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                            builder.setMessage(LocaleController.getString("FloodWait", C0493R.string.FloodWait));
                                         } else {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0446R.string.JoinToGroupErrorNotExist));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0493R.string.JoinToGroupErrorNotExist));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                         return;
                                     }
@@ -3603,13 +3627,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         }
                                     } else if (((invite.chat != null || (invite.channel && !invite.megagroup)) && (invite.chat == null || (ChatObject.isChannel(invite.chat) && !invite.chat.megagroup))) || LaunchActivity.mainFragmentsStack.isEmpty()) {
                                         builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                                         String str = "ChannelJoinTo";
                                         Object[] objArr = new Object[1];
                                         objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                                        builder.setMessage(LocaleController.formatString(str, C0446R.string.ChannelJoinTo, objArr));
-                                        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new C14501());
-                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
+                                        builder.setMessage(LocaleController.formatString(str, C0493R.string.ChannelJoinTo, objArr));
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C18861());
+                                        builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                     } else {
                                         BaseFragment fragment2 = (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1);
@@ -3639,15 +3663,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     if (error != null) {
                                         Builder builder = new Builder(LaunchActivity.this);
-                                        builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                                        builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                                         if (error.text.startsWith("FLOOD_WAIT")) {
-                                            builder.setMessage(LocaleController.getString("FloodWait", C0446R.string.FloodWait));
+                                            builder.setMessage(LocaleController.getString("FloodWait", C0493R.string.FloodWait));
                                         } else if (error.text.equals("USERS_TOO_MUCH")) {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0446R.string.JoinToGroupErrorFull));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0493R.string.JoinToGroupErrorFull));
                                         } else {
-                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0446R.string.JoinToGroupErrorNotExist));
+                                            builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0493R.string.JoinToGroupErrorNotExist));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+                                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                     } else if (LaunchActivity.this.actionBarLayout != null) {
                                         Updates updates = response;
@@ -3718,7 +3742,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (requestId != 0) {
             i3 = intentAccount;
             i4 = requestId;
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0446R.string.Cancel), new DialogInterface.OnClickListener() {
+            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0493R.string.Cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ConnectionsManager.getInstance(i3).cancelRequest(i4, true);
                     try {
@@ -3750,13 +3774,25 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.visibleDialog.setCanceledOnTouchOutside(true);
             this.visibleDialog.setOnDismissListener(new OnDismissListener() {
                 public void onDismiss(DialogInterface dialog) {
-                    if (LaunchActivity.this.visibleDialog != null && LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
-                        try {
-                            Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0446R.string.ChangeLanguageLater), 1).show();
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
+                    if (LaunchActivity.this.visibleDialog != null) {
+                        if (LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
+                            try {
+                                Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0493R.string.ChangeLanguageLater), 1).show();
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
+                            }
+                            LaunchActivity.this.localeDialog = null;
+                        } else if (LaunchActivity.this.visibleDialog == LaunchActivity.this.proxyErrorDialog) {
+                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                            Editor editor = MessagesController.getGlobalMainSettings().edit();
+                            editor.putBoolean("proxy_enabled", false);
+                            editor.putBoolean("proxy_enabled_calls", false);
+                            editor.commit();
+                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
+                            ConnectionsManager.setProxySettings(false, TtmlNode.ANONYMOUS_REGION_ID, 1080, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                            LaunchActivity.this.proxyErrorDialog = null;
                         }
-                        LaunchActivity.this.localeDialog = null;
                     }
                     LaunchActivity.this.visibleDialog = null;
                 }
@@ -3856,6 +3892,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.openArticle);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.hasNewContactsToImport);
             }
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needShowAlert);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.reloadInterface);
@@ -3933,17 +3970,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             if (showAlert) {
                 Builder builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
                 if (requestCode == 3) {
-                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0446R.string.PermissionNoAudio));
+                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0493R.string.PermissionNoAudio));
                 } else if (requestCode == 4) {
-                    builder.setMessage(LocaleController.getString("PermissionStorage", C0446R.string.PermissionStorage));
+                    builder.setMessage(LocaleController.getString("PermissionStorage", C0493R.string.PermissionStorage));
                 } else if (requestCode == 5) {
-                    builder.setMessage(LocaleController.getString("PermissionContacts", C0446R.string.PermissionContacts));
+                    builder.setMessage(LocaleController.getString("PermissionContacts", C0493R.string.PermissionContacts));
                 } else if (requestCode == 19 || requestCode == 20) {
-                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0446R.string.PermissionNoCamera));
+                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0493R.string.PermissionNoCamera));
                 }
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0446R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0493R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
                     @TargetApi(9)
                     public void onClick(DialogInterface dialog, int which) {
                         try {
@@ -3955,7 +3992,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
                 builder.show();
                 return;
             }
@@ -4153,41 +4190,59 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.drawerLayoutAdapter.notifyDataSetChanged();
         } else if (id == NotificationCenter.needShowAlert) {
             Integer reason = args[0];
-            builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
-            if (reason.intValue() != 2) {
-                final int i = account;
-                builder.setNegativeButton(LocaleController.getString("MoreInfo", C0446R.string.MoreInfo), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!LaunchActivity.mainFragmentsStack.isEmpty()) {
-                            MessagesController.getInstance(i).openByUserName("spambot", (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1), 1);
+            if (reason.intValue() != 3 || this.proxyErrorDialog == null) {
+                builder = new Builder((Context) this);
+                builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                if (!(reason.intValue() == 2 || reason.intValue() == 3)) {
+                    final int i = account;
+                    builder.setNegativeButton(LocaleController.getString("MoreInfo", C0493R.string.MoreInfo), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (!LaunchActivity.mainFragmentsStack.isEmpty()) {
+                                MessagesController.getInstance(i).openByUserName("spambot", (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1), 1);
+                            }
                         }
+                    });
+                }
+                if (reason.intValue() == 0) {
+                    builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0493R.string.NobodyLikesSpam1));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
+                } else if (reason.intValue() == 1) {
+                    builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0493R.string.NobodyLikesSpam2));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
+                } else if (reason.intValue() == 2) {
+                    builder.setMessage((String) args[1]);
+                    if (args[2].startsWith("AUTH_KEY_DROP_")) {
+                        builder.setPositiveButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("LogOut", C0493R.string.LogOut), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                MessagesController.getInstance(LaunchActivity.this.currentAccount).performLogout(2);
+                            }
+                        });
+                    } else {
+                        builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
                     }
-                });
-            }
-            if (reason.intValue() == 0) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0446R.string.NobodyLikesSpam1));
-            } else if (reason.intValue() == 1) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0446R.string.NobodyLikesSpam2));
-            } else if (reason.intValue() == 2) {
-                builder.setMessage((String) args[1]);
-            }
-            if (!mainFragmentsStack.isEmpty()) {
-                ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
+                } else if (reason.intValue() == 3) {
+                    builder.setMessage(LocaleController.getString("UseProxyTelegramError", C0493R.string.UseProxyTelegramError));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
+                    this.proxyErrorDialog = showAlertDialog(builder);
+                    return;
+                }
+                if (!mainFragmentsStack.isEmpty()) {
+                    ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
+                }
             }
         } else if (id == NotificationCenter.wasUnableToFindCurrentLocation) {
             HashMap<String, MessageObject> waitingForLocation = args[0];
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0446R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), null);
             final HashMap<String, MessageObject> hashMap = waitingForLocation;
             final int i2 = account;
-            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0446R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0493R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
 
-                /* renamed from: org.telegram.ui.LaunchActivity$19$1 */
-                class C21661 implements LocationActivityDelegate {
-                    C21661() {
+                /* renamed from: org.telegram.ui.LaunchActivity$20$1 */
+                class C18901 implements LocationActivityDelegate {
+                    C18901() {
                     }
 
                     public void didSelectLocation(MessageMedia location, int live) {
@@ -4201,12 +4256,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
                         LocationActivity fragment = new LocationActivity(0);
-                        fragment.setDelegate(new C21661());
+                        fragment.setDelegate(new C18901());
                         LaunchActivity.this.presentFragment(fragment);
                     }
                 }
             });
-            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0446R.string.ShareYouLocationUnable));
+            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0493R.string.ShareYouLocationUnable));
             if (!mainFragmentsStack.isEmpty()) {
                 ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
             }
@@ -4249,16 +4304,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 final boolean schedule = ((Boolean) args[3]).booleanValue();
                 BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0446R.string.UpdateContactsTitle));
-                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0446R.string.UpdateContactsMessage));
+                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0493R.string.UpdateContactsTitle));
+                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0493R.string.UpdateContactsMessage));
                 final int i3 = account;
-                builder.setPositiveButton(LocaleController.getString("OK", C0446R.string.OK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, false);
                     }
                 });
                 i3 = account;
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, true);
                     }
@@ -4319,9 +4374,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (VERSION.SDK_INT < 26) {
             Utilities.globalQueue.postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.ui.LaunchActivity$23$1 */
-                class C14541 implements Runnable {
-                    C14541() {
+                /* renamed from: org.telegram.ui.LaunchActivity$24$1 */
+                class C18911 implements Runnable {
+                    C18911() {
                     }
 
                     public void run() {
@@ -4348,7 +4403,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                                     if (freeSpace < 104857600) {
-                                        AndroidUtilities.runOnUIThread(new C14541());
+                                        AndroidUtilities.runOnUIThread(new C18911());
                                     }
                                 }
                             }
@@ -4366,14 +4421,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.loadingLocaleDialog = false;
             boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
             Builder builder = new Builder((Context) this);
-            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0446R.string.ChooseYourLanguage));
-            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0446R.string.ChooseYourLanguage));
+            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0493R.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0493R.string.ChooseYourLanguage));
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(1);
             final LanguageCell[] cells = new LanguageCell[2];
             final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
             LocaleInfo[] locales = new LocaleInfo[2];
-            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0446R.string.English);
+            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0493R.string.English);
             if (firstSystem) {
                 localeInfo = systemInfo;
             } else {
@@ -4417,7 +4472,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 a++;
             }
             LanguageCell cell = new LanguageCell(this, true);
-            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0446R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0446R.string.ChooseYourLanguageOther));
+            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0493R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0493R.string.ChooseYourLanguageOther));
             cell.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     LaunchActivity.this.localeDialog = null;
@@ -4431,7 +4486,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
             builder.setView(linearLayout);
-            builder.setNegativeButton(LocaleController.getString("OK", C0446R.string.OK), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("OK", C0493R.string.OK), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     LocaleController.getInstance().applyLanguage(selectedLanguage[0], true, false, LaunchActivity.this.currentAccount);
                     LaunchActivity.this.rebuildAllFragments(true);
@@ -4598,62 +4653,35 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private void updateCurrentConnectionState(int account) {
         if (this.actionBarLayout != null) {
             String title = null;
-            String subtitle = null;
             Runnable action = null;
+            this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             if (this.currentConnectionState == 2) {
-                title = LocaleController.getString("WaitingForNetwork", C0446R.string.WaitingForNetwork);
-            } else if (this.currentConnectionState == 1) {
-                title = LocaleController.getString("Connecting", C0446R.string.Connecting);
-                action = new Runnable() {
-                    public void run() {
-                        if (AndroidUtilities.isTablet()) {
-                            if (!LaunchActivity.layerFragmentsStack.isEmpty() && (LaunchActivity.layerFragmentsStack.get(LaunchActivity.layerFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
-                                return;
-                            }
-                        } else if (!LaunchActivity.mainFragmentsStack.isEmpty() && (LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
-                            return;
-                        }
-                        LaunchActivity.this.presentFragment(new ProxySettingsActivity());
-                    }
-                };
+                title = LocaleController.getString("WaitingForNetwork", C0493R.string.WaitingForNetwork);
             } else if (this.currentConnectionState == 5) {
-                title = LocaleController.getString("Updating", C0446R.string.Updating);
+                title = LocaleController.getString("Updating", C0493R.string.Updating);
             } else if (this.currentConnectionState == 4) {
-                title = LocaleController.getString("ConnectingToProxy", C0446R.string.ConnectingToProxy);
-                subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", C0446R.string.ConnectingToProxyTapToDisable);
+                title = LocaleController.getString("ConnectingToProxy", C0493R.string.ConnectingToProxy);
+            } else if (this.currentConnectionState == 1) {
+                title = LocaleController.getString("Connecting", C0493R.string.Connecting);
+            }
+            if (this.currentConnectionState == 1 || this.currentConnectionState == 4) {
                 action = new Runnable() {
-
-                    /* renamed from: org.telegram.ui.LaunchActivity$31$1 */
-                    class C14581 implements DialogInterface.OnClickListener {
-                        C14581() {
-                        }
-
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Editor editor = MessagesController.getGlobalMainSettings().edit();
-                            editor.putBoolean("proxy_enabled", false);
-                            editor.commit();
-                            for (int a = 0; a < 3; a++) {
-                                ConnectionsManager.native_setProxySettings(a, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
-                            }
-                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-                        }
-                    }
-
                     public void run() {
-                        if (LaunchActivity.this.actionBarLayout != null && !LaunchActivity.this.actionBarLayout.fragmentsStack.isEmpty()) {
-                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                            BaseFragment fragment = (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1);
-                            Builder builder = new Builder(LaunchActivity.this);
-                            builder.setTitle(LocaleController.getString("Proxy", C0446R.string.Proxy));
-                            builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", C0446R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
-                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", C0446R.string.ConnectingToProxyDisable), new C14581());
-                            builder.setNegativeButton(LocaleController.getString("Cancel", C0446R.string.Cancel), null);
-                            fragment.showDialog(builder.create());
+                        BaseFragment lastFragment = null;
+                        if (AndroidUtilities.isTablet()) {
+                            if (!LaunchActivity.layerFragmentsStack.isEmpty()) {
+                                lastFragment = (BaseFragment) LaunchActivity.layerFragmentsStack.get(LaunchActivity.layerFragmentsStack.size() - 1);
+                            }
+                        } else if (!LaunchActivity.mainFragmentsStack.isEmpty()) {
+                            lastFragment = (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1);
+                        }
+                        if (!(lastFragment instanceof ProxyListActivity) && !(lastFragment instanceof ProxySettingsActivity)) {
+                            LaunchActivity.this.presentFragment(new ProxyListActivity());
                         }
                     }
                 };
             }
-            this.actionBarLayout.setTitleOverlayText(title, subtitle, action);
+            this.actionBarLayout.setTitleOverlayText(title, null, action);
         }
     }
 

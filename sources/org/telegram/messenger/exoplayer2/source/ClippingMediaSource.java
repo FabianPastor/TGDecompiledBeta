@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0542C;
+import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
@@ -41,7 +41,7 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
                 } else {
                     resolvedEndUs = endUs;
                 }
-                if (window.durationUs != C0542C.TIME_UNSET) {
+                if (window.durationUs != C0605C.TIME_UNSET) {
                     if (resolvedEndUs > window.durationUs) {
                         resolvedEndUs = window.durationUs;
                     }
@@ -58,11 +58,11 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
 
         public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
             window = this.timeline.getWindow(0, window, setIds, defaultPositionProjectionUs);
-            window.durationUs = this.endUs != C0542C.TIME_UNSET ? this.endUs - this.startUs : C0542C.TIME_UNSET;
-            if (window.defaultPositionUs != C0542C.TIME_UNSET) {
+            window.durationUs = this.endUs != C0605C.TIME_UNSET ? this.endUs - this.startUs : C0605C.TIME_UNSET;
+            if (window.defaultPositionUs != C0605C.TIME_UNSET) {
                 long j;
                 window.defaultPositionUs = Math.max(window.defaultPositionUs, this.startUs);
-                if (this.endUs == C0542C.TIME_UNSET) {
+                if (this.endUs == C0605C.TIME_UNSET) {
                     j = window.defaultPositionUs;
                 } else {
                     j = Math.min(window.defaultPositionUs, this.endUs);
@@ -70,20 +70,20 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
                 window.defaultPositionUs = j;
                 window.defaultPositionUs -= this.startUs;
             }
-            long startMs = C0542C.usToMs(this.startUs);
-            if (window.presentationStartTimeMs != C0542C.TIME_UNSET) {
+            long startMs = C0605C.usToMs(this.startUs);
+            if (window.presentationStartTimeMs != C0605C.TIME_UNSET) {
                 window.presentationStartTimeMs += startMs;
             }
-            if (window.windowStartTimeMs != C0542C.TIME_UNSET) {
+            if (window.windowStartTimeMs != C0605C.TIME_UNSET) {
                 window.windowStartTimeMs += startMs;
             }
             return window;
         }
 
         public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            long j = C0542C.TIME_UNSET;
+            long j = C0605C.TIME_UNSET;
             period = this.timeline.getPeriod(0, period, setIds);
-            if (this.endUs != C0542C.TIME_UNSET) {
+            if (this.endUs != C0605C.TIME_UNSET) {
                 j = this.endUs - this.startUs;
             }
             period.durationUs = j;
