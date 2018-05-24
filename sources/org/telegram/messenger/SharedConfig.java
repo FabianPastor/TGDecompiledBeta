@@ -423,6 +423,7 @@ public class SharedConfig {
             editor.putString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
             editor.putInt("proxy_port", 1080);
             editor.putBoolean("proxy_enabled", false);
+            editor.putBoolean("proxy_enabled_calls", false);
             editor.commit();
             if (enabled) {
                 ConnectionsManager.setProxySettings(false, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);

@@ -425,6 +425,7 @@
     <string name="Connecting">Conectando...</string>
     <string name="ConnectingConnectProxy">Conectar Proxy</string>
     <string name="ConnectingToProxy">Conectando ao proxy...</string>
+    <string name="ConnectingToProxyEnable">Ativar</string>
     <string name="ContactJoined">Contato entrou para o Telegram</string>
     <string name="ContactNotRegistered">%1$s ainda não está no Telegram, deseja lhe enviar um convite para entrar?</string>
     <string name="Contacts">Contatos</string>
@@ -1685,6 +1686,7 @@
     <string name="UseProxySponsor">Proxy patrocinado</string>
     <string name="UseProxySponsorInfo">Esse canal é mostrado pelo seu servidor proxy. Para remover esse canal de sua lista de conversas, desative o proxy nas Configurações do Telegram.</string>
     <string name="UseProxyTelegram">Proxy MTProto</string>
+    <string name="UseProxyTelegramError">The proxy you are using is not configured correctly and will be disabled. Please find another one.</string>
     <string name="UseProxyTelegramInfo">Configurações de proxy MTProto.\n\nEsse proxy pode mostrar um canal patrocinado em sua lista de conversas. Isso não revela nada do seu tráfego no Telegram.</string>
     <string name="UseProxyTelegramInfo2">Esse proxy pode mostrar um canal patrocinado em sua lista de conversas. Isso não revela nada do seu tráfego no Telegram.</string>
     <string name="UseProxyUsername">Nome de Usuário</string>

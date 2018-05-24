@@ -425,6 +425,7 @@
     <string name="Connecting">Verbinden</string>
     <string name="ConnectingConnectProxy">Verbinden met proxy</string>
     <string name="ConnectingToProxy">Verbinden met proxy...</string>
+    <string name="ConnectingToProxyEnable">Inschakelen</string>
     <string name="ContactJoined">Contact lid van Telegram</string>
     <string name="ContactNotRegistered">%1$s is nog geen lid, uitnodigen?</string>
     <string name="Contacts">Contacten</string>
@@ -1685,6 +1686,7 @@
     <string name="UseProxySponsor">Proxy-sponsor</string>
     <string name="UseProxySponsorInfo">Dit kanaal is zichtbaar omdat je een proxy-server gebruikt, om dit kanaal te verwijderen uit je chatoverzicht kun je de proxy uitschakelen via de instellingen van Telegram.</string>
     <string name="UseProxyTelegram">MTProto Proxy</string>
+    <string name="UseProxyTelegramError">De door jou ingestelde proxy is niet correct geconfigureerd en zal daarom worden uitgeschakeld. Probeer een andere Proxy.</string>
     <string name="UseProxyTelegramInfo">MTProto-proxy-instellingen.</string>
     <string name="UseProxyTelegramInfo2">De proxy die je gebruikt kan een gesponsord kanaal weergeven in je chatoverzicht, maar heeft geen inzage in je Telegram-verkeer.</string>
     <string name="UseProxyUsername">Gebruiker</string>

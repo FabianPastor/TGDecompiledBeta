@@ -201,7 +201,9 @@ public class AudioRecordJNI {
                         FileLog.m3e(e);
                     }
                 }
-                Log.i("tg-voip", "audiotrack thread exits");
+                if (BuildVars.LOGS_ENABLED) {
+                    Log.i("tg-voip", "audiorecord thread exits");
+                }
             }
         });
         this.thread.start();

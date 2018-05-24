@@ -2136,7 +2136,7 @@ public class LocaleController {
     }
 
     public void saveRemoteLocaleStrings(final TL_langPackDifference difference, int currentAccount) {
-        if (difference != null && !difference.strings.isEmpty()) {
+        if (difference != null && !difference.strings.isEmpty() && this.currentLocaleInfo != null) {
             final String langCode = difference.lang_code.replace('-', '_').toLowerCase();
             if (langCode.equals(this.currentLocaleInfo.shortName)) {
                 File finalFile = new File(ApplicationLoader.getFilesDirFixed(), "remote_" + langCode + ".xml");

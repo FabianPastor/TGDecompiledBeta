@@ -425,6 +425,7 @@
     <string name="Connecting">جارٍ الاتصال...</string>
     <string name="ConnectingConnectProxy">وصل البروكسي</string>
     <string name="ConnectingToProxy">جارٍ الاتصال بالبروكسي...</string>
+    <string name="ConnectingToProxyEnable">تفعيل</string>
     <string name="ContactJoined">اشتراك صديق في تيليجرام</string>
     <string name="ContactNotRegistered">%1$s لم يقم بالتسجيل في تيليجرام بعد. فضلًا، هل ترغب في دعوتهم؟</string>
     <string name="Contacts">جهات الاتصال</string>
@@ -1685,6 +1686,7 @@
     <string name="UseProxySponsor">راعي البروكسي</string>
     <string name="UseProxySponsorInfo">يتم عرض هذه القناة من قبل البروكسي الخاص بك. لإزالة القناة من قائمة الدردشات الخاصة بك، قم بتعطيل البروكسي من إعدادات تيليجرام.</string>
     <string name="UseProxyTelegram">بروكسي MTProto</string>
+    <string name="UseProxyTelegramError">لم يتم إعداد البروكسي الذي تستخدمه بشكل صحيح وسيتم تعطيله. يرجى العثور على واحد آخر.</string>
     <string name="UseProxyTelegramInfo">إعدادات بروكسي MTProto.</string>
     <string name="UseProxyTelegramInfo2">قد يعرض هذا البروكسي قناة إعلانية في قائمة الدردشات الخاصة بك.\nلن يكشف هذا عن أي من بيانات تيليجرام الخاصة بك.</string>
     <string name="UseProxyUsername">اسم المستخدم</string>
