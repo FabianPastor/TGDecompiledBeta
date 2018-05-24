@@ -440,7 +440,7 @@ public class BottomSheet extends Dialog {
             }
         }
 
-        public boolean onTouchEvent(MotionEvent ev) {
+        boolean processTouchEvent(MotionEvent ev, boolean intercept) {
             if (BottomSheet.this.dismissed) {
                 return false;
             }
@@ -499,10 +499,14 @@ public class BottomSheet extends Dialog {
                 }
                 this.startedTrackingPointerId = -1;
             }
-            if (this.startedTracking || !BottomSheet.this.canDismissWithSwipe()) {
-                return true;
+            if ((intercept || !this.maybeStartTracking) && !this.startedTracking && BottomSheet.this.canDismissWithSwipe()) {
+                return false;
             }
-            return false;
+            return true;
+        }
+
+        public boolean onTouchEvent(MotionEvent ev) {
+            return processTouchEvent(ev, false);
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -611,7 +615,7 @@ public class BottomSheet extends Dialog {
 
         public boolean onInterceptTouchEvent(MotionEvent event) {
             if (BottomSheet.this.canDismissWithSwipe()) {
-                return onTouchEvent(event);
+                return processTouchEvent(event, true);
             }
             return super.onInterceptTouchEvent(event);
         }
