@@ -904,6 +904,23 @@ public class AlertsCreator {
         return builder.create();
     }
 
+    public static Builder createContactsPermissionDialog(Activity parentActivity, final IntCallback callback) {
+        Builder builder = new Builder((Context) parentActivity);
+        builder.setTopImage((int) R.drawable.permissions_contacts, Theme.getColor(Theme.key_dialogTopBackground));
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("ContactsPermissionAlert", R.string.ContactsPermissionAlert)));
+        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", R.string.ContactsPermissionAlertContinue), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                callback.run(1);
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                callback.run(0);
+            }
+        });
+        return builder;
+    }
+
     public static Dialog createFreeSpaceDialog(LaunchActivity parentActivity) {
         final int[] selected = new int[1];
         int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);

@@ -7235,7 +7235,8 @@ public class TLRPC {
     }
 
     public static class TL_help_getTermsOfService extends TLObject {
-        public static int constructor = 889286899;
+        public static int constructor = -NUM;
+        public String country_iso2;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_help_termsOfService.TLdeserialize(stream, constructor, exception);
@@ -7243,6 +7244,7 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+            stream.writeString(this.country_iso2);
         }
     }
 

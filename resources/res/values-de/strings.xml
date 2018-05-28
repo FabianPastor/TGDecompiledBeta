@@ -424,12 +424,12 @@
     <string name="Connected">Verbunden</string>
     <string name="Connecting">Verbinde...</string>
     <string name="ConnectingConnectProxy">Mit Proxy verbinden</string>
-    <string name="ConnectingToProxy">Verbinde mit Proxy...</string>
+    <string name="ConnectingToProxy">Verbinde mit Proxy</string>
     <string name="ConnectingToProxyEnable">Aktivieren</string>
     <string name="ContactJoined">Kontakt ist Telegram beigetreten</string>
     <string name="ContactNotRegistered">%1$s ist noch nicht bei Telegram. Willst du diesen Nutzer einladen?</string>
     <string name="Contacts">Kontakte</string>
-    <string name="ContactsPermissionAlert">Um dich nahtlos mit jedem zu verbinden, den du kennst, erlaube **Telegram** Zugriff auf deine Kontakte.</string>
+    <string name="ContactsPermissionAlert">Telegram benötigt Zugriff auf deine Kontakte, damit du dich mit Freunden auf all deinen Geräten verbinden kannst. Deine deine Kontakte werden durchgehend mit den stark verschlüsselten Cloud Servern von Telegram synchronisiert.</string>
     <string name="ContactsPermissionAlertContinue">WEITER</string>
     <string name="ContactsPermissionAlertNotNow">JETZT NICHT</string>
     <string name="ContinueOnThisLanguage">Weiter auf Deutsch</string>
@@ -495,7 +495,7 @@
     <string name="Default">Standard</string>
     <string name="DefaultRingtone">Standard</string>
     <string name="Delete">Löschen</string>
-    <string name="DeleteAccountHelp">Wenn du dich innerhalb dieser Zeit nicht anmeldest, wird dein Konto mit allen Nachrichten, Gruppen und Kontakten gelöscht.</string>
+    <string name="DeleteAccountHelp">Wenn du innerhalb dieser Zeit nicht online bist, wird dein Konto mit allen Nachrichten und Kontakten gelöscht.</string>
     <string name="DeleteAccountIfAwayFor">Wenn inaktiv für</string>
     <string name="DeleteAccountTitle">Automatische Kontolöschung</string>
     <string name="DeleteAllFrom">Lösche alles von %1$s</string>
@@ -1277,7 +1277,7 @@
     <string name="PaymentWarning">Warnung</string>
     <string name="PaymentWarningText">Weder Telegram noch %1$s haben Zugriff auf deine Kreditkartendaten. Kreditkartendetails werden nur vom Zahlungssystem %2$s abgewickelt.\n\nZahlungen gehen direkt an den Entwickler von %1$s. Telegram kann keine Haftung übernehmen, du handelst auf eigene Gefahr. Wende dich bei Problemen bitte direkt an den Entwickler von %1$s oder an deine Bank.</string>
     <string name="PendingEmailText">Deine E-Mail Adresse %1$s wurde noch verifiziert und ist daher noch nicht aktiv.</string>
-    <string name="PermissionContacts">Telegram benötigt Zugriff auf deine Kontakte, um dich auf all deinen Geräten mit deinen Freunden zu verbinden.</string>
+    <string name="PermissionContacts">Damit du dich mit Freunden auf all deinen Geräten verbinden kannst, werden deine Kontakte durchgehend mit den stark verschlüsselten Cloud Servern von Telegram synchronisiert.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
     <string name="PermissionNoAudio">Telegram benötigt Zugriff auf dein Mikrofon, damit du Sprachnachrichten senden kannst.</string>
     <string name="PermissionNoAudioVideo">Telegram benötigt Zugriff auf dein Mikrofon, damit du Videos aufnehmen kannst.</string>
@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Möchtest du die erweiterte Linkvorschau in Geheimen Chats aktivieren? Die Vorschau wird auf den Telegram Servern generiert.</string>
     <string name="SecretWebPage">Linkvorschau</string>
+    <string name="SecretWebPageInfo">Die Linkvorschau wird auf den Telegram-Servern generiert. Wir speichern keine Daten über die von dir gesendeten Links.</string>
     <string name="SecurityTitle">Sicherheit</string>
     <string name="SelectChat">Chat auswählen</string>
     <string name="SelectColor">Farbe wählen</string>
@@ -1597,8 +1598,10 @@
     <string name="Support">Support</string>
     <string name="SyncContacts">Kontakte synchronisieren</string>
     <string name="SyncContactsAdded">Kontakte von diesem Gerät wurden deinem Konto hinzugefügt.</string>
-    <string name="SyncContactsInfoOff">Einschalten, um Kontakte von diesem Gerät deinem Konto hinzuzufügen.</string>
-    <string name="SyncContactsInfoOn">Kontakte von diesem Gerät werden deinem Konto hinzugefügt.</string>
+    <string name="SyncContactsDelete">Synchronisierte Kontakte löschen</string>
+    <string name="SyncContactsDeleteInfo">Das wird deine Kontakte von den Telegram-Servern entfernen.Wenn \'Kontakte synchronisieren\' aktiviert ist, werden deine Kontakte erneut synchronisiert.</string>
+    <string name="SyncContactsInfoOff">Aktiviere diese Option, um Kontakte von diesem Gerät durchgehend mit deinem Konto zu synchronisieren.</string>
+    <string name="SyncContactsInfoOn">Kontakte dieses Gerätes werden deinem Konto hinzugefügt.</string>
     <string name="SyncContactsOff">Kontakte von diesem Gerät werden deinem Konto nicht hinzugefügt.</string>
     <string name="SyncContactsOn">Kontakte von diesem Gerät werden deinem Konto hinzugefügt.</string>
     <string name="SystemRoot">Systemverzeichnis</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">Antippen, um dich mit deinem Telegram-Konto abzumelden.</string>
     <string name="TerminateWebSessionQuestion">%1$s trennen?</string>
     <string name="TerminateWebSessionStop">%1$s blockieren</string>
+    <string name="TermsOfService">Nutzungsbedingungen</string>
+    <string name="TermsOfServiceLogin">Mit der Registrierung\nstimmst du den *Nutzungsbedigungen* zu.</string>
     <string name="TextCopied">Text in die Zwischenablage kopiert</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>

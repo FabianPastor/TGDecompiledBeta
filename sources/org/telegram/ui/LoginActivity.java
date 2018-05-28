@@ -21,10 +21,13 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,6 +55,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
@@ -92,6 +96,7 @@ import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeSms;
 import org.telegram.tgnet.TLRPC.TL_auth_signIn;
 import org.telegram.tgnet.TLRPC.TL_auth_signUp;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_help_getTermsOfService;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -106,6 +111,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.CountrySelectActivity.CountrySelectActivityDelegate;
 
 @SuppressLint({"HardwareIds"})
@@ -1875,15 +1881,60 @@ public class LoginActivity extends BaseFragment {
         private HashMap<String, String> countriesMap = new HashMap();
         private TextView countryButton;
         private int countryState = 0;
+        private String currentCountryIso = TtmlNode.ANONYMOUS_REGION_ID;
+        private String currentTermsOfService;
+        private int currentTermsReqId;
         private boolean ignoreOnPhoneChange = false;
         private boolean ignoreOnTextChange = false;
         private boolean ignoreSelection = false;
+        private HashMap<String, String> isoMap = new HashMap();
+        private String lastLoadedTerms;
         private boolean nextPressed = false;
         private HintEditText phoneField;
         private HashMap<String, String> phoneFormatMap = new HashMap();
+        private TextView privacyView;
+        private boolean showTermsAfterLoading;
         private TextView textView;
         private TextView textView2;
         private View view;
+
+        public class LinkSpan extends ClickableSpan {
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+
+            public void onClick(View widget) {
+                if (PhoneView.this.currentTermsOfService == null) {
+                    PhoneView.this.showTermsAfterLoading = true;
+                } else {
+                    PhoneView.this.showTermsOfService();
+                }
+            }
+        }
+
+        /* renamed from: org.telegram.ui.LoginActivity$PhoneView$8 */
+        class C15248 implements RequestDelegate {
+            C15248() {
+            }
+
+            public void run(final TLObject response, TL_error error) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        if (PhoneView.this.currentTermsReqId != 0) {
+                            PhoneView.this.currentTermsReqId = 0;
+                            if (response != null) {
+                                PhoneView.this.currentTermsOfService = response.text;
+                                if (PhoneView.this.showTermsAfterLoading) {
+                                    PhoneView.this.showTermsOfService();
+                                    PhoneView.this.showTermsAfterLoading = false;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
         public PhoneView(Context context) {
             super(context);
@@ -1918,7 +1969,7 @@ public class LoginActivity extends BaseFragment {
                     }
 
                     public void didSelectCountry(String name, String shortName) {
-                        PhoneView.this.selectCountry(name);
+                        PhoneView.this.selectCountry(name, shortName);
                         AndroidUtilities.runOnUIThread(new C15161(), 300);
                         PhoneView.this.phoneField.requestFocus();
                         PhoneView.this.phoneField.setSelection(PhoneView.this.phoneField.length());
@@ -1990,26 +2041,30 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 if (!ok) {
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditTextBoldCursor access$1000 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$1300 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
-                                    access$1000.setText(text);
+                                    access$1300.setText(text);
                                 }
                             }
                             String country = (String) PhoneView.this.codesMap.get(text);
                             if (country != null) {
                                 int index = PhoneView.this.countriesArray.indexOf(country);
                                 if (index != -1) {
+                                    PhoneView.this.currentCountryIso = (String) PhoneView.this.isoMap.get(text);
                                     PhoneView.this.ignoreSelection = true;
                                     PhoneView.this.countryButton.setText((CharSequence) PhoneView.this.countriesArray.get(index));
                                     String hint = (String) PhoneView.this.phoneFormatMap.get(text);
                                     PhoneView.this.phoneField.setHintText(hint != null ? hint.replace('X', '\u2013') : null);
                                     PhoneView.this.countryState = 0;
+                                    PhoneView.this.loadTermsOfService();
                                 } else {
+                                    PhoneView.this.currentCountryIso = TtmlNode.ANONYMOUS_REGION_ID;
                                     PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                                     PhoneView.this.phoneField.setHintText(null);
                                     PhoneView.this.countryState = 2;
                                 }
                             } else {
+                                PhoneView.this.currentCountryIso = TtmlNode.ANONYMOUS_REGION_ID;
                                 PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                                 PhoneView.this.phoneField.setHintText(null);
                                 PhoneView.this.countryState = 2;
@@ -2019,7 +2074,7 @@ public class LoginActivity extends BaseFragment {
                             }
                             if (textToSet != null) {
                                 PhoneView.this.phoneField.requestFocus();
-                                editable.replace(0, editable.length(), textToSet);
+                                PhoneView.this.phoneField.setText(textToSet);
                                 PhoneView.this.phoneField.setSelection(PhoneView.this.phoneField.length());
                             }
                         }
@@ -2114,11 +2169,11 @@ public class LoginActivity extends BaseFragment {
                         }
                         s.replace(0, s.length(), builder);
                         if (start >= 0) {
-                            HintEditText access$800 = PhoneView.this.phoneField;
+                            HintEditText access$1100 = PhoneView.this.phoneField;
                             if (start > PhoneView.this.phoneField.length()) {
                                 start = PhoneView.this.phoneField.length();
                             }
-                            access$800.setSelection(start);
+                            access$1100.setSelection(start);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -2173,6 +2228,24 @@ public class LoginActivity extends BaseFragment {
                     }
                 });
             }
+            this.privacyView = new TextView(context);
+            this.privacyView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+            this.privacyView.setMovementMethod(new LinkMovementMethodMy());
+            this.privacyView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+            this.privacyView.setTextSize(1, 14.0f);
+            this.privacyView.setGravity(81);
+            this.privacyView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            addView(this.privacyView, LayoutHelper.createLinear(-2, -1, 81, 0, 28, 0, 10));
+            String str = LocaleController.getString("TermsOfServiceLogin", R.string.TermsOfServiceLogin);
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+            int index1 = str.indexOf(42);
+            int index2 = str.lastIndexOf(42);
+            if (!(index1 == -1 || index2 == -1 || index1 == index2)) {
+                spannableStringBuilder.replace(index2, index2 + 1, TtmlNode.ANONYMOUS_REGION_ID);
+                spannableStringBuilder.replace(index1, index1 + 1, TtmlNode.ANONYMOUS_REGION_ID);
+                spannableStringBuilder.setSpan(new LinkSpan(), index1, index2 - 1, 33);
+            }
+            this.privacyView.setText(spannableStringBuilder);
             HashMap<String, String> languageMap = new HashMap();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
@@ -2184,6 +2257,7 @@ public class LoginActivity extends BaseFragment {
                     String[] args = line.split(";");
                     this.countriesArray.add(0, args[2]);
                     this.countriesMap.put(args[2], args[0]);
+                    this.isoMap.put(args[0], args[1]);
                     this.codesMap.put(args[0], args[2]);
                     if (args.length > 3) {
                         this.phoneFormatMap.put(args[0], args[3]);
@@ -2212,10 +2286,12 @@ public class LoginActivity extends BaseFragment {
             if (country != null) {
                 String countryName = (String) languageMap.get(country);
                 if (!(countryName == null || this.countriesArray.indexOf(countryName) == -1)) {
+                    this.currentCountryIso = country;
                     this.codeField.setText((CharSequence) this.countriesMap.get(countryName));
                     this.countryState = 0;
                 }
             }
+            loadTermsOfService();
             if (this.codeField.length() == 0) {
                 this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 this.phoneField.setHintText(null);
@@ -2229,7 +2305,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.requestFocus();
         }
 
-        public void selectCountry(String name) {
+        public void selectCountry(String name, String iso) {
             if (this.countriesArray.indexOf(name) != -1) {
                 this.ignoreOnTextChange = true;
                 String code = (String) this.countriesMap.get(name);
@@ -2237,8 +2313,43 @@ public class LoginActivity extends BaseFragment {
                 this.countryButton.setText(name);
                 String hint = (String) this.phoneFormatMap.get(code);
                 this.phoneField.setHintText(hint != null ? hint.replace('X', '\u2013') : null);
+                this.currentCountryIso = iso;
+                loadTermsOfService();
                 this.countryState = 0;
                 this.ignoreOnTextChange = false;
+            }
+        }
+
+        public void loadTermsOfService() {
+            if (this.lastLoadedTerms == null || !this.lastLoadedTerms.equals(this.currentCountryIso)) {
+                if (this.currentTermsReqId != 0) {
+                    ConnectionsManager.getInstance(LoginActivity.this.currentAccount).cancelRequest(this.currentTermsReqId, true);
+                    this.currentTermsReqId = 0;
+                }
+                this.currentTermsOfService = null;
+                TL_help_getTermsOfService req = new TL_help_getTermsOfService();
+                String str = this.currentCountryIso;
+                this.lastLoadedTerms = str;
+                req.country_iso2 = str;
+                this.currentTermsReqId = ConnectionsManager.getInstance(LoginActivity.this.currentAccount).sendRequest(req, new C15248(), 9);
+            }
+        }
+
+        private void showTermsOfService() {
+            if (this.currentTermsOfService != null) {
+                Builder builder = new Builder(LoginActivity.this.getParentActivity());
+                builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                SpannableStringBuilder text = new SpannableStringBuilder(this.currentTermsOfService);
+                int index1 = this.currentTermsOfService.indexOf(91);
+                int index2 = this.currentTermsOfService.lastIndexOf(93);
+                if (!(index1 == -1 || index2 == -1)) {
+                    text.replace(index2, index2 + 1, TtmlNode.ANONYMOUS_REGION_ID);
+                    text.replace(index1, index1 + 1, TtmlNode.ANONYMOUS_REGION_ID);
+                    text.setSpan(new URLSpanNoUnderline(LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl)), index1, index2 - 1, 33);
+                }
+                builder.setMessage(text);
+                LoginActivity.this.showDialog(builder.create());
             }
         }
 
@@ -2599,7 +2710,7 @@ public class LoginActivity extends BaseFragment {
         int a = 0;
         while (a < this.views.length) {
             this.views[a].setVisibility(a == 0 ? 0 : 8);
-            frameLayout.addView(this.views[a], LayoutHelper.createFrame(-1, a == 0 ? -2.0f : -1.0f, 51, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 30.0f, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 0.0f));
+            frameLayout.addView(this.views[a], LayoutHelper.createFrame(-1, -1.0f, 51, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 30.0f, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 0.0f));
             a++;
         }
         Bundle savedInstanceState = loadCurrentState();
@@ -3046,39 +3157,39 @@ public class LoginActivity extends BaseFragment {
         LoginActivityPasswordView passwordView = this.views[6];
         LoginActivityRecoverView recoverView = this.views[7];
         LoginActivityResetWaitView waitView = this.views[8];
-        r19 = new ThemeDescription[86];
-        r19[54] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
-        r19[55] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
-        r19[56] = new ThemeDescription(smsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[57] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r19[58] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        r19[59] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        r19[60] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        r19[61] = new ThemeDescription(smsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[62] = new ThemeDescription(smsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[63] = new ThemeDescription(smsView2.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[64] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
-        r19[65] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
-        r19[66] = new ThemeDescription(smsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[67] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r19[68] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        r19[69] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        r19[70] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        r19[71] = new ThemeDescription(smsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[72] = new ThemeDescription(smsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[73] = new ThemeDescription(smsView3.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[74] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
-        r19[75] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
-        r19[76] = new ThemeDescription(smsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[77] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r19[78] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        r19[79] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        r19[80] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        r19[81] = new ThemeDescription(smsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r19[82] = new ThemeDescription(smsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[83] = new ThemeDescription(smsView4.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r19[84] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
-        r19[85] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r19 = new ThemeDescription[88];
+        r19[56] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r19[57] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r19[58] = new ThemeDescription(smsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[59] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r19[60] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r19[61] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        r19[62] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        r19[63] = new ThemeDescription(smsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[64] = new ThemeDescription(smsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[65] = new ThemeDescription(smsView2.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[66] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r19[67] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r19[68] = new ThemeDescription(smsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[69] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r19[70] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r19[71] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        r19[72] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        r19[73] = new ThemeDescription(smsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[74] = new ThemeDescription(smsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[75] = new ThemeDescription(smsView3.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[76] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r19[77] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r19[78] = new ThemeDescription(smsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[79] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r19[80] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r19[81] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        r19[82] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        r19[83] = new ThemeDescription(smsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r19[84] = new ThemeDescription(smsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[85] = new ThemeDescription(smsView4.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r19[86] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r19[87] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
         return r19;
     }
 }

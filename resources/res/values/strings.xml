@@ -429,7 +429,7 @@
     <string name="ContactJoined">Contact joined Telegram</string>
     <string name="ContactNotRegistered">%1$s is not on Telegram yet, would you like to invite them to join?</string>
     <string name="Contacts">Contacts</string>
-    <string name="ContactsPermissionAlert">To seamlessly connect with everyone you know, allow **Telegram** access to your contacts.</string>
+    <string name="ContactsPermissionAlert">**Telegram** needs access to your contacts so that you can connect with your friends across all your devices. Your contacts will be continuosly synced with Telegram\'s heavily encrypted cloud servers.</string>
     <string name="ContactsPermissionAlertContinue">CONTINUE</string>
     <string name="ContactsPermissionAlertNotNow">NOT NOW</string>
     <string name="ContinueOnThisLanguage">Continue in English</string>
@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Would you like to enable extended link previews in Secret Chats? Note that link previews are generated on Telegram servers.</string>
     <string name="SecretWebPage">Link Previews</string>
+    <string name="SecretWebPageInfo">Link previews will be generated on Telegram servers. We do not store data about the links you send.</string>
     <string name="SecurityTitle">Security</string>
     <string name="SelectChat">Select Chat</string>
     <string name="SelectColor">Select color</string>
@@ -1597,6 +1598,8 @@
     <string name="Support">Support</string>
     <string name="SyncContacts">Sync Contacts</string>
     <string name="SyncContactsAdded">Contacts from this device were added to your account.</string>
+    <string name="SyncContactsDelete">Delete Synced Contacts</string>
+    <string name="SyncContactsDeleteInfo">This will remove your contacts from the Telegram servers. If \'Sync Contacts\' is enabled, contacts will be re-synced.</string>
     <string name="SyncContactsInfoOff">Turn on to import contacts from this device to your account.</string>
     <string name="SyncContactsInfoOn">Contacts from this device will be added to your account.</string>
     <string name="SyncContactsOff">Contacts from this device will not be added to this account.</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">Tap to disconnect from your Telegram account.</string>
     <string name="TerminateWebSessionQuestion">Disconnect %1$s?</string>
     <string name="TerminateWebSessionStop">Block %1$s</string>
+    <string name="TermsOfService">Terms of Service</string>
+    <string name="TermsOfServiceLogin">By signing up,\nyou agree to the *Terms of Service*.</string>
     <string name="TextCopied">Text copied to clipboard</string>
     <string name="TextSize">Messages Text Size</string>
     <string name="Theme">Theme</string>

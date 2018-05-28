@@ -732,7 +732,7 @@ public class RecyclerListView extends RecyclerView {
             return isEnabled(getSectionForPosition(position), getPositionInSectionForPosition(position));
         }
 
-        public final int getItemCount() {
+        public int getItemCount() {
             if (this.count >= 0) {
                 return this.count;
             }

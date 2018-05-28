@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Você gostaria de ativar a pré-visualização estendida de links em Chats Secretos? Note que a pré-visualização é gerada nos servidores do Telegram.</string>
     <string name="SecretWebPage">Pré-visualização de Link</string>
+    <string name="SecretWebPageInfo">Link previews will be generated on Telegram servers. We do not store data about the links you send.</string>
     <string name="SecurityTitle">Segurança</string>
     <string name="SelectChat">Selecione um Chat</string>
     <string name="SelectColor">Selecionar cor</string>
@@ -1597,6 +1598,8 @@
     <string name="Support">Suporte</string>
     <string name="SyncContacts">Sincronizar Contatos</string>
     <string name="SyncContactsAdded">Contatos deste dispositivo foram adicionados a sua conta.</string>
+    <string name="SyncContactsDelete">Delete Synced Contacts</string>
+    <string name="SyncContactsDeleteInfo">This will remove your contacts from the Telegram servers. If \'Sync Contacts\' is enabled, contacts will be re-synced.</string>
     <string name="SyncContactsInfoOff">Ative para importar contatos desse dispositivo para sua conta.</string>
     <string name="SyncContactsInfoOn">Contatos deste dispositivo serão adicionados a sua conta.</string>
     <string name="SyncContactsOff">Contatos deste dispositivo não serão adicionados a sua conta.</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">Toque para desconectar de sua conta do Telegram.</string>
     <string name="TerminateWebSessionQuestion">Desconectar %1$s?</string>
     <string name="TerminateWebSessionStop">Bloquear %1$s</string>
+    <string name="TermsOfService">Terms of Service</string>
+    <string name="TermsOfServiceLogin">By signing up,\nyou agree to the *Terms of Service*.</string>
     <string name="TextCopied">Texto copiado para área de transferência</string>
     <string name="TextSize">Tamanho do Texto</string>
     <string name="Theme">Tema</string>
