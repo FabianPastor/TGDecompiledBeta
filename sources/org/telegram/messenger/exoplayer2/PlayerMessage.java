@@ -10,7 +10,7 @@ public final class PlayerMessage {
     private boolean isProcessed;
     private boolean isSent;
     private Object payload;
-    private long positionMs = C0600C.TIME_UNSET;
+    private long positionMs = C0546C.TIME_UNSET;
     private final Sender sender;
     private final Target target;
     private final Timeline timeline;
@@ -90,7 +90,7 @@ public final class PlayerMessage {
             z = true;
         }
         Assertions.checkState(z);
-        if (positionMs == C0600C.TIME_UNSET) {
+        if (positionMs == C0546C.TIME_UNSET) {
             z2 = false;
         }
         Assertions.checkArgument(z2);
@@ -118,7 +118,7 @@ public final class PlayerMessage {
 
     public PlayerMessage send() {
         Assertions.checkState(!this.isSent);
-        if (this.positionMs == C0600C.TIME_UNSET) {
+        if (this.positionMs == C0546C.TIME_UNSET) {
             Assertions.checkArgument(this.deleteAfterDelivery);
         }
         this.isSent = true;

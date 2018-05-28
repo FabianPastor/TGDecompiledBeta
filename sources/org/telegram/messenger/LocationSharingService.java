@@ -21,11 +21,11 @@ public class LocationSharingService extends Service implements NotificationCente
     private Runnable runnable;
 
     /* renamed from: org.telegram.messenger.LocationSharingService$1 */
-    class C02841 implements Runnable {
+    class C02461 implements Runnable {
 
         /* renamed from: org.telegram.messenger.LocationSharingService$1$1 */
-        class C02831 implements Runnable {
-            C02831() {
+        class C02451 implements Runnable {
+            C02451() {
             }
 
             public void run() {
@@ -35,18 +35,18 @@ public class LocationSharingService extends Service implements NotificationCente
             }
         }
 
-        C02841() {
+        C02461() {
         }
 
         public void run() {
             LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
-            Utilities.stageQueue.postRunnable(new C02831());
+            Utilities.stageQueue.postRunnable(new C02451());
         }
     }
 
     /* renamed from: org.telegram.messenger.LocationSharingService$2 */
-    class C02852 implements Runnable {
-        C02852() {
+    class C02472 implements Runnable {
+        C02472() {
         }
 
         public void run() {
@@ -65,7 +65,7 @@ public class LocationSharingService extends Service implements NotificationCente
     public void onCreate() {
         super.onCreate();
         this.handler = new Handler();
-        this.runnable = new C02841();
+        this.runnable = new C02461();
         this.handler.postDelayed(this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
     }
 
@@ -83,7 +83,7 @@ public class LocationSharingService extends Service implements NotificationCente
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
-            this.handler.post(new C02852());
+            this.handler.post(new C02472());
         }
     }
 

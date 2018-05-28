@@ -222,7 +222,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private StaticLayout instantViewLayout;
     private Drawable instantViewSelectorDrawable;
     private int instantWidth;
-    private Runnable invalidateRunnable = new C10541();
+    private Runnable invalidateRunnable = new C08781();
     private boolean isAvatarVisible;
     public boolean isChat;
     private boolean isCheckPressed = true;
@@ -333,8 +333,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int widthForButtons;
 
     /* renamed from: org.telegram.ui.Cells.ChatMessageCell$1 */
-    class C10541 implements Runnable {
-        C10541() {
+    class C08781 implements Runnable {
+        C08781() {
         }
 
         public void run() {
@@ -360,9 +360,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         private StaticLayout title;
         private int width;
         /* renamed from: x */
-        private int f39x;
+        private int f9x;
         /* renamed from: y */
-        private int f40y;
+        private int f10y;
 
         private BotButton() {
         }
@@ -1081,8 +1081,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             int a = 0;
             while (a < this.botButtons.size()) {
                 BotButton button = (BotButton) this.botButtons.get(a);
-                int y2 = (button.f40y + this.layoutHeight) - AndroidUtilities.dp(2.0f);
-                if (x < button.f39x + addX || x > (button.f39x + addX) + button.width || y < y2 || y > button.height + y2) {
+                int y2 = (button.f10y + this.layoutHeight) - AndroidUtilities.dp(2.0f);
+                if (x < button.f9x + addX || x > (button.f9x + addX) + button.width || y < y2 || y > button.height + y2) {
                     a++;
                 } else {
                     this.pressedBotButton = a;
@@ -5020,12 +5020,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x1518:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x1528;
     L_0x1520:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x1584;
     L_0x1528:
         r41 = 0;
@@ -5052,22 +5052,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f18w;
-        r4.f25w = r6;
+        r6 = r0.f36w;
+        r4.f43w = r6;
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f17h;
-        r4.f24h = r6;
+        r6 = r0.f35h;
+        r4.f42h = r6;
     L_0x1562:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x1572;
     L_0x156a:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x1584;
     L_0x1572:
         r0 = r150;
@@ -5076,8 +5076,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = r0.currentPhotoObject;
         r8 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r6.f24h = r8;
-        r4.f25w = r8;
+        r6.f42h = r8;
+        r4.f43w = r8;
     L_0x1584:
         r0 = r67;
         r1 = r150;
@@ -5107,12 +5107,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x15ad:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x15bd;
     L_0x15b5:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x1613;
     L_0x15bd:
         r41 = 0;
@@ -5135,22 +5135,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f18w;
-        r4.f25w = r6;
+        r6 = r0.f36w;
+        r4.f43w = r6;
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f17h;
-        r4.f24h = r6;
+        r6 = r0.f35h;
+        r4.f42h = r6;
     L_0x15f1:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x1601;
     L_0x15f9:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x1613;
     L_0x1601:
         r0 = r150;
@@ -5159,8 +5159,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = r0.currentPhotoObject;
         r8 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r6.f24h = r8;
-        r4.f25w = r8;
+        r6.f42h = r8;
+        r4.f43w = r8;
     L_0x1613:
         r4 = 0;
         r0 = r150;
@@ -5185,12 +5185,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x1636:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x1646;
     L_0x163e:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x169c;
     L_0x1646:
         r41 = 0;
@@ -5213,22 +5213,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f18w;
-        r4.f25w = r6;
+        r6 = r0.f36w;
+        r4.f43w = r6;
         r0 = r150;
         r4 = r0.currentPhotoObject;
         r0 = r46;
-        r6 = r0.f17h;
-        r4.f24h = r6;
+        r6 = r0.f35h;
+        r4.f42h = r6;
     L_0x167a:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         if (r4 == 0) goto L_0x168a;
     L_0x1682:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         if (r4 != 0) goto L_0x169c;
     L_0x168a:
         r0 = r150;
@@ -5237,8 +5237,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = r0.currentPhotoObject;
         r8 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r6.f24h = r8;
-        r4.f25w = r8;
+        r6.f42h = r8;
+        r4.f43w = r8;
     L_0x169c:
         r0 = r67;
         r1 = r150;
@@ -5709,11 +5709,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x1a09:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f25w;
+        r0 = r4.f43w;
         r147 = r0;
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f24h;
+        r0 = r4.f42h;
         r79 = r0;
         r0 = r147;
         r4 = (float) r0;
@@ -7851,10 +7851,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x2b34;
     L_0x2a5a:
         r0 = r46;
-        r0 = r0.f18w;
+        r0 = r0.f36w;
         r116 = r0;
         r0 = r46;
-        r0 = r0.f17h;
+        r0 = r0.f35h;
         r115 = r0;
     L_0x2a66:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
@@ -8129,21 +8129,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x2c58:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         r4 = (float) r4;
         r0 = r116;
         r6 = (float) r0;
         r126 = r4 / r6;
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         r4 = (float) r4;
         r4 = r4 / r126;
         r0 = (int) r4;
         r143 = r0;
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         r4 = (float) r4;
         r4 = r4 / r126;
         r0 = (int) r4;
@@ -8220,19 +8220,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x2f01;
     L_0x2cef:
         r0 = r46;
-        r4 = r0.f18w;
+        r4 = r0.f36w;
         r4 = (float) r4;
         r0 = r116;
         r6 = (float) r0;
         r126 = r4 / r6;
         r0 = r46;
-        r4 = r0.f18w;
+        r4 = r0.f36w;
         r4 = (float) r4;
         r4 = r4 / r126;
         r0 = (int) r4;
         r143 = r0;
         r0 = r46;
-        r4 = r0.f17h;
+        r4 = r0.f35h;
         r4 = (float) r4;
         r4 = r4 / r126;
         r0 = (int) r4;
@@ -8463,14 +8463,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r76 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f24h;
+        r4 = r4.f42h;
         r4 = (float) r4;
         r0 = r76;
         r6 = (float) r0;
         r77 = r4 / r6;
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         r4 = (float) r4;
         r4 = r4 / r77;
         r0 = r116;
@@ -8480,7 +8480,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x2ebf:
         r0 = r150;
         r4 = r0.currentPhotoObject;
-        r4 = r4.f25w;
+        r4 = r4.f43w;
         r4 = (float) r4;
         r4 = r4 / r77;
         r0 = (int) r4;
@@ -8495,13 +8495,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = NUM; // 0x42f00000 float:120.0 double:5.548480205E-315;
         r76 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r46;
-        r4 = r0.f17h;
+        r4 = r0.f35h;
         r4 = (float) r4;
         r0 = r76;
         r6 = (float) r0;
         r77 = r4 / r6;
         r0 = r46;
-        r4 = r0.f18w;
+        r4 = r0.f36w;
         r4 = (float) r4;
         r4 = r4 / r77;
         r0 = r116;
@@ -8510,7 +8510,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 >= 0) goto L_0x2d27;
     L_0x2ef5:
         r0 = r46;
-        r4 = r0.f18w;
+        r4 = r0.f36w;
         r4 = (float) r4;
         r4 = r4 / r77;
         r0 = (int) r4;
@@ -10136,7 +10136,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r4 + r54;
         r4 = r4 * r50;
         r0 = r53;
-        r0.f39x = r4;
+        r0.f9x = r4;
         r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r4 * r41;
@@ -10144,7 +10144,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 + r6;
         r0 = r53;
-        r0.f40y = r4;
+        r0.f10y = r4;
         r53.width = r54;
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -10189,7 +10189,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r50;
         if (r0 != r4) goto L_0x3afe;
     L_0x3aef:
-        r4 = r53.f39x;
+        r4 = r53.f9x;
         r6 = r53.width;
         r4 = r4 + r6;
         r0 = r97;
@@ -11419,25 +11419,25 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             a = 0;
             while (a < this.botButtons.size()) {
                 BotButton button = (BotButton) this.botButtons.get(a);
-                y = (button.f40y + this.layoutHeight) - AndroidUtilities.dp(2.0f);
+                y = (button.f10y + this.layoutHeight) - AndroidUtilities.dp(2.0f);
                 Theme.chat_systemDrawable.setColorFilter(a == this.pressedBotButton ? Theme.colorPressedFilter : Theme.colorFilter);
-                Theme.chat_systemDrawable.setBounds(button.f39x + addX, y, (button.f39x + addX) + button.width, button.height + y);
+                Theme.chat_systemDrawable.setBounds(button.f9x + addX, y, (button.f9x + addX) + button.width, button.height + y);
                 Theme.chat_systemDrawable.draw(canvas);
                 canvas.save();
-                canvas.translate((float) ((button.f39x + addX) + AndroidUtilities.dp(5.0f)), (float) (((AndroidUtilities.dp(44.0f) - button.title.getLineBottom(button.title.getLineCount() - 1)) / 2) + y));
+                canvas.translate((float) ((button.f9x + addX) + AndroidUtilities.dp(5.0f)), (float) (((AndroidUtilities.dp(44.0f) - button.title.getLineBottom(button.title.getLineCount() - 1)) / 2) + y));
                 button.title.draw(canvas);
                 canvas.restore();
                 if (button.button instanceof TL_keyboardButtonUrl) {
-                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button.f39x + button.width) - AndroidUtilities.dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.dp(3.0f) + y);
+                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button.f9x + button.width) - AndroidUtilities.dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.dp(3.0f) + y);
                     Theme.chat_botLinkDrawalbe.draw(canvas);
                 } else if (button.button instanceof TL_keyboardButtonSwitchInline) {
-                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button.f39x + button.width) - AndroidUtilities.dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.dp(3.0f) + y);
+                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button.f9x + button.width) - AndroidUtilities.dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.dp(3.0f) + y);
                     Theme.chat_botInlineDrawable.draw(canvas);
                 } else if ((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonRequestGeoLocation) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) {
                     boolean drawProgress = (((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCallback(this.currentMessageObject, button.button)) || ((button.button instanceof TL_keyboardButtonRequestGeoLocation) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCurrentLocation(this.currentMessageObject, button.button));
                     if (drawProgress || !(drawProgress || button.progressAlpha == 0.0f)) {
                         Theme.chat_botProgressPaint.setAlpha(Math.min(255, (int) (button.progressAlpha * 255.0f)));
-                        x = ((button.f39x + button.width) - AndroidUtilities.dp(12.0f)) + addX;
+                        x = ((button.f9x + button.width) - AndroidUtilities.dp(12.0f)) + addX;
                         this.rect.set((float) x, (float) (AndroidUtilities.dp(4.0f) + y), (float) (AndroidUtilities.dp(8.0f) + x), (float) (AndroidUtilities.dp(12.0f) + y));
                         canvas.drawArc(this.rect, (float) button.angle, 220.0f, false, Theme.chat_botProgressPaint);
                         invalidate(((int) this.rect.left) - AndroidUtilities.dp(2.0f), ((int) this.rect.top) - AndroidUtilities.dp(2.0f), ((int) this.rect.right) + AndroidUtilities.dp(2.0f), ((int) this.rect.bottom) + AndroidUtilities.dp(2.0f));

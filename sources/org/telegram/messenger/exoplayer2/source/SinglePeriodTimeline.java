@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -22,7 +22,7 @@ public final class SinglePeriodTimeline extends Timeline {
     }
 
     public SinglePeriodTimeline(long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
-        this(C0600C.TIME_UNSET, C0600C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic);
+        this(C0546C.TIME_UNSET, C0546C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic);
     }
 
     public SinglePeriodTimeline(long presentationStartTimeMs, long windowStartTimeMs, long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
@@ -45,12 +45,12 @@ public final class SinglePeriodTimeline extends Timeline {
         Object id = setIds ? ID : null;
         long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
         if (this.isDynamic && defaultPositionProjectionUs != 0) {
-            if (this.windowDurationUs == C0600C.TIME_UNSET) {
-                windowDefaultStartPositionUs = C0600C.TIME_UNSET;
+            if (this.windowDurationUs == C0546C.TIME_UNSET) {
+                windowDefaultStartPositionUs = C0546C.TIME_UNSET;
             } else {
                 windowDefaultStartPositionUs += defaultPositionProjectionUs;
                 if (windowDefaultStartPositionUs > this.windowDurationUs) {
-                    windowDefaultStartPositionUs = C0600C.TIME_UNSET;
+                    windowDefaultStartPositionUs = C0546C.TIME_UNSET;
                 }
             }
         }

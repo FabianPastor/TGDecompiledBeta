@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -75,9 +75,9 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
 
     public ClippingMediaPeriod(MediaPeriod mediaPeriod, boolean enableInitialDiscontinuity) {
         this.mediaPeriod = mediaPeriod;
-        this.pendingInitialDiscontinuityPositionUs = enableInitialDiscontinuity ? 0 : C0600C.TIME_UNSET;
-        this.startUs = C0600C.TIME_UNSET;
-        this.endUs = C0600C.TIME_UNSET;
+        this.pendingInitialDiscontinuityPositionUs = enableInitialDiscontinuity ? 0 : C0546C.TIME_UNSET;
+        this.startUs = C0546C.TIME_UNSET;
+        this.endUs = C0546C.TIME_UNSET;
     }
 
     public void setClipping(long startUs, long endUs) {
@@ -107,7 +107,7 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
             childStreams[i] = this.sampleStreams[i] != null ? this.sampleStreams[i].childStream : null;
         }
         long enablePositionUs = this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, childStreams, streamResetFlags, positionUs + this.startUs) - this.startUs;
-        long j = (isPendingInitialDiscontinuity() && positionUs == 0 && shouldKeepInitialDiscontinuity(this.startUs, selections)) ? enablePositionUs : C0600C.TIME_UNSET;
+        long j = (isPendingInitialDiscontinuity() && positionUs == 0 && shouldKeepInitialDiscontinuity(this.startUs, selections)) ? enablePositionUs : C0546C.TIME_UNSET;
         this.pendingInitialDiscontinuityPositionUs = j;
         boolean z = enablePositionUs == positionUs || (enablePositionUs >= 0 && (this.endUs == Long.MIN_VALUE || this.startUs + enablePositionUs <= this.endUs));
         Assertions.checkState(z);
@@ -136,13 +136,13 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
         boolean z = false;
         if (isPendingInitialDiscontinuity()) {
             long initialDiscontinuityUs = this.pendingInitialDiscontinuityPositionUs;
-            this.pendingInitialDiscontinuityPositionUs = C0600C.TIME_UNSET;
+            this.pendingInitialDiscontinuityPositionUs = C0546C.TIME_UNSET;
             long childDiscontinuityUs = readDiscontinuity();
-            return childDiscontinuityUs != C0600C.TIME_UNSET ? childDiscontinuityUs : initialDiscontinuityUs;
+            return childDiscontinuityUs != C0546C.TIME_UNSET ? childDiscontinuityUs : initialDiscontinuityUs;
         } else {
             long discontinuityUs = this.mediaPeriod.readDiscontinuity();
-            if (discontinuityUs == C0600C.TIME_UNSET) {
-                return C0600C.TIME_UNSET;
+            if (discontinuityUs == C0546C.TIME_UNSET) {
+                return C0546C.TIME_UNSET;
             }
             boolean z2;
             if (discontinuityUs >= this.startUs) {
@@ -172,7 +172,7 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
 
     public long seekToUs(long positionUs) {
         boolean z = false;
-        this.pendingInitialDiscontinuityPositionUs = C0600C.TIME_UNSET;
+        this.pendingInitialDiscontinuityPositionUs = C0546C.TIME_UNSET;
         for (ClippingSampleStream sampleStream : this.sampleStreams) {
             if (sampleStream != null) {
                 sampleStream.clearSentEos();
@@ -211,7 +211,7 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public void onPrepared(MediaPeriod mediaPeriod) {
-        boolean z = (this.startUs == C0600C.TIME_UNSET || this.endUs == C0600C.TIME_UNSET) ? false : true;
+        boolean z = (this.startUs == C0546C.TIME_UNSET || this.endUs == C0546C.TIME_UNSET) ? false : true;
         Assertions.checkState(z);
         this.callback.onPrepared(this);
     }
@@ -221,7 +221,7 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
     }
 
     boolean isPendingInitialDiscontinuity() {
-        return this.pendingInitialDiscontinuityPositionUs != C0600C.TIME_UNSET;
+        return this.pendingInitialDiscontinuityPositionUs != C0546C.TIME_UNSET;
     }
 
     private SeekParameters clipSeekParameters(long offsetPositionUs, SeekParameters seekParameters) {

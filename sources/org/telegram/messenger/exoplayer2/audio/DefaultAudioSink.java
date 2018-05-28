@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.InitializationException;
@@ -135,8 +135,8 @@ public final class DefaultAudioSink implements AudioSink {
         public void reconfigure(AudioTrack audioTrack, boolean needsPassthroughWorkaround) {
             this.audioTrack = audioTrack;
             this.needsPassthroughWorkaround = needsPassthroughWorkaround;
-            this.stopTimestampUs = C0600C.TIME_UNSET;
-            this.forceResetWorkaroundTimeMs = C0600C.TIME_UNSET;
+            this.stopTimestampUs = C0546C.TIME_UNSET;
+            this.forceResetWorkaroundTimeMs = C0546C.TIME_UNSET;
             this.lastRawPlaybackHeadPosition = 0;
             this.rawPlaybackHeadWrapCount = 0;
             this.passthroughWorkaroundPauseOffset = 0;
@@ -153,18 +153,18 @@ public final class DefaultAudioSink implements AudioSink {
         }
 
         public void pause() {
-            if (this.stopTimestampUs == C0600C.TIME_UNSET) {
+            if (this.stopTimestampUs == C0546C.TIME_UNSET) {
                 this.audioTrack.pause();
             }
         }
 
         public boolean needsReset(long writtenFrames) {
-            return this.forceResetWorkaroundTimeMs != C0600C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
+            return this.forceResetWorkaroundTimeMs != C0546C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
         }
 
         public long getPlaybackHeadPosition() {
-            if (this.stopTimestampUs != C0600C.TIME_UNSET) {
-                return Math.min(this.endPlaybackHeadPosition, this.stopPlaybackHeadPosition + ((((long) this.sampleRate) * ((SystemClock.elapsedRealtime() * 1000) - this.stopTimestampUs)) / C0600C.MICROS_PER_SECOND));
+            if (this.stopTimestampUs != C0546C.TIME_UNSET) {
+                return Math.min(this.endPlaybackHeadPosition, this.stopPlaybackHeadPosition + ((((long) this.sampleRate) * ((SystemClock.elapsedRealtime() * 1000) - this.stopTimestampUs)) / C0546C.MICROS_PER_SECOND));
             }
             int state = this.audioTrack.getPlayState();
             if (state == 1) {
@@ -179,12 +179,12 @@ public final class DefaultAudioSink implements AudioSink {
             }
             if (Util.SDK_INT <= 26) {
                 if (rawPlaybackHeadPosition == 0 && this.lastRawPlaybackHeadPosition > 0 && state == 3) {
-                    if (this.forceResetWorkaroundTimeMs == C0600C.TIME_UNSET) {
+                    if (this.forceResetWorkaroundTimeMs == C0546C.TIME_UNSET) {
                         this.forceResetWorkaroundTimeMs = SystemClock.elapsedRealtime();
                     }
                     return this.lastRawPlaybackHeadPosition;
                 }
-                this.forceResetWorkaroundTimeMs = C0600C.TIME_UNSET;
+                this.forceResetWorkaroundTimeMs = C0546C.TIME_UNSET;
             }
             if (this.lastRawPlaybackHeadPosition > rawPlaybackHeadPosition) {
                 this.rawPlaybackHeadWrapCount++;
@@ -194,7 +194,7 @@ public final class DefaultAudioSink implements AudioSink {
         }
 
         public long getPositionUs() {
-            return (getPlaybackHeadPosition() * C0600C.MICROS_PER_SECOND) / ((long) this.sampleRate);
+            return (getPlaybackHeadPosition() * C0546C.MICROS_PER_SECOND) / ((long) this.sampleRate);
         }
 
         public boolean updateTimestamp() {
@@ -415,7 +415,7 @@ public final class DefaultAudioSink implements AudioSink {
                 channelConfig = 1276;
                 break;
             case 8:
-                channelConfig = C0600C.CHANNEL_OUT_7POINT1_SURROUND;
+                channelConfig = C0546C.CHANNEL_OUT_7POINT1_SURROUND;
                 break;
             default:
                 throw new ConfigurationException("Unsupported channel count: " + channelCount);
@@ -427,7 +427,7 @@ public final class DefaultAudioSink implements AudioSink {
                     channelConfig = 252;
                     break;
                 case 7:
-                    channelConfig = C0600C.CHANNEL_OUT_7POINT1_SURROUND;
+                    channelConfig = C0546C.CHANNEL_OUT_7POINT1_SURROUND;
                     break;
             }
         }
@@ -460,7 +460,7 @@ public final class DefaultAudioSink implements AudioSink {
             if (this.isInputPcm) {
                 framesToDurationUs = framesToDurationUs((long) (this.bufferSize / this.outputPcmFrameSize));
             } else {
-                framesToDurationUs = C0600C.TIME_UNSET;
+                framesToDurationUs = C0546C.TIME_UNSET;
             }
             this.bufferSizeUs = framesToDurationUs;
         }
@@ -545,7 +545,7 @@ public final class DefaultAudioSink implements AudioSink {
         boolean hadData = this.hasData;
         this.hasData = hasPendingData();
         if (!(!hadData || this.hasData || this.audioTrack.getPlayState() == 1 || this.listener == null)) {
-            this.listener.onUnderrun(this.bufferSize, C0600C.usToMs(this.bufferSizeUs), SystemClock.elapsedRealtime() - this.lastFeedElapsedRealtimeMs);
+            this.listener.onUnderrun(this.bufferSize, C0546C.usToMs(this.bufferSizeUs), SystemClock.elapsedRealtime() - this.lastFeedElapsedRealtimeMs);
         }
         if (this.inputBuffer == null) {
             if (!buffer.hasRemaining()) {
@@ -667,7 +667,7 @@ public final class DefaultAudioSink implements AudioSink {
                     }
                 }
             } else if (this.tunneling) {
-                if (avSyncPresentationTimeUs == C0600C.TIME_UNSET) {
+                if (avSyncPresentationTimeUs == C0546C.TIME_UNSET) {
                     z = false;
                 }
                 Assertions.checkState(z);
@@ -716,7 +716,7 @@ public final class DefaultAudioSink implements AudioSink {
             if (audioProcessorNeedsEndOfStream) {
                 audioProcessor.queueEndOfStream();
             }
-            processBuffers(C0600C.TIME_UNSET);
+            processBuffers(C0546C.TIME_UNSET);
             if (!audioProcessor.isEnded()) {
                 return false;
             }
@@ -724,7 +724,7 @@ public final class DefaultAudioSink implements AudioSink {
             this.drainingAudioProcessorIndex++;
         }
         if (this.outputBuffer != null) {
-            writeBuffer(this.outputBuffer, C0600C.TIME_UNSET);
+            writeBuffer(this.outputBuffer, C0546C.TIME_UNSET);
             if (this.outputBuffer != null) {
                 return false;
             }
@@ -979,15 +979,15 @@ public final class DefaultAudioSink implements AudioSink {
     }
 
     private long inputFramesToDurationUs(long frameCount) {
-        return (C0600C.MICROS_PER_SECOND * frameCount) / ((long) this.inputSampleRate);
+        return (C0546C.MICROS_PER_SECOND * frameCount) / ((long) this.inputSampleRate);
     }
 
     private long framesToDurationUs(long frameCount) {
-        return (C0600C.MICROS_PER_SECOND * frameCount) / ((long) this.sampleRate);
+        return (C0546C.MICROS_PER_SECOND * frameCount) / ((long) this.sampleRate);
     }
 
     private long durationUsToFrames(long durationUs) {
-        return (((long) this.sampleRate) * durationUs) / C0600C.MICROS_PER_SECOND;
+        return (((long) this.sampleRate) * durationUs) / C0546C.MICROS_PER_SECOND;
     }
 
     private long getSubmittedFrames() {

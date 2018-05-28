@@ -157,7 +157,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private boolean mediaEnabled = true;
     private boolean paused;
     private PhotoAttachAdapter photoAttachAdapter;
-    private PhotoViewerProvider photoViewerProvider = new C14051();
+    private PhotoViewerProvider photoViewerProvider = new C23691();
     private boolean pressed;
     private EmptyTextProgressView progressView;
     private TextView recordTime;
@@ -191,8 +191,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         private boolean pressed;
 
         /* renamed from: org.telegram.ui.Components.ChatAttachAlert$AttachBotButton$1 */
-        class C14151 implements OnClickListener {
-            C14151() {
+        class C11191 implements OnClickListener {
+            C11191() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -261,7 +261,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 Builder builder = new Builder(getContext());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name)));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14151());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C11191());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
             }
@@ -386,8 +386,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAttachAlert$3 */
-    class C14083 extends ItemDecoration {
-        C14083() {
+    class C20603 extends ItemDecoration {
+        C20603() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -399,8 +399,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAttachAlert$4 */
-    class C14094 extends OnScrollListener {
-        C14094() {
+    class C20614 extends OnScrollListener {
+        C20614() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -417,8 +417,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAttachAlert$7 */
-    class C14127 implements OnItemClickListener {
-        C14127() {
+    class C20627 implements OnItemClickListener {
+        C20627() {
         }
 
         public void onItemClick(View view, int position) {
@@ -442,8 +442,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAttachAlert$8 */
-    class C14138 extends OnScrollListener {
-        C14138() {
+    class C20638 extends OnScrollListener {
+        C20638() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -604,8 +604,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         private ArrayList<Holder> viewsCache = new ArrayList(8);
 
         /* renamed from: org.telegram.ui.Components.ChatAttachAlert$PhotoAttachAdapter$1 */
-        class C14171 implements PhotoAttachPhotoCellDelegate {
-            C14171() {
+        class C20641 implements PhotoAttachPhotoCellDelegate {
+            C20641() {
             }
 
             public void onCheckClick(PhotoAttachPhotoCell v) {
@@ -639,7 +639,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
         public Holder createHolder() {
             PhotoAttachPhotoCell cell = new PhotoAttachPhotoCell(this.mContext);
-            cell.setDelegate(new C14171());
+            cell.setDelegate(new C20641());
             return new Holder(cell);
         }
 
@@ -715,8 +715,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAttachAlert$1 */
-    class C14051 extends BasePhotoProvider {
-        C14051() {
+    class C23691 extends BasePhotoProvider {
+        C23691() {
             super();
         }
 
@@ -882,7 +882,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadInlineHints);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
-        ViewGroup c14072 = new RecyclerListView(context) {
+        ViewGroup c23772 = new RecyclerListView(context) {
             private int lastHeight;
             private int lastWidth;
 
@@ -993,8 +993,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 ChatAttachAlert.this.checkCameraViewPosition();
             }
         };
-        this.listView = c14072;
-        this.containerView = c14072;
+        this.listView = c23772;
+        this.containerView = c23772;
         this.nestedScrollChild = this.listView;
         this.listView.setWillNotDraw(false);
         this.listView.setClipToPadding(false);
@@ -1010,8 +1010,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.addItemDecoration(new C14083());
-        this.listView.setOnScrollListener(new C14094());
+        this.listView.addItemDecoration(new C20603());
+        this.listView.setOnScrollListener(new C20614());
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.attachView = new FrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -1059,8 +1059,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         };
         this.attachPhotoLayoutManager.setOrientation(0);
         this.attachPhotoRecyclerView.setLayoutManager(this.attachPhotoLayoutManager);
-        this.attachPhotoRecyclerView.setOnItemClickListener(new C14127());
-        this.attachPhotoRecyclerView.setOnScrollListener(new C14138());
+        this.attachPhotoRecyclerView.setOnItemClickListener(new C20627());
+        this.attachPhotoRecyclerView.setOnScrollListener(new C20638());
         viewArr = this.views;
         CorrectlyMeasuringTextView correctlyMeasuringTextView = new CorrectlyMeasuringTextView(context);
         this.mediaBanTooltip = correctlyMeasuringTextView;
@@ -1086,13 +1086,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.attachView.addView(this.progressView, LayoutHelper.createFrame(-1, 80.0f));
         this.attachPhotoRecyclerView.setEmptyView(this.progressView);
         viewArr = this.views;
-        View c14149 = new View(getContext()) {
+        View c11189 = new View(getContext()) {
             public boolean hasOverlappingRendering() {
                 return false;
             }
         };
-        this.lineView = c14149;
-        viewArr[10] = c14149;
+        this.lineView = c11189;
+        viewArr[10] = c11189;
         this.lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine));
         this.attachView.addView(this.lineView, new FrameLayout.LayoutParams(-1, 1, 51));
         CharSequence[] items = new CharSequence[]{LocaleController.getString("ChatCamera", R.string.ChatCamera), LocaleController.getString("ChatGallery", R.string.ChatGallery), LocaleController.getString("ChatVideo", R.string.ChatVideo), LocaleController.getString("AttachMusic", R.string.AttachMusic), LocaleController.getString("ChatDocument", R.string.ChatDocument), LocaleController.getString("AttachContact", R.string.AttachContact), LocaleController.getString("ChatLocation", R.string.ChatLocation), TtmlNode.ANONYMOUS_REGION_ID};
@@ -1196,8 +1196,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             private File outputFile;
 
             /* renamed from: org.telegram.ui.Components.ChatAttachAlert$13$1 */
-            class C13981 implements Runnable {
-                C13981() {
+            class C11101 implements Runnable {
+                C11101() {
                 }
 
                 public void run() {
@@ -1210,8 +1210,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
 
             /* renamed from: org.telegram.ui.Components.ChatAttachAlert$13$3 */
-            class C14003 implements Runnable {
-                C14003() {
+            class C11113 implements Runnable {
+                C11113() {
                 }
 
                 public void run() {
@@ -1220,8 +1220,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
 
             /* renamed from: org.telegram.ui.Components.ChatAttachAlert$13$2 */
-            class C13992 implements VideoTakeCallback {
-                C13992() {
+            class C20592 implements VideoTakeCallback {
+                C20592() {
                 }
 
                 public void onFinishVideoRecording(String thumbPath, long duration) {
@@ -1248,9 +1248,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     ChatAttachAlert.this.recordTime.setAlpha(1.0f);
                     ChatAttachAlert.this.recordTime.setText(String.format("%02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0)}));
                     ChatAttachAlert.this.videoRecordTime = 0;
-                    ChatAttachAlert.this.videoRecordRunnable = new C13981();
+                    ChatAttachAlert.this.videoRecordRunnable = new C11101();
                     AndroidUtilities.lockOrientation(parentFragment.getParentActivity());
-                    CameraController.getInstance().recordVideo(ChatAttachAlert.this.cameraView.getCameraSession(), this.outputFile, new C13992(), new C14003());
+                    CameraController.getInstance().recordVideo(ChatAttachAlert.this.cameraView.getCameraSession(), this.outputFile, new C20592(), new C11113());
                     ChatAttachAlert.this.shutterButton.setState(ShutterButton.State.RECORDING, true);
                     return true;
                 }
@@ -1315,8 +1315,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.switchCameraButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.Components.ChatAttachAlert$14$1 */
-            class C14021 extends AnimatorListenerAdapter {
-                C14021() {
+            class C11131 extends AnimatorListenerAdapter {
+                C11131() {
                 }
 
                 public void onAnimationEnd(Animator animator) {
@@ -1332,7 +1332,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     ChatAttachAlert.this.cameraInitied = false;
                     ChatAttachAlert.this.cameraView.switchCamera();
                     ObjectAnimator animator = ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
-                    animator.addListener(new C14021());
+                    animator.addListener(new C11131());
                     animator.start();
                 }
             }
@@ -1450,8 +1450,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             PhotoViewer.getInstance().openPhotoForSelect(getAllPhotosArray(), cameraPhotos.size() - 1, 2, new BasePhotoProvider() {
 
                 /* renamed from: org.telegram.ui.Components.ChatAttachAlert$19$1 */
-                class C14041 implements Runnable {
-                    C14041() {
+                class C11151 implements Runnable {
+                    C11151() {
                     }
 
                     public void run() {
@@ -1467,7 +1467,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
                 public boolean cancelButtonPressed() {
                     if (ChatAttachAlert.this.cameraOpened && ChatAttachAlert.this.cameraView != null) {
-                        AndroidUtilities.runOnUIThread(new C14041(), 1000);
+                        AndroidUtilities.runOnUIThread(new C11151(), 1000);
                         CameraController.getInstance().startPreview(ChatAttachAlert.this.cameraView.getCameraSession());
                     }
                     if (ChatAttachAlert.this.cancelTakingPhotos && ChatAttachAlert.cameraPhotos.size() == 1) {
@@ -2392,8 +2392,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.currentHintAnimation.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.Components.ChatAttachAlert$26$1 */
-                class C14061 implements Runnable {
-                    C14061() {
+                class C11161 implements Runnable {
+                    C11161() {
                     }
 
                     public void run() {
@@ -2407,7 +2407,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 public void onAnimationEnd(Animator animation) {
                     if (ChatAttachAlert.this.currentHintAnimation != null && ChatAttachAlert.this.currentHintAnimation.equals(animation)) {
                         ChatAttachAlert.this.currentHintAnimation = null;
-                        AndroidUtilities.runOnUIThread(ChatAttachAlert.this.hideHintRunnable = new C14061(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                        AndroidUtilities.runOnUIThread(ChatAttachAlert.this.hideHintRunnable = new C11161(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     }
                 }
 

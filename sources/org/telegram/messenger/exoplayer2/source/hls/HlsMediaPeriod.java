@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -175,7 +175,7 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
     }
 
     public long readDiscontinuity() {
-        return C0600C.TIME_UNSET;
+        return C0546C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

@@ -118,7 +118,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     public static final int STATE_WAIT_INIT_ACK = 2;
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
     protected static VoIPBaseService sharedInstance;
-    protected Runnable afterSoundRunnable = new C07881();
+    protected Runnable afterSoundRunnable = new C06791();
     protected boolean audioConfigured;
     protected int audioRouteToSet = 2;
     protected boolean bluetoothScoActive = false;
@@ -145,7 +145,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean playingSound;
     protected Stats prevStats = new Stats();
     protected WakeLock proximityWakelock;
-    protected BroadcastReceiver receiver = new C07892();
+    protected BroadcastReceiver receiver = new C06802();
     protected MediaPlayer ringtonePlayer;
     protected int signalBarCount;
     protected SoundPool soundPool;
@@ -164,8 +164,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     private boolean wasEstablished;
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$1 */
-    class C07881 implements Runnable {
-        C07881() {
+    class C06791 implements Runnable {
+        C06791() {
         }
 
         public void run() {
@@ -180,8 +180,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$2 */
-    class C07892 extends BroadcastReceiver {
-        C07892() {
+    class C06802 extends BroadcastReceiver {
+        C06802() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -245,8 +245,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$3 */
-    class C07903 implements OnClickListener {
-        C07903() {
+    class C06813 implements OnClickListener {
+        C06813() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -315,8 +315,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$4 */
-    class C07914 implements OnPreparedListener {
-        C07914() {
+    class C06824 implements OnPreparedListener {
+        C06824() {
         }
 
         public void onPrepared(MediaPlayer mediaPlayer) {
@@ -325,8 +325,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$5 */
-    class C07925 implements Runnable {
-        C07925() {
+    class C06835 implements Runnable {
+        C06835() {
         }
 
         public void run() {
@@ -335,8 +335,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$7 */
-    class C07947 implements Runnable {
-        C07947() {
+    class C06857 implements Runnable {
+        C06857() {
         }
 
         public void run() {
@@ -496,7 +496,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public void toggleSpeakerphoneOrShowRouteSheet(Activity activity) {
         if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C07903()).create();
+            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C06813()).create();
             sheet.setBackgroundColor(-13948117);
             sheet.show();
             ViewGroup container = sheet.getSheetContainer();
@@ -673,7 +673,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 am.requestAudioFocus(this, 2, 1);
             }
             this.ringtonePlayer = new MediaPlayer();
-            this.ringtonePlayer.setOnPreparedListener(new C07914());
+            this.ringtonePlayer.setOnPreparedListener(new C06824());
             this.ringtonePlayer.setLooping(true);
             this.ringtonePlayer.setAudioStreamType(2);
             try {
@@ -731,7 +731,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         super.onDestroy();
         sharedInstance = null;
-        AndroidUtilities.runOnUIThread(new C07925());
+        AndroidUtilities.runOnUIThread(new C06835());
         if (this.controller != null && this.controllerStarted) {
             this.lastKnownDuration = this.controller.getCallDuration();
             updateStats();
@@ -1292,7 +1292,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         vibrator.vibrate(100);
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C07947(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                AndroidUtilities.runOnUIThread(new C06857(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 if (this.isOutgoing) {
                     StatsController.getInstance(this.currentAccount).incrementSentItemsCount(getStatsNetworkType(), 0, 1);
                 } else {

@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
 import android.util.Log;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
@@ -23,7 +23,7 @@ final class XingSeeker implements Seeker {
         if ((flags & 1) == 1) {
             int frameCount = frame.readUnsignedIntToInt();
             if (frameCount != 0) {
-                long durationUs = Util.scaleLargeTimestamp((long) frameCount, ((long) samplesPerFrame) * C0600C.MICROS_PER_SECOND, (long) sampleRate);
+                long durationUs = Util.scaleLargeTimestamp((long) frameCount, ((long) samplesPerFrame) * C0546C.MICROS_PER_SECOND, (long) sampleRate);
                 if ((flags & 6) != 6) {
                     return new XingSeeker(position, mpegAudioHeader.frameSize, durationUs);
                 }

@@ -91,7 +91,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C09171()) {
+    private LocationProvider locationProvider = new LocationProvider(new C19071()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -130,8 +130,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C09171 implements LocationProviderDelegate {
-        C09171() {
+    class C19071 implements LocationProviderDelegate {
+        C19071() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -147,8 +147,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C09193 implements SearchAdapterHelperDelegate {
-        C09193() {
+    class C19093 implements SearchAdapterHelperDelegate {
+        C19093() {
         }
 
         public void onDataSetChanged() {
@@ -174,7 +174,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C09193());
+        this.searchAdapterHelper.setDelegate(new C19093());
     }
 
     public void onDestroy() {
@@ -395,8 +395,8 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
-                class C09241 implements RequestDelegate {
-                    C09241() {
+                class C19101 implements RequestDelegate {
+                    C19101() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -431,7 +431,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                             req.username = MentionsAdapter.this.searchingContextUsername;
-                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C09241());
+                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C19101());
                         } else if (!MentionsAdapter.this.noUserName) {
                             MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, TtmlNode.ANONYMOUS_REGION_ID);
                         }
@@ -805,7 +805,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C09309 c09309 = new Runnable() {
+                    C08009 c08009 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -813,7 +813,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 req.limit = 20;
                                 req.offset = 0;
                                 req.filter = new TL_channelParticipantsSearch();
-                                req.filter.f14q = str;
+                                req.filter.f32q = str;
                                 final int currentReqId = MentionsAdapter.access$3104(MentionsAdapter.this);
                                 MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                     public void run(final TLObject response, final TL_error error) {
@@ -846,8 +846,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     };
-                    this.searchGlobalRunnable = c09309;
-                    AndroidUtilities.runOnUIThread(c09309, 200);
+                    this.searchGlobalRunnable = c08009;
+                    AndroidUtilities.runOnUIThread(c08009, 200);
                 }
                 final SparseArray<User> sparseArray = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;

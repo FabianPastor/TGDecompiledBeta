@@ -7,11 +7,11 @@ import org.telegram.messenger.exoplayer2.metadata.scte35.SpliceInfoDecoder;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public interface MetadataDecoderFactory {
-    public static final MetadataDecoderFactory DEFAULT = new C06521();
+    public static final MetadataDecoderFactory DEFAULT = new C18611();
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.MetadataDecoderFactory$1 */
-    static class C06521 implements MetadataDecoderFactory {
-        C06521() {
+    static class C18611 implements MetadataDecoderFactory {
+        C18611() {
         }
 
         public boolean supportsFormat(Format format) {

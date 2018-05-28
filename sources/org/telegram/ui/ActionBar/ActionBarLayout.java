@@ -30,7 +30,7 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Components.LayoutHelper;
@@ -87,8 +87,8 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$4 */
-    class C08394 extends AnimatorListenerAdapter {
-        C08394() {
+    class C07204 extends AnimatorListenerAdapter {
+        C07204() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -97,8 +97,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$6 */
-    class C08416 implements Runnable {
-        C08416() {
+    class C07226 implements Runnable {
+        C07226() {
         }
 
         public void run() {
@@ -107,8 +107,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$7 */
-    class C08427 implements Runnable {
-        C08427() {
+    class C07237 implements Runnable {
+        C07237() {
         }
 
         public void run() {
@@ -120,8 +120,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$8 */
-    class C08438 implements Runnable {
-        C08438() {
+    class C07248 implements Runnable {
+        C07248() {
         }
 
         public void run() {
@@ -632,16 +632,16 @@ public class ActionBarLayout extends FrameLayout {
     private void startLayoutAnimation(final boolean open, final boolean first) {
         if (first) {
             this.animationProgress = 0.0f;
-            this.lastFrameTime = System.nanoTime() / C0600C.MICROS_PER_SECOND;
+            this.lastFrameTime = System.nanoTime() / C0546C.MICROS_PER_SECOND;
         }
-        Runnable c08372 = new Runnable() {
+        Runnable c07182 = new Runnable() {
             public void run() {
                 if (ActionBarLayout.this.animationRunnable == this) {
                     ActionBarLayout.this.animationRunnable = null;
                     if (first) {
                         ActionBarLayout.this.transitionAnimationStartTime = System.currentTimeMillis();
                     }
-                    long newTime = System.nanoTime() / C0600C.MICROS_PER_SECOND;
+                    long newTime = System.nanoTime() / C0546C.MICROS_PER_SECOND;
                     long dt = newTime - ActionBarLayout.this.lastFrameTime;
                     if (dt > 18) {
                         dt = 18;
@@ -667,8 +667,8 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
         };
-        this.animationRunnable = c08372;
-        AndroidUtilities.runOnUIThread(c08372);
+        this.animationRunnable = c07182;
+        AndroidUtilities.runOnUIThread(c07182);
     }
 
     public void resumeDelayedFragmentAnimation() {
@@ -763,7 +763,7 @@ public class ActionBarLayout extends FrameLayout {
             this.currentAnimation.playTogether(animators);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
-            this.currentAnimation.addListener(new C08394());
+            this.currentAnimation.addListener(new C07204());
             this.currentAnimation.start();
         } else {
             this.transitionAnimationStartTime = System.currentTimeMillis();
@@ -777,15 +777,15 @@ public class ActionBarLayout extends FrameLayout {
                 }
             };
             fragment.onTransitionAnimationStart(true, false);
-            AnimatorSet animation = fragment.onCustomTransitionAnimation(true, new C08416());
+            AnimatorSet animation = fragment.onCustomTransitionAnimation(true, new C07226());
             if (animation == null) {
                 this.containerView.setAlpha(0.0f);
                 this.containerView.setTranslationX(48.0f);
                 if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                    this.waitingForKeyboardCloseRunnable = new C08427();
+                    this.waitingForKeyboardCloseRunnable = new C07237();
                     AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, 200);
                 } else if (fragment.needDelayOpenAnimation()) {
-                    this.delayedOpenAnimationRunnable = new C08438();
+                    this.delayedOpenAnimationRunnable = new C07248();
                     AndroidUtilities.runOnUIThread(this.delayedOpenAnimationRunnable, 200);
                 } else {
                     startLayoutAnimation(true, true);

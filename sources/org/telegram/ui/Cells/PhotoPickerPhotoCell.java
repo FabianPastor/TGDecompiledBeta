@@ -28,8 +28,8 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     private boolean zoomOnSelect;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerPhotoCell$1 */
-    class C10741 extends AnimatorListenerAdapter {
-        C10741() {
+    class C08951 extends AnimatorListenerAdapter {
+        C08951() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -94,7 +94,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         fArr2[0] = f;
         animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
         animatorSet.playTogether(animatorArr);
-        this.animatorSet.addListener(new C10741());
+        this.animatorSet.addListener(new C08951());
         this.animatorSet.start();
     }
 

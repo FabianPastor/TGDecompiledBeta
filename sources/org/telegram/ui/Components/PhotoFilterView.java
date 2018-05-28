@@ -119,11 +119,11 @@ public class PhotoFilterView extends FrameLayout {
     private float warmthValue;
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$1 */
-    class C15631 implements SurfaceTextureListener {
+    class C12491 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$1$1 */
-        class C15621 implements Runnable {
-            C15621() {
+        class C12481 implements Runnable {
+            C12481() {
             }
 
             public void run() {
@@ -133,7 +133,7 @@ public class PhotoFilterView extends FrameLayout {
             }
         }
 
-        C15631() {
+        C12491() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -148,7 +148,7 @@ public class PhotoFilterView extends FrameLayout {
             if (PhotoFilterView.this.eglThread != null) {
                 PhotoFilterView.this.eglThread.setSurfaceTextureSize(width, height);
                 PhotoFilterView.this.eglThread.requestRender(false, true);
-                PhotoFilterView.this.eglThread.postRunnable(new C15621());
+                PhotoFilterView.this.eglThread.postRunnable(new C12481());
             }
         }
 
@@ -165,8 +165,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$4 */
-    class C15664 implements OnClickListener {
-        C15664() {
+    class C12504 implements OnClickListener {
+        C12504() {
         }
 
         public void onClick(View v) {
@@ -179,8 +179,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$5 */
-    class C15675 implements OnClickListener {
-        C15675() {
+    class C12515 implements OnClickListener {
+        C12515() {
         }
 
         public void onClick(View v) {
@@ -193,8 +193,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$6 */
-    class C15686 implements OnClickListener {
-        C15686() {
+    class C12526 implements OnClickListener {
+        C12526() {
         }
 
         public void onClick(View v) {
@@ -207,8 +207,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$7 */
-    class C15697 implements OnClickListener {
-        C15697() {
+    class C12537 implements OnClickListener {
+        C12537() {
         }
 
         public void onClick(View v) {
@@ -224,8 +224,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$8 */
-    class C15708 implements OnClickListener {
-        C15708() {
+    class C12548 implements OnClickListener {
+        C12548() {
         }
 
         public void onClick(View v) {
@@ -239,8 +239,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$9 */
-    class C15719 implements OnClickListener {
-        C15719() {
+    class C12559 implements OnClickListener {
+        C12559() {
         }
 
         public void onClick(View v) {
@@ -385,8 +385,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
-    class C15642 implements PhotoFilterLinearBlurControlDelegate {
-        C15642() {
+    class C20812 implements PhotoFilterLinearBlurControlDelegate {
+        C20812() {
         }
 
         public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
@@ -401,8 +401,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
-    class C15653 implements PhotoFilterCurvesControlDelegate {
-        C15653() {
+    class C20823 implements PhotoFilterCurvesControlDelegate {
+        C20823() {
         }
 
         public void valueChanged() {
@@ -439,7 +439,7 @@ public class PhotoFilterView extends FrameLayout {
         private Bitmap currentBitmap;
         private int[] curveTextures = new int[1];
         private int curvesImageHandle;
-        private Runnable drawRunnable = new C15721();
+        private Runnable drawRunnable = new C12561();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -522,8 +522,8 @@ public class PhotoFilterView extends FrameLayout {
         private int widthHandle;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$1 */
-        class C15721 implements Runnable {
-            C15721() {
+        class C12561 implements Runnable {
+            C12561() {
             }
 
             public void run() {
@@ -556,8 +556,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$3 */
-        class C15743 implements Runnable {
-            C15743() {
+        class C12583 implements Runnable {
+            C12583() {
             }
 
             public void run() {
@@ -1091,7 +1091,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1i(this.radialBlurSourceImage2Handle, 1);
                 GLES20.glUniform1f(this.radialBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.radialBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
-                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f54x, PhotoFilterView.this.blurExcludePoint.f55y);
+                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f24x, PhotoFilterView.this.blurExcludePoint.f25y);
                 GLES20.glUniform1f(this.radialBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.radialBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.radialBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1104,7 +1104,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1f(this.linearBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.linearBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
                 GLES20.glUniform1f(this.linearBlurAngleHandle, PhotoFilterView.this.blurAngle);
-                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f54x, PhotoFilterView.this.blurExcludePoint.f55y);
+                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f24x, PhotoFilterView.this.blurExcludePoint.f25y);
                 GLES20.glUniform1f(this.linearBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.linearBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.linearBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1213,7 +1213,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public void shutdown() {
-            postRunnable(new C15743());
+            postRunnable(new C12583());
         }
 
         public void setSurfaceTextureSize(int width, int height) {
@@ -1250,8 +1250,8 @@ public class PhotoFilterView extends FrameLayout {
         private Context mContext;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$2 */
-        class C15772 implements OnClickListener {
-            C15772() {
+        class C12602 implements OnClickListener {
+            C12602() {
             }
 
             public void onClick(View v) {
@@ -1268,8 +1268,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$1 */
-        class C15761 implements PhotoEditorSeekBarDelegate {
-            C15761() {
+        class C20831 implements PhotoEditorSeekBarDelegate {
+            C20831() {
             }
 
             public void onProgressChanged(int i, int progress) {
@@ -1319,10 +1319,10 @@ public class PhotoFilterView extends FrameLayout {
             if (i == 0) {
                 View cell = new PhotoEditToolCell(this.mContext);
                 view = cell;
-                cell.setSeekBarDelegate(new C15761());
+                cell.setSeekBarDelegate(new C20831());
             } else {
                 view = new PhotoEditRadioCell(this.mContext);
-                view.setOnClickListener(new C15772());
+                view.setOnClickListener(new C12602());
             }
             return new Holder(view);
         }
@@ -1432,13 +1432,13 @@ public class PhotoFilterView extends FrameLayout {
         this.textureView = new TextureView(context);
         addView(this.textureView, LayoutHelper.createFrame(-1, -1, 51));
         this.textureView.setVisibility(4);
-        this.textureView.setSurfaceTextureListener(new C15631());
+        this.textureView.setSurfaceTextureListener(new C12491());
         this.blurControl = new PhotoFilterBlurControl(context);
         this.blurControl.setVisibility(4);
         addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new C15642());
+        this.blurControl.setDelegate(new C20812());
         this.curvesControl = new PhotoFilterCurvesControl(context, this.curvesToolValue);
-        this.curvesControl.setDelegate(new C15653());
+        this.curvesControl.setDelegate(new C20823());
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context);
@@ -1472,19 +1472,19 @@ public class PhotoFilterView extends FrameLayout {
         this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
         this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new C15664());
+        this.tuneItem.setOnClickListener(new C12504());
         this.blurItem = new ImageView(context);
         this.blurItem.setScaleType(ScaleType.CENTER);
         this.blurItem.setImageResource(R.drawable.tool_blur);
         this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new C15675());
+        this.blurItem.setOnClickListener(new C12515());
         this.curveItem = new ImageView(context);
         this.curveItem.setScaleType(ScaleType.CENTER);
         this.curveItem.setImageResource(R.drawable.tool_curve);
         this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new C15686());
+        this.curveItem.setOnClickListener(new C12526());
         this.recyclerListView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(1);
@@ -1533,7 +1533,7 @@ public class PhotoFilterView extends FrameLayout {
             }
             frameLayout1.addView(curveTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
             curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout1.setOnClickListener(new C15697());
+            frameLayout1.setOnClickListener(new C12537());
             a++;
         }
         this.blurLayout = new FrameLayout(context);
@@ -1545,14 +1545,14 @@ public class PhotoFilterView extends FrameLayout {
         this.blurOffButton.setGravity(1);
         this.blurOffButton.setText(LocaleController.getString("BlurOff", R.string.BlurOff));
         this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new C15708());
+        this.blurOffButton.setOnClickListener(new C12548());
         this.blurRadialButton = new TextView(context);
         this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurRadialButton.setTextSize(1, 13.0f);
         this.blurRadialButton.setGravity(1);
         this.blurRadialButton.setText(LocaleController.getString("BlurRadial", R.string.BlurRadial));
         this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new C15719());
+        this.blurRadialButton.setOnClickListener(new C12559());
         this.blurLinearButton = new TextView(context);
         this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurLinearButton.setTextSize(1, 13.0f);

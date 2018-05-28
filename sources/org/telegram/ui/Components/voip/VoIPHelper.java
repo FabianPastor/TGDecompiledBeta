@@ -96,8 +96,8 @@ public class VoIPHelper {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                        class C17161 implements Runnable {
-                            C17161() {
+                        class C13611 implements Runnable {
+                            C13611() {
                             }
 
                             public void run() {
@@ -107,7 +107,7 @@ public class VoIPHelper {
 
                         public void onClick(DialogInterface dialog, int which) {
                             if (VoIPService.getSharedInstance() != null) {
-                                VoIPService.getSharedInstance().hangUp(new C17161());
+                                VoIPService.getSharedInstance().hangUp(new C13611());
                             } else {
                                 VoIPHelper.doInitiateCall(user, activity);
                             }
@@ -220,7 +220,7 @@ public class VoIPHelper {
         final boolean[] includeLogs = new boolean[]{true};
         linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
-        View.OnClickListener c17205 = new View.OnClickListener() {
+        View.OnClickListener c13655 = new View.OnClickListener() {
             public void onClick(View v) {
                 boolean z;
                 boolean[] zArr = includeLogs;
@@ -235,14 +235,14 @@ public class VoIPHelper {
         };
         linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
         linearLayout.setClipToPadding(false);
-        linearLayout.setOnClickListener(c17205);
+        linearLayout.setOnClickListener(c13655);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
         linearLayout.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        linearLayout.setOnClickListener(c17205);
+        linearLayout.setOnClickListener(c13655);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
         linearLayout.setVisibility(8);

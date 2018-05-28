@@ -159,8 +159,8 @@ public class AndroidUtilities {
     }
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C00775 extends CrashManagerListener {
-        C00775() {
+    static class C17995 extends CrashManagerListener {
+        C17995() {
         }
 
         public boolean includeDeviceData() {
@@ -848,7 +848,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00742 = new ContentObserver(new Handler()) {
+                ContentObserver c00602 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -858,16 +858,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00742;
-                contentResolver.registerContentObserver(uri, true, c00742);
-                Runnable c00753 = new Runnable() {
+                callLogContentObserver = c00602;
+                contentResolver.registerContentObserver(uri, true, c00602);
+                Runnable c00613 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00753;
-                runOnUIThread(c00753, 10000);
+                unregisterRunnable = c00613;
+                runOnUIThread(c00613, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1134,7 +1134,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C00775());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17995());
     }
 
     public static void checkForUpdates(Activity context) {

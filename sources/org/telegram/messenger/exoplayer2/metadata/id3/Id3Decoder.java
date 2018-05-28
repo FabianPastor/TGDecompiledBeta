@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.MetadataDecoder;
 import org.telegram.messenger.exoplayer2.metadata.MetadataInputBuffer;
@@ -532,11 +532,11 @@ public final class Id3Decoder implements MetadataDecoder {
             case 0:
                 return "ISO-8859-1";
             case 1:
-                return C0600C.UTF16_NAME;
+                return C0546C.UTF16_NAME;
             case 2:
                 return "UTF-16BE";
             case 3:
-                return C0600C.UTF8_NAME;
+                return C0546C.UTF8_NAME;
             default:
                 return "ISO-8859-1";
         }

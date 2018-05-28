@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -472,8 +472,8 @@ public class SsManifestParser implements Parser<SsManifest> {
 
         private void parseStreamFragmentStartTag(XmlPullParser parser) throws ParserException {
             int chunkIndex = this.startTimes.size();
-            long startTime = parseLong(parser, KEY_FRAGMENT_START_TIME, C0600C.TIME_UNSET);
-            if (startTime == C0600C.TIME_UNSET) {
+            long startTime = parseLong(parser, KEY_FRAGMENT_START_TIME, C0546C.TIME_UNSET);
+            if (startTime == C0546C.TIME_UNSET) {
                 if (chunkIndex == 0) {
                     startTime = 0;
                 } else if (this.lastChunkDuration != -1) {
@@ -484,9 +484,9 @@ public class SsManifestParser implements Parser<SsManifest> {
             }
             chunkIndex++;
             this.startTimes.add(Long.valueOf(startTime));
-            this.lastChunkDuration = parseLong(parser, KEY_FRAGMENT_DURATION, C0600C.TIME_UNSET);
+            this.lastChunkDuration = parseLong(parser, KEY_FRAGMENT_DURATION, C0546C.TIME_UNSET);
             long repeatCount = parseLong(parser, KEY_FRAGMENT_REPEAT_COUNT, 1);
-            if (repeatCount <= 1 || this.lastChunkDuration != C0600C.TIME_UNSET) {
+            if (repeatCount <= 1 || this.lastChunkDuration != C0546C.TIME_UNSET) {
                 for (int i = 1; ((long) i) < repeatCount; i++) {
                     chunkIndex++;
                     this.startTimes.add(Long.valueOf((this.lastChunkDuration * ((long) i)) + startTime));

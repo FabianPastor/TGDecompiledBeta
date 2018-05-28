@@ -54,10 +54,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
     private boolean wasLayout;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$2 */
-    class C10592 extends Drawable {
+    class C08832 extends Drawable {
         Paint paint = new Paint(1);
 
-        C10592() {
+        C08832() {
         }
 
         public void draw(Canvas canvas) {
@@ -85,8 +85,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$3 */
-    class C10603 extends AnimatorListenerAdapter {
-        C10603() {
+    class C08843 extends AnimatorListenerAdapter {
+        C08843() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -103,8 +103,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$4 */
-    class C10614 extends AnimatorListenerAdapter {
-        C10614() {
+    class C08854 extends AnimatorListenerAdapter {
+        C08854() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -279,7 +279,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         if (unread) {
             Drawable drawable;
-            Drawable drawable2 = new C10592();
+            Drawable drawable2 = new C08832();
             TextView textView = this.textView;
             if (LocaleController.isRTL) {
                 drawable = null;
@@ -310,7 +310,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(200);
                     this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, 1.0f})});
-                    this.currentAnimation.addListener(new C10603());
+                    this.currentAnimation.addListener(new C08843());
                     this.currentAnimation.start();
                     return;
                 }
@@ -321,7 +321,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(200);
                 this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, 1.0f})});
-                this.currentAnimation.addListener(new C10614());
+                this.currentAnimation.addListener(new C08854());
                 this.currentAnimation.start();
                 return;
             } else {

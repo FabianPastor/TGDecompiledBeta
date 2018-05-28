@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
@@ -88,8 +88,8 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
 
     /* renamed from: org.telegram.messenger.LocaleController$1 */
-    class C02541 implements Runnable {
-        C02541() {
+    class C02221 implements Runnable {
+        C02221() {
         }
 
         public void run() {
@@ -163,8 +163,8 @@ public class LocaleController {
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
 
         /* renamed from: org.telegram.messenger.LocaleController$TimeZoneChangedReceiver$1 */
-        class C02641 implements Runnable {
-            C02641() {
+        class C02291 implements Runnable {
+            C02291() {
             }
 
             public void run() {
@@ -178,7 +178,7 @@ public class LocaleController {
         }
 
         public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.applicationHandler.post(new C02641());
+            ApplicationLoader.applicationHandler.post(new C02291());
         }
     }
 
@@ -547,7 +547,7 @@ public class LocaleController {
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         loadOtherLanguages();
         if (this.remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new C02541());
+            AndroidUtilities.runOnUIThread(new C02221());
         }
         for (a = 0; a < this.otherLanguages.size(); a++) {
             LocaleInfo locale = (LocaleInfo) this.otherLanguages.get(a);
@@ -969,7 +969,7 @@ public class LocaleController {
                 XmlPullParser parser = Xml.newPullParser();
                 FileInputStream stream = new FileInputStream(file);
                 try {
-                    parser.setInput(stream, C0600C.UTF8_NAME);
+                    parser.setInput(stream, C0546C.UTF8_NAME);
                     String name = null;
                     String value = null;
                     String attrName = null;

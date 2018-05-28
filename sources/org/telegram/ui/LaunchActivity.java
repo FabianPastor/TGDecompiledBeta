@@ -158,8 +158,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$2 */
-    class C18852 implements OnTouchListener {
-        C18852() {
+    class C14652 implements OnTouchListener {
+        C14652() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -188,8 +188,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C18873 implements OnClickListener {
-        C18873() {
+    class C14663 implements OnClickListener {
+        C14663() {
         }
 
         public void onClick(View v) {
@@ -197,10 +197,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$7 */
-    class C18917 implements Runnable {
+    class C14687 implements Runnable {
         final /* synthetic */ Bundle val$args;
 
-        C18917(Bundle bundle) {
+        C14687(Bundle bundle) {
             this.val$args = bundle;
         }
 
@@ -219,8 +219,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C18884 implements OnItemClickListener {
-        C18884() {
+    class C21804 implements OnItemClickListener {
+        C21804() {
         }
 
         public void onItemClick(View view, int position) {
@@ -296,8 +296,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$6 */
-    class C18906 implements PasscodeViewDelegate {
-        C18906() {
+    class C21816 implements PasscodeViewDelegate {
+        C21816() {
         }
 
         public void didAcceptedPassword() {
@@ -316,10 +316,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$8 */
-    class C18938 implements SharingLocationsAlertDelegate {
+    class C21838 implements SharingLocationsAlertDelegate {
         final /* synthetic */ int[] val$intentAccount;
 
-        C18938(int[] iArr) {
+        C21838(int[] iArr) {
             this.val$intentAccount = iArr;
         }
 
@@ -331,7 +331,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             final long dialog_id = info.messageObject.getDialogId();
             locationActivity.setDelegate(new LocationActivityDelegate() {
                 public void didSelectLocation(MessageMedia location, int live) {
-                    SendMessagesHelper.getInstance(C18938.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
+                    SendMessagesHelper.getInstance(C21838.this.val$intentAccount[0]).sendMessage(location, dialog_id, null, null, null);
                 }
             });
             LaunchActivity.this.presentFragment(locationActivity);
@@ -409,7 +409,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c18811 = new RelativeLayout(this) {
+            View c14611 = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -463,26 +463,26 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c18811, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(c14611, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
             BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c18811.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c18811.addView(this.actionBarLayout);
+            c14611.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            c14611.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c18811.addView(this.rightActionBarLayout);
+            c14611.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c18811.addView(this.shadowTabletSide);
+            c14611.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c18811.addView(this.shadowTablet);
-            this.shadowTablet.setOnTouchListener(new C18852());
-            this.shadowTablet.setOnClickListener(new C18873());
+            c14611.addView(this.shadowTablet);
+            this.shadowTablet.setOnTouchListener(new C14652());
+            this.shadowTablet.setOnClickListener(new C14663());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
@@ -492,7 +492,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c18811.addView(this.layersActionBarLayout);
+            c14611.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -515,7 +515,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         layoutParams.width = dp;
         layoutParams.height = -1;
         this.sideMenu.setLayoutParams(layoutParams);
-        this.sideMenu.setOnItemClickListener(new C18884());
+        this.sideMenu.setOnItemClickListener(new C21804());
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
@@ -917,7 +917,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
                 final View view2 = view;
-                OnGlobalLayoutListener c18895 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener c14675 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view2.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -931,8 +931,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = c18895;
-                viewTreeObserver.addOnGlobalLayoutListener(c18895);
+                this.onGlobalLayoutListener = c14675;
+                viewTreeObserver.addOnGlobalLayoutListener(c14675);
             }
         } catch (Throwable e222) {
             FileLog.m3e(e222);
@@ -1123,7 +1123,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C18906());
+            this.passcodeView.setDelegate(new C21816());
         }
     }
 
@@ -3583,8 +3583,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.LaunchActivity$10$1$1 */
-                            class C18771 implements DialogInterface.OnClickListener {
-                                C18771() {
+                            class C14581 implements DialogInterface.OnClickListener {
+                                C14581() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -3632,7 +3632,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         Object[] objArr = new Object[1];
                                         objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
                                         builder.setMessage(LocaleController.formatString(str, R.string.ChannelJoinTo, objArr));
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18771());
+                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14581());
                                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                         LaunchActivity.this.showAlertDialog(builder);
                                     } else {
@@ -4241,8 +4241,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$20$1 */
-                class C24371 implements LocationActivityDelegate {
-                    C24371() {
+                class C21791 implements LocationActivityDelegate {
+                    C21791() {
                     }
 
                     public void didSelectLocation(MessageMedia location, int live) {
@@ -4256,7 +4256,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
                         LocationActivity fragment = new LocationActivity(0);
-                        fragment.setDelegate(new C24371());
+                        fragment.setDelegate(new C21791());
                         LaunchActivity.this.presentFragment(fragment);
                     }
                 }
@@ -4375,8 +4375,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.globalQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$24$1 */
-                class C24281 implements Runnable {
-                    C24281() {
+                class C14621 implements Runnable {
+                    C14621() {
                     }
 
                     public void run() {
@@ -4403,7 +4403,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                                     if (freeSpace < 104857600) {
-                                        AndroidUtilities.runOnUIThread(new C24281());
+                                        AndroidUtilities.runOnUIThread(new C14621());
                                     }
                                 }
                             }

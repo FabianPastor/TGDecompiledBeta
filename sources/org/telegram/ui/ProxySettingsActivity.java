@@ -34,7 +34,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -71,8 +71,8 @@ public class ProxySettingsActivity extends BaseFragment {
     private TypeCell[] typeCell;
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$2 */
-    class C21972 implements OnClickListener {
-        C21972() {
+    class C16682 implements OnClickListener {
+        C16682() {
         }
 
         public void onClick(View view) {
@@ -82,8 +82,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$3 */
-    class C21983 implements TextWatcher {
-        C21983() {
+    class C16693 implements TextWatcher {
+        C16693() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -98,8 +98,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$4 */
-    class C21994 implements TextWatcher {
-        C21994() {
+    class C16704 implements TextWatcher {
+        C16704() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -144,8 +144,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$5 */
-    class C22005 implements OnEditorActionListener {
-        C22005() {
+    class C16715 implements OnEditorActionListener {
+        C16715() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -165,8 +165,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$6 */
-    class C22016 implements OnClickListener {
-        C22016() {
+    class C16726 implements OnClickListener {
+        C16726() {
         }
 
         public void onClick(View v) {
@@ -179,33 +179,33 @@ public class ProxySettingsActivity extends BaseFragment {
             try {
                 String url;
                 if (!TextUtils.isEmpty(address)) {
-                    params.append("server=").append(URLEncoder.encode(address, C0600C.UTF8_NAME));
+                    params.append("server=").append(URLEncoder.encode(address, C0546C.UTF8_NAME));
                 }
                 if (!TextUtils.isEmpty(port)) {
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("port=").append(URLEncoder.encode(port, C0600C.UTF8_NAME));
+                    params.append("port=").append(URLEncoder.encode(port, C0546C.UTF8_NAME));
                 }
                 if (ProxySettingsActivity.this.currentType == 1) {
                     url = "https://t.me/proxy?";
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("secret=").append(URLEncoder.encode(secret, C0600C.UTF8_NAME));
+                    params.append("secret=").append(URLEncoder.encode(secret, C0546C.UTF8_NAME));
                 } else {
                     url = "https://t.me/socks?";
                     if (!TextUtils.isEmpty(user)) {
                         if (params.length() != 0) {
                             params.append("&");
                         }
-                        params.append("user=").append(URLEncoder.encode(user, C0600C.UTF8_NAME));
+                        params.append("user=").append(URLEncoder.encode(user, C0546C.UTF8_NAME));
                     }
                     if (!TextUtils.isEmpty(password)) {
                         if (params.length() != 0) {
                             params.append("&");
                         }
-                        params.append("pass=").append(URLEncoder.encode(password, C0600C.UTF8_NAME));
+                        params.append("pass=").append(URLEncoder.encode(password, C0546C.UTF8_NAME));
                     }
                 }
                 if (params.length() != 0) {
@@ -286,8 +286,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
-    class C21961 extends ActionBarMenuOnItemClick {
-        C21961() {
+    class C22811 extends ActionBarMenuOnItemClick {
+        C22811() {
         }
 
         public void onItemClick(int id) {
@@ -350,7 +350,7 @@ public class ProxySettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21961());
+        this.actionBar.setActionBarMenuOnItemClick(new C22811());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -373,7 +373,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 this.typeCell[a].setValue(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == this.currentType, false);
             }
             this.linearLayout2.addView(this.typeCell[a], LayoutHelper.createLinear(-1, 48));
-            this.typeCell[a].setOnClickListener(new C21972());
+            this.typeCell[a].setOnClickListener(new C16682());
             a++;
         }
         this.sectionCell[0] = new ShadowSectionCell(context);
@@ -399,10 +399,10 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
             if (a == 0) {
                 this.inputFields[a].setInputType(524305);
-                this.inputFields[a].addTextChangedListener(new C21983());
+                this.inputFields[a].addTextChangedListener(new C16693());
             } else if (a == 1) {
                 this.inputFields[a].setInputType(2);
-                this.inputFields[a].addTextChangedListener(new C21994());
+                this.inputFields[a].addTextChangedListener(new C16704());
             } else if (a == 3) {
                 this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.inputFields[a].setTypeface(Typeface.DEFAULT);
@@ -438,7 +438,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setSelection(this.inputFields[a].length());
             this.inputFields[a].setPadding(0, 0, 0, 0);
             container.addView(this.inputFields[a], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, 0.0f, 17.0f, 0.0f));
-            this.inputFields[a].setOnEditorActionListener(new C22005());
+            this.inputFields[a].setOnEditorActionListener(new C16715());
         }
         this.bottomCell = new TextInfoPrivacyCell(context);
         this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
@@ -449,7 +449,7 @@ public class ProxySettingsActivity extends BaseFragment {
         this.shareCell.setText(LocaleController.getString("ShareFile", R.string.ShareFile), false);
         this.shareCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
         this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
-        this.shareCell.setOnClickListener(new C22016());
+        this.shareCell.setOnClickListener(new C16726());
         this.sectionCell[1] = new ShadowSectionCell(context);
         this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));

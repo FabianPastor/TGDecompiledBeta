@@ -54,8 +54,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C05781 implements ServiceConnectionCallback {
-        C05781() {
+    static class C18431 implements ServiceConnectionCallback {
+        C18431() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -117,7 +117,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C05781());
+                customTabsServiceConnection = new ServiceConnection(new C18431());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -203,8 +203,8 @@ public class Browser {
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                            class C05811 implements OnClickListener {
-                                C05811() {
+                            class C05271 implements OnClickListener {
+                                C05271() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -223,7 +223,7 @@ public class Browser {
                                         progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
                                         progressDialog[0].setCanceledOnTouchOutside(false);
                                         progressDialog[0].setCancelable(false);
-                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05811());
+                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05271());
                                         progressDialog[0].show();
                                     } catch (Exception e) {
                                     }

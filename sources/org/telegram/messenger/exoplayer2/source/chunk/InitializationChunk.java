@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.chunk;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -17,7 +17,7 @@ public final class InitializationChunk extends Chunk {
     private volatile boolean loadCanceled;
 
     public InitializationChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, ChunkExtractorWrapper extractorWrapper) {
-        super(dataSource, dataSpec, 2, trackFormat, trackSelectionReason, trackSelectionData, C0600C.TIME_UNSET, C0600C.TIME_UNSET);
+        super(dataSource, dataSpec, 2, trackFormat, trackSelectionReason, trackSelectionData, C0546C.TIME_UNSET, C0546C.TIME_UNSET);
         this.extractorWrapper = extractorWrapper;
     }
 

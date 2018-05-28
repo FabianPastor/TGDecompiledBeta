@@ -33,7 +33,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -56,12 +56,12 @@ public class WebviewActivity extends BaseFragment {
     private ActionBarMenuItem progressItem;
     private ContextProgressView progressView;
     private String short_param;
-    public Runnable typingRunnable = new C23641();
+    public Runnable typingRunnable = new C17831();
     private WebView webView;
 
     /* renamed from: org.telegram.ui.WebviewActivity$1 */
-    class C23641 implements Runnable {
-        C23641() {
+    class C17831 implements Runnable {
+        C17831() {
         }
 
         public void run() {
@@ -73,11 +73,11 @@ public class WebviewActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.WebviewActivity$3 */
-    class C23673 extends WebViewClient {
+    class C17853 extends WebViewClient {
 
         /* renamed from: org.telegram.ui.WebviewActivity$3$1 */
-        class C23661 extends AnimatorListenerAdapter {
-            C23661() {
+        class C17841 extends AnimatorListenerAdapter {
+            C17841() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -85,7 +85,7 @@ public class WebviewActivity extends BaseFragment {
             }
         }
 
-        C23673() {
+        C17853() {
         }
 
         private boolean isInternalUrl(String url) {
@@ -124,7 +124,7 @@ public class WebviewActivity extends BaseFragment {
             WebviewActivity.this.progressItem.setEnabled(true);
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "scaleX", new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "scaleY", new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "scaleX", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "scaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "alpha", new float[]{0.0f, 1.0f})});
-            animatorSet.addListener(new C23661());
+            animatorSet.addListener(new C17841());
             animatorSet.setDuration(150);
             animatorSet.start();
         }
@@ -174,8 +174,8 @@ public class WebviewActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.WebviewActivity$2 */
-    class C23652 extends ActionBarMenuOnItemClick {
-        C23652() {
+    class C23322 extends ActionBarMenuOnItemClick {
+        C23322() {
         }
 
         public void onItemClick(int id) {
@@ -224,7 +224,7 @@ public class WebviewActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(this.currentGame);
         this.actionBar.setSubtitle("@" + this.currentBot);
-        this.actionBar.setActionBarMenuOnItemClick(new C23652());
+        this.actionBar.setActionBarMenuOnItemClick(new C23322());
         ActionBarMenu menu = this.actionBar.createMenu();
         this.progressItem = menu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.dp(54.0f));
         this.progressView = new ContextProgressView(context, 1);
@@ -241,7 +241,7 @@ public class WebviewActivity extends BaseFragment {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
             this.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
         }
-        this.webView.setWebViewClient(new C23673());
+        this.webView.setWebViewClient(new C17853());
         frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
         return this.fragmentView;
     }
@@ -273,7 +273,7 @@ public class WebviewActivity extends BaseFragment {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
             String existing = sharedPreferences.getString(TtmlNode.ANONYMOUS_REGION_ID + messageObject.getId(), null);
             StringBuilder hash = new StringBuilder(existing != null ? existing : TtmlNode.ANONYMOUS_REGION_ID);
-            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C0600C.UTF8_NAME));
+            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C0546C.UTF8_NAME));
             if (existing == null) {
                 char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
                 for (int i = 0; i < 20; i++) {

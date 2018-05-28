@@ -10,7 +10,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.voip.VoIPService;
@@ -42,8 +42,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C02121 implements Runnable {
-                C02121() {
+            class C01821 implements Runnable {
+                C01821() {
                 }
 
                 public void run() {
@@ -75,7 +75,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     int a;
                                     byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                                     nativeByteBuffer.readBytes(strBytes, true);
-                                    JSONObject json = new JSONObject(new String(strBytes, C0600C.UTF8_NAME));
+                                    JSONObject json = new JSONObject(new String(strBytes, C0546C.UTF8_NAME));
                                     JSONObject custom = json.getJSONObject("custom");
                                     if (json.has("user_id")) {
                                         obj = json.get("user_id");
@@ -1243,7 +1243,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C02121());
+                Utilities.stageQueue.postRunnable(new C01821());
             }
         });
     }

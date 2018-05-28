@@ -102,7 +102,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -443,8 +443,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private boolean zooming;
 
     /* renamed from: org.telegram.ui.ArticleViewer$1 */
-    class C09591 implements OnTouchListener {
-        C09591() {
+    class C08181 implements OnTouchListener {
+        C08181() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -459,8 +459,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$3 */
-    class C09683 implements OnClickListener {
-        C09683() {
+    class C08263 implements OnClickListener {
+        C08263() {
         }
 
         public void onClick(View v) {
@@ -475,8 +475,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$4 */
-    class C09714 implements OnDismissListener {
-        C09714() {
+    class C08294 implements OnDismissListener {
+        C08294() {
         }
 
         public void onDismiss() {
@@ -489,8 +489,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$6 */
-    class C09746 implements OnApplyWindowInsetsListener {
-        C09746() {
+    class C08316 implements OnApplyWindowInsetsListener {
+        C08316() {
         }
 
         @SuppressLint({"NewApi"})
@@ -978,7 +978,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.gridLayoutManager = gridLayoutManager;
             recyclerListView.setLayoutManager(gridLayoutManager);
             recyclerListView = this.innerListView;
-            Adapter c09823 = new Adapter(ArticleViewer.this) {
+            Adapter c19303 = new Adapter(ArticleViewer.this) {
                 public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                     View view;
                     switch (viewType) {
@@ -1017,8 +1017,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     return 1;
                 }
             };
-            this.adapter = c09823;
-            recyclerListView.setAdapter(c09823);
+            this.adapter = c19303;
+            recyclerListView.setAdapter(c19303);
             addView(this.innerListView, LayoutHelper.createFrame(-1, -2.0f));
             setWillNotDraw(false);
         }
@@ -1259,8 +1259,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.webView.setWebChromeClient(new WebChromeClient(ArticleViewer.this) {
 
                 /* renamed from: org.telegram.ui.ArticleViewer$BlockEmbedCell$2$1 */
-                class C09841 implements Runnable {
-                    C09841() {
+                class C08331 implements Runnable {
+                    C08331() {
                     }
 
                     public void run() {
@@ -1282,7 +1282,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                     ArticleViewer.this.customView = view;
                     ArticleViewer.this.customViewCallback = callback;
-                    AndroidUtilities.runOnUIThread(new C09841(), 100);
+                    AndroidUtilities.runOnUIThread(new C08331(), 100);
                 }
 
                 public void onHideCustomView() {
@@ -1336,7 +1336,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 try {
                     if (this.currentBlock.html != null) {
-                        this.webView.loadDataWithBaseURL("https://telegram.org/embed", this.currentBlock.html, "text/html", C0600C.UTF8_NAME, null);
+                        this.webView.loadDataWithBaseURL("https://telegram.org/embed", this.currentBlock.html, "text/html", C0546C.UTF8_NAME, null);
                         this.videoView.setVisibility(4);
                         this.videoView.loadVideo(null, null, null, false);
                         this.webView.setVisibility(0);
@@ -1975,14 +1975,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         thumb = null;
                     }
                     if (this.currentType == 0) {
-                        height = (int) (((float) image.f24h) * (((float) photoWidth) / ((float) image.f25w)));
+                        height = (int) (((float) image.f42h) * (((float) photoWidth) / ((float) image.f43w)));
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
                         } else {
                             int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) image.f25w) * (((float) height) / ((float) image.f24h)));
+                                photoWidth = (int) (((float) image.f43w) * (((float) height) / ((float) image.f42h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
@@ -2191,7 +2191,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             });
             ViewPager viewPager = this.innerListView;
-            PagerAdapter c09893 = new PagerAdapter(ArticleViewer.this) {
+            PagerAdapter c19343 = new PagerAdapter(ArticleViewer.this) {
 
                 /* renamed from: org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer */
                 class ObjectContainer {
@@ -2247,8 +2247,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                 }
             };
-            this.adapter = c09893;
-            viewPager.setAdapter(c09893);
+            this.adapter = c19343;
+            viewPager.setAdapter(c19343);
             int color = ArticleViewer.this.getSelectedColor();
             if (color == 0) {
                 AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -657673);
@@ -3233,8 +3233,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$2 */
-    class C09632 implements OnDispatchKeyEventListener {
-        C09632() {
+    class C19242 implements OnDispatchKeyEventListener {
+        C19242() {
         }
 
         public void onDispatchKeyEvent(KeyEvent keyEvent) {
@@ -3245,8 +3245,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$9 */
-    class C09779 implements OnItemLongClickListener {
-        C09779() {
+    class C19279 implements OnItemLongClickListener {
+        C19279() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -3680,14 +3680,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.currentDocument != null) {
                     PhotoSize thumb = this.currentDocument.thumb;
                     if (this.currentType == 0) {
-                        height = (int) (((float) thumb.f24h) * (((float) photoWidth) / ((float) thumb.f25w)));
+                        height = (int) (((float) thumb.f42h) * (((float) photoWidth) / ((float) thumb.f43w)));
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
                         } else {
                             int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) thumb.f25w) * (((float) height) / ((float) thumb.f24h)));
+                                photoWidth = (int) (((float) thumb.f43w) * (((float) height) / ((float) thumb.f42h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
@@ -4192,8 +4192,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupLayout = new ActionBarPopupWindowLayout(this.parentActivity);
                 this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(R.drawable.menu_copy));
                 this.popupLayout.setAnimationEnabled(false);
-                this.popupLayout.setOnTouchListener(new C09591());
-                this.popupLayout.setDispatchKeyEventListener(new C09632());
+                this.popupLayout.setOnTouchListener(new C08181());
+                this.popupLayout.setDispatchKeyEventListener(new C19242());
                 this.popupLayout.setShowedFromBotton(false);
                 TextView deleteView = new TextView(this.parentActivity);
                 deleteView.setTextColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
@@ -4203,7 +4203,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 deleteView.setTextSize(1, 15.0f);
                 deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
-                deleteView.setOnClickListener(new C09683());
+                deleteView.setOnClickListener(new C08263());
                 this.popupLayout.addView(deleteView, LayoutHelper.createFrame(-2, 38.0f));
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
@@ -4213,7 +4213,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupWindow.setInputMethodMode(2);
                 this.popupWindow.setSoftInputMode(0);
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                this.popupWindow.setOnDismissListener(new C09714());
+                this.popupWindow.setOnDismissListener(new C08294());
             }
             this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
@@ -4658,13 +4658,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
             } else if (this.selectedFont == 1 || (parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
                 if ((flags & 1) != 0 && (flags & 2) != 0) {
-                    paint.setTypeface(Typeface.create(C0600C.SERIF_NAME, 3));
+                    paint.setTypeface(Typeface.create(C0546C.SERIF_NAME, 3));
                 } else if ((flags & 1) != 0) {
-                    paint.setTypeface(Typeface.create(C0600C.SERIF_NAME, 1));
+                    paint.setTypeface(Typeface.create(C0546C.SERIF_NAME, 1));
                 } else if ((flags & 2) != 0) {
-                    paint.setTypeface(Typeface.create(C0600C.SERIF_NAME, 2));
+                    paint.setTypeface(Typeface.create(C0546C.SERIF_NAME, 2));
                 } else {
-                    paint.setTypeface(Typeface.create(C0600C.SERIF_NAME, 0));
+                    paint.setTypeface(Typeface.create(C0546C.SERIF_NAME, 0));
                 }
             } else if ((flags & 1) != 0 && (flags & 2) != 0) {
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf"));
@@ -5066,9 +5066,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         int a;
         ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_type", this.selectedFont).commit();
         Typeface typefaceNormal = this.selectedFont == 0 ? Typeface.DEFAULT : Typeface.SERIF;
-        Typeface typefaceItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/ritalic.ttf") : Typeface.create(C0600C.SERIF_NAME, 2);
-        Typeface typefaceBold = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmedium.ttf") : Typeface.create(C0600C.SERIF_NAME, 1);
-        Typeface typefaceBoldItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf") : Typeface.create(C0600C.SERIF_NAME, 3);
+        Typeface typefaceItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/ritalic.ttf") : Typeface.create(C0546C.SERIF_NAME, 2);
+        Typeface typefaceBold = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmedium.ttf") : Typeface.create(C0546C.SERIF_NAME, 1);
+        Typeface typefaceBoldItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf") : Typeface.create(C0546C.SERIF_NAME, 3);
         for (a = 0; a < quoteTextPaints.size(); a++) {
             updateFontEntry(quoteTextPaints.keyAt(a), (TextPaint) quoteTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
@@ -5299,7 +5299,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
         this.containerView.setFitsSystemWindows(true);
         if (VERSION.SDK_INT >= 21) {
-            this.containerView.setOnApplyWindowInsetsListener(new C09746());
+            this.containerView.setOnApplyWindowInsetsListener(new C08316());
         }
         this.containerView.setSystemUiVisibility(1028);
         this.photoContainerBackground = new View(activity);
@@ -5362,7 +5362,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.listView.setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
         this.listView.setTopGlowOffset(AndroidUtilities.dp(56.0f));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemLongClickListener(new C09779());
+        this.listView.setOnItemLongClickListener(new C19279());
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 if (position != ArticleViewer.this.blocks.size() || ArticleViewer.this.currentPage == null) {
@@ -5737,7 +5737,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 if (ArticleViewer.this.videoPlayer != null) {
                     duration = ArticleViewer.this.videoPlayer.getDuration();
-                    if (duration == C0600C.TIME_UNSET) {
+                    if (duration == C0546C.TIME_UNSET) {
                         duration = 0;
                     }
                 } else {
@@ -5845,8 +5845,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorSet.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.ArticleViewer$23$1 */
-                class C09601 implements Runnable {
-                    C09601() {
+                class C08191 implements Runnable {
+                    C08191() {
                     }
 
                     public void run() {
@@ -5861,7 +5861,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
 
                 public void onAnimationEnd(Animator animation) {
-                    AndroidUtilities.runOnUIThread(new C09601(), 3000);
+                    AndroidUtilities.runOnUIThread(new C08191(), 3000);
                 }
             });
             animatorSet.setDuration(250);
@@ -6097,8 +6097,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         animatorSet.addListener(new AnimatorListenerAdapter() {
 
             /* renamed from: org.telegram.ui.ArticleViewer$26$1 */
-            class C09621 implements Runnable {
-                C09621() {
+            class C08211 implements Runnable {
+                C08211() {
                 }
 
                 public void run() {
@@ -6111,7 +6111,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             public void onAnimationEnd(Animator animation) {
-                AndroidUtilities.runOnUIThread(new C09621());
+                AndroidUtilities.runOnUIThread(new C08211());
             }
         });
         this.transitionAnimationStartTime = System.currentTimeMillis();
@@ -6524,8 +6524,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.ui.ArticleViewer$37$2 */
-            class C09662 implements Runnable {
-                C09662() {
+            class C08242 implements Runnable {
+                C08242() {
                 }
 
                 public void run() {
@@ -6534,8 +6534,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             /* renamed from: org.telegram.ui.ArticleViewer$37$3 */
-            class C09673 implements Runnable {
-                C09673() {
+            class C08253 implements Runnable {
+                C08253() {
                 }
 
                 public void run() {
@@ -6566,8 +6566,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (!hasJoinMessage) {
                     MessagesController.getInstance(currentAccount).generateJoinMessage(chat.id, true);
                 }
-                AndroidUtilities.runOnUIThread(new C09662());
-                AndroidUtilities.runOnUIThread(new C09673(), 1000);
+                AndroidUtilities.runOnUIThread(new C08242());
+                AndroidUtilities.runOnUIThread(new C08253(), 1000);
                 MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, chat.id);
             }
         });
@@ -6695,7 +6695,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
         } else {
             long current = this.videoPlayer.getCurrentPosition() / 1000;
-            if (this.videoPlayer.getDuration() / 1000 == C0600C.TIME_UNSET || current == C0600C.TIME_UNSET) {
+            if (this.videoPlayer.getDuration() / 1000 == C0546C.TIME_UNSET || current == C0546C.TIME_UNSET) {
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
             } else {
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(current / 60), Long.valueOf(current % 60), Long.valueOf(total / 60), Long.valueOf(total % 60)});
@@ -6799,7 +6799,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 });
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
-                    if (duration == C0600C.TIME_UNSET) {
+                    if (duration == C0546C.TIME_UNSET) {
                         duration = 0;
                     }
                 } else {
@@ -7500,8 +7500,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         animatorSet.addListener(new AnimatorListenerAdapter() {
 
             /* renamed from: org.telegram.ui.ArticleViewer$44$1 */
-            class C09691 implements Runnable {
-                C09691() {
+            class C08271 implements Runnable {
+                C08271() {
                 }
 
                 public void run() {
@@ -7514,7 +7514,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             public void onAnimationEnd(Animator animation) {
-                AndroidUtilities.runOnUIThread(new C09691());
+                AndroidUtilities.runOnUIThread(new C08271());
             }
         });
         this.photoTransitionAnimationStartTime = System.currentTimeMillis();
@@ -7676,8 +7676,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 animatorSet.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.ArticleViewer$48$1 */
-                    class C09701 implements Runnable {
-                        C09701() {
+                    class C08281 implements Runnable {
+                        C08281() {
                         }
 
                         public void run() {
@@ -7689,7 +7689,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
 
                     public void onAnimationEnd(Animator animation) {
-                        AndroidUtilities.runOnUIThread(new C09701());
+                        AndroidUtilities.runOnUIThread(new C08281());
                     }
                 });
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();

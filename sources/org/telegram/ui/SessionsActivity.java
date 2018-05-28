@@ -87,8 +87,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.SessionsActivity$1 */
-    class C22191 extends ActionBarMenuOnItemClick {
-        C22191() {
+    class C22891 extends ActionBarMenuOnItemClick {
+        C22891() {
         }
 
         public void onItemClick(int id) {
@@ -99,14 +99,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$2 */
-    class C22312 implements OnItemClickListener {
+    class C22942 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.SessionsActivity$2$1 */
-        class C22241 implements OnClickListener {
+        class C16851 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$1 */
-            class C22211 implements RequestDelegate {
-                C22211() {
+            class C22901 implements RequestDelegate {
+                C22901() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -135,8 +135,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$2 */
-            class C22232 implements RequestDelegate {
-                C22232() {
+            class C22912 implements RequestDelegate {
+                C22912() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -155,19 +155,19 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C22241() {
+            C16851() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (SessionsActivity.this.currentType == 0) {
-                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C22211());
+                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C22901());
                     return;
                 }
-                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C22232());
+                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C22912());
             }
         }
 
-        C22312() {
+        C22942() {
         }
 
         public void onItemClick(View view, int position) {
@@ -181,7 +181,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         builder.setMessage(LocaleController.getString("AreYouSureWebSessions", R.string.AreYouSureWebSessions));
                     }
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C22241());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16851());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     SessionsActivity.this.showDialog(builder.create());
                 }
@@ -296,8 +296,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$3 */
-    class C22333 implements RequestDelegate {
-        C22333() {
+    class C22953 implements RequestDelegate {
+        C22953() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -326,8 +326,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$4 */
-    class C22354 implements RequestDelegate {
-        C22354() {
+    class C22964 implements RequestDelegate {
+        C22964() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -525,7 +525,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         } else {
             this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22191());
+        this.actionBar.setActionBarMenuOnItemClick(new C22891());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -574,7 +574,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.listView.setEmptyView(this.emptyView);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22312());
+        this.listView.setOnItemClickListener(new C22942());
         return this.fragmentView;
     }
 
@@ -597,10 +597,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 this.loading = true;
             }
             if (this.currentType == 0) {
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C22333()), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C22953()), this.classGuid);
                 return;
             }
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C22354()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C22964()), this.classGuid);
         }
     }
 

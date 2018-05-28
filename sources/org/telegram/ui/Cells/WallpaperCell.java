@@ -79,7 +79,7 @@ public class WallpaperCell extends FrameLayout {
         for (int a = 0; a < wallpaper.sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
             if (obj != null) {
-                int currentSide = obj.f25w >= obj.f24h ? obj.f25w : obj.f24h;
+                int currentSide = obj.f43w >= obj.f42h ? obj.f43w : obj.f42h;
                 if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
                     size = obj;
                 }

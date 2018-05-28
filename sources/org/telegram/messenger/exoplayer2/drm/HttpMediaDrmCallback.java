@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.KeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.ProvisionRequest;
 import org.telegram.messenger.exoplayer2.upstream.DataSourceInputStream;
@@ -68,9 +68,9 @@ public final class HttpMediaDrmCallback implements MediaDrmCallback {
             url = this.defaultLicenseUrl;
         }
         Map<String, String> requestProperties = new HashMap();
-        String contentType = C0600C.PLAYREADY_UUID.equals(uuid) ? "text/xml" : C0600C.CLEARKEY_UUID.equals(uuid) ? "application/json" : "application/octet-stream";
+        String contentType = C0546C.PLAYREADY_UUID.equals(uuid) ? "text/xml" : C0546C.CLEARKEY_UUID.equals(uuid) ? "application/json" : "application/octet-stream";
         requestProperties.put("Content-Type", contentType);
-        if (C0600C.PLAYREADY_UUID.equals(uuid)) {
+        if (C0546C.PLAYREADY_UUID.equals(uuid)) {
             requestProperties.put("SOAPAction", "http://schemas.microsoft.com/DRM/2007/03/protocols/AcquireLicense");
         }
         synchronized (this.keyRequestProperties) {

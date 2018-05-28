@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.util.Base64;
 import java.io.IOException;
 import java.net.URLDecoder;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.ParserException;
 
 public final class DataSchemeDataSource implements DataSource {
@@ -30,7 +30,7 @@ public final class DataSchemeDataSource implements DataSource {
                     throw new ParserException("Error while parsing Base64 encoded string: " + dataString, e);
                 }
             }
-            this.data = URLDecoder.decode(dataString, C0600C.ASCII_NAME).getBytes();
+            this.data = URLDecoder.decode(dataString, C0546C.ASCII_NAME).getBytes();
             return (long) this.data.length;
         }
         throw new ParserException("Unsupported scheme: " + scheme);

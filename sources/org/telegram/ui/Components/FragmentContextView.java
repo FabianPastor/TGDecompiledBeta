@@ -57,7 +57,7 @@ import org.telegram.ui.VoIPActivity;
 public class FragmentContextView extends FrameLayout implements NotificationCenterDelegate {
     private FragmentContextView additionalContextView;
     private AnimatorSet animatorSet;
-    private Runnable checkLocationRunnable = new C14791();
+    private Runnable checkLocationRunnable = new C11721();
     private ImageView closeButton;
     private int currentStyle = -1;
     private boolean firstLocationsLoaded;
@@ -75,8 +75,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private float yPosition;
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$1 */
-    class C14791 implements Runnable {
-        C14791() {
+    class C11721 implements Runnable {
+        C11721() {
         }
 
         public void run() {
@@ -86,8 +86,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$2 */
-    class C14802 implements OnClickListener {
-        C14802() {
+    class C11732 implements OnClickListener {
+        C11732() {
         }
 
         public void onClick(View v) {
@@ -103,11 +103,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$3 */
-    class C14823 implements OnClickListener {
+    class C11753 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.FragmentContextView$3$1 */
-        class C14811 implements DialogInterface.OnClickListener {
-            C14811() {
+        class C11741 implements DialogInterface.OnClickListener {
+            C11741() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -121,7 +121,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         }
 
-        C14823() {
+        C11753() {
         }
 
         public void onClick(View v) {
@@ -142,7 +142,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         builder.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
                     }
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14811());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C11741());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
                 return;
@@ -152,11 +152,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$4 */
-    class C14844 implements OnClickListener {
+    class C11764 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.FragmentContextView$4$1 */
-        class C14831 implements SharingLocationsAlertDelegate {
-            C14831() {
+        class C20741 implements SharingLocationsAlertDelegate {
+            C20741() {
             }
 
             public void didSelectLocation(SharingLocationInfo info) {
@@ -164,7 +164,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         }
 
-        C14844() {
+        C11764() {
         }
 
         public void onClick(View v) {
@@ -224,15 +224,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (did != 0) {
                     FragmentContextView.this.openSharingLocation(LocationController.getInstance(account).getSharingLocationInfo(did));
                 } else {
-                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C14831()));
+                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C20741()));
                 }
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$6 */
-    class C14866 extends AnimatorListenerAdapter {
-        C14866() {
+    class C11776 extends AnimatorListenerAdapter {
+        C11776() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -244,8 +244,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$7 */
-    class C14877 extends AnimatorListenerAdapter {
-        C14877() {
+    class C11787 extends AnimatorListenerAdapter {
+        C11787() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -256,8 +256,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$8 */
-    class C14888 extends AnimatorListenerAdapter {
-        C14888() {
+    class C11798 extends AnimatorListenerAdapter {
+        C11798() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -269,8 +269,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$9 */
-    class C14899 extends AnimatorListenerAdapter {
-        C14899() {
+    class C11809 extends AnimatorListenerAdapter {
+        C11809() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -297,7 +297,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.playButton.setScaleType(ScaleType.CENTER);
         this.playButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerPlayPause), Mode.MULTIPLY));
         addView(this.playButton, LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.playButton.setOnClickListener(new C14802());
+        this.playButton.setOnClickListener(new C11732());
         this.titleTextView = new TextView(context);
         this.titleTextView.setMaxLines(1);
         this.titleTextView.setLines(1);
@@ -311,8 +311,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), Mode.MULTIPLY));
         this.closeButton.setScaleType(ScaleType.CENTER);
         addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
-        this.closeButton.setOnClickListener(new C14823());
-        setOnClickListener(new C14844());
+        this.closeButton.setOnClickListener(new C11753());
+        setOnClickListener(new C11764());
     }
 
     public void setAdditionalContextView(FragmentContextView contextView) {
@@ -505,7 +505,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     r19[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                     animatorSet.playTogether(r19);
                     this.animatorSet.setDuration(200);
-                    this.animatorSet.addListener(new C14877());
+                    this.animatorSet.addListener(new C11787());
                     this.animatorSet.start();
                 }
                 this.visible = true;
@@ -568,7 +568,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r19[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
             animatorSet.playTogether(r19);
             this.animatorSet.setDuration(200);
-            this.animatorSet.addListener(new C14866());
+            this.animatorSet.addListener(new C11776());
             this.animatorSet.start();
         }
     }
@@ -669,7 +669,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 r7[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
                 animatorSet.playTogether(r7);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new C14888());
+                this.animatorSet.addListener(new C11798());
                 this.animatorSet.start();
                 return;
             } else {
@@ -706,7 +706,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 r7[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                 animatorSet.playTogether(r7);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new C14899());
+                this.animatorSet.addListener(new C11809());
                 this.animatorSet.start();
             }
             this.visible = true;

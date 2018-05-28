@@ -48,8 +48,8 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean useUserCell;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
-    class C09311 implements SearchAdapterHelperDelegate {
-        C09311() {
+    class C19131 implements SearchAdapterHelperDelegate {
+        C19131() {
         }
 
         public void onDataSetChanged() {
@@ -69,7 +69,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowBots = bots;
         this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C09311());
+        this.searchAdapterHelper.setDelegate(new C19131());
     }
 
     public void setCheckedMap(SparseArray<?> map) {

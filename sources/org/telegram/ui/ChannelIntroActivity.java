@@ -26,8 +26,8 @@ public class ChannelIntroActivity extends BaseFragment {
     private TextView whatIsChannelText;
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
-    class C12323 implements OnTouchListener {
-        C12323() {
+    class C10053 implements OnTouchListener {
+        C10053() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -36,8 +36,8 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$4 */
-    class C12334 implements OnClickListener {
-        C12334() {
+    class C10064 implements OnClickListener {
+        C10064() {
         }
 
         public void onClick(View v) {
@@ -48,8 +48,8 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class C12301 extends ActionBarMenuOnItemClick {
-        C12301() {
+    class C20041 extends ActionBarMenuOnItemClick {
+        C20041() {
         }
 
         public void onItemClick(int id) {
@@ -68,7 +68,7 @@ public class ChannelIntroActivity extends BaseFragment {
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C12301());
+        this.actionBar.setActionBarMenuOnItemClick(new C20041());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -116,7 +116,7 @@ public class ChannelIntroActivity extends BaseFragment {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C12323());
+        viewGroup.setOnTouchListener(new C10053());
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(R.drawable.channelintro);
         this.imageView.setScaleType(ScaleType.FIT_CENTER);
@@ -140,7 +140,7 @@ public class ChannelIntroActivity extends BaseFragment {
         this.createChannelText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", R.string.ChannelAlertCreate));
         viewGroup.addView(this.createChannelText);
-        this.createChannelText.setOnClickListener(new C12334());
+        this.createChannelText.setOnClickListener(new C10064());
         return this.fragmentView;
     }
 

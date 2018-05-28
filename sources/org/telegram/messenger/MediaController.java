@@ -61,7 +61,7 @@ import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -202,7 +202,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private long recordDialogId;
     private DispatchQueue recordQueue = new DispatchQueue("recordQueue");
     private MessageObject recordReplyingMessageObject;
-    private Runnable recordRunnable = new C02921();
+    private Runnable recordRunnable = new C02541();
     private short[] recordSamples = new short[1024];
     private Runnable recordStartRunnable;
     private long recordStartTime;
@@ -259,8 +259,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$1 */
-    class C02921 implements Runnable {
-        C02921() {
+    class C02541 implements Runnable {
+        C02541() {
         }
 
         public void run() {
@@ -317,8 +317,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         MediaController.this.fileEncodingQueue.postRunnable(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.MediaController$1$1$1 */
-                            class C02861 implements Runnable {
-                                C02861() {
+                            class C02481 implements Runnable {
+                                C02481() {
                                 }
 
                                 public void run() {
@@ -344,7 +344,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         finalBuffer.limit(oldLimit);
                                     }
                                 }
-                                MediaController.this.recordQueue.postRunnable(new C02861());
+                                MediaController.this.recordQueue.postRunnable(new C02481());
                             }
                         });
                     }
@@ -376,8 +376,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$3 */
-    class C03043 implements Runnable {
-        C03043() {
+    class C02663 implements Runnable {
+        C02663() {
         }
 
         public void run() {
@@ -406,11 +406,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$4 */
-    class C03074 implements Runnable {
+    class C02694 implements Runnable {
 
         /* renamed from: org.telegram.messenger.MediaController$4$1 */
-        class C03061 extends PhoneStateListener {
-            C03061() {
+        class C02681 extends PhoneStateListener {
+            C02681() {
             }
 
             public void onCallStateChanged(final int state, String incomingNumber) {
@@ -442,7 +442,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
         }
 
-        C03074() {
+        C02694() {
         }
 
         public void run() {
@@ -464,7 +464,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 FileLog.m3e(e);
             }
             try {
-                PhoneStateListener phoneStateListener = new C03061();
+                PhoneStateListener phoneStateListener = new C02681();
                 TelephonyManager mgr = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 if (mgr != null) {
                     mgr.listen(phoneStateListener, 32);
@@ -476,8 +476,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$5 */
-    class C03085 implements Runnable {
-        C03085() {
+    class C02705 implements Runnable {
+        C02705() {
         }
 
         public void run() {
@@ -494,8 +494,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$7 */
-    class C03117 implements Runnable {
-        C03117() {
+    class C02737 implements Runnable {
+        C02737() {
         }
 
         public void run() {
@@ -511,8 +511,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$9 */
-    class C03139 implements Runnable {
-        C03139() {
+    class C02759 implements Runnable {
+        C02759() {
         }
 
         public void run() {
@@ -617,8 +617,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private class GalleryObserverExternal extends ContentObserver {
 
         /* renamed from: org.telegram.messenger.MediaController$GalleryObserverExternal$1 */
-        class C03141 implements Runnable {
-            C03141() {
+        class C02761 implements Runnable {
+            C02761() {
             }
 
             public void run() {
@@ -636,15 +636,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             if (MediaController.refreshGalleryRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
             }
-            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03141(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C02761(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
         }
     }
 
     private class GalleryObserverInternal extends ContentObserver {
 
         /* renamed from: org.telegram.messenger.MediaController$GalleryObserverInternal$1 */
-        class C03151 implements Runnable {
-            C03151() {
+        class C02771 implements Runnable {
+            C02771() {
             }
 
             public void run() {
@@ -662,7 +662,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
 
         private void scheduleReloadRunnable() {
-            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03151(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C02771(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
         }
 
         public void onChange(boolean selfChange) {
@@ -1011,10 +1011,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.fileEncodingQueue.setPriority(10);
         this.playerQueue = new DispatchQueue("playerQueue");
         this.fileDecodingQueue = new DispatchQueue("fileDecodingQueue");
-        this.recordQueue.postRunnable(new C03043());
-        Utilities.globalQueue.postRunnable(new C03074());
+        this.recordQueue.postRunnable(new C02663());
+        Utilities.globalQueue.postRunnable(new C02694());
         this.fileBuffer = ByteBuffer.allocateDirect(1920);
-        AndroidUtilities.runOnUIThread(new C03085());
+        AndroidUtilities.runOnUIThread(new C02705());
         this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "datetaken", "title", "width", "height"};
         ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
         try {
@@ -1101,8 +1101,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.progressTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.messenger.MediaController$6$1 */
-                class C03091 implements Runnable {
-                    C03091() {
+                class C02711 implements Runnable {
+                    C02711() {
                     }
 
                     public void run() {
@@ -1134,13 +1134,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 } else if (MediaController.this.audioPlayer != null) {
                                     duration = MediaController.this.audioPlayer.getDuration();
                                     progress = MediaController.this.audioPlayer.getCurrentPosition();
-                                    if (duration == C0600C.TIME_UNSET || duration < 0) {
+                                    if (duration == C0546C.TIME_UNSET || duration < 0) {
                                         value = 0.0f;
                                     } else {
                                         value = ((float) progress) / ((float) duration);
                                     }
                                     bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
-                                    if (duration != C0600C.TIME_UNSET && progress >= 0) {
+                                    if (duration != C0546C.TIME_UNSET && progress >= 0) {
                                         if (MediaController.this.seekToProgressPending != 0.0f) {
                                             return;
                                         }
@@ -1170,7 +1170,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
                 public void run() {
                     synchronized (MediaController.this.sync) {
-                        AndroidUtilities.runOnUIThread(new C03091());
+                        AndroidUtilities.runOnUIThread(new C02711());
                     }
                 }
             }, 0, 17);
@@ -1242,7 +1242,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.smsObserver = smsObserver;
                 contentResolver.registerContentObserver(parse, false, smsObserver);
             }
-            AndroidUtilities.runOnUIThread(new C03117(), 300000);
+            AndroidUtilities.runOnUIThread(new C02737(), 300000);
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
@@ -1398,7 +1398,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     private void checkDecoderQueue() {
-        this.fileDecodingQueue.postRunnable(new C03139());
+        this.fileDecodingQueue.postRunnable(new C02759());
     }
 
     private void checkPlayerQueue() {
@@ -1922,8 +1922,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.fileDecodingQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MediaController$14$1 */
-                class C02901 implements Runnable {
-                    C02901() {
+                class C02521 implements Runnable {
+                    C02521() {
                     }
 
                     public void run() {
@@ -1945,7 +1945,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         MediaController.this.freePlayerBuffers.addAll(MediaController.this.usedPlayerBuffers);
                         MediaController.this.usedPlayerBuffers.clear();
                     }
-                    AndroidUtilities.runOnUIThread(new C02901());
+                    AndroidUtilities.runOnUIThread(new C02521());
                 }
             });
         }
@@ -1967,7 +1967,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         try {
             if (this.audioPlayer != null) {
                 long duration = this.audioPlayer.getDuration();
-                if (duration == C0600C.TIME_UNSET) {
+                if (duration == C0546C.TIME_UNSET) {
                     this.seekToProgressPending = progress;
                 } else {
                     int seekTo = (int) (((float) duration) * progress);
@@ -3443,8 +3443,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         Runnable anonymousClass23 = new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$23$1 */
-            class C02931 implements Runnable {
-                C02931() {
+            class C02551 implements Runnable {
+                C02551() {
                 }
 
                 public void run() {
@@ -3454,8 +3454,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.messenger.MediaController$23$2 */
-            class C02942 implements Runnable {
-                C02942() {
+            class C02562 implements Runnable {
+                C02562() {
                 }
 
                 public void run() {
@@ -3465,8 +3465,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.messenger.MediaController$23$3 */
-            class C02953 implements Runnable {
-                C02953() {
+            class C02573 implements Runnable {
+                C02573() {
                 }
 
                 public void run() {
@@ -3476,8 +3476,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.messenger.MediaController$23$4 */
-            class C02964 implements Runnable {
-                C02964() {
+            class C02584 implements Runnable {
+                C02584() {
                 }
 
                 public void run() {
@@ -3488,7 +3488,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
             public void run() {
                 if (MediaController.this.audioRecorder != null) {
-                    AndroidUtilities.runOnUIThread(new C02931());
+                    AndroidUtilities.runOnUIThread(new C02551());
                     return;
                 }
                 MediaController.this.recordingAudio = new TL_document();
@@ -3502,7 +3502,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 MediaController.this.recordingAudioFile = new File(FileLoader.getDirectory(4), FileLoader.getAttachFileName(MediaController.this.recordingAudio));
                 try {
                     if (MediaController.this.startRecord(MediaController.this.recordingAudioFile.getAbsolutePath()) == 0) {
-                        AndroidUtilities.runOnUIThread(new C02942());
+                        AndroidUtilities.runOnUIThread(new C02562());
                         return;
                     }
                     MediaController.this.audioRecorder = new AudioRecord(1, 16000, 16, 2, MediaController.this.recordBufferSize * 10);
@@ -3515,7 +3515,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     MediaController.this.fileBuffer.rewind();
                     MediaController.this.audioRecorder.startRecording();
                     MediaController.this.recordQueue.postRunnable(MediaController.this.recordRunnable);
-                    AndroidUtilities.runOnUIThread(new C02964());
+                    AndroidUtilities.runOnUIThread(new C02584());
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                     MediaController.this.recordingAudio = null;
@@ -3528,7 +3528,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } catch (Throwable e2) {
                         FileLog.m3e(e2);
                     }
-                    AndroidUtilities.runOnUIThread(new C02953());
+                    AndroidUtilities.runOnUIThread(new C02573());
                 }
             }
         };
@@ -3581,8 +3581,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.fileEncodingQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MediaController$25$1 */
-                class C02981 implements Runnable {
-                    C02981() {
+                class C02601 implements Runnable {
+                    C02601() {
                     }
 
                     public void run() {
@@ -3615,7 +3615,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                 public void run() {
                     MediaController.this.stopRecord();
-                    AndroidUtilities.runOnUIThread(new C02981());
+                    AndroidUtilities.runOnUIThread(new C02601());
                 }
             });
         }
@@ -3639,8 +3639,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.recordQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$26$1 */
-            class C02991 implements Runnable {
-                C02991() {
+            class C02611 implements Runnable {
+                C02611() {
                 }
 
                 public void run() {
@@ -3674,7 +3674,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         MediaController.this.feedbackView.performHapticFeedback(3, 2);
                     } catch (Exception e2) {
                     }
-                    AndroidUtilities.runOnUIThread(new C02991());
+                    AndroidUtilities.runOnUIThread(new C02611());
                 }
             }
         });
@@ -3724,8 +3724,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 new Thread(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.MediaController$28$2 */
-                                    class C03012 implements Runnable {
-                                        C03012() {
+                                    class C02632 implements Runnable {
+                                        C02632() {
                                         }
 
                                         public void run() {
@@ -3853,7 +3853,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                             FileLog.m3e(e32);
                                         }
                                         if (finalProgress != null) {
-                                            AndroidUtilities.runOnUIThread(new C03012());
+                                            AndroidUtilities.runOnUIThread(new C02632());
                                         }
                                     }
                                 }).start();
@@ -4139,8 +4139,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         Thread thread = new Thread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$29$1 */
-            class C03021 implements Comparator<PhotoEntry> {
-                C03021() {
+            class C02641 implements Comparator<PhotoEntry> {
+                C02641() {
                 }
 
                 public int compare(PhotoEntry o1, PhotoEntry o2) {

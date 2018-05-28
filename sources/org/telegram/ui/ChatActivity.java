@@ -113,7 +113,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
@@ -354,7 +354,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private ChatAvatarContainer avatarContainer;
     private ChatBigEmptyView bigEmptyView;
     private MessageObject botButtons;
-    private PhotoViewerProvider botContextProvider = new C12882();
+    private PhotoViewerProvider botContextProvider = new C23492();
     private ArrayList<Object> botContextResults;
     private SparseArray<BotInfo> botInfo = new SparseArray();
     private MessageObject botReplyButtons;
@@ -465,8 +465,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean needSelectFromMessageId;
     private int newMentionsCount;
     private int newUnreadMessageCount;
-    OnItemClickListenerExtended onItemClickListener = new C12944();
-    OnItemLongClickListenerExtended onItemLongClickListener = new C12923();
+    OnItemClickListenerExtended onItemClickListener = new C20294();
+    OnItemLongClickListenerExtended onItemLongClickListener = new C20283();
     private boolean openAnimationEnded;
     private boolean openSearchKeyboard;
     private View overlayView;
@@ -479,7 +479,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean pausedOnLastMessage;
     private String pendingLinkSearchString;
     private Runnable pendingWebPageTimeoutRunnable;
-    private PhotoViewerProvider photoViewerProvider = new C12801();
+    private PhotoViewerProvider photoViewerProvider = new C23481();
     private FileLocation pinnedImageLocation;
     private View pinnedLineView;
     private BackupImageView pinnedMessageImageView;
@@ -554,12 +554,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean wasPaused;
 
     /* renamed from: org.telegram.ui.ChatActivity$6 */
-    class C13076 implements Runnable {
+    class C10516 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ MessagesStorage val$messagesStorage;
         final /* synthetic */ int val$userId;
 
-        C13076(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+        C10516(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$userId = i;
             this.val$countDownLatch = countDownLatch;
@@ -572,12 +572,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$7 */
-    class C13147 implements Runnable {
+    class C10577 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ int val$encId;
         final /* synthetic */ MessagesStorage val$messagesStorage;
 
-        C13147(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+        C10577(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$encId = i;
             this.val$countDownLatch = countDownLatch;
@@ -590,11 +590,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$8 */
-    class C13188 implements Runnable {
+    class C10618 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ MessagesStorage val$messagesStorage;
 
-        C13188(MessagesStorage messagesStorage, CountDownLatch countDownLatch) {
+        C10618(MessagesStorage messagesStorage, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$countDownLatch = countDownLatch;
         }
@@ -606,8 +606,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$3 */
-    class C12923 implements OnItemLongClickListenerExtended {
-        C12923() {
+    class C20283 implements OnItemLongClickListenerExtended {
+        C20283() {
         }
 
         public boolean onItemClick(View view, int position, float x, float y) {
@@ -630,8 +630,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$4 */
-    class C12944 implements OnItemClickListenerExtended {
-        C12944() {
+    class C20294 implements OnItemClickListenerExtended {
+        C20294() {
         }
 
         public void onItemClick(View view, int position, float x, float y) {
@@ -653,8 +653,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$9 */
-    class C13229 extends ActionBarMenuOnItemClick {
-        C13229() {
+    class C20319 extends ActionBarMenuOnItemClick {
+        C20319() {
         }
 
         public void onItemClick(int id) {
@@ -873,8 +873,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$1 */
-        class C13241 implements ChatMessageCellDelegate {
-            C13241() {
+        class C20321 implements ChatMessageCellDelegate {
+            C20321() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -1224,8 +1224,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$2 */
-        class C13252 implements ChatActionCellDelegate {
-            C13252() {
+        class C20332 implements ChatActionCellDelegate {
+            C20332() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -1291,8 +1291,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$3 */
-        class C13263 implements BotHelpCellDelegate {
-            C13263() {
+        class C20343 implements BotHelpCellDelegate {
+            C20343() {
             }
 
             public void didPressUrl(String url) {
@@ -1371,18 +1371,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C13241());
+                chatMessageCell.setDelegate(new C20321());
                 if (ChatActivity.this.currentEncryptedChat == null) {
                     chatMessageCell.setAllowAssistant(true);
                 }
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C13252());
+                ((ChatActionCell) view).setDelegate(new C20332());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
                 view = new BotHelpCell(this.mContext);
-                ((BotHelpCell) view).setDelegate(new C13263());
+                ((BotHelpCell) view).setDelegate(new C20343());
             } else if (viewType == 4) {
                 view = new ChatLoadingCell(this.mContext);
             }
@@ -1500,8 +1500,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         r8[0] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView, "alpha", new float[]{0.0f});
                                         r8[1] = ObjectAnimator.ofFloat(cameraContainer, "scaleX", new float[]{scale});
                                         r8[2] = ObjectAnimator.ofFloat(cameraContainer, "scaleY", new float[]{scale});
-                                        r8[3] = ObjectAnimator.ofFloat(cameraContainer, "translationX", new float[]{((float) position[0]) - rect.f56x});
-                                        r8[4] = ObjectAnimator.ofFloat(cameraContainer, "translationY", new float[]{((float) position[1]) - rect.f57y});
+                                        r8[3] = ObjectAnimator.ofFloat(cameraContainer, "translationX", new float[]{((float) position[0]) - rect.f26x});
+                                        r8[4] = ObjectAnimator.ofFloat(cameraContainer, "translationY", new float[]{((float) position[1]) - rect.f27y});
                                         r8[5] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getSwitchButtonView(), "alpha", new float[]{0.0f});
                                         r8[6] = ObjectAnimator.ofInt(ChatActivity.this.instantCameraView.getPaint(), "alpha", new int[]{0});
                                         r8[7] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getMuteImageView(), "alpha", new float[]{0.0f});
@@ -1511,8 +1511,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         animatorSet.addListener(new AnimatorListenerAdapter() {
 
                                             /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$4$1$1 */
-                                            class C13271 extends AnimatorListenerAdapter {
-                                                C13271() {
+                                            class C10661 extends AnimatorListenerAdapter {
+                                                C10661() {
                                                 }
 
                                                 public void onAnimationEnd(Animator animation) {
@@ -1529,7 +1529,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 animatorSet.playTogether(r1);
                                                 animatorSet.setDuration(100);
                                                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                                                animatorSet.addListener(new C13271());
+                                                animatorSet.addListener(new C10661());
                                                 animatorSet.start();
                                             }
                                         });
@@ -1746,8 +1746,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$1 */
-    class C12801 extends EmptyPhotoViewerProvider {
-        C12801() {
+    class C23481 extends EmptyPhotoViewerProvider {
+        C23481() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -1808,8 +1808,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$2 */
-    class C12882 extends EmptyPhotoViewerProvider {
-        C12882() {
+    class C23492 extends EmptyPhotoViewerProvider {
+        C23492() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -2968,7 +2968,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         Theme.createChatResources(context, false);
         this.actionBar.setAddToContainer(false);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setActionBarMenuOnItemClick(new C13229());
+        this.actionBar.setActionBarMenuOnItemClick(new C20319());
         this.avatarContainer = new ChatAvatarContainer(context, this, this.currentEncryptedChat != null);
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
         if (!(this.currentChat == null || ChatObject.isChannel(this.currentChat))) {
@@ -2986,8 +2986,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 boolean searchWas;
 
                 /* renamed from: org.telegram.ui.ChatActivity$10$1 */
-                class C12751 implements Runnable {
-                    C12751() {
+                class C10271 implements Runnable {
+                    C10271() {
                     }
 
                     public void run() {
@@ -3039,7 +3039,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                 public void onSearchExpand() {
                     if (ChatActivity.this.openSearchKeyboard) {
-                        AndroidUtilities.runOnUIThread(new C12751(), 300);
+                        AndroidUtilities.runOnUIThread(new C10271(), 300);
                     }
                 }
 
@@ -4094,8 +4094,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             private float totalDy = 0.0f;
 
             /* renamed from: org.telegram.ui.ChatActivity$20$1 */
-            class C12811 extends AnimatorListenerAdapter {
-                C12811() {
+            class C10311 extends AnimatorListenerAdapter {
+                C10311() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -4140,7 +4140,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                         access$12600.playTogether(animatorArr);
-                        ChatActivity.this.floatingDateAnimation.addListener(new C12811());
+                        ChatActivity.this.floatingDateAnimation.addListener(new C10311());
                         ChatActivity.this.floatingDateAnimation.start();
                     }
                 }
@@ -4234,8 +4234,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.closePinned.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$23$1 */
-                class C12821 implements OnClickListener {
-                    C12821() {
+                class C10321 implements OnClickListener {
+                    C10321() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -4248,7 +4248,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         if (ChatActivity.this.currentChat.creator || (ChatActivity.this.currentChat.admin_rights != null && ((ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.admin_rights.pin_messages) || (!ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.admin_rights.edit_messages)))) {
                             Builder builder = new Builder(ChatActivity.this.getParentActivity());
                             builder.setMessage(LocaleController.getString("UnpinMessageAlert", R.string.UnpinMessageAlert));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12821());
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C10321());
                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             ChatActivity.this.showDialog(builder.create());
@@ -4305,8 +4305,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.reportSpamButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$25$1 */
-            class C12831 implements OnClickListener {
-                C12831() {
+            class C10331 implements OnClickListener {
+                C10331() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -4337,7 +4337,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         builder.setMessage(LocaleController.getString("ReportSpamAlert", R.string.ReportSpamAlert));
                     }
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12831());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C10331());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     ChatActivity.this.showDialog(builder.create());
                 }
@@ -4398,8 +4398,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.mentiondownButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$28$1 */
-            class C12841 implements IntCallback {
-                C12841() {
+            class C20251 implements IntCallback {
+                C20251() {
                 }
 
                 public void run(int param) {
@@ -4415,7 +4415,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             private void loadLastUnreadMention() {
                 ChatActivity.this.wasManualScroll = true;
                 if (ChatActivity.this.hasAllMentionsLocal) {
-                    MessagesStorage.getInstance(ChatActivity.this.currentAccount).getUnreadMention(ChatActivity.this.dialog_id, new C12841());
+                    MessagesStorage.getInstance(ChatActivity.this.currentAccount).getUnreadMention(ChatActivity.this.dialog_id, new C20251());
                     return;
                 }
                 final MessagesStorage messagesStorage = MessagesStorage.getInstance(ChatActivity.this.currentAccount);
@@ -4469,8 +4469,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.mentiondownButton.setOnLongClickListener(new OnLongClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$29$1 */
-            class C12871 implements RequestDelegate {
-                C12871() {
+            class C20271 implements RequestDelegate {
+                C20271() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -4490,7 +4490,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 ChatActivity.this.showMentiondownButton(false, true);
                 TL_messages_readMentions req = new TL_messages_readMentions();
                 req.peer = MessagesController.getInstance(ChatActivity.this.currentAccount).getInputPeer((int) ChatActivity.this.dialog_id);
-                ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C12871());
+                ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C20271());
                 return true;
             }
         });
@@ -4617,21 +4617,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             float f2;
                             Size size = this.size;
                             if (inlineResult.document.thumb != null) {
-                                f2 = (float) inlineResult.document.thumb.f25w;
+                                f2 = (float) inlineResult.document.thumb.f43w;
                             } else {
                                 f2 = 100.0f;
                             }
                             size.width = f2;
                             Size size2 = this.size;
                             if (inlineResult.document.thumb != null) {
-                                f = (float) inlineResult.document.thumb.f24h;
+                                f = (float) inlineResult.document.thumb.f42h;
                             }
                             size2.height = f;
                             for (b = 0; b < inlineResult.document.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.document.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f18w;
-                                    this.size.height = (float) attribute.f17h;
+                                    this.size.width = (float) attribute.f36w;
+                                    this.size.height = (float) attribute.f35h;
                                     break;
                                 }
                             }
@@ -4639,8 +4639,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             for (b = 0; b < inlineResult.content.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.content.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f18w;
-                                    this.size.height = (float) attribute.f17h;
+                                    this.size.width = (float) attribute.f36w;
+                                    this.size.height = (float) attribute.f35h;
                                     break;
                                 }
                             }
@@ -4648,8 +4648,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             for (b = 0; b < inlineResult.content.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.content.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f18w;
-                                    this.size.height = (float) attribute.f17h;
+                                    this.size.width = (float) attribute.f36w;
+                                    this.size.height = (float) attribute.f35h;
                                     break;
                                 }
                             }
@@ -4712,8 +4712,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             chatActivityAdapter = new MentionsAdapter(context, false, this.dialog_id, new MentionsAdapterDelegate() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$37$1 */
-                class C12891 extends AnimatorListenerAdapter {
-                    C12891() {
+                class C10351 extends AnimatorListenerAdapter {
+                    C10351() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -4730,8 +4730,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$37$2 */
-                class C12902 extends AnimatorListenerAdapter {
-                    C12902() {
+                class C10362 extends AnimatorListenerAdapter {
+                    C10362() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -4788,7 +4788,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.mentionContainer.setTag(null);
                             ChatActivity.this.mentionListAnimation = new AnimatorSet();
                             ChatActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f, 1.0f})});
-                            ChatActivity.this.mentionListAnimation.addListener(new C12891());
+                            ChatActivity.this.mentionListAnimation.addListener(new C10351());
                             ChatActivity.this.mentionListAnimation.setDuration(200);
                             ChatActivity.this.mentionListAnimation.start();
                             return;
@@ -4810,7 +4810,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f});
                         access$16500.playTogether(animatorArr);
-                        ChatActivity.this.mentionListAnimation.addListener(new C12902());
+                        ChatActivity.this.mentionListAnimation.addListener(new C10362());
                         ChatActivity.this.mentionListAnimation.setDuration(200);
                         ChatActivity.this.mentionListAnimation.start();
                         return;
@@ -4923,8 +4923,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.mentionListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$39$1 */
-                class C12911 implements OnClickListener {
-                    C12911() {
+                class C10371 implements OnClickListener {
+                    C10371() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -4945,7 +4945,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         Builder builder = new Builder(ChatActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C12911());
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C10371());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ChatActivity.this.showDialog(builder.create());
                         return true;
@@ -5482,8 +5482,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.searchCalendarButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$54$1 */
-            class C12951 implements OnDateSetListener {
-                C12951() {
+            class C10391 implements OnDateSetListener {
+                C10391() {
                 }
 
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -5498,8 +5498,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.ui.ChatActivity$54$2 */
-            class C12962 implements OnClickListener {
-                C12962() {
+            class C10402 implements OnClickListener {
+                C10402() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -5511,12 +5511,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.hideKeyboard(ChatActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
                     try {
-                        DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new C12951(), calendar.get(1), calendar.get(2), calendar.get(5));
+                        DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new C10391(), calendar.get(1), calendar.get(2), calendar.get(5));
                         final DatePicker datePicker = dialog.getDatePicker();
                         datePicker.setMinDate(1375315200000L);
                         datePicker.setMaxDate(System.currentTimeMillis());
                         dialog.setButton(-1, LocaleController.getString("JumpToDate", R.string.JumpToDate), dialog);
-                        dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C12962());
+                        dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C10402());
                         if (VERSION.SDK_INT >= 21) {
                             dialog.setOnShowListener(new OnShowListener() {
                                 public void onShow(DialogInterface dialog) {
@@ -5581,8 +5581,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.bottomOverlayChat.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$57$1 */
-            class C12981 implements OnClickListener {
-                C12981() {
+            class C10421 implements OnClickListener {
+                C10421() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -5591,8 +5591,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.ui.ChatActivity$57$2 */
-            class C12992 implements OnClickListener {
-                C12992() {
+            class C10432 implements OnClickListener {
+                C10432() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -5616,7 +5616,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         } else if (!ChatObject.isChannel(ChatActivity.this.currentChat) || (ChatActivity.this.currentChat instanceof TL_channelForbidden)) {
                             builder = new Builder(ChatActivity.this.getParentActivity());
                             builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12992());
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C10432());
                         } else if (ChatObject.isNotInChat(ChatActivity.this.currentChat)) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).addUserToChat(ChatActivity.this.currentChat.id, UserConfig.getInstance(ChatActivity.this.currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this);
                         } else {
@@ -5634,7 +5634,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } else {
                         builder = new Builder(ChatActivity.this.getParentActivity());
                         builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", R.string.AreYouSureUnblockContact));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12981());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C10421());
                     }
                     if (builder != null) {
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -6209,8 +6209,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.voiceHintAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.ChatActivity$67$1 */
-                    class C13021 implements Runnable {
-                        C13021() {
+                    class C10461 implements Runnable {
+                        C10461() {
                         }
 
                         public void run() {
@@ -6221,7 +6221,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     public void onAnimationEnd(Animator animation) {
                         if (animation.equals(ChatActivity.this.voiceHintAnimation)) {
                             ChatActivity.this.voiceHintAnimation = null;
-                            AndroidUtilities.runOnUIThread(ChatActivity.this.voiceHintHideRunnable = new C13021(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                            AndroidUtilities.runOnUIThread(ChatActivity.this.voiceHintHideRunnable = new C10461(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         }
                     }
 
@@ -6263,11 +6263,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AnimatorSet.addListener(new AnimatorListenerAdapter() {
 
                         /* renamed from: org.telegram.ui.ChatActivity$68$1 */
-                        class C13041 implements Runnable {
+                        class C10481 implements Runnable {
 
                             /* renamed from: org.telegram.ui.ChatActivity$68$1$1 */
-                            class C13031 extends AnimatorListenerAdapter {
-                                C13031() {
+                            class C10471 extends AnimatorListenerAdapter {
+                                C10471() {
                                 }
 
                                 public void onAnimationEnd(Animator animation) {
@@ -6277,7 +6277,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
                             }
 
-                            C13041() {
+                            C10481() {
                             }
 
                             public void run() {
@@ -6286,7 +6286,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     Animator[] animatorArr = new Animator[1];
                                     animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mediaBanTooltip, "alpha", new float[]{0.0f});
                                     AnimatorSet.playTogether(animatorArr);
-                                    AnimatorSet.addListener(new C13031());
+                                    AnimatorSet.addListener(new C10471());
                                     AnimatorSet.setDuration(300);
                                     AnimatorSet.start();
                                 }
@@ -6294,7 +6294,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void onAnimationEnd(Animator animation) {
-                            AndroidUtilities.runOnUIThread(new C13041(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            AndroidUtilities.runOnUIThread(new C10481(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                     });
                     AnimatorSet.setDuration(300);
@@ -6330,11 +6330,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AnimatorSet.addListener(new AnimatorListenerAdapter() {
 
                             /* renamed from: org.telegram.ui.ChatActivity$69$1 */
-                            class C13061 implements Runnable {
+                            class C10501 implements Runnable {
 
                                 /* renamed from: org.telegram.ui.ChatActivity$69$1$1 */
-                                class C13051 extends AnimatorListenerAdapter {
-                                    C13051() {
+                                class C10491 extends AnimatorListenerAdapter {
+                                    C10491() {
                                     }
 
                                     public void onAnimationEnd(Animator animation) {
@@ -6344,7 +6344,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                 }
 
-                                C13061() {
+                                C10501() {
                                 }
 
                                 public void run() {
@@ -6353,7 +6353,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         Animator[] animatorArr = new Animator[1];
                                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.gifHintTextView, "alpha", new float[]{0.0f});
                                         AnimatorSet.playTogether(animatorArr);
-                                        AnimatorSet.addListener(new C13051());
+                                        AnimatorSet.addListener(new C10491());
                                         AnimatorSet.setDuration(300);
                                         AnimatorSet.start();
                                     }
@@ -6361,7 +6361,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
 
                             public void onAnimationEnd(Animator animation) {
-                                AndroidUtilities.runOnUIThread(new C13061(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                                AndroidUtilities.runOnUIThread(new C10501(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                             }
                         });
                         AnimatorSet.setDuration(300);
@@ -6775,8 +6775,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.searchQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$76$1 */
-                class C13081 implements Runnable {
-                    C13081() {
+                class C10521 implements Runnable {
+                    C10521() {
                     }
 
                     public void run() {
@@ -6788,8 +6788,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$76$2 */
-                class C13092 implements Runnable {
-                    C13092() {
+                class C10532 implements Runnable {
+                    C10532() {
                     }
 
                     public void run() {
@@ -6801,11 +6801,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$76$3 */
-                class C13113 implements Runnable {
+                class C10553 implements Runnable {
 
                     /* renamed from: org.telegram.ui.ChatActivity$76$3$1 */
-                    class C13101 implements OnClickListener {
-                        C13101() {
+                    class C10541 implements OnClickListener {
+                        C10541() {
                         }
 
                         public void onClick(DialogInterface dialog, int which) {
@@ -6816,13 +6816,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     }
 
-                    C13113() {
+                    C10553() {
                     }
 
                     public void run() {
                         Builder builder = new Builder(ChatActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13101());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C10541());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         builder.setMessage(LocaleController.getString("SecretLinkPreviewAlert", R.string.SecretLinkPreviewAlert));
                         ChatActivity.this.showDialog(builder.create());
@@ -6875,14 +6875,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                         ChatActivity.this.foundUrls = urls2;
                         if (urls2 == null) {
-                            AndroidUtilities.runOnUIThread(new C13081());
+                            AndroidUtilities.runOnUIThread(new C10521());
                             urls = urls2;
                             return;
                         }
                         textToCheck = TextUtils.join(" ", urls2);
                         urls = urls2;
                         if (ChatActivity.this.currentEncryptedChat == null && messagesController.secretWebpagePreview == 2) {
-                            AndroidUtilities.runOnUIThread(new C13113());
+                            AndroidUtilities.runOnUIThread(new C10553());
                             return;
                         }
                         req = new TL_messages_getWebPagePreview();
@@ -6928,7 +6928,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     FileLog.m3e(e);
                     String text = charSequence.toString().toLowerCase();
                     if (charSequence.length() < 13 || !(text.contains("http://") || text.contains("https://"))) {
-                        AndroidUtilities.runOnUIThread(new C13092());
+                        AndroidUtilities.runOnUIThread(new C10532());
                         return;
                     }
                     textToCheck = charSequence;
@@ -8425,7 +8425,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     String firstExtraction = extractUriFrom.split("/1/")[1];
                     int index = firstExtraction.indexOf("/ACTUAL");
                     if (index != -1) {
-                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), C0600C.UTF8_NAME));
+                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), C0546C.UTF8_NAME));
                     }
                 } catch (Throwable e) {
                     FileLog.m3e(e);
@@ -9324,8 +9324,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                                     /* renamed from: org.telegram.ui.ChatActivity$85$1 */
-                                    class C13161 implements Runnable {
-                                        C13161() {
+                                    class C10591 implements Runnable {
+                                        C10591() {
                                         }
 
                                         public void run() {
@@ -9340,7 +9340,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         }
                                         NotificationCenter.getInstance(ChatActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                         parentLayout.presentFragment(new ChatActivity(bundle2), true);
-                                        AndroidUtilities.runOnUIThread(new C13161(), 1000);
+                                        AndroidUtilities.runOnUIThread(new C10591(), 1000);
                                     }
                                 });
                                 if (newGroups != null) {
@@ -9514,8 +9514,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.ChatActivity$84$1 */
-                                class C13151 implements Runnable {
-                                    C13151() {
+                                class C10581 implements Runnable {
+                                    C10581() {
                                     }
 
                                     public void run() {
@@ -9530,7 +9530,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     NotificationCenter.getInstance(ChatActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                     parentLayout.presentFragment(new ChatActivity(bundle2), true);
-                                    AndroidUtilities.runOnUIThread(new C13151(), 1000);
+                                    AndroidUtilities.runOnUIThread(new C10581(), 1000);
                                 }
                             });
                             return;
@@ -11032,8 +11032,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Runnable anonymousClass88 = new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$88$1 */
-                class C13171 extends AnimatorListenerAdapter {
-                    C13171() {
+                class C10601 extends AnimatorListenerAdapter {
+                    C10601() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -11063,7 +11063,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
                         access$25700.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
-                        ChatActivity.this.alertViewAnimator.addListener(new C13171());
+                        ChatActivity.this.alertViewAnimator.addListener(new C10601());
                         ChatActivity.this.alertViewAnimator.start();
                     }
                 }
@@ -11983,8 +11983,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.ChatActivity$98$1 */
-                            class C13211 implements OnClickListener {
-                                C13211() {
+                            class C10641 implements OnClickListener {
+                                C10641() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -12002,7 +12002,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     alertDialogArr[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
                                     alertDialogArr[0].setCanceledOnTouchOutside(false);
                                     alertDialogArr[0].setCancelable(false);
-                                    alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C13211());
+                                    alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C10641());
                                     ChatActivity.this.showDialog(alertDialogArr[0]);
                                 }
                             }
@@ -12077,8 +12077,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$102$1 */
-                class C12761 implements RequestDelegate {
-                    C12761() {
+                class C20241 implements RequestDelegate {
+                    C20241() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -12150,7 +12150,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             req.channel = MessagesController.getInputChannel(ChatActivity.this.currentChat);
                             req.user_id = MessagesController.getInstance(ChatActivity.this.currentAccount).getInputUser(userFinal);
                             req.id = ids;
-                            ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C12761());
+                            ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C20241());
                         }
                         if (zArr3[2]) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).deleteUserChannelHistory(ChatActivity.this.currentChat, userFinal, 0);

@@ -105,8 +105,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$1 */
-    class C10311 extends ActionBarMenuOnItemClick {
-        C10311() {
+    class C19501 extends ActionBarMenuOnItemClick {
+        C19501() {
         }
 
         public void onItemClick(int id) {
@@ -146,11 +146,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private boolean waitingForEvent;
 
         /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 */
-        class C10395 extends TimerTask {
+        class C08685 extends TimerTask {
 
             /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-            class C10381 implements Runnable {
-                C10381() {
+            class C08671 implements Runnable {
+                C08671() {
                 }
 
                 public void run() {
@@ -161,26 +161,26 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
             }
 
-            C10395() {
+            C08685() {
             }
 
             public void run() {
                 double currentTime = (double) System.currentTimeMillis();
                 LoginActivitySmsView.this.codeTime = (int) (((double) LoginActivitySmsView.this.codeTime) - (currentTime - LoginActivitySmsView.this.lastCodeTime));
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
-                AndroidUtilities.runOnUIThread(new C10381());
+                AndroidUtilities.runOnUIThread(new C08671());
             }
         }
 
         /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6 */
-        class C10436 extends TimerTask {
+        class C08716 extends TimerTask {
 
             /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6$1 */
-            class C10421 implements Runnable {
+            class C08701 implements Runnable {
 
                 /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6$1$1 */
-                class C10411 implements RequestDelegate {
-                    C10411() {
+                class C19521 implements RequestDelegate {
+                    C19521() {
                     }
 
                     public void run(TLObject response, final TL_error error) {
@@ -194,7 +194,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
 
-                C10421() {
+                C08701() {
                 }
 
                 public void run() {
@@ -229,7 +229,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = LoginActivitySmsView.this.phone;
                             req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new C10411(), 2);
+                            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new C19521(), 2);
                         } else if (LoginActivitySmsView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -241,7 +241,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
             }
 
-            C10436() {
+            C08716() {
             }
 
             public void run() {
@@ -249,7 +249,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     double currentTime = (double) System.currentTimeMillis();
                     LoginActivitySmsView.this.time = (int) (((double) LoginActivitySmsView.this.time) - (currentTime - LoginActivitySmsView.this.lastCurrentTime));
                     LoginActivitySmsView.this.lastCurrentTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new C10421());
+                    AndroidUtilities.runOnUIThread(new C08701());
                 }
             }
         }
@@ -463,7 +463,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new C10395(), 0, 1000);
+                this.codeTimer.schedule(new C08685(), 0, 1000);
             }
         }
 
@@ -483,7 +483,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private void createTimer() {
             if (this.timeTimer == null) {
                 this.timeTimer = new Timer();
-                this.timeTimer.schedule(new C10436(), 0, 1000);
+                this.timeTimer.schedule(new C08716(), 0, 1000);
             }
         }
 
@@ -701,7 +701,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     public View createView(Context context) {
         this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setActionBarMenuOnItemClick(new C10311());
+        this.actionBar.setActionBarMenuOnItemClick(new C19501());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.doneButton.setVisibility(8);
         this.fragmentView = new ScrollView(context);

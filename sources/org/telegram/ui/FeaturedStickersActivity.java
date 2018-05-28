@@ -45,8 +45,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     private ArrayList<Long> unreadStickers = null;
 
     /* renamed from: org.telegram.ui.FeaturedStickersActivity$1 */
-    class C17871 extends ActionBarMenuOnItemClick {
-        C17871() {
+    class C21491 extends ActionBarMenuOnItemClick {
+        C21491() {
         }
 
         public void onItemClick(int id) {
@@ -57,8 +57,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.FeaturedStickersActivity$3 */
-    class C17903 implements OnItemClickListener {
-        C17903() {
+    class C21513 implements OnItemClickListener {
+        C21513() {
         }
 
         public void onItemClick(final View view, int position) {
@@ -92,8 +92,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         private Context mContext;
 
         /* renamed from: org.telegram.ui.FeaturedStickersActivity$ListAdapter$1 */
-        class C17911 implements OnClickListener {
-            C17911() {
+        class C14001 implements OnClickListener {
+            C14001() {
             }
 
             public void onClick(View v) {
@@ -154,7 +154,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new FeaturedStickerSetCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new C17911());
+                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new C14001());
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
@@ -196,7 +196,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers));
-        this.actionBar.setActionBarMenuOnItemClick(new C17871());
+        this.actionBar.setActionBarMenuOnItemClick(new C21491());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -215,7 +215,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C17903());
+        this.listView.setOnItemClickListener(new C21513());
         return this.fragmentView;
     }
 

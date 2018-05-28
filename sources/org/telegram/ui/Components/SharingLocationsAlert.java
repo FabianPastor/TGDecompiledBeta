@@ -48,8 +48,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     private Pattern urlPattern;
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class C16435 implements OnClickListener {
-        C16435() {
+    class C13095 implements OnClickListener {
+        C13095() {
         }
 
         public void onClick(View view) {
@@ -61,8 +61,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class C16446 implements OnClickListener {
-        C16446() {
+    class C13106 implements OnClickListener {
+        C13106() {
         }
 
         public void onClick(View view) {
@@ -75,8 +75,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C16413 extends OnScrollListener {
-        C16413() {
+    class C20973 extends OnScrollListener {
+        C20973() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -85,8 +85,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C16424 implements OnItemClickListener {
-        C16424() {
+    class C20984 implements OnItemClickListener {
+        C20984() {
         }
 
         public void onItemClick(View view, int position) {
@@ -251,8 +251,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C16413());
-        this.listView.setOnItemClickListener(new C16424());
+        this.listView.setOnScrollListener(new C20973());
+        this.listView.setOnItemClickListener(new C20984());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
@@ -263,11 +263,11 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
-        pickerBottomLayout.cancelButton.setOnClickListener(new C16435());
+        pickerBottomLayout.cancelButton.setOnClickListener(new C13095());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new C16446());
+        pickerBottomLayout.doneButton.setOnClickListener(new C13106());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }

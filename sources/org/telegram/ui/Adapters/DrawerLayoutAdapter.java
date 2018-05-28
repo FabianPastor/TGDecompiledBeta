@@ -32,8 +32,8 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     private DrawerProfileCell profileCell;
 
     /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$1 */
-    class C09141 implements OnClickListener {
-        C09141() {
+    class C07901 implements OnClickListener {
+        C07901() {
         }
 
         public void onClick(View v) {
@@ -42,8 +42,8 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$2 */
-    class C09152 implements Comparator<Integer> {
-        C09152() {
+    class C07912 implements Comparator<Integer> {
+        C07912() {
         }
 
         public int compare(Integer o1, Integer o2) {
@@ -138,7 +138,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         switch (viewType) {
             case 0:
                 this.profileCell = new DrawerProfileCell(this.mContext);
-                this.profileCell.setOnArrowClickListener(new C09141());
+                this.profileCell.setOnArrowClickListener(new C07901());
                 view = this.profileCell;
                 break;
             case 2:
@@ -221,7 +221,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(a));
             }
         }
-        Collections.sort(this.accountNumbers, new C09152());
+        Collections.sort(this.accountNumbers, new C07912());
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));

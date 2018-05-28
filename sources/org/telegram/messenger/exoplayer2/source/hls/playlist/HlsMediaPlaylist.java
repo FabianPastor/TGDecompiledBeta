@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 
 public final class HlsMediaPlaylist extends HlsPlaylist {
@@ -42,7 +42,7 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
         public final String url;
 
         public Segment(String uri, long byterangeOffset, long byterangeLength) {
-            this(uri, 0, -1, C0600C.TIME_UNSET, null, null, byterangeOffset, byterangeLength);
+            this(uri, 0, -1, C0546C.TIME_UNSET, null, null, byterangeOffset, byterangeLength);
         }
 
         public Segment(String url, long durationUs, int relativeDiscontinuitySequence, long relativeStartTimeUs, String fullSegmentEncryptionKeyUri, String encryptionIV, long byterangeOffset, long byterangeLength) {
@@ -85,8 +85,8 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
             Segment last = (Segment) segments.get(segments.size() - 1);
             this.durationUs = last.relativeStartTimeUs + last.durationUs;
         }
-        if (startOffsetUs == C0600C.TIME_UNSET) {
-            startOffsetUs = C0600C.TIME_UNSET;
+        if (startOffsetUs == C0546C.TIME_UNSET) {
+            startOffsetUs = C0546C.TIME_UNSET;
         } else if (startOffsetUs < 0) {
             startOffsetUs += this.durationUs;
         }

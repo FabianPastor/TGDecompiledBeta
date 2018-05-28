@@ -16,8 +16,8 @@ public class AudioTrackJNI {
     private Thread thread;
 
     /* renamed from: org.telegram.messenger.voip.AudioTrackJNI$1 */
-    class C07871 implements Runnable {
-        C07871() {
+    class C06781 implements Runnable {
+        C06781() {
         }
 
         public void run() {
@@ -141,7 +141,7 @@ public class AudioTrackJNI {
             throw new IllegalStateException("thread already started");
         }
         this.running = true;
-        this.thread = new Thread(new C07871());
+        this.thread = new Thread(new C06781());
         this.thread.start();
     }
 }

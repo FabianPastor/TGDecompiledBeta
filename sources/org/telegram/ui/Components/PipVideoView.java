@@ -49,8 +49,8 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipVideoView$2 */
-    class C16072 extends AnimatorListenerAdapter {
-        C16072() {
+    class C12822 extends AnimatorListenerAdapter {
+        C12822() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -65,7 +65,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new C16081();
+        private Runnable hideRunnable = new C12831();
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -73,11 +73,11 @@ public class PipVideoView {
         private float progress;
         private Paint progressInnerPaint;
         private Paint progressPaint;
-        private Runnable progressRunnable = new C16092();
+        private Runnable progressRunnable = new C12842();
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$1 */
-        class C16081 implements Runnable {
-            C16081() {
+        class C12831 implements Runnable {
+            C12831() {
             }
 
             public void run() {
@@ -86,8 +86,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$2 */
-        class C16092 implements Runnable {
-            C16092() {
+        class C12842 implements Runnable {
+            C12842() {
             }
 
             public void run() {
@@ -105,8 +105,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$6 */
-        class C16136 extends AnimatorListenerAdapter {
-            C16136() {
+        class C12886 extends AnimatorListenerAdapter {
+            C12886() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -115,8 +115,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$7 */
-        class C16147 extends AnimatorListenerAdapter {
-            C16147() {
+        class C12897 extends AnimatorListenerAdapter {
+            C12897() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -216,7 +216,7 @@ public class PipVideoView {
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C16136());
+                        this.currentAnimation.addListener(new C12886());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -228,7 +228,7 @@ public class PipVideoView {
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C16147());
+                    this.currentAnimation.addListener(new C12897());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -554,7 +554,7 @@ public class PipVideoView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C16072());
+                animatorSet.addListener(new C12822());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

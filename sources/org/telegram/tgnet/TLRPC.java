@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
@@ -365,7 +365,7 @@ public class TLRPC {
 
     public static abstract class ChannelParticipantsFilter extends TLObject {
         /* renamed from: q */
-        public String f14q;
+        public String f32q;
 
         public static ChannelParticipantsFilter TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             ChannelParticipantsFilter result = null;
@@ -825,7 +825,7 @@ public class TLRPC {
         public String file_name;
         public String first_name;
         /* renamed from: h */
-        public int f15h;
+        public int f33h;
         public long id;
         public byte[] iv;
         public byte[] key;
@@ -842,7 +842,7 @@ public class TLRPC {
         public int user_id;
         public String venue_id;
         /* renamed from: w */
-        public int f16w;
+        public int f34w;
 
         public static DecryptedMessageMedia TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             DecryptedMessageMedia result = null;
@@ -977,7 +977,7 @@ public class TLRPC {
         public String file_name;
         public int flags;
         /* renamed from: h */
-        public int f17h;
+        public int f35h;
         public boolean mask;
         public TL_maskCoords mask_coords;
         public String performer;
@@ -987,7 +987,7 @@ public class TLRPC {
         public String title;
         public boolean voice;
         /* renamed from: w */
-        public int f18w;
+        public int f36w;
         public byte[] waveform;
 
         public static DocumentAttribute TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -1246,12 +1246,12 @@ public class TLRPC {
         public String content_url;
         public Document document;
         /* renamed from: h */
-        public int f19h;
+        public int f37h;
         public Photo photo;
         public String thumb_url;
         public String url;
         /* renamed from: w */
-        public int f20w;
+        public int f38w;
 
         public static FoundGif TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             FoundGif result = null;
@@ -1621,7 +1621,7 @@ public class TLRPC {
         public String phone_number;
         public String provider;
         /* renamed from: q */
-        public String f21q;
+        public String f39q;
         public ArrayList<InputDocument> stickers = new ArrayList();
         public InputFile thumb;
         public String title;
@@ -2565,8 +2565,8 @@ public class TLRPC {
                     mediaDocument.document.dc_id = result.video_unused.dc_id;
                     mediaDocument.captionLegacy = result.captionLegacy;
                     TL_documentAttributeVideo attributeVideo = new TL_documentAttributeVideo();
-                    attributeVideo.w = result.video_unused.f38w;
-                    attributeVideo.h = result.video_unused.f37h;
+                    attributeVideo.w = result.video_unused.f54w;
+                    attributeVideo.h = result.video_unused.f53h;
                     attributeVideo.duration = result.video_unused.duration;
                     mediaDocument.document.attributes.add(attributeVideo);
                     result = mediaDocument;
@@ -2755,7 +2755,7 @@ public class TLRPC {
         public int flags;
         public boolean full_width;
         /* renamed from: h */
-        public int f22h;
+        public int f40h;
         public String html;
         public String language;
         public int level;
@@ -2770,7 +2770,7 @@ public class TLRPC {
         public String url;
         public long video_id;
         /* renamed from: w */
-        public int f23w;
+        public int f41w;
         public long webpage_id;
 
         public static PageBlock TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -3068,12 +3068,12 @@ public class TLRPC {
     public static abstract class PhotoSize extends TLObject {
         public byte[] bytes;
         /* renamed from: h */
-        public int f24h;
+        public int f42h;
         public FileLocation location;
         public int size;
         public String type;
         /* renamed from: w */
-        public int f25w;
+        public int f43w;
 
         public static PhotoSize TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             PhotoSize result = null;
@@ -5470,7 +5470,7 @@ public class TLRPC {
         public long max_id;
         public long min_id;
         /* renamed from: q */
-        public String f26q;
+        public String f44q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_channels_adminLogResults.TLdeserialize(stream, constructor, exception);
@@ -5480,7 +5480,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeInt32(this.flags);
             this.channel.serializeToStream(stream);
-            stream.writeString(this.f26q);
+            stream.writeString(this.f44q);
             if ((this.flags & 1) != 0) {
                 this.events_filter.serializeToStream(stream);
             }
@@ -6723,7 +6723,7 @@ public class TLRPC {
         public static int constructor = 301470424;
         public int limit;
         /* renamed from: q */
-        public String f27q;
+        public String f45q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_contacts_found.TLdeserialize(stream, constructor, exception);
@@ -6731,7 +6731,7 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeString(this.f27q);
+            stream.writeString(this.f45q);
             stream.writeInt32(this.limit);
         }
     }
@@ -8281,11 +8281,11 @@ public class TLRPC {
     public static class TL_maskCoords extends TLObject {
         public static int constructor = -NUM;
         /* renamed from: n */
-        public int f28n;
+        public int f46n;
         /* renamed from: x */
-        public double f29x;
+        public double f47x;
         /* renamed from: y */
-        public double f30y;
+        public double f48y;
         public double zoom;
 
         public static TL_maskCoords TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -8301,17 +8301,17 @@ public class TLRPC {
         }
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.f28n = stream.readInt32(exception);
-            this.f29x = stream.readDouble(exception);
-            this.f30y = stream.readDouble(exception);
+            this.f46n = stream.readInt32(exception);
+            this.f47x = stream.readDouble(exception);
+            this.f48y = stream.readDouble(exception);
             this.zoom = stream.readDouble(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeInt32(this.f28n);
-            stream.writeDouble(this.f29x);
-            stream.writeDouble(this.f30y);
+            stream.writeInt32(this.f46n);
+            stream.writeDouble(this.f47x);
+            stream.writeDouble(this.f48y);
             stream.writeDouble(this.zoom);
         }
     }
@@ -10241,7 +10241,7 @@ public class TLRPC {
         public int offset_id;
         public InputPeer peer;
         /* renamed from: q */
-        public String f33q;
+        public String f49q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return messages_Messages.TLdeserialize(stream, constructor, exception);
@@ -10251,7 +10251,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeInt32(this.flags);
             this.peer.serializeToStream(stream);
-            stream.writeString(this.f33q);
+            stream.writeString(this.f49q);
             if ((this.flags & 1) != 0) {
                 this.from_id.serializeToStream(stream);
             }
@@ -10271,7 +10271,7 @@ public class TLRPC {
         public static int constructor = -NUM;
         public int offset;
         /* renamed from: q */
-        public String f34q;
+        public String f50q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_messages_foundGifs.TLdeserialize(stream, constructor, exception);
@@ -10279,7 +10279,7 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeString(this.f34q);
+            stream.writeString(this.f50q);
             stream.writeInt32(this.offset);
         }
     }
@@ -10291,7 +10291,7 @@ public class TLRPC {
         public int offset_id;
         public InputPeer offset_peer;
         /* renamed from: q */
-        public String f35q;
+        public String f51q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return messages_Messages.TLdeserialize(stream, constructor, exception);
@@ -10299,7 +10299,7 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeString(this.f35q);
+            stream.writeString(this.f51q);
             stream.writeInt32(this.offset_date);
             this.offset_peer.serializeToStream(stream);
             stream.writeInt32(this.offset_id);
@@ -10313,7 +10313,7 @@ public class TLRPC {
         public int flags;
         public int hash;
         /* renamed from: q */
-        public String f36q;
+        public String f52q;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return messages_FoundStickerSets.TLdeserialize(stream, constructor, exception);
@@ -10323,7 +10323,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             this.flags = this.exclude_featured ? this.flags | 1 : this.flags & -2;
             stream.writeInt32(this.flags);
-            stream.writeString(this.f36q);
+            stream.writeString(this.f52q);
             stream.writeInt32(this.hash);
         }
     }
@@ -13356,7 +13356,7 @@ public class TLRPC {
         public int dc_id;
         public int duration;
         /* renamed from: h */
-        public int f37h;
+        public int f53h;
         public long id;
         public byte[] iv;
         public byte[] key;
@@ -13365,7 +13365,7 @@ public class TLRPC {
         public PhotoSize thumb;
         public int user_id;
         /* renamed from: w */
-        public int f38w;
+        public int f54w;
 
         public static Video TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Video result = null;
@@ -13818,9 +13818,9 @@ public class TLRPC {
 
     public static abstract class messages_DhConfig extends TLObject {
         /* renamed from: g */
-        public int f31g;
+        public int f55g;
         /* renamed from: p */
-        public byte[] f32p;
+        public byte[] f56p;
         public byte[] random;
         public int version;
 
@@ -15148,7 +15148,7 @@ public class TLRPC {
             this.id = stream.readInt32(exception);
             this.access_hash = stream.readInt64(exception);
             this.title = stream.readString(exception);
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.until_date = stream.readInt32(exception);
             }
         }
@@ -15161,7 +15161,7 @@ public class TLRPC {
             stream.writeInt32(this.id);
             stream.writeInt64(this.access_hash);
             stream.writeString(this.title);
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeInt32(this.until_date);
             }
         }
@@ -19225,7 +19225,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
             if ((this.flags & 131072) != 0) {
@@ -19283,7 +19283,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             if ((this.flags & 131072) != 0) {
@@ -25544,7 +25544,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -25616,7 +25616,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0600C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0546C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
             this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
@@ -29234,7 +29234,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
         }
@@ -29289,7 +29289,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             writeAttachPath(stream);
@@ -30831,7 +30831,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30900,7 +30900,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0600C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0546C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
             this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
@@ -30978,7 +30978,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0600C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0546C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -31029,7 +31029,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0600C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0546C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.explicit_content ? this.flags | 262144 : this.flags & -262145;
             stream.writeInt32(this.flags);

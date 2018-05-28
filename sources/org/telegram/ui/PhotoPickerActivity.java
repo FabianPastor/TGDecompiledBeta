@@ -56,7 +56,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.GridLayoutManager;
@@ -126,7 +126,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private boolean loadingRecent;
     private int nextGiphySearchOffset;
     private PickerBottomLayout pickerBottomLayout;
-    private PhotoViewerProvider provider = new C20781();
+    private PhotoViewerProvider provider = new C23611();
     private ArrayList<SearchImage> recentImages;
     private ActionBarMenuItem searchItem;
     private ArrayList<SearchImage> searchResult = new ArrayList();
@@ -141,8 +141,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private int type;
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$9 */
-    class C20879 implements OnClickListener {
-        C20879() {
+    class C15959 implements OnClickListener {
+        C15959() {
         }
 
         public void onClick(View view) {
@@ -158,8 +158,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$2 */
-    class C20792 extends ActionBarMenuOnItemClick {
-        C20792() {
+    class C22382 extends ActionBarMenuOnItemClick {
+        C22382() {
         }
 
         public void onItemClick(int id) {
@@ -170,8 +170,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$3 */
-    class C20803 extends ActionBarMenuItemSearchListener {
-        C20803() {
+    class C22393 extends ActionBarMenuItemSearchListener {
+        C22393() {
         }
 
         public void onSearchExpand() {
@@ -236,8 +236,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$5 */
-    class C20825 extends ItemDecoration {
-        C20825() {
+    class C22405 extends ItemDecoration {
+        C22405() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -263,8 +263,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$6 */
-    class C20836 implements OnItemClickListener {
-        C20836() {
+    class C22416 implements OnItemClickListener {
+        C22416() {
         }
 
         public void onItemClick(View view, int position) {
@@ -287,11 +287,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$7 */
-    class C20857 implements OnItemLongClickListener {
+    class C22427 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.PhotoPickerActivity$7$1 */
-        class C20841 implements DialogInterface.OnClickListener {
-            C20841() {
+        class C15941 implements DialogInterface.OnClickListener {
+            C15941() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -303,7 +303,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C20857() {
+        C22427() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -313,7 +313,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             Builder builder = new Builder(PhotoPickerActivity.this.getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C20841());
+            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C15941());
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             PhotoPickerActivity.this.showDialog(builder.create());
             return true;
@@ -321,8 +321,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$8 */
-    class C20868 extends OnScrollListener {
-        C20868() {
+    class C22438 extends OnScrollListener {
+        C22438() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -348,8 +348,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PhotoPickerActivity$1 */
-    class C20781 extends EmptyPhotoViewerProvider {
-        C20781() {
+    class C23611 extends EmptyPhotoViewerProvider {
+        C23611() {
         }
 
         public boolean scaleToFill() {
@@ -601,8 +601,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         private Context mContext;
 
         /* renamed from: org.telegram.ui.PhotoPickerActivity$ListAdapter$1 */
-        class C20881 implements OnClickListener {
-            C20881() {
+        class C15961 implements OnClickListener {
+            C15961() {
             }
 
             public void onClick(View v) {
@@ -695,7 +695,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             switch (viewType) {
                 case 0:
                     View cell = new PhotoPickerPhotoCell(this.mContext, true);
-                    cell.checkFrame.setOnClickListener(new C20881());
+                    cell.checkFrame.setOnClickListener(new C15961());
                     cell.checkFrame.setVisibility(PhotoPickerActivity.this.singlePhoto ? 8 : 0);
                     view = cell;
                     break;
@@ -844,9 +844,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         } else if (this.type == 1) {
             this.actionBar.setTitle(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C20792());
+        this.actionBar.setActionBarMenuOnItemClick(new C22382());
         if (this.selectedAlbum == null) {
-            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C20803());
+            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22393());
         }
         if (this.selectedAlbum == null) {
             if (this.type == 0) {
@@ -866,23 +866,23 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c20814 = new GridLayoutManager(context, 4) {
+        LayoutManager c23704 = new GridLayoutManager(context, 4) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c20814;
-        recyclerListView.setLayoutManager(c20814);
-        this.listView.addItemDecoration(new C20825());
+        this.layoutManager = c23704;
+        recyclerListView.setLayoutManager(c23704);
+        this.listView.addItemDecoration(new C22405());
         this.frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
         recyclerListView = this.listView;
         Adapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         this.listView.setGlowColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-        this.listView.setOnItemClickListener(new C20836());
+        this.listView.setOnItemClickListener(new C22416());
         if (this.selectedAlbum == null) {
-            this.listView.setOnItemLongClickListener(new C20857());
+            this.listView.setOnItemLongClickListener(new C22427());
         }
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setTextColor(-8355712);
@@ -897,12 +897,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         this.frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
         if (this.selectedAlbum == null) {
-            this.listView.setOnScrollListener(new C20868());
+            this.listView.setOnScrollListener(new C22438());
             updateSearchInterface();
         }
         this.pickerBottomLayout = new PickerBottomLayout(context);
         this.frameLayout.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.pickerBottomLayout.cancelButton.setOnClickListener(new C20879());
+        this.pickerBottomLayout.cancelButton.setOnClickListener(new C15959());
         this.pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 PhotoPickerActivity.this.sendSelectedPhotos();
@@ -1042,8 +1042,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 this.hintAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.PhotoPickerActivity$14$1 */
-                    class C20761 implements Runnable {
-                        C20761() {
+                    class C15921 implements Runnable {
+                        C15921() {
                         }
 
                         public void run() {
@@ -1054,7 +1054,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     public void onAnimationEnd(Animator animation) {
                         if (animation.equals(PhotoPickerActivity.this.hintAnimation)) {
                             PhotoPickerActivity.this.hintAnimation = null;
-                            AndroidUtilities.runOnUIThread(PhotoPickerActivity.this.hintHideRunnable = new C20761(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                            AndroidUtilities.runOnUIThread(PhotoPickerActivity.this.hintHideRunnable = new C15921(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         }
                     }
 
@@ -1197,7 +1197,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         this.searching = true;
         TL_messages_searchGifs req = new TL_messages_searchGifs();
-        req.f34q = query;
+        req.f50q = query;
         req.offset = offset;
         final int token = this.lastSearchToken + 1;
         this.lastSearchToken = token;
@@ -1222,14 +1222,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                             for (int b = 0; b < gif.document.attributes.size(); b++) {
                                                 DocumentAttribute attribute = (DocumentAttribute) gif.document.attributes.get(b);
                                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                                    bingImage.width = attribute.f18w;
-                                                    bingImage.height = attribute.f17h;
+                                                    bingImage.width = attribute.f36w;
+                                                    bingImage.height = attribute.f35h;
                                                     break;
                                                 }
                                             }
                                         } else {
-                                            bingImage.width = gif.f20w;
-                                            bingImage.height = gif.f19h;
+                                            bingImage.width = gif.f38w;
+                                            bingImage.height = gif.f37h;
                                         }
                                         bingImage.size = 0;
                                         bingImage.imageUrl = gif.content_url;
@@ -1297,7 +1297,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             Locale locale = Locale.US;
             String str = "https://api.cognitive.microsoft.com/bing/v5.0/images/search?q='%s'&offset=%d&count=%d&$format=json&safeSearch=%s";
             Object[] objArr = new Object[4];
-            objArr[0] = URLEncoder.encode(query, C0600C.UTF8_NAME);
+            objArr[0] = URLEncoder.encode(query, C0546C.UTF8_NAME);
             objArr[1] = Integer.valueOf(offset);
             objArr[2] = Integer.valueOf(count);
             objArr[3] = adult ? "Strict" : "Off";
@@ -1386,7 +1386,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                                     result = result2;
                                                 }
                                                 try {
-                                                    result.append(new String(data, 0, read, C0600C.UTF8_NAME));
+                                                    result.append(new String(data, 0, read, C0546C.UTF8_NAME));
                                                     result2 = result;
                                                 } catch (Exception e3) {
                                                     e22 = e3;

@@ -68,8 +68,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private View windowView;
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$1 */
-    class C15901 implements OnClickListener {
-        C15901() {
+    class C12691 implements OnClickListener {
+        C12691() {
         }
 
         public void onClick(View view) {
@@ -82,8 +82,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$3 */
-    class C15923 implements ActionMode.Callback {
-        C15923() {
+    class C12703 implements ActionMode.Callback {
+        C12703() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -110,8 +110,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$4 */
-    class C15934 implements ActionMode.Callback {
-        C15934() {
+    class C12714 implements ActionMode.Callback {
+        C12714() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -138,8 +138,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$5 */
-    class C15945 implements OnKeyListener {
-        C15945() {
+    class C12725 implements OnKeyListener {
+        C12725() {
         }
 
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -160,8 +160,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$6 */
-    class C15956 implements OnClickListener {
-        C15956() {
+    class C12736 implements OnClickListener {
+        C12736() {
         }
 
         public void onClick(View view) {
@@ -172,10 +172,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$7 */
-    class C15967 implements TextWatcher {
+    class C12747 implements TextWatcher {
         boolean processChange = false;
 
-        C15967() {
+        C12747() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -205,8 +205,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$8 */
-    class C15978 implements OnClickListener {
-        C15978() {
+    class C12758 implements OnClickListener {
+        C12758() {
         }
 
         public void onClick(View view) {
@@ -223,8 +223,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$9 */
-    class C15989 implements Listener {
-        C15989() {
+    class C20889 implements Listener {
+        C20889() {
         }
 
         public boolean onBackspace() {
@@ -314,7 +314,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new C15901());
+        this.emojiButton.setOnClickListener(new C12691());
         this.messageEditText = new EditTextCaption(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
@@ -326,8 +326,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         };
         if (VERSION.SDK_INT >= 23 && this.windowView != null) {
-            this.messageEditText.setCustomSelectionActionModeCallback(new C15923());
-            this.messageEditText.setCustomInsertionActionModeCallback(new C15934());
+            this.messageEditText.setCustomSelectionActionModeCallback(new C12703());
+            this.messageEditText.setCustomInsertionActionModeCallback(new C12714());
         }
         this.messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         this.messageEditText.setImeOptions(268435456);
@@ -344,9 +344,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHintTextColor(-NUM);
         this.messageEditText.setFilters(new InputFilter[]{new LengthFilter(Callback.DEFAULT_DRAG_ANIMATION_DURATION)});
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new C15945());
-        this.messageEditText.setOnClickListener(new C15956());
-        this.messageEditText.addTextChangedListener(new C15967());
+        this.messageEditText.setOnKeyListener(new C12725());
+        this.messageEditText.setOnClickListener(new C12736());
+        this.messageEditText.addTextChangedListener(new C12747());
         ImageView doneButton = new ImageView(context);
         doneButton.setScaleType(ScaleType.CENTER);
         doneButton.setImageResource(R.drawable.ic_done);
@@ -354,7 +354,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (VERSION.SDK_INT >= 21) {
             doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         }
-        doneButton.setOnClickListener(new C15978());
+        doneButton.setOnClickListener(new C12758());
     }
 
     public void setForceFloatingEmoji(boolean value) {
@@ -464,7 +464,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void createEmojiView() {
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(false, false, getContext(), null);
-            this.emojiView.setListener(new C15989());
+            this.emojiView.setListener(new C20889());
             this.sizeNotifierLayout.addView(this.emojiView);
         }
     }

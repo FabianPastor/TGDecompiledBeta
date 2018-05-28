@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -69,7 +69,7 @@ public final class MatroskaExtractor implements Extractor {
     private static final String DOC_TYPE_MATROSKA = "matroska";
     private static final String DOC_TYPE_WEBM = "webm";
     private static final int ENCRYPTION_IV_SIZE = 8;
-    public static final ExtractorsFactory FACTORY = new C06351();
+    public static final ExtractorsFactory FACTORY = new C18501();
     public static final int FLAG_DISABLE_SEEK_FOR_CUES = 1;
     private static final int FOURCC_COMPRESSION_VC1 = 826496599;
     private static final int ID_AUDIO = 225;
@@ -1273,8 +1273,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$1 */
-    static class C06351 implements ExtractorsFactory {
-        C06351() {
+    static class C18501 implements ExtractorsFactory {
+        C18501() {
         }
 
         public Extractor[] createExtractors() {
@@ -1329,12 +1329,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     MatroskaExtractor(EbmlReader reader, int flags) {
         this.segmentContentPosition = -1;
-        this.timecodeScale = C0600C.TIME_UNSET;
-        this.durationTimecode = C0600C.TIME_UNSET;
-        this.durationUs = C0600C.TIME_UNSET;
+        this.timecodeScale = C0546C.TIME_UNSET;
+        this.durationTimecode = C0546C.TIME_UNSET;
+        this.durationUs = C0546C.TIME_UNSET;
         this.cuesContentPosition = -1;
         this.seekPositionAfterBuildingCues = -1;
-        this.clusterTimecodeUs = C0600C.TIME_UNSET;
+        this.clusterTimecodeUs = C0546C.TIME_UNSET;
         this.reader = reader;
         this.reader.init(new InnerEbmlReaderOutput());
         this.seekForCuesEnabled = (flags & 1) == 0;
@@ -1360,7 +1360,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void seek(long position, long timeUs) {
-        this.clusterTimecodeUs = C0600C.TIME_UNSET;
+        this.clusterTimecodeUs = C0546C.TIME_UNSET;
         this.blockState = 0;
         this.reader.reset();
         this.varintReader.reset();
@@ -1568,7 +1568,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
-                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0600C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
+                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0546C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
                 return;
             case ID_CONTENT_ENCODINGS /*28032*/:
                 if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
@@ -1576,10 +1576,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 return;
             case 357149030:
-                if (this.timecodeScale == C0600C.TIME_UNSET) {
-                    this.timecodeScale = C0600C.MICROS_PER_SECOND;
+                if (this.timecodeScale == C0546C.TIME_UNSET) {
+                    this.timecodeScale = C0546C.MICROS_PER_SECOND;
                 }
-                if (this.durationTimecode != C0600C.TIME_UNSET) {
+                if (this.durationTimecode != C0546C.TIME_UNSET) {
                     this.durationUs = scaleTimecodeToUs(this.durationTimecode);
                     return;
                 }
@@ -1857,7 +1857,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.blockState == 0) {
                     this.blockTrackNumber = (int) this.varintReader.readUnsignedVarint(input, false, true, 8);
                     this.blockTrackNumberLength = this.varintReader.getLastLength();
-                    this.blockDurationUs = C0600C.TIME_UNSET;
+                    this.blockDurationUs = C0546C.TIME_UNSET;
                     this.blockState = 1;
                     this.scratch.reset();
                 }
@@ -2181,12 +2181,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private static void setSampleDuration(byte[] subripSampleData, long durationUs, String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
         byte[] timeCodeData;
-        if (durationUs == C0600C.TIME_UNSET) {
+        if (durationUs == C0546C.TIME_UNSET) {
             timeCodeData = emptyTimecode;
         } else {
-            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0600C.MICROS_PER_SECOND;
-            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * C0600C.MICROS_PER_SECOND;
-            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / C0600C.MICROS_PER_SECOND))) * C0600C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
+            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0546C.MICROS_PER_SECOND;
+            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * C0546C.MICROS_PER_SECOND;
+            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / C0546C.MICROS_PER_SECOND))) * C0546C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
             timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(seconds), Integer.valueOf(lastValue)}));
         }
         System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
@@ -2216,7 +2216,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private SeekMap buildSeekMap() {
-        if (this.segmentContentPosition == -1 || this.durationUs == C0600C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null || this.cueClusterPositions.size() != this.cueTimesUs.size()) {
+        if (this.segmentContentPosition == -1 || this.durationUs == C0546C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null || this.cueClusterPositions.size() != this.cueTimesUs.size()) {
             this.cueTimesUs = null;
             this.cueClusterPositions = null;
             return new Unseekable(this.durationUs);
@@ -2258,7 +2258,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private long scaleTimecodeToUs(long unscaledTimecode) throws ParserException {
-        if (this.timecodeScale == C0600C.TIME_UNSET) {
+        if (this.timecodeScale == C0546C.TIME_UNSET) {
             throw new ParserException("Can't scale timecode prior to timecodeScale being set.");
         }
         return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR);

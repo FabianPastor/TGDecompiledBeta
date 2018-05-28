@@ -85,7 +85,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -238,8 +238,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         final /* synthetic */ String val$totalPrice;
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$21$1 */
-        class C20391 implements DialogInterface.OnClickListener {
-            C20391() {
+        class C15641 implements DialogInterface.OnClickListener {
+            C15641() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -267,7 +267,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
             builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
             builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, this.val$providerName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C20391());
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15641());
             PaymentFormActivity.this.showDialog(builder.create());
         }
     }
@@ -285,8 +285,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$2 */
-    class C20432 implements Comparator<String> {
-        C20432() {
+    class C15682 implements Comparator<String> {
+        C15682() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -295,11 +295,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$3 */
-    class C20573 implements OnTouchListener {
+    class C15793 implements OnTouchListener {
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$3$1 */
-        class C20441 implements CountrySelectActivityDelegate {
-            C20441() {
+        class C22291 implements CountrySelectActivityDelegate {
+            C22291() {
             }
 
             public void didSelectCountry(String name, String shortName) {
@@ -308,7 +308,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C20573() {
+        C15793() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -317,7 +317,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             if (event.getAction() == 1) {
                 CountrySelectActivity fragment = new CountrySelectActivity(false);
-                fragment.setCountrySelectActivityDelegate(new C20441());
+                fragment.setCountrySelectActivityDelegate(new C22291());
                 PaymentFormActivity.this.presentFragment(fragment);
             }
             return true;
@@ -325,8 +325,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$4 */
-    class C20584 implements TextWatcher {
-        C20584() {
+    class C15804 implements TextWatcher {
+        C15804() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -394,11 +394,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$5 */
-    class C20595 implements TextWatcher {
+    class C15815 implements TextWatcher {
         private int actionPosition;
         private int characterAction = -1;
 
-        C20595() {
+        C15815() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -471,8 +471,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$6 */
-    class C20606 implements OnEditorActionListener {
-        C20606() {
+    class C15826 implements OnEditorActionListener {
+        C15826() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -496,8 +496,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$7 */
-    class C20617 implements OnClickListener {
-        C20617() {
+    class C15837 implements OnClickListener {
+        C15837() {
         }
 
         public void onClick(View v) {
@@ -507,8 +507,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$8 */
-    class C20628 extends WebView {
-        C20628(Context x0) {
+    class C15848 extends WebView {
+        C15848(Context x0) {
             super(x0);
         }
 
@@ -519,8 +519,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$9 */
-    class C20639 extends WebViewClient {
-        C20639() {
+    class C15859 extends WebViewClient {
+        C15859() {
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -598,8 +598,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
-    class C20371 extends ActionBarMenuOnItemClick {
-        C20371() {
+    class C22271 extends ActionBarMenuOnItemClick {
+        C22271() {
         }
 
         public void onItemClick(int id) {
@@ -5144,8 +5144,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.PaymentFormActivity$26$1$1 */
-                        class C20411 implements Runnable {
-                            C20411() {
+                        class C15661 implements Runnable {
+                            C15661() {
                             }
 
                             public void run() {
@@ -5174,7 +5174,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
                             }
                             if ((response instanceof TL_account_noPassword) && PaymentFormActivity.this.shortPollRunnable == null) {
-                                PaymentFormActivity.this.shortPollRunnable = new C20411();
+                                PaymentFormActivity.this.shortPollRunnable = new C15661();
                                 AndroidUtilities.runOnUIThread(PaymentFormActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             }
                         }
@@ -5621,7 +5621,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 req.new_settings = new TL_account_passwordInputSettings();
                 byte[] newPasswordBytes = null;
                 try {
-                    newPasswordBytes = firstPassword.getBytes(C0600C.UTF8_NAME);
+                    newPasswordBytes = firstPassword.getBytes(C0546C.UTF8_NAME);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -5656,8 +5656,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$32$1$1 */
-                    class C20451 implements DialogInterface.OnClickListener {
-                        C20451() {
+                    class C15691 implements DialogInterface.OnClickListener {
+                        C15691() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -5681,7 +5681,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         } else {
                             if (error.text.equals("EMAIL_UNCONFIRMED")) {
                                 Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C20451());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15691());
                                 builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
                                 builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
                                 Dialog dialog = PaymentFormActivity.this.showDialog(builder.create());
@@ -5747,8 +5747,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 new Stripe(this.stripeApiKey).createToken(card, new TokenCallback() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$33$1 */
-                    class C20471 implements Runnable {
-                        C20471() {
+                    class C15711 implements Runnable {
+                        C15711() {
                         }
 
                         public void run() {
@@ -5761,7 +5761,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     public void onSuccess(Token token) {
                         if (!PaymentFormActivity.this.canceled) {
                             PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
-                            AndroidUtilities.runOnUIThread(new C20471());
+                            AndroidUtilities.runOnUIThread(new C15711());
                         }
                     }
 
@@ -5825,8 +5825,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$34$1$1 */
-                            class C20481 implements RequestDelegate {
-                                C20481() {
+                            class C22301 implements RequestDelegate {
+                                C22301() {
                                 }
 
                                 public void run(TLObject response, TL_error error) {
@@ -5838,7 +5838,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (!(PaymentFormActivity.this.paymentForm.saved_info == null || PaymentFormActivity.this.saveShippingInfo)) {
                                     TL_payments_clearSavedInfo req = new TL_payments_clearSavedInfo();
                                     req.info = true;
-                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C20481());
+                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C22301());
                                 }
                                 PaymentFormActivity.this.goToNextStep();
                                 PaymentFormActivity.this.setDonePressed(false);
@@ -6005,8 +6005,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.ui.PaymentFormActivity$35$1 */
-                class C20511 implements Runnable {
-                    C20511() {
+                class C15741 implements Runnable {
+                    C15741() {
                     }
 
                     public void run() {
@@ -6025,7 +6025,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         });
                     } else if (response instanceof TL_payments_paymentResult) {
                         MessagesController.getInstance(PaymentFormActivity.this.currentAccount).processUpdates(((TL_payments_paymentResult) response).updates, false);
-                        AndroidUtilities.runOnUIThread(new C20511());
+                        AndroidUtilities.runOnUIThread(new C15741());
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -6108,7 +6108,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 TL_account_password currentPassword = response;
                                 byte[] passwordBytes = null;
                                 try {
-                                    passwordBytes = password.getBytes(C0600C.UTF8_NAME);
+                                    passwordBytes = password.getBytes(C0546C.UTF8_NAME);
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
                                 }

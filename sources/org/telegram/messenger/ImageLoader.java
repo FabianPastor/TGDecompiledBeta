@@ -92,11 +92,11 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C02273 extends BroadcastReceiver {
+    class C01953 extends BroadcastReceiver {
 
         /* renamed from: org.telegram.messenger.ImageLoader$3$1 */
-        class C02261 implements Runnable {
-            C02261() {
+        class C01941 implements Runnable {
+            C01941() {
             }
 
             public void run() {
@@ -104,14 +104,14 @@ public class ImageLoader {
             }
         }
 
-        C02273() {
+        C01953() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("file system changed");
             }
-            Runnable r = new C02261();
+            Runnable r = new C01941();
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 AndroidUtilities.runOnUIThread(r, 1000);
             } else {
@@ -121,8 +121,8 @@ public class ImageLoader {
     }
 
     /* renamed from: org.telegram.messenger.ImageLoader$4 */
-    class C02294 implements Runnable {
-        C02294() {
+    class C01974 implements Runnable {
+        C01974() {
         }
 
         public void run() {
@@ -1497,8 +1497,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpFileTask$1$1 */
-                    class C02381 implements Runnable {
-                        C02381() {
+                    class C02061 implements Runnable {
+                        C02061() {
                         }
 
                         public void run() {
@@ -1508,7 +1508,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                     public void run() {
                         ImageLoader.this.fileProgresses.put(HttpFileTask.this.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02381());
+                        AndroidUtilities.runOnUIThread(new C02061());
                     }
                 });
             }
@@ -1645,8 +1645,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         private long lastProgressTime;
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$3 */
-        class C02443 implements Runnable {
-            C02443() {
+        class C02123 implements Runnable {
+            C02123() {
             }
 
             public void run() {
@@ -1655,8 +1655,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$4 */
-        class C02454 implements Runnable {
-            C02454() {
+        class C02134 implements Runnable {
+            C02134() {
             }
 
             public void run() {
@@ -1665,11 +1665,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5 */
-        class C02475 implements Runnable {
+        class C02155 implements Runnable {
 
             /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5$1 */
-            class C02461 implements Runnable {
-                C02461() {
+            class C02141 implements Runnable {
+                C02141() {
                 }
 
                 public void run() {
@@ -1677,12 +1677,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
 
-            C02475() {
+            C02155() {
             }
 
             public void run() {
                 ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                AndroidUtilities.runOnUIThread(new C02461());
+                AndroidUtilities.runOnUIThread(new C02141());
             }
         }
 
@@ -1698,8 +1698,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$1$1 */
-                    class C02401 implements Runnable {
-                        C02401() {
+                    class C02081 implements Runnable {
+                        C02081() {
                         }
 
                         public void run() {
@@ -1709,7 +1709,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                     public void run() {
                         ImageLoader.this.fileProgresses.put(HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02401());
+                        AndroidUtilities.runOnUIThread(new C02081());
                     }
                 });
             }
@@ -1836,8 +1836,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.stageQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$2$1 */
-                class C02421 implements Runnable {
-                    C02421() {
+                class C02101 implements Runnable {
+                    C02101() {
                     }
 
                     public void run() {
@@ -1851,15 +1851,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                 public void run() {
                     ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                    AndroidUtilities.runOnUIThread(new C02421());
+                    AndroidUtilities.runOnUIThread(new C02101());
                 }
             });
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02443());
+            ImageLoader.this.imageLoadQueue.postRunnable(new C02123());
         }
 
         protected void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02454());
-            Utilities.stageQueue.postRunnable(new C02475());
+            ImageLoader.this.imageLoadQueue.postRunnable(new C02134());
+            Utilities.stageQueue.postRunnable(new C02155());
         }
     }
 
@@ -2049,8 +2049,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     Utilities.stageQueue.postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.ImageLoader$2$2$1 */
-                        class C02181 implements Runnable {
-                            C02181() {
+                        class C01871 implements Runnable {
+                            C01871() {
                             }
 
                             public void run() {
@@ -2059,7 +2059,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void run() {
-                            AndroidUtilities.runOnUIThread(new C02181());
+                            AndroidUtilities.runOnUIThread(new C01871());
                             ImageLoader.this.fileProgresses.remove(str);
                         }
                     });
@@ -2069,8 +2069,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     Utilities.stageQueue.postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.ImageLoader$2$3$1 */
-                        class C02201 implements Runnable {
-                            C02201() {
+                        class C01891 implements Runnable {
+                            C01891() {
                             }
 
                             public void run() {
@@ -2079,7 +2079,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void run() {
-                            AndroidUtilities.runOnUIThread(new C02201());
+                            AndroidUtilities.runOnUIThread(new C01891());
                             ImageLoader.this.fileProgresses.remove(location);
                         }
                     });
@@ -2123,7 +2123,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
         }
         FileLoader.setMediaDirs(mediaDirs);
-        BroadcastReceiver receiver = new C02273();
+        BroadcastReceiver receiver = new C01953();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
         filter.addAction("android.intent.action.MEDIA_CHECKING");
@@ -2143,7 +2143,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void checkMediaPaths() {
-        this.cacheOutQueue.postRunnable(new C02294());
+        this.cacheOutQueue.postRunnable(new C01974());
     }
 
     public SparseArray<File> createMediaPaths() {
@@ -4005,15 +4005,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         location.local_id = SharedConfig.getLastLocalId();
         PhotoSize size = new TL_photoSize();
         size.location = location;
-        size.f25w = scaledBitmap.getWidth();
-        size.f24h = scaledBitmap.getHeight();
-        if (size.f25w <= 100 && size.f24h <= 100) {
+        size.f43w = scaledBitmap.getWidth();
+        size.f42h = scaledBitmap.getHeight();
+        if (size.f43w <= 100 && size.f42h <= 100) {
             size.type = "s";
-        } else if (size.f25w <= 320 && size.f24h <= 320) {
+        } else if (size.f43w <= 320 && size.f42h <= 320) {
             size.type = "m";
-        } else if (size.f25w <= 800 && size.f24h <= 800) {
+        } else if (size.f43w <= 800 && size.f42h <= 800) {
             size.type = "x";
-        } else if (size.f25w > 1280 || size.f24h > 1280) {
+        } else if (size.f43w > 1280 || size.f42h > 1280) {
             size.type = "w";
         } else {
             size.type = "y";
@@ -4158,8 +4158,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 randomAccessFile.close();
             }
             PhotoSize newPhotoSize = new TL_photoSize();
-            newPhotoSize.w = photoSize.f25w;
-            newPhotoSize.h = photoSize.f24h;
+            newPhotoSize.w = photoSize.f43w;
+            newPhotoSize.h = photoSize.f42h;
             newPhotoSize.location = photoSize.location;
             newPhotoSize.size = photoSize.size;
             newPhotoSize.type = photoSize.type;

@@ -155,10 +155,10 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     private User user;
 
     /* renamed from: org.telegram.ui.VoIPActivity$2 */
-    class C23382 implements OnClickListener {
+    class C17632 implements OnClickListener {
         private int tapCount = 0;
 
-        C23382() {
+        C17632() {
         }
 
         public void onClick(View v) {
@@ -172,11 +172,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$3 */
-    class C23453 implements OnClickListener {
+    class C17703 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$3$1 */
-        class C23391 implements Runnable {
-            C23391() {
+        class C17641 implements Runnable {
+            C17641() {
             }
 
             public void run() {
@@ -188,7 +188,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         }
 
-        C23453() {
+        C17703() {
         }
 
         public void onClick(View v) {
@@ -205,7 +205,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     FileLog.m3e(e);
                 }
                 VoIPActivity.this.hideRetry();
-                VoIPActivity.this.endBtn.postDelayed(new C23391(), 100);
+                VoIPActivity.this.endBtn.postDelayed(new C17641(), 100);
             } else if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().hangUp();
             }
@@ -213,8 +213,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$4 */
-    class C23464 implements OnClickListener {
-        C23464() {
+    class C17714 implements OnClickListener {
+        C17714() {
         }
 
         public void onClick(View v) {
@@ -226,8 +226,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$5 */
-    class C23475 implements OnClickListener {
-        C23475() {
+    class C17725 implements OnClickListener {
+        C17725() {
         }
 
         public void onClick(View v) {
@@ -242,8 +242,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$6 */
-    class C23486 implements OnClickListener {
-        C23486() {
+    class C17736 implements OnClickListener {
+        C17736() {
         }
 
         public void onClick(View v) {
@@ -262,8 +262,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$9 */
-    class C23559 implements OnClickListener {
-        C23559() {
+    class C17789 implements OnClickListener {
+        C17789() {
         }
 
         public void onClick(View v) {
@@ -335,8 +335,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$1 */
-    class C23341 implements ImageReceiverDelegate {
-        C23341() {
+    class C23251 implements ImageReceiverDelegate {
+        C23251() {
         }
 
         public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
@@ -348,11 +348,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$7 */
-    class C23517 implements Listener {
+    class C23267 implements Listener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$7$1 */
-        class C23491 extends AnimatorListenerAdapter {
-            C23491() {
+        class C17741 extends AnimatorListenerAdapter {
+            C17741() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -361,8 +361,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         /* renamed from: org.telegram.ui.VoIPActivity$7$2 */
-        class C23502 extends AnimatorListenerAdapter {
-            C23502() {
+        class C17752 extends AnimatorListenerAdapter {
+            C17752() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -370,7 +370,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         }
 
-        C23517() {
+        C23267() {
         }
 
         public void onDragComplete() {
@@ -400,7 +400,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C23491());
+            set.addListener(new C17741());
             VoIPActivity.this.currentDeclineAnim = set;
             set.start();
             VoIPActivity.this.declineSwipe.stopAnimatingArrows();
@@ -417,7 +417,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C23502());
+            set.addListener(new C17752());
             VoIPActivity.this.currentDeclineAnim = set;
             set.start();
             VoIPActivity.this.declineSwipe.startAnimatingArrows();
@@ -425,11 +425,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$8 */
-    class C23548 implements Listener {
+    class C23278 implements Listener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$8$1 */
-        class C23521 extends AnimatorListenerAdapter {
-            C23521() {
+        class C17761 extends AnimatorListenerAdapter {
+            C17761() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -438,8 +438,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         /* renamed from: org.telegram.ui.VoIPActivity$8$2 */
-        class C23532 extends AnimatorListenerAdapter {
-            C23532() {
+        class C17772 extends AnimatorListenerAdapter {
+            C17772() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -447,7 +447,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         }
 
-        C23548() {
+        C23278() {
         }
 
         public void onDragComplete() {
@@ -471,7 +471,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(new DecelerateInterpolator());
-            set.addListener(new C23521());
+            set.addListener(new C17761());
             VoIPActivity.this.currentAcceptAnim = set;
             set.start();
             VoIPActivity.this.acceptSwipe.stopAnimatingArrows();
@@ -488,7 +488,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C23532());
+            set.addListener(new C17772());
             VoIPActivity.this.currentAcceptAnim = set;
             set.start();
             VoIPActivity.this.acceptSwipe.startAnimatingArrows();
@@ -524,7 +524,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
         this.user = VoIPService.getSharedInstance().getUser();
         if (this.user.photo != null) {
-            this.photoView.getImageReceiver().setDelegate(new C23341());
+            this.photoView.getImageReceiver().setDelegate(new C23251());
             this.photoView.setImage(this.user.photo.photo_big, null, new ColorDrawable(Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             this.photoView.setLayerType(2, null);
         } else {
@@ -533,19 +533,19 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
         getWindow().setBackgroundDrawable(new ColorDrawable(0));
         setVolumeControlStream(0);
-        this.nameText.setOnClickListener(new C23382());
-        this.endBtn.setOnClickListener(new C23453());
-        this.spkToggle.setOnClickListener(new C23464());
-        this.micToggle.setOnClickListener(new C23475());
-        this.chatBtn.setOnClickListener(new C23486());
+        this.nameText.setOnClickListener(new C17632());
+        this.endBtn.setOnClickListener(new C17703());
+        this.spkToggle.setOnClickListener(new C17714());
+        this.micToggle.setOnClickListener(new C17725());
+        this.chatBtn.setOnClickListener(new C17736());
         this.spkToggle.setChecked(((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn());
         this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
         onAudioSettingsChanged();
         this.nameText.setText(ContactsController.formatName(this.user.first_name, this.user.last_name));
         VoIPService.getSharedInstance().registerStateListener(this);
-        this.acceptSwipe.setListener(new C23517());
-        this.declineSwipe.setListener(new C23548());
-        this.cancelBtn.setOnClickListener(new C23559());
+        this.acceptSwipe.setListener(new C23267());
+        this.declineSwipe.setListener(new C23278());
+        this.cancelBtn.setOnClickListener(new C17789());
         getWindow().getDecorView().setKeepScreenOn(true);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeInCallActivity);
@@ -791,8 +791,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.emojiWrap.setOnLongClickListener(new OnLongClickListener() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$13$1 */
-            class C23321 implements Runnable {
-                C23321() {
+            class C17581 implements Runnable {
+                C17581() {
                 }
 
                 public void run() {
@@ -816,7 +816,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 }
                 voIPActivity.setEmojiTooltipVisible(z);
                 if (VoIPActivity.this.emojiTooltipVisible) {
-                    VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C23321(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                    VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17581(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 }
                 return true;
             }
@@ -848,11 +848,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         r41[5] = createAlphaAnimator(this.ellSpans[2], ellMaxAlpha, 0, 1000, 400);
         animatorSet.playTogether(r41);
         this.ellAnimator.addListener(new AnimatorListenerAdapter() {
-            private Runnable restarter = new C23331();
+            private Runnable restarter = new C17591();
 
             /* renamed from: org.telegram.ui.VoIPActivity$14$1 */
-            class C23331 implements Runnable {
-                C23331() {
+            class C17591 implements Runnable {
+                C17591() {
                 }
 
                 public void run() {
@@ -1201,8 +1201,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         runOnUiThread(new Runnable() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$1 */
-            class C23351 implements Runnable {
-                C23351() {
+            class C17601 implements Runnable {
+                C17601() {
                 }
 
                 public void run() {
@@ -1211,8 +1211,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$2 */
-            class C23362 implements Runnable {
-                C23362() {
+            class C17612 implements Runnable {
+                C17612() {
                 }
 
                 public void run() {
@@ -1222,8 +1222,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$3 */
-            class C23373 implements Runnable {
-                C23373() {
+            class C17623 implements Runnable {
+                C17623() {
                 }
 
                 public void run() {
@@ -1284,7 +1284,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     VoIPActivity.this.endBtn.setEnabled(false);
                 } else if (state == 11) {
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipCallEnded", R.string.VoipCallEnded), false);
-                    VoIPActivity.this.stateText.postDelayed(new C23351(), 200);
+                    VoIPActivity.this.stateText.postDelayed(new C17601(), 200);
                 } else if (state == 17) {
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipBusy", R.string.VoipBusy), false);
                     VoIPActivity.this.showRetry();
@@ -1293,7 +1293,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                         int count = MessagesController.getGlobalMainSettings().getInt("call_emoji_tooltip_count", 0);
                         if (count < 3) {
                             VoIPActivity.this.setEmojiTooltipVisible(true);
-                            VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C23362(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17612(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).commit();
                         }
                     }
@@ -1328,7 +1328,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     } else if (lastError == -5) {
                         VoIPActivity.this.showErrorDialog(LocaleController.getString("VoipErrorUnknown", R.string.VoipErrorUnknown));
                     } else {
-                        VoIPActivity.this.stateText.postDelayed(new C23373(), 1000);
+                        VoIPActivity.this.stateText.postDelayed(new C17623(), 1000);
                     }
                 }
                 VoIPActivity.this.brandingText.invalidate();
@@ -1549,8 +1549,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         new Thread(new Runnable() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$30$1 */
-            class C23401 implements Runnable {
-                C23401() {
+            class C17651 implements Runnable {
+                C17651() {
                 }
 
                 public void run() {
@@ -1578,7 +1578,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 canvas2.drawRect(0.0f, 0.0f, (float) canvas2.getWidth(), (float) canvas2.getHeight(), paint);
                 VoIPActivity.this.blurredPhoto1 = blur1;
                 VoIPActivity.this.blurredPhoto2 = blur2;
-                VoIPActivity.this.runOnUiThread(new C23401());
+                VoIPActivity.this.runOnUiThread(new C17651());
             }
         }).start();
     }
@@ -1668,8 +1668,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         imageView.setOnClickListener(new OnClickListener() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$34$1 */
-            class C23421 implements Runnable {
-                C23421() {
+            class C17671 implements Runnable {
+                C17671() {
                 }
 
                 public void run() {
@@ -1681,7 +1681,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 if (field.length() != 0) {
                     bottomSheet2.dismiss();
                     if (VoIPService.getSharedInstance() != null) {
-                        VoIPService.getSharedInstance().declineIncomingCall(4, new C23421());
+                        VoIPService.getSharedInstance().declineIncomingCall(4, new C17671());
                     }
                 }
             }
@@ -1704,8 +1704,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             boolean prevState = false;
 
             /* renamed from: org.telegram.ui.VoIPActivity$36$1 */
-            class C23431 implements Runnable {
-                C23431() {
+            class C17681 implements Runnable {
+                C17681() {
                 }
 
                 public void run() {
@@ -1714,8 +1714,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$36$2 */
-            class C23442 implements Runnable {
-                C23442() {
+            class C17692 implements Runnable {
+                C17692() {
                 }
 
                 public void run() {
@@ -1748,12 +1748,12 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                             f = 1.0f;
                         }
                         alpha.scaleX(f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                        cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C23431()).start();
+                        cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17681()).start();
                         return;
                     }
                     cancelBtn.setVisibility(0);
                     cancelBtn.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                    view.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C23442()).start();
+                    view.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17692()).start();
                 }
             }
         });

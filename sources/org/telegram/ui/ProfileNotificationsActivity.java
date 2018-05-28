@@ -83,8 +83,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int vibrateRow;
 
     /* renamed from: org.telegram.ui.ProfileNotificationsActivity$1 */
-    class C21841 extends ActionBarMenuOnItemClick {
-        C21841() {
+    class C22741 extends ActionBarMenuOnItemClick {
+        C22741() {
         }
 
         public void onItemClick(int id) {
@@ -533,7 +533,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CustomNotifications", R.string.CustomNotifications));
-        this.actionBar.setActionBarMenuOnItemClick(new C21841());
+        this.actionBar.setActionBarMenuOnItemClick(new C22741());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -553,8 +553,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$1 */
-            class C21861 extends AnimatorListenerAdapter {
-                C21861() {
+            class C16581 extends AnimatorListenerAdapter {
+                C16581() {
                 }
 
                 public void onAnimationEnd(Animator animator) {
@@ -565,8 +565,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$2 */
-            class C21872 implements Runnable {
-                C21872() {
+            class C16592 implements Runnable {
+                C16592() {
                 }
 
                 public void run() {
@@ -577,8 +577,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$3 */
-            class C21883 implements Runnable {
-                C21883() {
+            class C16603 implements Runnable {
+                C16603() {
                 }
 
                 public void run() {
@@ -589,8 +589,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$4 */
-            class C21894 implements Runnable {
-                C21894() {
+            class C16614 implements Runnable {
+                C16614() {
                 }
 
                 public void run() {
@@ -601,8 +601,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$7 */
-            class C21937 implements OnClickListener {
-                C21937() {
+            class C16637 implements OnClickListener {
+                C16637() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -615,8 +615,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$8 */
-            class C21948 implements Runnable {
-                C21948() {
+            class C16648 implements Runnable {
+                C16648() {
                 }
 
                 public void run() {
@@ -627,8 +627,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$6 */
-            class C21926 implements OnItemClickListener {
-                C21926() {
+            class C22756 implements OnItemClickListener {
+                C22756() {
                 }
 
                 public void onItemClick(View view, int position) {
@@ -684,7 +684,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                         ProfileNotificationsActivity.this.animatorSet = new AnimatorSet();
                         ProfileNotificationsActivity.this.animatorSet.playTogether(animators);
-                        ProfileNotificationsActivity.this.animatorSet.addListener(new C21861());
+                        ProfileNotificationsActivity.this.animatorSet.addListener(new C16581());
                         ProfileNotificationsActivity.this.animatorSet.setDuration(150);
                         ProfileNotificationsActivity.this.animatorSet.start();
                     }
@@ -744,11 +744,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             FileLog.m3e(e2);
                         }
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C21872()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C16592()));
                     } else if (position == ProfileNotificationsActivity.this.callsVibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new C21883()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new C16603()));
                     } else if (position == ProfileNotificationsActivity.this.priorityRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C21894()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C16614()));
                     } else if (position == ProfileNotificationsActivity.this.smartRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             final Context context1 = ProfileNotificationsActivity.this.getParentActivity();
@@ -797,17 +797,17 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
                             });
                             recyclerListView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(8.0f));
-                            recyclerListView.setOnItemClickListener(new C21926());
+                            recyclerListView.setOnItemClickListener(new C22756());
                             Builder builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", R.string.SmartNotificationsAlert));
                             builder.setView(recyclerListView);
                             builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new C21937());
+                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new C16637());
                             ProfileNotificationsActivity.this.showDialog(builder.create());
                         }
                     } else if (position == ProfileNotificationsActivity.this.colorRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
-                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new C21948()));
+                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new C16648()));
                         }
                     } else if (position == ProfileNotificationsActivity.this.popupEnabledRow) {
                         MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("popup_" + ProfileNotificationsActivity.this.dialog_id, 1).commit();

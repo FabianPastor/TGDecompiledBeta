@@ -54,8 +54,8 @@ public class PhotoCropActivity extends BaseFragment {
         int viewWidth;
 
         /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoCropView$1 */
-        class C20751 implements OnTouchListener {
-            C20751() {
+        class C15911 implements OnTouchListener {
+            C15911() {
             }
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -250,7 +250,7 @@ public class PhotoCropActivity extends BaseFragment {
             this.halfPaint = new Paint();
             this.halfPaint.setColor(-939524096);
             setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-            setOnTouchListener(new C20751());
+            setOnTouchListener(new C15911());
         }
 
         private void updateBitmapSize() {
@@ -376,8 +376,8 @@ public class PhotoCropActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class C20741 extends ActionBarMenuOnItemClick {
-        C20741() {
+    class C22371 extends ActionBarMenuOnItemClick {
+        C22371() {
         }
 
         public void onItemClick(int id) {
@@ -447,7 +447,7 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CropImage", R.string.CropImage));
-        this.actionBar.setActionBarMenuOnItemClick(new C20741());
+        this.actionBar.setActionBarMenuOnItemClick(new C22371());
         this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         View photoCropView = new PhotoCropView(context);
         this.view = photoCropView;

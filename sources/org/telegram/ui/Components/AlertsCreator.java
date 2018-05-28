@@ -24,7 +24,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -234,7 +234,7 @@ public class AlertsCreator {
                                             showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                                             showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else if (error.code != C0600C.PRIORITY_DOWNLOAD) {
+                                        } else if (error.code != C0546C.PRIORITY_DOWNLOAD) {
                                             showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                                         }
                                     } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
@@ -362,8 +362,8 @@ public class AlertsCreator {
         builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
 
             /* renamed from: org.telegram.ui.Components.AlertsCreator$2$1 */
-            class C13561 implements RequestDelegate {
-                C13561() {
+            class C20501 implements RequestDelegate {
+                C20501() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -405,7 +405,7 @@ public class AlertsCreator {
                     }
                     req = request;
                 }
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C13561());
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C20501());
                 Toast.makeText(context2, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
             }
         });

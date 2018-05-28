@@ -23,8 +23,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
     private PhotoPickerSearchCellDelegate delegate;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerSearchCell$1 */
-    class C10761 implements OnClickListener {
-        C10761() {
+    class C08971 implements OnClickListener {
+        C08971() {
         }
 
         public void onClick(View v) {
@@ -35,8 +35,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerSearchCell$2 */
-    class C10772 implements OnClickListener {
-        C10772() {
+    class C08982 implements OnClickListener {
+        C08982() {
         }
 
         public void onClick(View v) {
@@ -105,7 +105,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.height = AndroidUtilities.dp(48.0f);
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
-        searchButton.setOnClickListener(new C10761());
+        searchButton.setOnClickListener(new C08971());
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(0);
         addView(frameLayout);
@@ -126,7 +126,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         if (allowGifs) {
-            searchButton.setOnClickListener(new C10772());
+            searchButton.setOnClickListener(new C08982());
         } else {
             searchButton.setAlpha(0.5f);
         }

@@ -41,19 +41,19 @@ public class PhotoFace {
             }
         }
         if (!(leftEyePoint == null || rightEyePoint == null)) {
-            this.eyesCenterPoint = new Point((0.5f * leftEyePoint.f54x) + (0.5f * rightEyePoint.f54x), (0.5f * leftEyePoint.f55y) + (0.5f * rightEyePoint.f55y));
-            this.eyesDistance = (float) Math.hypot((double) (rightEyePoint.f54x - leftEyePoint.f54x), (double) (rightEyePoint.f55y - leftEyePoint.f55y));
-            this.angle = (float) Math.toDegrees(3.141592653589793d + Math.atan2((double) (rightEyePoint.f55y - leftEyePoint.f55y), (double) (rightEyePoint.f54x - leftEyePoint.f54x)));
+            this.eyesCenterPoint = new Point((0.5f * leftEyePoint.f24x) + (0.5f * rightEyePoint.f24x), (0.5f * leftEyePoint.f25y) + (0.5f * rightEyePoint.f25y));
+            this.eyesDistance = (float) Math.hypot((double) (rightEyePoint.f24x - leftEyePoint.f24x), (double) (rightEyePoint.f25y - leftEyePoint.f25y));
+            this.angle = (float) Math.toDegrees(3.141592653589793d + Math.atan2((double) (rightEyePoint.f25y - leftEyePoint.f25y), (double) (rightEyePoint.f24x - leftEyePoint.f24x)));
             this.width = this.eyesDistance * 2.35f;
             float foreheadHeight = 0.8f * this.eyesDistance;
             float upAngle = (float) Math.toRadians((double) (this.angle - 90.0f));
-            this.foreheadPoint = new Point(this.eyesCenterPoint.f54x + (((float) Math.cos((double) upAngle)) * foreheadHeight), this.eyesCenterPoint.f55y + (((float) Math.sin((double) upAngle)) * foreheadHeight));
+            this.foreheadPoint = new Point(this.eyesCenterPoint.f24x + (((float) Math.cos((double) upAngle)) * foreheadHeight), this.eyesCenterPoint.f25y + (((float) Math.sin((double) upAngle)) * foreheadHeight));
         }
         if (leftMouthPoint != null && rightMouthPoint != null) {
-            this.mouthPoint = new Point((0.5f * leftMouthPoint.f54x) + (0.5f * rightMouthPoint.f54x), (0.5f * leftMouthPoint.f55y) + (0.5f * rightMouthPoint.f55y));
+            this.mouthPoint = new Point((0.5f * leftMouthPoint.f24x) + (0.5f * rightMouthPoint.f24x), (0.5f * leftMouthPoint.f25y) + (0.5f * rightMouthPoint.f25y));
             float chinDepth = 0.7f * this.eyesDistance;
             float downAngle = (float) Math.toRadians((double) (this.angle + 90.0f));
-            this.chinPoint = new Point(this.mouthPoint.f54x + (((float) Math.cos((double) downAngle)) * chinDepth), this.mouthPoint.f55y + (((float) Math.sin((double) downAngle)) * chinDepth));
+            this.chinPoint = new Point(this.mouthPoint.f24x + (((float) Math.cos((double) downAngle)) * chinDepth), this.mouthPoint.f25y + (((float) Math.sin((double) downAngle)) * chinDepth));
         }
     }
 

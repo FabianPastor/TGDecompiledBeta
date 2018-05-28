@@ -219,8 +219,8 @@ public class DataQuery {
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
     /* renamed from: org.telegram.messenger.DataQuery$1 */
-    class C01291 implements RequestDelegate {
-        C01291() {
+    class C18031 implements RequestDelegate {
+        C18031() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -228,8 +228,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$3 */
-    class C01433 implements RequestDelegate {
-        C01433() {
+    class C18043 implements RequestDelegate {
+        C18043() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -237,8 +237,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$7 */
-    class C01657 implements RequestDelegate {
-        C01657() {
+    class C18097 implements RequestDelegate {
+        C18097() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -442,7 +442,7 @@ public class DataQuery {
             req.id.id = document.id;
             req.id.access_hash = document.access_hash;
             req.unfave = remove;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01291());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18031());
             maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
         } else {
             maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
@@ -488,7 +488,7 @@ public class DataQuery {
         req.id.id = document.id;
         req.id.access_hash = document.access_hash;
         req.unsave = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01433());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18043());
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -600,7 +600,7 @@ public class DataQuery {
         req.stickerset = new TL_inputStickerSetID();
         req.stickerset.id = stickerSet.id;
         req.stickerset.access_hash = stickerSet.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01657());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18097());
     }
 
     public HashMap<String, ArrayList<Document>> getAllStickers() {
@@ -1052,8 +1052,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$17$1 */
-            class C01261 implements Runnable {
-                C01261() {
+            class C01091 implements Runnable {
+                C01091() {
                 }
 
                 public void run() {
@@ -1065,8 +1065,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$17$3 */
-            class C01283 implements Runnable {
-                C01283() {
+            class C01113 implements Runnable {
+                C01113() {
                 }
 
                 public void run() {
@@ -1077,11 +1077,11 @@ public class DataQuery {
             public void run() {
                 long j = 1000;
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    Runnable c01261 = new C01261();
+                    Runnable c01091 = new C01091();
                     if (arrayList != null || z) {
                         j = 0;
                     }
-                    AndroidUtilities.runOnUIThread(c01261, j);
+                    AndroidUtilities.runOnUIThread(c01091, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1113,7 +1113,7 @@ public class DataQuery {
                         FileLog.m3e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01283());
+                    AndroidUtilities.runOnUIThread(new C01113());
                     DataQuery.this.putFeaturedStickersToCache(null, null, i, 0);
                 }
             }
@@ -1514,8 +1514,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$28$1 */
-            class C01331 implements Runnable {
-                C01331() {
+            class C01151 implements Runnable {
+                C01151() {
                 }
 
                 public void run() {
@@ -1527,8 +1527,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$28$3 */
-            class C01353 implements Runnable {
-                C01353() {
+            class C01173 implements Runnable {
+                C01173() {
                 }
 
                 public void run() {
@@ -1538,9 +1538,9 @@ public class DataQuery {
 
             public void run() {
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    C01331 c01331 = new C01331();
+                    C01151 c01151 = new C01151();
                     long j = (arrayList != null || z) ? 0 : 1000;
-                    AndroidUtilities.runOnUIThread(c01331, j);
+                    AndroidUtilities.runOnUIThread(c01151, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1626,7 +1626,7 @@ public class DataQuery {
                         FileLog.m3e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01353());
+                    AndroidUtilities.runOnUIThread(new C01173());
                     DataQuery.this.putStickersToCache(i3, null, i, 0);
                 }
             }
@@ -1667,8 +1667,8 @@ public class DataQuery {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$29$2 */
-                        class C01372 implements Runnable {
-                            C01372() {
+                        class C01192 implements Runnable {
+                            C01192() {
                             }
 
                             public void run() {
@@ -1687,7 +1687,7 @@ public class DataQuery {
                                     }
                                 }
                             });
-                            AndroidUtilities.runOnUIThread(new C01372(), 1000);
+                            AndroidUtilities.runOnUIThread(new C01192(), 1000);
                         }
                     });
                     return;
@@ -1832,7 +1832,7 @@ public class DataQuery {
                     req.peer = inputPeer;
                     this.lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.f33q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+                    req.f49q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
                     if (user != null) {
                         req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                         req.flags |= 1;
@@ -1853,7 +1853,7 @@ public class DataQuery {
                                             messages_Messages res = response;
                                             DataQuery.this.messagesSearchEndReached[1] = res.messages.isEmpty();
                                             DataQuery.this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            DataQuery.this.searchMessagesInChat(req.f33q, j2, j, i, i2, true, user2);
+                                            DataQuery.this.searchMessagesInChat(req.f49q, j2, j, i, i2, true, user2);
                                         }
                                     }
                                 }
@@ -1872,7 +1872,7 @@ public class DataQuery {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.f33q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+            req.f49q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
@@ -1980,7 +1980,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f33q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final int i = count;
@@ -2026,7 +2026,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f33q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final long j = uid;
@@ -2660,8 +2660,8 @@ public class DataQuery {
                                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.DataQuery$44$1$1$1 */
-                                        class C01461 implements Runnable {
-                                            C01461() {
+                                        class C01271 implements Runnable {
+                                            C01271() {
                                             }
 
                                             public void run() {
@@ -2704,7 +2704,7 @@ public class DataQuery {
                                                 }
                                                 state.dispose();
                                                 MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                                                AndroidUtilities.runOnUIThread(new C01461());
+                                                AndroidUtilities.runOnUIThread(new C01271());
                                             } catch (Throwable e) {
                                                 FileLog.m3e(e);
                                             }
@@ -2886,8 +2886,8 @@ public class DataQuery {
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.DataQuery$48$1$1 */
-                            class C01491 implements Comparator<TL_topPeer> {
-                                C01491() {
+                            class C01301 implements Comparator<TL_topPeer> {
+                                C01301() {
                                 }
 
                                 public int compare(TL_topPeer lhs, TL_topPeer rhs) {
@@ -2922,7 +2922,7 @@ public class DataQuery {
                                     DataQuery.this.hints.add(peer);
                                 }
                                 peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
-                                Collections.sort(DataQuery.this.hints, new C01491());
+                                Collections.sort(DataQuery.this.hints, new C01301());
                                 DataQuery.this.savePeer((int) did, 0, peer.rating);
                                 NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
                             }
@@ -3358,8 +3358,8 @@ public class DataQuery {
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.DataQuery$56$1 */
-                    class C01521 implements Runnable {
-                        C01521() {
+                    class C01331 implements Runnable {
+                        C01331() {
                         }
 
                         public void run() {
@@ -3407,7 +3407,7 @@ public class DataQuery {
                                     }
                                 }
                             }
-                            AndroidUtilities.runOnUIThread(new C01521());
+                            AndroidUtilities.runOnUIThread(new C01331());
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -3451,8 +3451,8 @@ public class DataQuery {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.DataQuery$57$1 */
-                class C01531 implements RequestDelegate {
-                    C01531() {
+                class C18051 implements RequestDelegate {
+                    C18051() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3468,8 +3468,8 @@ public class DataQuery {
                 }
 
                 /* renamed from: org.telegram.messenger.DataQuery$57$2 */
-                class C01542 implements RequestDelegate {
-                    C01542() {
+                class C18062 implements RequestDelegate {
+                    C18062() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3519,12 +3519,12 @@ public class DataQuery {
                                 TL_channels_getMessages req = new TL_channels_getMessages();
                                 req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                 req.id = replyMessages2;
-                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C01531());
+                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C18051());
                                 return;
                             }
                             TL_messages_getMessages req2 = new TL_messages_getMessages();
                             req2.id = replyMessages2;
-                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C01542());
+                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C18062());
                         }
                     } catch (Throwable e) {
                         FileLog.m3e(e);
@@ -3843,8 +3843,8 @@ public class DataQuery {
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new RequestDelegate() {
 
                 /* renamed from: org.telegram.messenger.DataQuery$60$1 */
-                class C01571 implements Runnable {
-                    C01571() {
+                class C01361 implements Runnable {
+                    C01361() {
                     }
 
                     public void run() {
@@ -3857,7 +3857,7 @@ public class DataQuery {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         MessagesController.getInstance(DataQuery.this.currentAccount).processUpdates((Updates) response, false);
-                        AndroidUtilities.runOnUIThread(new C01571());
+                        AndroidUtilities.runOnUIThread(new C01361());
                     }
                 }
             });
@@ -3976,8 +3976,8 @@ public class DataQuery {
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$62$1 */
-                        class C01581 implements RequestDelegate {
-                            C01581() {
+                        class C18071 implements RequestDelegate {
+                            C18071() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -3991,8 +3991,8 @@ public class DataQuery {
                         }
 
                         /* renamed from: org.telegram.messenger.DataQuery$62$2 */
-                        class C01592 implements RequestDelegate {
-                            C01592() {
+                        class C18082 implements RequestDelegate {
+                            C18082() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4024,11 +4024,11 @@ public class DataQuery {
                                     TL_channels_getMessages req = new TL_channels_getMessages();
                                     req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                     req.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C01581());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C18071());
                                 } else {
                                     TL_messages_getMessages req2 = new TL_messages_getMessages();
                                     req2.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C01592());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C18082());
                                 }
                             } catch (Throwable e) {
                                 FileLog.m3e(e);

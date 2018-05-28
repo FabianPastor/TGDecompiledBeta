@@ -313,7 +313,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f25w) / ((float) photoSize.f24h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f43w) / ((float) photoSize.f42h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {
@@ -2014,8 +2014,8 @@ public class MessageObject {
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f18w;
-                    height = attribute.f18w;
+                    width = attribute.f36w;
+                    height = attribute.f36w;
                     round = attribute.round_message;
                 }
             }
@@ -2034,8 +2034,8 @@ public class MessageObject {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (!(attribute instanceof TL_documentAttributeAnimated)) {
                     if (attribute instanceof TL_documentAttributeVideo) {
-                        width = attribute.f18w;
-                        height = attribute.f18w;
+                        width = attribute.f36w;
+                        height = attribute.f36w;
                     }
                 }
             }
@@ -2056,8 +2056,8 @@ public class MessageObject {
                 if (attribute instanceof TL_documentAttributeAnimated) {
                     animated = true;
                 } else if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f18w;
-                    height = attribute.f18w;
+                    width = attribute.f36w;
+                    height = attribute.f36w;
                 }
             }
             if (animated && width <= 1280 && height <= 1280) {
@@ -2114,8 +2114,8 @@ public class MessageObject {
                     } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty() && this.messageOwner.media.document.thumb != null) {
                         photoObject = (PhotoSize) this.photoThumbs.get(0);
                         photoObject.location = this.messageOwner.media.document.thumb.location;
-                        photoObject.f25w = this.messageOwner.media.document.thumb.f25w;
-                        photoObject.f24h = this.messageOwner.media.document.thumb.f24h;
+                        photoObject.f43w = this.messageOwner.media.document.thumb.f43w;
+                        photoObject.f42h = this.messageOwner.media.document.thumb.f42h;
                     }
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -2446,9 +2446,9 @@ public class MessageObject {
         while (a < size) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
-                return new int[]{attribute.f18w, attribute.f17h};
+                return new int[]{attribute.f36w, attribute.f35h};
             } else if (attribute instanceof TL_documentAttributeVideo) {
-                return new int[]{attribute.f18w, attribute.f17h};
+                return new int[]{attribute.f36w, attribute.f35h};
             } else {
                 a++;
             }
@@ -3220,8 +3220,8 @@ public class MessageObject {
                     return false;
                 }
                 isVideo = true;
-                width = attribute.f18w;
-                height = attribute.f17h;
+                width = attribute.f36w;
+                height = attribute.f35h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
@@ -3402,8 +3402,8 @@ public class MessageObject {
                 while (it.hasNext()) {
                     DocumentAttribute attribute = (DocumentAttribute) it.next();
                     if (attribute instanceof TL_documentAttributeImageSize) {
-                        photoWidth = attribute.f18w;
-                        photoHeight = attribute.f17h;
+                        photoWidth = attribute.f36w;
+                        photoHeight = attribute.f35h;
                         break;
                     }
                 }
@@ -3434,7 +3434,7 @@ public class MessageObject {
             }
             PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
-                int h = (int) (((float) currentPhotoObject.f24h) / (((float) currentPhotoObject.f25w) / ((float) photoWidth)));
+                int h = (int) (((float) currentPhotoObject.f42h) / (((float) currentPhotoObject.f43w) / ((float) photoWidth)));
                 if (h == 0) {
                     h = AndroidUtilities.dp(100.0f);
                 }

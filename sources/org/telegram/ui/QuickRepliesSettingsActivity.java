@@ -42,8 +42,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     private EditTextSettingsCell[] textCells = new EditTextSettingsCell[4];
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$1 */
-    class C22021 extends ActionBarMenuOnItemClick {
-        C22021() {
+    class C22821 extends ActionBarMenuOnItemClick {
+        C22821() {
         }
 
         public void onItemClick(int id) {
@@ -54,8 +54,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$2 */
-    class C22032 implements OnItemClickListener {
-        C22032() {
+    class C22832 implements OnItemClickListener {
+        C22832() {
         }
 
         public void onItemClick(View view, int position) {
@@ -199,7 +199,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C22021());
+        this.actionBar.setActionBarMenuOnItemClick(new C22821());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -209,7 +209,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22032());
+        this.listView.setOnItemClickListener(new C22832());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

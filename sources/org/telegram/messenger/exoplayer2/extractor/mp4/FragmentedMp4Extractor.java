@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0600C;
+import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -40,7 +40,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class FragmentedMp4Extractor implements Extractor {
     private static final Format EMSG_FORMAT = Format.createSampleFormat(null, MimeTypes.APPLICATION_EMSG, Long.MAX_VALUE);
-    public static final ExtractorsFactory FACTORY = new C06381();
+    public static final ExtractorsFactory FACTORY = new C18521();
     public static final int FLAG_ENABLE_EMSG_TRACK = 4;
     private static final int FLAG_SIDELOADED = 8;
     public static final int FLAG_WORKAROUND_EVERY_VIDEO_FRAME_IS_SYNC_FRAME = 1;
@@ -137,8 +137,8 @@ public final class FragmentedMp4Extractor implements Extractor {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor$1 */
-    static class C06381 implements ExtractorsFactory {
-        C06381() {
+    static class C18521 implements ExtractorsFactory {
+        C18521() {
         }
 
         public Extractor[] createExtractors() {
@@ -183,8 +183,8 @@ public final class FragmentedMp4Extractor implements Extractor {
         this.containerAtoms = new Stack();
         this.pendingMetadataSampleInfos = new ArrayDeque();
         this.trackBundles = new SparseArray();
-        this.durationUs = C0600C.TIME_UNSET;
-        this.segmentIndexEarliestPresentationTimeUs = C0600C.TIME_UNSET;
+        this.durationUs = C0546C.TIME_UNSET;
+        this.segmentIndexEarliestPresentationTimeUs = C0546C.TIME_UNSET;
         enterReadingAtomHeaderState();
     }
 
@@ -371,7 +371,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
         ContainerAtom mvex = moov.getContainerAtomOfType(Atom.TYPE_mvex);
         SparseArray<DefaultSampleValues> defaultSampleValuesArray = new SparseArray();
-        long duration = C0600C.TIME_UNSET;
+        long duration = C0546C.TIME_UNSET;
         int mvexChildrenSize = mvex.leafChildren.size();
         for (i = 0; i < mvexChildrenSize; i++) {
             LeafAtom atom = (LeafAtom) mvex.leafChildren.get(i);
@@ -466,12 +466,12 @@ public final class FragmentedMp4Extractor implements Extractor {
             int sampleSize = atom.bytesLeft();
             atom.readNullTerminatedString();
             atom.readNullTerminatedString();
-            long presentationTimeDeltaUs = Util.scaleLargeTimestamp(atom.readUnsignedInt(), C0600C.MICROS_PER_SECOND, atom.readUnsignedInt());
+            long presentationTimeDeltaUs = Util.scaleLargeTimestamp(atom.readUnsignedInt(), C0546C.MICROS_PER_SECOND, atom.readUnsignedInt());
             for (TrackOutput emsgTrackOutput : this.emsgTrackOutputs) {
                 atom.setPosition(12);
                 emsgTrackOutput.sampleData(atom, sampleSize);
             }
-            if (this.segmentIndexEarliestPresentationTimeUs != C0600C.TIME_UNSET) {
+            if (this.segmentIndexEarliestPresentationTimeUs != C0546C.TIME_UNSET) {
                 for (TrackOutput emsgTrackOutput2 : this.emsgTrackOutputs) {
                     emsgTrackOutput2.sampleMetadata(this.segmentIndexEarliestPresentationTimeUs + presentationTimeDeltaUs, 1, sampleSize, 0, null);
                 }
@@ -792,7 +792,7 @@ public final class FragmentedMp4Extractor implements Extractor {
             earliestPresentationTime = atom.readUnsignedLongToLong();
             offset += atom.readUnsignedLongToLong();
         }
-        long earliestPresentationTimeUs = Util.scaleLargeTimestamp(earliestPresentationTime, C0600C.MICROS_PER_SECOND, timescale);
+        long earliestPresentationTimeUs = Util.scaleLargeTimestamp(earliestPresentationTime, C0546C.MICROS_PER_SECOND, timescale);
         atom.skipBytes(2);
         int referenceCount = atom.readUnsignedShort();
         int[] sizes = new int[referenceCount];
@@ -811,7 +811,7 @@ public final class FragmentedMp4Extractor implements Extractor {
             offsets[i] = offset;
             timesUs[i] = timeUs;
             time += referenceDuration;
-            timeUs = Util.scaleLargeTimestamp(time, C0600C.MICROS_PER_SECOND, timescale);
+            timeUs = Util.scaleLargeTimestamp(time, C0546C.MICROS_PER_SECOND, timescale);
             durationsUs[i] = timeUs - timesUs[i];
             atom.skipBytes(4);
             offset += (long) sizes[i];

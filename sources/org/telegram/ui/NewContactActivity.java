@@ -92,8 +92,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private TextView textView;
 
     /* renamed from: org.telegram.ui.NewContactActivity$2 */
-    class C20052 implements OnTouchListener {
-        C20052() {
+    class C15422 implements OnTouchListener {
+        C15422() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -102,8 +102,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$3 */
-    class C20063 implements OnEditorActionListener {
-        C20063() {
+    class C15433 implements OnEditorActionListener {
+        C15433() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -117,8 +117,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$4 */
-    class C20074 implements TextWatcher {
-        C20074() {
+    class C15444 implements TextWatcher {
+        C15444() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -134,8 +134,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$5 */
-    class C20085 implements OnEditorActionListener {
-        C20085() {
+    class C15455 implements OnEditorActionListener {
+        C15455() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -149,8 +149,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$6 */
-    class C20096 implements TextWatcher {
-        C20096() {
+    class C15466 implements TextWatcher {
+        C15466() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -166,14 +166,14 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$7 */
-    class C20127 implements OnClickListener {
+    class C15487 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.NewContactActivity$7$1 */
-        class C20111 implements CountrySelectActivityDelegate {
+        class C22191 implements CountrySelectActivityDelegate {
 
             /* renamed from: org.telegram.ui.NewContactActivity$7$1$1 */
-            class C20101 implements Runnable {
-                C20101() {
+            class C15471 implements Runnable {
+                C15471() {
                 }
 
                 public void run() {
@@ -181,30 +181,30 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 }
             }
 
-            C20111() {
+            C22191() {
             }
 
             public void didSelectCountry(String name, String shortName) {
                 NewContactActivity.this.selectCountry(name);
-                AndroidUtilities.runOnUIThread(new C20101(), 300);
+                AndroidUtilities.runOnUIThread(new C15471(), 300);
                 NewContactActivity.this.phoneField.requestFocus();
                 NewContactActivity.this.phoneField.setSelection(NewContactActivity.this.phoneField.length());
             }
         }
 
-        C20127() {
+        C15487() {
         }
 
         public void onClick(View view) {
             CountrySelectActivity fragment = new CountrySelectActivity(true);
-            fragment.setCountrySelectActivityDelegate(new C20111());
+            fragment.setCountrySelectActivityDelegate(new C22191());
             NewContactActivity.this.presentFragment(fragment);
         }
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$8 */
-    class C20138 implements TextWatcher {
-        C20138() {
+    class C15498 implements TextWatcher {
+        C15498() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -279,8 +279,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$9 */
-    class C20149 implements OnEditorActionListener {
-        C20149() {
+    class C15509 implements OnEditorActionListener {
+        C15509() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -294,8 +294,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     /* renamed from: org.telegram.ui.NewContactActivity$1 */
-    class C20041 extends ActionBarMenuOnItemClick {
-        C20041() {
+    class C22181 extends ActionBarMenuOnItemClick {
+        C22181() {
         }
 
         public void onItemClick(int id) {
@@ -336,8 +336,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.NewContactActivity$1$1$1$1 */
-                                class C20011 implements DialogInterface.OnClickListener {
-                                    C20011() {
+                                class C15401 implements DialogInterface.OnClickListener {
+                                    C15401() {
                                     }
 
                                     public void onClick(DialogInterface dialog, int which) {
@@ -365,7 +365,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                         builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
                                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                                        builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), new C20011());
+                                        builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), new C15401());
                                         NewContactActivity.this.showDialog(builder.create());
                                     }
                                 }
@@ -381,7 +381,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
-        this.actionBar.setActionBarMenuOnItemClick(new C20041());
+        this.actionBar.setActionBarMenuOnItemClick(new C22181());
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setInfo(5, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, false);
         this.editDoneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
@@ -393,7 +393,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         linearLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
         linearLayout.setOrientation(1);
         ((ScrollView) this.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-        linearLayout.setOnTouchListener(new C20052());
+        linearLayout.setOnTouchListener(new C15422());
         FrameLayout frameLayout = new FrameLayout(context);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 24.0f, 0.0f, 0.0f));
         this.avatarImage = new BackupImageView(context);
@@ -415,8 +415,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 0.0f, 0.0f, 0.0f));
-        this.firstNameField.setOnEditorActionListener(new C20063());
-        this.firstNameField.addTextChangedListener(new C20074());
+        this.firstNameField.setOnEditorActionListener(new C15433());
+        this.firstNameField.addTextChangedListener(new C15444());
         this.lastNameField = new EditTextBoldCursor(context);
         this.lastNameField.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -433,8 +433,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
         frameLayout.addView(this.lastNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 44.0f, 0.0f, 0.0f));
-        this.lastNameField.setOnEditorActionListener(new C20085());
-        this.lastNameField.addTextChangedListener(new C20096());
+        this.lastNameField.setOnEditorActionListener(new C15455());
+        this.lastNameField.addTextChangedListener(new C15466());
         this.countryButton = new TextView(context);
         this.countryButton.setTextSize(1, 18.0f);
         this.countryButton.setPadding(AndroidUtilities.dp(6.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(6.0f), 0);
@@ -445,7 +445,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.countryButton.setGravity(3);
         this.countryButton.setBackgroundResource(R.drawable.spinner_states);
         linearLayout.addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 24.0f, 0.0f, 14.0f));
-        this.countryButton.setOnClickListener(new C20127());
+        this.countryButton.setOnClickListener(new C15487());
         this.lineView = new View(context);
         this.lineView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
         this.lineView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayLine));
@@ -472,8 +472,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.codeField.setImeOptions(268435461);
         this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
         linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
-        this.codeField.addTextChangedListener(new C20138());
-        this.codeField.setOnEditorActionListener(new C20149());
+        this.codeField.addTextChangedListener(new C15498());
+        this.codeField.setOnEditorActionListener(new C15509());
         this.phoneField = new HintEditText(context);
         this.phoneField.setInputType(3);
         this.phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));

@@ -101,10 +101,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     private EditTextBoldCursor usernameTextView;
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$3 */
-    class C18263 implements TextWatcher {
+    class C14243 implements TextWatcher {
         boolean ignoreTextChange;
 
-        C18263() {
+        C14243() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,8 +139,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$4 */
-    class C18274 implements OnClickListener {
-        C18274() {
+    class C14254 implements OnClickListener {
+        C14254() {
         }
 
         public void onClick(View v) {
@@ -152,8 +152,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$9 */
-    class C18349 implements Runnable {
-        C18349() {
+    class C14289 implements Runnable {
+        C14289() {
         }
 
         public void run() {
@@ -165,8 +165,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$1 */
-    class C18241 extends ActionBarMenuOnItemClick {
-        C18241() {
+    class C21621 extends ActionBarMenuOnItemClick {
+        C21621() {
         }
 
         public void onItemClick(int id) {
@@ -184,8 +184,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$6 */
-    class C18296 implements OnItemClickListener {
-        C18296() {
+    class C21636 implements OnItemClickListener {
+        C21636() {
         }
 
         public void onItemClick(View view, int position) {
@@ -223,8 +223,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$7 */
-    class C18307 extends OnScrollListener {
-        C18307() {
+    class C21647 extends OnScrollListener {
+        C21647() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -399,7 +399,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupStickers", R.string.GroupStickers));
-        this.actionBar.setActionBarMenuOnItemClick(new C18241());
+        this.actionBar.setActionBarMenuOnItemClick(new C21621());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
@@ -452,7 +452,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView.setInputType(163872);
         this.usernameTextView.setImeOptions(6);
         this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", R.string.ChooseStickerSetPlaceholder));
-        this.usernameTextView.addTextChangedListener(new C18263());
+        this.usernameTextView.addTextChangedListener(new C14243());
         this.nameContainer.addView(this.usernameTextView, LayoutHelper.createLinear(0, 42, 1.0f));
         this.eraseImageView = new ImageView(context);
         this.eraseImageView.setScaleType(ScaleType.CENTER);
@@ -460,7 +460,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.eraseImageView.setPadding(AndroidUtilities.dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
-        this.eraseImageView.setOnClickListener(new C18274());
+        this.eraseImageView.setOnClickListener(new C14254());
         this.nameContainer.addView(this.eraseImageView, LayoutHelper.createLinear(42, 42, 0.0f));
         if (!(this.info == null || this.info.stickerset == null)) {
             this.ignoreTextChanges = true;
@@ -489,8 +489,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C18296());
-        this.listView.setOnScrollListener(new C18307());
+        this.listView.setOnItemClickListener(new C21636());
+        this.listView.setOnScrollListener(new C21647());
         return this.fragmentView;
     }
 
@@ -559,11 +559,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            Runnable c18338 = new Runnable() {
+            Runnable c14278 = new Runnable() {
 
                 /* renamed from: org.telegram.ui.GroupStickersActivity$8$1 */
-                class C18321 implements RequestDelegate {
-                    C18321() {
+                class C21651 implements RequestDelegate {
+                    C21651() {
                     }
 
                     public void run(final TLObject response, TL_error error) {
@@ -602,18 +602,18 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                         req.stickerset = new TL_inputStickerSetShortName();
                         req.stickerset.short_name = query;
-                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C18321());
+                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C21651());
                     }
                 }
             };
-            this.queryRunnable = c18338;
-            AndroidUtilities.runOnUIThread(c18338, 500);
+            this.queryRunnable = c14278;
+            AndroidUtilities.runOnUIThread(c14278, 500);
         }
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C18349(), 100);
+            AndroidUtilities.runOnUIThread(new C14289(), 100);
         }
     }
 

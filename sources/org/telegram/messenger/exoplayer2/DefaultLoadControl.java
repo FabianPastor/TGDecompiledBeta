@@ -26,7 +26,7 @@ public class DefaultLoadControl implements LoadControl {
     private int targetBufferSize;
 
     public DefaultLoadControl() {
-        this(new DefaultAllocator(true, C0600C.DEFAULT_BUFFER_SEGMENT_SIZE));
+        this(new DefaultAllocator(true, C0546C.DEFAULT_BUFFER_SEGMENT_SIZE));
     }
 
     public DefaultLoadControl(DefaultAllocator allocator) {
