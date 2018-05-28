@@ -435,6 +435,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     } else {
                         this.valueTextView.setText(LocaleController.getString("Connected", C0493R.string.Connected));
                     }
+                    if (!(this.currentInfo.checking || this.currentInfo.available)) {
+                        this.currentInfo.availableCheckTime = 0;
+                    }
                 } else {
                     colorKey = Theme.key_windowBackgroundWhiteGrayText2;
                     this.valueTextView.setText(LocaleController.getString("Connecting", C0493R.string.Connecting));
