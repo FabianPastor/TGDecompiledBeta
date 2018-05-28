@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -516,6 +517,8 @@ public class AlertDialog extends Dialog implements Callback {
         this.messageTextView = new TextView(getContext());
         this.messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
         this.messageTextView.setTextSize(1, 16.0f);
+        this.messageTextView.setMovementMethod(new LinkMovementMethodMy());
+        this.messageTextView.setLinkTextColor(getThemeColor(Theme.key_dialogTextLink));
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         View view2;
         if (this.progressViewStyle == 1) {

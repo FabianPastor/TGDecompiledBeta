@@ -164,6 +164,9 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     public void searchPlacesWithQuery(String query, Location coordinate, boolean searchUser) {
+        if (coordinate == null) {
+            return;
+        }
         if (this.lastSearchLocation == null || coordinate.distanceTo(this.lastSearchLocation) >= 200.0f) {
             this.lastSearchLocation = coordinate;
             this.lastSearchQuery = query;

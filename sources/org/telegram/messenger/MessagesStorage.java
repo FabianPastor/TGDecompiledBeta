@@ -3127,7 +3127,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public void putContacts(ArrayList<TL_contact> contacts, final boolean deleteAll) {
-        if (!contacts.isEmpty()) {
+        if (!contacts.isEmpty() || deleteAll) {
             final ArrayList<TL_contact> contactsCopy = new ArrayList(contacts);
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
@@ -3187,11 +3187,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    public void putCachedPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean migrate) {
+    public void putCachedPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean migrate, boolean delete) {
         if (contactHashMap == null) {
             return;
         }
-        if (!contactHashMap.isEmpty() || migrate) {
+        if (!contactHashMap.isEmpty() || migrate || delete) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
@@ -6840,7 +6840,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         state.dispose();
     }
 
-    public void closeHolesInMedia(long did, int minId, int maxId, int type) throws Exception {
+    public void closeHolesInMedia(long did, int minId, int maxId, int type) {
         SQLiteCursor cursor;
         if (type < 0) {
             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type >= 0 AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
@@ -6908,7 +6908,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    private void closeHolesInTable(String table, long did, int minId, int maxId) throws Exception {
+    private void closeHolesInTable(String table, long did, int minId, int maxId) {
         SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT start, end FROM " + table + " WHERE uid = %d AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
         ArrayList<Hole> holes = null;
         while (cursor.next()) {

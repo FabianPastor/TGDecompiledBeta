@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">텔레그램</string>
     <string name="SecretLinkPreviewAlert">비밀 대화에서 링크 미리보기를 활성화하시겠습니까? 링크 미리보기는 텔레그램 서버에서 만들어지는 점을 유의하시기 바랍니다.</string>
     <string name="SecretWebPage">링크 미리보기</string>
+    <string name="SecretWebPageInfo">Link previews will be generated on Telegram servers. We do not store data about the links you send.</string>
     <string name="SecurityTitle">보안</string>
     <string name="SelectChat">대화방 선택</string>
     <string name="SelectColor">색깔 선택</string>
@@ -1597,6 +1598,8 @@
     <string name="Support">지원</string>
     <string name="SyncContacts">연락처 동기화</string>
     <string name="SyncContactsAdded">사용중인 계정에 기기에 있는 연락처가 추가되었습니다.</string>
+    <string name="SyncContactsDelete">Delete Synced Contacts</string>
+    <string name="SyncContactsDeleteInfo">This will remove your contacts from the Telegram servers. If \'Sync Contacts\' is enabled, contacts will be re-synced.</string>
     <string name="SyncContactsInfoOff">사용중인 계정에 기기에 있는 연락처를 가져오려면 허용을 해주세요.</string>
     <string name="SyncContactsInfoOn">사용중인 계정에 기기에 있는 연락처가 추가 됩니다.</string>
     <string name="SyncContactsOff">사용중인 계정에 기기에 있는 연락처가 추가가 되지 않을 예정입니다.</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">텔레그램 계정과 연결을 끊으려면 짧게 누르세요.</string>
     <string name="TerminateWebSessionQuestion">%1$s 과(와) 연결을 끊을까요?</string>
     <string name="TerminateWebSessionStop">%1$s 차단</string>
+    <string name="TermsOfService">Terms of Service</string>
+    <string name="TermsOfServiceLogin">By signing up,\nyou agree to the *Terms of Service*.</string>
     <string name="TextCopied">클립보드로 텍스트가 복사되었습니다.</string>
     <string name="TextSize">메시지 글자 크기</string>
     <string name="Theme">테마</string>

@@ -2790,7 +2790,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00d8;
     L_0x0025:
         r19 = "WaitingForNetwork";
-        r20 = NUM; // 0x7f0c06ea float:1.8612782E38 double:1.053098273E-314;
+        r20 = NUM; // 0x7f0c06ef float:1.8612792E38 double:1.0530982754E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x002f:
         r0 = r25;
@@ -2891,7 +2891,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00fc;
     L_0x00f0:
         r19 = "Updating";
-        r20 = NUM; // 0x7f0c0684 float:1.8612575E38 double:1.0530982226E-314;
+        r20 = NUM; // 0x7f0c0689 float:1.8612585E38 double:1.053098225E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00fc:
@@ -2924,7 +2924,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x013a;
     L_0x012f:
         r19 = "ServiceNotifications";
-        r20 = NUM; // 0x7f0c05e1 float:1.8612244E38 double:1.053098142E-314;
+        r20 = NUM; // 0x7f0c05e2 float:1.8612246E38 double:1.0530981425E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x013a:

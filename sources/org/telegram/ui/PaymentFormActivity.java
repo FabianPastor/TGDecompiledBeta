@@ -16,13 +16,10 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.Selection;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -74,6 +71,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.C0493R;
 import org.telegram.messenger.FileLog;
@@ -576,25 +574,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             PaymentFormActivity.this.webviewLoading = false;
             PaymentFormActivity.this.showEditDoneProgress(true, false);
             PaymentFormActivity.this.updateSavePaymentField();
-        }
-    }
-
-    private static class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() != 1 && event.getAction() != 3) {
-                    return result;
-                }
-                Selection.removeSelection(buffer);
-                return result;
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-                return false;
-            }
         }
     }
 
@@ -3937,7 +3916,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.currentStep;
         r5 = 5;
-        if (r4 != r5) goto L_0x1da6;
+        if (r4 != r5) goto L_0x1da3;
     L_0x17e0:
         r4 = new org.telegram.ui.Cells.PaymentInfoCell;
         r0 = r48;
@@ -3985,31 +3964,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
         r16 = new java.util.ArrayList;
-        r16.<init>();
         r0 = r47;
         r4 = r0.paymentForm;
         r4 = r4.invoice;
         r4 = r4.prices;
         r0 = r16;
-        r0.addAll(r4);
+        r0.<init>(r4);
         r0 = r47;
         r4 = r0.shippingOption;
-        if (r4 == 0) goto L_0x1864;
-    L_0x1859:
+        if (r4 == 0) goto L_0x1861;
+    L_0x1856:
         r0 = r47;
         r4 = r0.shippingOption;
         r4 = r4.prices;
         r0 = r16;
         r0.addAll(r4);
-    L_0x1864:
+    L_0x1861:
         r0 = r47;
         r1 = r16;
         r42 = r0.getTotalPriceString(r1);
         r11 = 0;
-    L_0x186d:
+    L_0x186a:
         r4 = r16.size();
-        if (r11 >= r4) goto L_0x18ba;
-    L_0x1873:
+        if (r11 >= r4) goto L_0x18b7;
+    L_0x1870:
         r0 = r16;
         r34 = r0.get(r11);
         r34 = (org.telegram.tgnet.TLRPC.TL_labeledPrice) r34;
@@ -4039,8 +4017,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r35;
         r4.addView(r0);
         r11 = r11 + 1;
-        goto L_0x186d;
-    L_0x18ba:
+        goto L_0x186a;
+    L_0x18b7:
         r35 = new org.telegram.ui.Cells.TextPriceCell;
         r0 = r35;
         r1 = r48;
@@ -4116,8 +4094,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.currentStep;
         r5 = 4;
-        if (r4 != r5) goto L_0x1976;
-    L_0x1965:
+        if (r4 != r5) goto L_0x1973;
+    L_0x1962:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 0;
@@ -4126,16 +4104,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r5.<init>();
         r4.setOnClickListener(r5);
-    L_0x1976:
+    L_0x1973:
         r37 = 0;
         r11 = 0;
-    L_0x1979:
+    L_0x1976:
         r0 = r47;
         r4 = r0.paymentForm;
         r4 = r4.users;
         r4 = r4.size();
-        if (r11 >= r4) goto L_0x19a2;
-    L_0x1985:
+        if (r11 >= r4) goto L_0x199f;
+    L_0x1982:
         r0 = r47;
         r4 = r0.paymentForm;
         r4 = r4.users;
@@ -4146,15 +4124,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r5 = r0.paymentForm;
         r5 = r5.provider_id;
-        if (r4 != r5) goto L_0x199f;
-    L_0x199d:
+        if (r4 != r5) goto L_0x199c;
+    L_0x199a:
         r37 = r43;
-    L_0x199f:
+    L_0x199c:
         r11 = r11 + 1;
-        goto L_0x1979;
-    L_0x19a2:
-        if (r37 == 0) goto L_0x1da1;
-    L_0x19a4:
+        goto L_0x1976;
+    L_0x199f:
+        if (r37 == 0) goto L_0x1d9e;
+    L_0x19a1:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 1;
@@ -4191,17 +4169,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 1;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x19f2:
+    L_0x19ef:
         r0 = r47;
         r4 = r0.validateRequest;
-        if (r4 == 0) goto L_0x1bee;
-    L_0x19f8:
+        if (r4 == 0) goto L_0x1beb;
+    L_0x19f5:
         r0 = r47;
         r4 = r0.validateRequest;
         r4 = r4.info;
         r4 = r4.shipping_address;
-        if (r4 == 0) goto L_0x1a9c;
-    L_0x1a02:
+        if (r4 == 0) goto L_0x1a99;
+    L_0x19ff:
         r4 = "%s %s, %s, %s, %s, %s";
         r5 = 6;
         r5 = new java.lang.Object[r5];
@@ -4278,13 +4256,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 2;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x1a9c:
+    L_0x1a99:
         r0 = r47;
         r4 = r0.validateRequest;
         r4 = r4.info;
         r4 = r4.name;
-        if (r4 == 0) goto L_0x1af0;
-    L_0x1aa6:
+        if (r4 == 0) goto L_0x1aed;
+    L_0x1aa3:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 3;
@@ -4319,13 +4297,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 3;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x1af0:
+    L_0x1aed:
         r0 = r47;
         r4 = r0.validateRequest;
         r4 = r4.info;
         r4 = r4.phone;
-        if (r4 == 0) goto L_0x1b4c;
-    L_0x1afa:
+        if (r4 == 0) goto L_0x1b49;
+    L_0x1af7:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 4;
@@ -4362,13 +4340,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 4;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x1b4c:
+    L_0x1b49:
         r0 = r47;
         r4 = r0.validateRequest;
         r4 = r4.info;
         r4 = r4.email;
-        if (r4 == 0) goto L_0x1ba0;
-    L_0x1b56:
+        if (r4 == 0) goto L_0x1b9d;
+    L_0x1b53:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 5;
@@ -4403,11 +4381,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 5;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x1ba0:
+    L_0x1b9d:
         r0 = r47;
         r4 = r0.shippingOption;
-        if (r4 == 0) goto L_0x1bee;
-    L_0x1ba6:
+        if (r4 == 0) goto L_0x1beb;
+    L_0x1ba3:
         r0 = r47;
         r4 = r0.detailSettingsCell;
         r5 = 6;
@@ -4441,12 +4419,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 6;
         r5 = r5[r6];
         r4.addView(r5);
-    L_0x1bee:
+    L_0x1beb:
         r0 = r47;
         r4 = r0.currentStep;
         r5 = 4;
-        if (r4 != r5) goto L_0x1d67;
-    L_0x1bf5:
+        if (r4 != r5) goto L_0x1d64;
+    L_0x1bf2:
         r4 = new android.widget.FrameLayout;
         r0 = r48;
         r4.<init>(r0);
@@ -4582,8 +4560,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.setDomStorageEnabled(r5);
         r4 = android.os.Build.VERSION.SDK_INT;
         r5 = 21;
-        if (r4 < r5) goto L_0x1d40;
-    L_0x1d26:
+        if (r4 < r5) goto L_0x1d3d;
+    L_0x1d23:
         r0 = r47;
         r4 = r0.webView;
         r4 = r4.getSettings();
@@ -4595,7 +4573,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r0 = r19;
         r0.setAcceptThirdPartyCookies(r4, r5);
-    L_0x1d40:
+    L_0x1d3d:
         r0 = r47;
         r4 = r0.webView;
         r5 = new org.telegram.ui.PaymentFormActivity$23;
@@ -4613,7 +4591,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.webView;
         r5 = 8;
         r4.setVisibility(r5);
-    L_0x1d67:
+    L_0x1d64:
         r0 = r47;
         r4 = r0.sectionCell;
         r5 = 1;
@@ -4641,15 +4619,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
         goto L_0x0c3b;
-    L_0x1da1:
+    L_0x1d9e:
         r36 = "";
-        goto L_0x19f2;
-    L_0x1da6:
+        goto L_0x19ef;
+    L_0x1da3:
         r0 = r47;
         r4 = r0.currentStep;
         r5 = 6;
         if (r4 != r5) goto L_0x0c3b;
-    L_0x1dad:
+    L_0x1daa:
         r0 = r47;
         r4 = r0.bottomCell;
         r5 = 2;
@@ -4721,12 +4699,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r0.inputFields = r4;
         r11 = 0;
-    L_0x1e4d:
+    L_0x1e4a:
         r4 = 3;
-        if (r11 >= r4) goto L_0x2129;
-    L_0x1e50:
-        if (r11 != 0) goto L_0x2033;
-    L_0x1e52:
+        if (r11 >= r4) goto L_0x2126;
+    L_0x1e4d:
+        if (r11 != 0) goto L_0x2030;
+    L_0x1e4f:
         r0 = r47;
         r4 = r0.headerCell;
         r5 = 0;
@@ -4759,7 +4737,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r7 = -2;
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
-    L_0x1e99:
+    L_0x1e96:
         r18 = new android.widget.FrameLayout;
         r0 = r18;
         r1 = r48;
@@ -4775,8 +4753,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r0 = r18;
         r0.setBackgroundColor(r4);
-        if (r11 != 0) goto L_0x1eee;
-    L_0x1ec0:
+        if (r11 != 0) goto L_0x1eeb;
+    L_0x1ebd:
         r24 = new android.view.View;
         r0 = r24;
         r1 = r48;
@@ -4797,7 +4775,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r18;
         r1 = r24;
         r0.addView(r1, r4);
-    L_0x1eee:
+    L_0x1eeb:
         r0 = r47;
         r4 = r0.inputFields;
         r5 = new org.telegram.ui.Components.EditTextBoldCursor;
@@ -4849,11 +4827,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r4[r11];
         r5 = NUM; // 0x3fc00000 float:1.5 double:5.28426686E-315;
         r4.setCursorWidth(r5);
-        if (r11 == 0) goto L_0x1f6d;
-    L_0x1f6a:
+        if (r11 == 0) goto L_0x1f6a;
+    L_0x1f67:
         r4 = 1;
-        if (r11 != r4) goto L_0x207f;
-    L_0x1f6d:
+        if (r11 != r4) goto L_0x207c;
+    L_0x1f6a:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
@@ -4869,14 +4847,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r4[r11];
         r5 = 268435461; // 0x10000005 float:2.5243564E-29 double:1.326247394E-315;
         r4.setImeOptions(r5);
-    L_0x1f8f:
+    L_0x1f8c:
         switch(r11) {
-            case 0: goto L_0x208d;
-            case 1: goto L_0x20ab;
-            case 2: goto L_0x20c0;
-            default: goto L_0x1f92;
+            case 0: goto L_0x208a;
+            case 1: goto L_0x20a8;
+            case 2: goto L_0x20bd;
+            default: goto L_0x1f8f;
         };
-    L_0x1f92:
+    L_0x1f8f:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
@@ -4890,10 +4868,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r5 = r4[r11];
         r4 = org.telegram.messenger.LocaleController.isRTL;
-        if (r4 == 0) goto L_0x20d5;
-    L_0x1fae:
+        if (r4 == 0) goto L_0x20d2;
+    L_0x1fab:
         r4 = 5;
-    L_0x1faf:
+    L_0x1fac:
         r5.setGravity(r4);
         r0 = r47;
         r4 = r0.inputFields;
@@ -4917,8 +4895,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5.<init>();
         r4.setOnEditorActionListener(r5);
         r4 = 1;
-        if (r11 != r4) goto L_0x20d8;
-    L_0x1fe3:
+        if (r11 != r4) goto L_0x20d5;
+    L_0x1fe0:
         r0 = r47;
         r4 = r0.bottomCell;
         r5 = 0;
@@ -4953,13 +4931,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r7 = -2;
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
-    L_0x202f:
+    L_0x202c:
         r11 = r11 + 1;
-        goto L_0x1e4d;
-    L_0x2033:
+        goto L_0x1e4a;
+    L_0x2030:
         r4 = 2;
-        if (r11 != r4) goto L_0x1e99;
-    L_0x2036:
+        if (r11 != r4) goto L_0x1e96;
+    L_0x2033:
         r0 = r47;
         r4 = r0.headerCell;
         r5 = 1;
@@ -4992,15 +4970,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r7 = -2;
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
-        goto L_0x1e99;
-    L_0x207f:
+        goto L_0x1e96;
+    L_0x207c:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = 268435462; // 0x10000006 float:2.5243567E-29 double:1.3262474E-315;
         r4.setImeOptions(r5);
-        goto L_0x1f8f;
-    L_0x208d:
+        goto L_0x1f8c;
+    L_0x208a:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
@@ -5012,8 +4990,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r4.requestFocus();
-        goto L_0x1f92;
-    L_0x20ab:
+        goto L_0x1f8f;
+    L_0x20a8:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
@@ -5021,8 +4999,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = NUM; // 0x7f0c04df float:1.8611721E38 double:1.0530980146E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
-        goto L_0x1f92;
-    L_0x20c0:
+        goto L_0x1f8f;
+    L_0x20bd:
         r0 = r47;
         r4 = r0.inputFields;
         r4 = r4[r11];
@@ -5030,14 +5008,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = NUM; // 0x7f0c04da float:1.8611711E38 double:1.053098012E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
-        goto L_0x1f92;
-    L_0x20d5:
+        goto L_0x1f8f;
+    L_0x20d2:
         r4 = 3;
-        goto L_0x1faf;
-    L_0x20d8:
+        goto L_0x1fac;
+    L_0x20d5:
         r4 = 2;
-        if (r11 != r4) goto L_0x202f;
-    L_0x20db:
+        if (r11 != r4) goto L_0x202c;
+    L_0x20d8:
         r0 = r47;
         r4 = r0.bottomCell;
         r5 = 1;
@@ -5072,8 +5050,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r7 = -2;
         r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r7);
         r4.addView(r5, r6);
-        goto L_0x202f;
-    L_0x2129:
+        goto L_0x202c;
+    L_0x2126:
         r47.updatePasswordFields();
         goto L_0x0c3b;
         */
@@ -5339,8 +5317,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             FragmentTransaction fragmentTransaction = getParentActivity().getFragmentManager().beginTransaction();
             fragmentTransaction.replace(fragment_container_id, walletFragment);
             fragmentTransaction.commit();
-            ArrayList<TL_labeledPrice> arrayList = new ArrayList();
-            arrayList.addAll(this.paymentForm.invoice.prices);
+            ArrayList<TL_labeledPrice> arrayList = new ArrayList(this.paymentForm.invoice.prices);
             if (this.shippingOption != null) {
                 arrayList.addAll(this.shippingOption.prices);
             }
@@ -5367,8 +5344,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 setDonePressed(true);
                 MaskedWallet maskedWallet = (MaskedWallet) data.getParcelableExtra("com.google.android.gms.wallet.EXTRA_MASKED_WALLET");
                 Cart.Builder cardBuilder = Cart.newBuilder().setCurrencyCode(this.paymentForm.invoice.currency).setTotalPrice(this.totalPriceDecimal);
-                ArrayList<TL_labeledPrice> arrayList = new ArrayList();
-                arrayList.addAll(this.paymentForm.invoice.prices);
+                ArrayList<TL_labeledPrice> arrayList = new ArrayList(this.paymentForm.invoice.prices);
                 if (this.shippingOption != null) {
                     arrayList.addAll(this.shippingOption.prices);
                 }

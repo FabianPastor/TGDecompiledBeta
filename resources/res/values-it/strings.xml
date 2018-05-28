@@ -424,12 +424,12 @@
     <string name="Connected">Connesso</string>
     <string name="Connecting">Connetto...</string>
     <string name="ConnectingConnectProxy">Connetti proxy</string>
-    <string name="ConnectingToProxy">Connetto al proxy...</string>
+    <string name="ConnectingToProxy">Connetto al proxy</string>
     <string name="ConnectingToProxyEnable">Attiva</string>
     <string name="ContactJoined">Un contatto si è unito a Telegram</string>
     <string name="ContactNotRegistered">%1$s non si è ancora unito a Telegram, vuoi invitarlo a unirsi?</string>
     <string name="Contacts">Contatti</string>
-    <string name="ContactsPermissionAlert">Per connetterti senza problemi con tutti i tuoi conoscenti, permetti a **Telegram** di accedere ai tuoi contatti.</string>
+    <string name="ContactsPermissionAlert">Telegram ha bisogno di accedere ai tuoi contatti per farti connettere con gli amici su tutti i tuoi dispositivi. I tuoi contatti verranno sincronizzati continuamente con i server cloud fortemente criptati di Telegram.</string>
     <string name="ContactsPermissionAlertContinue">CONTINUA</string>
     <string name="ContactsPermissionAlertNotNow">NON ADESSO</string>
     <string name="ContinueOnThisLanguage">Continua in italiano</string>
@@ -495,7 +495,7 @@
     <string name="Default">Predefinito</string>
     <string name="DefaultRingtone">Predefinita</string>
     <string name="Delete">Elimina</string>
-    <string name="DeleteAccountHelp">Se non ti connetti almeno una volta in questo periodo, il tuo account verrà eliminato insieme a tutti i gruppi, i messaggi e i contatti.</string>
+    <string name="DeleteAccountHelp">Se non ti connetti almeno una volta in questo periodo, il tuo account verrà eliminato insieme a tutti i messaggi e i contatti.</string>
     <string name="DeleteAccountIfAwayFor">Se assente per</string>
     <string name="DeleteAccountTitle">Elimina il mio account</string>
     <string name="DeleteAllFrom">Elimina tutto da %1$s</string>
@@ -1197,7 +1197,7 @@
     <string name="Page4Title">Sicuro</string>
     <string name="Page5Message">**Telegram** non ha limiti di dimensione\nper le tue chat e i file multimediali.</string>
     <string name="Page5Title">Potente</string>
-    <string name="Page6Message">**Telegram** ti consente di accedere\nai tuoi messaggi da più dispositivi.</string>
+    <string name="Page6Message">**Telegram** ti permette di accedere\nai tuoi messaggi da più dispositivi.</string>
     <string name="Page6Title">Basato sul cloud</string>
     <string name="PaintDelete">Elimina</string>
     <string name="PaintDuplicate">Duplica</string>
@@ -1277,7 +1277,7 @@
     <string name="PaymentWarning">Attenzione</string>
     <string name="PaymentWarningText">Né Telegram, né %1$s avranno accesso alle informazioni della tua carta di credito. I dettagli della tua carta di credito saranno gestiti solamente dal sistema di pagamento, %2$s.\n\nI pagamenti saranno inviati direttamente allo sviluppatore di %1$s. Telegram non può fornire alcuna garanzia, per cui procedi a tuo rischio. In caso di problemi, per favore contatta lo sviluppatore di %1$s o la tua banca.</string>
     <string name="PendingEmailText">La tua email di recupero %1$s non è ancora attiva e attende la conferma.</string>
-    <string name="PermissionContacts">Telegram deve accedere ai tuoi contatti per poterti connettere con i tuoi amici su tutti i tuoi dispositivi.</string>
+    <string name="PermissionContacts">Per connetterti con gli amici su tutti i tuoi dispositivi, i tuoi contatti verranno sincronizzati continuamente con i server cloud fortemente criptati di Telegram.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram deve accedere allo spostamento su altre app per riprodurre i video in modalità PiP.</string>
     <string name="PermissionNoAudio">Telegram deve accedere al microfono per poter inviare messaggi vocali.</string>
     <string name="PermissionNoAudioVideo">Telegram deve accedere al microfono per poter registrare video.</string>
@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Vuoi attivare le anteprime estese per i link nelle Chat Segrete? Nota che le anteprime dei link sono generate sui server di Telegram.</string>
     <string name="SecretWebPage">Anteprime link</string>
+    <string name="SecretWebPageInfo">Le anteprime dei link saranno generate dai server di Telegram. Non archiviamo dati sui link che invii.</string>
     <string name="SecurityTitle">Sicurezza</string>
     <string name="SelectChat">Seleziona chat</string>
     <string name="SelectColor">Seleziona colore</string>
@@ -1597,7 +1598,9 @@
     <string name="Support">Assistenza</string>
     <string name="SyncContacts">Sincronizza contatti</string>
     <string name="SyncContactsAdded">I contatti da questo dispositivo sono stati aggiunti al tuo account.</string>
-    <string name="SyncContactsInfoOff">Attiva per importare i contatti da questo dispositivo nel tuo account.</string>
+    <string name="SyncContactsDelete">Elimina i contatti sincronizzati</string>
+    <string name="SyncContactsDeleteInfo">Questo rimuoverà i tuoi contatti dai server di Telegram. Se \'Sincronizza contatti\' è attivo, i contatti saranno risincronizzati.</string>
+    <string name="SyncContactsInfoOff">Attiva per mantenere sincronizzati i contatti da questo dispositivo con il tuo account.</string>
     <string name="SyncContactsInfoOn">I contatti da questo dispositivo saranno aggiunti al tuo account.</string>
     <string name="SyncContactsOff">I contatti da questo dispositivo non saranno aggiunti a questo account.</string>
     <string name="SyncContactsOn">I contatti da questo dispositivo saranno aggiunti a questo account.</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">Tocca per disconnettere dal tuo account Telegram.</string>
     <string name="TerminateWebSessionQuestion">Disconnettere %1$s?</string>
     <string name="TerminateWebSessionStop">Bloccare %1$s</string>
+    <string name="TermsOfService">Termini di servizio</string>
+    <string name="TermsOfServiceLogin">Iscrivendoti,\naccetti i *Termini di servizio*.</string>
     <string name="TextCopied">Testo copiato negli appunti</string>
     <string name="TextSize">Dimensione testo messaggi</string>
     <string name="Theme">Tema</string>

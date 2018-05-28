@@ -2327,6 +2327,7 @@ public final class C0493R {
         public static final int SecretChatName = NUM;
         public static final int SecretLinkPreviewAlert = NUM;
         public static final int SecretWebPage = NUM;
+        public static final int SecretWebPageInfo = NUM;
         public static final int SecurityTitle = NUM;
         public static final int SelectChat = NUM;
         public static final int SelectColor = NUM;
@@ -2458,6 +2459,8 @@ public final class C0493R {
         public static final int Support = NUM;
         public static final int SyncContacts = NUM;
         public static final int SyncContactsAdded = NUM;
+        public static final int SyncContactsDelete = NUM;
+        public static final int SyncContactsDeleteInfo = NUM;
         public static final int SyncContactsInfoOff = NUM;
         public static final int SyncContactsInfoOn = NUM;
         public static final int SyncContactsOff = NUM;
@@ -2481,6 +2484,8 @@ public final class C0493R {
         public static final int TerminateWebSessionInfo = NUM;
         public static final int TerminateWebSessionQuestion = NUM;
         public static final int TerminateWebSessionStop = NUM;
+        public static final int TermsOfService = NUM;
+        public static final int TermsOfServiceLogin = NUM;
         public static final int TextCopied = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;

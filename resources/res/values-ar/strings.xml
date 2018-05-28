@@ -424,12 +424,12 @@
     <string name="Connected">متصل</string>
     <string name="Connecting">جارٍ الاتصال...</string>
     <string name="ConnectingConnectProxy">وصل البروكسي</string>
-    <string name="ConnectingToProxy">جارٍ الاتصال بالبروكسي...</string>
+    <string name="ConnectingToProxy">جارٍ الاتصال بالبروكسي</string>
     <string name="ConnectingToProxyEnable">تفعيل</string>
     <string name="ContactJoined">اشتراك صديق في تيليجرام</string>
     <string name="ContactNotRegistered">%1$s لم يقم بالتسجيل في تيليجرام بعد. فضلًا، هل ترغب في دعوتهم؟</string>
     <string name="Contacts">جهات الاتصال</string>
-    <string name="ContactsPermissionAlert">لتستطيع التواصل بشكل سلس مع الجميع، قم بالسماح لـ **تيليجرام** بالوصول إلى جهات الاتصال الخاصة بك.</string>
+    <string name="ContactsPermissionAlert">يحتاج تيليجرام الوصول إلى جهات اتصالك لكي تستطيع التواصل مع أصدقائك عبر جميع أجهزتك. ستتم مزامنة جهات اتصالك باستمرار مع خوادم تيليجرام السحابية المشفرة بشدة.</string>
     <string name="ContactsPermissionAlertContinue">الاستمرار</string>
     <string name="ContactsPermissionAlertNotNow">ليس الآن</string>
     <string name="ContinueOnThisLanguage">الاستمرار بالعربية</string>
@@ -495,7 +495,7 @@
     <string name="Default">افتراضي</string>
     <string name="DefaultRingtone">افتراضي</string>
     <string name="Delete">حذف</string>
-    <string name="DeleteAccountHelp">إذا لم تقم بتسجيل الدخول خلال هذه الفترة، سيتم حذف حسابك بالإضافة إلى مجموعاتك، رسائلك، وجهات الاتصال الخاصة بك في تيليجرام.</string>
+    <string name="DeleteAccountHelp">إن لم تقم بفتح تيليجرام مرة واحدة على الأقل خلال هذه الفترة، سيتم حذف حسابك بالإضافة إلى جميع رسائلك وجهات اتصالك.</string>
     <string name="DeleteAccountIfAwayFor">إذا كنت غائبًا لمدة</string>
     <string name="DeleteAccountTitle">التدمير الذاتي للحساب</string>
     <string name="DeleteAllFrom">مسح الكل من %1$s</string>
@@ -1277,7 +1277,7 @@
     <string name="PaymentWarning">تحذير</string>
     <string name="PaymentWarningText">لا يمتلك تيليجرام، ولا %1$s صلاحيات الوصول إلى معلومات بطاقتك الإئتمانية. تفاصيل البطاقات الإئتمانية تتم معالجتها مباشرة عن طريق نظام الدفع, %2$s.\n\nالدفعات تذهب لشكل مباشر إلى مطور %1$s. تيليجرام لا يوفر أية ضمانات، لذلك استمر على مسؤوليتك. في حال وجود مشاكل، تواصل مع مطور %1$s أو البنك الخاص بك.</string>
     <string name="PendingEmailText">البريد الإلكتروني لإسترداد الحساب %1$s غير فعّال بعد ويلزم تفعيله</string>
-    <string name="PermissionContacts">تيليجرام يحتاج للسماح له بالوصول لجهات الاتصال الخاصة بك لتتمكن من محادثة أصدقائك من كافة أجهزتك.</string>
+    <string name="PermissionContacts">لتستطيع التواصل مع أصدقائك عبر جميع أجهزتك, ستتم مزامنة جهات اتصالك باستمرار مع خوادم تيليجرام السحابية المشفرة بشدة.</string>
     <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام الأذن ليشغل المقاطع المرئية في وضع الصورة داخل الصورة بعد الخروج منه.</string>
     <string name="PermissionNoAudio">تيليجرام يحتاج للسماح له بالوصول للمايكروفون الخاص بك لتتمكن من إرسال رسائل صوتية.</string>
     <string name="PermissionNoAudioVideo">يحتاج تيليجرام صلاحيات الوصول للمايكروفون الخاص بك لتتمكن من إرسال المقاطع المرئية.</string>
@@ -1464,8 +1464,9 @@
     <string name="SecretChat">المحادثات السرية</string>
     <string name="SecretChatContextBotAlert">يرجى ملاحظة أن بوتات المحتوى الاستعلامي يتم تطويرها من مطورين مستقلين. لكي تعمل هذه البوتات، ما تكتبه بعد اسم مستخدم البوت يذهب لمطور البوت.</string>
     <string name="SecretChatName">تيليجرام</string>
-    <string name="SecretLinkPreviewAlert">هل ترغب في تفعيل معاينة الروابط المطولة في المحادثات السرية؟ تذكر أن هذه المعاينات يتم إنشاؤها في خوادم تيليجرام.</string>
+    <string name="SecretLinkPreviewAlert">هل ترغب في تفعيل المعاينات المطولة للروابط في المحادثات السرية؟ علمًا أنه يتم توليدها في خوادم تيليجرام.</string>
     <string name="SecretWebPage">معاينة الروابط</string>
+    <string name="SecretWebPageInfo">يتم توليد معاينات للروابط على خوادم تيليجرام. لا نقوم بتخزين المعلومات حول الروابط التي ترسلها.</string>
     <string name="SecurityTitle">الأمان</string>
     <string name="SelectChat">اختر محادثة</string>
     <string name="SelectColor">اختر لون</string>
@@ -1597,7 +1598,9 @@
     <string name="Support">الدعم</string>
     <string name="SyncContacts">مزامنة جهات الاتصال</string>
     <string name="SyncContactsAdded">تم إضافة جهات الاتصال من جهازك إلى حسابك.</string>
-    <string name="SyncContactsInfoOff">قم بالتفعيل لجلب جهات الاتصال من هذا الجهاز إلى حسابك.</string>
+    <string name="SyncContactsDelete">حذف جهات الاتصال المتزامنة</string>
+    <string name="SyncContactsDeleteInfo">هذا سيؤدي إلى حذف جهات اتصالك من خوادم تيليجرام. إن كان خيار \"مزامنة جهات الاتصال\" مفعلًا، ستتم إعادة مزامنتهم.</string>
+    <string name="SyncContactsInfoOff">قم بالتفعيل لمزامنة جهات اتصال هذا الجهاز مع حسابك باستمرار.</string>
     <string name="SyncContactsInfoOn">سيتم إضافة جهات الاتصال من جهازك إلى حسابك.</string>
     <string name="SyncContactsOff">لن يتم إضافة جهات الاتصال على الجهاز هذا إلى هذا الحساب.</string>
     <string name="SyncContactsOn">سيتم إضافة جهات الاتصال على الجهاز هذا إلى هذا الحساب.</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">اضغط على تطبيق لفك ارتباطه مع حسابك في تيليجرام.</string>
     <string name="TerminateWebSessionQuestion">فك الارتباط مع %1$s؟</string>
     <string name="TerminateWebSessionStop">حظر %1$s</string>
+    <string name="TermsOfService">شروط الخدمة</string>
+    <string name="TermsOfServiceLogin">من خلال تسجيلك،\nأنت توافق على *شروط الخدمة*.</string>
     <string name="TextCopied">تم نسخ النص للحافظة</string>
     <string name="TextSize">حجم نص الرسائل</string>
     <string name="Theme">النمط</string>
@@ -1676,7 +1681,7 @@
     <string name="UseLessDataOnMobile">فقط على البيانات الخلوية</string>
     <string name="UseProxyAddress">الخادم</string>
     <string name="UseProxyForCalls">استخدام البروكسي للمكالمات</string>
-    <string name="UseProxyForCallsInfo">خوادم البروكسي ربما تقلل من جودة الاتصال في تيليجرام.</string>
+    <string name="UseProxyForCallsInfo">خوادم البروكسي قد تقلل من جودة مكالماتك.</string>
     <string name="UseProxyInfo">إعدادات بروكسي SOCKS 5</string>
     <string name="UseProxyPassword">كلمة المرور</string>
     <string name="UseProxyPort">المنفذ</string>

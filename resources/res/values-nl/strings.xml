@@ -424,12 +424,12 @@
     <string name="Connected">Verbonden</string>
     <string name="Connecting">Verbinden</string>
     <string name="ConnectingConnectProxy">Verbinden met proxy</string>
-    <string name="ConnectingToProxy">Verbinden met proxy...</string>
+    <string name="ConnectingToProxy">Verbinden met proxy</string>
     <string name="ConnectingToProxyEnable">Inschakelen</string>
     <string name="ContactJoined">Contact lid van Telegram</string>
     <string name="ContactNotRegistered">%1$s is nog geen lid, uitnodigen?</string>
     <string name="Contacts">Contacten</string>
-    <string name="ContactsPermissionAlert">Geef **Telegram** toegang tot je contacten zodat je makkelijk contact kunt opnemen met iedereen die je kent.</string>
+    <string name="ContactsPermissionAlert">Geef Telegram toegang tot je contacten zodat je makkelijk contact kunt opnemen met iedereen die je kent. Telegram synchroniseert je contacten continu naar onze zwaar versleutelde Cloud-servers.</string>
     <string name="ContactsPermissionAlertContinue">DOORGAAN</string>
     <string name="ContactsPermissionAlertNotNow">NU NIET</string>
     <string name="ContinueOnThisLanguage">Doorgaan in het Nederlands</string>
@@ -495,7 +495,7 @@
     <string name="Default">Standaard</string>
     <string name="DefaultRingtone">Standaard</string>
     <string name="Delete">Verwijder</string>
-    <string name="DeleteAccountHelp">Als je binnen deze periode niet minimaal één keer ingelogd bent geweest zal je account worden verwijderd, inclusief alle groepen, berichten en contacten.</string>
+    <string name="DeleteAccountHelp">Als je binnen deze periode niet minimaal één keer ingelogd bent geweest zal je account worden verwijderd, inclusief alle berichten en contacten.</string>
     <string name="DeleteAccountIfAwayFor">Indien afwezig voor</string>
     <string name="DeleteAccountTitle">Account verwijderen</string>
     <string name="DeleteAllFrom">Alles verwijderen van %1$s</string>
@@ -1277,7 +1277,7 @@
     <string name="PaymentWarning">Waarschuwing</string>
     <string name="PaymentWarningText">Noch Telegram, noch %1$s krijgen toegang tot je creditcard-informatie. Creditkaartgegevens worden alleen gebruikt door het het betalingssysteem %2$s.\n\nBetalingen gaan direct naar de ontwikkelaar van %1$s. Telegram kan geen garanties afgeven, doorgaan is op eigen risico. Neem bij problemen contact op met de ontwikkelaar van %1$s of je bank.</string>
     <string name="PendingEmailText">Je herstel-e-mailadres %1$s is nog niet actief en in afwachting van bevestiging.</string>
-    <string name="PermissionContacts">Telegram heeft toegang tot je contacten nodig zodat je kan chatten met je vrienden vanaf al je apparaten.</string>
+    <string name="PermissionContacts">Om vanaf al je apparaten contact te kunnen leggen met je vrienden zullen je contacten continu worden gesynchroniseerd met onze zwaar versleutelde Cloud-servers.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in Picture-in-Picture-modus.</string>
     <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
     <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
@@ -1466,6 +1466,7 @@
     <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Wil je uitgebreide link-voorbeelden inschakelen voor geheime chats? Let op: deze worden gegenereerd op onze servers.</string>
     <string name="SecretWebPage">Link-voorbeelden</string>
+    <string name="SecretWebPageInfo">Link-voorvertoningen worden gegenereerd op de servers van Telegram. We slaan geen data op over de verstuurde links</string>
     <string name="SecurityTitle">Veiligheid</string>
     <string name="SelectChat">Kies een chat</string>
     <string name="SelectColor">Selecteer kleur</string>
@@ -1597,7 +1598,9 @@
     <string name="Support">Ondersteuning</string>
     <string name="SyncContacts">Contacten synchroniseren</string>
     <string name="SyncContactsAdded">Contacten van dit apparaat zijn aan je account toegevoegd.</string>
-    <string name="SyncContactsInfoOff">Inschakelen om contacten van dit apparaat naar je account te importeren.</string>
+    <string name="SyncContactsDelete">Wis gesynchroniseerde contacten</string>
+    <string name="SyncContactsDeleteInfo">Hiermee verwijder je je contacten van de Telegram-servers.\nals \'Contacten Synchroniseren\' is ingeschakeld worden je contacten opnieuw gesynchroniseerd.</string>
+    <string name="SyncContactsInfoOff">Inschakelen om contacten continu naar je account te synchroniseren</string>
     <string name="SyncContactsInfoOn">Contacten van dit apparaat worden aan je account toegevoegd.</string>
     <string name="SyncContactsOff">Contacten van dit apparaat worden niet aan dit account toegevoegd.</string>
     <string name="SyncContactsOn">Contacten van dit apparaat worden aan dit account toegevoegd</string>
@@ -1620,6 +1623,8 @@
     <string name="TerminateWebSessionInfo">Tik om de verbinding met je Telegram-account te verbreken.</string>
     <string name="TerminateWebSessionQuestion">Verbinding met %1$s verbreken?</string>
     <string name="TerminateWebSessionStop">%1$s blokkeren</string>
+    <string name="TermsOfService">Algemene voorwaarden</string>
+    <string name="TermsOfServiceLogin">Door aan te melden ga je akkoord \nmet onze *Algemene voorwaarden*.</string>
     <string name="TextCopied">Tekst gekopieerd naar klembord.</string>
     <string name="TextSize">Tekstgrootte berichten</string>
     <string name="Theme">Thema</string>

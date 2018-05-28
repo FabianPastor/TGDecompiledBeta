@@ -190,6 +190,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     SharedConfig.deleteProxy(info);
+                    if (SharedConfig.currentProxy == null) {
+                        ProxyListActivity.this.useProxyForCalls = false;
+                        ProxyListActivity.this.useProxySettings = false;
+                    }
                     ProxyListActivity.this.updateRows(true);
                 }
             });

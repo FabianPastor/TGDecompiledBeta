@@ -2,6 +2,7 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
@@ -79,6 +80,7 @@ public class ProxySettingsActivity extends BaseFragment {
             if (id == -1) {
                 ProxySettingsActivity.this.finishFragment();
             } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
+                boolean enabled;
                 ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
                 ProxySettingsActivity.this.currentProxyInfo.port = Utilities.parseInt(ProxySettingsActivity.this.inputFields[1].getText().toString()).intValue();
                 if (ProxySettingsActivity.this.currentType == 0) {
@@ -90,19 +92,25 @@ public class ProxySettingsActivity extends BaseFragment {
                     ProxySettingsActivity.this.currentProxyInfo.username = TtmlNode.ANONYMOUS_REGION_ID;
                     ProxySettingsActivity.this.currentProxyInfo.password = TtmlNode.ANONYMOUS_REGION_ID;
                 }
+                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                Editor editor = preferences.edit();
                 if (ProxySettingsActivity.this.addingNewProxy) {
                     SharedConfig.addProxy(ProxySettingsActivity.this.currentProxyInfo);
                     SharedConfig.currentProxy = ProxySettingsActivity.this.currentProxyInfo;
-                    Editor editor = MessagesController.getGlobalMainSettings().edit();
+                    editor.putBoolean("proxy_enabled", true);
+                    enabled = true;
+                } else {
+                    enabled = preferences.getBoolean("proxy_enabled", false);
+                }
+                if (ProxySettingsActivity.this.addingNewProxy || SharedConfig.currentProxy == ProxySettingsActivity.this.currentProxyInfo) {
                     editor.putString("proxy_ip", ProxySettingsActivity.this.currentProxyInfo.address);
                     editor.putString("proxy_pass", ProxySettingsActivity.this.currentProxyInfo.password);
                     editor.putString("proxy_user", ProxySettingsActivity.this.currentProxyInfo.username);
                     editor.putInt("proxy_port", ProxySettingsActivity.this.currentProxyInfo.port);
                     editor.putString("proxy_secret", ProxySettingsActivity.this.currentProxyInfo.secret);
-                    editor.putBoolean("proxy_enabled", true);
-                    editor.commit();
-                    ConnectionsManager.setProxySettings(true, ProxySettingsActivity.this.currentProxyInfo.address, ProxySettingsActivity.this.currentProxyInfo.port, ProxySettingsActivity.this.currentProxyInfo.username, ProxySettingsActivity.this.currentProxyInfo.password, ProxySettingsActivity.this.currentProxyInfo.secret);
+                    ConnectionsManager.setProxySettings(enabled, ProxySettingsActivity.this.currentProxyInfo.address, ProxySettingsActivity.this.currentProxyInfo.port, ProxySettingsActivity.this.currentProxyInfo.username, ProxySettingsActivity.this.currentProxyInfo.password, ProxySettingsActivity.this.currentProxyInfo.secret);
                 }
+                editor.commit();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
                 ProxySettingsActivity.this.finishFragment();
             }
