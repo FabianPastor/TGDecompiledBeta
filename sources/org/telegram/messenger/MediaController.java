@@ -5027,6 +5027,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         int rotateRender = 0;
         boolean isSecret = ((int) messageObject.getDialogId()) == 0;
         File file = new File(messageObject.messageOwner.attachPath);
+        if (videoPath == null) {
+            videoPath = TtmlNode.ANONYMOUS_REGION_ID;
+        }
         int temp;
         if (VERSION.SDK_INT < 18 && resultHeight > resultWidth && resultWidth != originalWidth && resultHeight != originalHeight) {
             temp = resultHeight;
