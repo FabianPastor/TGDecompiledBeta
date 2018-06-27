@@ -34,7 +34,9 @@ final class Aes128DataSource implements DataSource {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             try {
                 cipher.init(2, new SecretKeySpec(this.encryptionKey, "AES"), new IvParameterSpec(this.encryptionIv));
-                this.cipherInputStream = new CipherInputStream(new DataSourceInputStream(this.upstream, dataSpec), cipher);
+                DataSourceInputStream inputStream = new DataSourceInputStream(this.upstream, dataSpec);
+                this.cipherInputStream = new CipherInputStream(inputStream, cipher);
+                inputStream.open();
                 return -1;
             } catch (InvalidKeyException e2) {
                 e = e2;
@@ -53,8 +55,10 @@ final class Aes128DataSource implements DataSource {
     }
 
     public void close() throws IOException {
-        this.cipherInputStream = null;
-        this.upstream.close();
+        if (this.cipherInputStream != null) {
+            this.cipherInputStream = null;
+            this.upstream.close();
+        }
     }
 
     public int read(byte[] buffer, int offset, int readLength) throws IOException {

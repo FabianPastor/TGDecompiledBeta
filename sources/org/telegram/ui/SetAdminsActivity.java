@@ -67,8 +67,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     private int usersStartRow;
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$4 */
-    class C16924 implements Comparator<ChatParticipant> {
-        C16924() {
+    class C18154 implements Comparator<ChatParticipant> {
+        C18154() {
         }
 
         public int compare(ChatParticipant lhs, ChatParticipant rhs) {
@@ -124,8 +124,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$1 */
-    class C22971 extends ActionBarMenuOnItemClick {
-        C22971() {
+    class C24741 extends ActionBarMenuOnItemClick {
+        C24741() {
         }
 
         public void onItemClick(int id) {
@@ -136,8 +136,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$2 */
-    class C22982 extends ActionBarMenuItemSearchListener {
-        C22982() {
+    class C24752 extends ActionBarMenuItemSearchListener {
+        C24752() {
         }
 
         public void onSearchExpand() {
@@ -180,8 +180,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$3 */
-    class C22993 implements OnItemClickListener {
-        C22993() {
+    class C24763 implements OnItemClickListener {
+        C24763() {
         }
 
         public void onItemClick(View view, int position) {
@@ -260,8 +260,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$5 */
-    class C23005 implements ThemeDescriptionDelegate {
-        C23005() {
+    class C24775 implements ThemeDescriptionDelegate {
+        C24775() {
         }
 
         public void didSetColor() {
@@ -570,8 +570,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SetAdminsTitle", R.string.SetAdminsTitle));
-        this.actionBar.setActionBarMenuOnItemClick(new C22971());
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22982());
+        this.actionBar.setActionBarMenuOnItemClick(new C24741());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C24752());
         this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context);
         this.searchAdapter = new SearchAdapter(context);
@@ -583,7 +583,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22993());
+        this.listView.setOnItemClickListener(new C24763());
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setVisibility(8);
         this.emptyView.setShowAtCenter(true);
@@ -643,7 +643,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             this.participants.clear();
             this.participants.addAll(this.info.participants.participants);
             try {
-                Collections.sort(this.participants, new C16924());
+                Collections.sort(this.participants, new C18154());
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
@@ -680,7 +680,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C23005();
+        ThemeDescriptionDelegate сellDelegate = new C24775();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, UserCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);

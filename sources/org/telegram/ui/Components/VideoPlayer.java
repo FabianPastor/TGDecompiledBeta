@@ -79,8 +79,8 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     }
 
     /* renamed from: org.telegram.ui.Components.VideoPlayer$1 */
-    class C21151 implements Player.EventListener {
-        C21151() {
+    class C22481 implements Player.EventListener {
+        C22481() {
         }
 
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
@@ -138,7 +138,7 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
         if (this.mixedAudio && this.audioPlayer == null) {
             this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 2);
-            this.audioPlayer.addListener(new C21151());
+            this.audioPlayer.addListener(new C22481());
             this.audioPlayer.setPlayWhenReady(this.autoplay);
         }
     }
@@ -311,6 +311,17 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
         if (this.audioPlayer != null) {
             this.audioPlayer.setPlayWhenReady(false);
+        }
+    }
+
+    public void setPlaybackSpeed(float speed) {
+        float f = 1.0f;
+        if (this.player != null) {
+            SimpleExoPlayer simpleExoPlayer = this.player;
+            if (speed > 1.0f) {
+                f = 0.98f;
+            }
+            simpleExoPlayer.setPlaybackParameters(new PlaybackParameters(speed, f));
         }
     }
 

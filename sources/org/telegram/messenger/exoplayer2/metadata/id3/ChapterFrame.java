@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ChapterFrame extends Id3Frame {
-    public static final Creator<ChapterFrame> CREATOR = new C05851();
+    public static final Creator<ChapterFrame> CREATOR = new C05941();
     public static final String ID = "CHAP";
     public final String chapterId;
     public final long endOffset;
@@ -16,8 +16,8 @@ public final class ChapterFrame extends Id3Frame {
     private final Id3Frame[] subFrames;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.ChapterFrame$1 */
-    static class C05851 implements Creator<ChapterFrame> {
-        C05851() {
+    static class C05941 implements Creator<ChapterFrame> {
+        C05941() {
         }
 
         public ChapterFrame createFromParcel(Parcel in) {

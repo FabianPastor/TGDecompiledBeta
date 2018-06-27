@@ -9,126 +9,125 @@ final class Sonic {
     private static final int AMDF_FREQUENCY = 4000;
     private static final int MAXIMUM_PITCH = 400;
     private static final int MINIMUM_PITCH = 65;
-    private final short[] downSampleBuffer = new short[this.maxRequired];
+    private final int channelCount;
+    private final short[] downSampleBuffer = new short[this.maxRequiredFrameCount];
     private short[] inputBuffer;
-    private int inputBufferSize = this.maxRequired;
+    private int inputFrameCount;
     private final int inputSampleRateHz;
     private int maxDiff;
     private final int maxPeriod;
-    private final int maxRequired = (this.maxPeriod * 2);
+    private final int maxRequiredFrameCount = (this.maxPeriod * 2);
     private int minDiff;
     private final int minPeriod;
     private int newRatePosition;
-    private final int numChannels;
-    private int numInputSamples;
-    private int numOutputSamples;
-    private int numPitchSamples;
     private int oldRatePosition;
     private short[] outputBuffer;
-    private int outputBufferSize;
+    private int outputFrameCount;
     private final float pitch;
     private short[] pitchBuffer;
-    private int pitchBufferSize;
+    private int pitchFrameCount;
     private int prevMinDiff;
     private int prevPeriod;
     private final float rate;
-    private int remainingInputToCopy;
+    private int remainingInputToCopyFrameCount;
     private final float speed;
 
-    public Sonic(int inputSampleRateHz, int numChannels, float speed, float pitch, int outputSampleRateHz) {
+    public Sonic(int inputSampleRateHz, int channelCount, float speed, float pitch, int outputSampleRateHz) {
         this.inputSampleRateHz = inputSampleRateHz;
-        this.numChannels = numChannels;
-        this.minPeriod = inputSampleRateHz / MAXIMUM_PITCH;
-        this.maxPeriod = inputSampleRateHz / 65;
-        this.inputBuffer = new short[(this.maxRequired * numChannels)];
-        this.outputBufferSize = this.maxRequired;
-        this.outputBuffer = new short[(this.maxRequired * numChannels)];
-        this.pitchBufferSize = this.maxRequired;
-        this.pitchBuffer = new short[(this.maxRequired * numChannels)];
-        this.oldRatePosition = 0;
-        this.newRatePosition = 0;
-        this.prevPeriod = 0;
+        this.channelCount = channelCount;
         this.speed = speed;
         this.pitch = pitch;
         this.rate = ((float) inputSampleRateHz) / ((float) outputSampleRateHz);
+        this.minPeriod = inputSampleRateHz / MAXIMUM_PITCH;
+        this.maxPeriod = inputSampleRateHz / 65;
+        this.inputBuffer = new short[(this.maxRequiredFrameCount * channelCount)];
+        this.outputBuffer = new short[(this.maxRequiredFrameCount * channelCount)];
+        this.pitchBuffer = new short[(this.maxRequiredFrameCount * channelCount)];
     }
 
     public void queueInput(ShortBuffer buffer) {
-        int samplesToWrite = buffer.remaining() / this.numChannels;
-        int bytesToWrite = (this.numChannels * samplesToWrite) * 2;
-        enlargeInputBufferIfNeeded(samplesToWrite);
-        buffer.get(this.inputBuffer, this.numInputSamples * this.numChannels, bytesToWrite / 2);
-        this.numInputSamples += samplesToWrite;
+        int framesToWrite = buffer.remaining() / this.channelCount;
+        int bytesToWrite = (this.channelCount * framesToWrite) * 2;
+        this.inputBuffer = ensureSpaceForAdditionalFrames(this.inputBuffer, this.inputFrameCount, framesToWrite);
+        buffer.get(this.inputBuffer, this.inputFrameCount * this.channelCount, bytesToWrite / 2);
+        this.inputFrameCount += framesToWrite;
         processStreamInput();
     }
 
     public void getOutput(ShortBuffer buffer) {
-        int samplesToRead = Math.min(buffer.remaining() / this.numChannels, this.numOutputSamples);
-        buffer.put(this.outputBuffer, 0, this.numChannels * samplesToRead);
-        this.numOutputSamples -= samplesToRead;
-        System.arraycopy(this.outputBuffer, this.numChannels * samplesToRead, this.outputBuffer, 0, this.numOutputSamples * this.numChannels);
+        int framesToRead = Math.min(buffer.remaining() / this.channelCount, this.outputFrameCount);
+        buffer.put(this.outputBuffer, 0, this.channelCount * framesToRead);
+        this.outputFrameCount -= framesToRead;
+        System.arraycopy(this.outputBuffer, this.channelCount * framesToRead, this.outputBuffer, 0, this.outputFrameCount * this.channelCount);
     }
 
     public void queueEndOfStream() {
-        int remainingSamples = this.numInputSamples;
+        int remainingFrameCount = this.inputFrameCount;
         float r = this.rate * this.pitch;
-        int expectedOutputSamples = this.numOutputSamples + ((int) ((((((float) remainingSamples) / (this.speed / this.pitch)) + ((float) this.numPitchSamples)) / r) + 0.5f));
-        enlargeInputBufferIfNeeded((this.maxRequired * 2) + remainingSamples);
-        for (int xSample = 0; xSample < (this.maxRequired * 2) * this.numChannels; xSample++) {
-            this.inputBuffer[(this.numChannels * remainingSamples) + xSample] = (short) 0;
+        int expectedOutputFrames = this.outputFrameCount + ((int) ((((((float) remainingFrameCount) / (this.speed / this.pitch)) + ((float) this.pitchFrameCount)) / r) + 0.5f));
+        this.inputBuffer = ensureSpaceForAdditionalFrames(this.inputBuffer, this.inputFrameCount, (this.maxRequiredFrameCount * 2) + remainingFrameCount);
+        for (int xSample = 0; xSample < (this.maxRequiredFrameCount * 2) * this.channelCount; xSample++) {
+            this.inputBuffer[(this.channelCount * remainingFrameCount) + xSample] = (short) 0;
         }
-        this.numInputSamples += this.maxRequired * 2;
+        this.inputFrameCount += this.maxRequiredFrameCount * 2;
         processStreamInput();
-        if (this.numOutputSamples > expectedOutputSamples) {
-            this.numOutputSamples = expectedOutputSamples;
+        if (this.outputFrameCount > expectedOutputFrames) {
+            this.outputFrameCount = expectedOutputFrames;
         }
-        this.numInputSamples = 0;
-        this.remainingInputToCopy = 0;
-        this.numPitchSamples = 0;
+        this.inputFrameCount = 0;
+        this.remainingInputToCopyFrameCount = 0;
+        this.pitchFrameCount = 0;
     }
 
-    public int getSamplesAvailable() {
-        return this.numOutputSamples;
+    public void flush() {
+        this.inputFrameCount = 0;
+        this.outputFrameCount = 0;
+        this.pitchFrameCount = 0;
+        this.oldRatePosition = 0;
+        this.newRatePosition = 0;
+        this.remainingInputToCopyFrameCount = 0;
+        this.prevPeriod = 0;
+        this.prevMinDiff = 0;
+        this.minDiff = 0;
+        this.maxDiff = 0;
     }
 
-    private void enlargeOutputBufferIfNeeded(int numSamples) {
-        if (this.numOutputSamples + numSamples > this.outputBufferSize) {
-            this.outputBufferSize += (this.outputBufferSize / 2) + numSamples;
-            this.outputBuffer = Arrays.copyOf(this.outputBuffer, this.outputBufferSize * this.numChannels);
+    public int getFramesAvailable() {
+        return this.outputFrameCount;
+    }
+
+    private short[] ensureSpaceForAdditionalFrames(short[] buffer, int frameCount, int additionalFrameCount) {
+        int currentCapacityFrames = buffer.length / this.channelCount;
+        if (frameCount + additionalFrameCount <= currentCapacityFrames) {
+            return buffer;
         }
+        return Arrays.copyOf(buffer, this.channelCount * (((currentCapacityFrames * 3) / 2) + additionalFrameCount));
     }
 
-    private void enlargeInputBufferIfNeeded(int numSamples) {
-        if (this.numInputSamples + numSamples > this.inputBufferSize) {
-            this.inputBufferSize += (this.inputBufferSize / 2) + numSamples;
-            this.inputBuffer = Arrays.copyOf(this.inputBuffer, this.inputBufferSize * this.numChannels);
-        }
+    private void removeProcessedInputFrames(int positionFrames) {
+        int remainingFrames = this.inputFrameCount - positionFrames;
+        System.arraycopy(this.inputBuffer, this.channelCount * positionFrames, this.inputBuffer, 0, this.channelCount * remainingFrames);
+        this.inputFrameCount = remainingFrames;
     }
 
-    private void removeProcessedInputSamples(int position) {
-        int remainingSamples = this.numInputSamples - position;
-        System.arraycopy(this.inputBuffer, this.numChannels * position, this.inputBuffer, 0, this.numChannels * remainingSamples);
-        this.numInputSamples = remainingSamples;
+    private void copyToOutput(short[] samples, int positionFrames, int frameCount) {
+        this.outputBuffer = ensureSpaceForAdditionalFrames(this.outputBuffer, this.outputFrameCount, frameCount);
+        System.arraycopy(samples, this.channelCount * positionFrames, this.outputBuffer, this.outputFrameCount * this.channelCount, this.channelCount * frameCount);
+        this.outputFrameCount += frameCount;
     }
 
-    private void copyToOutput(short[] samples, int position, int numSamples) {
-        enlargeOutputBufferIfNeeded(numSamples);
-        System.arraycopy(samples, this.numChannels * position, this.outputBuffer, this.numOutputSamples * this.numChannels, this.numChannels * numSamples);
-        this.numOutputSamples += numSamples;
-    }
-
-    private int copyInputToOutput(int position) {
-        int numSamples = Math.min(this.maxRequired, this.remainingInputToCopy);
-        copyToOutput(this.inputBuffer, position, numSamples);
-        this.remainingInputToCopy -= numSamples;
-        return numSamples;
+    private int copyInputToOutput(int positionFrames) {
+        int frameCount = Math.min(this.maxRequiredFrameCount, this.remainingInputToCopyFrameCount);
+        copyToOutput(this.inputBuffer, positionFrames, frameCount);
+        this.remainingInputToCopyFrameCount -= frameCount;
+        return frameCount;
     }
 
     private void downSampleInput(short[] samples, int position, int skip) {
-        int numSamples = this.maxRequired / skip;
-        int samplesPerValue = this.numChannels * skip;
-        position *= this.numChannels;
-        for (int i = 0; i < numSamples; i++) {
+        int frameCount = this.maxRequiredFrameCount / skip;
+        int samplesPerValue = this.channelCount * skip;
+        position *= this.channelCount;
+        for (int i = 0; i < frameCount; i++) {
             int value = 0;
             for (int j = 0; j < samplesPerValue; j++) {
                 value += samples[((i * samplesPerValue) + position) + j];
@@ -142,7 +141,7 @@ final class Sonic {
         int worstPeriod = 255;
         int minDiff = 1;
         int maxDiff = 0;
-        position *= this.numChannels;
+        position *= this.channelCount;
         for (int period = minPeriod; period <= maxPeriod; period++) {
             int diff = 0;
             for (int i = 0; i < period; i++) {
@@ -162,21 +161,14 @@ final class Sonic {
         return bestPeriod;
     }
 
-    private boolean previousPeriodBetter(int minDiff, int maxDiff, boolean preferNewPeriod) {
-        if (minDiff == 0 || this.prevPeriod == 0) {
-            return false;
-        }
-        if (preferNewPeriod) {
-            if (maxDiff > minDiff * 3 || minDiff * 2 <= this.prevMinDiff * 3) {
-                return false;
-            }
-        } else if (minDiff <= this.prevMinDiff) {
+    private boolean previousPeriodBetter(int minDiff, int maxDiff) {
+        if (minDiff == 0 || this.prevPeriod == 0 || maxDiff > minDiff * 3 || minDiff * 2 <= this.prevMinDiff * 3) {
             return false;
         }
         return true;
     }
 
-    private int findPitchPeriod(short[] samples, int position, boolean preferNewPeriod) {
+    private int findPitchPeriod(short[] samples, int position) {
         int skip;
         int period;
         int retPeriod;
@@ -185,7 +177,7 @@ final class Sonic {
         } else {
             skip = 1;
         }
-        if (this.numChannels == 1 && skip == 1) {
+        if (this.channelCount == 1 && skip == 1) {
             period = findPitchPeriodInRange(samples, position, this.minPeriod, this.maxPeriod);
         } else {
             downSampleInput(samples, position, skip);
@@ -200,7 +192,7 @@ final class Sonic {
                 if (maxP > this.maxPeriod) {
                     maxP = this.maxPeriod;
                 }
-                if (this.numChannels == 1) {
+                if (this.channelCount == 1) {
                     period = findPitchPeriodInRange(samples, position, minP, maxP);
                 } else {
                     downSampleInput(samples, position, 1);
@@ -208,7 +200,7 @@ final class Sonic {
                 }
             }
         }
-        if (previousPeriodBetter(this.minDiff, this.maxDiff, preferNewPeriod)) {
+        if (previousPeriodBetter(this.minDiff, this.maxDiff)) {
             retPeriod = this.prevPeriod;
         } else {
             retPeriod = period;
@@ -218,21 +210,18 @@ final class Sonic {
         return retPeriod;
     }
 
-    private void moveNewSamplesToPitchBuffer(int originalNumOutputSamples) {
-        int numSamples = this.numOutputSamples - originalNumOutputSamples;
-        if (this.numPitchSamples + numSamples > this.pitchBufferSize) {
-            this.pitchBufferSize += (this.pitchBufferSize / 2) + numSamples;
-            this.pitchBuffer = Arrays.copyOf(this.pitchBuffer, this.pitchBufferSize * this.numChannels);
-        }
-        System.arraycopy(this.outputBuffer, this.numChannels * originalNumOutputSamples, this.pitchBuffer, this.numPitchSamples * this.numChannels, this.numChannels * numSamples);
-        this.numOutputSamples = originalNumOutputSamples;
-        this.numPitchSamples += numSamples;
+    private void moveNewSamplesToPitchBuffer(int originalOutputFrameCount) {
+        int frameCount = this.outputFrameCount - originalOutputFrameCount;
+        this.pitchBuffer = ensureSpaceForAdditionalFrames(this.pitchBuffer, this.pitchFrameCount, frameCount);
+        System.arraycopy(this.outputBuffer, this.channelCount * originalOutputFrameCount, this.pitchBuffer, this.pitchFrameCount * this.channelCount, this.channelCount * frameCount);
+        this.outputFrameCount = originalOutputFrameCount;
+        this.pitchFrameCount += frameCount;
     }
 
-    private void removePitchSamples(int numSamples) {
-        if (numSamples != 0) {
-            System.arraycopy(this.pitchBuffer, this.numChannels * numSamples, this.pitchBuffer, 0, (this.numPitchSamples - numSamples) * this.numChannels);
-            this.numPitchSamples -= numSamples;
+    private void removePitchFrames(int frameCount) {
+        if (frameCount != 0) {
+            System.arraycopy(this.pitchBuffer, this.channelCount * frameCount, this.pitchBuffer, 0, (this.pitchFrameCount - frameCount) * this.channelCount);
+            this.pitchFrameCount -= frameCount;
         }
     }
 
@@ -240,11 +229,11 @@ final class Sonic {
         int rightPosition = (this.oldRatePosition + 1) * newSampleRate;
         int ratio = rightPosition - (this.newRatePosition * oldSampleRate);
         int width = rightPosition - (this.oldRatePosition * newSampleRate);
-        return (short) (((ratio * in[inPos]) + ((width - ratio) * in[this.numChannels + inPos])) / width);
+        return (short) (((ratio * in[inPos]) + ((width - ratio) * in[this.channelCount + inPos])) / width);
     }
 
-    private void adjustRate(float rate, int originalNumOutputSamples) {
-        if (this.numOutputSamples != originalNumOutputSamples) {
+    private void adjustRate(float rate, int originalOutputFrameCount) {
+        if (this.outputFrameCount != originalOutputFrameCount) {
             int newSampleRate = (int) (((float) this.inputSampleRateHz) / rate);
             int oldSampleRate = this.inputSampleRateHz;
             while (true) {
@@ -254,15 +243,15 @@ final class Sonic {
                 newSampleRate /= 2;
                 oldSampleRate /= 2;
             }
-            moveNewSamplesToPitchBuffer(originalNumOutputSamples);
-            for (int position = 0; position < this.numPitchSamples - 1; position++) {
+            moveNewSamplesToPitchBuffer(originalOutputFrameCount);
+            for (int position = 0; position < this.pitchFrameCount - 1; position++) {
                 while ((this.oldRatePosition + 1) * newSampleRate > this.newRatePosition * oldSampleRate) {
-                    enlargeOutputBufferIfNeeded(1);
-                    for (int i = 0; i < this.numChannels; i++) {
-                        this.outputBuffer[(this.numOutputSamples * this.numChannels) + i] = interpolate(this.pitchBuffer, (this.numChannels * position) + i, oldSampleRate, newSampleRate);
+                    this.outputBuffer = ensureSpaceForAdditionalFrames(this.outputBuffer, this.outputFrameCount, 1);
+                    for (int i = 0; i < this.channelCount; i++) {
+                        this.outputBuffer[(this.outputFrameCount * this.channelCount) + i] = interpolate(this.pitchBuffer, (this.channelCount * position) + i, oldSampleRate, newSampleRate);
                     }
                     this.newRatePosition++;
-                    this.numOutputSamples++;
+                    this.outputFrameCount++;
                 }
                 this.oldRatePosition++;
                 if (this.oldRatePosition == oldSampleRate) {
@@ -271,84 +260,84 @@ final class Sonic {
                     this.newRatePosition = 0;
                 }
             }
-            removePitchSamples(this.numPitchSamples - 1);
+            removePitchFrames(this.pitchFrameCount - 1);
         }
     }
 
     private int skipPitchPeriod(short[] samples, int position, float speed, int period) {
-        int newSamples;
+        int newFrameCount;
         if (speed >= 2.0f) {
-            newSamples = (int) (((float) period) / (speed - 1.0f));
+            newFrameCount = (int) (((float) period) / (speed - 1.0f));
         } else {
-            newSamples = period;
-            this.remainingInputToCopy = (int) ((((float) period) * (2.0f - speed)) / (speed - 1.0f));
+            newFrameCount = period;
+            this.remainingInputToCopyFrameCount = (int) ((((float) period) * (2.0f - speed)) / (speed - 1.0f));
         }
-        enlargeOutputBufferIfNeeded(newSamples);
-        overlapAdd(newSamples, this.numChannels, this.outputBuffer, this.numOutputSamples, samples, position, samples, position + period);
-        this.numOutputSamples += newSamples;
-        return newSamples;
+        this.outputBuffer = ensureSpaceForAdditionalFrames(this.outputBuffer, this.outputFrameCount, newFrameCount);
+        overlapAdd(newFrameCount, this.channelCount, this.outputBuffer, this.outputFrameCount, samples, position, samples, position + period);
+        this.outputFrameCount += newFrameCount;
+        return newFrameCount;
     }
 
     private int insertPitchPeriod(short[] samples, int position, float speed, int period) {
-        int newSamples;
+        int newFrameCount;
         if (speed < 0.5f) {
-            newSamples = (int) ((((float) period) * speed) / (1.0f - speed));
+            newFrameCount = (int) ((((float) period) * speed) / (1.0f - speed));
         } else {
-            newSamples = period;
-            this.remainingInputToCopy = (int) ((((float) period) * ((2.0f * speed) - 1.0f)) / (1.0f - speed));
+            newFrameCount = period;
+            this.remainingInputToCopyFrameCount = (int) ((((float) period) * ((2.0f * speed) - 1.0f)) / (1.0f - speed));
         }
-        enlargeOutputBufferIfNeeded(period + newSamples);
-        System.arraycopy(samples, this.numChannels * position, this.outputBuffer, this.numOutputSamples * this.numChannels, this.numChannels * period);
-        overlapAdd(newSamples, this.numChannels, this.outputBuffer, this.numOutputSamples + period, samples, position + period, samples, position);
-        this.numOutputSamples += period + newSamples;
-        return newSamples;
+        this.outputBuffer = ensureSpaceForAdditionalFrames(this.outputBuffer, this.outputFrameCount, period + newFrameCount);
+        System.arraycopy(samples, this.channelCount * position, this.outputBuffer, this.outputFrameCount * this.channelCount, this.channelCount * period);
+        overlapAdd(newFrameCount, this.channelCount, this.outputBuffer, this.outputFrameCount + period, samples, position + period, samples, position);
+        this.outputFrameCount += period + newFrameCount;
+        return newFrameCount;
     }
 
     private void changeSpeed(float speed) {
-        if (this.numInputSamples >= this.maxRequired) {
-            int numSamples = this.numInputSamples;
-            int position = 0;
+        if (this.inputFrameCount >= this.maxRequiredFrameCount) {
+            int frameCount = this.inputFrameCount;
+            int positionFrames = 0;
             do {
-                if (this.remainingInputToCopy > 0) {
-                    position += copyInputToOutput(position);
+                if (this.remainingInputToCopyFrameCount > 0) {
+                    positionFrames += copyInputToOutput(positionFrames);
                 } else {
-                    int period = findPitchPeriod(this.inputBuffer, position, true);
+                    int period = findPitchPeriod(this.inputBuffer, positionFrames);
                     if (((double) speed) > 1.0d) {
-                        position += skipPitchPeriod(this.inputBuffer, position, speed, period) + period;
+                        positionFrames += skipPitchPeriod(this.inputBuffer, positionFrames, speed, period) + period;
                     } else {
-                        position += insertPitchPeriod(this.inputBuffer, position, speed, period);
+                        positionFrames += insertPitchPeriod(this.inputBuffer, positionFrames, speed, period);
                     }
                 }
-            } while (this.maxRequired + position <= numSamples);
-            removeProcessedInputSamples(position);
+            } while (this.maxRequiredFrameCount + positionFrames <= frameCount);
+            removeProcessedInputFrames(positionFrames);
         }
     }
 
     private void processStreamInput() {
-        int originalNumOutputSamples = this.numOutputSamples;
+        int originalOutputFrameCount = this.outputFrameCount;
         float s = this.speed / this.pitch;
         float r = this.rate * this.pitch;
         if (((double) s) > 1.00001d || ((double) s) < 0.99999d) {
             changeSpeed(s);
         } else {
-            copyToOutput(this.inputBuffer, 0, this.numInputSamples);
-            this.numInputSamples = 0;
+            copyToOutput(this.inputBuffer, 0, this.inputFrameCount);
+            this.inputFrameCount = 0;
         }
         if (r != 1.0f) {
-            adjustRate(r, originalNumOutputSamples);
+            adjustRate(r, originalOutputFrameCount);
         }
     }
 
-    private static void overlapAdd(int numSamples, int numChannels, short[] out, int outPos, short[] rampDown, int rampDownPos, short[] rampUp, int rampUpPos) {
-        for (int i = 0; i < numChannels; i++) {
-            int o = (outPos * numChannels) + i;
-            int u = (rampUpPos * numChannels) + i;
-            int d = (rampDownPos * numChannels) + i;
-            for (int t = 0; t < numSamples; t++) {
-                out[o] = (short) (((rampDown[d] * (numSamples - t)) + (rampUp[u] * t)) / numSamples);
-                o += numChannels;
-                d += numChannels;
-                u += numChannels;
+    private static void overlapAdd(int frameCount, int channelCount, short[] out, int outPosition, short[] rampDown, int rampDownPosition, short[] rampUp, int rampUpPosition) {
+        for (int i = 0; i < channelCount; i++) {
+            int o = (outPosition * channelCount) + i;
+            int u = (rampUpPosition * channelCount) + i;
+            int d = (rampDownPosition * channelCount) + i;
+            for (int t = 0; t < frameCount; t++) {
+                out[o] = (short) (((rampDown[d] * (frameCount - t)) + (rampUp[u] * t)) / frameCount);
+                o += channelCount;
+                d += channelCount;
+                u += channelCount;
             }
         }
     }

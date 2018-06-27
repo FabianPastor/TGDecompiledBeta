@@ -60,6 +60,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class DocumentSelectActivity extends BaseFragment {
     private static final int done = 3;
     private ArrayList<View> actionModeViews = new ArrayList();
+    private boolean canSelectOnlyImageFiles;
     private File currentDir;
     private DocumentSelectActivityDelegate delegate;
     private EmptyTextProgressView emptyView;
@@ -68,7 +69,8 @@ public class DocumentSelectActivity extends BaseFragment {
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private BroadcastReceiver receiver = new C13951();
+    private int maxSelectedFiles = -1;
+    private BroadcastReceiver receiver = new C14421();
     private boolean receiverRegistered = false;
     private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
@@ -77,11 +79,11 @@ public class DocumentSelectActivity extends BaseFragment {
     private long sizeLimit = NUM;
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
-    class C13951 extends BroadcastReceiver {
+    class C14421 extends BroadcastReceiver {
 
         /* renamed from: org.telegram.ui.DocumentSelectActivity$1$1 */
-        class C13941 implements Runnable {
-            C13941() {
+        class C14411 implements Runnable {
+            C14411() {
             }
 
             public void run() {
@@ -97,11 +99,11 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         }
 
-        C13951() {
+        C14421() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
-            Runnable r = new C13941();
+            Runnable r = new C14411();
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 DocumentSelectActivity.this.listView.postDelayed(r, 1000);
             } else {
@@ -111,8 +113,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
-    class C13963 implements OnTouchListener {
-        C13963() {
+    class C14433 implements OnTouchListener {
+        C14433() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -121,8 +123,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$7 */
-    class C13977 implements Comparator<ListItem> {
-        C13977() {
+    class C14447 implements Comparator<ListItem> {
+        C14447() {
         }
 
         public int compare(ListItem o1, ListItem o2) {
@@ -139,8 +141,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$8 */
-    class C13988 implements OnPreDrawListener {
-        C13988() {
+    class C14458 implements OnPreDrawListener {
+        C14458() {
         }
 
         public boolean onPreDraw() {
@@ -151,8 +153,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$9 */
-    class C13999 implements Comparator<File> {
-        C13999() {
+    class C14469 implements Comparator<File> {
+        C14469() {
         }
 
         public int compare(File lhs, File rhs) {
@@ -196,8 +198,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C21452 extends ActionBarMenuOnItemClick {
-        C21452() {
+    class C22782 extends ActionBarMenuOnItemClick {
+        C22782() {
         }
 
         public void onItemClick(int id) {
@@ -216,9 +218,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
                 DocumentSelectActivity.this.finishFragment();
             } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
-                ArrayList<String> files = new ArrayList();
-                files.addAll(DocumentSelectActivity.this.selectedFiles.keySet());
-                DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
+                DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                 for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
                     item.date = System.currentTimeMillis();
                 }
@@ -227,8 +227,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C21464 extends OnScrollListener {
-        C21464() {
+    class C22794 extends OnScrollListener {
+        C22794() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -237,8 +237,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$5 */
-    class C21475 implements OnItemLongClickListener {
-        C21475() {
+    class C22805 implements OnItemLongClickListener {
+        C22805() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -254,8 +254,14 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (!file.canRead()) {
                     DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
                     return false;
+                } else if (DocumentSelectActivity.this.canSelectOnlyImageFiles && item.thumb == null) {
+                    DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("PassportUploadNotImage", R.string.PassportUploadNotImage, new Object[0]));
+                    return false;
                 } else if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
                     DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
+                    return false;
+                } else if (DocumentSelectActivity.this.maxSelectedFiles >= 0 && DocumentSelectActivity.this.selectedFiles.size() >= DocumentSelectActivity.this.maxSelectedFiles) {
+                    DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", DocumentSelectActivity.this.maxSelectedFiles)));
                     return false;
                 } else if (file.length() == 0) {
                     return false;
@@ -284,8 +290,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$6 */
-    class C21486 implements OnItemClickListener {
-        C21486() {
+    class C22816 implements OnItemClickListener {
+        C22816() {
         }
 
         public void onItemClick(View view, int position) {
@@ -329,15 +335,20 @@ public class DocumentSelectActivity extends BaseFragment {
                         DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
                         file = new File("/mnt/sdcard");
                     }
-                    if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
+                    if (DocumentSelectActivity.this.canSelectOnlyImageFiles && item.thumb == null) {
+                        DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("PassportUploadNotImage", R.string.PassportUploadNotImage, new Object[0]));
+                    } else if (DocumentSelectActivity.this.sizeLimit != 0 && file.length() > DocumentSelectActivity.this.sizeLimit) {
                         DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("FileUploadLimit", R.string.FileUploadLimit, AndroidUtilities.formatFileSize(DocumentSelectActivity.this.sizeLimit)));
                     } else if (file.length() == 0) {
                     } else {
                         if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
                             if (DocumentSelectActivity.this.selectedFiles.containsKey(file.toString())) {
                                 DocumentSelectActivity.this.selectedFiles.remove(file.toString());
-                            } else {
+                            } else if (DocumentSelectActivity.this.maxSelectedFiles < 0 || DocumentSelectActivity.this.selectedFiles.size() < DocumentSelectActivity.this.maxSelectedFiles) {
                                 DocumentSelectActivity.this.selectedFiles.put(file.toString(), item);
+                            } else {
+                                DocumentSelectActivity.this.showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", DocumentSelectActivity.this.maxSelectedFiles)));
+                                return;
                             }
                             if (DocumentSelectActivity.this.selectedFiles.isEmpty()) {
                                 DocumentSelectActivity.this.actionBar.hideActionMode();
@@ -473,7 +484,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C21452());
+        this.actionBar.setActionBarMenuOnItemClick(new C22782());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -481,7 +492,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
-        this.selectedMessagesCountTextView.setOnTouchListener(new C13963());
+        this.selectedMessagesCountTextView.setOnTouchListener(new C14433());
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
@@ -501,11 +512,19 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C21464());
-        this.listView.setOnItemLongClickListener(new C21475());
-        this.listView.setOnItemClickListener(new C21486());
+        this.listView.setOnScrollListener(new C22794());
+        this.listView.setOnItemLongClickListener(new C22805());
+        this.listView.setOnItemClickListener(new C22816());
         listRoots();
         return this.fragmentView;
+    }
+
+    public void setMaxSelectedFiles(int value) {
+        this.maxSelectedFiles = value;
+    }
+
+    public void setCanSelectOnlyImageFiles(boolean value) {
+        this.canSelectOnlyImageFiles = true;
     }
 
     public void loadRecentFiles() {
@@ -527,7 +546,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     this.recentItems.add(item);
                 }
             }
-            Collections.sort(this.recentItems, new C13977());
+            Collections.sort(this.recentItems, new C14447());
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
@@ -544,7 +563,7 @@ public class DocumentSelectActivity extends BaseFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C13988());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new C14458());
         }
     }
 
@@ -588,7 +607,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 ListItem item;
                 this.currentDir = dir;
                 this.items.clear();
-                Arrays.sort(files, new C13999());
+                Arrays.sort(files, new C14469());
                 for (File file : files) {
                     if (file.getName().indexOf(46) != 0) {
                         item = new ListItem();

@@ -48,6 +48,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private ArrayList<AlbumEntry> albumsSorted = null;
     private boolean allowCaption;
     private boolean allowGifs;
+    private boolean allowSearchImages = true;
     private ChatActivity chatActivity;
     private int columnsCount = 2;
     private PhotoAlbumPickerActivityDelegate delegate;
@@ -55,6 +56,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private boolean loading = false;
+    private int maxSelectedPhotos = 100;
     private PickerBottomLayout pickerBottomLayout;
     private FrameLayout progressView;
     private ArrayList<SearchImage> recentGifImages = new ArrayList();
@@ -67,8 +69,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private boolean singlePhoto;
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$2 */
-    class C15872 implements OnTouchListener {
-        C15872() {
+    class C17032 implements OnTouchListener {
+        C17032() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -77,8 +79,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$3 */
-    class C15883 implements OnClickListener {
-        C15883() {
+    class C17043 implements OnClickListener {
+        C17043() {
         }
 
         public void onClick(View view) {
@@ -87,8 +89,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$4 */
-    class C15894 implements OnClickListener {
-        C15894() {
+    class C17054 implements OnClickListener {
+        C17054() {
         }
 
         public void onClick(View view) {
@@ -98,8 +100,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$5 */
-    class C15905 implements OnPreDrawListener {
-        C15905() {
+    class C17065 implements OnPreDrawListener {
+        C17065() {
         }
 
         public boolean onPreDraw() {
@@ -118,8 +120,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
-    class C22321 extends ActionBarMenuOnItemClick {
-        C22321() {
+    class C24061 extends ActionBarMenuOnItemClick {
+        C24061() {
         }
 
         public void onItemClick(int id) {
@@ -133,8 +135,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$6 */
-    class C22336 implements PhotoPickerActivityDelegate {
-        C22336() {
+    class C24076 implements PhotoPickerActivityDelegate {
+        C24076() {
         }
 
         public void selectedPhotosChanged() {
@@ -155,8 +157,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         private Context mContext;
 
         /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$ListAdapter$1 */
-        class C22351 implements PhotoPickerAlbumsCellDelegate {
-            C22351() {
+        class C24091 implements PhotoPickerAlbumsCellDelegate {
+            C24091() {
             }
 
             public void didSelectAlbum(AlbumEntry albumEntry) {
@@ -165,8 +167,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
 
         /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$ListAdapter$2 */
-        class C22362 implements PhotoPickerSearchCellDelegate {
-            C22362() {
+        class C24102 implements PhotoPickerSearchCellDelegate {
+            C24102() {
             }
 
             public void didPressedSearchButton(int index) {
@@ -184,7 +186,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
         public int getItemCount() {
             int i = 0;
-            if (!PhotoAlbumPickerActivity.this.singlePhoto) {
+            if (!PhotoAlbumPickerActivity.this.singlePhoto && PhotoAlbumPickerActivity.this.allowSearchImages) {
                 if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
                     i = (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
                 }
@@ -202,12 +204,12 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             switch (viewType) {
                 case 0:
                     cell = new PhotoPickerAlbumsCell(this.mContext);
-                    cell.setDelegate(new C22351());
+                    cell.setDelegate(new C24091());
                     view = cell;
                     break;
                 default:
                     cell = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
-                    cell.setDelegate(new C22362());
+                    cell.setDelegate(new C24102());
                     view = cell;
                     break;
             }
@@ -220,7 +222,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 photoPickerAlbumsCell.setAlbumsCount(PhotoAlbumPickerActivity.this.columnsCount);
                 for (int a = 0; a < PhotoAlbumPickerActivity.this.columnsCount; a++) {
                     int index;
-                    if (PhotoAlbumPickerActivity.this.singlePhoto) {
+                    if (PhotoAlbumPickerActivity.this.singlePhoto || !PhotoAlbumPickerActivity.this.allowSearchImages) {
                         index = (PhotoAlbumPickerActivity.this.columnsCount * position) + a;
                     } else {
                         index = ((position - 1) * PhotoAlbumPickerActivity.this.columnsCount) + a;
@@ -236,7 +238,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
 
         public int getItemViewType(int i) {
-            if (!PhotoAlbumPickerActivity.this.singlePhoto && i == 0) {
+            if (!PhotoAlbumPickerActivity.this.singlePhoto && PhotoAlbumPickerActivity.this.allowSearchImages && i == 0) {
                 return 1;
             }
             return 0;
@@ -271,7 +273,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setActionBarMenuOnItemClick(new C22321());
+        this.actionBar.setActionBarMenuOnItemClick(new C24061());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_other);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -307,7 +309,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         layoutParams.height = -1;
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.emptyView.setLayoutParams(layoutParams);
-        this.emptyView.setOnTouchListener(new C15872());
+        this.emptyView.setOnTouchListener(new C17032());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(8);
         frameLayout.addView(this.progressView);
@@ -329,8 +331,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         layoutParams.height = AndroidUtilities.dp(48.0f);
         layoutParams.gravity = 80;
         this.pickerBottomLayout.setLayoutParams(layoutParams);
-        this.pickerBottomLayout.cancelButton.setOnClickListener(new C15883());
-        this.pickerBottomLayout.doneButton.setOnClickListener(new C15894());
+        this.pickerBottomLayout.cancelButton.setOnClickListener(new C17043());
+        this.pickerBottomLayout.doneButton.setOnClickListener(new C17054());
         if (!this.loading || (this.albumsSorted != null && (this.albumsSorted == null || !this.albumsSorted.isEmpty()))) {
             this.progressView.setVisibility(8);
             this.listView.setEmptyView(this.emptyView);
@@ -358,7 +360,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.albumsDidLoaded) {
             if (this.classGuid == ((Integer) args[0]).intValue()) {
-                if (this.singlePhoto) {
+                if (this.singlePhoto || !this.allowSearchImages) {
                     this.albumsSorted = (ArrayList) args[2];
                 } else {
                     this.albumsSorted = (ArrayList) args[1];
@@ -398,6 +400,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
             }
         }
+    }
+
+    public void setMaxSelectedPhotos(int value) {
+        this.maxSelectedPhotos = value;
+    }
+
+    public void setAllowSearchImages(boolean value) {
+        this.allowSearchImages = value;
     }
 
     public void setDelegate(PhotoAlbumPickerActivityDelegate delegate) {
@@ -475,7 +485,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
     private void fixLayout() {
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C15905());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new C17065());
         }
     }
 
@@ -502,7 +512,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         if (albumEntry != null) {
             fragment = new PhotoPickerActivity(type, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, recentImages, this.singlePhoto, this.allowCaption, this.chatActivity);
-            fragment.setDelegate(new C22336());
+            fragment.setDelegate(new C24076());
         } else {
             final HashMap<Object, Object> photos = new HashMap();
             final ArrayList<Object> order = new ArrayList();
@@ -519,6 +529,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
             });
         }
+        fragment.setMaxSelectedPhotos(this.maxSelectedPhotos);
         presentFragment(fragment);
     }
 }

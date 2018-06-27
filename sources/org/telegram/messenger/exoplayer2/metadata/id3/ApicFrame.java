@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ApicFrame extends Id3Frame {
-    public static final Creator<ApicFrame> CREATOR = new C05831();
+    public static final Creator<ApicFrame> CREATOR = new C05921();
     public static final String ID = "APIC";
     public final String description;
     public final String mimeType;
@@ -14,8 +14,8 @@ public final class ApicFrame extends Id3Frame {
     public final int pictureType;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.ApicFrame$1 */
-    static class C05831 implements Creator<ApicFrame> {
-        C05831() {
+    static class C05921 implements Creator<ApicFrame> {
+        C05921() {
         }
 
         public ApicFrame createFromParcel(Parcel in) {
@@ -71,6 +71,10 @@ public final class ApicFrame extends Id3Frame {
             i = this.description.hashCode();
         }
         return ((hashCode + i) * 31) + Arrays.hashCode(this.pictureData);
+    }
+
+    public String toString() {
+        return this.id + ": mimeType=" + this.mimeType + ", description=" + this.description;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

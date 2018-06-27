@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 
@@ -35,6 +35,7 @@ public class SharedConfig {
     public static int passcodeType;
     public static boolean playOrderReversed;
     public static ArrayList<ProxyInfo> proxyList = new ArrayList();
+    private static boolean proxyListLoaded;
     public static byte[] pushAuthKey;
     public static byte[] pushAuthKeyId;
     public static String pushString = TtmlNode.ANONYMOUS_REGION_ID;
@@ -187,7 +188,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0546C.UTF8_NAME);
+                    passcodeBytes = passcode.getBytes(C0554C.UTF8_NAME);
                     bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -200,7 +201,7 @@ public class SharedConfig {
             }
         } else {
             try {
-                passcodeBytes = passcode.getBytes(C0546C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(C0554C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -344,7 +345,7 @@ public class SharedConfig {
     }
 
     public static void loadProxyList() {
-        if (proxyList.isEmpty()) {
+        if (!proxyListLoaded) {
             ProxyInfo info;
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             String proxyAddress = preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
@@ -352,6 +353,7 @@ public class SharedConfig {
             String proxyPassword = preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
             String proxySecret = preferences.getString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
             int proxyPort = preferences.getInt("proxy_port", 1080);
+            proxyListLoaded = true;
             proxyList.clear();
             currentProxy = null;
             String list = preferences.getString("proxy_list", null);
@@ -376,7 +378,7 @@ public class SharedConfig {
         }
     }
 
-    private static void saveProxyList() {
+    public static void saveProxyList() {
         SerializedData serializedData = new SerializedData();
         int count = proxyList.size();
         serializedData.writeInt32(count);

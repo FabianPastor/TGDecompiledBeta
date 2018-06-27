@@ -1,28 +1,9 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.Parcelable.Creator;
-
-public final class RepresentationKey implements Parcelable, Comparable<RepresentationKey> {
-    public static final Creator<RepresentationKey> CREATOR = new C06171();
+public final class RepresentationKey implements Comparable<RepresentationKey> {
     public final int adaptationSetIndex;
     public final int periodIndex;
     public final int representationIndex;
-
-    /* renamed from: org.telegram.messenger.exoplayer2.source.dash.manifest.RepresentationKey$1 */
-    static class C06171 implements Creator<RepresentationKey> {
-        C06171() {
-        }
-
-        public RepresentationKey createFromParcel(Parcel in) {
-            return new RepresentationKey(in.readInt(), in.readInt(), in.readInt());
-        }
-
-        public RepresentationKey[] newArray(int size) {
-            return new RepresentationKey[size];
-        }
-    }
 
     public RepresentationKey(int periodIndex, int adaptationSetIndex, int representationIndex) {
         this.periodIndex = periodIndex;
@@ -32,28 +13,6 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
 
     public String toString() {
         return this.periodIndex + "." + this.adaptationSetIndex + "." + this.representationIndex;
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.periodIndex);
-        dest.writeInt(this.adaptationSetIndex);
-        dest.writeInt(this.representationIndex);
-    }
-
-    public int compareTo(RepresentationKey o) {
-        int result = this.periodIndex - o.periodIndex;
-        if (result != 0) {
-            return result;
-        }
-        result = this.adaptationSetIndex - o.adaptationSetIndex;
-        if (result == 0) {
-            return this.representationIndex - o.representationIndex;
-        }
-        return result;
     }
 
     public boolean equals(Object o) {
@@ -72,5 +31,17 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
 
     public int hashCode() {
         return (((this.periodIndex * 31) + this.adaptationSetIndex) * 31) + this.representationIndex;
+    }
+
+    public int compareTo(RepresentationKey o) {
+        int result = this.periodIndex - o.periodIndex;
+        if (result != 0) {
+            return result;
+        }
+        result = this.adaptationSetIndex - o.adaptationSetIndex;
+        if (result == 0) {
+            return this.representationIndex - o.representationIndex;
+        }
+        return result;
     }
 }

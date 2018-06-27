@@ -60,7 +60,8 @@ public class RecyclerListView extends RecyclerView {
     private boolean instantClick;
     private boolean interceptedByChild;
     private boolean isChildViewEnabled;
-    private AdapterDataObserver observer = new C20911();
+    private boolean longPressCalled;
+    private AdapterDataObserver observer = new C22221();
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
@@ -326,11 +327,15 @@ public class RecyclerListView extends RecyclerView {
 
     public interface OnItemLongClickListenerExtended {
         boolean onItemClick(View view, int i, float f, float f2);
+
+        void onLongClickRelease();
+
+        void onMove(float f, float f2);
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$1 */
-    class C20911 extends AdapterDataObserver {
-        C20911() {
+    class C22221 extends AdapterDataObserver {
+        C22221() {
         }
 
         public void onChanged() {
@@ -349,10 +354,10 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$2 */
-    class C20922 extends OnScrollListener {
+    class C22232 extends OnScrollListener {
         boolean scrollingByUser;
 
-        C20922() {
+        C22232() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -402,11 +407,12 @@ public class RecyclerListView extends RecyclerView {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
                     if (linearLayoutManager.getOrientation() == 1) {
                         int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                        int visibleItemCount = Math.abs(linearLayoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
                         if (firstVisibleItem != -1) {
                             if (this.scrollingByUser && RecyclerListView.this.fastScroll != null) {
                                 Adapter adapter = RecyclerListView.this.getAdapter();
                                 if (adapter instanceof FastScrollAdapter) {
-                                    RecyclerListView.this.fastScroll.setProgress(((float) firstVisibleItem) / ((float) adapter.getItemCount()));
+                                    RecyclerListView.this.fastScroll.setProgress(Math.min(1.0f, ((float) firstVisibleItem) / ((float) ((adapter.getItemCount() - visibleItemCount) + 1))));
                                 }
                             }
                             if (RecyclerListView.this.sectionsAdapter == null) {
@@ -415,7 +421,6 @@ public class RecyclerListView extends RecyclerView {
                             View child;
                             int headerTop;
                             if (RecyclerListView.this.sectionsType == 1) {
-                                int visibleItemCount = Math.abs(linearLayoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
                                 RecyclerListView.this.headersCache.addAll(RecyclerListView.this.headers);
                                 RecyclerListView.this.headers.clear();
                                 if (RecyclerListView.this.sectionsAdapter.getItemCount() != 0) {
@@ -516,8 +521,8 @@ public class RecyclerListView extends RecyclerView {
     private class RecyclerListViewItemClickListener implements OnItemTouchListener {
 
         /* renamed from: org.telegram.ui.Components.RecyclerListView$RecyclerListViewItemClickListener$2 */
-        class C12932 implements Runnable {
-            C12932() {
+        class C13332 implements Runnable {
+            C13332() {
             }
 
             public void run() {
@@ -588,6 +593,7 @@ public class RecyclerListView extends RecyclerView {
                                 }
                             } else if (RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.onItemLongClickListenerExtended.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition, event.getX(), event.getY())) {
                                 child.performHapticFeedback(0);
+                                RecyclerListView.this.longPressCalled = true;
                             }
                         }
                     }
@@ -601,6 +607,7 @@ public class RecyclerListView extends RecyclerView {
             if ((action == 0 || action == 5) && RecyclerListView.this.currentChildView == null && isScrollIdle) {
                 float ex = event.getX();
                 float ey = event.getY();
+                RecyclerListView.this.longPressCalled = false;
                 if (RecyclerListView.this.allowSelectChildAtPosition(ex, ey)) {
                     RecyclerListView.this.currentChildView = view.findChildViewUnder(ex, ey);
                 }
@@ -635,7 +642,7 @@ public class RecyclerListView extends RecyclerView {
             }
             if (action == 0 || action == 5) {
                 if (!(RecyclerListView.this.interceptedByChild || RecyclerListView.this.currentChildView == null)) {
-                    RecyclerListView.this.selectChildRunnable = new C12932();
+                    RecyclerListView.this.selectChildRunnable = new C13332();
                     AndroidUtilities.runOnUIThread(RecyclerListView.this.selectChildRunnable, (long) ViewConfiguration.getTapTimeout());
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         RecyclerListView.this.positionSelector(RecyclerListView.this.currentChildPosition, RecyclerListView.this.currentChildView);
@@ -667,6 +674,13 @@ public class RecyclerListView extends RecyclerView {
                 RecyclerListView.this.currentChildView = null;
                 RecyclerListView.this.interceptedByChild = false;
                 RecyclerListView.this.removeSelection(pressedChild, event);
+                if (action == 3) {
+                    FileLog.m0d("cancel");
+                }
+                if ((action == 1 || action == 6) && RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.longPressCalled) {
+                    RecyclerListView.this.onItemLongClickListenerExtended.onLongClickRelease();
+                    RecyclerListView.this.longPressCalled = false;
+                }
             }
             return false;
         }
@@ -894,7 +908,7 @@ public class RecyclerListView extends RecyclerView {
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        super.setOnScrollListener(new C20922());
+        super.setOnScrollListener(new C22232());
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
     }
 
@@ -1173,6 +1187,18 @@ public class RecyclerListView extends RecyclerView {
             super.stopScroll();
         } catch (NullPointerException e) {
         }
+    }
+
+    public boolean dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow, int type) {
+        if (!this.longPressCalled) {
+            return super.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type);
+        }
+        if (this.onItemLongClickListenerExtended != null) {
+            this.onItemLongClickListenerExtended.onMove((float) dx, (float) dy);
+        }
+        consumed[0] = dx;
+        consumed[1] = dy;
+        return true;
     }
 
     public boolean hasOverlappingRendering() {

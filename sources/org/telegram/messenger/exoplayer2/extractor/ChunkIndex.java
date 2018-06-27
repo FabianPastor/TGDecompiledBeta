@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor;
 
+import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -43,5 +44,9 @@ public final class ChunkIndex implements SeekMap {
             return new SeekPoints(seekPoint);
         }
         return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex + 1], this.offsets[chunkIndex + 1]));
+    }
+
+    public String toString() {
+        return "ChunkIndex(length=" + this.length + ", sizes=" + Arrays.toString(this.sizes) + ", offsets=" + Arrays.toString(this.offsets) + ", timeUs=" + Arrays.toString(this.timesUs) + ", durationsUs=" + Arrays.toString(this.durationsUs) + ")";
     }
 }

@@ -1,179 +1,295 @@
 package org.telegram.messenger.exoplayer2.source;
 
 import android.os.Handler;
+import android.os.Looper;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0546C;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public interface MediaSourceEventListener {
 
     public static final class EventDispatcher {
-        private final Handler handler;
-        private final MediaSourceEventListener listener;
+        private final CopyOnWriteArrayList<ListenerAndHandler> listenerAndHandlers;
+        public final MediaPeriodId mediaPeriodId;
         private final long mediaTimeOffsetMs;
+        public final int windowIndex;
 
-        public EventDispatcher(Handler handler, MediaSourceEventListener listener) {
-            this(handler, listener, 0);
+        private static final class ListenerAndHandler {
+            public final Handler handler;
+            public final MediaSourceEventListener listener;
+
+            public ListenerAndHandler(Handler handler, MediaSourceEventListener listener) {
+                this.handler = handler;
+                this.listener = listener;
+            }
         }
 
-        public EventDispatcher(Handler handler, MediaSourceEventListener listener, long mediaTimeOffsetMs) {
-            this.handler = listener != null ? (Handler) Assertions.checkNotNull(handler) : null;
-            this.listener = listener;
+        public EventDispatcher() {
+            this(new CopyOnWriteArrayList(), 0, null, 0);
+        }
+
+        private EventDispatcher(CopyOnWriteArrayList<ListenerAndHandler> listenerAndHandlers, int windowIndex, MediaPeriodId mediaPeriodId, long mediaTimeOffsetMs) {
+            this.listenerAndHandlers = listenerAndHandlers;
+            this.windowIndex = windowIndex;
+            this.mediaPeriodId = mediaPeriodId;
             this.mediaTimeOffsetMs = mediaTimeOffsetMs;
         }
 
-        public EventDispatcher copyWithMediaTimeOffsetMs(long mediaTimeOffsetMs) {
-            return new EventDispatcher(this.handler, this.listener, mediaTimeOffsetMs);
+        public EventDispatcher withParameters(int windowIndex, MediaPeriodId mediaPeriodId, long mediaTimeOffsetMs) {
+            return new EventDispatcher(this.listenerAndHandlers, windowIndex, mediaPeriodId, mediaTimeOffsetMs);
+        }
+
+        public void addEventListener(Handler handler, MediaSourceEventListener eventListener) {
+            boolean z = (handler == null || eventListener == null) ? false : true;
+            Assertions.checkArgument(z);
+            this.listenerAndHandlers.add(new ListenerAndHandler(handler, eventListener));
+        }
+
+        public void removeEventListener(MediaSourceEventListener eventListener) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                if (listenerAndHandler.listener == eventListener) {
+                    this.listenerAndHandlers.remove(listenerAndHandler);
+                }
+            }
+        }
+
+        public void mediaPeriodCreated() {
+            Assertions.checkState(this.mediaPeriodId != null);
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
+                    public void run() {
+                        listener.onMediaPeriodCreated(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId);
+                    }
+                });
+            }
+        }
+
+        public void mediaPeriodReleased() {
+            Assertions.checkState(this.mediaPeriodId != null);
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
+                    public void run() {
+                        listener.onMediaPeriodReleased(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId);
+                    }
+                });
+            }
         }
 
         public void loadStarted(DataSpec dataSpec, int dataType, long elapsedRealtimeMs) {
-            loadStarted(dataSpec, dataType, -1, null, 0, null, C0546C.TIME_UNSET, C0546C.TIME_UNSET, elapsedRealtimeMs);
+            loadStarted(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs);
         }
 
         public void loadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs) {
-            if (this.listener != null && this.handler != null) {
-                final DataSpec dataSpec2 = dataSpec;
-                final int i = dataType;
-                final int i2 = trackType;
-                final Format format = trackFormat;
-                final int i3 = trackSelectionReason;
-                final Object obj = trackSelectionData;
-                final long j = mediaStartTimeUs;
-                final long j2 = mediaEndTimeUs;
-                final long j3 = elapsedRealtimeMs;
-                this.handler.post(new Runnable() {
+            loadStarted(new LoadEventInfo(dataSpec, elapsedRealtimeMs, 0, 0), new MediaLoadData(dataType, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaStartTimeUs), adjustMediaTime(mediaEndTimeUs)));
+        }
+
+        public void loadStarted(final LoadEventInfo loadEventInfo, final MediaLoadData mediaLoadData) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadStarted(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3);
+                        listener.onLoadStarted(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, loadEventInfo, mediaLoadData);
                     }
                 });
             }
         }
 
         public void loadCompleted(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            loadCompleted(dataSpec, dataType, -1, null, 0, null, C0546C.TIME_UNSET, C0546C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
+            loadCompleted(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
         }
 
         public void loadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            if (this.listener != null && this.handler != null) {
-                final DataSpec dataSpec2 = dataSpec;
-                final int i = dataType;
-                final int i2 = trackType;
-                final Format format = trackFormat;
-                final int i3 = trackSelectionReason;
-                final Object obj = trackSelectionData;
-                final long j = mediaStartTimeUs;
-                final long j2 = mediaEndTimeUs;
-                final long j3 = elapsedRealtimeMs;
-                final long j4 = loadDurationMs;
-                final long j5 = bytesLoaded;
-                this.handler.post(new Runnable() {
+            loadCompleted(new LoadEventInfo(dataSpec, elapsedRealtimeMs, loadDurationMs, bytesLoaded), new MediaLoadData(dataType, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaStartTimeUs), adjustMediaTime(mediaEndTimeUs)));
+        }
+
+        public void loadCompleted(final LoadEventInfo loadEventInfo, final MediaLoadData mediaLoadData) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadCompleted(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5);
+                        listener.onLoadCompleted(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, loadEventInfo, mediaLoadData);
                     }
                 });
             }
         }
 
         public void loadCanceled(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            loadCanceled(dataSpec, dataType, -1, null, 0, null, C0546C.TIME_UNSET, C0546C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
+            loadCanceled(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
         }
 
         public void loadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            if (this.listener != null && this.handler != null) {
-                final DataSpec dataSpec2 = dataSpec;
-                final int i = dataType;
-                final int i2 = trackType;
-                final Format format = trackFormat;
-                final int i3 = trackSelectionReason;
-                final Object obj = trackSelectionData;
-                final long j = mediaStartTimeUs;
-                final long j2 = mediaEndTimeUs;
-                final long j3 = elapsedRealtimeMs;
-                final long j4 = loadDurationMs;
-                final long j5 = bytesLoaded;
-                this.handler.post(new Runnable() {
+            loadCanceled(new LoadEventInfo(dataSpec, elapsedRealtimeMs, loadDurationMs, bytesLoaded), new MediaLoadData(dataType, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaStartTimeUs), adjustMediaTime(mediaEndTimeUs)));
+        }
+
+        public void loadCanceled(final LoadEventInfo loadEventInfo, final MediaLoadData mediaLoadData) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadCanceled(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5);
+                        listener.onLoadCanceled(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, loadEventInfo, mediaLoadData);
                     }
                 });
             }
         }
 
         public void loadError(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
-            loadError(dataSpec, dataType, -1, null, 0, null, C0546C.TIME_UNSET, C0546C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, wasCanceled);
+            loadError(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, wasCanceled);
         }
 
         public void loadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
-            if (this.listener != null && this.handler != null) {
-                final DataSpec dataSpec2 = dataSpec;
-                final int i = dataType;
-                final int i2 = trackType;
-                final Format format = trackFormat;
-                final int i3 = trackSelectionReason;
-                final Object obj = trackSelectionData;
-                final long j = mediaStartTimeUs;
-                final long j2 = mediaEndTimeUs;
-                final long j3 = elapsedRealtimeMs;
-                final long j4 = loadDurationMs;
-                final long j5 = bytesLoaded;
+            loadError(new LoadEventInfo(dataSpec, elapsedRealtimeMs, loadDurationMs, bytesLoaded), new MediaLoadData(dataType, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaStartTimeUs), adjustMediaTime(mediaEndTimeUs)), error, wasCanceled);
+        }
+
+        public void loadError(LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                final LoadEventInfo loadEventInfo2 = loadEventInfo;
+                final MediaLoadData mediaLoadData2 = mediaLoadData;
                 final IOException iOException = error;
                 final boolean z = wasCanceled;
-                this.handler.post(new Runnable() {
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadError(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5, iOException, z);
+                        listener.onLoadError(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, loadEventInfo2, mediaLoadData2, iOException, z);
+                    }
+                });
+            }
+        }
+
+        public void readingStarted() {
+            Assertions.checkState(this.mediaPeriodId != null);
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
+                    public void run() {
+                        listener.onReadingStarted(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId);
                     }
                 });
             }
         }
 
         public void upstreamDiscarded(int trackType, long mediaStartTimeUs, long mediaEndTimeUs) {
-            if (this.listener != null && this.handler != null) {
-                final int i = trackType;
-                final long j = mediaStartTimeUs;
-                final long j2 = mediaEndTimeUs;
-                this.handler.post(new Runnable() {
+            upstreamDiscarded(new MediaLoadData(1, trackType, null, 3, null, adjustMediaTime(mediaStartTimeUs), adjustMediaTime(mediaEndTimeUs)));
+        }
+
+        public void upstreamDiscarded(final MediaLoadData mediaLoadData) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onUpstreamDiscarded(i, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2));
+                        listener.onUpstreamDiscarded(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, mediaLoadData);
                     }
                 });
             }
         }
 
         public void downstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeUs) {
-            if (this.listener != null && this.handler != null) {
-                final int i = trackType;
-                final Format format = trackFormat;
-                final int i2 = trackSelectionReason;
-                final Object obj = trackSelectionData;
-                final long j = mediaTimeUs;
-                this.handler.post(new Runnable() {
+            downstreamFormatChanged(new MediaLoadData(1, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaTimeUs), C0554C.TIME_UNSET));
+        }
+
+        public void downstreamFormatChanged(final MediaLoadData mediaLoadData) {
+            Iterator it = this.listenerAndHandlers.iterator();
+            while (it.hasNext()) {
+                ListenerAndHandler listenerAndHandler = (ListenerAndHandler) it.next();
+                final MediaSourceEventListener listener = listenerAndHandler.listener;
+                postOrRun(listenerAndHandler.handler, new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onDownstreamFormatChanged(i, format, i2, obj, EventDispatcher.this.adjustMediaTime(j));
+                        listener.onDownstreamFormatChanged(EventDispatcher.this.windowIndex, EventDispatcher.this.mediaPeriodId, mediaLoadData);
                     }
                 });
             }
         }
 
         private long adjustMediaTime(long mediaTimeUs) {
-            long mediaTimeMs = C0546C.usToMs(mediaTimeUs);
-            if (mediaTimeMs == C0546C.TIME_UNSET) {
-                return C0546C.TIME_UNSET;
+            long mediaTimeMs = C0554C.usToMs(mediaTimeUs);
+            if (mediaTimeMs == C0554C.TIME_UNSET) {
+                return C0554C.TIME_UNSET;
             }
             return this.mediaTimeOffsetMs + mediaTimeMs;
         }
+
+        private void postOrRun(Handler handler, Runnable runnable) {
+            if (handler.getLooper() == Looper.myLooper()) {
+                runnable.run();
+            } else {
+                handler.post(runnable);
+            }
+        }
     }
 
-    void onDownstreamFormatChanged(int i, Format format, int i2, Object obj, long j);
+    public static final class LoadEventInfo {
+        public final long bytesLoaded;
+        public final DataSpec dataSpec;
+        public final long elapsedRealtimeMs;
+        public final long loadDurationMs;
 
-    void onLoadCanceled(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5);
+        public LoadEventInfo(DataSpec dataSpec, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+            this.dataSpec = dataSpec;
+            this.elapsedRealtimeMs = elapsedRealtimeMs;
+            this.loadDurationMs = loadDurationMs;
+            this.bytesLoaded = bytesLoaded;
+        }
+    }
 
-    void onLoadCompleted(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5);
+    public static final class MediaLoadData {
+        public final int dataType;
+        public final long mediaEndTimeMs;
+        public final long mediaStartTimeMs;
+        public final Format trackFormat;
+        public final Object trackSelectionData;
+        public final int trackSelectionReason;
+        public final int trackType;
 
-    void onLoadError(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3, long j4, long j5, IOException iOException, boolean z);
+        public MediaLoadData(int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs) {
+            this.dataType = dataType;
+            this.trackType = trackType;
+            this.trackFormat = trackFormat;
+            this.trackSelectionReason = trackSelectionReason;
+            this.trackSelectionData = trackSelectionData;
+            this.mediaStartTimeMs = mediaStartTimeMs;
+            this.mediaEndTimeMs = mediaEndTimeMs;
+        }
+    }
 
-    void onLoadStarted(DataSpec dataSpec, int i, int i2, Format format, int i3, Object obj, long j, long j2, long j3);
+    void onDownstreamFormatChanged(int i, MediaPeriodId mediaPeriodId, MediaLoadData mediaLoadData);
 
-    void onUpstreamDiscarded(int i, long j, long j2);
+    void onLoadCanceled(int i, MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData);
+
+    void onLoadCompleted(int i, MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData);
+
+    void onLoadError(int i, MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException iOException, boolean z);
+
+    void onLoadStarted(int i, MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData);
+
+    void onMediaPeriodCreated(int i, MediaPeriodId mediaPeriodId);
+
+    void onMediaPeriodReleased(int i, MediaPeriodId mediaPeriodId);
+
+    void onReadingStarted(int i, MediaPeriodId mediaPeriodId);
+
+    void onUpstreamDiscarded(int i, MediaPeriodId mediaPeriodId, MediaLoadData mediaLoadData);
 }

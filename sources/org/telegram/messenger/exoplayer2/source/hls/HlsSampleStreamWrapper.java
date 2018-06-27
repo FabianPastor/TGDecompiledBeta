@@ -3,9 +3,12 @@ package org.telegram.messenger.exoplayer2.source.hls;
 import android.os.Handler;
 import android.util.Log;
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0546C;
+import java.util.Iterator;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.ParserException;
@@ -37,6 +40,9 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private static final int PRIMARY_TYPE_NONE = 0;
     private static final int PRIMARY_TYPE_TEXT = 1;
     private static final int PRIMARY_TYPE_VIDEO = 3;
+    public static final int SAMPLE_QUEUE_INDEX_NO_MAPPING_FATAL = -2;
+    public static final int SAMPLE_QUEUE_INDEX_NO_MAPPING_NON_FATAL = -3;
+    public static final int SAMPLE_QUEUE_INDEX_PENDING = -1;
     private static final String TAG = "HlsSampleStreamWrapper";
     private final Allocator allocator;
     private int audioSampleQueueIndex = -1;
@@ -48,15 +54,17 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private final EventDispatcher eventDispatcher;
     private final Handler handler = new Handler();
     private boolean haveAudioVideoSampleQueues;
+    private final ArrayList<HlsSampleStream> hlsSampleStreams = new ArrayList();
     private long lastSeekPositionUs;
     private final Loader loader = new Loader("Loader:HlsSampleStreamWrapper");
     private boolean loadingFinished;
-    private final Runnable maybeFinishPrepareRunnable = new C06191();
+    private final Runnable maybeFinishPrepareRunnable = new C06451();
     private final ArrayList<HlsMediaChunk> mediaChunks = new ArrayList();
     private final int minLoadableRetryCount;
     private final Format muxedAudioFormat;
     private final HlsChunkHolder nextChunkHolder = new HlsChunkHolder();
-    private final Runnable onTracksEndedRunnable = new C06202();
+    private final Runnable onTracksEndedRunnable = new C06462();
+    private TrackGroupArray optionalTrackGroups;
     private long pendingResetPositionUs;
     private boolean pendingResetUpstreamFormats;
     private boolean prepared;
@@ -77,8 +85,8 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private boolean videoSampleQueueMappingDone;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$1 */
-    class C06191 implements Runnable {
-        C06191() {
+    class C06451 implements Runnable {
+        C06451() {
         }
 
         public void run() {
@@ -87,13 +95,17 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$2 */
-    class C06202 implements Runnable {
-        C06202() {
+    class C06462 implements Runnable {
+        C06462() {
         }
 
         public void run() {
             HlsSampleStreamWrapper.this.onTracksEnded();
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface PrimaryTrackType {
     }
 
     public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
@@ -120,9 +132,10 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         }
     }
 
-    public void prepareWithMasterPlaylistInfo(TrackGroupArray trackGroups, int primaryTrackGroupIndex) {
+    public void prepareWithMasterPlaylistInfo(TrackGroupArray trackGroups, int primaryTrackGroupIndex, TrackGroupArray optionalTrackGroups) {
         this.prepared = true;
         this.trackGroups = trackGroups;
+        this.optionalTrackGroups = optionalTrackGroups;
         this.primaryTrackGroupIndex = primaryTrackGroupIndex;
         this.callback.onPrepared();
     }
@@ -135,23 +148,19 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         return this.trackGroups;
     }
 
-    public boolean isMappingFinished() {
-        return this.trackGroupToSampleQueueIndex != null;
-    }
-
     public int bindSampleQueueToSampleStream(int trackGroupIndex) {
-        if (!isMappingFinished()) {
-            return -1;
-        }
         int sampleQueueIndex = this.trackGroupToSampleQueueIndex[trackGroupIndex];
         if (sampleQueueIndex == -1) {
-            return -1;
+            if (this.optionalTrackGroups.indexOf(this.trackGroups.get(trackGroupIndex)) == -1) {
+                return -2;
+            }
+            return -3;
+        } else if (this.sampleQueuesEnabledStates[sampleQueueIndex]) {
+            return -2;
+        } else {
+            this.sampleQueuesEnabledStates[sampleQueueIndex] = true;
+            return sampleQueueIndex;
         }
-        if (this.sampleQueuesEnabledStates[sampleQueueIndex]) {
-            return -1;
-        }
-        this.sampleQueuesEnabledStates[sampleQueueIndex] = true;
-        return sampleQueueIndex;
     }
 
     public void unbindSampleQueue(int trackGroupIndex) {
@@ -192,6 +201,9 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 }
                 streams[i] = new HlsSampleStream(this, trackGroupIndex);
                 streamResetFlags[i] = true;
+                if (this.trackGroupToSampleQueueIndex != null) {
+                    ((HlsSampleStream) streams[i]).bindSampleQueue();
+                }
                 if (this.sampleQueuesBuilt && !seekRequired) {
                     SampleQueue sampleQueue;
                     sampleQueue = this.sampleQueues[this.trackGroupToSampleQueueIndex[trackGroupIndex]];
@@ -225,7 +237,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 if (this.seenFirstTrackSelection) {
                     primarySampleQueueDirty = true;
                 } else {
-                    primaryTrackSelection.updateSelectedTrack(positionUs, positionUs < 0 ? -positionUs : 0, C0546C.TIME_UNSET);
+                    primaryTrackSelection.updateSelectedTrack(positionUs, positionUs < 0 ? -positionUs : 0, C0554C.TIME_UNSET);
                     if (primaryTrackSelection.getSelectedIndexInTrackGroup() != this.chunkSource.getTrackGroup().indexOf(getLastMediaChunk().trackFormat)) {
                         primarySampleQueueDirty = true;
                     }
@@ -245,6 +257,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 }
             }
         }
+        updateSampleStreams(streams);
         this.seenFirstTrackSelection = true;
         return seekRequired;
     }
@@ -275,14 +288,15 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     public void release() {
-        boolean releasedSynchronously = this.loader.release(this);
-        if (this.prepared && !releasedSynchronously) {
+        if (this.prepared) {
             for (SampleQueue sampleQueue : this.sampleQueues) {
                 sampleQueue.discardToEnd();
             }
         }
+        this.loader.release(this);
         this.handler.removeCallbacksAndMessages(null);
         this.released = true;
+        this.hlsSampleStreams.clear();
     }
 
     public void onLoaderReleased() {
@@ -293,8 +307,8 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         this.chunkSource.setIsTimestampMaster(isTimestampMaster);
     }
 
-    public void onPlaylistBlacklisted(HlsUrl url, long blacklistMs) {
-        this.chunkSource.onPlaylistBlacklisted(url, blacklistMs);
+    public boolean onPlaylistError(HlsUrl url, boolean shouldBlacklist) {
+        return this.chunkSource.onPlaylistError(url, shouldBlacklist);
     }
 
     public boolean isReady(int sampleQueueIndex) {
@@ -391,7 +405,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         HlsUrl playlistToLoad = this.nextChunkHolder.playlist;
         this.nextChunkHolder.clear();
         if (endOfStream) {
-            this.pendingResetPositionUs = C0546C.TIME_UNSET;
+            this.pendingResetPositionUs = C0554C.TIME_UNSET;
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
@@ -401,7 +415,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
             return false;
         } else {
             if (isMediaChunk(loadable)) {
-                this.pendingResetPositionUs = C0546C.TIME_UNSET;
+                this.pendingResetPositionUs = C0554C.TIME_UNSET;
                 HlsMediaChunk mediaChunk = (HlsMediaChunk) loadable;
                 mediaChunk.init(this);
                 this.mediaChunks.add(mediaChunk);
@@ -560,6 +574,15 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
         }
     }
 
+    private void updateSampleStreams(SampleStream[] streams) {
+        this.hlsSampleStreams.clear();
+        for (SampleStream stream : streams) {
+            if (stream != null) {
+                this.hlsSampleStreams.add((HlsSampleStream) stream);
+            }
+        }
+    }
+
     private boolean finishedReadingChunk(HlsMediaChunk chunk) {
         int chunkUid = chunk.uid;
         int sampleQueueCount = this.sampleQueues.length;
@@ -601,7 +624,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 mapSampleQueuesToMatchTrackGroups();
                 return;
             }
-            buildTracks();
+            buildTracksFromSampleStreams();
             this.prepared = true;
             this.callback.onPrepared();
         }
@@ -619,9 +642,13 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 }
             }
         }
+        Iterator it = this.hlsSampleStreams.iterator();
+        while (it.hasNext()) {
+            ((HlsSampleStream) it.next()).bindSampleQueue();
+        }
     }
 
-    private void buildTracks() {
+    private void buildTracksFromSampleStreams() {
         int i;
         int primaryExtractorTrackType = 0;
         int primaryExtractorTrackIndex = -1;
@@ -668,6 +695,8 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
             }
         }
         this.trackGroups = new TrackGroupArray(trackGroups);
+        Assertions.checkState(this.optionalTrackGroups == null);
+        this.optionalTrackGroups = TrackGroupArray.EMPTY;
     }
 
     private HlsMediaChunk getLastMediaChunk() {
@@ -675,7 +704,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     private boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0546C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0554C.TIME_UNSET;
     }
 
     private boolean seekInsideBufferUs(long positionUs) {

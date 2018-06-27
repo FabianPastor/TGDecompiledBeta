@@ -9,7 +9,8 @@ import org.telegram.messenger.exoplayer2.util.SlidingPercentile;
 
 public final class DefaultBandwidthMeter implements BandwidthMeter, TransferListener<Object> {
     private static final int BYTES_TRANSFERRED_FOR_ESTIMATE = 524288;
-    public static final int DEFAULT_MAX_WEIGHT = 2000;
+    public static final long DEFAULT_INITIAL_BITRATE_ESTIMATE = 1000000;
+    public static final int DEFAULT_SLIDING_WINDOW_MAX_WEIGHT = 2000;
     private static final int ELAPSED_MILLIS_FOR_ESTIMATE = 2000;
     private long bitrateEstimate;
     private final Clock clock;
@@ -22,24 +23,61 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
     private long totalBytesTransferred;
     private long totalElapsedTimeMs;
 
+    public static final class Builder {
+        private Clock clock = Clock.DEFAULT;
+        private Handler eventHandler;
+        private EventListener eventListener;
+        private long initialBitrateEstimate = 1000000;
+        private int slidingWindowMaxWeight = 2000;
+
+        public Builder setEventListener(Handler eventHandler, EventListener eventListener) {
+            boolean z = (eventHandler == null || eventListener == null) ? false : true;
+            Assertions.checkArgument(z);
+            this.eventHandler = eventHandler;
+            this.eventListener = eventListener;
+            return this;
+        }
+
+        public Builder setSlidingWindowMaxWeight(int slidingWindowMaxWeight) {
+            this.slidingWindowMaxWeight = slidingWindowMaxWeight;
+            return this;
+        }
+
+        public Builder setInitialBitrateEstimate(long initialBitrateEstimate) {
+            this.initialBitrateEstimate = initialBitrateEstimate;
+            return this;
+        }
+
+        public Builder setClock(Clock clock) {
+            this.clock = clock;
+            return this;
+        }
+
+        public DefaultBandwidthMeter build() {
+            return new DefaultBandwidthMeter(this.eventHandler, this.eventListener, this.initialBitrateEstimate, this.slidingWindowMaxWeight, this.clock);
+        }
+    }
+
     public DefaultBandwidthMeter() {
-        this(null, null);
+        this(null, null, 1000000, 2000, Clock.DEFAULT);
     }
 
+    @Deprecated
     public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener) {
-        this(eventHandler, eventListener, 2000);
+        this(eventHandler, eventListener, 1000000, 2000, Clock.DEFAULT);
     }
 
+    @Deprecated
     public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight) {
-        this(eventHandler, eventListener, maxWeight, Clock.DEFAULT);
+        this(eventHandler, eventListener, 1000000, maxWeight, Clock.DEFAULT);
     }
 
-    public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight, Clock clock) {
+    private DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, long initialBitrateEstimate, int maxWeight, Clock clock) {
         this.eventHandler = eventHandler;
         this.eventListener = eventListener;
         this.slidingPercentile = new SlidingPercentile(maxWeight);
         this.clock = clock;
-        this.bitrateEstimate = -1;
+        this.bitrateEstimate = initialBitrateEstimate;
     }
 
     public synchronized long getBitrateEstimate() {
@@ -66,8 +104,7 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
         if (sampleElapsedTimeMs > 0) {
             this.slidingPercentile.addSample((int) Math.sqrt((double) this.sampleBytesTransferred), (float) ((this.sampleBytesTransferred * 8000) / ((long) sampleElapsedTimeMs)));
             if (this.totalElapsedTimeMs >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS || this.totalBytesTransferred >= 524288) {
-                float bitrateEstimateFloat = this.slidingPercentile.getPercentile(0.5f);
-                this.bitrateEstimate = Float.isNaN(bitrateEstimateFloat) ? -1 : (long) bitrateEstimateFloat;
+                this.bitrateEstimate = (long) this.slidingPercentile.getPercentile(0.5f);
             }
         }
         notifyBandwidthSample(sampleElapsedTimeMs, this.sampleBytesTransferred, this.bitrateEstimate);

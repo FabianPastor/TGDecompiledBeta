@@ -13,6 +13,15 @@ final class FlacDecoderJni {
     private final long nativeDecoderContext = flacInit();
     private byte[] tempBuffer;
 
+    public static final class FlacFrameDecodeException extends Exception {
+        public final int errorCode;
+
+        public FlacFrameDecodeException(String message, int errorCode) {
+            super(message);
+            this.errorCode = errorCode;
+        }
+    }
+
     private native FlacStreamInfo flacDecodeMetadata(long j) throws IOException, InterruptedException;
 
     private native int flacDecodeToArray(long j, byte[] bArr) throws IOException, InterruptedException;
@@ -23,13 +32,19 @@ final class FlacDecoderJni {
 
     private native long flacGetDecodePosition(long j);
 
-    private native long flacGetLastTimestamp(long j);
+    private native long flacGetLastFrameFirstSampleIndex(long j);
+
+    private native long flacGetLastFrameTimestamp(long j);
+
+    private native long flacGetNextFrameFirstSampleIndex(long j);
 
     private native long flacGetSeekPosition(long j, long j2);
 
     private native String flacGetStateString(long j);
 
     private native long flacInit();
+
+    private native boolean flacIsDecoderAtEndOfStream(long j);
 
     private native void flacRelease(long j);
 
@@ -96,19 +111,51 @@ final class FlacDecoderJni {
         return flacDecodeMetadata(this.nativeDecoderContext);
     }
 
-    public int decodeSample(ByteBuffer output) throws IOException, InterruptedException {
-        if (output.isDirect()) {
-            return flacDecodeToBuffer(this.nativeDecoderContext, output);
+    public void decodeSampleWithBacktrackPosition(ByteBuffer output, long retryPosition) throws InterruptedException, IOException, FlacFrameDecodeException {
+        try {
+            decodeSample(output);
+        } catch (IOException e) {
+            if (retryPosition >= 0) {
+                reset(retryPosition);
+                if (this.extractorInput != null) {
+                    this.extractorInput.setRetryPosition(retryPosition, e);
+                }
+            }
+            throw e;
         }
-        return flacDecodeToArray(this.nativeDecoderContext, output.array());
+    }
+
+    public void decodeSample(ByteBuffer output) throws IOException, InterruptedException, FlacFrameDecodeException {
+        int frameSize;
+        output.clear();
+        if (output.isDirect()) {
+            frameSize = flacDecodeToBuffer(this.nativeDecoderContext, output);
+        } else {
+            frameSize = flacDecodeToArray(this.nativeDecoderContext, output.array());
+        }
+        if (frameSize >= 0) {
+            output.limit(frameSize);
+        } else if (isDecoderAtEndOfInput()) {
+            output.limit(0);
+        } else {
+            throw new FlacFrameDecodeException("Cannot decode FLAC frame", frameSize);
+        }
     }
 
     public long getDecodePosition() {
         return flacGetDecodePosition(this.nativeDecoderContext);
     }
 
-    public long getLastSampleTimestamp() {
-        return flacGetLastTimestamp(this.nativeDecoderContext);
+    public long getLastFrameTimestamp() {
+        return flacGetLastFrameTimestamp(this.nativeDecoderContext);
+    }
+
+    public long getLastFrameFirstSampleIndex() {
+        return flacGetLastFrameFirstSampleIndex(this.nativeDecoderContext);
+    }
+
+    public long getNextFrameFirstSampleIndex() {
+        return flacGetNextFrameFirstSampleIndex(this.nativeDecoderContext);
     }
 
     public long getSeekPosition(long timeUs) {
@@ -117,6 +164,10 @@ final class FlacDecoderJni {
 
     public String getStateString() {
         return flacGetStateString(this.nativeDecoderContext);
+    }
+
+    public boolean isDecoderAtEndOfInput() {
+        return flacIsDecoderAtEndOfStream(this.nativeDecoderContext);
     }
 
     public void flush() {

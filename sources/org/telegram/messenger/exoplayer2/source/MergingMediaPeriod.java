@@ -2,8 +2,9 @@ package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
@@ -11,22 +12,24 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class MergingMediaPeriod implements MediaPeriod, Callback {
     private Callback callback;
+    private final ArrayList<MediaPeriod> childrenPendingPreparation = new ArrayList();
     private SequenceableLoader compositeSequenceableLoader;
     private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
     private MediaPeriod[] enabledPeriods;
-    private int pendingChildPrepareCount;
     public final MediaPeriod[] periods;
-    private final IdentityHashMap<SampleStream, Integer> streamPeriodIndices = new IdentityHashMap();
+    private final IdentityHashMap<SampleStream, Integer> streamPeriodIndices;
     private TrackGroupArray trackGroups;
 
     public MergingMediaPeriod(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, MediaPeriod... periods) {
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
         this.periods = periods;
+        this.compositeSequenceableLoader = compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(new SequenceableLoader[0]);
+        this.streamPeriodIndices = new IdentityHashMap();
     }
 
     public void prepare(Callback callback, long positionUs) {
         this.callback = callback;
-        this.pendingChildPrepareCount = this.periods.length;
+        Collections.addAll(this.childrenPendingPreparation, this.periods);
         for (MediaPeriod period : this.periods) {
             period.prepare(this, positionUs);
         }
@@ -83,7 +86,7 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
             if (i == 0) {
                 positionUs = selectPositionUs;
             } else if (selectPositionUs != positionUs) {
-                throw new IllegalStateException("Children enabled at different positions");
+                throw new IllegalStateException("Children enabled at different positions.");
             }
             boolean periodEnabled = false;
             for (j = 0; j < selections.length; j++) {
@@ -119,7 +122,14 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public boolean continueLoading(long positionUs) {
-        return this.compositeSequenceableLoader.continueLoading(positionUs);
+        if (this.childrenPendingPreparation.isEmpty()) {
+            return this.compositeSequenceableLoader.continueLoading(positionUs);
+        }
+        int childrenPendingPreparationSize = this.childrenPendingPreparation.size();
+        for (int i = 0; i < childrenPendingPreparationSize; i++) {
+            ((MediaPeriod) this.childrenPendingPreparation.get(i)).continueLoading(positionUs);
+        }
+        return false;
     }
 
     public long getNextLoadPositionUs() {
@@ -129,11 +139,11 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     public long readDiscontinuity() {
         long positionUs = this.periods[0].readDiscontinuity();
         for (int i = 1; i < this.periods.length; i++) {
-            if (this.periods[i].readDiscontinuity() != C0546C.TIME_UNSET) {
-                throw new IllegalStateException("Child reported discontinuity");
+            if (this.periods[i].readDiscontinuity() != C0554C.TIME_UNSET) {
+                throw new IllegalStateException("Child reported discontinuity.");
             }
         }
-        if (positionUs != C0546C.TIME_UNSET) {
+        if (positionUs != C0554C.TIME_UNSET) {
             MediaPeriod[] mediaPeriodArr = this.enabledPeriods;
             int length = mediaPeriodArr.length;
             int i2 = 0;
@@ -142,7 +152,7 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
                 if (enabledPeriod == this.periods[0] || enabledPeriod.seekToUs(positionUs) == positionUs) {
                     i2++;
                 } else {
-                    throw new IllegalStateException("Children seeked to different positions");
+                    throw new IllegalStateException("Unexpected child seekToUs result.");
                 }
             }
         }
@@ -157,7 +167,7 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
         positionUs = this.enabledPeriods[0].seekToUs(positionUs);
         for (int i = 1; i < this.enabledPeriods.length; i++) {
             if (this.enabledPeriods[i].seekToUs(positionUs) != positionUs) {
-                throw new IllegalStateException("Children seeked to different positions");
+                throw new IllegalStateException("Unexpected child seekToUs result.");
             }
         }
         return positionUs;
@@ -167,11 +177,10 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
         return this.enabledPeriods[0].getAdjustedSeekPositionUs(positionUs, seekParameters);
     }
 
-    public void onPrepared(MediaPeriod ignored) {
+    public void onPrepared(MediaPeriod preparedPeriod) {
         int i = 0;
-        int i2 = this.pendingChildPrepareCount - 1;
-        this.pendingChildPrepareCount = i2;
-        if (i2 <= 0) {
+        this.childrenPendingPreparation.remove(preparedPeriod);
+        if (this.childrenPendingPreparation.isEmpty()) {
             int totalTrackGroupCount = 0;
             for (MediaPeriod period : this.periods) {
                 totalTrackGroupCount += period.getTrackGroups().length;
@@ -200,8 +209,6 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public void onContinueLoadingRequested(MediaPeriod ignored) {
-        if (this.trackGroups != null) {
-            this.callback.onContinueLoadingRequested(this);
-        }
+        this.callback.onContinueLoadingRequested(this);
     }
 }

@@ -8,35 +8,46 @@ import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class CachedContent {
-    private final TreeSet<SimpleCacheSpan> cachedSpans;
+    private static final int VERSION_MAX = Integer.MAX_VALUE;
+    private static final int VERSION_METADATA_INTRODUCED = 2;
+    private final TreeSet<SimpleCacheSpan> cachedSpans = new TreeSet();
     public final int id;
     public final String key;
-    private long length;
     private boolean locked;
+    private DefaultContentMetadata metadata = DefaultContentMetadata.EMPTY;
 
-    public CachedContent(DataInputStream input) throws IOException {
-        this(input.readInt(), input.readUTF(), input.readLong());
+    public static CachedContent readFromStream(int version, DataInputStream input) throws IOException {
+        CachedContent cachedContent = new CachedContent(input.readInt(), input.readUTF());
+        if (version < 2) {
+            long length = input.readLong();
+            ContentMetadataMutations mutations = new ContentMetadataMutations();
+            ContentMetadataInternal.setContentLength(mutations, length);
+            cachedContent.applyMetadataMutations(mutations);
+        } else {
+            cachedContent.metadata = DefaultContentMetadata.readFromStream(input);
+        }
+        return cachedContent;
     }
 
-    public CachedContent(int id, String key, long length) {
+    public CachedContent(int id, String key) {
         this.id = id;
         this.key = key;
-        this.length = length;
-        this.cachedSpans = new TreeSet();
     }
 
     public void writeToStream(DataOutputStream output) throws IOException {
         output.writeInt(this.id);
         output.writeUTF(this.key);
-        output.writeLong(this.length);
+        this.metadata.writeToStream(output);
     }
 
-    public long getLength() {
-        return this.length;
+    public ContentMetadata getMetadata() {
+        return this.metadata;
     }
 
-    public void setLength(long length) {
-        this.length = length;
+    public boolean applyMetadataMutations(ContentMetadataMutations mutations) {
+        DefaultContentMetadata oldMetadata = this.metadata;
+        this.metadata = this.metadata.copyWithMutationsApplied(mutations);
+        return !this.metadata.equals(oldMetadata);
     }
 
     public boolean isLocked() {
@@ -120,7 +131,30 @@ final class CachedContent {
         return true;
     }
 
-    public int headerHashCode() {
-        return (((this.id * 31) + this.key.hashCode()) * 31) + ((int) (this.length ^ (this.length >>> 32)));
+    public int headerHashCode(int version) {
+        int result = (this.id * 31) + this.key.hashCode();
+        if (version >= 2) {
+            return (result * 31) + this.metadata.hashCode();
+        }
+        long length = ContentMetadataInternal.getContentLength(this.metadata);
+        return (result * 31) + ((int) ((length >>> 32) ^ length));
+    }
+
+    public int hashCode() {
+        return (headerHashCode(Integer.MAX_VALUE) * 31) + this.cachedSpans.hashCode();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CachedContent that = (CachedContent) o;
+        if (this.id == that.id && this.key.equals(that.key) && this.cachedSpans.equals(that.cachedSpans) && this.metadata.equals(that.metadata)) {
+            return true;
+        }
+        return false;
     }
 }

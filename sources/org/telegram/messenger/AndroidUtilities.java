@@ -70,12 +70,14 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -89,13 +91,17 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_document;
+import org.telegram.tgnet.TLRPC.TL_userContact_old2;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -158,9 +164,181 @@ public class AndroidUtilities {
         }
     }
 
+    private static class VcardData {
+        String name;
+        ArrayList<String> phones;
+        StringBuilder vcard;
+
+        private VcardData() {
+            this.phones = new ArrayList();
+            this.vcard = new StringBuilder();
+        }
+    }
+
+    public static class VcardItem {
+        public boolean checked = true;
+        public String fullData = TtmlNode.ANONYMOUS_REGION_ID;
+        public int type;
+        public ArrayList<String> vcardData = new ArrayList();
+
+        public String[] getRawValue() {
+            int idx = this.fullData.indexOf(58);
+            if (idx < 0) {
+                return new String[0];
+            }
+            int a;
+            String valueType = this.fullData.substring(0, idx);
+            String value = this.fullData.substring(idx + 1, this.fullData.length());
+            String nameEncoding = null;
+            String nameCharset = C0554C.UTF8_NAME;
+            String[] params = valueType.split(";");
+            for (String split : params) {
+                String[] args2 = split.split("=");
+                if (args2.length == 2) {
+                    if (args2[0].equals("CHARSET")) {
+                        nameCharset = args2[1];
+                    } else if (args2[0].equals("ENCODING")) {
+                        nameEncoding = args2[1];
+                    }
+                }
+            }
+            String[] args = value.split(";");
+            for (a = 0; a < args.length; a++) {
+                if (!(TextUtils.isEmpty(args[a]) || nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE"))) {
+                    byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                    if (!(bytes == null || bytes.length == 0)) {
+                        try {
+                            args[a] = new String(bytes, nameCharset);
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            }
+            return args;
+        }
+
+        public String getValue(boolean format) {
+            StringBuilder result = new StringBuilder();
+            int idx = this.fullData.indexOf(58);
+            if (idx < 0) {
+                return TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            int a;
+            if (result.length() > 0) {
+                result.append(", ");
+            }
+            String valueType = this.fullData.substring(0, idx);
+            String value = this.fullData.substring(idx + 1, this.fullData.length());
+            String nameEncoding = null;
+            String nameCharset = C0554C.UTF8_NAME;
+            String[] params = valueType.split(";");
+            for (String split : params) {
+                String[] args2 = split.split("=");
+                if (args2.length == 2) {
+                    if (args2[0].equals("CHARSET")) {
+                        nameCharset = args2[1];
+                    } else if (args2[0].equals("ENCODING")) {
+                        nameEncoding = args2[1];
+                    }
+                }
+            }
+            String[] args = value.split(";");
+            boolean added = false;
+            for (a = 0; a < args.length; a++) {
+                if (!TextUtils.isEmpty(args[a])) {
+                    if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                        byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                        if (!(bytes == null || bytes.length == 0)) {
+                            try {
+                                args[a] = new String(bytes, nameCharset);
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                    if (added && result.length() > 0) {
+                        result.append(" ");
+                    }
+                    result.append(args[a]);
+                    if (!added) {
+                        added = args[a].length() > 0;
+                    }
+                }
+            }
+            if (format && this.type == 0) {
+                return PhoneFormat.getInstance().format(result.toString());
+            }
+            return result.toString();
+        }
+
+        public String getRawType(boolean first) {
+            int idx = this.fullData.indexOf(58);
+            if (idx < 0) {
+                return TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            String value = this.fullData.substring(0, idx);
+            String[] args;
+            if (this.type == 20) {
+                args = value.substring(2).split(";");
+                if (first) {
+                    return args[0];
+                }
+                if (args.length > 1) {
+                    return args[args.length - 1];
+                }
+                return TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            args = value.split(";");
+            for (int a = 0; a < args.length; a++) {
+                if (args[a].indexOf(61) < 0) {
+                    value = args[a];
+                }
+            }
+            return value;
+        }
+
+        public String getType() {
+            if (this.type != 6) {
+                int idx = this.fullData.indexOf(58);
+                if (idx < 0) {
+                    return TtmlNode.ANONYMOUS_REGION_ID;
+                }
+                String value = this.fullData.substring(0, idx);
+                if (this.type == 20) {
+                    value = value.substring(2).split(";")[0];
+                } else {
+                    String[] args = value.split(";");
+                    for (int a = 0; a < args.length; a++) {
+                        if (args[a].indexOf(61) < 0) {
+                            value = args[a];
+                        }
+                    }
+                    if (value.startsWith("X-")) {
+                        value = value.substring(2);
+                    }
+                    if ("PREF".equals(value)) {
+                        value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
+                    } else if ("HOME".equals(value)) {
+                        value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
+                    } else if ("MOBILE".equals(value) || "CELL".equals(value)) {
+                        value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                    } else if ("OTHER".equals(value)) {
+                        value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
+                    } else if ("WORK".equals(value)) {
+                        value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
+                    }
+                }
+                return value.substring(0, 1).toUpperCase() + value.substring(1, value.length()).toLowerCase();
+            } else if ("ORG".equalsIgnoreCase(getRawType(true))) {
+                return LocaleController.getString("ContactJob", R.string.ContactJob);
+            } else {
+                return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C17995 extends CrashManagerListener {
-        C17995() {
+    static class C19235 extends CrashManagerListener {
+        C19235() {
         }
 
         public boolean includeDeviceData() {
@@ -505,6 +683,185 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    public static ArrayList<User> loadVCardFromStream(Uri uri, int currentAccount, boolean asset, ArrayList<VcardItem> items, String name) {
+        InputStream stream;
+        Throwable e;
+        ArrayList<User> result = null;
+        if (asset) {
+            stream = ApplicationLoader.applicationContext.getContentResolver().openAssetFileDescriptor(uri, "r").createInputStream();
+        } else {
+            stream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
+        }
+        ArrayList<VcardData> vcardDatas = new ArrayList();
+        VcardData currentData = null;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0554C.UTF8_NAME));
+        String pendingLine = null;
+        boolean currentIsPhoto = false;
+        VcardItem currentItem = null;
+        while (true) {
+            String line = bufferedReader.readLine();
+            String originalLine = line;
+            if (line == null) {
+                break;
+            } else if (originalLine.startsWith("PHOTO")) {
+                currentIsPhoto = true;
+            } else {
+                if (originalLine.indexOf(58) >= 0) {
+                    currentItem = null;
+                    currentIsPhoto = false;
+                    if (originalLine.startsWith("BEGIN:VCARD")) {
+                        currentData = new VcardData();
+                        vcardDatas.add(currentData);
+                        currentData.name = name;
+                    } else if (!(originalLine.startsWith("END:VCARD") || items == null)) {
+                        if (originalLine.startsWith("TEL")) {
+                            currentItem = new VcardItem();
+                            currentItem.type = 0;
+                        } else {
+                            try {
+                                if (originalLine.startsWith("EMAIL")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 1;
+                                } else if (originalLine.startsWith("ADR") || originalLine.startsWith("LABEL") || originalLine.startsWith("GEO")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 2;
+                                } else if (originalLine.startsWith("URL")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 3;
+                                } else if (originalLine.startsWith("NOTE")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 4;
+                                } else if (originalLine.startsWith("BDAY")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 5;
+                                } else if (originalLine.startsWith("ORG") || originalLine.startsWith("TITLE") || originalLine.startsWith("ROLE")) {
+                                    if (null == null) {
+                                        currentItem = new VcardItem();
+                                        currentItem.type = 6;
+                                    }
+                                } else if (originalLine.startsWith("X-ANDROID")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = -1;
+                                } else if (originalLine.startsWith("X-PHONETIC")) {
+                                    currentItem = null;
+                                } else if (originalLine.startsWith("X-")) {
+                                    currentItem = new VcardItem();
+                                    currentItem.type = 20;
+                                }
+                            } catch (Throwable e2) {
+                                FileLog.m3e(e2);
+                            } catch (Throwable th) {
+                                e2 = th;
+                            }
+                        }
+                        if (currentItem != null && currentItem.type >= 0) {
+                            items.add(currentItem);
+                        }
+                    }
+                }
+                if (!(currentIsPhoto || currentData == null)) {
+                    if (currentItem == null) {
+                        if (currentData.vcard.length() > 0) {
+                            currentData.vcard.append('\n');
+                        }
+                        currentData.vcard.append(originalLine);
+                    } else {
+                        currentItem.vcardData.add(originalLine);
+                    }
+                }
+                if (pendingLine != null) {
+                    line = pendingLine + line;
+                    pendingLine = null;
+                }
+                if (line.contains("=QUOTED-PRINTABLE") && line.endsWith("=")) {
+                    pendingLine = line.substring(0, line.length() - 1);
+                } else {
+                    String[] args;
+                    if (!(currentIsPhoto || currentData == null || currentItem == null)) {
+                        currentItem.fullData = line;
+                    }
+                    int idx = line.indexOf(":");
+                    if (idx >= 0) {
+                        args = new String[2];
+                        args[0] = line.substring(0, idx);
+                        args[1] = line.substring(idx + 1, line.length()).trim();
+                    } else {
+                        args = new String[]{line.trim()};
+                    }
+                    if (args.length >= 2 && currentData != null) {
+                        if (args[0].startsWith("FN") || (args[0].startsWith("ORG") && TextUtils.isEmpty(currentData.name))) {
+                            String nameEncoding = null;
+                            String nameCharset = null;
+                            for (String param : args[0].split(";")) {
+                                String[] args2 = param.split("=");
+                                if (args2.length == 2) {
+                                    if (args2[0].equals("CHARSET")) {
+                                        nameCharset = args2[1];
+                                    } else if (args2[0].equals("ENCODING")) {
+                                        nameEncoding = args2[1];
+                                    }
+                                }
+                            }
+                            currentData.name = args[1];
+                            if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                                byte[] bytes = decodeQuotedPrintable(currentData.name.getBytes());
+                                if (!(bytes == null || bytes.length == 0)) {
+                                    String decodedName = new String(bytes, nameCharset);
+                                    if (decodedName != null) {
+                                        currentData.name = decodedName;
+                                    }
+                                }
+                            }
+                        } else if (args[0].startsWith("TEL")) {
+                            currentData.phones.add(args[1]);
+                        }
+                    }
+                }
+            }
+        }
+        bufferedReader.close();
+        stream.close();
+        int a = 0;
+        ArrayList<User> result2 = null;
+        while (a < vcardDatas.size()) {
+            try {
+                VcardData vcardData = (VcardData) vcardDatas.get(a);
+                if (vcardData.name == null || vcardData.phones.isEmpty()) {
+                    result = result2;
+                } else {
+                    if (result2 == null) {
+                        result = new ArrayList();
+                    } else {
+                        result = result2;
+                    }
+                    String phoneToUse = (String) vcardData.phones.get(0);
+                    for (int b = 0; b < vcardData.phones.size(); b++) {
+                        String phone = (String) vcardData.phones.get(b);
+                        if (ContactsController.getInstance(currentAccount).contactsByShortPhone.get(phone.substring(Math.max(0, phone.length() - 7))) != null) {
+                            phoneToUse = phone;
+                            break;
+                        }
+                    }
+                    User user = new TL_userContact_old2();
+                    user.phone = phoneToUse;
+                    user.first_name = vcardData.name;
+                    user.last_name = TtmlNode.ANONYMOUS_REGION_ID;
+                    user.id = 0;
+                    user.restriction_reason = vcardData.vcard.toString();
+                    result.add(user);
+                }
+                a++;
+                result2 = result;
+            } catch (Throwable th2) {
+                e2 = th2;
+                result = result2;
+            }
+        }
+        return result2;
+        FileLog.m3e(e2);
+        return result;
+    }
+
     public static Typeface getTypeface(String assetPath) {
         Typeface typeface;
         synchronized (typefaceCache) {
@@ -691,6 +1048,32 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
+        }
+    }
+
+    public static String formapMapUrl(int account, double lat, double lon, int width, int height, boolean marker, int zoom) {
+        int scale = Math.min(2, (int) Math.ceil((double) density));
+        int provider = MessagesController.getInstance(account).mapProvider;
+        if (provider == 1 || provider == 3) {
+            String lang = null;
+            String[] availableLangs = new String[]{"ru_RU", "tr_TR"};
+            LocaleInfo localeInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+            for (int a = 0; a < availableLangs.length; a++) {
+                if (availableLangs[a].toLowerCase().contains(localeInfo.shortName)) {
+                    lang = availableLangs[a];
+                }
+            }
+            if (lang == null) {
+                lang = "en_US";
+            }
+            if (marker) {
+                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&pt=%f,%f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
+            }
+            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
+        } else if (marker) {
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
+        } else {
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
         }
     }
 
@@ -1134,7 +1517,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17995());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19235());
     }
 
     public static void checkForUpdates(Activity context) {
@@ -1820,6 +2203,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         final Runnable runnable = dismissRunnable;
         textView.doneButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                ProxyInfo info;
                 Editor editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled", true);
                 editor.putString("proxy_ip", str);
@@ -1837,13 +2221,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     } else {
                         editor.putString("proxy_user", str5);
                     }
+                    info = new ProxyInfo(str, p, str5, str4, TtmlNode.ANONYMOUS_REGION_ID);
                 } else {
                     editor.remove("proxy_pass");
                     editor.remove("proxy_user");
                     editor.putString("proxy_secret", str3);
+                    info = new ProxyInfo(str, p, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, str3);
                 }
                 editor.commit();
-                SharedConfig.currentProxy = SharedConfig.addProxy(new ProxyInfo(str, p, str5, str4, str3));
+                SharedConfig.currentProxy = SharedConfig.addProxy(info);
                 ConnectionsManager.setProxySettings(true, str, p, str5, str4, str3);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
                 runnable.run();

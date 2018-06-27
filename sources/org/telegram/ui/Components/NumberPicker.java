@@ -362,6 +362,15 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
+    public void finishScroll() {
+        if (!this.mFlingScroller.isFinished() || !this.mAdjustScroller.isFinished()) {
+            this.mFlingScroller.forceFinished(true);
+            this.mAdjustScroller.forceFinished(true);
+            this.mCurrentScrollOffset = this.mInitialScrollOffset;
+            invalidate();
+        }
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
         if (!isEnabled()) {
             return false;

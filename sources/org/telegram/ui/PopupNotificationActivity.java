@@ -117,8 +117,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private WakeLock wakeLock = null;
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class C16335 implements OnClickListener {
-        C16335() {
+    class C17515 implements OnClickListener {
+        C17515() {
         }
 
         @TargetApi(9)
@@ -134,8 +134,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class C16346 implements Runnable {
-        C16346() {
+    class C17526 implements Runnable {
+        C17526() {
         }
 
         public void run() {
@@ -146,8 +146,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class C16357 implements Runnable {
-        C16357() {
+    class C17537 implements Runnable {
+        C17537() {
         }
 
         public void run() {
@@ -158,8 +158,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$8 */
-    class C16368 implements Runnable {
-        C16368() {
+    class C17548 implements Runnable {
+        C17548() {
         }
 
         public void run() {
@@ -170,8 +170,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$9 */
-    class C16379 extends AnimatorListenerAdapter {
-        C16379() {
+    class C17559 extends AnimatorListenerAdapter {
+        C17559() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -210,8 +210,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
-    class C22503 implements ChatActivityEnterViewDelegate {
-        C22503() {
+    class C24243 implements ChatActivityEnterViewDelegate {
+        C24243() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -275,8 +275,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$4 */
-    class C22514 extends ActionBarMenuOnItemClick {
-        C22514() {
+    class C24254 extends ActionBarMenuOnItemClick {
+        C24254() {
         }
 
         public void onItemClick(int id) {
@@ -426,7 +426,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
-        this.chatActivityEnterView.setDelegate(new C22503());
+        this.chatActivityEnterView.setDelegate(new C24243());
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
@@ -495,7 +495,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.bottomMargin = AndroidUtilities.dp(4.0f);
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
-        this.actionBar.setActionBarMenuOnItemClick(new C22514());
+        this.actionBar.setActionBarMenuOnItemClick(new C24254());
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
@@ -518,7 +518,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             Builder builder = new Builder((Context) this);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C16335());
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C17515());
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             builder.show();
         }
@@ -615,12 +615,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     moveDiff = ((float) width) - this.centerView.getTranslationX();
                     otherView = this.leftView;
                     otherButtonsView = this.leftButtonsView;
-                    this.onAnimationEndRunnable = new C16346();
+                    this.onAnimationEndRunnable = new C17526();
                 } else if ((forceMove == 2 || diff < (-width) / 3) && this.rightView != null) {
                     moveDiff = ((float) (-width)) - this.centerView.getTranslationX();
                     otherView = this.rightView;
                     otherButtonsView = this.rightButtonsView;
-                    this.onAnimationEndRunnable = new C16357();
+                    this.onAnimationEndRunnable = new C17537();
                 } else if (this.centerView.getTranslationX() != 0.0f) {
                     moveDiff = -this.centerView.getTranslationX();
                     otherView = diff > 0 ? this.leftView : this.rightView;
@@ -629,7 +629,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     } else {
                         otherButtonsView = this.rightButtonsView;
                     }
-                    this.onAnimationEndRunnable = new C16368();
+                    this.onAnimationEndRunnable = new C17548();
                 }
                 if (moveDiff != 0.0f) {
                     int time = (int) (Math.abs(moveDiff / ((float) width)) * 200.0f);
@@ -647,7 +647,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animators);
                     animatorSet.setDuration((long) time);
-                    animatorSet.addListener(new C16379());
+                    animatorSet.addListener(new C17559());
                     animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();
@@ -799,7 +799,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private android.view.ViewGroup getViewForMessage(int r35, boolean r36) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r30_12 'view' android.view.View) in PHI: PHI: (r30_11 'view' android.view.View) = (r30_10 'view' android.view.View), (r30_12 'view' android.view.View) binds: {(r30_10 'view' android.view.View)=B:15:0x004f, (r30_12 'view' android.view.View)=B:43:0x0167}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r32_12 'view' android.view.View) in PHI: PHI: (r32_11 'view' android.view.View) = (r32_10 'view' android.view.View), (r32_12 'view' android.view.View) binds: {(r32_10 'view' android.view.View)=B:15:0x004f, (r32_12 'view' android.view.View)=B:43:0x016b}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -814,577 +814,599 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         /*
         r34 = this;
         r0 = r34;
-        r2 = r0.popupMessages;
-        r2 = r2.size();
-        r3 = 1;
-        if (r2 != r3) goto L_0x001c;
+        r3 = r0.popupMessages;
+        r3 = r3.size();
+        r8 = 1;
+        if (r3 != r8) goto L_0x001c;
     L_0x000b:
         if (r35 < 0) goto L_0x0019;
     L_0x000d:
         r0 = r34;
-        r2 = r0.popupMessages;
-        r2 = r2.size();
+        r3 = r0.popupMessages;
+        r3 = r3.size();
         r0 = r35;
-        if (r0 < r2) goto L_0x001c;
+        if (r0 < r3) goto L_0x001c;
     L_0x0019:
-        r30 = 0;
+        r32 = 0;
     L_0x001b:
-        return r30;
+        return r32;
     L_0x001c:
-        r2 = -1;
+        r3 = -1;
         r0 = r35;
-        if (r0 != r2) goto L_0x0157;
+        if (r0 != r3) goto L_0x015b;
     L_0x0021:
         r0 = r34;
-        r2 = r0.popupMessages;
-        r2 = r2.size();
-        r35 = r2 + -1;
+        r3 = r0.popupMessages;
+        r3 = r3.size();
+        r35 = r3 + -1;
     L_0x002b:
         r0 = r34;
-        r2 = r0.popupMessages;
+        r3 = r0.popupMessages;
         r0 = r35;
-        r21 = r2.get(r0);
-        r21 = (org.telegram.messenger.MessageObject) r21;
-        r0 = r21;
-        r2 = r0.type;
-        r3 = 1;
-        if (r2 == r3) goto L_0x0045;
+        r25 = r3.get(r0);
+        r25 = (org.telegram.messenger.MessageObject) r25;
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 1;
+        if (r3 == r8) goto L_0x0045;
     L_0x003e:
-        r0 = r21;
-        r2 = r0.type;
-        r3 = 4;
-        if (r2 != r3) goto L_0x02b4;
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 4;
+        if (r3 != r8) goto L_0x02c0;
     L_0x0045:
         r0 = r34;
-        r2 = r0.imageViews;
-        r2 = r2.size();
-        if (r2 <= 0) goto L_0x0167;
+        r3 = r0.imageViews;
+        r3 = r3.size();
+        if (r3 <= 0) goto L_0x016b;
     L_0x004f:
         r0 = r34;
-        r2 = r0.imageViews;
-        r3 = 0;
-        r30 = r2.get(r3);
-        r30 = (android.view.ViewGroup) r30;
+        r3 = r0.imageViews;
+        r8 = 0;
+        r32 = r3.get(r8);
+        r32 = (android.view.ViewGroup) r32;
         r0 = r34;
-        r2 = r0.imageViews;
-        r3 = 0;
-        r2.remove(r3);
+        r3 = r0.imageViews;
+        r8 = 0;
+        r3.remove(r8);
     L_0x0062:
-        r2 = 312; // 0x138 float:4.37E-43 double:1.54E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r24 = r0.findViewWithTag(r2);
-        r24 = (android.widget.TextView) r24;
-        r2 = 311; // 0x137 float:4.36E-43 double:1.537E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r16 = r0.findViewWithTag(r2);
-        r16 = (org.telegram.ui.Components.BackupImageView) r16;
-        r2 = 1;
-        r0 = r16;
-        r0.setAspectFit(r2);
-        r0 = r21;
-        r2 = r0.type;
+        r3 = 312; // 0x138 float:4.37E-43 double:1.54E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r26 = r0.findViewWithTag(r3);
+        r26 = (android.widget.TextView) r26;
+        r3 = 311; // 0x137 float:4.36E-43 double:1.537E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r22 = r0.findViewWithTag(r3);
+        r22 = (org.telegram.ui.Components.BackupImageView) r22;
         r3 = 1;
-        if (r2 != r3) goto L_0x0236;
+        r0 = r22;
+        r0.setAspectFit(r3);
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 1;
+        if (r3 != r8) goto L_0x0246;
     L_0x008b:
-        r0 = r21;
-        r2 = r0.photoThumbs;
-        r3 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-        r12 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r3);
-        r0 = r21;
-        r2 = r0.photoThumbs;
-        r3 = 100;
-        r29 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r3);
-        r26 = 0;
-        if (r12 == 0) goto L_0x00e2;
+        r0 = r25;
+        r3 = r0.photoThumbs;
+        r8 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
+        r17 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r8);
+        r0 = r25;
+        r3 = r0.photoThumbs;
+        r8 = 100;
+        r31 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r8);
+        r28 = 0;
+        if (r17 == 0) goto L_0x00e6;
     L_0x00a5:
-        r25 = 1;
-        r0 = r21;
-        r2 = r0.type;
-        r3 = 1;
-        if (r2 != r3) goto L_0x00be;
+        r27 = 1;
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 1;
+        if (r3 != r8) goto L_0x00be;
     L_0x00ae:
-        r0 = r21;
-        r2 = r0.messageOwner;
-        r10 = org.telegram.messenger.FileLoader.getPathToMessage(r2);
-        r2 = r10.exists();
-        if (r2 != 0) goto L_0x00be;
+        r0 = r25;
+        r3 = r0.messageOwner;
+        r15 = org.telegram.messenger.FileLoader.getPathToMessage(r3);
+        r3 = r15.exists();
+        if (r3 != 0) goto L_0x00be;
     L_0x00bc:
-        r25 = 0;
+        r27 = 0;
     L_0x00be:
-        if (r25 != 0) goto L_0x00d0;
+        if (r27 != 0) goto L_0x00d0;
     L_0x00c0:
-        r0 = r21;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.DownloadController.getInstance(r2);
-        r0 = r21;
-        r2 = r2.canDownloadMedia(r0);
-        if (r2 == 0) goto L_0x0214;
+        r0 = r25;
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.DownloadController.getInstance(r3);
+        r0 = r25;
+        r3 = r3.canDownloadMedia(r0);
+        if (r3 == 0) goto L_0x0224;
     L_0x00d0:
-        r2 = r12.location;
-        r3 = "100_100";
-        r0 = r29;
-        r4 = r0.location;
-        r5 = r12.size;
-        r0 = r16;
-        r0.setImage(r2, r3, r4, r5);
-        r26 = 1;
-    L_0x00e2:
-        if (r26 != 0) goto L_0x0227;
-    L_0x00e4:
-        r2 = 8;
-        r0 = r16;
-        r0.setVisibility(r2);
-        r2 = 0;
-        r0 = r24;
-        r0.setVisibility(r2);
-        r2 = 2;
-        r3 = org.telegram.messenger.SharedConfig.fontSize;
-        r3 = (float) r3;
-        r0 = r24;
-        r0.setTextSize(r2, r3);
-        r0 = r21;
-        r2 = r0.messageText;
-        r0 = r24;
-        r0.setText(r2);
-    L_0x0103:
-        r2 = r30.getParent();
-        if (r2 != 0) goto L_0x0112;
-    L_0x0109:
-        r0 = r34;
-        r2 = r0.messageContainer;
-        r0 = r30;
-        r2.addView(r0);
-    L_0x0112:
-        r2 = 0;
-        r0 = r30;
-        r0.setVisibility(r2);
-        if (r36 == 0) goto L_0x001b;
-    L_0x011a:
-        r2 = org.telegram.messenger.AndroidUtilities.displaySize;
-        r2 = r2.x;
-        r3 = NUM; // 0x41c00000 float:24.0 double:5.450047783E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r31 = r2 - r3;
-        r17 = r30.getLayoutParams();
-        r17 = (android.widget.FrameLayout.LayoutParams) r17;
-        r2 = 51;
         r0 = r17;
-        r0.gravity = r2;
-        r2 = -1;
-        r0 = r17;
-        r0.height = r2;
+        r3 = r0.location;
+        r8 = "100_100";
         r0 = r31;
-        r1 = r17;
+        r9 = r0.location;
+        r0 = r17;
+        r10 = r0.size;
+        r0 = r22;
+        r0.setImage(r3, r8, r9, r10);
+        r28 = 1;
+    L_0x00e6:
+        if (r28 != 0) goto L_0x0237;
+    L_0x00e8:
+        r3 = 8;
+        r0 = r22;
+        r0.setVisibility(r3);
+        r3 = 0;
+        r0 = r26;
+        r0.setVisibility(r3);
+        r3 = 2;
+        r8 = org.telegram.messenger.SharedConfig.fontSize;
+        r8 = (float) r8;
+        r0 = r26;
+        r0.setTextSize(r3, r8);
+        r0 = r25;
+        r3 = r0.messageText;
+        r0 = r26;
+        r0.setText(r3);
+    L_0x0107:
+        r3 = r32.getParent();
+        if (r3 != 0) goto L_0x0116;
+    L_0x010d:
+        r0 = r34;
+        r3 = r0.messageContainer;
+        r0 = r32;
+        r3.addView(r0);
+    L_0x0116:
+        r3 = 0;
+        r0 = r32;
+        r0.setVisibility(r3);
+        if (r36 == 0) goto L_0x001b;
+    L_0x011e:
+        r3 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r3 = r3.x;
+        r8 = NUM; // 0x41c00000 float:24.0 double:5.450047783E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r33 = r3 - r8;
+        r23 = r32.getLayoutParams();
+        r23 = (android.widget.FrameLayout.LayoutParams) r23;
+        r3 = 51;
+        r0 = r23;
+        r0.gravity = r3;
+        r3 = -1;
+        r0 = r23;
+        r0.height = r3;
+        r0 = r33;
+        r1 = r23;
         r1.width = r0;
         r0 = r34;
-        r2 = r0.currentMessageNum;
+        r3 = r0.currentMessageNum;
         r0 = r35;
-        if (r0 != r2) goto L_0x048e;
-    L_0x0145:
-        r2 = 0;
-        r0 = r30;
-        r0.setTranslationX(r2);
-    L_0x014b:
-        r0 = r30;
-        r1 = r17;
+        if (r0 != r3) goto L_0x04b2;
+    L_0x0149:
+        r3 = 0;
+        r0 = r32;
+        r0.setTranslationX(r3);
+    L_0x014f:
+        r0 = r32;
+        r1 = r23;
         r0.setLayoutParams(r1);
-        r30.invalidate();
+        r32.invalidate();
         goto L_0x001b;
-    L_0x0157:
+    L_0x015b:
         r0 = r34;
-        r2 = r0.popupMessages;
-        r2 = r2.size();
+        r3 = r0.popupMessages;
+        r3 = r3.size();
         r0 = r35;
-        if (r0 != r2) goto L_0x002b;
-    L_0x0163:
+        if (r0 != r3) goto L_0x002b;
+    L_0x0167:
         r35 = 0;
         goto L_0x002b;
-    L_0x0167:
-        r30 = new android.widget.FrameLayout;
-        r0 = r30;
-        r1 = r34;
-        r0.<init>(r1);
-        r14 = new android.widget.FrameLayout;
-        r0 = r34;
-        r14.<init>(r0);
-        r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r5 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r14.setPadding(r2, r3, r4, r5);
-        r2 = 0;
-        r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r2);
-        r14.setBackgroundDrawable(r2);
-        r2 = -1;
-        r3 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3);
-        r0 = r30;
-        r0.addView(r14, r2);
-        r9 = new org.telegram.ui.Components.BackupImageView;
-        r0 = r34;
-        r9.<init>(r0);
-        r2 = 311; // 0x137 float:4.36E-43 double:1.537E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r9.setTag(r2);
-        r2 = -1;
-        r3 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3);
-        r14.addView(r9, r2);
-        r28 = new android.widget.TextView;
-        r0 = r28;
-        r1 = r34;
-        r0.<init>(r1);
-        r2 = "windowBackgroundWhiteBlackText";
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r0 = r28;
-        r0.setTextColor(r2);
-        r2 = 1;
-        r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r0 = r28;
-        r0.setTextSize(r2, r3);
-        r2 = 17;
-        r0 = r28;
-        r0.setGravity(r2);
-        r2 = 312; // 0x138 float:4.37E-43 double:1.54E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r28;
-        r0.setTag(r2);
-        r2 = -1;
-        r3 = -2;
-        r4 = 17;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4);
-        r0 = r28;
-        r14.addView(r0, r2);
-        r2 = 2;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r0.setTag(r2);
-        r2 = new org.telegram.ui.PopupNotificationActivity$12;
-        r0 = r34;
-        r2.<init>();
-        r0 = r30;
-        r0.setOnClickListener(r2);
-        goto L_0x0062;
-    L_0x0214:
-        if (r29 == 0) goto L_0x00e2;
-    L_0x0216:
-        r0 = r29;
-        r3 = r0.location;
-        r4 = 0;
-        r2 = 0;
-        r2 = (android.graphics.drawable.Drawable) r2;
-        r0 = r16;
-        r0.setImage(r3, r4, r2);
-        r26 = 1;
-        goto L_0x00e2;
-    L_0x0227:
-        r2 = 0;
-        r0 = r16;
-        r0.setVisibility(r2);
-        r2 = 8;
-        r0 = r24;
-        r0.setVisibility(r2);
-        goto L_0x0103;
-    L_0x0236:
-        r0 = r21;
-        r2 = r0.type;
-        r3 = 4;
-        if (r2 != r3) goto L_0x0103;
-    L_0x023d:
-        r2 = 8;
-        r0 = r24;
-        r0.setVisibility(r2);
-        r0 = r21;
-        r2 = r0.messageText;
-        r0 = r24;
-        r0.setText(r2);
-        r2 = 0;
-        r0 = r16;
-        r0.setVisibility(r2);
-        r0 = r21;
-        r2 = r0.messageOwner;
-        r2 = r2.media;
-        r2 = r2.geo;
-        r0 = r2.lat;
-        r18 = r0;
-        r0 = r21;
-        r2 = r0.messageOwner;
-        r2 = r2.media;
-        r2 = r2.geo;
-        r0 = r2._long;
-        r22 = r0;
-        r2 = java.util.Locale.US;
-        r3 = "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=13&size=100x100&maptype=roadmap&scale=%d&markers=color:red|size:big|%f,%f&sensor=false";
-        r4 = 5;
-        r4 = new java.lang.Object[r4];
-        r5 = 0;
-        r6 = java.lang.Double.valueOf(r18);
-        r4[r5] = r6;
-        r5 = 1;
-        r6 = java.lang.Double.valueOf(r22);
-        r4[r5] = r6;
-        r5 = 2;
-        r6 = 2;
-        r7 = org.telegram.messenger.AndroidUtilities.density;
-        r0 = (double) r7;
-        r32 = r0;
-        r32 = java.lang.Math.ceil(r32);
+    L_0x016b:
+        r32 = new android.widget.FrameLayout;
         r0 = r32;
-        r7 = (int) r0;
-        r6 = java.lang.Math.min(r6, r7);
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r5 = 3;
-        r6 = java.lang.Double.valueOf(r18);
-        r4[r5] = r6;
-        r5 = 4;
-        r6 = java.lang.Double.valueOf(r22);
-        r4[r5] = r6;
-        r13 = java.lang.String.format(r2, r3, r4);
-        r2 = 0;
+        r1 = r34;
+        r0.<init>(r1);
+        r19 = new android.widget.FrameLayout;
+        r0 = r19;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r8 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r9 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r10 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r0 = r19;
+        r0.setPadding(r3, r8, r9, r10);
         r3 = 0;
-        r0 = r16;
-        r0.setImage(r13, r2, r3);
-        goto L_0x0103;
-    L_0x02b4:
-        r0 = r21;
-        r2 = r0.type;
+        r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3);
+        r0 = r19;
+        r0.setBackgroundDrawable(r3);
+        r3 = -1;
+        r8 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r8);
+        r0 = r32;
+        r1 = r19;
+        r0.addView(r1, r3);
+        r2 = new org.telegram.ui.Components.BackupImageView;
+        r0 = r34;
+        r2.<init>(r0);
+        r3 = 311; // 0x137 float:4.36E-43 double:1.537E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r2.setTag(r3);
+        r3 = -1;
+        r8 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r8);
+        r0 = r19;
+        r0.addView(r2, r3);
+        r30 = new android.widget.TextView;
+        r0 = r30;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = "windowBackgroundWhiteBlackText";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r0 = r30;
+        r0.setTextColor(r3);
+        r3 = 1;
+        r8 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r0 = r30;
+        r0.setTextSize(r3, r8);
+        r3 = 17;
+        r0 = r30;
+        r0.setGravity(r3);
+        r3 = 312; // 0x138 float:4.37E-43 double:1.54E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r30;
+        r0.setTag(r3);
+        r3 = -1;
+        r8 = -2;
+        r9 = 17;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r8, r9);
+        r0 = r19;
+        r1 = r30;
+        r0.addView(r1, r3);
         r3 = 2;
-        if (r2 != r3) goto L_0x0383;
-    L_0x02bb:
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r0.setTag(r3);
+        r3 = new org.telegram.ui.PopupNotificationActivity$12;
         r0 = r34;
-        r2 = r0.audioViews;
-        r2 = r2.size();
-        if (r2 <= 0) goto L_0x0300;
-    L_0x02c5:
-        r0 = r34;
-        r2 = r0.audioViews;
+        r3.<init>();
+        r0 = r32;
+        r0.setOnClickListener(r3);
+        goto L_0x0062;
+    L_0x0224:
+        if (r31 == 0) goto L_0x00e6;
+    L_0x0226:
+        r0 = r31;
+        r8 = r0.location;
+        r9 = 0;
         r3 = 0;
-        r30 = r2.get(r3);
-        r30 = (android.view.ViewGroup) r30;
-        r0 = r34;
-        r2 = r0.audioViews;
+        r3 = (android.graphics.drawable.Drawable) r3;
+        r0 = r22;
+        r0.setImage(r8, r9, r3);
+        r28 = 1;
+        goto L_0x00e6;
+    L_0x0237:
         r3 = 0;
-        r2.remove(r3);
-        r2 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r11 = r0.findViewWithTag(r2);
-        r11 = (org.telegram.ui.Components.PopupAudioView) r11;
-    L_0x02e6:
+        r0 = r22;
+        r0.setVisibility(r3);
+        r3 = 8;
+        r0 = r26;
+        r0.setVisibility(r3);
+        goto L_0x0107;
+    L_0x0246:
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 4;
+        if (r3 != r8) goto L_0x0107;
+    L_0x024d:
+        r3 = 8;
+        r0 = r26;
+        r0.setVisibility(r3);
+        r0 = r25;
+        r3 = r0.messageText;
+        r0 = r26;
+        r0.setText(r3);
+        r3 = 0;
+        r0 = r22;
+        r0.setVisibility(r3);
+        r0 = r25;
+        r3 = r0.messageOwner;
+        r3 = r3.media;
+        r0 = r3.geo;
+        r21 = r0;
         r0 = r21;
-        r11.setMessageObject(r0);
+        r4 = r0.lat;
         r0 = r21;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.DownloadController.getInstance(r2);
+        r6 = r0._long;
+        r0 = r25;
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        r3 = r3.mapProvider;
+        r8 = 2;
+        if (r3 != r8) goto L_0x02a6;
+    L_0x0282:
+        r3 = 100;
+        r8 = 100;
+        r9 = 13;
+        r10 = 2;
+        r11 = org.telegram.messenger.AndroidUtilities.density;
+        r12 = (double) r11;
+        r12 = java.lang.Math.ceil(r12);
+        r11 = (int) r12;
+        r10 = java.lang.Math.min(r10, r11);
         r0 = r21;
-        r2 = r2.canDownloadMedia(r0);
-        if (r2 == 0) goto L_0x0103;
-    L_0x02fb:
-        r11.downloadAudioIfNeed();
-        goto L_0x0103;
-    L_0x0300:
-        r30 = new android.widget.FrameLayout;
-        r0 = r30;
-        r1 = r34;
-        r0.<init>(r1);
-        r14 = new android.widget.FrameLayout;
-        r0 = r34;
-        r14.<init>(r0);
-        r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r5 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r14.setPadding(r2, r3, r4, r5);
-        r2 = 0;
-        r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r2);
-        r14.setBackgroundDrawable(r2);
-        r2 = -1;
-        r3 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3);
-        r0 = r30;
-        r0.addView(r14, r2);
-        r15 = new android.widget.FrameLayout;
-        r0 = r34;
-        r15.<init>(r0);
-        r2 = -1;
-        r3 = -NUM; // 0xffffffffc0000000 float:-2.0 double:NaN;
-        r4 = 17;
-        r5 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r6 = 0;
-        r7 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r8 = org.telegram.messenger.WebFile.createWithGeoPoint(r0, r3, r8, r9, r10);
+        r9 = 0;
+        r3 = 0;
+        r3 = (android.graphics.drawable.Drawable) r3;
+        r0 = r22;
+        r0.setImage(r8, r9, r3);
+        goto L_0x0107;
+    L_0x02a6:
+        r0 = r25;
+        r3 = r0.currentAccount;
+        r8 = 100;
+        r9 = 100;
+        r10 = 1;
+        r11 = 13;
+        r18 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r3, r4, r6, r8, r9, r10, r11);
+        r3 = 0;
         r8 = 0;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8);
-        r14.addView(r15, r2);
-        r11 = new org.telegram.ui.Components.PopupAudioView;
+        r0 = r22;
+        r1 = r18;
+        r0.setImage(r1, r3, r8);
+        goto L_0x0107;
+    L_0x02c0:
+        r0 = r25;
+        r3 = r0.type;
+        r8 = 2;
+        if (r3 != r8) goto L_0x03a7;
+    L_0x02c7:
         r0 = r34;
-        r11.<init>(r0);
-        r2 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r11.setTag(r2);
-        r15.addView(r11);
-        r2 = 3;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r0.setTag(r2);
-        r2 = new org.telegram.ui.PopupNotificationActivity$13;
+        r3 = r0.audioViews;
+        r3 = r3.size();
+        if (r3 <= 0) goto L_0x030e;
+    L_0x02d1:
         r0 = r34;
-        r2.<init>();
-        r0 = r30;
-        r0.setOnClickListener(r2);
-        goto L_0x02e6;
-    L_0x0383:
+        r3 = r0.audioViews;
+        r8 = 0;
+        r32 = r3.get(r8);
+        r32 = (android.view.ViewGroup) r32;
         r0 = r34;
-        r2 = r0.textViews;
-        r2 = r2.size();
-        if (r2 <= 0) goto L_0x03c2;
-    L_0x038d:
-        r0 = r34;
-        r2 = r0.textViews;
-        r3 = 0;
-        r30 = r2.get(r3);
-        r30 = (android.view.ViewGroup) r30;
-        r0 = r34;
-        r2 = r0.textViews;
-        r3 = 0;
-        r2.remove(r3);
-    L_0x03a0:
-        r2 = 301; // 0x12d float:4.22E-43 double:1.487E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r24 = r0.findViewWithTag(r2);
-        r24 = (android.widget.TextView) r24;
-        r2 = 2;
-        r3 = org.telegram.messenger.SharedConfig.fontSize;
-        r3 = (float) r3;
-        r0 = r24;
-        r0.setTextSize(r2, r3);
-        r0 = r21;
-        r2 = r0.messageText;
-        r0 = r24;
-        r0.setText(r2);
-        goto L_0x0103;
-    L_0x03c2:
-        r30 = new android.widget.FrameLayout;
-        r0 = r30;
+        r3 = r0.audioViews;
+        r8 = 0;
+        r3.remove(r8);
+        r3 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r16 = r0.findViewWithTag(r3);
+        r16 = (org.telegram.ui.Components.PopupAudioView) r16;
+    L_0x02f2:
+        r0 = r16;
+        r1 = r25;
+        r0.setMessageObject(r1);
+        r0 = r25;
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.DownloadController.getInstance(r3);
+        r0 = r25;
+        r3 = r3.canDownloadMedia(r0);
+        if (r3 == 0) goto L_0x0107;
+    L_0x0309:
+        r16.downloadAudioIfNeed();
+        goto L_0x0107;
+    L_0x030e:
+        r32 = new android.widget.FrameLayout;
+        r0 = r32;
         r1 = r34;
         r0.<init>(r1);
-        r27 = new android.widget.ScrollView;
-        r0 = r27;
+        r19 = new android.widget.FrameLayout;
+        r0 = r19;
         r1 = r34;
         r0.<init>(r1);
-        r2 = 1;
-        r0 = r27;
-        r0.setFillViewport(r2);
-        r2 = -1;
-        r3 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3);
-        r0 = r30;
-        r1 = r27;
-        r0.addView(r1, r2);
-        r20 = new android.widget.LinearLayout;
-        r0 = r20;
-        r1 = r34;
-        r0.<init>(r1);
-        r2 = 0;
-        r0 = r20;
-        r0.setOrientation(r2);
-        r2 = 0;
-        r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r2);
-        r0 = r20;
-        r0.setBackgroundDrawable(r2);
-        r2 = -1;
-        r3 = -2;
-        r4 = 1;
-        r2 = org.telegram.ui.Components.LayoutHelper.createScroll(r2, r3, r4);
-        r0 = r27;
-        r1 = r20;
-        r0.addView(r1, r2);
-        r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r5 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r8 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r9 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r10 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r0 = r19;
+        r0.setPadding(r3, r8, r9, r10);
+        r3 = 0;
+        r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3);
+        r0 = r19;
+        r0.setBackgroundDrawable(r3);
+        r3 = -1;
+        r8 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r8);
+        r0 = r32;
+        r1 = r19;
+        r0.addView(r1, r3);
+        r20 = new android.widget.FrameLayout;
         r0 = r20;
-        r0.setPadding(r2, r3, r4, r5);
-        r2 = new org.telegram.ui.PopupNotificationActivity$14;
-        r0 = r34;
-        r2.<init>();
-        r0 = r20;
-        r0.setOnClickListener(r2);
-        r28 = new android.widget.TextView;
-        r0 = r28;
         r1 = r34;
         r0.<init>(r1);
-        r2 = 1;
-        r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r0 = r28;
-        r0.setTextSize(r2, r3);
-        r2 = 301; // 0x12d float:4.22E-43 double:1.487E-321;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r28;
-        r0.setTag(r2);
-        r2 = "windowBackgroundWhiteBlackText";
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r0 = r28;
-        r0.setTextColor(r2);
-        r2 = "windowBackgroundWhiteBlackText";
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r0 = r28;
-        r0.setLinkTextColor(r2);
-        r2 = 17;
-        r0 = r28;
-        r0.setGravity(r2);
-        r2 = -1;
-        r3 = -2;
-        r4 = 17;
-        r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r2, r3, r4);
+        r8 = -1;
+        r9 = -NUM; // 0xffffffffc0000000 float:-2.0 double:NaN;
+        r10 = 17;
+        r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r12 = 0;
+        r13 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r14 = 0;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14);
+        r0 = r19;
+        r1 = r20;
+        r0.addView(r1, r3);
+        r16 = new org.telegram.ui.Components.PopupAudioView;
+        r0 = r16;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r16;
+        r0.setTag(r3);
         r0 = r20;
-        r1 = r28;
-        r0.addView(r1, r2);
-        r2 = 1;
-        r2 = java.lang.Integer.valueOf(r2);
-        r0 = r30;
-        r0.setTag(r2);
-        goto L_0x03a0;
-    L_0x048e:
+        r1 = r16;
+        r0.addView(r1);
+        r3 = 3;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r0.setTag(r3);
+        r3 = new org.telegram.ui.PopupNotificationActivity$13;
         r0 = r34;
-        r2 = r0.currentMessageNum;
-        r2 = r2 + -1;
-        r0 = r35;
-        if (r0 != r2) goto L_0x04a3;
-    L_0x0498:
-        r0 = r31;
-        r2 = -r0;
-        r2 = (float) r2;
-        r0 = r30;
-        r0.setTranslationX(r2);
-        goto L_0x014b;
-    L_0x04a3:
+        r3.<init>();
+        r0 = r32;
+        r0.setOnClickListener(r3);
+        goto L_0x02f2;
+    L_0x03a7:
         r0 = r34;
-        r2 = r0.currentMessageNum;
-        r2 = r2 + 1;
-        r0 = r35;
-        if (r0 != r2) goto L_0x014b;
-    L_0x04ad:
-        r0 = r31;
-        r2 = (float) r0;
+        r3 = r0.textViews;
+        r3 = r3.size();
+        if (r3 <= 0) goto L_0x03e6;
+    L_0x03b1:
+        r0 = r34;
+        r3 = r0.textViews;
+        r8 = 0;
+        r32 = r3.get(r8);
+        r32 = (android.view.ViewGroup) r32;
+        r0 = r34;
+        r3 = r0.textViews;
+        r8 = 0;
+        r3.remove(r8);
+    L_0x03c4:
+        r3 = 301; // 0x12d float:4.22E-43 double:1.487E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r26 = r0.findViewWithTag(r3);
+        r26 = (android.widget.TextView) r26;
+        r3 = 2;
+        r8 = org.telegram.messenger.SharedConfig.fontSize;
+        r8 = (float) r8;
+        r0 = r26;
+        r0.setTextSize(r3, r8);
+        r0 = r25;
+        r3 = r0.messageText;
+        r0 = r26;
+        r0.setText(r3);
+        goto L_0x0107;
+    L_0x03e6:
+        r32 = new android.widget.FrameLayout;
+        r0 = r32;
+        r1 = r34;
+        r0.<init>(r1);
+        r29 = new android.widget.ScrollView;
+        r0 = r29;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = 1;
+        r0 = r29;
+        r0.setFillViewport(r3);
+        r3 = -1;
+        r8 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r8);
+        r0 = r32;
+        r1 = r29;
+        r0.addView(r1, r3);
+        r24 = new android.widget.LinearLayout;
+        r0 = r24;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = 0;
+        r0 = r24;
+        r0.setOrientation(r3);
+        r3 = 0;
+        r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3);
+        r0 = r24;
+        r0.setBackgroundDrawable(r3);
+        r3 = -1;
+        r8 = -2;
+        r9 = 1;
+        r3 = org.telegram.ui.Components.LayoutHelper.createScroll(r3, r8, r9);
+        r0 = r29;
+        r1 = r24;
+        r0.addView(r1, r3);
+        r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r8 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r9 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r10 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r0 = r24;
+        r0.setPadding(r3, r8, r9, r10);
+        r3 = new org.telegram.ui.PopupNotificationActivity$14;
+        r0 = r34;
+        r3.<init>();
+        r0 = r24;
+        r0.setOnClickListener(r3);
+        r30 = new android.widget.TextView;
         r0 = r30;
-        r0.setTranslationX(r2);
-        goto L_0x014b;
+        r1 = r34;
+        r0.<init>(r1);
+        r3 = 1;
+        r8 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r0 = r30;
+        r0.setTextSize(r3, r8);
+        r3 = 301; // 0x12d float:4.22E-43 double:1.487E-321;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r30;
+        r0.setTag(r3);
+        r3 = "windowBackgroundWhiteBlackText";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r0 = r30;
+        r0.setTextColor(r3);
+        r3 = "windowBackgroundWhiteBlackText";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r0 = r30;
+        r0.setLinkTextColor(r3);
+        r3 = 17;
+        r0 = r30;
+        r0.setGravity(r3);
+        r3 = -1;
+        r8 = -2;
+        r9 = 17;
+        r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r8, r9);
+        r0 = r24;
+        r1 = r30;
+        r0.addView(r1, r3);
+        r3 = 1;
+        r3 = java.lang.Integer.valueOf(r3);
+        r0 = r32;
+        r0.setTag(r3);
+        goto L_0x03c4;
+    L_0x04b2:
+        r0 = r34;
+        r3 = r0.currentMessageNum;
+        r3 = r3 + -1;
+        r0 = r35;
+        if (r0 != r3) goto L_0x04c7;
+    L_0x04bc:
+        r0 = r33;
+        r3 = -r0;
+        r3 = (float) r3;
+        r0 = r32;
+        r0.setTranslationX(r3);
+        goto L_0x014f;
+    L_0x04c7:
+        r0 = r34;
+        r3 = r0.currentMessageNum;
+        r3 = r3 + 1;
+        r0 = r35;
+        if (r0 != r3) goto L_0x014f;
+    L_0x04d1:
+        r0 = r33;
+        r3 = (float) r0;
+        r0 = r32;
+        r0.setTranslationX(r3);
+        goto L_0x014f;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PopupNotificationActivity.getViewForMessage(int, boolean):android.view.ViewGroup");
     }

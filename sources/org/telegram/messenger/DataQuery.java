@@ -25,7 +25,8 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Build.VERSION;
-import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
@@ -65,6 +66,7 @@ import org.telegram.tgnet.TLRPC.TL_channels_getMessages;
 import org.telegram.tgnet.TLRPC.TL_contacts_getTopPeers;
 import org.telegram.tgnet.TLRPC.TL_contacts_resetTopPeerRating;
 import org.telegram.tgnet.TLRPC.TL_contacts_topPeers;
+import org.telegram.tgnet.TLRPC.TL_contacts_topPeersDisabled;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC.TL_documentEmpty;
 import org.telegram.tgnet.TLRPC.TL_draftMessage;
@@ -137,6 +139,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.StickersArchiveAlert;
 import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.LaunchActivity;
 
@@ -219,8 +222,8 @@ public class DataQuery {
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
     /* renamed from: org.telegram.messenger.DataQuery$1 */
-    class C18031 implements RequestDelegate {
-        C18031() {
+    class C19281 implements RequestDelegate {
+        C19281() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -228,8 +231,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$3 */
-    class C18043 implements RequestDelegate {
-        C18043() {
+    class C19293 implements RequestDelegate {
+        C19293() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -237,8 +240,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$7 */
-    class C18097 implements RequestDelegate {
-        C18097() {
+    class C19347 implements RequestDelegate {
+        C19347() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -442,7 +445,7 @@ public class DataQuery {
             req.id.id = document.id;
             req.id.access_hash = document.access_hash;
             req.unfave = remove;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18031());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19281());
             maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
         } else {
             maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
@@ -488,7 +491,7 @@ public class DataQuery {
         req.id.id = document.id;
         req.id.access_hash = document.access_hash;
         req.unsave = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18043());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19293());
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -600,7 +603,7 @@ public class DataQuery {
         req.stickerset = new TL_inputStickerSetID();
         req.stickerset.id = stickerSet.id;
         req.stickerset.access_hash = stickerSet.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C18097());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19347());
     }
 
     public HashMap<String, ArrayList<Document>> getAllStickers() {
@@ -1052,8 +1055,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$17$1 */
-            class C01091 implements Runnable {
-                C01091() {
+            class C01121 implements Runnable {
+                C01121() {
                 }
 
                 public void run() {
@@ -1065,8 +1068,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$17$3 */
-            class C01113 implements Runnable {
-                C01113() {
+            class C01143 implements Runnable {
+                C01143() {
                 }
 
                 public void run() {
@@ -1077,11 +1080,11 @@ public class DataQuery {
             public void run() {
                 long j = 1000;
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    Runnable c01091 = new C01091();
+                    Runnable c01121 = new C01121();
                     if (arrayList != null || z) {
                         j = 0;
                     }
-                    AndroidUtilities.runOnUIThread(c01091, j);
+                    AndroidUtilities.runOnUIThread(c01121, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1113,7 +1116,7 @@ public class DataQuery {
                         FileLog.m3e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01113());
+                    AndroidUtilities.runOnUIThread(new C01143());
                     DataQuery.this.putFeaturedStickersToCache(null, null, i, 0);
                 }
             }
@@ -1514,8 +1517,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$28$1 */
-            class C01151 implements Runnable {
-                C01151() {
+            class C01181 implements Runnable {
+                C01181() {
                 }
 
                 public void run() {
@@ -1527,8 +1530,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$28$3 */
-            class C01173 implements Runnable {
-                C01173() {
+            class C01203 implements Runnable {
+                C01203() {
                 }
 
                 public void run() {
@@ -1538,9 +1541,9 @@ public class DataQuery {
 
             public void run() {
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    C01151 c01151 = new C01151();
+                    C01181 c01181 = new C01181();
                     long j = (arrayList != null || z) ? 0 : 1000;
-                    AndroidUtilities.runOnUIThread(c01151, j);
+                    AndroidUtilities.runOnUIThread(c01181, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1626,7 +1629,7 @@ public class DataQuery {
                         FileLog.m3e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01173());
+                    AndroidUtilities.runOnUIThread(new C01203());
                     DataQuery.this.putStickersToCache(i3, null, i, 0);
                 }
             }
@@ -1667,8 +1670,8 @@ public class DataQuery {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$29$2 */
-                        class C01192 implements Runnable {
-                            C01192() {
+                        class C01222 implements Runnable {
+                            C01222() {
                             }
 
                             public void run() {
@@ -1687,7 +1690,7 @@ public class DataQuery {
                                     }
                                 }
                             });
-                            AndroidUtilities.runOnUIThread(new C01192(), 1000);
+                            AndroidUtilities.runOnUIThread(new C01222(), 1000);
                         }
                     });
                     return;
@@ -1832,7 +1835,7 @@ public class DataQuery {
                     req.peer = inputPeer;
                     this.lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.f49q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+                    req.f51q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
                     if (user != null) {
                         req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                         req.flags |= 1;
@@ -1853,7 +1856,7 @@ public class DataQuery {
                                             messages_Messages res = response;
                                             DataQuery.this.messagesSearchEndReached[1] = res.messages.isEmpty();
                                             DataQuery.this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            DataQuery.this.searchMessagesInChat(req.f49q, j2, j, i, i2, true, user2);
+                                            DataQuery.this.searchMessagesInChat(req.f51q, j2, j, i, i2, true, user2);
                                         }
                                     }
                                 }
@@ -1872,7 +1875,7 @@ public class DataQuery {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.f49q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+            req.f51q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
@@ -1980,7 +1983,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f51q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final int i = count;
@@ -2026,7 +2029,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f51q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final long j = uid;
@@ -2616,7 +2619,7 @@ public class DataQuery {
     }
 
     public void loadHints(boolean cache) {
-        if (!this.loading) {
+        if (!this.loading && UserConfig.getInstance(this.currentAccount).suggestContacts) {
             if (!cache) {
                 this.loading = true;
                 TL_contacts_getTopPeers req = new TL_contacts_getTopPeers();
@@ -2629,6 +2632,20 @@ public class DataQuery {
                 req.offset = 0;
                 req.limit = 20;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+
+                    /* renamed from: org.telegram.messenger.DataQuery$44$2 */
+                    class C01332 implements Runnable {
+                        C01332() {
+                        }
+
+                        public void run() {
+                            UserConfig.getInstance(DataQuery.this.currentAccount).suggestContacts = false;
+                            UserConfig.getInstance(DataQuery.this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
+                            UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
+                            DataQuery.this.clearTopPeers();
+                        }
+                    }
+
                     public void run(final TLObject response, TL_error error) {
                         if (response instanceof TL_contacts_topPeers) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2660,11 +2677,12 @@ public class DataQuery {
                                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.DataQuery$44$1$1$1 */
-                                        class C01271 implements Runnable {
-                                            C01271() {
+                                        class C01301 implements Runnable {
+                                            C01301() {
                                             }
 
                                             public void run() {
+                                                UserConfig.getInstance(DataQuery.this.currentAccount).suggestContacts = true;
                                                 UserConfig.getInstance(DataQuery.this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
                                                 UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
                                             }
@@ -2704,7 +2722,7 @@ public class DataQuery {
                                                 }
                                                 state.dispose();
                                                 MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                                                AndroidUtilities.runOnUIThread(new C01271());
+                                                AndroidUtilities.runOnUIThread(new C01301());
                                             } catch (Throwable e) {
                                                 FileLog.m3e(e);
                                             }
@@ -2712,6 +2730,8 @@ public class DataQuery {
                                     });
                                 }
                             });
+                        } else if (response instanceof TL_contacts_topPeersDisabled) {
+                            AndroidUtilities.runOnUIThread(new C01332());
                         }
                     }
                 });
@@ -2783,44 +2803,61 @@ public class DataQuery {
         }
     }
 
-    public void increaseInlineRaiting(int uid) {
-        int dt;
-        if (UserConfig.getInstance(this.currentAccount).botRatingLoadTime != 0) {
-            dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - UserConfig.getInstance(this.currentAccount).botRatingLoadTime);
-        } else {
-            dt = 60;
-        }
-        TL_topPeer peer = null;
-        for (int a = 0; a < this.inlineBots.size(); a++) {
-            TL_topPeer p = (TL_topPeer) this.inlineBots.get(a);
-            if (p.peer.user_id == uid) {
-                peer = p;
-                break;
-            }
-        }
-        if (peer == null) {
-            peer = new TL_topPeer();
-            peer.peer = new TL_peerUser();
-            peer.peer.user_id = uid;
-            this.inlineBots.add(peer);
-        }
-        peer.rating += Math.exp((double) (dt / MessagesController.getInstance(this.currentAccount).ratingDecay));
-        Collections.sort(this.inlineBots, new Comparator<TL_topPeer>() {
-            public int compare(TL_topPeer lhs, TL_topPeer rhs) {
-                if (lhs.rating > rhs.rating) {
-                    return -1;
+    public void clearTopPeers() {
+        this.hints.clear();
+        this.inlineBots.clear();
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM chat_hints WHERE 1").stepThis().dispose();
+                } catch (Exception e) {
                 }
-                if (lhs.rating < rhs.rating) {
-                    return 1;
-                }
-                return 0;
             }
         });
-        if (this.inlineBots.size() > 20) {
-            this.inlineBots.remove(this.inlineBots.size() - 1);
+    }
+
+    public void increaseInlineRaiting(int uid) {
+        if (UserConfig.getInstance(this.currentAccount).suggestContacts) {
+            int dt;
+            if (UserConfig.getInstance(this.currentAccount).botRatingLoadTime != 0) {
+                dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - UserConfig.getInstance(this.currentAccount).botRatingLoadTime);
+            } else {
+                dt = 60;
+            }
+            TL_topPeer peer = null;
+            for (int a = 0; a < this.inlineBots.size(); a++) {
+                TL_topPeer p = (TL_topPeer) this.inlineBots.get(a);
+                if (p.peer.user_id == uid) {
+                    peer = p;
+                    break;
+                }
+            }
+            if (peer == null) {
+                peer = new TL_topPeer();
+                peer.peer = new TL_peerUser();
+                peer.peer.user_id = uid;
+                this.inlineBots.add(peer);
+            }
+            peer.rating += Math.exp((double) (dt / MessagesController.getInstance(this.currentAccount).ratingDecay));
+            Collections.sort(this.inlineBots, new Comparator<TL_topPeer>() {
+                public int compare(TL_topPeer lhs, TL_topPeer rhs) {
+                    if (lhs.rating > rhs.rating) {
+                        return -1;
+                    }
+                    if (lhs.rating < rhs.rating) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+            if (this.inlineBots.size() > 20) {
+                this.inlineBots.remove(this.inlineBots.size() - 1);
+            }
+            savePeer(uid, 1, peer.rating);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
         }
-        savePeer(uid, 1, peer.rating);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
     }
 
     public void removeInline(int uid) {
@@ -2860,75 +2897,77 @@ public class DataQuery {
     }
 
     public void increasePeerRaiting(final long did) {
-        final int lower_id = (int) did;
-        if (lower_id > 0) {
-            User user = lower_id > 0 ? MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id)) : null;
-            if (user != null && !user.bot) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                    public void run() {
-                        double dt = 0.0d;
-                        int lastTime = 0;
-                        int lastMid = 0;
-                        try {
-                            SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT MAX(mid), MAX(date) FROM messages WHERE uid = %d AND out = 1", new Object[]{Long.valueOf(did)}), new Object[0]);
-                            if (cursor.next()) {
-                                lastMid = cursor.intValue(0);
-                                lastTime = cursor.intValue(1);
+        if (UserConfig.getInstance(this.currentAccount).suggestContacts) {
+            final int lower_id = (int) did;
+            if (lower_id > 0) {
+                User user = lower_id > 0 ? MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id)) : null;
+                if (user != null && !user.bot) {
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
+                        public void run() {
+                            double dt = 0.0d;
+                            int lastTime = 0;
+                            int lastMid = 0;
+                            try {
+                                SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT MAX(mid), MAX(date) FROM messages WHERE uid = %d AND out = 1", new Object[]{Long.valueOf(did)}), new Object[0]);
+                                if (cursor.next()) {
+                                    lastMid = cursor.intValue(0);
+                                    lastTime = cursor.intValue(1);
+                                }
+                                cursor.dispose();
+                                if (lastMid > 0 && UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime != 0) {
+                                    dt = (double) (lastTime - UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime);
+                                }
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
                             }
-                            cursor.dispose();
-                            if (lastMid > 0 && UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime != 0) {
-                                dt = (double) (lastTime - UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime);
-                            }
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            final double dtFinal = dt;
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+
+                                /* renamed from: org.telegram.messenger.DataQuery$49$1$1 */
+                                class C01341 implements Comparator<TL_topPeer> {
+                                    C01341() {
+                                    }
+
+                                    public int compare(TL_topPeer lhs, TL_topPeer rhs) {
+                                        if (lhs.rating > rhs.rating) {
+                                            return -1;
+                                        }
+                                        if (lhs.rating < rhs.rating) {
+                                            return 1;
+                                        }
+                                        return 0;
+                                    }
+                                }
+
+                                public void run() {
+                                    TL_topPeer peer = null;
+                                    for (int a = 0; a < DataQuery.this.hints.size(); a++) {
+                                        TL_topPeer p = (TL_topPeer) DataQuery.this.hints.get(a);
+                                        if ((lower_id < 0 && (p.peer.chat_id == (-lower_id) || p.peer.channel_id == (-lower_id))) || (lower_id > 0 && p.peer.user_id == lower_id)) {
+                                            peer = p;
+                                            break;
+                                        }
+                                    }
+                                    if (peer == null) {
+                                        peer = new TL_topPeer();
+                                        if (lower_id > 0) {
+                                            peer.peer = new TL_peerUser();
+                                            peer.peer.user_id = lower_id;
+                                        } else {
+                                            peer.peer = new TL_peerChat();
+                                            peer.peer.chat_id = -lower_id;
+                                        }
+                                        DataQuery.this.hints.add(peer);
+                                    }
+                                    peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
+                                    Collections.sort(DataQuery.this.hints, new C01341());
+                                    DataQuery.this.savePeer((int) did, 0, peer.rating);
+                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
+                                }
+                            });
                         }
-                        final double dtFinal = dt;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-
-                            /* renamed from: org.telegram.messenger.DataQuery$48$1$1 */
-                            class C01301 implements Comparator<TL_topPeer> {
-                                C01301() {
-                                }
-
-                                public int compare(TL_topPeer lhs, TL_topPeer rhs) {
-                                    if (lhs.rating > rhs.rating) {
-                                        return -1;
-                                    }
-                                    if (lhs.rating < rhs.rating) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                }
-                            }
-
-                            public void run() {
-                                TL_topPeer peer = null;
-                                for (int a = 0; a < DataQuery.this.hints.size(); a++) {
-                                    TL_topPeer p = (TL_topPeer) DataQuery.this.hints.get(a);
-                                    if ((lower_id < 0 && (p.peer.chat_id == (-lower_id) || p.peer.channel_id == (-lower_id))) || (lower_id > 0 && p.peer.user_id == lower_id)) {
-                                        peer = p;
-                                        break;
-                                    }
-                                }
-                                if (peer == null) {
-                                    peer = new TL_topPeer();
-                                    if (lower_id > 0) {
-                                        peer.peer = new TL_peerUser();
-                                        peer.peer.user_id = lower_id;
-                                    } else {
-                                        peer.peer = new TL_peerChat();
-                                        peer.peer.chat_id = -lower_id;
-                                    }
-                                    DataQuery.this.hints.add(peer);
-                                }
-                                peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
-                                Collections.sort(DataQuery.this.hints, new C01301());
-                                DataQuery.this.savePeer((int) did, 0, peer.rating);
-                                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
-                            }
-                        });
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -3357,9 +3396,9 @@ public class DataQuery {
                 final long j = dialogId;
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.DataQuery$56$1 */
-                    class C01331 implements Runnable {
-                        C01331() {
+                    /* renamed from: org.telegram.messenger.DataQuery$57$1 */
+                    class C01371 implements Runnable {
+                        C01371() {
                         }
 
                         public void run() {
@@ -3407,7 +3446,7 @@ public class DataQuery {
                                     }
                                 }
                             }
-                            AndroidUtilities.runOnUIThread(new C01331());
+                            AndroidUtilities.runOnUIThread(new C01371());
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -3450,9 +3489,9 @@ public class DataQuery {
             final long j2 = dialogId;
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.DataQuery$57$1 */
-                class C18051 implements RequestDelegate {
-                    C18051() {
+                /* renamed from: org.telegram.messenger.DataQuery$58$1 */
+                class C19301 implements RequestDelegate {
+                    C19301() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3467,9 +3506,9 @@ public class DataQuery {
                     }
                 }
 
-                /* renamed from: org.telegram.messenger.DataQuery$57$2 */
-                class C18062 implements RequestDelegate {
-                    C18062() {
+                /* renamed from: org.telegram.messenger.DataQuery$58$2 */
+                class C19312 implements RequestDelegate {
+                    C19312() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3519,12 +3558,12 @@ public class DataQuery {
                                 TL_channels_getMessages req = new TL_channels_getMessages();
                                 req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                 req.id = replyMessages2;
-                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C18051());
+                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C19301());
                                 return;
                             }
                             TL_messages_getMessages req2 = new TL_messages_getMessages();
                             req2.id = replyMessages2;
-                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C18062());
+                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C19312());
                         }
                     } catch (Throwable e) {
                         FileLog.m3e(e);
@@ -3664,6 +3703,13 @@ public class DataQuery {
         }
     }
 
+    public CharSequence substring(CharSequence source, int start, int end) {
+        if (source instanceof SpannableStringBuilder) {
+            return ((SpannableStringBuilder) source).subSequence(start, end);
+        }
+        return TextUtils.substring(source, start, end);
+    }
+
     public ArrayList<MessageEntity> getEntities(CharSequence[] message) {
         if (message == null || message[0] == null) {
             return null;
@@ -3699,13 +3745,13 @@ public class DataQuery {
                 if (isPre) {
                     int firstChar = start > 0 ? message[0].charAt(start - 1) : 0;
                     boolean replacedFirst = firstChar == 32 || firstChar == 10;
-                    CharSequence startMessage = TextUtils.substring(message[0], 0, start - (replacedFirst ? 1 : 0));
-                    CharSequence content = TextUtils.substring(message[0], start + 3, index);
+                    CharSequence startMessage = substring(message[0], 0, start - (replacedFirst ? 1 : 0));
+                    CharSequence content = substring(message[0], start + 3, index);
                     firstChar = index + 3 < message[0].length() ? message[0].charAt(index + 3) : 0;
                     CharSequence charSequence = message[0];
                     int i = index + 3;
                     int i2 = (firstChar == 32 || firstChar == 10) ? 1 : 0;
-                    CharSequence endMessage = TextUtils.substring(charSequence, i2 + i, message[0].length());
+                    CharSequence endMessage = substring(charSequence, i2 + i, message[0].length());
                     if (startMessage.length() != 0) {
                         startMessage = TextUtils.concat(new CharSequence[]{startMessage, "\n"});
                     } else {
@@ -3724,7 +3770,11 @@ public class DataQuery {
                         lastIndex -= 6;
                     }
                 } else if (start + 1 != index) {
-                    message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 1, index), TextUtils.substring(message[0], index + 1, message[0].length())});
+                    CharSequence[] charSequenceArr = new CharSequence[3];
+                    charSequenceArr[0] = substring(message[0], 0, start);
+                    charSequenceArr[1] = substring(message[0], start + 1, index);
+                    charSequenceArr[2] = substring(message[0], index + 1, message[0].length());
+                    message[0] = TextUtils.concat(charSequenceArr);
                     TL_messageEntityCode entity3 = new TL_messageEntityCode();
                     entity3.offset = start;
                     entity3.length = (index - start) - 1;
@@ -3736,7 +3786,10 @@ public class DataQuery {
             }
         }
         if (start != -1 && isPre) {
-            message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 2, message[0].length())});
+            charSequenceArr = new CharSequence[2];
+            charSequenceArr[0] = substring(message[0], 0, start);
+            charSequenceArr[1] = substring(message[0], start + 2, message[0].length());
+            message[0] = TextUtils.concat(charSequenceArr);
             if (entities == null) {
                 entities = new ArrayList();
             }
@@ -3745,8 +3798,9 @@ public class DataQuery {
             entity3.length = 1;
             entities.add(entity3);
         }
-        if (message[0] instanceof Spannable) {
-            Spannable spannable = message[0];
+        if (message[0] instanceof Spanned) {
+            int b;
+            Spanned spannable = message[0];
             TypefaceSpan[] spans = (TypefaceSpan[]) spannable.getSpans(0, message[0].length(), TypefaceSpan.class);
             if (spans != null && spans.length > 0) {
                 for (TypefaceSpan span : spans) {
@@ -3772,7 +3826,7 @@ public class DataQuery {
                 if (entities == null) {
                     entities = new ArrayList();
                 }
-                for (int b = 0; b < spansMentions.length; b++) {
+                for (b = 0; b < spansMentions.length; b++) {
                     TL_inputMessageEntityMentionName entity4 = new TL_inputMessageEntityMentionName();
                     entity4.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(Utilities.parseInt(spansMentions[b].getURL()).intValue());
                     if (entity4.user_id != null) {
@@ -3783,6 +3837,19 @@ public class DataQuery {
                         }
                         entities.add(entity4);
                     }
+                }
+            }
+            URLSpanReplacement[] spansUrlReplacement = (URLSpanReplacement[]) spannable.getSpans(0, message[0].length(), URLSpanReplacement.class);
+            if (spansUrlReplacement != null && spansUrlReplacement.length > 0) {
+                if (entities == null) {
+                    entities = new ArrayList();
+                }
+                for (b = 0; b < spansUrlReplacement.length; b++) {
+                    TL_messageEntityTextUrl entity5 = new TL_messageEntityTextUrl();
+                    entity5.offset = spannable.getSpanStart(spansUrlReplacement[b]);
+                    entity5.length = Math.min(spannable.getSpanEnd(spansUrlReplacement[b]), message[0].length()) - entity5.offset;
+                    entity5.url = spansUrlReplacement[b].getURL();
+                    entities.add(entity5);
                 }
             }
         }
@@ -3816,7 +3883,11 @@ public class DataQuery {
                             if (entities == null) {
                                 entities = new ArrayList();
                             }
-                            message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 2, index), TextUtils.substring(message[0], index + 2, message[0].length())});
+                            charSequenceArr = new CharSequence[3];
+                            charSequenceArr[0] = substring(message[0], 0, start);
+                            charSequenceArr[1] = substring(message[0], start + 2, index);
+                            charSequenceArr[2] = substring(message[0], index + 2, message[0].length());
+                            message[0] = TextUtils.concat(charSequenceArr);
                             if (c == 0) {
                                 entity = new TL_messageEntityBold();
                             } else {
@@ -3842,9 +3913,9 @@ public class DataQuery {
             this.loadingDrafts = true;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.DataQuery$60$1 */
-                class C01361 implements Runnable {
-                    C01361() {
+                /* renamed from: org.telegram.messenger.DataQuery$61$1 */
+                class C01401 implements Runnable {
+                    C01401() {
                     }
 
                     public void run() {
@@ -3857,7 +3928,7 @@ public class DataQuery {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         MessagesController.getInstance(DataQuery.this.currentAccount).processUpdates((Updates) response, false);
-                        AndroidUtilities.runOnUIThread(new C01361());
+                        AndroidUtilities.runOnUIThread(new C01401());
                     }
                 }
             });
@@ -3975,9 +4046,9 @@ public class DataQuery {
                     final long j = did;
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                        /* renamed from: org.telegram.messenger.DataQuery$62$1 */
-                        class C18071 implements RequestDelegate {
-                            C18071() {
+                        /* renamed from: org.telegram.messenger.DataQuery$63$1 */
+                        class C19321 implements RequestDelegate {
+                            C19321() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -3990,9 +4061,9 @@ public class DataQuery {
                             }
                         }
 
-                        /* renamed from: org.telegram.messenger.DataQuery$62$2 */
-                        class C18082 implements RequestDelegate {
-                            C18082() {
+                        /* renamed from: org.telegram.messenger.DataQuery$63$2 */
+                        class C19332 implements RequestDelegate {
+                            C19332() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4024,11 +4095,11 @@ public class DataQuery {
                                     TL_channels_getMessages req = new TL_channels_getMessages();
                                     req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                     req.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C18071());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C19321());
                                 } else {
                                     TL_messages_getMessages req2 = new TL_messages_getMessages();
                                     req2.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C18082());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C19332());
                                 }
                             } catch (Throwable e) {
                                 FileLog.m3e(e);

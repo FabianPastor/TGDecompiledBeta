@@ -6,14 +6,14 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class PrivFrame extends Id3Frame {
-    public static final Creator<PrivFrame> CREATOR = new C05891();
+    public static final Creator<PrivFrame> CREATOR = new C05981();
     public static final String ID = "PRIV";
     public final String owner;
     public final byte[] privateData;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.PrivFrame$1 */
-    static class C05891 implements Creator<PrivFrame> {
-        C05891() {
+    static class C05981 implements Creator<PrivFrame> {
+        C05981() {
         }
 
         public PrivFrame createFromParcel(Parcel in) {
@@ -53,6 +53,10 @@ public final class PrivFrame extends Id3Frame {
 
     public int hashCode() {
         return (((this.owner != null ? this.owner.hashCode() : 0) + 527) * 31) + Arrays.hashCode(this.privateData);
+    }
+
+    public String toString() {
+        return this.id + ": owner=" + this.owner;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

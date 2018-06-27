@@ -2,12 +2,15 @@ package org.telegram.messenger.exoplayer2.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.Parcel;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -35,7 +38,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
@@ -74,6 +77,13 @@ public final class Util {
         }
     }
 
+    public static ComponentName startForegroundService(Context context, Intent intent) {
+        if (SDK_INT >= 26) {
+            return context.startForegroundService(intent);
+        }
+        return context.startService(intent);
+    }
+
     @TargetApi(23)
     public static boolean maybeRequestReadExternalStoragePermission(Activity activity, Uri... uris) {
         if (SDK_INT < 23) {
@@ -96,7 +106,7 @@ public final class Util {
 
     public static boolean isLocalFileUri(Uri uri) {
         String scheme = uri.getScheme();
-        return TextUtils.isEmpty(scheme) || scheme.equals("file");
+        return TextUtils.isEmpty(scheme) || "file".equals(scheme);
     }
 
     public static boolean areEqual(Object o1, Object o2) {
@@ -118,6 +128,11 @@ public final class Util {
 
     public static <T> void removeRange(List<T> list, int fromIndex, int toIndex) {
         list.subList(fromIndex, toIndex).clear();
+    }
+
+    public static <T> T[] nullSafeArrayCopy(T[] input, int length) {
+        Assertions.checkArgument(length <= input.length);
+        return Arrays.copyOf(input, length);
     }
 
     public static ExecutorService newSingleThreadExecutor(final String threadName) {
@@ -146,6 +161,14 @@ public final class Util {
         }
     }
 
+    public static boolean readBoolean(Parcel parcel) {
+        return parcel.readInt() != 0;
+    }
+
+    public static void writeBoolean(Parcel parcel, boolean value) {
+        parcel.writeInt(value ? 1 : 0);
+    }
+
     public static String normalizeLanguageCode(String language) {
         if (language == null) {
             return null;
@@ -153,16 +176,16 @@ public final class Util {
         try {
             return new Locale(language).getISO3Language();
         } catch (MissingResourceException e) {
-            return language.toLowerCase();
+            return toLowerInvariant(language);
         }
     }
 
     public static String fromUtf8Bytes(byte[] bytes) {
-        return new String(bytes, Charset.forName(C0546C.UTF8_NAME));
+        return new String(bytes, Charset.forName(C0554C.UTF8_NAME));
     }
 
     public static byte[] getUtf8Bytes(String value) {
-        return value.getBytes(Charset.forName(C0546C.UTF8_NAME));
+        return value.getBytes(Charset.forName(C0554C.UTF8_NAME));
     }
 
     public static boolean isLinebreak(int c) {
@@ -171,6 +194,14 @@ public final class Util {
 
     public static String toLowerInvariant(String text) {
         return text == null ? null : text.toLowerCase(Locale.US);
+    }
+
+    public static String toUpperInvariant(String text) {
+        return text == null ? null : text.toUpperCase(Locale.US);
+    }
+
+    public static String formatInvariant(String format, Object... args) {
+        return String.format(Locale.US, format, args);
     }
 
     public static int ceilDivide(int numerator, int denominator) {
@@ -335,7 +366,7 @@ public final class Util {
                 timezoneShift = 0;
             } else {
                 timezoneShift = (Integer.parseInt(matcher.group(12)) * 60) + Integer.parseInt(matcher.group(13));
-                if (matcher.group(11).equals("-")) {
+                if ("-".equals(matcher.group(11))) {
                     timezoneShift *= -1;
                 }
             }
@@ -524,6 +555,10 @@ public final class Util {
         }
     }
 
+    public static boolean isEncodingPcm(int encoding) {
+        return encoding == 3 || encoding == 2 || encoding == Integer.MIN_VALUE || encoding == NUM || encoding == 4;
+    }
+
     public static boolean isEncodingHighResolutionIntegerPcm(int encoding) {
         return encoding == Integer.MIN_VALUE || encoding == NUM;
     }
@@ -626,11 +661,11 @@ public final class Util {
         }
         switch (obj) {
             case null:
-                return C0546C.WIDEVINE_UUID;
+                return C0554C.WIDEVINE_UUID;
             case 1:
-                return C0546C.PLAYREADY_UUID;
+                return C0554C.PLAYREADY_UUID;
             case 2:
-                return C0546C.CLEARKEY_UUID;
+                return C0554C.CLEARKEY_UUID;
             default:
                 try {
                     return UUID.fromString(drmScheme);
@@ -638,6 +673,13 @@ public final class Util {
                     return null;
                 }
         }
+    }
+
+    public static int inferContentType(Uri uri, String overrideExtension) {
+        if (TextUtils.isEmpty(overrideExtension)) {
+            return inferContentType(uri);
+        }
+        return inferContentType("." + overrideExtension);
     }
 
     public static int inferContentType(Uri uri) {
@@ -660,7 +702,7 @@ public final class Util {
     }
 
     public static String getStringForTime(StringBuilder builder, Formatter formatter, long timeMs) {
-        if (timeMs == C0546C.TIME_UNSET) {
+        if (timeMs == C0554C.TIME_UNSET) {
             timeMs = 0;
         }
         long totalSeconds = (500 + timeMs) / 1000;
@@ -679,9 +721,9 @@ public final class Util {
             case 0:
                 return 16777216;
             case 1:
-                return C0546C.DEFAULT_AUDIO_BUFFER_SIZE;
+                return C0554C.DEFAULT_AUDIO_BUFFER_SIZE;
             case 2:
-                return C0546C.DEFAULT_VIDEO_BUFFER_SIZE;
+                return C0554C.DEFAULT_VIDEO_BUFFER_SIZE;
             case 3:
             case 4:
                 return 131072;
@@ -813,7 +855,7 @@ public final class Util {
             if ("Sony".equals(MANUFACTURER) && MODEL.startsWith("BRAVIA") && context.getPackageManager().hasSystemFeature("com.sony.dtv.hardware.panel.qfhd")) {
                 return new Point(3840, 2160);
             }
-            if ("NVIDIA".equals(MANUFACTURER) && MODEL.contains("SHIELD")) {
+            if (("NVIDIA".equals(MANUFACTURER) && MODEL.contains("SHIELD")) || ("philips".equals(toLowerInvariant(MANUFACTURER)) && (MODEL.startsWith("QM1") || MODEL.equals("QV151E") || MODEL.equals("TPM171E")))) {
                 String sysDisplaySize = null;
                 try {
                     Class<?> systemProperties = Class.forName("android.os.SystemProperties");

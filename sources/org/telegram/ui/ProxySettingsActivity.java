@@ -35,7 +35,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -72,8 +72,8 @@ public class ProxySettingsActivity extends BaseFragment {
     private TypeCell[] typeCell;
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$2 */
-    class C16682 implements OnClickListener {
-        C16682() {
+    class C17912 implements OnClickListener {
+        C17912() {
         }
 
         public void onClick(View view) {
@@ -83,8 +83,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$3 */
-    class C16693 implements TextWatcher {
-        C16693() {
+    class C17923 implements TextWatcher {
+        C17923() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,8 +99,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$4 */
-    class C16704 implements TextWatcher {
-        C16704() {
+    class C17934 implements TextWatcher {
+        C17934() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,8 +145,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$5 */
-    class C16715 implements OnEditorActionListener {
-        C16715() {
+    class C17945 implements OnEditorActionListener {
+        C17945() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -166,8 +166,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$6 */
-    class C16726 implements OnClickListener {
-        C16726() {
+    class C17956 implements OnClickListener {
+        C17956() {
         }
 
         public void onClick(View v) {
@@ -180,33 +180,33 @@ public class ProxySettingsActivity extends BaseFragment {
             try {
                 String url;
                 if (!TextUtils.isEmpty(address)) {
-                    params.append("server=").append(URLEncoder.encode(address, C0546C.UTF8_NAME));
+                    params.append("server=").append(URLEncoder.encode(address, C0554C.UTF8_NAME));
                 }
                 if (!TextUtils.isEmpty(port)) {
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("port=").append(URLEncoder.encode(port, C0546C.UTF8_NAME));
+                    params.append("port=").append(URLEncoder.encode(port, C0554C.UTF8_NAME));
                 }
                 if (ProxySettingsActivity.this.currentType == 1) {
                     url = "https://t.me/proxy?";
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("secret=").append(URLEncoder.encode(secret, C0546C.UTF8_NAME));
+                    params.append("secret=").append(URLEncoder.encode(secret, C0554C.UTF8_NAME));
                 } else {
                     url = "https://t.me/socks?";
                     if (!TextUtils.isEmpty(user)) {
                         if (params.length() != 0) {
                             params.append("&");
                         }
-                        params.append("user=").append(URLEncoder.encode(user, C0546C.UTF8_NAME));
+                        params.append("user=").append(URLEncoder.encode(user, C0554C.UTF8_NAME));
                     }
                     if (!TextUtils.isEmpty(password)) {
                         if (params.length() != 0) {
                             params.append("&");
                         }
-                        params.append("pass=").append(URLEncoder.encode(password, C0546C.UTF8_NAME));
+                        params.append("pass=").append(URLEncoder.encode(password, C0554C.UTF8_NAME));
                     }
                 }
                 if (params.length() != 0) {
@@ -287,8 +287,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
-    class C22811 extends ActionBarMenuOnItemClick {
-        C22811() {
+    class C24581 extends ActionBarMenuOnItemClick {
+        C24581() {
         }
 
         public void onItemClick(int id) {
@@ -316,6 +316,7 @@ public class ProxySettingsActivity extends BaseFragment {
                     enabled = true;
                 } else {
                     enabled = preferences.getBoolean("proxy_enabled", false);
+                    SharedConfig.saveProxyList();
                 }
                 if (ProxySettingsActivity.this.addingNewProxy || SharedConfig.currentProxy == ProxySettingsActivity.this.currentProxyInfo) {
                     editor.putString("proxy_ip", ProxySettingsActivity.this.currentProxyInfo.address);
@@ -358,7 +359,7 @@ public class ProxySettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22811());
+        this.actionBar.setActionBarMenuOnItemClick(new C24581());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -381,7 +382,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 this.typeCell[a].setValue(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == this.currentType, false);
             }
             this.linearLayout2.addView(this.typeCell[a], LayoutHelper.createLinear(-1, 48));
-            this.typeCell[a].setOnClickListener(new C16682());
+            this.typeCell[a].setOnClickListener(new C17912());
             a++;
         }
         this.sectionCell[0] = new ShadowSectionCell(context);
@@ -407,10 +408,10 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
             if (a == 0) {
                 this.inputFields[a].setInputType(524305);
-                this.inputFields[a].addTextChangedListener(new C16693());
+                this.inputFields[a].addTextChangedListener(new C17923());
             } else if (a == 1) {
                 this.inputFields[a].setInputType(2);
-                this.inputFields[a].addTextChangedListener(new C16704());
+                this.inputFields[a].addTextChangedListener(new C17934());
             } else if (a == 3) {
                 this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.inputFields[a].setTypeface(Typeface.DEFAULT);
@@ -446,7 +447,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setSelection(this.inputFields[a].length());
             this.inputFields[a].setPadding(0, 0, 0, 0);
             container.addView(this.inputFields[a], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, 0.0f, 17.0f, 0.0f));
-            this.inputFields[a].setOnEditorActionListener(new C16715());
+            this.inputFields[a].setOnEditorActionListener(new C17945());
         }
         this.bottomCell = new TextInfoPrivacyCell(context);
         this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
@@ -457,7 +458,7 @@ public class ProxySettingsActivity extends BaseFragment {
         this.shareCell.setText(LocaleController.getString("ShareFile", R.string.ShareFile), false);
         this.shareCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
         this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
-        this.shareCell.setOnClickListener(new C16726());
+        this.shareCell.setOnClickListener(new C17956());
         this.sectionCell[1] = new ShadowSectionCell(context);
         this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));

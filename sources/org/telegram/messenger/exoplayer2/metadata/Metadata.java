@@ -7,12 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class Metadata implements Parcelable {
-    public static final Creator<Metadata> CREATOR = new C05811();
+    public static final Creator<Metadata> CREATOR = new C05901();
     private final Entry[] entries;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.Metadata$1 */
-    static class C05811 implements Creator<Metadata> {
-        C05811() {
+    static class C05901 implements Creator<Metadata> {
+        C05901() {
         }
 
         public Metadata createFromParcel(Parcel in) {

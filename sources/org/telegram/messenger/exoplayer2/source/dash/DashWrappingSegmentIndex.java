@@ -10,7 +10,7 @@ public final class DashWrappingSegmentIndex implements DashSegmentIndex {
         this.chunkIndex = chunkIndex;
     }
 
-    public int getFirstSegmentNum() {
+    public long getFirstSegmentNum() {
         return 0;
     }
 
@@ -18,20 +18,20 @@ public final class DashWrappingSegmentIndex implements DashSegmentIndex {
         return this.chunkIndex.length;
     }
 
-    public long getTimeUs(int segmentNum) {
-        return this.chunkIndex.timesUs[segmentNum];
+    public long getTimeUs(long segmentNum) {
+        return this.chunkIndex.timesUs[(int) segmentNum];
     }
 
-    public long getDurationUs(int segmentNum, long periodDurationUs) {
-        return this.chunkIndex.durationsUs[segmentNum];
+    public long getDurationUs(long segmentNum, long periodDurationUs) {
+        return this.chunkIndex.durationsUs[(int) segmentNum];
     }
 
-    public RangedUri getSegmentUrl(int segmentNum) {
-        return new RangedUri(null, this.chunkIndex.offsets[segmentNum], (long) this.chunkIndex.sizes[segmentNum]);
+    public RangedUri getSegmentUrl(long segmentNum) {
+        return new RangedUri(null, this.chunkIndex.offsets[(int) segmentNum], (long) this.chunkIndex.sizes[(int) segmentNum]);
     }
 
-    public int getSegmentNum(long timeUs, long periodDurationUs) {
-        return this.chunkIndex.getChunkIndex(timeUs);
+    public long getSegmentNum(long timeUs, long periodDurationUs) {
+        return (long) this.chunkIndex.getChunkIndex(timeUs);
     }
 
     public boolean isExplicit() {

@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor;
 
 import java.lang.reflect.Constructor;
+import org.telegram.messenger.exoplayer2.extractor.amr.AmrExtractor;
 import org.telegram.messenger.exoplayer2.extractor.flv.FlvExtractor;
 import org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor;
 import org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor;
@@ -27,7 +28,8 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
         try {
             flacExtractorConstructor = Class.forName("org.telegram.messenger.exoplayer2.ext.flac.FlacExtractor").asSubclass(Extractor.class).getConstructor(new Class[0]);
         } catch (ClassNotFoundException e) {
-        } catch (NoSuchMethodException e2) {
+        } catch (Exception e2) {
+            throw new RuntimeException("Error instantiating FLAC extension", e2);
         }
         FLAC_EXTRACTOR_CONSTRUCTOR = flacExtractorConstructor;
     }
@@ -64,10 +66,10 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
 
     public synchronized Extractor[] createExtractors() {
         Extractor[] extractors;
-        int i = 11;
+        int i = 12;
         synchronized (this) {
             if (FLAC_EXTRACTOR_CONSTRUCTOR != null) {
-                i = 12;
+                i = 13;
             }
             extractors = new Extractor[i];
             extractors[0] = new MatroskaExtractor(this.matroskaFlags);
@@ -81,9 +83,10 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
             extractors[8] = new OggExtractor();
             extractors[9] = new PsExtractor();
             extractors[10] = new WavExtractor();
+            extractors[11] = new AmrExtractor();
             if (FLAC_EXTRACTOR_CONSTRUCTOR != null) {
                 try {
-                    extractors[11] = (Extractor) FLAC_EXTRACTOR_CONSTRUCTOR.newInstance(new Object[0]);
+                    extractors[12] = (Extractor) FLAC_EXTRACTOR_CONSTRUCTOR.newInstance(new Object[0]);
                 } catch (Exception e) {
                     throw new IllegalStateException("Unexpected error creating FLAC extractor", e);
                 }

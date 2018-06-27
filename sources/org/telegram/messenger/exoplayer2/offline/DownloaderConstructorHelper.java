@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.offline;
 
-import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.upstream.DataSink;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
@@ -49,7 +48,7 @@ public final class DownloaderConstructorHelper {
         DataSink cacheWriteDataSink = this.cacheWriteDataSinkFactory != null ? this.cacheWriteDataSinkFactory.createDataSink() : new CacheDataSink(this.cache, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
         DataSource upstream = this.upstreamDataSourceFactory.createDataSource();
         if (this.priorityTaskManager != null) {
-            Object upstream2 = new PriorityDataSource(upstream, this.priorityTaskManager, C0546C.PRIORITY_DOWNLOAD);
+            Object upstream2 = new PriorityDataSource(upstream, this.priorityTaskManager, -1000);
         }
         return new CacheDataSource(this.cache, upstream, cacheReadDataSource, cacheWriteDataSink, 1, null);
     }

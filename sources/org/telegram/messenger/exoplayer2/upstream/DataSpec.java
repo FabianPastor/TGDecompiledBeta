@@ -77,4 +77,8 @@ public final class DataSpec {
         }
         return new DataSpec(this.uri, this.postBody, this.absoluteStreamPosition + offset, this.position + offset, length, this.key, this.flags);
     }
+
+    public DataSpec withUri(Uri uri) {
+        return new DataSpec(uri, this.postBody, this.absoluteStreamPosition, this.position, this.length, this.key, this.flags);
+    }
 }

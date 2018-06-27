@@ -20,6 +20,10 @@ public class Utilities {
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
 
+    public static native void aesCbcEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, int i, int i2, int i3);
+
+    private static native void aesCbcEncryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, int i, int i2, int i3, int i4);
+
     public static native void aesCtrDecryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, int i, int i2);
 
     public static native void aesCtrDecryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, int i, int i2, int i3);
@@ -58,6 +62,10 @@ public class Utilities {
 
     public static void aesIgeEncryption(ByteBuffer buffer, byte[] key, byte[] iv, boolean encrypt, boolean changeIv, int offset, int length) {
         aesIgeEncryption(buffer, key, changeIv ? iv : (byte[]) iv.clone(), encrypt, offset, length);
+    }
+
+    public static void aesCbcEncryptionByteArraySafe(byte[] buffer, byte[] key, byte[] iv, int offset, int length, int n, int encrypt) {
+        aesCbcEncryptionByteArray(buffer, key, (byte[]) iv.clone(), offset, length, n, encrypt);
     }
 
     public static Integer parseInt(String value) {
@@ -234,6 +242,42 @@ public class Utilities {
         } catch (Throwable e) {
             FileLog.m3e(e);
             return new byte[32];
+        }
+    }
+
+    public static byte[] computeSHA512(byte[] convertme) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(convertme, 0, convertme.length);
+            return md.digest();
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[64];
+        }
+    }
+
+    public static byte[] computeSHA512(byte[] convertme, byte[] convertme2) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(convertme, 0, convertme.length);
+            md.update(convertme2, 0, convertme2.length);
+            return md.digest();
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[64];
+        }
+    }
+
+    public static byte[] computeSHA512(byte[] convertme, byte[] convertme2, byte[] convertme3) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(convertme, 0, convertme.length);
+            md.update(convertme2, 0, convertme2.length);
+            md.update(convertme3, 0, convertme3.length);
+            return md.digest();
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return new byte[64];
         }
     }
 

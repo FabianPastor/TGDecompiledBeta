@@ -221,8 +221,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$1 */
-    class C22771 extends ActionBarMenuOnItemClick {
-        C22771() {
+    class C24541 extends ActionBarMenuOnItemClick {
+        C24541() {
         }
 
         public void onItemClick(int id) {
@@ -233,26 +233,24 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$2 */
-    class C22782 implements OnItemClickListener {
-        C22782() {
+    class C24552 implements OnItemClickListener {
+        C24552() {
         }
 
         public void onItemClick(View view, int position) {
             boolean z = true;
-            ProxyListActivity proxyListActivity;
             Holder holder;
             Editor editor;
             int a;
             if (position == ProxyListActivity.this.useProxyRow) {
                 if (SharedConfig.currentProxy == null) {
-                    ProxyListActivity.this.presentFragment(new ProxySettingsActivity());
-                    return;
+                    if (SharedConfig.proxyList.isEmpty()) {
+                        ProxyListActivity.this.presentFragment(new ProxySettingsActivity());
+                        return;
+                    }
+                    SharedConfig.currentProxy = (ProxyInfo) SharedConfig.proxyList.get(0);
                 }
-                proxyListActivity = ProxyListActivity.this;
-                if (ProxyListActivity.this.useProxySettings) {
-                    z = false;
-                }
-                proxyListActivity.useProxySettings = z;
+                ProxyListActivity.this.useProxySettings = !ProxyListActivity.this.useProxySettings;
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                 ((TextCheckCell) view).setChecked(ProxyListActivity.this.useProxySettings);
                 if (!ProxyListActivity.this.useProxySettings) {
@@ -265,7 +263,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled", ProxyListActivity.this.useProxySettings);
                 editor.commit();
-                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
+                NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
                 ConnectionsManager.setProxySettings(ProxyListActivity.this.useProxySettings, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
                 for (a = ProxyListActivity.this.proxyStartRow; a < ProxyListActivity.this.proxyEndRow; a++) {
                     holder = (Holder) ProxyListActivity.this.listView.findViewHolderForAdapterPosition(a);
@@ -274,7 +274,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     }
                 }
             } else if (position == ProxyListActivity.this.callsRow) {
-                proxyListActivity = ProxyListActivity.this;
+                ProxyListActivity proxyListActivity = ProxyListActivity.this;
                 if (ProxyListActivity.this.useProxyForCalls) {
                     z = false;
                 }
@@ -326,8 +326,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$3 */
-    class C22793 implements OnItemLongClickListener {
-        C22793() {
+    class C24563 implements OnItemLongClickListener {
+        C24563() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -346,6 +346,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         ProxyListActivity.this.useProxyForCalls = false;
                         ProxyListActivity.this.useProxySettings = false;
                     }
+                    NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                    NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
                     ProxyListActivity.this.updateRows(true);
                 }
             });
@@ -521,7 +524,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C22771());
+        this.actionBar.setActionBarMenuOnItemClick(new C24541());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -532,8 +535,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22782());
-        this.listView.setOnItemLongClickListener(new C22793());
+        this.listView.setOnItemClickListener(new C24552());
+        this.listView.setOnItemLongClickListener(new C24563());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

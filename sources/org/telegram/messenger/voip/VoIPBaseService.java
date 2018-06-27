@@ -118,7 +118,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     public static final int STATE_WAIT_INIT_ACK = 2;
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
     protected static VoIPBaseService sharedInstance;
-    protected Runnable afterSoundRunnable = new C06791();
+    protected Runnable afterSoundRunnable = new C07091();
     protected boolean audioConfigured;
     protected int audioRouteToSet = 2;
     protected boolean bluetoothScoActive = false;
@@ -145,7 +145,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean playingSound;
     protected Stats prevStats = new Stats();
     protected WakeLock proximityWakelock;
-    protected BroadcastReceiver receiver = new C06802();
+    protected BroadcastReceiver receiver = new C07102();
     protected MediaPlayer ringtonePlayer;
     protected int signalBarCount;
     protected SoundPool soundPool;
@@ -164,8 +164,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     private boolean wasEstablished;
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$1 */
-    class C06791 implements Runnable {
-        C06791() {
+    class C07091 implements Runnable {
+        C07091() {
         }
 
         public void run() {
@@ -180,8 +180,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$2 */
-    class C06802 extends BroadcastReceiver {
-        C06802() {
+    class C07102 extends BroadcastReceiver {
+        C07102() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -245,8 +245,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$3 */
-    class C06813 implements OnClickListener {
-        C06813() {
+    class C07113 implements OnClickListener {
+        C07113() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -315,8 +315,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$4 */
-    class C06824 implements OnPreparedListener {
-        C06824() {
+    class C07124 implements OnPreparedListener {
+        C07124() {
         }
 
         public void onPrepared(MediaPlayer mediaPlayer) {
@@ -325,8 +325,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$5 */
-    class C06835 implements Runnable {
-        C06835() {
+    class C07135 implements Runnable {
+        C07135() {
         }
 
         public void run() {
@@ -335,14 +335,44 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$7 */
-    class C06857 implements Runnable {
-        C06857() {
+    class C07157 implements Runnable {
+        C07157() {
         }
 
         public void run() {
             if (VoIPBaseService.this.controller != null) {
                 StatsController.getInstance(VoIPBaseService.this.currentAccount).incrementTotalCallsTime(VoIPBaseService.this.getStatsNetworkType(), 5);
                 AndroidUtilities.runOnUIThread(this, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.voip.VoIPBaseService$8 */
+    class C07168 implements Runnable {
+        C07168() {
+        }
+
+        public void run() {
+            if (VoIPBaseService.this.systemCallConnection != null) {
+                switch (VoIPBaseService.this.callDiscardReason) {
+                    case 1:
+                        VoIPBaseService.this.systemCallConnection.setDisconnected(new DisconnectCause(VoIPBaseService.this.isOutgoing ? 2 : 6));
+                        break;
+                    case 2:
+                        VoIPBaseService.this.systemCallConnection.setDisconnected(new DisconnectCause(1));
+                        break;
+                    case 3:
+                        VoIPBaseService.this.systemCallConnection.setDisconnected(new DisconnectCause(VoIPBaseService.this.isOutgoing ? 4 : 5));
+                        break;
+                    case 4:
+                        VoIPBaseService.this.systemCallConnection.setDisconnected(new DisconnectCause(7));
+                        break;
+                    default:
+                        VoIPBaseService.this.systemCallConnection.setDisconnected(new DisconnectCause(3));
+                        break;
+                }
+                VoIPBaseService.this.systemCallConnection.destroy();
+                VoIPBaseService.this.systemCallConnection = null;
             }
         }
     }
@@ -379,6 +409,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
 
         public void onReject() {
+            VoIPBaseService.this.needPlayEndSound = false;
             VoIPBaseService.this.declineIncomingCall(1, null);
         }
 
@@ -398,6 +429,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("ConnectionService onCallEvent " + event);
             }
+        }
+
+        public void onSilence() {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("onSlience");
+            }
+            VoIPBaseService.this.stopRinging();
         }
     }
 
@@ -496,7 +534,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public void toggleSpeakerphoneOrShowRouteSheet(Activity activity) {
         if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C06813()).create();
+            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C07113()).create();
             sheet.setBackgroundColor(-13948117);
             sheet.show();
             ViewGroup container = sheet.getSheetContainer();
@@ -673,7 +711,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 am.requestAudioFocus(this, 2, 1);
             }
             this.ringtonePlayer = new MediaPlayer();
-            this.ringtonePlayer.setOnPreparedListener(new C06824());
+            this.ringtonePlayer.setOnPreparedListener(new C07124());
             this.ringtonePlayer.setLooping(true);
             this.ringtonePlayer.setAudioStreamType(2);
             try {
@@ -731,7 +769,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         super.onDestroy();
         sharedInstance = null;
-        AndroidUtilities.runOnUIThread(new C06835());
+        AndroidUtilities.runOnUIThread(new C07135());
         if (this.controller != null && this.controllerStarted) {
             this.lastKnownDuration = this.controller.getCallDuration();
             updateStats();
@@ -763,7 +801,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (!this.playingSound) {
             this.soundPool.release();
         }
-        if (USE_CONNECTION_SERVICE && this.systemCallConnection != null) {
+        if (!(!USE_CONNECTION_SERVICE || this.systemCallConnection == null || this.playingSound)) {
             this.systemCallConnection.destroy();
         }
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
@@ -880,38 +918,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     protected void configureDeviceForCall() {
-        int i = 5;
         this.needPlayEndSound = true;
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-        if (USE_CONNECTION_SERVICE) {
-            if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-                switch (this.audioRouteToSet) {
-                    case 0:
-                        this.systemCallConnection.setAudioRoute(5);
-                        break;
-                    case 1:
-                        this.systemCallConnection.setAudioRoute(8);
-                        break;
-                    case 2:
-                        this.systemCallConnection.setAudioRoute(2);
-                        break;
-                    default:
-                        break;
-                }
-            } else if (hasEarpiece()) {
-                CallConnection callConnection = this.systemCallConnection;
-                if (this.speakerphoneStateToSet) {
-                    i = 8;
-                }
-                callConnection.setAudioRoute(i);
-            } else {
-                CallConnection callConnection2 = this.systemCallConnection;
-                if (this.speakerphoneStateToSet) {
-                    i = 2;
-                }
-                callConnection2.setAudioRoute(i);
-            }
-        } else {
+        if (!USE_CONNECTION_SERVICE) {
             am.setMode(3);
             am.requestAudioFocus(this, 0, 1);
             if (isBluetoothHeadsetConnected() && hasEarpiece()) {
@@ -1292,7 +1301,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         vibrator.vibrate(100);
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C06857(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                AndroidUtilities.runOnUIThread(new C07157(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 if (this.isOutgoing) {
                     StatsController.getInstance(this.currentAccount).incrementSentItemsCount(getStatsNetworkType(), 0, 1);
                 } else {
@@ -1330,26 +1339,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
             this.timeoutRunnable = null;
         }
-        if (USE_CONNECTION_SERVICE && this.systemCallConnection != null) {
-            switch (this.callDiscardReason) {
-                case 1:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(this.isOutgoing ? 2 : 6));
-                    break;
-                case 2:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(1));
-                    break;
-                case 3:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(this.isOutgoing ? 4 : 5));
-                    break;
-                case 4:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(7));
-                    break;
-                default:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(3));
-                    break;
+        if (USE_CONNECTION_SERVICE) {
+            Runnable r = new C07168();
+            if (this.needPlayEndSound) {
+                AndroidUtilities.runOnUIThread(r, 700);
+            } else {
+                r.run();
             }
-            this.systemCallConnection.destroy();
-            this.systemCallConnection = null;
         }
         stopSelf();
     }

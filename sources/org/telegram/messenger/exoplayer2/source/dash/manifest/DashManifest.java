@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.offline.FilterableManifest;
 
-public class DashManifest {
+public class DashManifest implements FilterableManifest<DashManifest, RepresentationKey> {
     public final long availabilityStartTimeMs;
     public final long durationMs;
     public final boolean dynamic;
@@ -49,18 +50,18 @@ public class DashManifest {
         if (index != this.periods.size() - 1) {
             return ((Period) this.periods.get(index + 1)).startMs - ((Period) this.periods.get(index)).startMs;
         }
-        if (this.durationMs == C0546C.TIME_UNSET) {
-            return C0546C.TIME_UNSET;
+        if (this.durationMs == C0554C.TIME_UNSET) {
+            return C0554C.TIME_UNSET;
         }
         return this.durationMs - ((Period) this.periods.get(index)).startMs;
     }
 
     public final long getPeriodDurationUs(int index) {
-        return C0546C.msToUs(getPeriodDurationMs(index));
+        return C0554C.msToUs(getPeriodDurationMs(index));
     }
 
-    public final DashManifest copy(List<RepresentationKey> representationKeys) {
-        LinkedList<RepresentationKey> linkedList = new LinkedList(representationKeys);
+    public final DashManifest copy(List<RepresentationKey> streamKeys) {
+        LinkedList<RepresentationKey> linkedList = new LinkedList(streamKeys);
         Collections.sort(linkedList);
         linkedList.add(new RepresentationKey(-1, -1, -1));
         ArrayList<Period> copyPeriods = new ArrayList();
@@ -68,7 +69,7 @@ public class DashManifest {
         for (int periodIndex = 0; periodIndex < getPeriodCount(); periodIndex++) {
             if (((RepresentationKey) linkedList.peek()).periodIndex != periodIndex) {
                 long periodDurationMs = getPeriodDurationMs(periodIndex);
-                if (periodDurationMs != C0546C.TIME_UNSET) {
+                if (periodDurationMs != C0554C.TIME_UNSET) {
                     shiftMs += periodDurationMs;
                 }
             } else {
@@ -76,7 +77,7 @@ public class DashManifest {
                 copyPeriods.add(new Period(period.id, period.startMs - shiftMs, copyAdaptationSets(period.adaptationSets, linkedList), period.eventStreams));
             }
         }
-        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C0546C.TIME_UNSET ? this.durationMs - shiftMs : C0546C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
+        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C0554C.TIME_UNSET ? this.durationMs - shiftMs : C0554C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
     }
 
     private static ArrayList<AdaptationSet> copyAdaptationSets(List<AdaptationSet> adaptationSets, LinkedList<RepresentationKey> keys) {

@@ -14,6 +14,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     private boolean readEndOfStream = true;
     private int state;
     private SampleStream stream;
+    private Format[] streamFormats;
     private boolean streamIsFinal;
     private long streamOffsetUs;
     private final int trackType;
@@ -65,6 +66,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         Assertions.checkState(!this.streamIsFinal);
         this.stream = stream;
         this.readEndOfStream = false;
+        this.streamFormats = formats;
         this.streamOffsetUs = offsetUs;
         onStreamChanged(formats, offsetUs);
     }
@@ -109,6 +111,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         Assertions.checkState(z);
         this.state = 0;
         this.stream = null;
+        this.streamFormats = null;
         this.streamIsFinal = false;
         onDisabled();
     }
@@ -136,6 +139,10 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     }
 
     protected void onDisabled() {
+    }
+
+    protected final Format[] getStreamFormats() {
+        return this.streamFormats;
     }
 
     protected final RendererConfiguration getConfiguration() {

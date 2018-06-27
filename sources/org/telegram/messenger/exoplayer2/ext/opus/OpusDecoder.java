@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.ext.opus;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.decoder.CryptoInfo;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
@@ -41,54 +41,53 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     public OpusDecoder(int numInputBuffers, int numOutputBuffers, int initialInputBufferSize, List<byte[]> initializationData, ExoMediaCrypto exoMediaCrypto) throws OpusDecoderException {
         super(new DecoderInputBuffer[numInputBuffers], new SimpleOutputBuffer[numOutputBuffers]);
         this.exoMediaCrypto = exoMediaCrypto;
-        if (exoMediaCrypto == null || OpusLibrary.opusIsSecureDecodeSupported()) {
-            byte[] headerBytes = (byte[]) initializationData.get(0);
-            if (headerBytes.length < 19) {
-                throw new OpusDecoderException("Header size is too small.");
-            }
-            this.channelCount = headerBytes[9] & 255;
-            if (this.channelCount > 8) {
-                throw new OpusDecoderException("Invalid channel count: " + this.channelCount);
-            }
-            int numStreams;
-            int numCoupled;
-            int preskip = readLittleEndian16(headerBytes, 10);
-            int gain = readLittleEndian16(headerBytes, 16);
-            byte[] streamMap = new byte[8];
-            if (headerBytes[18] == (byte) 0) {
-                if (this.channelCount > 2) {
-                    throw new OpusDecoderException("Invalid Header, missing stream map.");
-                }
-                numStreams = 1;
-                numCoupled = this.channelCount == 2 ? 1 : 0;
-                streamMap[0] = (byte) 0;
-                streamMap[1] = (byte) 1;
-            } else if (headerBytes.length < this.channelCount + 21) {
-                throw new OpusDecoderException("Header size is too small.");
-            } else {
-                numStreams = headerBytes[19] & 255;
-                numCoupled = headerBytes[20] & 255;
-                System.arraycopy(headerBytes, 21, streamMap, 0, this.channelCount);
-            }
-            if (initializationData.size() != 3) {
-                this.headerSkipSamples = preskip;
-                this.headerSeekPreRollSamples = DEFAULT_SEEK_PRE_ROLL_SAMPLES;
-            } else if (((byte[]) initializationData.get(1)).length == 8 && ((byte[]) initializationData.get(2)).length == 8) {
-                long codecDelayNs = ByteBuffer.wrap((byte[]) initializationData.get(1)).order(ByteOrder.nativeOrder()).getLong();
-                long seekPreRollNs = ByteBuffer.wrap((byte[]) initializationData.get(2)).order(ByteOrder.nativeOrder()).getLong();
-                this.headerSkipSamples = nsToSamples(codecDelayNs);
-                this.headerSeekPreRollSamples = nsToSamples(seekPreRollNs);
-            } else {
-                throw new OpusDecoderException("Invalid Codec Delay or Seek Preroll");
-            }
-            this.nativeDecoderContext = opusInit(SAMPLE_RATE, this.channelCount, numStreams, numCoupled, gain, streamMap);
-            if (this.nativeDecoderContext == 0) {
-                throw new OpusDecoderException("Failed to initialize decoder");
-            }
-            setInitialInputBufferSize(initialInputBufferSize);
-            return;
+        if (exoMediaCrypto != null) {
+            throw new OpusDecoderException("Opus decoder does not support secure decode.");
         }
-        throw new OpusDecoderException("Opus decoder does not support secure decode.");
+        byte[] headerBytes = (byte[]) initializationData.get(0);
+        if (headerBytes.length < 19) {
+            throw new OpusDecoderException("Header size is too small.");
+        }
+        this.channelCount = headerBytes[9] & 255;
+        if (this.channelCount > 8) {
+            throw new OpusDecoderException("Invalid channel count: " + this.channelCount);
+        }
+        int numStreams;
+        int numCoupled;
+        int preskip = readLittleEndian16(headerBytes, 10);
+        int gain = readLittleEndian16(headerBytes, 16);
+        byte[] streamMap = new byte[8];
+        if (headerBytes[18] == (byte) 0) {
+            if (this.channelCount > 2) {
+                throw new OpusDecoderException("Invalid Header, missing stream map.");
+            }
+            numStreams = 1;
+            numCoupled = this.channelCount == 2 ? 1 : 0;
+            streamMap[0] = (byte) 0;
+            streamMap[1] = (byte) 1;
+        } else if (headerBytes.length < this.channelCount + 21) {
+            throw new OpusDecoderException("Header size is too small.");
+        } else {
+            numStreams = headerBytes[19] & 255;
+            numCoupled = headerBytes[20] & 255;
+            System.arraycopy(headerBytes, 21, streamMap, 0, this.channelCount);
+        }
+        if (initializationData.size() != 3) {
+            this.headerSkipSamples = preskip;
+            this.headerSeekPreRollSamples = DEFAULT_SEEK_PRE_ROLL_SAMPLES;
+        } else if (((byte[]) initializationData.get(1)).length == 8 && ((byte[]) initializationData.get(2)).length == 8) {
+            long codecDelayNs = ByteBuffer.wrap((byte[]) initializationData.get(1)).order(ByteOrder.nativeOrder()).getLong();
+            long seekPreRollNs = ByteBuffer.wrap((byte[]) initializationData.get(2)).order(ByteOrder.nativeOrder()).getLong();
+            this.headerSkipSamples = nsToSamples(codecDelayNs);
+            this.headerSeekPreRollSamples = nsToSamples(seekPreRollNs);
+        } else {
+            throw new OpusDecoderException("Invalid Codec Delay or Seek Preroll");
+        }
+        this.nativeDecoderContext = opusInit(SAMPLE_RATE, this.channelCount, numStreams, numCoupled, gain, streamMap);
+        if (this.nativeDecoderContext == 0) {
+            throw new OpusDecoderException("Failed to initialize decoder");
+        }
+        setInitialInputBufferSize(initialInputBufferSize);
     }
 
     public String getName() {
@@ -159,7 +158,7 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     }
 
     private static int nsToSamples(long ns) {
-        return (int) ((48000 * ns) / C0546C.NANOS_PER_SECOND);
+        return (int) ((48000 * ns) / C0554C.NANOS_PER_SECOND);
     }
 
     private static int readLittleEndian16(byte[] input, int offset) {

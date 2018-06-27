@@ -50,6 +50,7 @@ public class ActionBar extends FrameLayout {
     protected int itemsActionModeColor;
     protected int itemsBackgroundColor;
     protected int itemsColor;
+    private Runnable lastRunnable;
     private CharSequence lastSubtitle;
     private CharSequence lastTitle;
     private boolean manualStart;
@@ -66,8 +67,8 @@ public class ActionBar extends FrameLayout {
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$1 */
-    class C07131 implements OnClickListener {
-        C07131() {
+    class C07441 implements OnClickListener {
+        C07441() {
         }
 
         public void onClick(View v) {
@@ -78,8 +79,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$2 */
-    class C07142 implements OnClickListener {
-        C07142() {
+    class C07452 implements OnClickListener {
+        C07452() {
         }
 
         public void onClick(View v) {
@@ -92,8 +93,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$3 */
-    class C07153 extends AnimatorListenerAdapter {
-        C07153() {
+    class C07463 extends AnimatorListenerAdapter {
+        C07463() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -126,8 +127,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$4 */
-    class C07164 extends AnimatorListenerAdapter {
-        C07164() {
+    class C07474 extends AnimatorListenerAdapter {
+        C07474() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -162,7 +163,7 @@ public class ActionBar extends FrameLayout {
         this.addToContainer = true;
         this.interceptTouches = true;
         this.castShadows = true;
-        setOnClickListener(new C07131());
+        setOnClickListener(new C07441());
     }
 
     private void createBackButtonImage() {
@@ -175,7 +176,7 @@ public class ActionBar extends FrameLayout {
             }
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
-            this.backButtonImageView.setOnClickListener(new C07142());
+            this.backButtonImageView.setOnClickListener(new C07452());
         }
     }
 
@@ -437,7 +438,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07153());
+            this.actionModeAnimation.addListener(new C07463());
             this.actionModeAnimation.start();
             if (this.backButtonImageView != null) {
                 Drawable drawable = this.backButtonImageView.getDrawable();
@@ -463,7 +464,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07164());
+            this.actionModeAnimation.addListener(new C07474());
             this.actionModeAnimation.start();
             if (this.titleTextView != null) {
                 this.titleTextView.setVisibility(0);
@@ -705,6 +706,11 @@ public class ActionBar extends FrameLayout {
         this.allowOverlayTitle = value;
     }
 
+    public void setTitleActionRunnable(Runnable action) {
+        this.titleActionRunnable = action;
+        this.lastRunnable = action;
+    }
+
     public void setTitleOverlayText(String title, String subtitle, Runnable action) {
         int i = 0;
         if (this.allowOverlayTitle && this.parentFragment.parentLayout != null) {
@@ -740,6 +746,9 @@ public class ActionBar extends FrameLayout {
                 }
                 simpleTextView2.setVisibility(i);
                 this.subtitleTextView.setText(textToSet);
+            }
+            if (action == null) {
+                action = this.lastRunnable;
             }
             this.titleActionRunnable = action;
         }

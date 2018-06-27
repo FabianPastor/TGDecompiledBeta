@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -40,7 +40,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class FragmentedMp4Extractor implements Extractor {
     private static final Format EMSG_FORMAT = Format.createSampleFormat(null, MimeTypes.APPLICATION_EMSG, Long.MAX_VALUE);
-    public static final ExtractorsFactory FACTORY = new C18521();
+    public static final ExtractorsFactory FACTORY = new C19791();
     public static final int FLAG_ENABLE_EMSG_TRACK = 4;
     private static final int FLAG_SIDELOADED = 8;
     public static final int FLAG_WORKAROUND_EVERY_VIDEO_FRAME_IS_SYNC_FRAME = 1;
@@ -64,10 +64,8 @@ public final class FragmentedMp4Extractor implements Extractor {
     private final List<Format> closedCaptionFormats;
     private final Stack<ContainerAtom> containerAtoms;
     private TrackBundle currentTrackBundle;
-    private final ParsableByteArray defaultInitializationVector;
     private long durationUs;
     private TrackOutput[] emsgTrackOutputs;
-    private final ParsableByteArray encryptionSignalByte;
     private long endOfMdatPosition;
     private final byte[] extendedTypeScratch;
     private ExtractorOutput extractorOutput;
@@ -79,6 +77,7 @@ public final class FragmentedMp4Extractor implements Extractor {
     private int parserState;
     private int pendingMetadataSampleBytes;
     private final ArrayDeque<MetadataSampleInfo> pendingMetadataSampleInfos;
+    private long pendingSeekTimeUs;
     private boolean processSeiNalUnitPayload;
     private int sampleBytesWritten;
     private int sampleCurrentNalBytesRemaining;
@@ -107,7 +106,10 @@ public final class FragmentedMp4Extractor implements Extractor {
         public int currentSampleInTrackRun;
         public int currentSampleIndex;
         public int currentTrackRunIndex;
+        private final ParsableByteArray defaultInitializationVector = new ParsableByteArray();
         public DefaultSampleValues defaultSampleValues;
+        private final ParsableByteArray encryptionSignalByte = new ParsableByteArray(1);
+        public int firstSampleToOutputIndex;
         public final TrackFragment fragment = new TrackFragment();
         public final TrackOutput output;
         public Track track;
@@ -123,22 +125,105 @@ public final class FragmentedMp4Extractor implements Extractor {
             reset();
         }
 
+        public void updateDrmInitData(DrmInitData drmInitData) {
+            TrackEncryptionBox encryptionBox = this.track.getSampleDescriptionEncryptionBox(this.fragment.header.sampleDescriptionIndex);
+            this.output.format(this.track.format.copyWithDrmInitData(drmInitData.copyWithSchemeType(encryptionBox != null ? encryptionBox.schemeType : null)));
+        }
+
         public void reset() {
             this.fragment.reset();
             this.currentSampleIndex = 0;
             this.currentTrackRunIndex = 0;
             this.currentSampleInTrackRun = 0;
+            this.firstSampleToOutputIndex = 0;
         }
 
-        public void updateDrmInitData(DrmInitData drmInitData) {
-            TrackEncryptionBox encryptionBox = this.track.getSampleDescriptionEncryptionBox(this.fragment.header.sampleDescriptionIndex);
-            this.output.format(this.track.format.copyWithDrmInitData(drmInitData.copyWithSchemeType(encryptionBox != null ? encryptionBox.schemeType : null)));
+        public void seek(long timeUs) {
+            long timeMs = C0554C.usToMs(timeUs);
+            int searchIndex = this.currentSampleIndex;
+            while (searchIndex < this.fragment.sampleCount && this.fragment.getSamplePresentationTime(searchIndex) < timeMs) {
+                if (this.fragment.sampleIsSyncFrameTable[searchIndex]) {
+                    this.firstSampleToOutputIndex = searchIndex;
+                }
+                searchIndex++;
+            }
+        }
+
+        public boolean next() {
+            this.currentSampleIndex++;
+            this.currentSampleInTrackRun++;
+            if (this.currentSampleInTrackRun != this.fragment.trunLength[this.currentTrackRunIndex]) {
+                return true;
+            }
+            this.currentTrackRunIndex++;
+            this.currentSampleInTrackRun = 0;
+            return false;
+        }
+
+        public int outputSampleEncryptionData() {
+            if (!this.fragment.definesEncryptionData) {
+                return 0;
+            }
+            ParsableByteArray initializationVectorData;
+            int vectorSize;
+            int i;
+            TrackEncryptionBox encryptionBox = getEncryptionBox();
+            if (encryptionBox.initializationVectorSize != 0) {
+                initializationVectorData = this.fragment.sampleEncryptionData;
+                vectorSize = encryptionBox.initializationVectorSize;
+            } else {
+                byte[] initVectorData = encryptionBox.defaultInitializationVector;
+                this.defaultInitializationVector.reset(initVectorData, initVectorData.length);
+                initializationVectorData = this.defaultInitializationVector;
+                vectorSize = initVectorData.length;
+            }
+            boolean subsampleEncryption = this.fragment.sampleHasSubsampleEncryptionTable[this.currentSampleIndex];
+            byte[] bArr = this.encryptionSignalByte.data;
+            if (subsampleEncryption) {
+                i = 128;
+            } else {
+                i = 0;
+            }
+            bArr[0] = (byte) (i | vectorSize);
+            this.encryptionSignalByte.setPosition(0);
+            this.output.sampleData(this.encryptionSignalByte, 1);
+            this.output.sampleData(initializationVectorData, vectorSize);
+            if (!subsampleEncryption) {
+                return vectorSize + 1;
+            }
+            ParsableByteArray subsampleEncryptionData = this.fragment.sampleEncryptionData;
+            int subsampleCount = subsampleEncryptionData.readUnsignedShort();
+            subsampleEncryptionData.skipBytes(-2);
+            int subsampleDataLength = (subsampleCount * 6) + 2;
+            this.output.sampleData(subsampleEncryptionData, subsampleDataLength);
+            return (vectorSize + 1) + subsampleDataLength;
+        }
+
+        private void skipSampleEncryptionData() {
+            if (this.fragment.definesEncryptionData) {
+                ParsableByteArray sampleEncryptionData = this.fragment.sampleEncryptionData;
+                TrackEncryptionBox encryptionBox = getEncryptionBox();
+                if (encryptionBox.initializationVectorSize != 0) {
+                    sampleEncryptionData.skipBytes(encryptionBox.initializationVectorSize);
+                }
+                if (this.fragment.sampleHasSubsampleEncryptionTable[this.currentSampleIndex]) {
+                    sampleEncryptionData.skipBytes(sampleEncryptionData.readUnsignedShort() * 6);
+                }
+            }
+        }
+
+        private TrackEncryptionBox getEncryptionBox() {
+            int sampleDescriptionIndex = this.fragment.header.sampleDescriptionIndex;
+            if (this.fragment.trackEncryptionBox != null) {
+                return this.fragment.trackEncryptionBox;
+            }
+            return this.track.getSampleDescriptionEncryptionBox(sampleDescriptionIndex);
         }
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor$1 */
-    static class C18521 implements ExtractorsFactory {
-        C18521() {
+    static class C19791 implements ExtractorsFactory {
+        C19791() {
         }
 
         public Extractor[] createExtractors() {
@@ -177,14 +262,13 @@ public final class FragmentedMp4Extractor implements Extractor {
         this.nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
         this.nalPrefix = new ParsableByteArray(5);
         this.nalBuffer = new ParsableByteArray();
-        this.encryptionSignalByte = new ParsableByteArray(1);
-        this.defaultInitializationVector = new ParsableByteArray();
         this.extendedTypeScratch = new byte[16];
         this.containerAtoms = new Stack();
         this.pendingMetadataSampleInfos = new ArrayDeque();
         this.trackBundles = new SparseArray();
-        this.durationUs = C0546C.TIME_UNSET;
-        this.segmentIndexEarliestPresentationTimeUs = C0546C.TIME_UNSET;
+        this.durationUs = C0554C.TIME_UNSET;
+        this.pendingSeekTimeUs = C0554C.TIME_UNSET;
+        this.segmentIndexEarliestPresentationTimeUs = C0554C.TIME_UNSET;
         enterReadingAtomHeaderState();
     }
 
@@ -210,6 +294,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
         this.pendingMetadataSampleInfos.clear();
         this.pendingMetadataSampleBytes = 0;
+        this.pendingSeekTimeUs = timeUs;
         this.containerAtoms.clear();
         enterReadingAtomHeaderState();
     }
@@ -371,7 +456,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
         ContainerAtom mvex = moov.getContainerAtomOfType(Atom.TYPE_mvex);
         SparseArray<DefaultSampleValues> defaultSampleValuesArray = new SparseArray();
-        long duration = C0546C.TIME_UNSET;
+        long duration = C0554C.TIME_UNSET;
         int mvexChildrenSize = mvex.leafChildren.size();
         for (i = 0; i < mvexChildrenSize; i++) {
             LeafAtom atom = (LeafAtom) mvex.leafChildren.get(i);
@@ -416,6 +501,8 @@ public final class FragmentedMp4Extractor implements Extractor {
 
     private void onMoofContainerAtomRead(ContainerAtom moof) throws ParserException {
         DrmInitData drmInitData;
+        int trackCount;
+        int i;
         parseMoof(moof, this.trackBundles, this.flags, this.extendedTypeScratch);
         if (this.sideloadedDrmInitData != null) {
             drmInitData = null;
@@ -423,10 +510,17 @@ public final class FragmentedMp4Extractor implements Extractor {
             drmInitData = getDrmInitDataFromAtoms(moof.leafChildren);
         }
         if (drmInitData != null) {
-            int trackCount = this.trackBundles.size();
-            for (int i = 0; i < trackCount; i++) {
+            trackCount = this.trackBundles.size();
+            for (i = 0; i < trackCount; i++) {
                 ((TrackBundle) this.trackBundles.valueAt(i)).updateDrmInitData(drmInitData);
             }
+        }
+        if (this.pendingSeekTimeUs != C0554C.TIME_UNSET) {
+            trackCount = this.trackBundles.size();
+            for (i = 0; i < trackCount; i++) {
+                ((TrackBundle) this.trackBundles.valueAt(i)).seek(this.pendingSeekTimeUs);
+            }
+            this.pendingSeekTimeUs = C0554C.TIME_UNSET;
         }
     }
 
@@ -461,17 +555,17 @@ public final class FragmentedMp4Extractor implements Extractor {
     }
 
     private void onEmsgLeafAtomRead(ParsableByteArray atom) {
-        if (this.emsgTrackOutputs.length != 0) {
+        if (this.emsgTrackOutputs != null && this.emsgTrackOutputs.length != 0) {
             atom.setPosition(12);
             int sampleSize = atom.bytesLeft();
             atom.readNullTerminatedString();
             atom.readNullTerminatedString();
-            long presentationTimeDeltaUs = Util.scaleLargeTimestamp(atom.readUnsignedInt(), C0546C.MICROS_PER_SECOND, atom.readUnsignedInt());
+            long presentationTimeDeltaUs = Util.scaleLargeTimestamp(atom.readUnsignedInt(), 1000000, atom.readUnsignedInt());
             for (TrackOutput emsgTrackOutput : this.emsgTrackOutputs) {
                 atom.setPosition(12);
                 emsgTrackOutput.sampleData(atom, sampleSize);
             }
-            if (this.segmentIndexEarliestPresentationTimeUs != C0546C.TIME_UNSET) {
+            if (this.segmentIndexEarliestPresentationTimeUs != C0554C.TIME_UNSET) {
                 for (TrackOutput emsgTrackOutput2 : this.emsgTrackOutputs) {
                     emsgTrackOutput2.sampleMetadata(this.segmentIndexEarliestPresentationTimeUs + presentationTimeDeltaUs, 1, sampleSize, 0, null);
                 }
@@ -792,7 +886,7 @@ public final class FragmentedMp4Extractor implements Extractor {
             earliestPresentationTime = atom.readUnsignedLongToLong();
             offset += atom.readUnsignedLongToLong();
         }
-        long earliestPresentationTimeUs = Util.scaleLargeTimestamp(earliestPresentationTime, C0546C.MICROS_PER_SECOND, timescale);
+        long earliestPresentationTimeUs = Util.scaleLargeTimestamp(earliestPresentationTime, 1000000, timescale);
         atom.skipBytes(2);
         int referenceCount = atom.readUnsignedShort();
         int[] sizes = new int[referenceCount];
@@ -811,7 +905,7 @@ public final class FragmentedMp4Extractor implements Extractor {
             offsets[i] = offset;
             timesUs[i] = timeUs;
             time += referenceDuration;
-            timeUs = Util.scaleLargeTimestamp(time, C0546C.MICROS_PER_SECOND, timescale);
+            timeUs = Util.scaleLargeTimestamp(time, 1000000, timescale);
             durationsUs[i] = timeUs - timesUs[i];
             atom.skipBytes(4);
             offset += (long) sizes[i];
@@ -865,16 +959,21 @@ public final class FragmentedMp4Extractor implements Extractor {
                 this.currentTrackBundle = currentTrackBundle;
             }
             this.sampleSize = this.currentTrackBundle.fragment.sampleSizeTable[this.currentTrackBundle.currentSampleIndex];
-            if (this.currentTrackBundle.fragment.definesEncryptionData) {
-                this.sampleBytesWritten = appendSampleEncryptionData(this.currentTrackBundle);
-                this.sampleSize += this.sampleBytesWritten;
-            } else {
-                this.sampleBytesWritten = 0;
+            if (this.currentTrackBundle.currentSampleIndex < this.currentTrackBundle.firstSampleToOutputIndex) {
+                input.skipFully(this.sampleSize);
+                this.currentTrackBundle.skipSampleEncryptionData();
+                if (!this.currentTrackBundle.next()) {
+                    this.currentTrackBundle = null;
+                }
+                this.parserState = 3;
+                return true;
             }
             if (this.currentTrackBundle.track.sampleTransformation == 1) {
                 this.sampleSize -= 8;
                 input.skipFully(8);
             }
+            this.sampleBytesWritten = this.currentTrackBundle.outputSampleEncryptionData();
+            this.sampleSize += this.sampleBytesWritten;
             this.parserState = 4;
             this.sampleCurrentNalBytesRemaining = 0;
         }
@@ -942,14 +1041,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
         output.sampleMetadata(sampleTimeUs, sampleFlags, this.sampleSize, 0, cryptoData);
         outputPendingMetadataSamples(sampleTimeUs);
-        TrackBundle trackBundle = this.currentTrackBundle;
-        trackBundle.currentSampleIndex++;
-        trackBundle = this.currentTrackBundle;
-        trackBundle.currentSampleInTrackRun++;
-        if (this.currentTrackBundle.currentSampleInTrackRun == fragment.trunLength[this.currentTrackBundle.currentTrackRunIndex]) {
-            trackBundle = this.currentTrackBundle;
-            trackBundle.currentTrackRunIndex++;
-            this.currentTrackBundle.currentSampleInTrackRun = 0;
+        if (!this.currentTrackBundle.next()) {
             this.currentTrackBundle = null;
         }
         this.parserState = 3;
@@ -981,50 +1073,6 @@ public final class FragmentedMp4Extractor implements Extractor {
             }
         }
         return nextTrackBundle;
-    }
-
-    private int appendSampleEncryptionData(TrackBundle trackBundle) {
-        TrackEncryptionBox encryptionBox;
-        ParsableByteArray initializationVectorData;
-        int vectorSize;
-        int i;
-        TrackFragment trackFragment = trackBundle.fragment;
-        int sampleDescriptionIndex = trackFragment.header.sampleDescriptionIndex;
-        if (trackFragment.trackEncryptionBox != null) {
-            encryptionBox = trackFragment.trackEncryptionBox;
-        } else {
-            encryptionBox = trackBundle.track.getSampleDescriptionEncryptionBox(sampleDescriptionIndex);
-        }
-        if (encryptionBox.initializationVectorSize != 0) {
-            initializationVectorData = trackFragment.sampleEncryptionData;
-            vectorSize = encryptionBox.initializationVectorSize;
-        } else {
-            byte[] initVectorData = encryptionBox.defaultInitializationVector;
-            this.defaultInitializationVector.reset(initVectorData, initVectorData.length);
-            initializationVectorData = this.defaultInitializationVector;
-            vectorSize = initVectorData.length;
-        }
-        boolean subsampleEncryption = trackFragment.sampleHasSubsampleEncryptionTable[trackBundle.currentSampleIndex];
-        byte[] bArr = this.encryptionSignalByte.data;
-        if (subsampleEncryption) {
-            i = 128;
-        } else {
-            i = 0;
-        }
-        bArr[0] = (byte) (i | vectorSize);
-        this.encryptionSignalByte.setPosition(0);
-        TrackOutput output = trackBundle.output;
-        output.sampleData(this.encryptionSignalByte, 1);
-        output.sampleData(initializationVectorData, vectorSize);
-        if (!subsampleEncryption) {
-            return vectorSize + 1;
-        }
-        ParsableByteArray subsampleEncryptionData = trackFragment.sampleEncryptionData;
-        int subsampleCount = subsampleEncryptionData.readUnsignedShort();
-        subsampleEncryptionData.skipBytes(-2);
-        int subsampleDataLength = (subsampleCount * 6) + 2;
-        output.sampleData(subsampleEncryptionData, subsampleDataLength);
-        return (vectorSize + 1) + subsampleDataLength;
     }
 
     private static DrmInitData getDrmInitDataFromAtoms(List<LeafAtom> leafChildren) {

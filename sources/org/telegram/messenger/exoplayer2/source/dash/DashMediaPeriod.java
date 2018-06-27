@@ -1,17 +1,16 @@
 package org.telegram.messenger.exoplayer2.source.dash;
 
 import android.util.Pair;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -54,6 +53,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
     private DashManifest manifest;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int minLoadableRetryCount;
+    private boolean notifiedReadingStarted;
     private int periodIndex;
     private final PlayerEmsgHandler playerEmsgHandler;
     private ChunkSampleStream<DashChunkSource>[] sampleStreams = newSampleStreamArray(0);
@@ -122,6 +122,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
         Pair<TrackGroupArray, TrackGroupInfo[]> result = buildTrackGroups(period.adaptationSets, this.eventStreams);
         this.trackGroups = (TrackGroupArray) result.first;
         this.trackGroupInfos = (TrackGroupInfo[]) result.second;
+        eventDispatcher.mediaPeriodCreated();
     }
 
     public void updateManifest(DashManifest manifest, int periodIndex) {
@@ -150,9 +151,10 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
         for (ChunkSampleStream<DashChunkSource> sampleStream : this.sampleStreams) {
             sampleStream.release(this);
         }
+        this.eventDispatcher.mediaPeriodReleased();
     }
 
-    public void onSampleStreamReleased(ChunkSampleStream<DashChunkSource> stream) {
+    public synchronized void onSampleStreamReleased(ChunkSampleStream<DashChunkSource> stream) {
         PlayerTrackEmsgHandler trackEmsgHandler = (PlayerTrackEmsgHandler) this.trackEmsgHandlerBySampleStream.remove(stream);
         if (trackEmsgHandler != null) {
             trackEmsgHandler.release();
@@ -173,20 +175,22 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
-        Map<Integer, ChunkSampleStream<DashChunkSource>> primarySampleStreams = new HashMap();
+        SparseArray<ChunkSampleStream<DashChunkSource>> primarySampleStreams = new SparseArray();
         List<EventSampleStream> eventSampleStreamList = new ArrayList();
         selectPrimarySampleStreams(selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs, primarySampleStreams);
         selectEventSampleStreams(selections, mayRetainStreamFlags, streams, streamResetFlags, eventSampleStreamList);
         selectEmbeddedSampleStreams(selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs, primarySampleStreams);
         this.sampleStreams = newSampleStreamArray(primarySampleStreams.size());
-        primarySampleStreams.values().toArray(this.sampleStreams);
+        for (int i = 0; i < this.sampleStreams.length; i++) {
+            this.sampleStreams[i] = (ChunkSampleStream) primarySampleStreams.valueAt(i);
+        }
         this.eventSampleStreams = new EventSampleStream[eventSampleStreamList.size()];
         eventSampleStreamList.toArray(this.eventSampleStreams);
         this.compositeSequenceableLoader = this.compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.sampleStreams);
         return positionUs;
     }
 
-    private void selectPrimarySampleStreams(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, Map<Integer, ChunkSampleStream<DashChunkSource>> primarySampleStreams) {
+    private void selectPrimarySampleStreams(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, SparseArray<ChunkSampleStream<DashChunkSource>> primarySampleStreams) {
         int i = 0;
         while (i < selections.length) {
             ChunkSampleStream<DashChunkSource> stream;
@@ -196,7 +200,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
                     stream.release(this);
                     streams[i] = null;
                 } else {
-                    primarySampleStreams.put(Integer.valueOf(this.trackGroups.indexOf(selections[i].getTrackGroup())), stream);
+                    primarySampleStreams.put(this.trackGroups.indexOf(selections[i].getTrackGroup()), stream);
                 }
             }
             if (streams[i] == null && selections[i] != null) {
@@ -204,7 +208,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
                 TrackGroupInfo trackGroupInfo = this.trackGroupInfos[trackGroupIndex];
                 if (trackGroupInfo.trackGroupCategory == 0) {
                     stream = buildSampleStream(trackGroupInfo, selections[i], positionUs);
-                    primarySampleStreams.put(Integer.valueOf(trackGroupIndex), stream);
+                    primarySampleStreams.put(trackGroupIndex, stream);
                     streams[i] = stream;
                     streamResetFlags[i] = true;
                 }
@@ -238,7 +242,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
         }
     }
 
-    private void selectEmbeddedSampleStreams(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, Map<Integer, ChunkSampleStream<DashChunkSource>> primarySampleStreams) {
+    private void selectEmbeddedSampleStreams(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, SparseArray<ChunkSampleStream<DashChunkSource>> primarySampleStreams) {
         int i = 0;
         while (i < selections.length) {
             if (((streams[i] instanceof EmbeddedSampleStream) || (streams[i] instanceof EmptySampleStream)) && (selections[i] == null || !mayRetainStreamFlags[i])) {
@@ -248,7 +252,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
             if (selections[i] != null) {
                 TrackGroupInfo trackGroupInfo = this.trackGroupInfos[this.trackGroups.indexOf(selections[i].getTrackGroup())];
                 if (trackGroupInfo.trackGroupCategory == 1) {
-                    ChunkSampleStream<?> primaryStream = (ChunkSampleStream) primarySampleStreams.get(Integer.valueOf(trackGroupInfo.primaryTrackGroupIndex));
+                    ChunkSampleStream<?> primaryStream = (ChunkSampleStream) primarySampleStreams.get(trackGroupInfo.primaryTrackGroupIndex);
                     SampleStream stream = streams[i];
                     boolean mayRetainStream = primaryStream == null ? stream instanceof EmptySampleStream : (stream instanceof EmbeddedSampleStream) && ((EmbeddedSampleStream) stream).parent == primaryStream;
                     if (!mayRetainStream) {
@@ -287,7 +291,11 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
     }
 
     public long readDiscontinuity() {
-        return C0546C.TIME_UNSET;
+        if (!this.notifiedReadingStarted) {
+            this.eventDispatcher.readingStarted();
+            this.notifiedReadingStarted = true;
+        }
+        return C0554C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {
@@ -477,7 +485,9 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
         }
         PlayerTrackEmsgHandler trackPlayerEmsgHandler = (this.manifest.dynamic && enableEventMessageTrack) ? this.playerEmsgHandler.newPlayerTrackEmsgHandler() : null;
         ChunkSampleStream<DashChunkSource> stream = new ChunkSampleStream(trackGroupInfo.trackType, embeddedTrackTypes, embeddedTrackFormats, this.chunkSourceFactory.createDashChunkSource(this.manifestLoaderErrorThrower, this.manifest, this.periodIndex, trackGroupInfo.adaptationSetIndices, selection, trackGroupInfo.trackType, this.elapsedRealtimeOffset, enableEventMessageTrack, enableCea608Track, trackPlayerEmsgHandler), this, this.allocator, positionUs, this.minLoadableRetryCount, this.eventDispatcher);
-        this.trackEmsgHandlerBySampleStream.put(stream, trackPlayerEmsgHandler);
+        synchronized (this) {
+            this.trackEmsgHandlerBySampleStream.put(stream, trackPlayerEmsgHandler);
+        }
         return stream;
     }
 

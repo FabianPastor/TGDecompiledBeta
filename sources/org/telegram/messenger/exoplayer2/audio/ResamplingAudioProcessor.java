@@ -21,9 +21,6 @@ final class ResamplingAudioProcessor implements AudioProcessor {
             this.sampleRateHz = sampleRateHz;
             this.channelCount = channelCount;
             this.encoding = encoding;
-            if (encoding == 2) {
-                this.buffer = EMPTY_BUFFER;
-            }
             return true;
         }
     }
@@ -116,9 +113,9 @@ final class ResamplingAudioProcessor implements AudioProcessor {
 
     public void reset() {
         flush();
-        this.buffer = EMPTY_BUFFER;
         this.sampleRateHz = -1;
         this.channelCount = -1;
         this.encoding = 0;
+        this.buffer = EMPTY_BUFFER;
     }
 }

@@ -53,8 +53,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$1 */
-    class C11211 implements OnClickListener {
-        C11211() {
+    class C11501 implements OnClickListener {
+        C11501() {
         }
 
         public void onClick(View v) {
@@ -63,8 +63,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$2 */
-    class C11222 implements OnClickListener {
-        C11222() {
+    class C11512 implements OnClickListener {
+        C11512() {
         }
 
         public void onClick(View v) {
@@ -126,10 +126,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timerDrawable = timerDrawable;
             imageView.setImageDrawable(timerDrawable);
             addView(this.timeItem);
-            this.timeItem.setOnClickListener(new C11211());
+            this.timeItem.setOnClickListener(new C11501());
         }
         if (this.parentFragment != null) {
-            setOnClickListener(new C11222());
+            setOnClickListener(new C11512());
             Chat chat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();

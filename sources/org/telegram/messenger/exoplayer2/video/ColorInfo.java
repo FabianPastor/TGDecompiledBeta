@@ -4,9 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import java.util.Arrays;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ColorInfo implements Parcelable {
-    public static final Creator<ColorInfo> CREATOR = new C06321();
+    public static final Creator<ColorInfo> CREATOR = new C06621();
     public final int colorRange;
     public final int colorSpace;
     public final int colorTransfer;
@@ -14,8 +15,8 @@ public final class ColorInfo implements Parcelable {
     public final byte[] hdrStaticInfo;
 
     /* renamed from: org.telegram.messenger.exoplayer2.video.ColorInfo$1 */
-    static class C06321 implements Creator<ColorInfo> {
-        C06321() {
+    static class C06621 implements Creator<ColorInfo> {
+        C06621() {
         }
 
         public ColorInfo createFromParcel(Parcel in) {
@@ -38,7 +39,7 @@ public final class ColorInfo implements Parcelable {
         this.colorSpace = in.readInt();
         this.colorRange = in.readInt();
         this.colorTransfer = in.readInt();
-        this.hdrStaticInfo = in.readInt() != 0 ? in.createByteArray() : null;
+        this.hdrStaticInfo = Util.readBoolean(in) ? in.createByteArray() : null;
     }
 
     public boolean equals(Object obj) {
@@ -74,7 +75,7 @@ public final class ColorInfo implements Parcelable {
         dest.writeInt(this.colorSpace);
         dest.writeInt(this.colorRange);
         dest.writeInt(this.colorTransfer);
-        dest.writeInt(this.hdrStaticInfo != null ? 1 : 0);
+        Util.writeBoolean(dest, this.hdrStaticInfo != null);
         if (this.hdrStaticInfo != null) {
             dest.writeByteArray(this.hdrStaticInfo);
         }

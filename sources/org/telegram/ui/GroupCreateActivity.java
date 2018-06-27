@@ -102,8 +102,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private SpansContainer spansContainer;
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
-    class C14035 implements Callback {
-        C14035() {
+    class C14565 implements Callback {
+        C14565() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -123,8 +123,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C14046 implements OnEditorActionListener {
-        C14046() {
+    class C14576 implements OnEditorActionListener {
+        C14576() {
         }
 
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -133,10 +133,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C14057 implements OnKeyListener {
+    class C14587 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C14057() {
+        C14587() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -155,8 +155,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C14068 implements TextWatcher {
-        C14068() {
+    class C14598 implements TextWatcher {
+        C14598() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -193,8 +193,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C14111 extends AnimatorListenerAdapter {
-            C14111() {
+        class C14641 extends AnimatorListenerAdapter {
+            C14641() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -313,7 +313,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C14111());
+            this.currentAnimation.addListener(new C14641());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -357,8 +357,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C21521 extends ActionBarMenuOnItemClick {
-        C21521() {
+    class C22891 extends ActionBarMenuOnItemClick {
+        C22891() {
         }
 
         public void onItemClick(int id) {
@@ -371,8 +371,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C21549 implements OnItemClickListener {
-        C21549() {
+    class C22919 implements OnItemClickListener {
+        C22919() {
         }
 
         public void onItemClick(View view, int position) {
@@ -620,11 +620,11 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1 */
-                class C14081 implements Runnable {
+                class C14611 implements Runnable {
 
                     /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1$1 */
-                    class C14071 implements Runnable {
-                        C14071() {
+                    class C14601 implements Runnable {
+                        C14601() {
                         }
 
                         public void run() {
@@ -677,12 +677,12 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                         }
                     }
 
-                    C14081() {
+                    C14611() {
                     }
 
                     public void run() {
                         GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
-                        Utilities.searchQueue.postRunnable(new C14071());
+                        Utilities.searchQueue.postRunnable(new C14601());
                     }
                 }
 
@@ -693,7 +693,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C14081());
+                    AndroidUtilities.runOnUIThread(new C14611());
                 }
             }, 200, 300);
         }
@@ -780,7 +780,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21521());
+        this.actionBar.setActionBarMenuOnItemClick(new C22891());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         if (this.chatType != 2) {
             this.doneButton.setScaleX(0.0f);
@@ -874,10 +874,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C14035());
-        this.editText.setOnEditorActionListener(new C14046());
-        this.editText.setOnKeyListener(new C14057());
-        this.editText.addTextChangedListener(new C14068());
+        this.editText.setCustomSelectionActionModeCallback(new C14565());
+        this.editText.setOnEditorActionListener(new C14576());
+        this.editText.setOnKeyListener(new C14587());
+        this.editText.addTextChangedListener(new C14598());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -907,7 +907,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.itemDecoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C21549());
+        this.listView.setOnItemClickListener(new C22919());
         this.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == 1) {

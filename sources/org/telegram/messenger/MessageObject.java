@@ -13,8 +13,11 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.Base64;
 import android.util.SparseArray;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.StringReader;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +33,7 @@ import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -39,10 +43,12 @@ import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.MessageEntity;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PageBlock;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.SecureValueType;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeAbout;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangePhoto;
@@ -98,6 +104,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageActionScreenshotTaken;
+import org.telegram.tgnet.TLRPC.TL_messageActionSecureValuesSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionTTLChange;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -153,7 +160,19 @@ import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
-import org.telegram.tgnet.TLRPC.TL_webDocument;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeAddress;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeBankStatement;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeDriverLicense;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeEmail;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeIdentityCard;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeInternalPassport;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypePassport;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypePassportRegistration;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypePersonalDetails;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypePhone;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeRentalAgreement;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeTemporaryRegistration;
+import org.telegram.tgnet.TLRPC.TL_secureValueTypeUtilityBill;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WebDocument;
@@ -170,6 +189,7 @@ import org.telegram.ui.Components.URLSpanUserMention;
 
 public class MessageObject {
     private static final int LINES_PER_BLOCK = 10;
+    public static final int MESSAGE_SEND_STATE_EDITING = 3;
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -184,6 +204,7 @@ public class MessageObject {
     public int audioProgressSec;
     public StringBuilder botButtonsLayout;
     public float bufferedProgress;
+    public boolean cancelEditing;
     public CharSequence caption;
     public int contentType;
     public int currentAccount;
@@ -191,6 +212,8 @@ public class MessageObject {
     public String customReplyName;
     public String dateKey;
     public boolean deleted;
+    public CharSequence editingMessage;
+    public ArrayList<MessageEntity> editingMessageEntities;
     public long eventId;
     public boolean forceUpdate;
     private int generatedWithMinSize;
@@ -205,6 +228,7 @@ public class MessageObject {
     public boolean localChannel;
     public long localGroupId;
     public String localName;
+    public long localSentGroupId;
     public int localType;
     public String localUserName;
     public boolean mediaExists;
@@ -213,6 +237,10 @@ public class MessageObject {
     public String monthKey;
     public ArrayList<PhotoSize> photoThumbs;
     public ArrayList<PhotoSize> photoThumbs2;
+    public String previousAttachPath;
+    public String previousCaption;
+    public ArrayList<MessageEntity> previousCaptionEntities;
+    public MessageMedia previousMedia;
     public MessageObject replyMessageObject;
     public boolean resendAsIs;
     public int textHeight;
@@ -221,6 +249,7 @@ public class MessageObject {
     public float textXOffset;
     public int type;
     public boolean useCustomPhoto;
+    public CharSequence vCardData;
     public VideoEditedInfo videoEditedInfo;
     public boolean viewsReloaded;
     public int wantedBotKeyboardWidth;
@@ -313,7 +342,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f43w) / ((float) photoSize.f42h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f45w) / ((float) photoSize.f44h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {
@@ -607,6 +636,194 @@ public class MessageObject {
         }
     }
 
+    public static class VCardData {
+        private String company;
+        private ArrayList<String> emails = new ArrayList();
+        private ArrayList<String> phones = new ArrayList();
+
+        public static CharSequence parse(String data) {
+            boolean finished = false;
+            BufferedReader bufferedReader = new BufferedReader(new StringReader(data));
+            String pendingLine = null;
+            VCardData currentData = null;
+            while (true) {
+                VCardData currentData2;
+                try {
+                    String line = bufferedReader.readLine();
+                    String originalLine = line;
+                    if (line == null) {
+                        break;
+                    } else if (!originalLine.startsWith("PHOTO")) {
+                        int idx;
+                        String[] args;
+                        String nameEncoding;
+                        String nameCharset;
+                        String[] args2;
+                        byte[] bytes;
+                        String decodedName;
+                        String email;
+                        if (originalLine.indexOf(58) >= 0) {
+                            if (originalLine.startsWith("BEGIN:VCARD")) {
+                                currentData2 = new VCardData();
+                            } else if (originalLine.startsWith("END:VCARD") && currentData != null) {
+                                finished = true;
+                                currentData2 = currentData;
+                            }
+                            if (pendingLine != null) {
+                                try {
+                                    line = pendingLine + line;
+                                    pendingLine = null;
+                                } catch (Throwable th) {
+                                }
+                            }
+                            if (line.contains("=QUOTED-PRINTABLE") || !line.endsWith("=")) {
+                                idx = line.indexOf(":");
+                                if (idx < 0) {
+                                    args = new String[2];
+                                    args[0] = line.substring(0, idx);
+                                    args[1] = line.substring(idx + 1, line.length()).trim();
+                                } else {
+                                    args = new String[]{line.trim()};
+                                }
+                                if (args.length >= 2) {
+                                    currentData = currentData2;
+                                } else if (currentData2 != null) {
+                                    currentData = currentData2;
+                                } else {
+                                    if (args[0].startsWith("ORG")) {
+                                        nameEncoding = null;
+                                        nameCharset = null;
+                                        for (String param : args[0].split(";")) {
+                                            args2 = param.split("=");
+                                            if (args2.length == 2) {
+                                                if (args2[0].equals("CHARSET")) {
+                                                    nameCharset = args2[1];
+                                                } else if (args2[0].equals("ENCODING")) {
+                                                    nameEncoding = args2[1];
+                                                }
+                                            }
+                                        }
+                                        currentData2.company = args[1];
+                                        if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                                            bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                            if (!(bytes == null || bytes.length == 0)) {
+                                                decodedName = new String(bytes, nameCharset);
+                                                if (decodedName != null) {
+                                                    currentData2.company = decodedName;
+                                                }
+                                            }
+                                        }
+                                        currentData2.company = currentData2.company.replace(';', ' ');
+                                    } else if (args[0].startsWith("TEL")) {
+                                        if (args[0].startsWith("EMAIL")) {
+                                            email = args[1];
+                                            if (email.length() > 0) {
+                                                currentData2.emails.add(email);
+                                            }
+                                        }
+                                    } else if (args[1].length() > 0) {
+                                        currentData2.phones.add(args[1]);
+                                    }
+                                    currentData = currentData2;
+                                }
+                            } else {
+                                pendingLine = line.substring(0, line.length() - 1);
+                                currentData = currentData2;
+                            }
+                        }
+                        currentData2 = currentData;
+                        if (pendingLine != null) {
+                            line = pendingLine + line;
+                            pendingLine = null;
+                        }
+                        if (line.contains("=QUOTED-PRINTABLE")) {
+                        }
+                        idx = line.indexOf(":");
+                        if (idx < 0) {
+                            args = new String[]{line.trim()};
+                        } else {
+                            args = new String[2];
+                            args[0] = line.substring(0, idx);
+                            args[1] = line.substring(idx + 1, line.length()).trim();
+                        }
+                        if (args.length >= 2) {
+                            currentData = currentData2;
+                        } else if (currentData2 != null) {
+                            if (args[0].startsWith("ORG")) {
+                                nameEncoding = null;
+                                nameCharset = null;
+                                while (r23 < r24) {
+                                    args2 = param.split("=");
+                                    if (args2.length == 2) {
+                                        if (args2[0].equals("CHARSET")) {
+                                            nameCharset = args2[1];
+                                        } else if (args2[0].equals("ENCODING")) {
+                                            nameEncoding = args2[1];
+                                        }
+                                    }
+                                }
+                                currentData2.company = args[1];
+                                bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                decodedName = new String(bytes, nameCharset);
+                                if (decodedName != null) {
+                                    currentData2.company = decodedName;
+                                }
+                                currentData2.company = currentData2.company.replace(';', ' ');
+                            } else if (args[0].startsWith("TEL")) {
+                                if (args[0].startsWith("EMAIL")) {
+                                    email = args[1];
+                                    if (email.length() > 0) {
+                                        currentData2.emails.add(email);
+                                    }
+                                }
+                            } else if (args[1].length() > 0) {
+                                currentData2.phones.add(args[1]);
+                            }
+                            currentData = currentData2;
+                        } else {
+                            currentData = currentData2;
+                        }
+                    }
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                } catch (Throwable th2) {
+                    currentData2 = currentData;
+                }
+            }
+            bufferedReader.close();
+            if (finished) {
+                int a;
+                CharSequence result = new StringBuilder();
+                for (a = 0; a < currentData.phones.size(); a++) {
+                    if (result.length() > 0) {
+                        result.append('\n');
+                    }
+                    String phone = (String) currentData.phones.get(a);
+                    if (phone.contains("#") || phone.contains("*")) {
+                        result.append(phone);
+                    } else {
+                        result.append(PhoneFormat.getInstance().format(phone));
+                    }
+                }
+                for (a = 0; a < currentData.emails.size(); a++) {
+                    if (result.length() > 0) {
+                        result.append('\n');
+                    }
+                    result.append(PhoneFormat.getInstance().format((String) currentData.emails.get(a)));
+                }
+                if (TextUtils.isEmpty(currentData.company)) {
+                    return result;
+                }
+                if (result.length() > 0) {
+                    result.append('\n');
+                }
+                result.append(currentData.company);
+                return result;
+            }
+            return null;
+        }
+    }
+
     public MessageObject(int accountNum, Message message, String formattedMessage, String name, String userName, boolean localMessage, boolean isChannel) {
         this.type = 1000;
         this.localType = localMessage ? 2 : 1;
@@ -643,6 +860,7 @@ public class MessageObject {
     }
 
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, SparseArray<User> sUsers, SparseArray<Chat> sChats, boolean generateLayout, long eid) {
+        int size;
         this.type = 1000;
         Theme.createChatResources(null, true);
         this.currentAccount = accountNum;
@@ -919,6 +1137,56 @@ public class MessageObject {
                         r0.setSpan(new URLSpanNoUnderlineBold("http://" + domain), start, domain.length() + start, 33);
                     }
                     this.messageText = r0;
+                } else if (message.action instanceof TL_messageActionSecureValuesSent) {
+                    TL_messageActionSecureValuesSent valuesSent = (TL_messageActionSecureValuesSent) message.action;
+                    StringBuilder str = new StringBuilder();
+                    size = valuesSent.types.size();
+                    int a;
+                    for (a = 0; a < size; a++) {
+                        SecureValueType type = (SecureValueType) valuesSent.types.get(a);
+                        if (str.length() > 0) {
+                            str.append(", ");
+                        }
+                        if (type instanceof TL_secureValueTypePhone) {
+                            str.append(LocaleController.getString("ActionBotDocumentPhone", R.string.ActionBotDocumentPhone));
+                        } else if (type instanceof TL_secureValueTypeEmail) {
+                            str.append(LocaleController.getString("ActionBotDocumentEmail", R.string.ActionBotDocumentEmail));
+                        } else if (type instanceof TL_secureValueTypeAddress) {
+                            str.append(LocaleController.getString("ActionBotDocumentAddress", R.string.ActionBotDocumentAddress));
+                        } else if (type instanceof TL_secureValueTypePersonalDetails) {
+                            str.append(LocaleController.getString("ActionBotDocumentIdentity", R.string.ActionBotDocumentIdentity));
+                        } else if (type instanceof TL_secureValueTypePassport) {
+                            str.append(LocaleController.getString("ActionBotDocumentPassport", R.string.ActionBotDocumentPassport));
+                        } else if (type instanceof TL_secureValueTypeDriverLicense) {
+                            str.append(LocaleController.getString("ActionBotDocumentDriverLicence", R.string.ActionBotDocumentDriverLicence));
+                        } else if (type instanceof TL_secureValueTypeIdentityCard) {
+                            str.append(LocaleController.getString("ActionBotDocumentIdentityCard", R.string.ActionBotDocumentIdentityCard));
+                        } else if (type instanceof TL_secureValueTypeUtilityBill) {
+                            str.append(LocaleController.getString("ActionBotDocumentUtilityBill", R.string.ActionBotDocumentUtilityBill));
+                        } else if (type instanceof TL_secureValueTypeBankStatement) {
+                            str.append(LocaleController.getString("ActionBotDocumentBankStatement", R.string.ActionBotDocumentBankStatement));
+                        } else if (type instanceof TL_secureValueTypeRentalAgreement) {
+                            str.append(LocaleController.getString("ActionBotDocumentRentalAgreement", R.string.ActionBotDocumentRentalAgreement));
+                        } else if (type instanceof TL_secureValueTypeInternalPassport) {
+                            str.append(LocaleController.getString("ActionBotDocumentInternalPassport", R.string.ActionBotDocumentInternalPassport));
+                        } else if (type instanceof TL_secureValueTypePassportRegistration) {
+                            str.append(LocaleController.getString("ActionBotDocumentPassportRegistration", R.string.ActionBotDocumentPassportRegistration));
+                        } else if (type instanceof TL_secureValueTypeTemporaryRegistration) {
+                            str.append(LocaleController.getString("ActionBotDocumentTemporaryRegistration", R.string.ActionBotDocumentTemporaryRegistration));
+                        }
+                    }
+                    User user = null;
+                    if (message.to_id != null) {
+                        if (users != null) {
+                            user = (User) users.get(Integer.valueOf(message.to_id.user_id));
+                        } else if (sUsers != null) {
+                            user = (User) sUsers.get(message.to_id.user_id);
+                        }
+                        if (user == null) {
+                            user = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.to_id.user_id));
+                        }
+                    }
+                    this.messageText = LocaleController.formatString("ActionBotDocuments", R.string.ActionBotDocuments, UserObject.getFirstName(user), str.toString());
                 }
             }
         } else if (isMediaEmpty()) {
@@ -937,6 +1205,9 @@ public class MessageObject {
             this.messageText = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
         } else if (message.media instanceof TL_messageMediaContact) {
             this.messageText = LocaleController.getString("AttachContact", R.string.AttachContact);
+            if (!TextUtils.isEmpty(message.media.vcard)) {
+                this.vCardData = VCardData.parse(message.media.vcard);
+            }
         } else if (message.media instanceof TL_messageMediaGame) {
             this.messageText = message.message;
         } else if (message.media instanceof TL_messageMediaInvoice) {
@@ -976,17 +1247,7 @@ public class MessageObject {
         int dateMonth = rightNow.get(2);
         this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth), Integer.valueOf(dateDay)});
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
-        if (!(this.messageOwner.message == null || this.messageOwner.id >= 0 || this.messageOwner.params == null)) {
-            String ve = (String) this.messageOwner.params.get("ve");
-            if (ve != null && (isVideo() || isNewGif() || isRoundVideo())) {
-                this.videoEditedInfo = new VideoEditedInfo();
-                if (this.videoEditedInfo.parseString(ve)) {
-                    this.videoEditedInfo.roundVideo = isRoundVideo();
-                } else {
-                    this.videoEditedInfo = null;
-                }
-            }
-        }
+        createMessageSendInfo();
         generateCaption();
         if (generateLayout) {
             TextPaint paint;
@@ -999,7 +1260,6 @@ public class MessageObject {
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
             if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
                 TextPaint emojiPaint;
-                int size;
                 switch (emojiOnly[0]) {
                     case 1:
                         emojiPaint = Theme.chat_msgTextPaintOneEmoji;
@@ -1376,7 +1636,7 @@ public class MessageObject {
             message.date = event.date;
             Message newMessage = ((TL_channelAdminLogEventActionEditMessage) event.action).new_message;
             Message oldMessage = ((TL_channelAdminLogEventActionEditMessage) event.action).prev_message;
-            if (newMessage.media == null || (newMessage.media instanceof TL_messageMediaEmpty) || (newMessage.media instanceof TL_messageMediaWebPage) || !TextUtils.isEmpty(newMessage.message)) {
+            if (newMessage.media == null || (newMessage.media instanceof TL_messageMediaEmpty) || (newMessage.media instanceof TL_messageMediaWebPage)) {
                 this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMessages", R.string.EventLogEditedMessages), "un1", fromUser);
                 message.message = newMessage.message;
                 message.media = new TL_messageMediaWebPage();
@@ -1388,20 +1648,42 @@ public class MessageObject {
                     message.media.webpage.description = oldMessage.message;
                 }
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", R.string.EventLogEditedCaption), "un1", fromUser);
-                message.media = newMessage.media;
-                message.media.webpage = new TL_webPage();
-                message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", R.string.EventLogOriginalCaption);
-                if (TextUtils.isEmpty(oldMessage.message)) {
-                    message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
+                boolean changedCaption;
+                boolean changedMedia;
+                if (TextUtils.equals(newMessage.message, oldMessage.message)) {
+                    changedCaption = false;
                 } else {
-                    message.media.webpage.description = oldMessage.message;
+                    changedCaption = true;
+                }
+                if (newMessage.media.getClass() == oldMessage.media.getClass() && ((newMessage.media.photo == null || oldMessage.media.photo == null || newMessage.media.photo.id == oldMessage.media.photo.id) && (newMessage.media.document == null || oldMessage.media.document == null || newMessage.media.document.id == oldMessage.media.document.id))) {
+                    changedMedia = false;
+                } else {
+                    changedMedia = true;
+                }
+                if (changedMedia && changedCaption) {
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMediaCaption", R.string.EventLogEditedMediaCaption), "un1", fromUser);
+                } else if (changedCaption) {
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", R.string.EventLogEditedCaption), "un1", fromUser);
+                } else {
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMedia", R.string.EventLogEditedMedia), "un1", fromUser);
+                }
+                message.media = newMessage.media;
+                if (changedCaption) {
+                    message.media.webpage = new TL_webPage();
+                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", R.string.EventLogOriginalCaption);
+                    if (TextUtils.isEmpty(oldMessage.message)) {
+                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
+                    } else {
+                        message.media.webpage.description = oldMessage.message;
+                    }
                 }
             }
             message.reply_markup = newMessage.reply_markup;
-            message.media.webpage.flags = 10;
-            message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
-            message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
+            if (message.media.webpage != null) {
+                message.media.webpage.flags = 10;
+                message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
+                message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
+            }
         } else if (event.action instanceof TL_channelAdminLogEventActionChangeStickerSet) {
             InputStickerSet newStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             InputStickerSet oldStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
@@ -1468,14 +1750,6 @@ public class MessageObject {
             }
             setType();
             measureInlineBotButtons();
-            if (this.messageOwner.message != null && this.messageOwner.id < 0 && this.messageOwner.message.length() > 6 && (isVideo() || isNewGif() || isRoundVideo())) {
-                this.videoEditedInfo = new VideoEditedInfo();
-                if (this.videoEditedInfo.parseString(this.messageOwner.message)) {
-                    this.videoEditedInfo.roundVideo = isRoundVideo();
-                } else {
-                    this.videoEditedInfo = null;
-                }
-            }
             generateCaption();
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
                 paint = Theme.chat_msgGameTextPaint;
@@ -1827,6 +2101,37 @@ public class MessageObject {
         return messageObjects;
     }
 
+    public void createMessageSendInfo() {
+        if (this.messageOwner.message == null) {
+            return;
+        }
+        if ((this.messageOwner.id < 0 || isEditing()) && this.messageOwner.params != null) {
+            String param = (String) this.messageOwner.params.get("ve");
+            if (param != null && (isVideo() || isNewGif() || isRoundVideo())) {
+                this.videoEditedInfo = new VideoEditedInfo();
+                if (this.videoEditedInfo.parseString(param)) {
+                    this.videoEditedInfo.roundVideo = isRoundVideo();
+                } else {
+                    this.videoEditedInfo = null;
+                }
+            }
+            if (this.messageOwner.send_state == 3) {
+                param = (String) this.messageOwner.params.get("prevMedia");
+                if (param != null) {
+                    SerializedData serializedData = new SerializedData(Base64.decode(param, 0));
+                    this.previousMedia = MessageMedia.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+                    this.previousCaption = serializedData.readString(false);
+                    this.previousAttachPath = serializedData.readString(false);
+                    int count = serializedData.readInt32(false);
+                    this.previousCaptionEntities = new ArrayList(count);
+                    for (int a = 0; a < count; a++) {
+                        this.previousCaptionEntities.add(MessageEntity.TLdeserialize(serializedData, serializedData.readInt32(false), false));
+                    }
+                }
+            }
+        }
+    }
+
     public void measureInlineBotButtons() {
         this.wantedBotKeyboardWidth = 0;
         if (this.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
@@ -1998,7 +2303,7 @@ public class MessageObject {
         return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
-    public static boolean isGifDocument(TL_webDocument document) {
+    public static boolean isGifDocument(WebFile document) {
         return document != null && (document.mime_type.equals("image/gif") || isNewGifDocument(document));
     }
 
@@ -2014,8 +2319,8 @@ public class MessageObject {
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f36w;
-                    height = attribute.f36w;
+                    width = attribute.f38w;
+                    height = attribute.f38w;
                     round = attribute.round_message;
                 }
             }
@@ -2026,7 +2331,7 @@ public class MessageObject {
         return false;
     }
 
-    public static boolean isNewGifDocument(TL_webDocument document) {
+    public static boolean isNewGifDocument(WebFile document) {
         if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
             int width = 0;
             int height = 0;
@@ -2034,8 +2339,8 @@ public class MessageObject {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (!(attribute instanceof TL_documentAttributeAnimated)) {
                     if (attribute instanceof TL_documentAttributeVideo) {
-                        width = attribute.f36w;
-                        height = attribute.f36w;
+                        width = attribute.f38w;
+                        height = attribute.f38w;
                     }
                 }
             }
@@ -2056,8 +2361,8 @@ public class MessageObject {
                 if (attribute instanceof TL_documentAttributeAnimated) {
                     animated = true;
                 } else if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f36w;
-                    height = attribute.f36w;
+                    width = attribute.f38w;
+                    height = attribute.f38w;
                 }
             }
             if (animated && width <= 1280 && height <= 1280) {
@@ -2114,8 +2419,8 @@ public class MessageObject {
                     } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty() && this.messageOwner.media.document.thumb != null) {
                         photoObject = (PhotoSize) this.photoThumbs.get(0);
                         photoObject.location = this.messageOwner.media.document.thumb.location;
-                        photoObject.f43w = this.messageOwner.media.document.thumb.f43w;
-                        photoObject.f42h = this.messageOwner.media.document.thumb.f42h;
+                        photoObject.f45w = this.messageOwner.media.document.thumb.f45w;
+                        photoObject.f44h = this.messageOwner.media.document.thumb.f44h;
                     }
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -2405,7 +2710,7 @@ public class MessageObject {
     private static void addUsernamesAndHashtags(boolean isOut, CharSequence charSequence, boolean botCommands) {
         try {
             if (urlPattern == null) {
-                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)");
+                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)");
             }
             Matcher matcher = urlPattern.matcher(charSequence);
             while (matcher.find()) {
@@ -2446,9 +2751,9 @@ public class MessageObject {
         while (a < size) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
-                return new int[]{attribute.f36w, attribute.f35h};
+                return new int[]{attribute.f38w, attribute.f37h};
             } else if (attribute instanceof TL_documentAttributeVideo) {
-                return new int[]{attribute.f36w, attribute.f35h};
+                return new int[]{attribute.f38w, attribute.f37h};
             } else {
                 a++;
             }
@@ -2497,8 +2802,12 @@ public class MessageObject {
         return (getGroupId() == 0 || this.photoThumbs == null || this.photoThumbs.isEmpty()) ? false : true;
     }
 
+    public long getGroupIdForUse() {
+        return this.localSentGroupId != 0 ? this.localSentGroupId : this.messageOwner.grouped_id;
+    }
+
     public long getGroupId() {
-        return this.localGroupId != 0 ? this.localGroupId : this.messageOwner.grouped_id;
+        return this.localGroupId != 0 ? this.localGroupId : getGroupIdForUse();
     }
 
     public static void addLinks(boolean isOut, CharSequence messageText) {
@@ -2531,16 +2840,20 @@ public class MessageObject {
     }
 
     private boolean addEntitiesToText(CharSequence text, boolean useManualParse) {
-        return addEntitiesToText(text, false, useManualParse);
+        return addEntitiesToText(text, this.messageOwner.entities, isOutOwner(), this.type, true, false, useManualParse);
     }
 
     public boolean addEntitiesToText(CharSequence text, boolean photoViewer, boolean useManualParse) {
+        return addEntitiesToText(text, this.messageOwner.entities, isOutOwner(), this.type, true, photoViewer, useManualParse);
+    }
+
+    public static boolean addEntitiesToText(CharSequence text, ArrayList<MessageEntity> entities, boolean out, int type, boolean usernames, boolean photoViewer, boolean useManualParse) {
         boolean hasUrls = false;
         if (!(text instanceof Spannable)) {
             return false;
         }
         Spannable spannable = (Spannable) text;
-        int count = this.messageOwner.entities.size();
+        int count = entities.size();
         URLSpan[] spans = (URLSpan[]) spannable.getSpans(0, text.length(), URLSpan.class);
         if (spans != null && spans.length > 0) {
             hasUrls = true;
@@ -2548,7 +2861,7 @@ public class MessageObject {
         int a = 0;
         boolean hasUrls2 = hasUrls;
         while (a < count) {
-            MessageEntity entity = (MessageEntity) this.messageOwner.entities.get(a);
+            MessageEntity entity = (MessageEntity) entities.get(a);
             if (entity.length > 0 && entity.offset >= 0) {
                 if (entity.offset >= text.length()) {
                     hasUrls = hasUrls2;
@@ -2575,28 +2888,32 @@ public class MessageObject {
                         spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
                         hasUrls = hasUrls2;
                     } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
-                        byte type;
+                        byte t;
                         if (photoViewer) {
-                            type = (byte) 2;
-                        } else if (isOutOwner()) {
-                            type = (byte) 1;
+                            t = (byte) 2;
+                        } else if (out) {
+                            t = (byte) 1;
                         } else {
-                            type = (byte) 0;
+                            t = (byte) 0;
                         }
-                        spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, type), entity.offset, entity.offset + entity.length, 33);
+                        spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, t), entity.offset, entity.offset + entity.length, 33);
                         hasUrls = hasUrls2;
                     } else if (entity instanceof TL_messageEntityMentionName) {
-                        spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, this.type), entity.offset, entity.offset + entity.length, 33);
-                        hasUrls = hasUrls2;
+                        if (usernames) {
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, type), entity.offset, entity.offset + entity.length, 33);
+                            hasUrls = hasUrls2;
+                        }
                     } else if (entity instanceof TL_inputMessageEntityMentionName) {
-                        spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, this.type), entity.offset, entity.offset + entity.length, 33);
-                        hasUrls = hasUrls2;
+                        if (usernames) {
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, type), entity.offset, entity.offset + entity.length, 33);
+                            hasUrls = hasUrls2;
+                        }
                     } else if (!useManualParse) {
                         String url = TextUtils.substring(text, entity.offset, entity.offset + entity.length);
                         if (entity instanceof TL_messageEntityBotCommand) {
-                            spannable.setSpan(new URLSpanBotCommand(url, this.type), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanBotCommand(url, type), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
-                        } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention) || (entity instanceof TL_messageEntityCashtag)) {
+                        } else if ((entity instanceof TL_messageEntityHashtag) || ((usernames && (entity instanceof TL_messageEntityMention)) || (entity instanceof TL_messageEntityCashtag))) {
                             spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
                         } else if (entity instanceof TL_messageEntityEmail) {
@@ -3095,6 +3412,10 @@ public class MessageObject {
         return this.messageOwner.send_state == 1 && this.messageOwner.id < 0;
     }
 
+    public boolean isEditing() {
+        return this.messageOwner.send_state == 3 && this.messageOwner.id > 0;
+    }
+
     public boolean isSendError() {
         return this.messageOwner.send_state == 2 && this.messageOwner.id < 0;
     }
@@ -3167,15 +3488,15 @@ public class MessageObject {
         return false;
     }
 
-    public static boolean isVoiceWebDocument(TL_webDocument webDocument) {
+    public static boolean isVoiceWebDocument(WebFile webDocument) {
         return webDocument != null && webDocument.mime_type.equals("audio/ogg");
     }
 
-    public static boolean isImageWebDocument(TL_webDocument webDocument) {
+    public static boolean isImageWebDocument(WebFile webDocument) {
         return (webDocument == null || isGifDocument(webDocument) || !webDocument.mime_type.startsWith("image/")) ? false : true;
     }
 
-    public static boolean isVideoWebDocument(TL_webDocument webDocument) {
+    public static boolean isVideoWebDocument(WebFile webDocument) {
         return webDocument != null && webDocument.mime_type.startsWith("video/");
     }
 
@@ -3220,8 +3541,8 @@ public class MessageObject {
                     return false;
                 }
                 isVideo = true;
-                width = attribute.f36w;
-                height = attribute.f35h;
+                width = attribute.f38w;
+                height = attribute.f37h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
@@ -3402,8 +3723,8 @@ public class MessageObject {
                 while (it.hasNext()) {
                     DocumentAttribute attribute = (DocumentAttribute) it.next();
                     if (attribute instanceof TL_documentAttributeImageSize) {
-                        photoWidth = attribute.f36w;
-                        photoHeight = attribute.f35h;
+                        photoWidth = attribute.f38w;
+                        photoHeight = attribute.f37h;
                         break;
                     }
                 }
@@ -3434,7 +3755,7 @@ public class MessageObject {
             }
             PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
-                int h = (int) (((float) currentPhotoObject.f42h) / (((float) currentPhotoObject.f43w) / ((float) photoWidth)));
+                int h = (int) (((float) currentPhotoObject.f44h) / (((float) currentPhotoObject.f45w) / ((float) photoWidth)));
                 if (h == 0) {
                     h = AndroidUtilities.dp(100.0f);
                 }
@@ -3642,8 +3963,10 @@ public class MessageObject {
                     user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
                 } else if (this.messageOwner.from_id < 0) {
                     chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-this.messageOwner.from_id));
-                } else {
+                } else if (this.messageOwner.from_id != 0 || this.messageOwner.to_id.channel_id == 0) {
                     user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
+                } else {
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
                 }
                 if (user != null) {
                     return UserObject.getUserName(user);
@@ -3688,6 +4011,23 @@ public class MessageObject {
         return canEditMessage(this.currentAccount, this.messageOwner, chat);
     }
 
+    public boolean canEditMedia() {
+        boolean z = true;
+        if (isSecretMedia()) {
+            return false;
+        }
+        if (this.messageOwner.media instanceof TL_messageMediaPhoto) {
+            return true;
+        }
+        if (!(this.messageOwner.media instanceof TL_messageMediaDocument)) {
+            return false;
+        }
+        if (isVoice() || isSticker() || isRoundVideo()) {
+            z = false;
+        }
+        return z;
+    }
+
     public boolean canEditMessageAnytime(Chat chat) {
         return canEditMessageAnytime(this.currentAccount, this.messageOwner, chat);
     }
@@ -3718,7 +4058,7 @@ public class MessageObject {
 
     public static boolean canEditMessage(int currentAccount, Message message, Chat chat) {
         boolean z = true;
-        if (message == null || message.to_id == null) {
+        if ((chat != null && (chat.left || chat.kicked)) || message == null || message.to_id == null) {
             return false;
         }
         if (message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) {

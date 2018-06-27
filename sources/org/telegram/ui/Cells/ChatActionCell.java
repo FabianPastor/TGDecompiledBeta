@@ -48,8 +48,8 @@ public class ChatActionCell extends BaseCell {
     private int textY = 0;
 
     /* renamed from: org.telegram.ui.Cells.ChatActionCell$1 */
-    class C08771 implements Runnable {
-        C08771() {
+    class C09121 implements Runnable {
+        C09121() {
         }
 
         public void run() {
@@ -90,7 +90,7 @@ public class ChatActionCell extends BaseCell {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
                 }
-                AndroidUtilities.runOnUIThread(new C08771());
+                AndroidUtilities.runOnUIThread(new C09121());
             }
         }
     }

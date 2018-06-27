@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionManager.EventListener;
+import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultKeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.KeyRequest;
@@ -28,8 +28,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private static final int MSG_PROVISION = 0;
     private static final String TAG = "DefaultDrmSession";
     final MediaDrmCallback callback;
-    private final Handler eventHandler;
-    private final EventListener eventListener;
+    private final EventDispatcher eventDispatcher;
     private final byte[] initData;
     private final int initialDrmRequestRetryCount;
     private DrmSessionException lastException;
@@ -47,36 +46,6 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private byte[] sessionId;
     private int state = 2;
     final UUID uuid;
-
-    /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$1 */
-    class C05661 implements Runnable {
-        C05661() {
-        }
-
-        public void run() {
-            DefaultDrmSession.this.eventListener.onDrmKeysRestored();
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$2 */
-    class C05672 implements Runnable {
-        C05672() {
-        }
-
-        public void run() {
-            DefaultDrmSession.this.eventListener.onDrmKeysRemoved();
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$3 */
-    class C05683 implements Runnable {
-        C05683() {
-        }
-
-        public void run() {
-            DefaultDrmSession.this.eventListener.onDrmKeysLoaded();
-        }
-    }
 
     @SuppressLint({"HandlerLeak"})
     private class PostRequestHandler extends Handler {
@@ -166,7 +135,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         void provisionRequired(DefaultDrmSession<T> defaultDrmSession);
     }
 
-    public DefaultDrmSession(UUID uuid, ExoMediaDrm<T> mediaDrm, ProvisioningManager<T> provisioningManager, byte[] initData, String mimeType, int mode, byte[] offlineLicenseKeySetId, HashMap<String, String> optionalKeyRequestParameters, MediaDrmCallback callback, Looper playbackLooper, Handler eventHandler, EventListener eventListener, int initialDrmRequestRetryCount) {
+    public DefaultDrmSession(UUID uuid, ExoMediaDrm<T> mediaDrm, ProvisioningManager<T> provisioningManager, byte[] initData, String mimeType, int mode, byte[] offlineLicenseKeySetId, HashMap<String, String> optionalKeyRequestParameters, MediaDrmCallback callback, Looper playbackLooper, EventDispatcher eventDispatcher, int initialDrmRequestRetryCount) {
         this.uuid = uuid;
         this.provisioningManager = provisioningManager;
         this.mediaDrm = mediaDrm;
@@ -175,8 +144,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         this.optionalKeyRequestParameters = optionalKeyRequestParameters;
         this.callback = callback;
         this.initialDrmRequestRetryCount = initialDrmRequestRetryCount;
-        this.eventHandler = eventHandler;
-        this.eventListener = eventListener;
+        this.eventDispatcher = eventDispatcher;
         this.postResponseHandler = new PostResponseHandler(playbackLooper);
         this.requestHandlerThread = new HandlerThread("DrmRequestHandler");
         this.requestHandlerThread.start();
@@ -317,10 +285,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
                         return;
                     } else {
                         this.state = 4;
-                        if (this.eventHandler != null && this.eventListener != null) {
-                            this.eventHandler.post(new C05661());
-                            return;
-                        }
+                        this.eventDispatcher.drmKeysRestored();
                         return;
                     }
                 } else {
@@ -359,7 +324,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     }
 
     private long getLicenseDurationRemainingSec() {
-        if (!C0546C.WIDEVINE_UUID.equals(this.uuid)) {
+        if (!C0554C.WIDEVINE_UUID.equals(this.uuid)) {
             return Long.MAX_VALUE;
         }
         Pair<Long, Long> pair = WidevineUtil.getLicenseDurationRemainingSec(this);
@@ -369,7 +334,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private void postKeyRequest(int type, boolean allowRetry) {
         try {
             KeyRequest request = this.mediaDrm.getKeyRequest(type == 3 ? this.offlineLicenseKeySetId : this.sessionId, this.initData, this.mimeType, type, this.optionalKeyRequestParameters);
-            if (C0546C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0554C.CLEARKEY_UUID.equals(this.uuid)) {
                 request = new DefaultKeyRequest(ClearKeyUtil.adjustRequestData(request.getData()), request.getDefaultUrl());
             }
             this.postRequestHandler.obtainMessage(1, request, allowRetry).sendToTarget();
@@ -388,15 +353,12 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         }
         try {
             byte[] responseData = (byte[]) response;
-            if (C0546C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0554C.CLEARKEY_UUID.equals(this.uuid)) {
                 responseData = ClearKeyUtil.adjustResponseData(responseData);
             }
             if (this.mode == 3) {
                 this.mediaDrm.provideKeyResponse(this.offlineLicenseKeySetId, responseData);
-                if (this.eventHandler != null && this.eventListener != null) {
-                    this.eventHandler.post(new C05672());
-                    return;
-                }
+                this.eventDispatcher.drmKeysRemoved();
                 return;
             }
             byte[] keySetId = this.mediaDrm.provideKeyResponse(this.sessionId, responseData);
@@ -404,9 +366,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
                 this.offlineLicenseKeySetId = keySetId;
             }
             this.state = 4;
-            if (this.eventHandler != null && this.eventListener != null) {
-                this.eventHandler.post(new C05683());
-            }
+            this.eventDispatcher.drmKeysLoaded();
         } catch (Exception e) {
             onKeysError(e);
         }
@@ -427,15 +387,9 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         }
     }
 
-    private void onError(final Exception e) {
+    private void onError(Exception e) {
         this.lastException = new DrmSessionException(e);
-        if (!(this.eventHandler == null || this.eventListener == null)) {
-            this.eventHandler.post(new Runnable() {
-                public void run() {
-                    DefaultDrmSession.this.eventListener.onDrmSessionManagerError(e);
-                }
-            });
-        }
+        this.eventDispatcher.drmSessionManagerError(e);
         if (this.state != 4) {
             this.state = 1;
         }

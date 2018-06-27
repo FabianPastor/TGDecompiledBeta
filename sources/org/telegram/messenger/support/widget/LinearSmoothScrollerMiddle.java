@@ -95,14 +95,9 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
         LayoutParams params = (LayoutParams) view.getLayoutParams();
         int top = layoutManager.getDecoratedTop(view) - params.topMargin;
         int bottom = layoutManager.getDecoratedBottom(view) + params.bottomMargin;
-        int start = layoutManager.getPaddingTop();
-        int end = layoutManager.getHeight() - layoutManager.getPaddingBottom();
-        if (top > start && bottom < end) {
-            return 0;
-        }
         int viewSize = bottom - top;
-        start = ((end - start) - viewSize) / 2;
-        end = start + viewSize;
+        int start = (((layoutManager.getHeight() - layoutManager.getPaddingBottom()) - layoutManager.getPaddingTop()) - viewSize) / 2;
+        int end = start + viewSize;
         int dtStart = start - top;
         if (dtStart > 0) {
             return dtStart;

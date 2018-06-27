@@ -141,6 +141,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         if (SharedConfig.suggestStickers != 2) {
             boolean search = emoji != null && emoji.length() > 0 && emoji.length() <= 14;
             if (search) {
+                String originalEmoji = emoji.toString();
                 int length = emoji.length();
                 int a = 0;
                 while (a < length) {
@@ -173,7 +174,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                     a++;
                 }
                 this.lastSticker = emoji.toString().trim();
-                if (Emoji.isValidEmoji(this.lastSticker)) {
+                if (Emoji.isValidEmoji(originalEmoji) || Emoji.isValidEmoji(this.lastSticker)) {
                     Document document;
                     this.stickers = null;
                     this.stickersMap = null;
@@ -288,8 +289,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         }
         TL_messages_getStickers req = new TL_messages_getStickers();
         req.emoticon = emoji;
-        req.hash = TtmlNode.ANONYMOUS_REGION_ID;
-        req.exclude_featured = false;
+        req.hash = 0;
         this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {

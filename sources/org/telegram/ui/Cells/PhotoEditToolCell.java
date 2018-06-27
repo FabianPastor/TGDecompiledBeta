@@ -16,18 +16,18 @@ import org.telegram.ui.Components.PhotoEditorSeekBar;
 import org.telegram.ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDelegate;
 
 public class PhotoEditToolCell extends FrameLayout {
-    private Runnable hideValueRunnable = new C08921();
+    private Runnable hideValueRunnable = new C09271();
     private TextView nameTextView;
     private PhotoEditorSeekBar seekBar;
     private AnimatorSet valueAnimation;
     private TextView valueTextView;
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1 */
-    class C08921 implements Runnable {
+    class C09271 implements Runnable {
 
         /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1$1 */
-        class C08911 extends AnimatorListenerAdapter {
-            C08911() {
+        class C09261 extends AnimatorListenerAdapter {
+            C09261() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -37,7 +37,7 @@ public class PhotoEditToolCell extends FrameLayout {
             }
         }
 
-        C08921() {
+        C09271() {
         }
 
         public void run() {
@@ -50,7 +50,7 @@ public class PhotoEditToolCell extends FrameLayout {
             access$100.playTogether(r1);
             PhotoEditToolCell.this.valueAnimation.setDuration(180);
             PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-            PhotoEditToolCell.this.valueAnimation.addListener(new C08911());
+            PhotoEditToolCell.this.valueAnimation.addListener(new C09261());
             PhotoEditToolCell.this.valueAnimation.start();
         }
     }
@@ -79,8 +79,8 @@ public class PhotoEditToolCell extends FrameLayout {
         this.seekBar.setDelegate(new PhotoEditorSeekBarDelegate() {
 
             /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$2$1 */
-            class C08931 extends AnimatorListenerAdapter {
-                C08931() {
+            class C09281 extends AnimatorListenerAdapter {
+                C09281() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -108,7 +108,7 @@ public class PhotoEditToolCell extends FrameLayout {
                     access$100.playTogether(r1);
                     PhotoEditToolCell.this.valueAnimation.setDuration(180);
                     PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-                    PhotoEditToolCell.this.valueAnimation.addListener(new C08931());
+                    PhotoEditToolCell.this.valueAnimation.addListener(new C09281());
                     PhotoEditToolCell.this.valueAnimation.start();
                     return;
                 }

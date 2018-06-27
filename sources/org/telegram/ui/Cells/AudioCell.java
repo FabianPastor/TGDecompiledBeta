@@ -38,8 +38,8 @@ public class AudioCell extends FrameLayout {
     private TextView titleTextView;
 
     /* renamed from: org.telegram.ui.Cells.AudioCell$1 */
-    class C08751 implements OnClickListener {
-        C08751() {
+    class C09101 implements OnClickListener {
+        C09101() {
         }
 
         public void onClick(View v) {
@@ -88,7 +88,7 @@ public class AudioCell extends FrameLayout {
             f2 = 0.0f;
         }
         addView(view, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
-        this.playButton.setOnClickListener(new C08751());
+        this.playButton.setOnClickListener(new C09101());
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.titleTextView.setTextSize(1, 16.0f);

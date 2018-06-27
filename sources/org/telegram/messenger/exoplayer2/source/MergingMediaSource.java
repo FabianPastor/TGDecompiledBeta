@@ -5,17 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
-import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class MergingMediaSource implements MediaSource {
+public final class MergingMediaSource extends CompositeMediaSource<Integer> {
     private static final int PERIOD_COUNT_UNSET = -1;
     private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
-    private Listener listener;
     private final MediaSource[] mediaSources;
     private IllegalMergeException mergeError;
     private final ArrayList<MediaSource> pendingTimelineSources;
@@ -47,22 +45,10 @@ public final class MergingMediaSource implements MediaSource {
         this.periodCount = -1;
     }
 
-    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        boolean z;
-        if (this.listener == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
-        this.listener = listener;
+    public void prepareSourceInternal(ExoPlayer player, boolean isTopLevelSource) {
+        super.prepareSourceInternal(player, isTopLevelSource);
         for (int i = 0; i < this.mediaSources.length; i++) {
-            final int sourceIndex = i;
-            this.mediaSources[sourceIndex].prepareSource(player, false, new Listener() {
-                public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
-                    MergingMediaSource.this.handleSourceInfoRefreshed(sourceIndex, timeline, manifest);
-                }
-            });
+            prepareChildSource(Integer.valueOf(i), this.mediaSources[i]);
         }
     }
 
@@ -70,9 +56,7 @@ public final class MergingMediaSource implements MediaSource {
         if (this.mergeError != null) {
             throw this.mergeError;
         }
-        for (MediaSource mediaSource : this.mediaSources) {
-            mediaSource.maybeThrowSourceInfoRefreshError();
-        }
+        super.maybeThrowSourceInfoRefreshError();
     }
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
@@ -90,24 +74,28 @@ public final class MergingMediaSource implements MediaSource {
         }
     }
 
-    public void releaseSource() {
-        for (MediaSource mediaSource : this.mediaSources) {
-            mediaSource.releaseSource();
-        }
+    public void releaseSourceInternal() {
+        super.releaseSourceInternal();
+        this.primaryTimeline = null;
+        this.primaryManifest = null;
+        this.periodCount = -1;
+        this.mergeError = null;
+        this.pendingTimelineSources.clear();
+        Collections.addAll(this.pendingTimelineSources, this.mediaSources);
     }
 
-    private void handleSourceInfoRefreshed(int sourceIndex, Timeline timeline, Object manifest) {
+    protected void onChildSourceInfoRefreshed(Integer id, MediaSource mediaSource, Timeline timeline, Object manifest) {
         if (this.mergeError == null) {
             this.mergeError = checkTimelineMerges(timeline);
         }
         if (this.mergeError == null) {
-            this.pendingTimelineSources.remove(this.mediaSources[sourceIndex]);
-            if (sourceIndex == 0) {
+            this.pendingTimelineSources.remove(mediaSource);
+            if (mediaSource == this.mediaSources[0]) {
                 this.primaryTimeline = timeline;
                 this.primaryManifest = manifest;
             }
             if (this.pendingTimelineSources.isEmpty()) {
-                this.listener.onSourceInfoRefreshed(this, this.primaryTimeline, this.primaryManifest);
+                refreshSourceInfo(this.primaryTimeline, this.primaryManifest);
             }
         }
     }

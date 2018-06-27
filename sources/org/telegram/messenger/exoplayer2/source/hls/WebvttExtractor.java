@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -40,7 +40,7 @@ final class WebvttExtractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         this.output = output;
-        output.seekMap(new Unseekable(C0546C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0554C.TIME_UNSET));
     }
 
     public void seek(long position, long timeUs) {

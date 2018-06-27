@@ -62,8 +62,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private int shareLinkRow;
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$1 */
-    class C21591 extends ActionBarMenuOnItemClick {
-        C21591() {
+    class C22961 extends ActionBarMenuOnItemClick {
+        C22961() {
         }
 
         public void onItemClick(int id) {
@@ -74,11 +74,11 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$2 */
-    class C21602 implements OnItemClickListener {
+    class C22972 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.GroupInviteActivity$2$1 */
-        class C14201 implements OnClickListener {
-            C14201() {
+        class C14731 implements OnClickListener {
+            C14731() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -86,7 +86,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C21602() {
+        C22972() {
         }
 
         public void onItemClick(View view, int position) {
@@ -115,7 +115,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                     Builder builder = new Builder(GroupInviteActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
                     builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
-                    builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C14201());
+                    builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C14731());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     GroupInviteActivity.this.showDialog(builder.create());
                 }
@@ -252,7 +252,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteLink", R.string.InviteLink));
-        this.actionBar.setActionBarMenuOnItemClick(new C21591());
+        this.actionBar.setActionBarMenuOnItemClick(new C22961());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -266,7 +266,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C21602());
+        this.listView.setOnItemClickListener(new C22972());
         return this.fragmentView;
     }
 

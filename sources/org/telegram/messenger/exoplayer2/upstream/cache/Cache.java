@@ -27,6 +27,8 @@ public interface Cache {
 
     NavigableSet<CacheSpan> addListener(String str, Listener listener);
 
+    void applyContentMetadataMutations(String str, ContentMetadataMutations contentMetadataMutations) throws CacheException;
+
     void commitFile(File file) throws CacheException;
 
     long getCacheSpace();
@@ -37,9 +39,13 @@ public interface Cache {
 
     long getContentLength(String str);
 
+    ContentMetadata getContentMetadata(String str);
+
     Set<String> getKeys();
 
     boolean isCached(String str, long j, long j2);
+
+    void release() throws CacheException;
 
     void releaseHoleSpan(CacheSpan cacheSpan);
 

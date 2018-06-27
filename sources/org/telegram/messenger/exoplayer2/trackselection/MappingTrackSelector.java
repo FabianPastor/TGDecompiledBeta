@@ -1,52 +1,61 @@
 package org.telegram.messenger.exoplayer2.trackselection;
 
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
+import android.util.Pair;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.RendererConfiguration;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelection.Factory;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public abstract class MappingTrackSelector extends TrackSelector {
     private MappedTrackInfo currentMappedTrackInfo;
-    private final SparseBooleanArray rendererDisabledFlags = new SparseBooleanArray();
-    private final SparseArray<Map<TrackGroupArray, SelectionOverride>> selectionOverrides = new SparseArray();
-    private int tunnelingAudioSessionId = 0;
 
     public static final class MappedTrackInfo {
         public static final int RENDERER_SUPPORT_EXCEEDS_CAPABILITIES_TRACKS = 2;
         public static final int RENDERER_SUPPORT_NO_TRACKS = 0;
         public static final int RENDERER_SUPPORT_PLAYABLE_TRACKS = 3;
         public static final int RENDERER_SUPPORT_UNSUPPORTED_TRACKS = 1;
-        private final int[][][] formatSupport;
-        public final int length;
-        private final int[] mixedMimeTypeAdaptiveSupport;
+        @Deprecated
+        public final int length = this.rendererCount;
+        private final int rendererCount;
+        private final int[][][] rendererFormatSupports;
+        private final int[] rendererMixedMimeTypeAdaptiveSupports;
+        private final TrackGroupArray[] rendererTrackGroups;
         private final int[] rendererTrackTypes;
-        private final TrackGroupArray[] trackGroups;
-        private final TrackGroupArray unassociatedTrackGroups;
+        private final TrackGroupArray unmappedTrackGroups;
 
-        MappedTrackInfo(int[] rendererTrackTypes, TrackGroupArray[] trackGroups, int[] mixedMimeTypeAdaptiveSupport, int[][][] formatSupport, TrackGroupArray unassociatedTrackGroups) {
+        @Retention(RetentionPolicy.SOURCE)
+        @interface RendererSupport {
+        }
+
+        MappedTrackInfo(int[] rendererTrackTypes, TrackGroupArray[] rendererTrackGroups, int[] rendererMixedMimeTypeAdaptiveSupports, int[][][] rendererFormatSupports, TrackGroupArray unmappedTrackGroups) {
             this.rendererTrackTypes = rendererTrackTypes;
-            this.trackGroups = trackGroups;
-            this.formatSupport = formatSupport;
-            this.mixedMimeTypeAdaptiveSupport = mixedMimeTypeAdaptiveSupport;
-            this.unassociatedTrackGroups = unassociatedTrackGroups;
-            this.length = trackGroups.length;
+            this.rendererTrackGroups = rendererTrackGroups;
+            this.rendererFormatSupports = rendererFormatSupports;
+            this.rendererMixedMimeTypeAdaptiveSupports = rendererMixedMimeTypeAdaptiveSupports;
+            this.unmappedTrackGroups = unmappedTrackGroups;
+            this.rendererCount = rendererTrackTypes.length;
+        }
+
+        public int getRendererCount() {
+            return this.rendererCount;
+        }
+
+        public int getRendererType(int rendererIndex) {
+            return this.rendererTrackTypes[rendererIndex];
         }
 
         public TrackGroupArray getTrackGroups(int rendererIndex) {
-            return this.trackGroups[rendererIndex];
+            return this.rendererTrackGroups[rendererIndex];
         }
 
         public int getRendererSupport(int rendererIndex) {
             int bestRendererSupport = 0;
-            int[][] rendererFormatSupport = this.formatSupport[rendererIndex];
+            int[][] rendererFormatSupport = this.rendererFormatSupports[rendererIndex];
             for (int i = 0; i < rendererFormatSupport.length; i++) {
                 for (int i2 : rendererFormatSupport[i]) {
                     int trackRendererSupport;
@@ -67,9 +76,14 @@ public abstract class MappingTrackSelector extends TrackSelector {
             return bestRendererSupport;
         }
 
+        @Deprecated
         public int getTrackTypeRendererSupport(int trackType) {
+            return getTypeSupport(trackType);
+        }
+
+        public int getTypeSupport(int trackType) {
             int bestRendererSupport = 0;
-            for (int i = 0; i < this.length; i++) {
+            for (int i = 0; i < this.rendererCount; i++) {
                 if (this.rendererTrackTypes[i] == trackType) {
                     bestRendererSupport = Math.max(bestRendererSupport, getRendererSupport(i));
                 }
@@ -77,18 +91,23 @@ public abstract class MappingTrackSelector extends TrackSelector {
             return bestRendererSupport;
         }
 
+        @Deprecated
         public int getTrackFormatSupport(int rendererIndex, int groupIndex, int trackIndex) {
-            return this.formatSupport[rendererIndex][groupIndex][trackIndex] & 7;
+            return getTrackSupport(rendererIndex, groupIndex, trackIndex);
+        }
+
+        public int getTrackSupport(int rendererIndex, int groupIndex, int trackIndex) {
+            return this.rendererFormatSupports[rendererIndex][groupIndex][trackIndex] & 7;
         }
 
         public int getAdaptiveSupport(int rendererIndex, int groupIndex, boolean includeCapabilitiesExceededTracks) {
-            int trackCount = this.trackGroups[rendererIndex].get(groupIndex).length;
+            int trackCount = this.rendererTrackGroups[rendererIndex].get(groupIndex).length;
             int[] trackIndices = new int[trackCount];
             int i = 0;
             int trackIndexCount = 0;
             while (i < trackCount) {
                 int trackIndexCount2;
-                int fixedSupport = getTrackFormatSupport(rendererIndex, groupIndex, i);
+                int fixedSupport = getTrackSupport(rendererIndex, groupIndex, i);
                 if (fixedSupport == 4 || (includeCapabilitiesExceededTracks && fixedSupport == 3)) {
                     trackIndexCount2 = trackIndexCount + 1;
                     trackIndices[trackIndexCount] = i;
@@ -108,125 +127,41 @@ public abstract class MappingTrackSelector extends TrackSelector {
             String firstSampleMimeType = null;
             int i = 0;
             while (i < trackIndices.length) {
-                String sampleMimeType = this.trackGroups[rendererIndex].get(groupIndex).getFormat(trackIndices[i]).sampleMimeType;
+                String sampleMimeType = this.rendererTrackGroups[rendererIndex].get(groupIndex).getFormat(trackIndices[i]).sampleMimeType;
                 int handledTrackCount2 = handledTrackCount + 1;
                 if (handledTrackCount == 0) {
                     firstSampleMimeType = sampleMimeType;
                 } else {
                     multipleMimeTypes |= !Util.areEqual(firstSampleMimeType, sampleMimeType) ? 1 : 0;
                 }
-                adaptiveSupport = Math.min(adaptiveSupport, this.formatSupport[rendererIndex][groupIndex][i] & 24);
+                adaptiveSupport = Math.min(adaptiveSupport, this.rendererFormatSupports[rendererIndex][groupIndex][i] & 24);
                 i++;
                 handledTrackCount = handledTrackCount2;
             }
             if (multipleMimeTypes) {
-                return Math.min(adaptiveSupport, this.mixedMimeTypeAdaptiveSupport[rendererIndex]);
+                return Math.min(adaptiveSupport, this.rendererMixedMimeTypeAdaptiveSupports[rendererIndex]);
             }
             return adaptiveSupport;
         }
 
+        @Deprecated
         public TrackGroupArray getUnassociatedTrackGroups() {
-            return this.unassociatedTrackGroups;
+            return getUnmappedTrackGroups();
+        }
+
+        public TrackGroupArray getUnmappedTrackGroups() {
+            return this.unmappedTrackGroups;
         }
     }
 
-    public static final class SelectionOverride {
-        public final Factory factory;
-        public final int groupIndex;
-        public final int length;
-        public final int[] tracks;
-
-        public SelectionOverride(Factory factory, int groupIndex, int... tracks) {
-            this.factory = factory;
-            this.groupIndex = groupIndex;
-            this.tracks = tracks;
-            this.length = tracks.length;
-        }
-
-        public TrackSelection createTrackSelection(TrackGroupArray groups) {
-            return this.factory.createTrackSelection(groups.get(this.groupIndex), this.tracks);
-        }
-
-        public boolean containsTrack(int track) {
-            for (int overrideTrack : this.tracks) {
-                if (overrideTrack == track) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    protected abstract TrackSelection[] selectTracks(RendererCapabilities[] rendererCapabilitiesArr, TrackGroupArray[] trackGroupArrayArr, int[][][] iArr) throws ExoPlaybackException;
+    protected abstract Pair<RendererConfiguration[], TrackSelection[]> selectTracks(MappedTrackInfo mappedTrackInfo, int[][][] iArr, int[] iArr2) throws ExoPlaybackException;
 
     public final MappedTrackInfo getCurrentMappedTrackInfo() {
         return this.currentMappedTrackInfo;
     }
 
-    public final void setRendererDisabled(int rendererIndex, boolean disabled) {
-        if (this.rendererDisabledFlags.get(rendererIndex) != disabled) {
-            this.rendererDisabledFlags.put(rendererIndex, disabled);
-            invalidate();
-        }
-    }
-
-    public final boolean getRendererDisabled(int rendererIndex) {
-        return this.rendererDisabledFlags.get(rendererIndex);
-    }
-
-    public final void setSelectionOverride(int rendererIndex, TrackGroupArray groups, SelectionOverride override) {
-        Map<TrackGroupArray, SelectionOverride> overrides = (Map) this.selectionOverrides.get(rendererIndex);
-        if (overrides == null) {
-            overrides = new HashMap();
-            this.selectionOverrides.put(rendererIndex, overrides);
-        }
-        if (!overrides.containsKey(groups) || !Util.areEqual(overrides.get(groups), override)) {
-            overrides.put(groups, override);
-            invalidate();
-        }
-    }
-
-    public final boolean hasSelectionOverride(int rendererIndex, TrackGroupArray groups) {
-        Map<TrackGroupArray, SelectionOverride> overrides = (Map) this.selectionOverrides.get(rendererIndex);
-        return overrides != null && overrides.containsKey(groups);
-    }
-
-    public final SelectionOverride getSelectionOverride(int rendererIndex, TrackGroupArray groups) {
-        Map<TrackGroupArray, SelectionOverride> overrides = (Map) this.selectionOverrides.get(rendererIndex);
-        return overrides != null ? (SelectionOverride) overrides.get(groups) : null;
-    }
-
-    public final void clearSelectionOverride(int rendererIndex, TrackGroupArray groups) {
-        Map<TrackGroupArray, SelectionOverride> overrides = (Map) this.selectionOverrides.get(rendererIndex);
-        if (overrides != null && overrides.containsKey(groups)) {
-            overrides.remove(groups);
-            if (overrides.isEmpty()) {
-                this.selectionOverrides.remove(rendererIndex);
-            }
-            invalidate();
-        }
-    }
-
-    public final void clearSelectionOverrides(int rendererIndex) {
-        Map<TrackGroupArray, ?> overrides = (Map) this.selectionOverrides.get(rendererIndex);
-        if (overrides != null && !overrides.isEmpty()) {
-            this.selectionOverrides.remove(rendererIndex);
-            invalidate();
-        }
-    }
-
-    public final void clearSelectionOverrides() {
-        if (this.selectionOverrides.size() != 0) {
-            this.selectionOverrides.clear();
-            invalidate();
-        }
-    }
-
-    public void setTunnelingAudioSessionId(int tunnelingAudioSessionId) {
-        if (this.tunnelingAudioSessionId != tunnelingAudioSessionId) {
-            this.tunnelingAudioSessionId = tunnelingAudioSessionId;
-            invalidate();
-        }
+    public final void onSelectionActivated(Object info) {
+        this.currentMappedTrackInfo = (MappedTrackInfo) info;
     }
 
     public final TrackSelectorResult selectTracks(RendererCapabilities[] rendererCapabilities, TrackGroupArray trackGroups) throws ExoPlaybackException {
@@ -238,7 +173,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
             rendererTrackGroups[i] = new TrackGroup[trackGroups.length];
             rendererFormatSupports[i] = new int[trackGroups.length][];
         }
-        int[] mixedMimeTypeAdaptationSupport = getMixedMimeTypeAdaptationSupport(rendererCapabilities);
+        int[] rendererMixedMimeTypeAdaptationSupports = getMixedMimeTypeAdaptationSupports(rendererCapabilities);
         for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
             int[] rendererFormatSupport;
             TrackGroup group = trackGroups.get(groupIndex);
@@ -261,46 +196,9 @@ public abstract class MappingTrackSelector extends TrackSelector {
             rendererFormatSupports[i] = (int[][]) Arrays.copyOf(rendererFormatSupports[i], rendererTrackGroupCount);
             rendererTrackTypes[i] = rendererCapabilities[i].getTrackType();
         }
-        TrackGroupArray unassociatedTrackGroupArray = new TrackGroupArray((TrackGroup[]) Arrays.copyOf(rendererTrackGroups[rendererCapabilities.length], rendererTrackGroupCounts[rendererCapabilities.length]));
-        TrackSelection[] trackSelections = selectTracks(rendererCapabilities, rendererTrackGroupArrays, rendererFormatSupports);
-        for (i = 0; i < rendererCapabilities.length; i++) {
-            if (this.rendererDisabledFlags.get(i)) {
-                trackSelections[i] = null;
-            } else {
-                TrackGroupArray rendererTrackGroup = rendererTrackGroupArrays[i];
-                if (hasSelectionOverride(i, rendererTrackGroup)) {
-                    TrackSelection trackSelection;
-                    SelectionOverride override = (SelectionOverride) ((Map) this.selectionOverrides.get(i)).get(rendererTrackGroup);
-                    if (override == null) {
-                        trackSelection = null;
-                    } else {
-                        trackSelection = override.createTrackSelection(rendererTrackGroup);
-                    }
-                    trackSelections[i] = trackSelection;
-                }
-            }
-        }
-        boolean[] rendererEnabled = determineEnabledRenderers(rendererCapabilities, trackSelections);
-        MappedTrackInfo mappedTrackInfo = new MappedTrackInfo(rendererTrackTypes, rendererTrackGroupArrays, mixedMimeTypeAdaptationSupport, rendererFormatSupports, unassociatedTrackGroupArray);
-        RendererConfiguration[] rendererConfigurations = new RendererConfiguration[rendererCapabilities.length];
-        for (i = 0; i < rendererCapabilities.length; i++) {
-            rendererConfigurations[i] = rendererEnabled[i] ? RendererConfiguration.DEFAULT : null;
-        }
-        maybeConfigureRenderersForTunneling(rendererCapabilities, rendererTrackGroupArrays, rendererFormatSupports, rendererConfigurations, trackSelections, this.tunnelingAudioSessionId);
-        return new TrackSelectorResult(trackGroups, rendererEnabled, new TrackSelectionArray(trackSelections), mappedTrackInfo, rendererConfigurations);
-    }
-
-    private boolean[] determineEnabledRenderers(RendererCapabilities[] rendererCapabilities, TrackSelection[] trackSelections) {
-        boolean[] rendererEnabled = new boolean[trackSelections.length];
-        for (int i = 0; i < rendererEnabled.length; i++) {
-            boolean z = !this.rendererDisabledFlags.get(i) && (rendererCapabilities[i].getTrackType() == 5 || trackSelections[i] != null);
-            rendererEnabled[i] = z;
-        }
-        return rendererEnabled;
-    }
-
-    public final void onSelectionActivated(Object info) {
-        this.currentMappedTrackInfo = (MappedTrackInfo) info;
+        MappedTrackInfo mappedTrackInfo = new MappedTrackInfo(rendererTrackTypes, rendererTrackGroupArrays, rendererMixedMimeTypeAdaptationSupports, rendererFormatSupports, new TrackGroupArray((TrackGroup[]) Arrays.copyOf(rendererTrackGroups[rendererCapabilities.length], rendererTrackGroupCounts[rendererCapabilities.length])));
+        Pair<RendererConfiguration[], TrackSelection[]> result = selectTracks(mappedTrackInfo, rendererFormatSupports, rendererMixedMimeTypeAdaptationSupports);
+        return new TrackSelectorResult((RendererConfiguration[]) result.first, (TrackSelection[]) result.second, mappedTrackInfo);
     }
 
     private static int findRenderer(RendererCapabilities[] rendererCapabilities, TrackGroup group) throws ExoPlaybackException {
@@ -331,58 +229,11 @@ public abstract class MappingTrackSelector extends TrackSelector {
         return formatSupport;
     }
 
-    private static int[] getMixedMimeTypeAdaptationSupport(RendererCapabilities[] rendererCapabilities) throws ExoPlaybackException {
+    private static int[] getMixedMimeTypeAdaptationSupports(RendererCapabilities[] rendererCapabilities) throws ExoPlaybackException {
         int[] mixedMimeTypeAdaptationSupport = new int[rendererCapabilities.length];
         for (int i = 0; i < mixedMimeTypeAdaptationSupport.length; i++) {
             mixedMimeTypeAdaptationSupport[i] = rendererCapabilities[i].supportsMixedMimeTypeAdaptation();
         }
         return mixedMimeTypeAdaptationSupport;
-    }
-
-    private static void maybeConfigureRenderersForTunneling(RendererCapabilities[] rendererCapabilities, TrackGroupArray[] rendererTrackGroupArrays, int[][][] rendererFormatSupports, RendererConfiguration[] rendererConfigurations, TrackSelection[] trackSelections, int tunnelingAudioSessionId) {
-        if (tunnelingAudioSessionId != 0) {
-            int tunnelingAudioRendererIndex = -1;
-            int tunnelingVideoRendererIndex = -1;
-            boolean enableTunneling = true;
-            int i = 0;
-            while (i < rendererCapabilities.length) {
-                int rendererType = rendererCapabilities[i].getTrackType();
-                TrackSelection trackSelection = trackSelections[i];
-                if ((rendererType == 1 || rendererType == 2) && trackSelection != null && rendererSupportsTunneling(rendererFormatSupports[i], rendererTrackGroupArrays[i], trackSelection)) {
-                    if (rendererType == 1) {
-                        if (tunnelingAudioRendererIndex != -1) {
-                            enableTunneling = false;
-                            break;
-                        }
-                        tunnelingAudioRendererIndex = i;
-                    } else if (tunnelingVideoRendererIndex != -1) {
-                        enableTunneling = false;
-                        break;
-                    } else {
-                        tunnelingVideoRendererIndex = i;
-                    }
-                }
-                i++;
-            }
-            int i2 = (tunnelingAudioRendererIndex == -1 || tunnelingVideoRendererIndex == -1) ? 0 : 1;
-            if (enableTunneling & i2) {
-                RendererConfiguration tunnelingRendererConfiguration = new RendererConfiguration(tunnelingAudioSessionId);
-                rendererConfigurations[tunnelingAudioRendererIndex] = tunnelingRendererConfiguration;
-                rendererConfigurations[tunnelingVideoRendererIndex] = tunnelingRendererConfiguration;
-            }
-        }
-    }
-
-    private static boolean rendererSupportsTunneling(int[][] formatSupport, TrackGroupArray trackGroups, TrackSelection selection) {
-        if (selection == null) {
-            return false;
-        }
-        int trackGroupIndex = trackGroups.indexOf(selection.getTrackGroup());
-        for (int i = 0; i < selection.length(); i++) {
-            if ((formatSupport[trackGroupIndex][selection.getIndexInTrackGroup(i)] & 32) != 32) {
-                return false;
-            }
-        }
-        return true;
     }
 }

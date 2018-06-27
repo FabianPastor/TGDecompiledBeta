@@ -39,10 +39,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private long lastFrameDecodeTime;
     private long lastFrameTime;
     private int lastTimeStamp;
-    private Runnable loadFrameRunnable = new C10893();
+    private Runnable loadFrameRunnable = new C11183();
     private Runnable loadFrameTask;
-    protected final Runnable mInvalidateTask = new C10871();
-    private final Runnable mStartTask = new C10904();
+    protected final Runnable mInvalidateTask = new C11161();
+    private final Runnable mStartTask = new C11194();
     private final int[] metaData = new int[4];
     private volatile long nativePtr;
     private Bitmap nextRenderingBitmap;
@@ -59,11 +59,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private View secondParentView = null;
     private Matrix shaderMatrix = new Matrix();
     private boolean singleFrameDecoded;
-    private Runnable uiRunnable = new C10882();
+    private Runnable uiRunnable = new C11172();
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$1 */
-    class C10871 implements Runnable {
-        C10871() {
+    class C11161 implements Runnable {
+        C11161() {
         }
 
         public void run() {
@@ -76,8 +76,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$2 */
-    class C10882 implements Runnable {
-        C10882() {
+    class C11172 implements Runnable {
+        C11172() {
         }
 
         public void run() {
@@ -118,8 +118,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$3 */
-    class C10893 implements Runnable {
-        C10893() {
+    class C11183 implements Runnable {
+        C11183() {
         }
 
         public void run() {
@@ -148,8 +148,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$4 */
-    class C10904 implements Runnable {
-        C10904() {
+    class C11194 implements Runnable {
+        C11194() {
         }
 
         public void run() {

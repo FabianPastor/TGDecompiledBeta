@@ -56,8 +56,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$1 */
-    class C07601 implements OnApplyWindowInsetsListener {
-        C07601() {
+    class C07911 implements OnApplyWindowInsetsListener {
+        C07911() {
         }
 
         @SuppressLint({"NewApi"})
@@ -73,8 +73,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
-    class C07612 extends AnimatorListenerAdapter {
-        C07612() {
+    class C07922 extends AnimatorListenerAdapter {
+        C07922() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -83,8 +83,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$3 */
-    class C07623 extends AnimatorListenerAdapter {
-        C07623() {
+    class C07933 extends AnimatorListenerAdapter {
+        C07933() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -98,7 +98,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         setFocusableInTouchMode(true);
         if (VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
-            setOnApplyWindowInsetsListener(new C07601());
+            setOnApplyWindowInsetsListener(new C07911());
             setSystemUiVisibility(1280);
         }
         this.shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
@@ -195,7 +195,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else {
                 animatorSet.setDuration(300);
             }
-            animatorSet.addListener(new C07612());
+            animatorSet.addListener(new C07922());
             animatorSet.start();
             this.currentAnimation = animatorSet;
         }
@@ -213,7 +213,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         } else {
             animatorSet.setDuration(300);
         }
-        animatorSet.addListener(new C07623());
+        animatorSet.addListener(new C07933());
         animatorSet.start();
     }
 

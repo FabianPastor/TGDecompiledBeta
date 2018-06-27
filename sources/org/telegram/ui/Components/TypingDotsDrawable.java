@@ -19,8 +19,8 @@ public class TypingDotsDrawable extends StatusDrawable {
     private boolean started = false;
 
     /* renamed from: org.telegram.ui.Components.TypingDotsDrawable$1 */
-    class C13401 implements Runnable {
-        C13401() {
+    class C13861 implements Runnable {
+        C13861() {
         }
 
         public void run() {
@@ -96,7 +96,7 @@ public class TypingDotsDrawable extends StatusDrawable {
             return;
         }
         if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new C13401(), 100);
+            AndroidUtilities.runOnUIThread(new C13861(), 100);
         } else {
             update();
         }

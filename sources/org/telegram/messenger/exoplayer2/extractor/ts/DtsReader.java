@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.DtsUtil;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -9,30 +8,23 @@ import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGen
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class DtsReader implements ElementaryStreamReader {
-    private static final int HEADER_SIZE = 15;
+    private static final int HEADER_SIZE = 18;
     private static final int STATE_FINDING_SYNC = 0;
     private static final int STATE_READING_HEADER = 1;
     private static final int STATE_READING_SAMPLE = 2;
-    private static final int SYNC_VALUE = NUM;
-    private static final int SYNC_VALUE_SIZE = 4;
     private int bytesRead;
     private Format format;
     private String formatId;
-    private final ParsableByteArray headerScratchBytes = new ParsableByteArray(new byte[15]);
+    private final ParsableByteArray headerScratchBytes = new ParsableByteArray(new byte[18]);
     private final String language;
     private TrackOutput output;
     private long sampleDurationUs;
     private int sampleSize;
-    private int state;
+    private int state = 0;
     private int syncBytes;
     private long timeUs;
 
     public DtsReader(String language) {
-        this.headerScratchBytes.data[0] = Byte.MAX_VALUE;
-        this.headerScratchBytes.data[1] = (byte) -2;
-        this.headerScratchBytes.data[2] = Byte.MIN_VALUE;
-        this.headerScratchBytes.data[3] = (byte) 1;
-        this.state = 0;
         this.language = language;
     }
 
@@ -59,16 +51,15 @@ public final class DtsReader implements ElementaryStreamReader {
                     if (!skipToNextSync(data)) {
                         break;
                     }
-                    this.bytesRead = 4;
                     this.state = 1;
                     break;
                 case 1:
-                    if (!continueRead(data, this.headerScratchBytes.data, 15)) {
+                    if (!continueRead(data, this.headerScratchBytes.data, 18)) {
                         break;
                     }
                     parseHeader();
                     this.headerScratchBytes.setPosition(0);
-                    this.output.sampleData(this.headerScratchBytes, 15);
+                    this.output.sampleData(this.headerScratchBytes, 18);
                     this.state = 2;
                     break;
                 case 2:
@@ -102,7 +93,12 @@ public final class DtsReader implements ElementaryStreamReader {
         while (pesBuffer.bytesLeft() > 0) {
             this.syncBytes <<= 8;
             this.syncBytes |= pesBuffer.readUnsignedByte();
-            if (this.syncBytes == SYNC_VALUE) {
+            if (DtsUtil.isSyncWord(this.syncBytes)) {
+                this.headerScratchBytes.data[0] = (byte) ((this.syncBytes >> 24) & 255);
+                this.headerScratchBytes.data[1] = (byte) ((this.syncBytes >> 16) & 255);
+                this.headerScratchBytes.data[2] = (byte) ((this.syncBytes >> 8) & 255);
+                this.headerScratchBytes.data[3] = (byte) (this.syncBytes & 255);
+                this.bytesRead = 4;
                 this.syncBytes = 0;
                 return true;
             }
@@ -117,6 +113,6 @@ public final class DtsReader implements ElementaryStreamReader {
             this.output.format(this.format);
         }
         this.sampleSize = DtsUtil.getDtsFrameSize(frameData);
-        this.sampleDurationUs = (long) ((int) ((C0546C.MICROS_PER_SECOND * ((long) DtsUtil.parseDtsAudioSampleCount(frameData))) / ((long) this.format.sampleRate)));
+        this.sampleDurationUs = (long) ((int) ((1000000 * ((long) DtsUtil.parseDtsAudioSampleCount(frameData))) / ((long) this.format.sampleRate)));
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.voip.VoIPService;
@@ -42,8 +42,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C01821 implements Runnable {
-                C01821() {
+            class C01861 implements Runnable {
+                C01861() {
                 }
 
                 public void run() {
@@ -75,7 +75,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     int a;
                                     byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                                     nativeByteBuffer.readBytes(strBytes, true);
-                                    JSONObject json = new JSONObject(new String(strBytes, C0546C.UTF8_NAME));
+                                    JSONObject json = new JSONObject(new String(strBytes, C0554C.UTF8_NAME));
                                     JSONObject custom = json.getJSONObject("custom");
                                     if (json.has("user_id")) {
                                         obj = json.get("user_id");
@@ -757,7 +757,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     break;
                                                                 case 1:
                                                                     messageText = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, args[0]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    message = LocaleController.getString("Message", R.string.Message);
                                                                     break;
                                                                 case 2:
                                                                     messageText = LocaleController.formatString("NotificationMessagePhoto", R.string.NotificationMessagePhoto, args[0]);
@@ -765,7 +765,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     break;
                                                                 case 3:
                                                                     messageText = LocaleController.formatString("NotificationMessageSDPhoto", R.string.NotificationMessageSDPhoto, args[0]);
-                                                                    message = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                                                                    message = LocaleController.getString("AttachDestructingPhoto", R.string.AttachDestructingPhoto);
                                                                     break;
                                                                 case 4:
                                                                     messageText = LocaleController.formatString("NotificationMessageVideo", R.string.NotificationMessageVideo, args[0]);
@@ -773,7 +773,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     break;
                                                                 case 5:
                                                                     messageText = LocaleController.formatString("NotificationMessageSDVideo", R.string.NotificationMessageSDVideo, args[0]);
-                                                                    message = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                                                                    message = LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
                                                                     break;
                                                                 case 6:
                                                                     messageText = LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot).replace("un1", args[0]);
@@ -787,11 +787,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     message = LocaleController.getString("AttachDocument", R.string.AttachDocument);
                                                                     break;
                                                                 case 9:
-                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
-                                                                        messageText = LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, args[0]);
-                                                                    } else {
+                                                                    if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
                                                                         messageText = LocaleController.formatString("NotificationMessageStickerEmoji", R.string.NotificationMessageStickerEmoji, args[0], args[1]);
+                                                                        message = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                                                        break;
                                                                     }
+                                                                    messageText = LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, args[0]);
                                                                     message = LocaleController.getString("AttachSticker", R.string.AttachSticker);
                                                                     break;
                                                                 case 10:
@@ -840,7 +841,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     break;
                                                                 case 21:
                                                                     messageText = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, args[0]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    message = LocaleController.getString("Message", R.string.Message);
                                                                     break;
                                                                 case 22:
                                                                     messageText = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, args[0]);
@@ -859,12 +860,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     message = LocaleController.getString("AttachDocument", R.string.AttachDocument);
                                                                     break;
                                                                 case 26:
-                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
-                                                                        messageText = LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, args[0]);
-                                                                    } else {
+                                                                    if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
                                                                         messageText = LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, args[0], args[1]);
+                                                                        message = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                                                        break;
                                                                     }
+                                                                    messageText = LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, args[0]);
                                                                     message = LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                                                    break;
                                                                     break;
                                                                 case 27:
                                                                     messageText = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, args[0]);
@@ -904,11 +907,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     break;
                                                                 case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                                                                     messageText = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
-                                                                    message = args[1];
+                                                                    message = args[2];
                                                                     break;
                                                                 case 37:
                                                                     messageText = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, args[0], args[1]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    message = LocaleController.getString("Message", R.string.Message);
                                                                     break;
                                                                 case 38:
                                                                     messageText = LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, args[0], args[1]);
@@ -927,12 +930,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     message = LocaleController.getString("AttachDocument", R.string.AttachDocument);
                                                                     break;
                                                                 case 42:
-                                                                    if (args.length <= 2 || TextUtils.isEmpty(args[2])) {
-                                                                        messageText = LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, args[0], args[1]);
-                                                                    } else {
+                                                                    if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
                                                                         messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
+                                                                        message = args[2] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                                                        break;
                                                                     }
-                                                                    message = LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, args[0], args[1]);
+                                                                    message = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
                                                                     break;
                                                                 case 43:
                                                                     messageText = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, args[0], args[1]);
@@ -1126,11 +1130,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         break;
                                                                     }
                                                                 case 77:
-                                                                case TLRPC.LAYER /*78*/:
+                                                                case 78:
                                                                 case 79:
                                                                 case 80:
                                                                 case 81:
-                                                                case 82:
+                                                                case TLRPC.LAYER /*82*/:
                                                                 case 83:
                                                                 case 84:
                                                                 case 85:
@@ -1243,7 +1247,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C01821());
+                Utilities.stageQueue.postRunnable(new C01861());
             }
         });
     }

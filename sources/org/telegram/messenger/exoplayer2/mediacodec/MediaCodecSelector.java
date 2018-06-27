@@ -3,11 +3,11 @@ package org.telegram.messenger.exoplayer2.mediacodec;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 
 public interface MediaCodecSelector {
-    public static final MediaCodecSelector DEFAULT = new C18601();
+    public static final MediaCodecSelector DEFAULT = new C19871();
 
     /* renamed from: org.telegram.messenger.exoplayer2.mediacodec.MediaCodecSelector$1 */
-    static class C18601 implements MediaCodecSelector {
-        C18601() {
+    static class C19871 implements MediaCodecSelector {
+        C19871() {
         }
 
         public MediaCodecInfo getDecoderInfo(String mimeType, boolean requiresSecureDecoder) throws DecoderQueryException {

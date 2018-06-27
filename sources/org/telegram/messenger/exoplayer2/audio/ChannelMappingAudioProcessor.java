@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.audio.AudioProcessor.UnhandledFormatException;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class ChannelMappingAudioProcessor implements AudioProcessor {
     private boolean active;
@@ -69,6 +70,13 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
     }
 
     public void queueInput(ByteBuffer inputBuffer) {
+        boolean z;
+        if (this.outputChannels != null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
         int position = inputBuffer.position();
         int limit = inputBuffer.limit();
         int outputSize = (this.outputChannels.length * ((limit - position) / (this.channelCount * 2))) * 2;
@@ -113,6 +121,7 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         this.channelCount = -1;
         this.sampleRateHz = -1;
         this.outputChannels = null;
+        this.pendingOutputChannels = null;
         this.active = false;
     }
 }

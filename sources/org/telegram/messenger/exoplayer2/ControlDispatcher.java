@@ -8,4 +8,6 @@ public interface ControlDispatcher {
     boolean dispatchSetRepeatMode(Player player, int i);
 
     boolean dispatchSetShuffleModeEnabled(Player player, boolean z);
+
+    boolean dispatchStop(Player player, boolean z);
 }

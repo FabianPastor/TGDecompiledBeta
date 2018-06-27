@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
 import android.util.Log;
-import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
@@ -21,7 +20,7 @@ final class VbriSeeker implements Seeker {
             return null;
         }
         int sampleRate = mpegAudioHeader.sampleRate;
-        long durationUs = Util.scaleLargeTimestamp((long) numFrames, ((long) (sampleRate >= 32000 ? 1152 : 576)) * C0546C.MICROS_PER_SECOND, (long) sampleRate);
+        long durationUs = Util.scaleLargeTimestamp((long) numFrames, ((long) (sampleRate >= 32000 ? 1152 : 576)) * 1000000, (long) sampleRate);
         int entryCount = frame.readUnsignedShort();
         int scale = frame.readUnsignedShort();
         int entrySize = frame.readUnsignedShort();

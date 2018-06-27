@@ -4,7 +4,7 @@ import java.util.Map;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-final class ErrorStateDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
+public final class ErrorStateDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private final DrmSessionException error;
 
     public ErrorStateDrmSession(DrmSessionException error) {

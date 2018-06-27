@@ -59,7 +59,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
     }
 
-    public void setAccount(int account) {
+    public void setAccount(int account, boolean check) {
         TLObject avatar;
         this.accountNumber = account;
         User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
@@ -72,7 +72,9 @@ public class AccountSelectCell extends FrameLayout {
         }
         this.imageView.getImageReceiver().setCurrentAccount(account);
         this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
-        this.checkImageView.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
+        ImageView imageView = this.checkImageView;
+        int i = (check && account == UserConfig.selectedAccount) ? 0 : 4;
+        imageView.setVisibility(i);
     }
 
     public int getAccountNumber() {

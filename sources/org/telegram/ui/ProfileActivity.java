@@ -67,6 +67,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -111,6 +112,7 @@ import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.TL_userEmpty;
 import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.User;
@@ -138,11 +140,11 @@ import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.ChannelRightsEditActivity.ChannelRightsEditActivityDelegate;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.AvatarUpdater;
-import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.IdenticonDrawable;
+import org.telegram.ui.Components.ImageUpdater;
+import org.telegram.ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -178,7 +180,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private float animationProgress;
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImage;
-    private AvatarUpdater avatarUpdater;
     private int banFromGroup;
     private BotInfo botInfo;
     private ActionBarMenuItem callItem;
@@ -198,6 +199,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int emptyRowChat2;
     private int extraHeight;
     private int groupsInCommonRow;
+    private ImageUpdater imageUpdater;
     private ChatFull info;
     private int initialAnimationExtraHeight;
     private boolean isBot;
@@ -218,7 +220,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int phoneRow;
     private boolean playProfileAnimation;
-    private PhotoViewerProvider provider = new C23631();
+    private PhotoViewerProvider provider = new C25451();
     private boolean recreateMenuAfterAnimation;
     private int rowCount = 0;
     private int sectionRow;
@@ -271,11 +273,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$3 */
-    class C22683 implements AvatarUpdaterDelegate {
-        C22683() {
+    class C24453 implements ImageUpdaterDelegate {
+        C24453() {
         }
 
-        public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big) {
+        public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big, TL_secureFile secureFile) {
             if (ProfileActivity.this.chat_id != 0) {
                 MessagesController.getInstance(ProfileActivity.this.currentAccount).changeChatAvatar(ProfileActivity.this.chat_id, file);
             }
@@ -283,11 +285,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$5 */
-    class C22715 extends ActionBarMenuOnItemClick {
+    class C24485 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ProfileActivity$5$1 */
-        class C16521 implements OnClickListener {
-            C16521() {
+        class C17751 implements OnClickListener {
+            C17751() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -299,7 +301,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22715() {
+        C24485() {
         }
 
         public void onItemClick(int id) {
@@ -318,7 +320,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             builder.setMessage(LocaleController.getString("AreYouSureBlockContact", R.string.AreYouSureBlockContact));
                         }
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16521());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17751());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (ProfileActivity.this.userBlocked) {
@@ -468,11 +470,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
-    class C22729 implements OnItemClickListener {
+    class C24499 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$2 */
-        class C16562 implements OnClickListener {
-            C16562() {
+        class C17792 implements OnClickListener {
+            C17792() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -482,8 +484,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$3 */
-        class C16573 implements OnClickListener {
-            C16573() {
+        class C17803 implements OnClickListener {
+            C17803() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -491,7 +493,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22729() {
+        C24499() {
         }
 
         public void onItemClick(View view, int position) {
@@ -612,7 +614,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     builder = new Builder(ProfileActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16562());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17792());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else if (position > ProfileActivity.this.emptyRowChat2 && position < ProfileActivity.this.membersEndRow) {
@@ -653,7 +655,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     builder = new Builder(ProfileActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
                     builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16573());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17803());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else {
@@ -664,8 +666,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class C23631 extends EmptyPhotoViewerProvider {
-        C23631() {
+    class C25451 extends EmptyPhotoViewerProvider {
+        C25451() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -719,8 +721,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ProfileActivity$ListAdapter$1 */
-        class C22731 implements AboutLinkCellDelegate {
-            C22731() {
+        class C24501 implements AboutLinkCellDelegate {
+            C24501() {
             }
 
             public void didPressUrl(String url) {
@@ -783,7 +785,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
                 case 8:
                     view = new AboutLinkCell(this.mContext);
-                    ((AboutLinkCell) view).setDelegate(new C22731());
+                    ((AboutLinkCell) view).setDelegate(new C24501());
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -1167,9 +1169,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
             this.sortedUsers = new ArrayList();
             updateOnlineCount();
-            this.avatarUpdater = new AvatarUpdater();
-            this.avatarUpdater.delegate = new C22683();
-            this.avatarUpdater.parentFragment = this;
+            this.imageUpdater = new ImageUpdater();
+            this.imageUpdater.delegate = new C24453();
+            this.imageUpdater.parentFragment = this;
             if (ChatObject.isChannel(this.currentChat)) {
                 MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
             }
@@ -1209,7 +1211,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (this.chat_id != 0) {
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
-            this.avatarUpdater.clear();
+            this.imageUpdater.clear();
         }
     }
 
@@ -1241,7 +1243,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         Theme.createProfileResources(context);
         this.hasOwnBackground = true;
         this.extraHeight = AndroidUtilities.dp(88.0f);
-        this.actionBar.setActionBarMenuOnItemClick(new C22715());
+        this.actionBar.setActionBarMenuOnItemClick(new C24485());
         createActionBarMenu();
         this.listAdapter = new ListAdapter(context);
         this.avatarDrawable = new AvatarDrawable();
@@ -1284,7 +1286,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setGlowColor(AvatarDrawable.getProfileBackColorForId(i));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22729());
+        this.listView.setOnItemClickListener(new C24499());
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemClick(View view, int position) {
                 if (position <= ProfileActivity.this.emptyRowChat2 || position >= ProfileActivity.this.membersEndRow) {
@@ -1450,8 +1452,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             frameLayout1.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$13$1 */
-                class C22671 implements ChannelRightsEditActivityDelegate {
-                    C22671() {
+                class C24441 implements ChannelRightsEditActivityDelegate {
+                    C24441() {
                     }
 
                     public void didSetRights(int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {
@@ -1469,7 +1471,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         tL_channelBannedRights = null;
                     }
                     ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(access$000, access$8500, null, tL_channelBannedRights, 1, true);
-                    fragment.setDelegate(new C22671());
+                    fragment.setDelegate(new C24441());
                     ProfileActivity.this.presentFragment(fragment);
                 }
             });
@@ -1593,15 +1595,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.writeButton.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$16$1 */
-                class C16491 implements OnClickListener {
-                    C16491() {
+                class C17721 implements OnClickListener {
+                    C17721() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (i == 0) {
-                            ProfileActivity.this.avatarUpdater.openCamera();
+                            ProfileActivity.this.imageUpdater.openCamera();
                         } else if (i == 1) {
-                            ProfileActivity.this.avatarUpdater.openGallery();
+                            ProfileActivity.this.imageUpdater.openGallery();
                         } else if (i == 2) {
                             MessagesController.getInstance(ProfileActivity.this.currentAccount).changeChatAvatar(ProfileActivity.this.chat_id, null);
                         }
@@ -1632,7 +1634,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 Builder builder = new Builder(ProfileActivity.this.getParentActivity());
                                 Chat chat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getChat(Integer.valueOf(ProfileActivity.this.chat_id));
                                 CharSequence[] items = (chat.photo == null || chat.photo.photo_big == null || (chat.photo instanceof TL_chatPhotoEmpty)) ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                                builder.setItems(items, new C16491());
+                                builder.setItems(items, new C17721());
                                 ProfileActivity.this.showDialog(builder.create());
                             } else if (ProfileActivity.this.playProfileAnimation && (ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity)) {
                                 ProfileActivity.this.finishFragment();
@@ -1780,23 +1782,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     public void saveSelfArgs(Bundle args) {
-        if (this.chat_id != 0 && this.avatarUpdater != null && this.avatarUpdater.currentPicturePath != null) {
-            args.putString("path", this.avatarUpdater.currentPicturePath);
+        if (this.chat_id != 0 && this.imageUpdater != null && this.imageUpdater.currentPicturePath != null) {
+            args.putString("path", this.imageUpdater.currentPicturePath);
         }
     }
 
     public void restoreSelfArgs(Bundle args) {
         if (this.chat_id != 0) {
             MessagesController.getInstance(this.currentAccount).loadChatInfo(this.chat_id, null, false);
-            if (this.avatarUpdater != null) {
-                this.avatarUpdater.currentPicturePath = args.getString("path");
+            if (this.imageUpdater != null) {
+                this.imageUpdater.currentPicturePath = args.getString("path");
             }
         }
     }
 
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
         if (this.chat_id != 0) {
-            this.avatarUpdater.onActivityResult(requestCode, resultCode, data);
+            this.imageUpdater.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -2467,10 +2469,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         int status1 = 0;
                         int status2 = 0;
                         if (!(user1 == null || user1.status == null)) {
-                            status1 = user1.id == UserConfig.getInstance(ProfileActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).getCurrentTime() + 50000 : user1.status.expires;
+                            status1 = user1.id == UserConfig.getInstance(ProfileActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user1.status.expires;
                         }
                         if (!(user2 == null || user2.status == null)) {
-                            status2 = user2.id == UserConfig.getInstance(ProfileActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).getCurrentTime() + 50000 : user2.status.expires;
+                            status2 = user2.id == UserConfig.getInstance(ProfileActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user2.status.expires;
                         }
                         if (status1 <= 0 || status2 <= 0) {
                             if (status1 >= 0 || status2 >= 0) {
@@ -2790,7 +2792,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00d8;
     L_0x0025:
         r19 = "WaitingForNetwork";
-        r20 = NUM; // 0x7f0c06ef float:1.8612792E38 double:1.0530982754E-314;
+        r20 = NUM; // 0x7f0c079c float:1.8613143E38 double:1.053098361E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x002f:
         r0 = r25;
@@ -2856,10 +2858,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x0111;
     L_0x00b0:
         r19 = "ChatYourSelf";
-        r20 = NUM; // 0x7f0c0173 float:1.8609944E38 double:1.053097582E-314;
+        r20 = NUM; // 0x7f0c0188 float:1.8609987E38 double:1.053097592E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r19 = "ChatYourSelfName";
-        r20 = NUM; // 0x7f0c0178 float:1.8609955E38 double:1.053097584E-314;
+        r20 = NUM; // 0x7f0c018d float:1.8609997E38 double:1.0530975946E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x00c4:
         r4 = 0;
@@ -2882,7 +2884,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00ea;
     L_0x00de:
         r19 = "Connecting";
-        r20 = NUM; // 0x7f0c01a6 float:1.8610048E38 double:1.053097607E-314;
+        r20 = NUM; // 0x7f0c01bb float:1.861009E38 double:1.0530976173E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00ea:
@@ -2891,7 +2893,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00fc;
     L_0x00f0:
         r19 = "Updating";
-        r20 = NUM; // 0x7f0c0689 float:1.8612585E38 double:1.053098225E-314;
+        r20 = NUM; // 0x7f0c0734 float:1.8612932E38 double:1.0530983095E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00fc:
@@ -2900,7 +2902,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x010e;
     L_0x0102:
         r19 = "ConnectingToProxy";
-        r20 = NUM; // 0x7f0c01a8 float:1.8610052E38 double:1.053097608E-314;
+        r20 = NUM; // 0x7f0c01bd float:1.8610095E38 double:1.0530976183E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x010e:
@@ -2924,7 +2926,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x013a;
     L_0x012f:
         r19 = "ServiceNotifications";
-        r20 = NUM; // 0x7f0c05e2 float:1.8612246E38 double:1.0530981425E-314;
+        r20 = NUM; // 0x7f0c067b float:1.8612557E38 double:1.053098218E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x013a:
@@ -2934,7 +2936,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x014e;
     L_0x0142:
         r19 = "Bot";
-        r20 = NUM; // 0x7f0c00e0 float:1.8609646E38 double:1.053097509E-314;
+        r20 = NUM; // 0x7f0c00f4 float:1.8609687E38 double:1.053097519E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x014e:
@@ -3256,7 +3258,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x03d4;
     L_0x03ad:
         r19 = "Loading";
-        r20 = NUM; // 0x7f0c0383 float:1.8611015E38 double:1.0530978426E-314;
+        r20 = NUM; // 0x7f0c03ab float:1.8611096E38 double:1.0530978624E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
     L_0x03bb:
@@ -3285,13 +3287,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x03eb;
     L_0x03dc:
         r19 = "ChannelPublic";
-        r20 = NUM; // 0x7f0c0152 float:1.8609877E38 double:1.0530975655E-314;
+        r20 = NUM; // 0x7f0c0167 float:1.860992E38 double:1.053097576E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
         goto L_0x03bb;
     L_0x03eb:
         r19 = "ChannelPrivate";
-        r20 = NUM; // 0x7f0c014f float:1.8609871E38 double:1.053097564E-314;
+        r20 = NUM; // 0x7f0c0164 float:1.8609914E38 double:1.0530975743E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
         goto L_0x03bb;

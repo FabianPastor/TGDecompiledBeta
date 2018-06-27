@@ -22,6 +22,7 @@ public final class CacheDataSink implements DataSink {
     private final long maxCacheFileSize;
     private OutputStream outputStream;
     private long outputStreamBytesWritten;
+    private final boolean syncFileDescriptor;
     private FileOutputStream underlyingFileOutputStream;
 
     public static class CacheDataSinkException extends CacheException {
@@ -31,13 +32,22 @@ public final class CacheDataSink implements DataSink {
     }
 
     public CacheDataSink(Cache cache, long maxCacheFileSize) {
-        this(cache, maxCacheFileSize, DEFAULT_BUFFER_SIZE);
+        this(cache, maxCacheFileSize, DEFAULT_BUFFER_SIZE, true);
+    }
+
+    public CacheDataSink(Cache cache, long maxCacheFileSize, boolean syncFileDescriptor) {
+        this(cache, maxCacheFileSize, DEFAULT_BUFFER_SIZE, syncFileDescriptor);
     }
 
     public CacheDataSink(Cache cache, long maxCacheFileSize, int bufferSize) {
+        this(cache, maxCacheFileSize, bufferSize, true);
+    }
+
+    public CacheDataSink(Cache cache, long maxCacheFileSize, int bufferSize, boolean syncFileDescriptor) {
         this.cache = (Cache) Assertions.checkNotNull(cache);
         this.maxCacheFileSize = maxCacheFileSize;
         this.bufferSize = bufferSize;
+        this.syncFileDescriptor = syncFileDescriptor;
     }
 
     public void open(DataSpec dataSpec) throws CacheDataSinkException {
@@ -114,7 +124,9 @@ public final class CacheDataSink implements DataSink {
             File fileToCommit;
             try {
                 this.outputStream.flush();
-                this.underlyingFileOutputStream.getFD().sync();
+                if (this.syncFileDescriptor) {
+                    this.underlyingFileOutputStream.getFD().sync();
+                }
                 Util.closeQuietly(this.outputStream);
                 this.outputStream = null;
                 fileToCommit = this.file;

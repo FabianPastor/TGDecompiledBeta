@@ -35,7 +35,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private static final int STATE_VISIBLE = 1;
     private int mAnimationState = 0;
     private int mDragState = 0;
-    private final Runnable mHideRunnable = new C06601();
+    private final Runnable mHideRunnable = new C06901();
     float mHorizontalDragX;
     private final int[] mHorizontalRange = new int[2];
     int mHorizontalThumbCenterX;
@@ -47,7 +47,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mMargin;
     private boolean mNeedHorizontalScrollbar = false;
     private boolean mNeedVerticalScrollbar = false;
-    private final OnScrollListener mOnScrollListener = new C18782();
+    private final OnScrollListener mOnScrollListener = new C20032();
     private RecyclerView mRecyclerView;
     private int mRecyclerViewHeight = 0;
     private int mRecyclerViewWidth = 0;
@@ -64,8 +64,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mVerticalTrackWidth;
 
     /* renamed from: org.telegram.messenger.support.widget.FastScroller$1 */
-    class C06601 implements Runnable {
-        C06601() {
+    class C06901 implements Runnable {
+        C06901() {
         }
 
         public void run() {
@@ -122,8 +122,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
-    class C18782 extends OnScrollListener {
-        C18782() {
+    class C20032 extends OnScrollListener {
+        C20032() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

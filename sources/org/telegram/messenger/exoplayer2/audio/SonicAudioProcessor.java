@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import org.telegram.messenger.exoplayer2.audio.AudioProcessor.UnhandledFormatException;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class SonicAudioProcessor implements AudioProcessor {
@@ -29,12 +30,22 @@ public final class SonicAudioProcessor implements AudioProcessor {
     private float speed = 1.0f;
 
     public float setSpeed(float speed) {
-        this.speed = Util.constrainValue(speed, 0.1f, 8.0f);
-        return this.speed;
+        speed = Util.constrainValue(speed, 0.1f, 8.0f);
+        if (this.speed != speed) {
+            this.speed = speed;
+            this.sonic = null;
+        }
+        flush();
+        return speed;
     }
 
     public float setPitch(float pitch) {
-        this.pitch = Util.constrainValue(pitch, 0.1f, 8.0f);
+        pitch = Util.constrainValue(pitch, 0.1f, 8.0f);
+        if (this.pitch != pitch) {
+            this.pitch = pitch;
+            this.sonic = null;
+        }
+        flush();
         return pitch;
     }
 
@@ -63,11 +74,12 @@ public final class SonicAudioProcessor implements AudioProcessor {
         this.sampleRateHz = sampleRateHz;
         this.channelCount = channelCount;
         this.outputSampleRateHz = outputSampleRateHz;
+        this.sonic = null;
         return true;
     }
 
     public boolean isActive() {
-        return Math.abs(this.speed - 1.0f) >= CLOSE_THRESHOLD || Math.abs(this.pitch - 1.0f) >= CLOSE_THRESHOLD || this.outputSampleRateHz != this.sampleRateHz;
+        return this.sampleRateHz != -1 && (Math.abs(this.speed - 1.0f) >= CLOSE_THRESHOLD || Math.abs(this.pitch - 1.0f) >= CLOSE_THRESHOLD || this.outputSampleRateHz != this.sampleRateHz);
     }
 
     public int getOutputChannelCount() {
@@ -83,6 +95,7 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public void queueInput(ByteBuffer inputBuffer) {
+        Assertions.checkState(this.sonic != null);
         if (inputBuffer.hasRemaining()) {
             ShortBuffer shortBuffer = inputBuffer.asShortBuffer();
             int inputSize = inputBuffer.remaining();
@@ -90,7 +103,7 @@ public final class SonicAudioProcessor implements AudioProcessor {
             this.sonic.queueInput(shortBuffer);
             inputBuffer.position(inputBuffer.position() + inputSize);
         }
-        int outputSize = (this.sonic.getSamplesAvailable() * this.channelCount) * 2;
+        int outputSize = (this.sonic.getFramesAvailable() * this.channelCount) * 2;
         if (outputSize > 0) {
             if (this.buffer.capacity() < outputSize) {
                 this.buffer = ByteBuffer.allocateDirect(outputSize).order(ByteOrder.nativeOrder());
@@ -107,6 +120,7 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public void queueEndOfStream() {
+        Assertions.checkState(this.sonic != null);
         this.sonic.queueEndOfStream();
         this.inputEnded = true;
     }
@@ -118,11 +132,17 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public boolean isEnded() {
-        return this.inputEnded && (this.sonic == null || this.sonic.getSamplesAvailable() == 0);
+        return this.inputEnded && (this.sonic == null || this.sonic.getFramesAvailable() == 0);
     }
 
     public void flush() {
-        this.sonic = new Sonic(this.sampleRateHz, this.channelCount, this.speed, this.pitch, this.outputSampleRateHz);
+        if (isActive()) {
+            if (this.sonic == null) {
+                this.sonic = new Sonic(this.sampleRateHz, this.channelCount, this.speed, this.pitch, this.outputSampleRateHz);
+            } else {
+                this.sonic.flush();
+            }
+        }
         this.outputBuffer = EMPTY_BUFFER;
         this.inputBytes = 0;
         this.outputBytes = 0;
@@ -130,16 +150,18 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public void reset() {
-        this.sonic = null;
-        this.buffer = EMPTY_BUFFER;
-        this.shortBuffer = this.buffer.asShortBuffer();
-        this.outputBuffer = EMPTY_BUFFER;
+        this.speed = 1.0f;
+        this.pitch = 1.0f;
         this.channelCount = -1;
         this.sampleRateHz = -1;
         this.outputSampleRateHz = -1;
+        this.buffer = EMPTY_BUFFER;
+        this.shortBuffer = this.buffer.asShortBuffer();
+        this.outputBuffer = EMPTY_BUFFER;
+        this.pendingOutputSampleRateHz = -1;
+        this.sonic = null;
         this.inputBytes = 0;
         this.outputBytes = 0;
         this.inputEnded = false;
-        this.pendingOutputSampleRateHz = -1;
     }
 }

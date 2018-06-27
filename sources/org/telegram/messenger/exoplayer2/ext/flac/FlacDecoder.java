@@ -6,6 +6,7 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
 import org.telegram.messenger.exoplayer2.decoder.SimpleOutputBuffer;
+import org.telegram.messenger.exoplayer2.ext.flac.FlacDecoderJni.FlacFrameDecodeException;
 import org.telegram.messenger.exoplayer2.util.FlacStreamInfo;
 
 final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBuffer, FlacDecoderException> {
@@ -58,20 +59,16 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
             this.decoderJni.flush();
         }
         this.decoderJni.setData(inputBuffer.data);
-        ByteBuffer outputData = outputBuffer.init(inputBuffer.timeUs, this.maxOutputBufferSize);
         try {
-            int result = this.decoderJni.decodeSample(outputData);
-            if (result < 0) {
-                return new FlacDecoderException("Frame decoding failed");
-            }
-            outputData.position(0);
-            outputData.limit(result);
+            this.decoderJni.decodeSample(outputBuffer.init(inputBuffer.timeUs, this.maxOutputBufferSize));
             return null;
-        } catch (IOException e2) {
-            e = e2;
-            throw new IllegalStateException(e);
-        } catch (InterruptedException e3) {
+        } catch (FlacFrameDecodeException e2) {
+            return new FlacDecoderException("Frame decoding failed", e2);
+        } catch (IOException e3) {
             e = e3;
+            throw new IllegalStateException(e);
+        } catch (InterruptedException e4) {
+            e = e4;
             throw new IllegalStateException(e);
         }
     }

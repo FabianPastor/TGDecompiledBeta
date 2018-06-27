@@ -7,6 +7,8 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.ExecutorService;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -212,7 +214,7 @@ public final class Loader implements LoaderErrorThrower {
         void onLoaderReleased();
     }
 
-    private static final class ReleaseTask extends Handler implements Runnable {
+    private static final class ReleaseTask implements Runnable {
         private final ReleaseCallback callback;
 
         public ReleaseTask(ReleaseCallback callback) {
@@ -220,14 +222,12 @@ public final class Loader implements LoaderErrorThrower {
         }
 
         public void run() {
-            if (getLooper().getThread().isAlive()) {
-                sendEmptyMessage(0);
-            }
-        }
-
-        public void handleMessage(Message msg) {
             this.callback.onLoaderReleased();
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface RetryAction {
     }
 
     public static final class UnexpectedLoaderException extends IOException {
@@ -243,6 +243,7 @@ public final class Loader implements LoaderErrorThrower {
     public <T extends Loadable> long startLoading(T loadable, Callback<T> callback, int defaultMinRetryCount) {
         Looper looper = Looper.myLooper();
         Assertions.checkState(looper != null);
+        this.fatalError = null;
         long startTimeMs = SystemClock.elapsedRealtime();
         new LoadTask(looper, loadable, callback, defaultMinRetryCount, startTimeMs).start(0);
         return startTimeMs;
@@ -260,19 +261,14 @@ public final class Loader implements LoaderErrorThrower {
         release(null);
     }
 
-    public boolean release(ReleaseCallback callback) {
-        boolean callbackInvoked = false;
+    public void release(ReleaseCallback callback) {
         if (this.currentTask != null) {
             this.currentTask.cancel(true);
-            if (callback != null) {
-                this.downloadExecutorService.execute(new ReleaseTask(callback));
-            }
-        } else if (callback != null) {
-            callback.onLoaderReleased();
-            callbackInvoked = true;
+        }
+        if (callback != null) {
+            this.downloadExecutorService.execute(new ReleaseTask(callback));
         }
         this.downloadExecutorService.shutdown();
-        return callbackInvoked;
     }
 
     public void maybeThrowError() throws IOException {

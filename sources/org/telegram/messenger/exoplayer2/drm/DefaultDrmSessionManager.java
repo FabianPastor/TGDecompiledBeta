@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSession.ProvisioningManager;
+import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.OnEventListener;
@@ -34,8 +35,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
     public static final String PLAYREADY_CUSTOM_DATA_KEY = "PRCustomData";
     private static final String TAG = "DefaultDrmSessionMgr";
     private final MediaDrmCallback callback;
-    private final Handler eventHandler;
-    private final EventListener eventListener;
+    private final EventDispatcher eventDispatcher;
     private final int initialDrmRequestRetryCount;
     private final ExoMediaDrm<T> mediaDrm;
     volatile MediaDrmHandler mediaDrmHandler;
@@ -47,16 +47,6 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
     private final List<DefaultDrmSession<T>> provisioningSessions;
     private final List<DefaultDrmSession<T>> sessions;
     private final UUID uuid;
-
-    public interface EventListener {
-        void onDrmKeysLoaded();
-
-        void onDrmKeysRemoved();
-
-        void onDrmKeysRestored();
-
-        void onDrmSessionManagerError(Exception exception);
-    }
 
     @SuppressLint({"HandlerLeak"})
     private class MediaDrmHandler extends Handler {
@@ -85,6 +75,10 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
     public @interface Mode {
     }
 
+    @Deprecated
+    public interface EventListener extends DefaultDrmSessionEventListener {
+    }
+
     private class MediaDrmEventListener implements OnEventListener<T> {
         private MediaDrmEventListener() {
         }
@@ -96,11 +90,29 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         }
     }
 
-    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newWidevineInstance(MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) throws UnsupportedDrmException {
-        return newFrameworkInstance(C0546C.WIDEVINE_UUID, callback, optionalKeyRequestParameters, eventHandler, eventListener);
+    @Deprecated
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newWidevineInstance(MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, DefaultDrmSessionEventListener eventListener) throws UnsupportedDrmException {
+        DefaultDrmSessionManager<FrameworkMediaCrypto> drmSessionManager = newWidevineInstance(callback, optionalKeyRequestParameters);
+        if (!(eventHandler == null || eventListener == null)) {
+            drmSessionManager.addListener(eventHandler, eventListener);
+        }
+        return drmSessionManager;
     }
 
-    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newPlayReadyInstance(MediaDrmCallback callback, String customData, Handler eventHandler, EventListener eventListener) throws UnsupportedDrmException {
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newWidevineInstance(MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) throws UnsupportedDrmException {
+        return newFrameworkInstance(C0554C.WIDEVINE_UUID, callback, optionalKeyRequestParameters);
+    }
+
+    @Deprecated
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newPlayReadyInstance(MediaDrmCallback callback, String customData, Handler eventHandler, DefaultDrmSessionEventListener eventListener) throws UnsupportedDrmException {
+        DefaultDrmSessionManager<FrameworkMediaCrypto> drmSessionManager = newPlayReadyInstance(callback, customData);
+        if (!(eventHandler == null || eventListener == null)) {
+            drmSessionManager.addListener(eventHandler, eventListener);
+        }
+        return drmSessionManager;
+    }
+
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newPlayReadyInstance(MediaDrmCallback callback, String customData) throws UnsupportedDrmException {
         HashMap<String, String> optionalKeyRequestParameters;
         if (TextUtils.isEmpty(customData)) {
             optionalKeyRequestParameters = null;
@@ -108,31 +120,63 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             optionalKeyRequestParameters = new HashMap();
             optionalKeyRequestParameters.put(PLAYREADY_CUSTOM_DATA_KEY, customData);
         }
-        return newFrameworkInstance(C0546C.PLAYREADY_UUID, callback, optionalKeyRequestParameters, eventHandler, eventListener);
+        return newFrameworkInstance(C0554C.PLAYREADY_UUID, callback, optionalKeyRequestParameters);
     }
 
-    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newFrameworkInstance(UUID uuid, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) throws UnsupportedDrmException {
-        return new DefaultDrmSessionManager(uuid, FrameworkMediaDrm.newInstance(uuid), callback, optionalKeyRequestParameters, eventHandler, eventListener, false, 3);
+    @Deprecated
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newFrameworkInstance(UUID uuid, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, DefaultDrmSessionEventListener eventListener) throws UnsupportedDrmException {
+        DefaultDrmSessionManager<FrameworkMediaCrypto> drmSessionManager = newFrameworkInstance(uuid, callback, optionalKeyRequestParameters);
+        if (!(eventHandler == null || eventListener == null)) {
+            drmSessionManager.addListener(eventHandler, eventListener);
+        }
+        return drmSessionManager;
     }
 
-    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) {
-        this(uuid, mediaDrm, callback, optionalKeyRequestParameters, eventHandler, eventListener, false, 3);
+    public static DefaultDrmSessionManager<FrameworkMediaCrypto> newFrameworkInstance(UUID uuid, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) throws UnsupportedDrmException {
+        return new DefaultDrmSessionManager(uuid, FrameworkMediaDrm.newInstance(uuid), callback, (HashMap) optionalKeyRequestParameters, false, 3);
     }
 
-    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener, boolean multiSession) {
-        this(uuid, mediaDrm, callback, optionalKeyRequestParameters, eventHandler, eventListener, multiSession, 3);
+    @Deprecated
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, DefaultDrmSessionEventListener eventListener) {
+        this(uuid, mediaDrm, callback, optionalKeyRequestParameters);
+        if (eventHandler != null && eventListener != null) {
+            addListener(eventHandler, eventListener);
+        }
     }
 
-    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener, boolean multiSession, int initialDrmRequestRetryCount) {
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) {
+        this(uuid, (ExoMediaDrm) mediaDrm, callback, (HashMap) optionalKeyRequestParameters, false, 3);
+    }
+
+    @Deprecated
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, DefaultDrmSessionEventListener eventListener, boolean multiSession) {
+        this(uuid, mediaDrm, callback, optionalKeyRequestParameters, multiSession);
+        if (eventHandler != null && eventListener != null) {
+            addListener(eventHandler, eventListener);
+        }
+    }
+
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, boolean multiSession) {
+        this(uuid, (ExoMediaDrm) mediaDrm, callback, (HashMap) optionalKeyRequestParameters, multiSession, 3);
+    }
+
+    @Deprecated
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, DefaultDrmSessionEventListener eventListener, boolean multiSession, int initialDrmRequestRetryCount) {
+        this(uuid, (ExoMediaDrm) mediaDrm, callback, (HashMap) optionalKeyRequestParameters, multiSession, initialDrmRequestRetryCount);
+        if (eventHandler != null && eventListener != null) {
+            addListener(eventHandler, eventListener);
+        }
+    }
+
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, boolean multiSession, int initialDrmRequestRetryCount) {
         Assertions.checkNotNull(uuid);
         Assertions.checkNotNull(mediaDrm);
-        Assertions.checkArgument(!C0546C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
+        Assertions.checkArgument(!C0554C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
         this.uuid = uuid;
         this.mediaDrm = mediaDrm;
         this.callback = callback;
         this.optionalKeyRequestParameters = optionalKeyRequestParameters;
-        this.eventHandler = eventHandler;
-        this.eventListener = eventListener;
+        this.eventDispatcher = new EventDispatcher();
         this.multiSession = multiSession;
         this.initialDrmRequestRetryCount = initialDrmRequestRetryCount;
         this.mode = 0;
@@ -142,6 +186,14 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             mediaDrm.setPropertyString("sessionSharing", "enable");
         }
         mediaDrm.setOnEventListener(new MediaDrmEventListener());
+    }
+
+    public final void addListener(Handler handler, DefaultDrmSessionEventListener eventListener) {
+        this.eventDispatcher.addListener(handler, eventListener);
+    }
+
+    public final void removeListener(DefaultDrmSessionEventListener eventListener) {
+        this.eventDispatcher.removeListener(eventListener);
     }
 
     public final String getPropertyString(String key) {
@@ -174,7 +226,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             return true;
         }
         if (getSchemeData(drmInitData, this.uuid, true) == null) {
-            if (drmInitData.schemeDataCount != 1 || !drmInitData.get(0).matches(C0546C.COMMON_PSSH_UUID)) {
+            if (drmInitData.schemeDataCount != 1 || !drmInitData.get(0).matches(C0554C.COMMON_PSSH_UUID)) {
                 return false;
             }
             Log.w(TAG, "DrmInitData only contains common PSSH SchemeData. Assuming support for: " + this.uuid);
@@ -183,7 +235,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         if (schemeType == null || "cenc".equals(schemeType)) {
             return true;
         }
-        if ((C0546C.CENC_TYPE_cbc1.equals(schemeType) || C0546C.CENC_TYPE_cbcs.equals(schemeType) || C0546C.CENC_TYPE_cens.equals(schemeType)) && Util.SDK_INT < 24) {
+        if ((C0554C.CENC_TYPE_cbc1.equals(schemeType) || C0554C.CENC_TYPE_cbcs.equals(schemeType) || C0554C.CENC_TYPE_cens.equals(schemeType)) && Util.SDK_INT < 25) {
             return false;
         }
         return true;
@@ -205,14 +257,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             SchemeData data = getSchemeData(drmInitData, this.uuid, false);
             if (data == null) {
                 Throwable missingSchemeDataException = new MissingSchemeDataException(this.uuid);
-                if (!(this.eventHandler == null || this.eventListener == null)) {
-                    final Throwable th = missingSchemeDataException;
-                    this.eventHandler.post(new Runnable() {
-                        public void run() {
-                            DefaultDrmSessionManager.this.eventListener.onDrmSessionManagerError(th);
-                        }
-                    });
-                }
+                this.eventDispatcher.drmSessionManagerError(missingSchemeDataException);
                 return new ErrorStateDrmSession(new DrmSessionException(missingSchemeDataException));
             }
             initData = getSchemeInitData(data, this.uuid);
@@ -233,7 +278,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             session2 = (DefaultDrmSession) this.sessions.get(0);
         }
         if (session == null) {
-            session = new DefaultDrmSession(this.uuid, this.mediaDrm, this, initData, mimeType, this.mode, this.offlineLicenseKeySetId, this.optionalKeyRequestParameters, this.callback, playbackLooper, this.eventHandler, this.eventListener, this.initialDrmRequestRetryCount);
+            session = new DefaultDrmSession(this.uuid, this.mediaDrm, this, initData, mimeType, this.mode, this.offlineLicenseKeySetId, this.optionalKeyRequestParameters, this.callback, playbackLooper, this.eventDispatcher, this.initialDrmRequestRetryCount);
             this.sessions.add(session);
         }
         session.acquire();
@@ -280,7 +325,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         for (i = 0; i < drmInitData.schemeDataCount; i++) {
             boolean uuidMatches;
             SchemeData schemeData = drmInitData.get(i);
-            if (schemeData.matches(uuid) || (C0546C.CLEARKEY_UUID.equals(uuid) && schemeData.matches(C0546C.COMMON_PSSH_UUID))) {
+            if (schemeData.matches(uuid) || (C0554C.CLEARKEY_UUID.equals(uuid) && schemeData.matches(C0554C.COMMON_PSSH_UUID))) {
                 uuidMatches = true;
             } else {
                 uuidMatches = false;
@@ -292,7 +337,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         if (matchingSchemeDatas.isEmpty()) {
             return null;
         }
-        if (C0546C.WIDEVINE_UUID.equals(uuid)) {
+        if (C0554C.WIDEVINE_UUID.equals(uuid)) {
             for (i = 0; i < matchingSchemeDatas.size(); i++) {
                 SchemeData matchingSchemeData = (SchemeData) matchingSchemeDatas.get(i);
                 int version = matchingSchemeData.hasData() ? PsshAtomUtil.parseVersion(matchingSchemeData.data) : -1;
@@ -321,7 +366,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
 
     private static String getSchemeMimeType(SchemeData data, UUID uuid) {
         String schemeMimeType = data.mimeType;
-        if (Util.SDK_INT >= 26 || !C0546C.CLEARKEY_UUID.equals(uuid)) {
+        if (Util.SDK_INT >= 26 || !C0554C.CLEARKEY_UUID.equals(uuid)) {
             return schemeMimeType;
         }
         if (MimeTypes.VIDEO_MP4.equals(schemeMimeType) || MimeTypes.AUDIO_MP4.equals(schemeMimeType)) {

@@ -6,8 +6,7 @@ import android.os.HandlerThread;
 import android.util.Pair;
 import java.util.HashMap;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0546C;
-import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionManager.EventListener;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.Factory;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -18,8 +17,8 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
     private final HandlerThread handlerThread = new HandlerThread("OfflineLicenseHelper");
 
     /* renamed from: org.telegram.messenger.exoplayer2.drm.OfflineLicenseHelper$1 */
-    class C18461 implements EventListener {
-        C18461() {
+    class C19721 implements DefaultDrmSessionEventListener {
+        C19721() {
         }
 
         public void onDrmKeysLoaded() {
@@ -48,14 +47,15 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
     }
 
     public static OfflineLicenseHelper<FrameworkMediaCrypto> newWidevineInstance(String defaultLicenseUrl, boolean forceDefaultLicenseUrl, Factory httpDataSourceFactory, HashMap<String, String> optionalKeyRequestParameters) throws UnsupportedDrmException {
-        return new OfflineLicenseHelper(C0546C.WIDEVINE_UUID, FrameworkMediaDrm.newInstance(C0546C.WIDEVINE_UUID), new HttpMediaDrmCallback(defaultLicenseUrl, forceDefaultLicenseUrl, httpDataSourceFactory), optionalKeyRequestParameters);
+        return new OfflineLicenseHelper(C0554C.WIDEVINE_UUID, FrameworkMediaDrm.newInstance(C0554C.WIDEVINE_UUID), new HttpMediaDrmCallback(defaultLicenseUrl, forceDefaultLicenseUrl, httpDataSourceFactory), optionalKeyRequestParameters);
     }
 
     public OfflineLicenseHelper(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) {
         this.handlerThread.start();
         this.conditionVariable = new ConditionVariable();
-        EventListener eventListener = new C18461();
-        this.drmSessionManager = new DefaultDrmSessionManager(uuid, mediaDrm, callback, optionalKeyRequestParameters, new Handler(this.handlerThread.getLooper()), eventListener);
+        DefaultDrmSessionEventListener eventListener = new C19721();
+        this.drmSessionManager = new DefaultDrmSessionManager(uuid, mediaDrm, callback, optionalKeyRequestParameters);
+        this.drmSessionManager.addListener(new Handler(this.handlerThread.getLooper()), eventListener);
     }
 
     public synchronized byte[] getPropertyByteArray(String key) {

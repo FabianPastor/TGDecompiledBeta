@@ -1,6 +1,9 @@
 package org.telegram.messenger.exoplayer2.audio;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.MediaCodec;
 import android.media.MediaCrypto;
 import android.media.MediaFormat;
@@ -15,6 +18,7 @@ import org.telegram.messenger.exoplayer2.audio.AudioSink.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.InitializationException;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.Listener;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.WriteException;
+import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
@@ -22,16 +26,20 @@ import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecInfo;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecRenderer;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecSelector;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
+import org.telegram.messenger.exoplayer2.mediacodec.MediaFormatUtil;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(16)
 public class MediaCodecAudioRenderer extends MediaCodecRenderer implements MediaClock {
+    private boolean allowFirstBufferPositionDiscontinuity;
     private boolean allowPositionDiscontinuity;
     private final AudioSink audioSink;
     private int channelCount;
+    private int codecMaxInputSize;
     private boolean codecNeedsDiscardChannelsWorkaround;
+    private final Context context;
     private long currentPositionUs;
     private int encoderDelay;
     private int encoderPadding;
@@ -60,30 +68,31 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         }
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector) {
-        this(mediaCodecSelector, null, true);
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
+        this(context, mediaCodecSelector, null, false);
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
-        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, null, null);
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
+        this(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, null, null);
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, Handler eventHandler, AudioRendererEventListener eventListener) {
-        this(mediaCodecSelector, null, true, eventHandler, eventListener);
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, Handler eventHandler, AudioRendererEventListener eventListener) {
+        this(context, mediaCodecSelector, null, false, eventHandler, eventListener);
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener) {
-        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, (AudioCapabilities) null, new AudioProcessor[0]);
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener) {
+        this(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, (AudioCapabilities) null, new AudioProcessor[0]);
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities, AudioProcessor... audioProcessors) {
-        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, new DefaultAudioSink(audioCapabilities, audioProcessors));
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities, AudioProcessor... audioProcessors) {
+        this(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, new DefaultAudioSink(audioCapabilities, audioProcessors));
     }
 
-    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioSink audioSink) {
+    public MediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(1, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
-        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
+        this.context = context.getApplicationContext();
         this.audioSink = audioSink;
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
         audioSink.setListener(new AudioSinkListener());
     }
 
@@ -123,11 +132,9 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         if (allowPassthrough(format.sampleMimeType)) {
             MediaCodecInfo passthroughDecoderInfo = mediaCodecSelector.getPassthroughDecoderInfo();
             if (passthroughDecoderInfo != null) {
-                this.passthroughEnabled = true;
                 return passthroughDecoderInfo;
             }
         }
-        this.passthroughEnabled = false;
         return super.getDecoderInfo(mediaCodecSelector, format, requiresSecureDecoder);
     }
 
@@ -137,17 +144,21 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format, MediaCrypto crypto) {
+        this.codecMaxInputSize = getCodecMaxInputSize(codecInfo, format, getStreamFormats());
         this.codecNeedsDiscardChannelsWorkaround = codecNeedsDiscardChannelsWorkaround(codecInfo.name);
-        MediaFormat mediaFormat = getMediaFormatForPlayback(format);
+        this.passthroughEnabled = codecInfo.passthrough;
+        MediaFormat mediaFormat = getMediaFormat(format, codecInfo.mimeType == null ? MimeTypes.AUDIO_RAW : codecInfo.mimeType, this.codecMaxInputSize);
+        codec.configure(mediaFormat, null, crypto, 0);
         if (this.passthroughEnabled) {
             this.passthroughMediaFormat = mediaFormat;
-            this.passthroughMediaFormat.setString("mime", MimeTypes.AUDIO_RAW);
-            codec.configure(this.passthroughMediaFormat, null, crypto, 0);
             this.passthroughMediaFormat.setString("mime", format.sampleMimeType);
             return;
         }
-        codec.configure(mediaFormat, null, crypto, 0);
         this.passthroughMediaFormat = null;
+    }
+
+    protected int canKeepCodec(MediaCodec codec, MediaCodecInfo codecInfo, Format oldFormat, Format newFormat) {
+        return 0;
     }
 
     public MediaClock getMediaClock() {
@@ -159,22 +170,12 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
-        int i;
-        int i2 = 0;
         super.onInputFormatChanged(newFormat);
         this.eventDispatcher.inputFormatChanged(newFormat);
         this.pcmEncoding = MimeTypes.AUDIO_RAW.equals(newFormat.sampleMimeType) ? newFormat.pcmEncoding : 2;
         this.channelCount = newFormat.channelCount;
-        if (newFormat.encoderDelay != -1) {
-            i = newFormat.encoderDelay;
-        } else {
-            i = 0;
-        }
-        this.encoderDelay = i;
-        if (newFormat.encoderPadding != -1) {
-            i2 = newFormat.encoderPadding;
-        }
-        this.encoderPadding = i2;
+        this.encoderDelay = newFormat.encoderDelay;
+        this.encoderPadding = newFormat.encoderPadding;
     }
 
     protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) throws ExoPlaybackException {
@@ -229,6 +230,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         super.onPositionReset(positionUs, joining);
         this.audioSink.reset();
         this.currentPositionUs = positionUs;
+        this.allowFirstBufferPositionDiscontinuity = true;
         this.allowPositionDiscontinuity = true;
     }
 
@@ -238,8 +240,8 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     protected void onStopped() {
-        this.audioSink.pause();
         updateCurrentPosition();
+        this.audioSink.pause();
         super.onStopped();
     }
 
@@ -281,6 +283,15 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
 
     public PlaybackParameters getPlaybackParameters() {
         return this.audioSink.getPlaybackParameters();
+    }
+
+    protected void onQueueInputBuffer(DecoderInputBuffer buffer) {
+        if (this.allowFirstBufferPositionDiscontinuity && !buffer.isDecodeOnly()) {
+            if (Math.abs(buffer.timeUs - this.currentPositionUs) > 500000) {
+                this.currentPositionUs = buffer.timeUs;
+            }
+            this.allowFirstBufferPositionDiscontinuity = false;
+        }
     }
 
     protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
@@ -335,6 +346,40 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         }
     }
 
+    protected int getCodecMaxInputSize(MediaCodecInfo codecInfo, Format format, Format[] streamFormats) {
+        return getCodecMaxInputSize(codecInfo, format);
+    }
+
+    private int getCodecMaxInputSize(MediaCodecInfo codecInfo, Format format) {
+        if (Util.SDK_INT < 24 && "OMX.google.raw.decoder".equals(codecInfo.name)) {
+            boolean needsRawDecoderWorkaround = true;
+            if (Util.SDK_INT == 23) {
+                PackageManager packageManager = this.context.getPackageManager();
+                if (packageManager != null && packageManager.hasSystemFeature("android.software.leanback")) {
+                    needsRawDecoderWorkaround = false;
+                }
+            }
+            if (needsRawDecoderWorkaround) {
+                return -1;
+            }
+        }
+        return format.maxInputSize;
+    }
+
+    @SuppressLint({"InlinedApi"})
+    protected MediaFormat getMediaFormat(Format format, String codecMimeType, int codecMaxInputSize) {
+        MediaFormat mediaFormat = new MediaFormat();
+        mediaFormat.setString("mime", codecMimeType);
+        mediaFormat.setInteger("channel-count", format.channelCount);
+        mediaFormat.setInteger("sample-rate", format.sampleRate);
+        MediaFormatUtil.setCsdBuffers(mediaFormat, format.initializationData);
+        MediaFormatUtil.maybeSetInteger(mediaFormat, "max-input-size", codecMaxInputSize);
+        if (Util.SDK_INT >= 23) {
+            mediaFormat.setInteger("priority", 0);
+        }
+        return mediaFormat;
+    }
+
     private void updateCurrentPosition() {
         long newCurrentPositionUs = this.audioSink.getCurrentPositionUs(isEnded());
         if (newCurrentPositionUs != Long.MIN_VALUE) {
@@ -344,6 +389,13 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
             this.currentPositionUs = newCurrentPositionUs;
             this.allowPositionDiscontinuity = false;
         }
+    }
+
+    private static boolean areAdaptationCompatible(Format first, Format second) {
+        if (first.sampleMimeType.equals(second.sampleMimeType) && first.channelCount == second.channelCount && first.sampleRate == second.sampleRate && first.encoderDelay == 0 && first.encoderPadding == 0 && second.encoderDelay == 0 && second.encoderPadding == 0 && first.initializationDataEquals(second)) {
+            return true;
+        }
+        return false;
     }
 
     private static boolean codecNeedsDiscardChannelsWorkaround(String codecName) {

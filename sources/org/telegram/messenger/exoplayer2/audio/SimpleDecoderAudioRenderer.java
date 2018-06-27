@@ -32,6 +32,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     private static final int REINITIALIZATION_STATE_NONE = 0;
     private static final int REINITIALIZATION_STATE_SIGNAL_END_OF_STREAM = 1;
     private static final int REINITIALIZATION_STATE_WAIT_END_OF_STREAM = 2;
+    private boolean allowFirstBufferPositionDiscontinuity;
     private boolean allowPositionDiscontinuity;
     private final AudioSink audioSink;
     private boolean audioTrackNeedsConfigure;
@@ -268,6 +269,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
                 return false;
             }
             this.inputBuffer.flip();
+            onQueueInputBuffer(this.inputBuffer);
             this.decoder.queueInputBuffer(this.inputBuffer);
             this.decoderReceivedBuffers = true;
             DecoderCounters decoderCounters = this.decoderCounters;
@@ -353,6 +355,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
         this.audioSink.reset();
         this.currentPositionUs = positionUs;
+        this.allowFirstBufferPositionDiscontinuity = true;
         this.allowPositionDiscontinuity = true;
         this.inputStreamEnded = false;
         this.outputStreamEnded = false;
@@ -366,8 +369,8 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     }
 
     protected void onStopped() {
-        this.audioSink.pause();
         updateCurrentPosition();
+        this.audioSink.pause();
     }
 
     protected void onDisabled() {
@@ -462,7 +465,6 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     }
 
     private void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
-        int i = 0;
         Format oldFormat = this.inputFormat;
         this.inputFormat = newFormat;
         if (!Util.areEqual(this.inputFormat.drmInitData, oldFormat == null ? null : oldFormat.drmInitData)) {
@@ -484,12 +486,18 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
             maybeInitDecoder();
             this.audioTrackNeedsConfigure = true;
         }
-        this.encoderDelay = newFormat.encoderDelay == -1 ? 0 : newFormat.encoderDelay;
-        if (newFormat.encoderPadding != -1) {
-            i = newFormat.encoderPadding;
-        }
-        this.encoderPadding = i;
+        this.encoderDelay = newFormat.encoderDelay;
+        this.encoderPadding = newFormat.encoderPadding;
         this.eventDispatcher.inputFormatChanged(newFormat);
+    }
+
+    private void onQueueInputBuffer(DecoderInputBuffer buffer) {
+        if (this.allowFirstBufferPositionDiscontinuity && !buffer.isDecodeOnly()) {
+            if (Math.abs(buffer.timeUs - this.currentPositionUs) > 500000) {
+                this.currentPositionUs = buffer.timeUs;
+            }
+            this.allowFirstBufferPositionDiscontinuity = false;
+        }
     }
 
     private void updateCurrentPosition() {

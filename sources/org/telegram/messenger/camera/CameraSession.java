@@ -6,6 +6,7 @@ import android.hardware.Camera.Area;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PreviewCallback;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -18,11 +19,12 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new C05421();
+    private AutoFocusCallback autoFocusCallback = new C05501();
     protected CameraInfo cameraInfo;
-    private String currentFlashMode = "off";
+    private String currentFlashMode;
     private int currentOrientation;
     private int diffOrientation;
+    private boolean flipFront = true;
     private boolean initied;
     private boolean isVideo;
     private int jpegOrientation;
@@ -36,8 +38,8 @@ public class CameraSession {
     private boolean sameTakePictureOrientation;
 
     /* renamed from: org.telegram.messenger.camera.CameraSession$1 */
-    class C05421 implements AutoFocusCallback {
-        C05421() {
+    class C05501 implements AutoFocusCallback {
+        C05501() {
         }
 
         public void onAutoFocus(boolean success, Camera camera) {
@@ -134,6 +136,14 @@ public class CameraSession {
         return this.currentOrientation;
     }
 
+    public boolean isFlipFront() {
+        return this.flipFront;
+    }
+
+    public void setFlipFront(boolean value) {
+        this.flipFront = value;
+    }
+
     public int getWorldAngle() {
         return this.diffOrientation;
     }
@@ -203,9 +213,14 @@ public class CameraSession {
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
                 params.setRecordingHint(true);
-                String desiredMode = "auto";
+                String desiredMode = "continuous-video";
                 if (params.getSupportedFocusModes().contains(desiredMode)) {
                     params.setFocusMode(desiredMode);
+                } else {
+                    desiredMode = "auto";
+                    if (params.getSupportedFocusModes().contains(desiredMode)) {
+                        params.setFocusMode(desiredMode);
+                    }
                 }
                 int outputOrientation = 0;
                 if (this.jpegOrientation != -1) {
@@ -443,6 +458,14 @@ public class CameraSession {
             FileLog.m3e(e);
             return 0;
         }
+    }
+
+    public void setPreviewCallback(PreviewCallback callback) {
+        this.cameraInfo.camera.setPreviewCallback(callback);
+    }
+
+    public void setOneShotPreviewCallback(PreviewCallback callback) {
+        this.cameraInfo.camera.setOneShotPreviewCallback(callback);
     }
 
     public void destroy() {

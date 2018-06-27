@@ -6,6 +6,7 @@ import android.util.Base64;
 import java.io.File;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
+import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.User;
 
 public class UserConfig {
@@ -27,6 +28,7 @@ public class UserConfig {
     public int dialogsLoadOffsetId = 0;
     public int dialogsLoadOffsetUserId = 0;
     public boolean draftsLoaded;
+    public boolean hasSecureData;
     public int lastBroadcastId = -1;
     public int lastContactsSyncTime;
     public int lastHintsSyncTime;
@@ -41,10 +43,13 @@ public class UserConfig {
     public boolean pinnedDialogsLoaded = true;
     public int ratingLoadTime;
     public boolean registeredForPush;
+    public boolean suggestContacts = true;
     private final Object sync = new Object();
     public boolean syncContacts = true;
     public TL_account_tmpPassword tmpPassword;
     public int totalDialogsLoadCount = 0;
+    public TL_help_termsOfService unacceptedTermsOfService;
+    public boolean unreadDialogsLoaded = true;
 
     public static UserConfig getInstance(int num) {
         UserConfig localInstance = Instance[num];
@@ -123,11 +128,14 @@ public class UserConfig {
                 editor.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
                 editor.putBoolean("draftsLoaded", this.draftsLoaded);
                 editor.putBoolean("pinnedDialogsLoaded", this.pinnedDialogsLoaded);
+                editor.putBoolean("unreadDialogsLoaded", this.unreadDialogsLoaded);
                 editor.putInt("ratingLoadTime", this.ratingLoadTime);
                 editor.putInt("botRatingLoadTime", this.botRatingLoadTime);
                 editor.putBoolean("contactsReimported", this.contactsReimported);
                 editor.putInt("loginTime", this.loginTime);
                 editor.putBoolean("syncContacts", this.syncContacts);
+                editor.putBoolean("suggestContacts", this.suggestContacts);
+                editor.putBoolean("hasSecureData", this.hasSecureData);
                 editor.putInt("3migrateOffsetId", this.migrateOffsetId);
                 if (this.migrateOffsetId != -1) {
                     editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
@@ -135,6 +143,16 @@ public class UserConfig {
                     editor.putInt("3migrateOffsetChatId", this.migrateOffsetChatId);
                     editor.putInt("3migrateOffsetChannelId", this.migrateOffsetChannelId);
                     editor.putLong("3migrateOffsetAccess", this.migrateOffsetAccess);
+                }
+                if (this.unacceptedTermsOfService != null) {
+                    try {
+                        data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
+                        this.unacceptedTermsOfService.serializeToStream(data);
+                        editor.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
+                    } catch (Exception e) {
+                    }
+                } else {
+                    editor.remove("terms");
                 }
                 editor.putInt("2totalDialogsLoadCount", this.totalDialogsLoadCount);
                 editor.putInt("2dialogsLoadOffsetId", this.dialogsLoadOffsetId);
@@ -164,8 +182,8 @@ public class UserConfig {
                 if (oldFile != null) {
                     oldFile.delete();
                 }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
             }
         }
     }
@@ -231,11 +249,27 @@ public class UserConfig {
             this.lastHintsSyncTime = preferences.getInt("lastHintsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 90000);
             this.draftsLoaded = preferences.getBoolean("draftsLoaded", false);
             this.pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
+            this.unreadDialogsLoaded = preferences.getBoolean("unreadDialogsLoaded", false);
             this.contactsReimported = preferences.getBoolean("contactsReimported", false);
             this.ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
             this.botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
             this.loginTime = preferences.getInt("loginTime", this.currentAccount);
-            this.syncContacts = preferences.getBoolean("syncContacts", this.syncContacts);
+            this.syncContacts = preferences.getBoolean("syncContacts", true);
+            this.suggestContacts = preferences.getBoolean("suggestContacts", true);
+            this.hasSecureData = preferences.getBoolean("hasSecureData", false);
+            try {
+                String terms = preferences.getString("terms", null);
+                if (terms != null) {
+                    byte[] arr = Base64.decode(terms, 0);
+                    if (arr != null) {
+                        SerializedData data = new SerializedData(arr);
+                        this.unacceptedTermsOfService = TL_help_termsOfService.TLdeserialize(data, data.readInt32(false), false);
+                        data.cleanup();
+                    }
+                }
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
             if (this.migrateOffsetId != -1) {
                 this.migrateOffsetDate = preferences.getInt("3migrateOffsetDate", 0);
@@ -255,7 +289,7 @@ public class UserConfig {
             if (string != null) {
                 bytes = Base64.decode(string, 0);
                 if (bytes != null) {
-                    SerializedData data = new SerializedData(bytes);
+                    data = new SerializedData(bytes);
                     this.tmpPassword = TL_account_tmpPassword.TLdeserialize(data, data.readInt32(false), false);
                     data.cleanup();
                 }
@@ -302,7 +336,11 @@ public class UserConfig {
         this.draftsLoaded = true;
         this.contactsReimported = true;
         this.syncContacts = true;
+        this.suggestContacts = true;
         this.pinnedDialogsLoaded = false;
+        this.unreadDialogsLoaded = true;
+        this.unacceptedTermsOfService = null;
+        this.hasSecureData = false;
         this.loginTime = (int) (System.currentTimeMillis() / 1000);
         this.lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         this.lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;

@@ -43,8 +43,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$2 */
-    class C19032 implements RequestDelegate {
-        C19032() {
+    class C20282 implements RequestDelegate {
+        C20282() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -65,8 +65,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$3 */
-    class C19043 implements RequestDelegate {
-        C19043() {
+    class C20293 implements RequestDelegate {
+        C20293() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -132,8 +132,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.searchTimer.schedule(new TimerTask() {
 
             /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-            class C07731 implements Runnable {
-                C07731() {
+            class C08041 implements Runnable {
+                C08041() {
                 }
 
                 public void run() {
@@ -149,7 +149,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                AndroidUtilities.runOnUIThread(new C07731());
+                AndroidUtilities.runOnUIThread(new C08041());
             }
         }, 200, 500);
     }
@@ -158,8 +158,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         if (!this.searchingUser) {
             this.searchingUser = true;
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
-            req.username = "foursquare";
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19032());
+            req.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20282());
         }
     }
 
@@ -178,7 +178,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 }
             }
             this.searching = true;
-            TLObject object = MessagesController.getInstance(this.currentAccount).getUserOrChat("foursquare");
+            TLObject object = MessagesController.getInstance(this.currentAccount).getUserOrChat(MessagesController.getInstance(this.currentAccount).venueSearchBot);
             if (object instanceof User) {
                 User user = (User) object;
                 TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
@@ -199,7 +199,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } else {
                     req.peer = new TL_inputPeerEmpty();
                 }
-                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19043());
+                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20293());
                 notifyDataSetChanged();
             } else if (searchUser) {
                 searchBotUser();

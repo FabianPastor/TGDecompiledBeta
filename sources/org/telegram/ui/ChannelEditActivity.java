@@ -110,8 +110,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private boolean usersEndReached;
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$2 */
-    class C19902 extends ActionBarMenuOnItemClick {
-        C19902() {
+    class C21152 extends ActionBarMenuOnItemClick {
+        C21152() {
         }
 
         public void onItemClick(int id) {
@@ -122,8 +122,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$3 */
-    class C19913 extends ActionBarMenuItemSearchListener {
-        C19913() {
+    class C21163 extends ActionBarMenuItemSearchListener {
+        C21163() {
         }
 
         public void onSearchExpand() {
@@ -158,8 +158,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$5 */
-    class C19925 implements OnItemClickListener {
-        C19925() {
+    class C21175 implements OnItemClickListener {
+        C21175() {
         }
 
         public void onItemClick(View view, int position) {
@@ -206,8 +206,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$6 */
-    class C19936 implements OnItemLongClickListener {
-        C19936() {
+    class C21186 implements OnItemLongClickListener {
+        C21186() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -228,8 +228,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$7 */
-    class C19947 extends OnScrollListener {
-        C19947() {
+    class C21197 extends OnScrollListener {
+        C21197() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -243,8 +243,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ChannelEditActivity$ListAdapter$1 */
-        class C19971 implements ManageChatUserCellDelegate {
-            C19971() {
+        class C21221 implements ManageChatUserCellDelegate {
+            C21221() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -273,7 +273,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 case 1:
                     view = new ManageChatUserCell(this.mContext, 8, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C19971());
+                    ((ManageChatUserCell) view).setDelegate(new C21221());
                     break;
                 case 2:
                     view = new ShadowSectionCell(this.mContext);
@@ -392,8 +392,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         private Timer searchTimer;
 
         /* renamed from: org.telegram.ui.ChannelEditActivity$SearchAdapter$4 */
-        class C19994 implements ManageChatUserCellDelegate {
-            C19994() {
+        class C21244 implements ManageChatUserCellDelegate {
+            C21244() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -463,7 +463,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ManageChatUserCell(this.mContext, 8, true);
             view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            ((ManageChatUserCell) view).setDelegate(new C19994());
+            ((ManageChatUserCell) view).setDelegate(new C21244());
             return new Holder(view);
         }
 
@@ -561,9 +561,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         } else {
             this.actionBar.setTitle(LocaleController.getString("ManageChannel", R.string.ManageChannel));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C19902());
+        this.actionBar.setActionBarMenuOnItemClick(new C21152());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C19913()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21163()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listViewAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -586,9 +586,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listViewAdapter);
-        this.listView.setOnItemClickListener(new C19925());
-        this.listView.setOnItemLongClickListener(new C19936());
-        this.listView.setOnScrollListener(new C19947());
+        this.listView.setOnItemClickListener(new C21175());
+        this.listView.setOnItemLongClickListener(new C21186());
+        this.listView.setOnScrollListener(new C21197());
         return this.fragmentView;
     }
 

@@ -154,7 +154,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private ActionBarPopupWindowLayout popupLayout;
     private RadialProgressView progressBar;
     private LinearLayout progressView;
-    private PhotoViewerProvider provider = new C23581();
+    private PhotoViewerProvider provider = new C25381();
     private boolean scrolling;
     private ActionBarMenuItem searchItem;
     private boolean searchWas;
@@ -195,8 +195,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private SharedMediaData[] sharedMediaData = new SharedMediaData[5];
 
     /* renamed from: org.telegram.ui.MediaActivity$4 */
-    class C15324 implements View.OnClickListener {
-        C15324() {
+    class C15894 implements View.OnClickListener {
+        C15894() {
         }
 
         public void onClick(View view) {
@@ -205,8 +205,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$5 */
-    class C15335 implements OnTouchListener {
-        C15335() {
+    class C15905 implements OnTouchListener {
+        C15905() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -215,8 +215,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$9 */
-    class C15349 implements OnTouchListener {
-        C15349() {
+    class C15919 implements OnTouchListener {
+        C15919() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -310,11 +310,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$2 */
-    class C22102 extends ActionBarMenuOnItemClick {
+    class C23482 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.MediaActivity$2$3 */
-        class C22093 implements DialogsActivityDelegate {
-            C22093() {
+        class C23473 implements DialogsActivityDelegate {
+            C23473() {
             }
 
             public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -365,7 +365,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     NotificationCenter.getInstance(MediaActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                     ChatActivity chatActivity = new ChatActivity(args);
                     MediaActivity.this.presentFragment(chatActivity, true);
-                    chatActivity.showReplyPanel(true, null, fmessages, null, false);
+                    chatActivity.showFieldPanelForForward(true, fmessages);
                     if (!AndroidUtilities.isTablet()) {
                         MediaActivity.this.removeSelfFromStack();
                     }
@@ -373,7 +373,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         }
 
-        C22102() {
+        C23482() {
         }
 
         public void onItemClick(int id) {
@@ -550,7 +550,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 args.putBoolean("onlySelect", true);
                 args.putInt("dialogsType", 3);
                 BaseFragment dialogsActivity = new DialogsActivity(args);
-                dialogsActivity.setDelegate(new C22093());
+                dialogsActivity.setDelegate(new C23473());
                 MediaActivity.this.presentFragment(dialogsActivity);
             } else if (id == 7 && MediaActivity.this.selectedFiles[0].size() == 1) {
                 args = new Bundle();
@@ -578,8 +578,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$3 */
-    class C22113 extends ActionBarMenuItemSearchListener {
-        C22113() {
+    class C23493 extends ActionBarMenuItemSearchListener {
+        C23493() {
         }
 
         public void onSearchExpand() {
@@ -622,8 +622,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$6 */
-    class C22126 implements OnItemClickListener {
-        C22126() {
+    class C23506 implements OnItemClickListener {
+        C23506() {
         }
 
         public void onItemClick(View view, int position) {
@@ -636,8 +636,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$7 */
-    class C22137 extends OnScrollListener {
-        C22137() {
+    class C23517 extends OnScrollListener {
+        C23517() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -683,8 +683,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$8 */
-    class C22148 implements OnItemLongClickListener {
-        C22148() {
+    class C23528 implements OnItemLongClickListener {
+        C23528() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -699,8 +699,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$1 */
-    class C23581 extends EmptyPhotoViewerProvider {
-        C23581() {
+    class C25381 extends EmptyPhotoViewerProvider {
+        C25381() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -777,7 +777,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else if (this.currentType == 4) {
                     req.filter = new TL_inputMessagesFilterMusic();
                 }
-                req.f49q = query;
+                req.f51q = query;
                 req.peer = MessagesController.getInstance(MediaActivity.this.currentAccount).getInputPeer(uid);
                 if (req.peer != null) {
                     final int currentReqId = this.lastReqId + 1;
@@ -1289,8 +1289,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         private Context mContext;
 
         /* renamed from: org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter$1 */
-        class C22161 implements SharedPhotoVideoCellDelegate {
-            C22161() {
+        class C23541 implements SharedPhotoVideoCellDelegate {
+            C23541() {
             }
 
             public void didClickItem(SharedPhotoVideoCell cell, int index, MessageObject messageObject, int a) {
@@ -1354,7 +1354,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         view = (View) MediaActivity.this.cellCache.get(0);
                         MediaActivity.this.cellCache.remove(0);
                     }
-                    ((SharedPhotoVideoCell) view).setDelegate(new C22161());
+                    ((SharedPhotoVideoCell) view).setDelegate(new C23541());
                     break;
                 default:
                     view = new LoadingCell(this.mContext);
@@ -1473,14 +1473,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setTitle(TtmlNode.ANONYMOUS_REGION_ID);
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C22102());
+        this.actionBar.setActionBarMenuOnItemClick(new C23482());
         for (a = 1; a >= 0; a--) {
             this.selectedFiles[a].clear();
         }
         this.cantDeleteMessagesCount = 0;
         this.actionModeViews.clear();
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22113());
+        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C23493());
         this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.searchItem.setVisibility(8);
         this.dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0);
@@ -1497,7 +1497,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         }
         this.actionBar.addView(this.dropDownContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
-        this.dropDownContainer.setOnClickListener(new C15324());
+        this.dropDownContainer.setOnClickListener(new C15894());
         this.dropDown = new TextView(context);
         this.dropDown.setGravity(3);
         this.dropDown.setSingleLine(true);
@@ -1517,7 +1517,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
-        this.selectedMessagesCountTextView.setOnTouchListener(new C15335());
+        this.selectedMessagesCountTextView.setOnTouchListener(new C15905());
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         if (((int) this.dialog_id) != 0) {
             ArrayList arrayList = this.actionModeViews;
@@ -1559,9 +1559,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22126());
-        this.listView.setOnScrollListener(new C22137());
-        this.listView.setOnItemLongClickListener(new C22148());
+        this.listView.setOnItemClickListener(new C23506());
+        this.listView.setOnScrollListener(new C23517());
+        this.listView.setOnItemLongClickListener(new C23528());
         if (scrollToPositionOnRecreate != -1) {
             this.layoutManager.scrollToPositionWithOffset(scrollToPositionOnRecreate, scrollToOffsetOnRecreate);
         }
@@ -1574,7 +1574,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.emptyView.setVisibility(8);
         this.emptyView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView.setOnTouchListener(new C15349());
+        this.emptyView.setOnTouchListener(new C15919());
         this.emptyImageView = new ImageView(context);
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
         this.emptyTextView = new TextView(context);

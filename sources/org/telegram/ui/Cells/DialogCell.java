@@ -92,6 +92,7 @@ public class DialogCell extends BaseCell {
     private CharSequence lastPrintString = null;
     private int lastSendState;
     private boolean lastUnreadState;
+    private boolean markUnread;
     private int mentionCount;
     private int mentionLeft;
     private int mentionWidth;
@@ -160,6 +161,7 @@ public class DialogCell extends BaseCell {
         this.lastMessageDate = date;
         this.currentEditDate = messageObject != null ? messageObject.messageOwner.edit_date : 0;
         this.unreadCount = 0;
+        this.markUnread = false;
         this.mentionCount = 0;
         if (messageObject == null || !messageObject.isUnread()) {
             z = false;
@@ -209,6 +211,10 @@ public class DialogCell extends BaseCell {
                 }
             }
         }
+    }
+
+    public boolean isUnread() {
+        return (this.unreadCount != 0 || this.markUnread) && !this.dialogMuted;
     }
 
     public void buildLayout() {
@@ -537,11 +543,14 @@ public class DialogCell extends BaseCell {
                 this.drawMention = false;
                 this.drawError = false;
             } else {
-                if (this.unreadCount == 0 || (this.unreadCount == 1 && this.unreadCount == this.mentionCount && this.message != null && this.message.messageOwner.mentioned)) {
-                    this.drawCount = false;
-                } else {
+                if (this.unreadCount != 0 && (this.unreadCount != 1 || this.unreadCount != this.mentionCount || this.message == null || !this.message.messageOwner.mentioned)) {
                     this.drawCount = true;
                     countString = String.format("%d", new Object[]{Integer.valueOf(this.unreadCount)});
+                } else if (this.markUnread) {
+                    this.drawCount = true;
+                    countString = TtmlNode.ANONYMOUS_REGION_ID;
+                } else {
+                    this.drawCount = false;
                 }
                 if (this.mentionCount != 0) {
                     this.drawMention = true;
@@ -803,6 +812,19 @@ public class DialogCell extends BaseCell {
         }
     }
 
+    public boolean isPointInsideAvatar(float x, float y) {
+        if (LocaleController.isRTL) {
+            if (x < ((float) (getMeasuredWidth() - AndroidUtilities.dp(60.0f))) || x >= ((float) getMeasuredWidth())) {
+                return false;
+            }
+            return true;
+        } else if (x < 0.0f || x >= ((float) AndroidUtilities.dp(60.0f))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public void setDialogSelected(boolean value) {
         if (this.isSelected != value) {
             invalidate();
@@ -831,7 +853,7 @@ public class DialogCell extends BaseCell {
             TL_dialog dialog = (TL_dialog) getDialogsArray().get(this.index);
             DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
             MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.id);
-            if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
+            if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.markUnread != dialog.unread_mark || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
                 this.currentDialogId = dialog.id;
                 update(0);
             }
@@ -868,6 +890,7 @@ public class DialogCell extends BaseCell {
                     }
                     this.lastUnreadState = z;
                     this.unreadCount = dialog.unread_count;
+                    this.markUnread = dialog.unread_mark;
                     this.mentionCount = dialog.unread_mentions_count;
                     if (this.message != null) {
                         i = this.message.messageOwner.edit_date;
@@ -913,9 +936,10 @@ public class DialogCell extends BaseCell {
                         continueUpdate = true;
                     } else if (this.isDialogCell) {
                         dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.currentDialogId);
-                        if (!(dialog == null || (this.unreadCount == dialog.unread_count && this.mentionCount == dialog.unread_mentions_count))) {
+                        if (!(dialog == null || (this.unreadCount == dialog.unread_count && this.markUnread == dialog.unread_mark && this.mentionCount == dialog.unread_mentions_count))) {
                             this.unreadCount = dialog.unread_count;
                             this.mentionCount = dialog.unread_mentions_count;
+                            this.markUnread = dialog.unread_mark;
                             continueUpdate = true;
                         }
                     }

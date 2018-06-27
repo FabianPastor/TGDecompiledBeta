@@ -73,8 +73,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private int suggestRow;
 
     /* renamed from: org.telegram.ui.StickersActivity$1 */
-    class C23071 extends ActionBarMenuOnItemClick {
-        C23071() {
+    class C24841 extends ActionBarMenuOnItemClick {
+        C24841() {
         }
 
         public void onItemClick(int id) {
@@ -85,11 +85,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.StickersActivity$2 */
-    class C23082 implements OnItemClickListener {
+    class C24852 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.StickersActivity$2$1 */
-        class C17201 implements OnClickListener {
-            C17201() {
+        class C18431 implements OnClickListener {
+            C18431() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -98,7 +98,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C23082() {
+        C24852() {
         }
 
         public void onItemClick(View view, int position) {
@@ -120,15 +120,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             } else if (position == StickersActivity.this.suggestRow) {
                 Builder builder = new Builder(StickersActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("SuggestStickers", R.string.SuggestStickers));
-                builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll), LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled), LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone)}, new C17201());
+                builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll), LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled), LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone)}, new C18431());
                 StickersActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.StickersActivity$3 */
-    class C23093 implements RequestDelegate {
-        C23093() {
+    class C24863 implements RequestDelegate {
+        C24863() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -180,8 +180,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         private Context mContext;
 
         /* renamed from: org.telegram.ui.StickersActivity$ListAdapter$2 */
-        class C17222 implements View.OnClickListener {
-            C17222() {
+        class C18452 implements View.OnClickListener {
+            C18452() {
             }
 
             public void onClick(View v) {
@@ -369,7 +369,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 case 0:
                     view = new StickerSetCell(this.mContext, 1);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((StickerSetCell) view).setOnOptionsClick(new C17222());
+                    ((StickerSetCell) view).setOnOptionsClick(new C18452());
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
@@ -448,7 +448,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         } else {
             this.actionBar.setTitle(LocaleController.getString("Masks", R.string.Masks));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C23071());
+        this.actionBar.setActionBarMenuOnItemClick(new C24841());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -462,7 +462,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C23082());
+        this.listView.setOnItemClickListener(new C24852());
         return this.fragmentView;
     }
 
@@ -496,7 +496,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             for (int a = 0; a < arrayList.size(); a++) {
                 req.order.add(Long.valueOf(((TL_messages_stickerSet) arrayList.get(a)).set.id));
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C23093());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C24863());
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(this.currentType));
         }
     }

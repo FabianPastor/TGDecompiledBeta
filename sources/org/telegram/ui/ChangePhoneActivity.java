@@ -118,8 +118,8 @@ public class ChangePhoneActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangePhoneActivity$1 */
-    class C19661 extends ActionBarMenuOnItemClick {
-        C19661() {
+    class C20911 extends ActionBarMenuOnItemClick {
+        C20911() {
         }
 
         public void onItemClick(int id) {
@@ -162,11 +162,11 @@ public class ChangePhoneActivity extends BaseFragment {
         private TextView wrongNumber;
 
         /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$6 */
-        class C09326 extends TimerTask {
+        class C09676 extends TimerTask {
 
             /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$6$1 */
-            class C09311 implements Runnable {
-                C09311() {
+            class C09661 implements Runnable {
+                C09661() {
                 }
 
                 public void run() {
@@ -177,26 +177,26 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
             }
 
-            C09326() {
+            C09676() {
             }
 
             public void run() {
                 double currentTime = (double) System.currentTimeMillis();
                 LoginActivitySmsView.this.codeTime = (int) (((double) LoginActivitySmsView.this.codeTime) - (currentTime - LoginActivitySmsView.this.lastCodeTime));
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
-                AndroidUtilities.runOnUIThread(new C09311());
+                AndroidUtilities.runOnUIThread(new C09661());
             }
         }
 
         /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$7 */
-        class C09357 extends TimerTask {
+        class C09707 extends TimerTask {
 
             /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$7$1 */
-            class C09341 implements Runnable {
+            class C09691 implements Runnable {
 
                 /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$7$1$1 */
-                class C19691 implements RequestDelegate {
-                    C19691() {
+                class C20941 implements RequestDelegate {
+                    C20941() {
                     }
 
                     public void run(TLObject response, final TL_error error) {
@@ -210,7 +210,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                 }
 
-                C09341() {
+                C09691() {
                 }
 
                 public void run() {
@@ -245,7 +245,7 @@ public class ChangePhoneActivity extends BaseFragment {
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = LoginActivitySmsView.this.requestPhone;
                             req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                            ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new C19691(), 2);
+                            ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new C20941(), 2);
                         } else if (LoginActivitySmsView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -257,7 +257,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
             }
 
-            C09357() {
+            C09707() {
             }
 
             public void run() {
@@ -265,7 +265,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     double currentTime = (double) System.currentTimeMillis();
                     LoginActivitySmsView.this.time = (int) (((double) LoginActivitySmsView.this.time) - (currentTime - LoginActivitySmsView.this.lastCurrentTime));
                     LoginActivitySmsView.this.lastCurrentTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new C09341());
+                    AndroidUtilities.runOnUIThread(new C09691());
                 }
             }
         }
@@ -390,8 +390,8 @@ public class ChangePhoneActivity extends BaseFragment {
             this.wrongNumber.setOnClickListener(new OnClickListener(ChangePhoneActivity.this) {
 
                 /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4$1 */
-                class C19671 implements RequestDelegate {
-                    C19671() {
+                class C20921 implements RequestDelegate {
+                    C20921() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -402,7 +402,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     TL_auth_cancelCode req = new TL_auth_cancelCode();
                     req.phone_number = LoginActivitySmsView.this.requestPhone;
                     req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                    ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new C19671(), 2);
+                    ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new C20921(), 2);
                     LoginActivitySmsView.this.onBackPressed();
                     ChangePhoneActivity.this.setPage(0, true, null, true);
                 }
@@ -543,7 +543,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new C09326(), 0, 1000);
+                this.codeTimer.schedule(new C09676(), 0, 1000);
             }
         }
 
@@ -563,7 +563,7 @@ public class ChangePhoneActivity extends BaseFragment {
         private void createTimer() {
             if (this.timeTimer == null) {
                 this.timeTimer = new Timer();
-                this.timeTimer.schedule(new C09357(), 0, 1000);
+                this.timeTimer.schedule(new C09707(), 0, 1000);
             }
         }
 
@@ -729,11 +729,11 @@ public class ChangePhoneActivity extends BaseFragment {
             this.countryButton.setOnClickListener(new OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChangePhoneActivity$PhoneView$1$1 */
-                class C19711 implements CountrySelectActivityDelegate {
+                class C20961 implements CountrySelectActivityDelegate {
 
                     /* renamed from: org.telegram.ui.ChangePhoneActivity$PhoneView$1$1$1 */
-                    class C09371 implements Runnable {
-                        C09371() {
+                    class C09721 implements Runnable {
+                        C09721() {
                         }
 
                         public void run() {
@@ -741,12 +741,12 @@ public class ChangePhoneActivity extends BaseFragment {
                         }
                     }
 
-                    C19711() {
+                    C20961() {
                     }
 
                     public void didSelectCountry(String name, String shortName) {
                         PhoneView.this.selectCountry(name);
-                        AndroidUtilities.runOnUIThread(new C09371(), 300);
+                        AndroidUtilities.runOnUIThread(new C09721(), 300);
                         PhoneView.this.phoneField.requestFocus();
                         PhoneView.this.phoneField.setSelection(PhoneView.this.phoneField.length());
                     }
@@ -754,7 +754,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
                 public void onClick(View view) {
                     CountrySelectActivity fragment = new CountrySelectActivity(true);
-                    fragment.setCountrySelectActivityDelegate(new C19711());
+                    fragment.setCountrySelectActivityDelegate(new C20961());
                     ChangePhoneActivity.this.presentFragment(fragment);
                 }
             });
@@ -1198,7 +1198,7 @@ public class ChangePhoneActivity extends BaseFragment {
     public View createView(Context context) {
         this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setActionBarMenuOnItemClick(new C19661());
+        this.actionBar.setActionBarMenuOnItemClick(new C20911());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context);
         ScrollView scrollView = this.fragmentView;

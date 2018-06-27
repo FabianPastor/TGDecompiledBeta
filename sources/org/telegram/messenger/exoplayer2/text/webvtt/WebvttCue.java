@@ -10,7 +10,7 @@ public final class WebvttCue extends Cue {
     public final long startTime;
 
     /* renamed from: org.telegram.messenger.exoplayer2.text.webvtt.WebvttCue$1 */
-    static /* synthetic */ class C06241 {
+    static /* synthetic */ class C06501 {
         static final /* synthetic */ int[] $SwitchMap$android$text$Layout$Alignment = new int[Alignment.values().length];
 
         static {
@@ -118,7 +118,7 @@ public final class WebvttCue extends Cue {
 
         private Builder derivePositionAnchorFromAlignment() {
             if (this.textAlignment != null) {
-                switch (C06241.$SwitchMap$android$text$Layout$Alignment[this.textAlignment.ordinal()]) {
+                switch (C06501.$SwitchMap$android$text$Layout$Alignment[this.textAlignment.ordinal()]) {
                     case 1:
                         this.positionAnchor = 0;
                         break;

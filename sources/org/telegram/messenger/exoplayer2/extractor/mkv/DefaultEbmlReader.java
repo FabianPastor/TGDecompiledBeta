@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2.extractor.mkv;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Stack;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
@@ -22,6 +24,10 @@ final class DefaultEbmlReader implements EbmlReader {
     private EbmlReaderOutput output;
     private final byte[] scratch = new byte[8];
     private final VarintReader varintReader = new VarintReader();
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ElementState {
+    }
 
     private static final class MasterElement {
         private final long elementEndPosition;
@@ -149,6 +155,10 @@ final class DefaultEbmlReader implements EbmlReader {
         }
         byte[] stringBytes = new byte[byteLength];
         input.readFully(stringBytes, 0, byteLength);
-        return new String(stringBytes);
+        int trimmedLength = byteLength;
+        while (trimmedLength > 0 && stringBytes[trimmedLength - 1] == (byte) 0) {
+            trimmedLength--;
+        }
+        return new String(stringBytes, 0, trimmedLength);
     }
 }

@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import android.net.Uri;
+import android.util.Log;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,11 +14,16 @@ import org.telegram.messenger.exoplayer2.upstream.TeeDataSource;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 
 public final class CacheDataSource implements DataSource {
+    public static final int CACHE_IGNORED_REASON_ERROR = 0;
+    public static final int CACHE_IGNORED_REASON_UNSET_LENGTH = 1;
+    private static final int CACHE_NOT_IGNORED = -1;
     public static final long DEFAULT_MAX_CACHE_FILE_SIZE = 2097152;
     public static final int FLAG_BLOCK_ON_CACHE = 1;
     public static final int FLAG_IGNORE_CACHE_FOR_UNSET_LENGTH_REQUESTS = 4;
     public static final int FLAG_IGNORE_CACHE_ON_ERROR = 2;
     private static final long MIN_READ_BEFORE_CHECKING_CACHE = 102400;
+    private static final String TAG = "CacheDataSource";
+    private Uri actualUri;
     private final boolean blockOnCache;
     private long bytesRemaining;
     private final Cache cache;
@@ -39,7 +45,13 @@ public final class CacheDataSource implements DataSource {
     private final DataSource upstreamDataSource;
     private Uri uri;
 
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface CacheIgnoredReason {
+    }
+
     public interface EventListener {
+        void onCacheIgnored(int i);
+
         void onCachedBytesRead(long j, long j2);
     }
 
@@ -144,14 +156,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public long open(DataSpec dataSpec) throws IOException {
         boolean z = false;
         try {
-            this.uri = dataSpec.uri;
-            this.flags = dataSpec.flags;
             this.key = CacheUtil.getKey(dataSpec);
+            this.uri = dataSpec.uri;
+            this.actualUri = loadRedirectedUriOrReturnGivenUri(this.cache, this.key, this.uri);
+            this.flags = dataSpec.flags;
             this.readPosition = dataSpec.position;
-            if ((this.ignoreCacheOnError && this.seenCacheError) || (dataSpec.length == -1 && this.ignoreCacheForUnsetLengthRequests)) {
+            int reason = shouldIgnoreCacheForRequest(dataSpec);
+            if (reason != -1) {
                 z = true;
             }
             this.currentRequestIgnoresCache = z;
+            if (this.currentRequestIgnoresCache) {
+                notifyCacheIgnored(reason);
+            }
             if (dataSpec.length != -1 || this.currentRequestIgnoresCache) {
                 this.bytesRemaining = dataSpec.length;
             } else {
@@ -184,7 +201,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             int bytesRead = this.currentDataSource.read(buffer, offset, readLength);
             if (bytesRead != -1) {
-                if (this.currentDataSource == this.cacheReadDataSource) {
+                if (isReadingFromCache()) {
                     this.totalCachedBytesRead += (long) bytesRead;
                 }
                 this.readPosition += (long) bytesRead;
@@ -194,7 +211,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 this.bytesRemaining -= (long) bytesRead;
                 return bytesRead;
             } else if (this.currentDataSpecLengthUnset) {
-                setBytesRemaining(0);
+                setBytesRemainingAndMaybeStoreLength(0);
                 return bytesRead;
             } else if (this.bytesRemaining <= 0 && this.bytesRemaining != -1) {
                 return bytesRead;
@@ -205,7 +222,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         } catch (IOException e) {
             if (this.currentDataSpecLengthUnset && isCausedByPositionOutOfRange(e)) {
-                setBytesRemaining(0);
+                setBytesRemainingAndMaybeStoreLength(0);
                 return -1;
             }
             handleBeforeThrow(e);
@@ -214,11 +231,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public Uri getUri() {
-        return this.currentDataSource == this.upstreamDataSource ? this.currentDataSource.getUri() : this.uri;
+        return this.actualUri;
     }
 
     public void close() throws IOException {
         this.uri = null;
+        this.actualUri = null;
         notifyBytesRead();
         try {
             closeCurrentSource();
@@ -231,7 +249,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     private void openNextSource(boolean r27) throws java.io.IOException {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) in PHI: PHI: (r4_1 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) = (r4_0 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_2 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) binds: {(r4_0 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:4:0x000a, (r4_2 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:31:0x00bc, (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:37:0x0101, (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:41:0x0120}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) in PHI: PHI: (r4_1 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) = (r4_0 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_2 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) binds: {(r4_0 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:4:0x000a, (r4_2 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:28:0x00bc, (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:34:0x0101, (r4_3 'nextDataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:38:0x0120}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -249,7 +267,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r26 = this;
         r0 = r26;
         r6 = r0.currentRequestIgnoresCache;
-        if (r6 == 0) goto L_0x005c;
+        if (r6 == 0) goto L_0x0055;
     L_0x0006:
         r22 = 0;
     L_0x0008:
@@ -287,38 +305,33 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x003f:
         r0 = r26;
         r0.checkCachePosition = r6;
-        if (r27 == 0) goto L_0x0140;
+        if (r27 == 0) goto L_0x013d;
     L_0x0045:
-        r0 = r26;
-        r6 = r0.currentDataSource;
-        r0 = r26;
-        r7 = r0.upstreamDataSource;
-        if (r6 != r7) goto L_0x013a;
-    L_0x004f:
-        r6 = 1;
-    L_0x0050:
+        r6 = r26.isBypassingCache();
         org.telegram.messenger.exoplayer2.util.Assertions.checkState(r6);
         r0 = r26;
         r6 = r0.upstreamDataSource;
         r0 = r21;
-        if (r0 != r6) goto L_0x013d;
-    L_0x005b:
+        if (r0 != r6) goto L_0x013a;
+    L_0x0054:
         return;
-    L_0x005c:
+    L_0x0055:
         r0 = r26;
         r6 = r0.blockOnCache;
         if (r6 == 0) goto L_0x007a;
-    L_0x0062:
-        r0 = r26;	 Catch:{ InterruptedException -> 0x0073 }
-        r6 = r0.cache;	 Catch:{ InterruptedException -> 0x0073 }
-        r0 = r26;	 Catch:{ InterruptedException -> 0x0073 }
-        r7 = r0.key;	 Catch:{ InterruptedException -> 0x0073 }
-        r0 = r26;	 Catch:{ InterruptedException -> 0x0073 }
-        r12 = r0.readPosition;	 Catch:{ InterruptedException -> 0x0073 }
-        r22 = r6.startReadWrite(r7, r12);	 Catch:{ InterruptedException -> 0x0073 }
+    L_0x005b:
+        r0 = r26;	 Catch:{ InterruptedException -> 0x006c }
+        r6 = r0.cache;	 Catch:{ InterruptedException -> 0x006c }
+        r0 = r26;	 Catch:{ InterruptedException -> 0x006c }
+        r7 = r0.key;	 Catch:{ InterruptedException -> 0x006c }
+        r0 = r26;	 Catch:{ InterruptedException -> 0x006c }
+        r12 = r0.readPosition;	 Catch:{ InterruptedException -> 0x006c }
+        r22 = r6.startReadWrite(r7, r12);	 Catch:{ InterruptedException -> 0x006c }
         goto L_0x0008;
-    L_0x0073:
+    L_0x006c:
         r20 = move-exception;
+        r6 = java.lang.Thread.currentThread();
+        r6.interrupt();
         r6 = new java.io.InterruptedIOException;
         r6.<init>();
         throw r6;
@@ -425,20 +438,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 922337203NUM; // 0x7fffffffffffffff float:NaN double:NaN;
         goto L_0x003f;
     L_0x013a:
-        r6 = 0;
-        goto L_0x0050;
-    L_0x013d:
         r26.closeCurrentSource();	 Catch:{ Throwable -> 0x017c }
-    L_0x0140:
-        if (r22 == 0) goto L_0x014e;
-    L_0x0142:
+    L_0x013d:
+        if (r22 == 0) goto L_0x014b;
+    L_0x013f:
         r6 = r22.isHoleSpan();
-        if (r6 == 0) goto L_0x014e;
-    L_0x0148:
+        if (r6 == 0) goto L_0x014b;
+    L_0x0145:
         r0 = r22;
         r1 = r26;
         r1.currentHoleSpan = r0;
-    L_0x014e:
+    L_0x014b:
         r0 = r21;
         r1 = r26;
         r1.currentDataSource = r0;
@@ -446,25 +456,27 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r12 = -1;
         r6 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1));
         if (r6 != 0) goto L_0x018d;
-    L_0x015c:
+    L_0x0159:
         r6 = 1;
-    L_0x015d:
+    L_0x015a:
         r0 = r26;
         r0.currentDataSpecLengthUnset = r6;
         r0 = r21;
         r24 = r0.open(r4);
         r0 = r26;
         r6 = r0.currentDataSpecLengthUnset;
-        if (r6 == 0) goto L_0x005b;
-    L_0x016d:
+        if (r6 == 0) goto L_0x0177;
+    L_0x016a:
         r6 = -1;
         r6 = (r24 > r6 ? 1 : (r24 == r6 ? 0 : -1));
-        if (r6 == 0) goto L_0x005b;
-    L_0x0173:
+        if (r6 == 0) goto L_0x0177;
+    L_0x0170:
         r0 = r26;
         r1 = r24;
-        r0.setBytesRemaining(r1);
-        goto L_0x005b;
+        r0.setBytesRemainingAndMaybeStoreLength(r1);
+    L_0x0177:
+        r26.maybeUpdateActualUriFieldAndRedirectedUriMetadata();
+        goto L_0x0054;
     L_0x017c:
         r20 = move-exception;
         r6 = r22.isHoleSpan();
@@ -478,9 +490,37 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         throw r20;
     L_0x018d:
         r6 = 0;
-        goto L_0x015d;
+        goto L_0x015a;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSource.openNextSource(boolean):void");
+    }
+
+    private void maybeUpdateActualUriFieldAndRedirectedUriMetadata() {
+        if (isReadingFromUpstream()) {
+            this.actualUri = this.currentDataSource.getUri();
+            maybeUpdateRedirectedUriMetadata();
+        }
+    }
+
+    private void maybeUpdateRedirectedUriMetadata() {
+        if (isWritingToCache()) {
+            ContentMetadataMutations mutations = new ContentMetadataMutations();
+            if (!this.uri.equals(this.actualUri)) {
+                ContentMetadataInternal.setRedirectedUri(mutations, this.actualUri);
+            } else {
+                ContentMetadataInternal.removeRedirectedUri(mutations);
+            }
+            try {
+                this.cache.applyContentMetadataMutations(this.key, mutations);
+            } catch (CacheException e) {
+                Log.w(TAG, "Couldn't update redirected URI. This might cause relative URIs get resolved incorrectly.", e);
+            }
+        }
+    }
+
+    private static Uri loadRedirectedUriOrReturnGivenUri(Cache cache, String key, Uri uri) {
+        Uri redirectedUri = ContentMetadataInternal.getRedirectedUri(cache.getContentMetadata(key));
+        return redirectedUri == null ? uri : redirectedUri;
     }
 
     private static boolean isCausedByPositionOutOfRange(IOException e) {
@@ -494,11 +534,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return false;
     }
 
-    private void setBytesRemaining(long bytesRemaining) throws IOException {
+    private void setBytesRemainingAndMaybeStoreLength(long bytesRemaining) throws IOException {
         this.bytesRemaining = bytesRemaining;
         if (isWritingToCache()) {
             this.cache.setContentLength(this.key, this.readPosition + bytesRemaining);
         }
+    }
+
+    private boolean isReadingFromUpstream() {
+        return !isReadingFromCache();
+    }
+
+    private boolean isBypassingCache() {
+        return this.currentDataSource == this.upstreamDataSource;
+    }
+
+    private boolean isReadingFromCache() {
+        return this.currentDataSource == this.cacheReadDataSource;
     }
 
     private boolean isWritingToCache() {
@@ -506,8 +558,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private void handleBeforeThrow(IOException exception) {
-        if (this.currentDataSource == this.cacheReadDataSource || (exception instanceof CacheException)) {
+        if (isReadingFromCache() || (exception instanceof CacheException)) {
             this.seenCacheError = true;
+        }
+    }
+
+    private int shouldIgnoreCacheForRequest(DataSpec dataSpec) {
+        if (this.ignoreCacheOnError && this.seenCacheError) {
+            return 0;
+        }
+        if (this.ignoreCacheForUnsetLengthRequests && dataSpec.length == -1) {
+            return 1;
+        }
+        return -1;
+    }
+
+    private void notifyCacheIgnored(int reason) {
+        if (this.eventListener != null) {
+            this.eventListener.onCacheIgnored(reason);
         }
     }
 

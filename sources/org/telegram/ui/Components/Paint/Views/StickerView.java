@@ -101,7 +101,7 @@ public class StickerView extends EntityView {
             DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
             if (attribute instanceof TL_documentAttributeSticker) {
                 if (attribute.mask_coords != null) {
-                    this.anchor = attribute.mask_coords.f46n;
+                    this.anchor = attribute.mask_coords.f48n;
                 }
                 this.containerView = new FrameLayoutDrawer(context);
                 addView(this.containerView, LayoutHelper.createFrame(-1, -1.0f));

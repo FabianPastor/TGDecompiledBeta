@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.drm;
 
-import android.annotation.TargetApi;
 import android.media.DeniedByServerException;
 import android.media.MediaCryptoException;
 import android.media.MediaDrmException;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@TargetApi(18)
 public interface ExoMediaDrm<T extends ExoMediaCrypto> {
     public static final int EVENT_KEY_EXPIRED = 3;
     public static final int EVENT_KEY_REQUIRED = 2;

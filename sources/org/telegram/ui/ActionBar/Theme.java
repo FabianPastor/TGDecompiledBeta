@@ -65,7 +65,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.time.SunDate;
@@ -708,7 +708,7 @@ public class Theme {
     public static final String key_dialogTextLink = "dialogTextLink";
     public static final String key_dialogTextRed = "dialogTextRed";
     public static final String key_dialogTopBackground = "dialogTopBackground";
-    public static final String key_dialog_liveLocationProgress = "location_liveLocationProgress";
+    public static final String key_dialog_liveLocationProgress = "dialog_liveLocationProgress";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
     public static final String key_fastScrollActive = "fastScrollActive";
@@ -754,6 +754,9 @@ public class Theme {
     public static final String key_musicPicker_buttonIcon = "musicPicker_buttonIcon";
     public static final String key_musicPicker_checkbox = "musicPicker_checkbox";
     public static final String key_musicPicker_checkboxCheck = "musicPicker_checkboxCheck";
+    public static final String key_passport_authorizeBackground = "passport_authorizeBackground";
+    public static final String key_passport_authorizeBackgroundSelected = "passport_authorizeBackgroundSelected";
+    public static final String key_passport_authorizeText = "passport_authorizeText";
     public static final String key_picker_badge = "picker_badge";
     public static final String key_picker_badgeText = "picker_badgeText";
     public static final String key_picker_disabledButton = "picker_disabledButton";
@@ -847,6 +850,7 @@ public class Theme {
     public static Paint linkSelectionPaint;
     public static Drawable listSelector;
     private static Paint maskPaint = new Paint(1);
+    public static Drawable moveUpDrawable;
     private static ArrayList<ThemeInfo> otherThemes = new ArrayList();
     private static ThemeInfo previousTheme;
     public static TextPaint profile_aboutTextPaint;
@@ -857,9 +861,9 @@ public class Theme {
     private static SensorManager sensorManager;
     private static int serviceMessageColor;
     private static int serviceSelectedMessageColor;
-    private static Runnable switchDayBrightnessRunnable = new C07641();
+    private static Runnable switchDayBrightnessRunnable = new C07951();
     private static boolean switchDayRunnableScheduled;
-    private static Runnable switchNightBrightnessRunnable = new C07652();
+    private static Runnable switchNightBrightnessRunnable = new C07962();
     private static boolean switchNightRunnableScheduled;
     private static final Object sync = new Object();
     private static Drawable themedWallpaper;
@@ -870,8 +874,8 @@ public class Theme {
     private static final Object wallpaperSync = new Object();
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$1 */
-    static class C07641 implements Runnable {
-        C07641() {
+    static class C07951 implements Runnable {
+        C07951() {
         }
 
         public void run() {
@@ -881,8 +885,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$2 */
-    static class C07652 implements Runnable {
-        C07652() {
+    static class C07962 implements Runnable {
+        C07962() {
         }
 
         public void run() {
@@ -892,8 +896,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$3 */
-    static class C07663 implements Runnable {
-        C07663() {
+    static class C07973 implements Runnable {
+        C07973() {
         }
 
         public void run() {
@@ -902,8 +906,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$4 */
-    static class C07674 extends StateListDrawable {
-        C07674() {
+    static class C07984 extends StateListDrawable {
+        C07984() {
         }
 
         public boolean selectDrawable(int index) {
@@ -927,8 +931,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$5 */
-    static class C07685 extends StateListDrawable {
-        C07685() {
+    static class C07995 extends StateListDrawable {
+        C07995() {
         }
 
         public boolean selectDrawable(int index) {
@@ -952,8 +956,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$6 */
-    static class C07696 extends StateListDrawable {
-        C07696() {
+    static class C08006 extends StateListDrawable {
+        C08006() {
         }
 
         public boolean selectDrawable(int index) {
@@ -977,8 +981,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$7 */
-    static class C07707 extends Drawable {
-        C07707() {
+    static class C08017 extends Drawable {
+        C08017() {
         }
 
         public void draw(Canvas canvas) {
@@ -998,8 +1002,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$8 */
-    static class C07718 implements Comparator<ThemeInfo> {
-        C07718() {
+    static class C08028 implements Comparator<ThemeInfo> {
+        C08028() {
         }
 
         public int compare(ThemeInfo o1, ThemeInfo o2) {
@@ -1545,13 +1549,16 @@ public class Theme {
         defaultColors.put(key_files_folderIconBackground, Integer.valueOf(-986896));
         defaultColors.put(key_files_iconText, Integer.valueOf(-1));
         defaultColors.put(key_sessions_devicesImage, Integer.valueOf(-6908266));
+        defaultColors.put(key_passport_authorizeBackground, Integer.valueOf(-12211217));
+        defaultColors.put(key_passport_authorizeBackgroundSelected, Integer.valueOf(-12542501));
+        defaultColors.put(key_passport_authorizeText, Integer.valueOf(-1));
         defaultColors.put(key_location_markerX, Integer.valueOf(-8355712));
         defaultColors.put(key_location_sendLocationBackground, Integer.valueOf(-9592620));
         defaultColors.put(key_location_sendLiveLocationBackground, Integer.valueOf(-39836));
         defaultColors.put(key_location_sendLocationIcon, Integer.valueOf(-1));
-        defaultColors.put("location_liveLocationProgress", Integer.valueOf(-13262875));
+        defaultColors.put(key_location_liveLocationProgress, Integer.valueOf(-13262875));
         defaultColors.put(key_location_placeLocationBackground, Integer.valueOf(-11753238));
-        defaultColors.put("location_liveLocationProgress", Integer.valueOf(-13262875));
+        defaultColors.put(key_dialog_liveLocationProgress, Integer.valueOf(-13262875));
         defaultColors.put(key_calls_callReceivedGreenIcon, Integer.valueOf(-16725933));
         defaultColors.put(key_calls_callReceivedRedIcon, Integer.valueOf(-47032));
         defaultColors.put(key_featuredStickers_addedIcon, Integer.valueOf(-11491093));
@@ -1706,7 +1713,7 @@ public class Theme {
             currentDayTheme = themeInfo2;
         }
         applyTheme(themeInfo2, false, false, false);
-        AndroidUtilities.runOnUIThread(new C07663());
+        AndroidUtilities.runOnUIThread(new C07973());
     }
 
     public static void saveAutoNightThemeConfig() {
@@ -1758,7 +1765,7 @@ public class Theme {
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        StateListDrawable stateListDrawable = new C07674();
+        StateListDrawable stateListDrawable = new C07984();
         stateListDrawable.setEnterFadeDuration(1);
         stateListDrawable.setExitFadeDuration(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
@@ -1772,7 +1779,7 @@ public class Theme {
         defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), Mode.MULTIPLY));
         Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
         pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
-        StateListDrawable stateListDrawable = new C07685();
+        StateListDrawable stateListDrawable = new C07995();
         stateListDrawable.addState(new int[]{16842910, 16842908}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842908}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -1835,7 +1842,7 @@ public class Theme {
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        StateListDrawable stateListDrawable = new C07696();
+        StateListDrawable stateListDrawable = new C08006();
         stateListDrawable.addState(new int[]{16842919}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -1946,6 +1953,17 @@ public class Theme {
         return stateListDrawable;
     }
 
+    public static Drawable createSelectorWithBackgroundDrawable(int backgroundColor, int color) {
+        if (VERSION.SDK_INT >= 21) {
+            return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{color}), new ColorDrawable(backgroundColor), new ColorDrawable(backgroundColor));
+        }
+        Drawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{16842919}, new ColorDrawable(color));
+        stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(color));
+        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(backgroundColor));
+        return stateListDrawable;
+    }
+
     public static Drawable getSelectorDrawable(boolean whiteBackground) {
         if (!whiteBackground) {
             return createSelectorDrawable(getColor(key_listSelector), 2);
@@ -1970,7 +1988,7 @@ public class Theme {
             Drawable maskDrawable = null;
             if (maskType == 1) {
                 maskPaint.setColor(-1);
-                maskDrawable = new C07707();
+                maskDrawable = new C08017();
             } else if (maskType == 2) {
                 maskDrawable = new ColorDrawable(-1);
             }
@@ -1992,7 +2010,7 @@ public class Theme {
     }
 
     private static void sortThemes() {
-        Collections.sort(themes, new C07718());
+        Collections.sort(themes, new C08028());
     }
 
     public static ThemeInfo applyThemeFile(File file, String themeName, boolean temporary) {
@@ -2439,7 +2457,7 @@ public class Theme {
                     for (int a = 0; a < read; a++) {
                         if (bytes[a] == (byte) 10) {
                             int len = (a - start) + 1;
-                            String line = new String(bytes, start, len - 1, C0546C.UTF8_NAME);
+                            String line = new String(bytes, start, len - 1, C0554C.UTF8_NAME);
                             if (line.startsWith("WPS")) {
                                 themedWallpaperFileOffset = currentPosition + len;
                                 finished = true;
@@ -2574,6 +2592,7 @@ public class Theme {
             dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
             dialogs_botDrawable = resources.getDrawable(R.drawable.list_bot);
             dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
+            moveUpDrawable = resources.getDrawable(R.drawable.preview_open);
             applyDialogsTheme();
         }
         dialogs_namePaint.setTextSize((float) AndroidUtilities.dp(17.0f));
@@ -3319,8 +3338,8 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.ActionBar.Theme$11$1 */
-                class C07631 implements Runnable {
-                    C07631() {
+                class C07941 implements Runnable {
+                    C07941() {
                     }
 
                     public void run() {
@@ -3408,7 +3427,7 @@ public class Theme {
                                         }
                                     }
                                     Theme.calcBackgroundColor(Theme.wallpaper, 1);
-                                    AndroidUtilities.runOnUIThread(new C07631());
+                                    AndroidUtilities.runOnUIThread(new C07941());
                                 }
                             }
                         }
@@ -3440,7 +3459,7 @@ public class Theme {
                             }
                         }
                         Theme.calcBackgroundColor(Theme.wallpaper, 1);
-                        AndroidUtilities.runOnUIThread(new C07631());
+                        AndroidUtilities.runOnUIThread(new C07941());
                     }
                 }
             });

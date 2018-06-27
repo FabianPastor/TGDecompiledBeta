@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -35,6 +36,7 @@ public class UserCell extends FrameLayout {
     private CheckBoxSquare checkBoxBig;
     private int currentAccount = UserConfig.selectedAccount;
     private int currentDrawable;
+    private int currentId;
     private CharSequence currentName;
     private TLObject currentObject;
     private CharSequence currrntStatus;
@@ -118,7 +120,7 @@ public class UserCell extends FrameLayout {
     }
 
     public void setData(TLObject user, CharSequence name, CharSequence status, int resId) {
-        if (user == null) {
+        if (user == null && name == null && status == null) {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentObject = null;
@@ -132,6 +134,14 @@ public class UserCell extends FrameLayout {
         this.currentObject = user;
         this.currentDrawable = resId;
         update(0);
+    }
+
+    public void setNameTypeface(Typeface typeface) {
+        this.nameTextView.setTypeface(typeface);
+    }
+
+    public void setCurrentId(int id) {
+        this.currentId = id;
     }
 
     public void setChecked(boolean checked, boolean animated) {
@@ -171,107 +181,104 @@ public class UserCell extends FrameLayout {
     }
 
     public void update(int mask) {
-        int i = 8;
-        if (this.currentObject != null) {
-            TLObject photo = null;
-            String newName = null;
-            User currentUser = null;
-            Chat currentChat = null;
-            if (this.currentObject instanceof User) {
-                currentUser = this.currentObject;
-                if (currentUser.photo != null) {
-                    photo = currentUser.photo.photo_small;
-                }
-            } else {
-                currentChat = this.currentObject;
-                if (currentChat.photo != null) {
-                    photo = currentChat.photo.photo_small;
-                }
+        TLObject photo = null;
+        String newName = null;
+        User currentUser = null;
+        Chat currentChat = null;
+        if (this.currentObject instanceof User) {
+            currentUser = this.currentObject;
+            if (currentUser.photo != null) {
+                photo = currentUser.photo.photo_small;
             }
-            if (mask != 0) {
-                boolean continueUpdate = false;
-                if ((mask & 2) != 0 && ((this.lastAvatar != null && photo == null) || !(this.lastAvatar != null || photo == null || this.lastAvatar == null || photo == null || (this.lastAvatar.volume_id == photo.volume_id && this.lastAvatar.local_id == photo.local_id)))) {
+        } else if (this.currentObject instanceof Chat) {
+            currentChat = this.currentObject;
+            if (currentChat.photo != null) {
+                photo = currentChat.photo.photo_small;
+            }
+        }
+        if (mask != 0) {
+            boolean continueUpdate = false;
+            if ((mask & 2) != 0 && ((this.lastAvatar != null && photo == null) || !(this.lastAvatar != null || photo == null || this.lastAvatar == null || photo == null || (this.lastAvatar.volume_id == photo.volume_id && this.lastAvatar.local_id == photo.local_id)))) {
+                continueUpdate = true;
+            }
+            if (!(currentUser == null || continueUpdate || (mask & 4) == 0)) {
+                int newStatus = 0;
+                if (currentUser.status != null) {
+                    newStatus = currentUser.status.expires;
+                }
+                if (newStatus != this.lastStatus) {
                     continueUpdate = true;
                 }
-                if (!(currentUser == null || continueUpdate || (mask & 4) == 0)) {
-                    int newStatus = 0;
-                    if (currentUser.status != null) {
-                        newStatus = currentUser.status.expires;
-                    }
-                    if (newStatus != this.lastStatus) {
-                        continueUpdate = true;
-                    }
-                }
-                if (!(continueUpdate || this.currentName != null || this.lastName == null || (mask & 1) == 0)) {
-                    if (currentUser != null) {
-                        newName = UserObject.getUserName(currentUser);
-                    } else {
-                        newName = currentChat.title;
-                    }
-                    if (!newName.equals(this.lastName)) {
-                        continueUpdate = true;
-                    }
-                }
-                if (!continueUpdate) {
-                    return;
-                }
             }
-            if (currentUser != null) {
-                this.avatarDrawable.setInfo(currentUser);
-                if (currentUser.status != null) {
-                    this.lastStatus = currentUser.status.expires;
-                } else {
-                    this.lastStatus = 0;
-                }
-            } else {
-                this.avatarDrawable.setInfo(currentChat);
-            }
-            if (this.currentName != null) {
-                this.lastName = null;
-                this.nameTextView.setText(this.currentName);
-            } else {
+            if (!(continueUpdate || this.currentName != null || this.lastName == null || (mask & 1) == 0)) {
                 if (currentUser != null) {
-                    if (newName == null) {
-                        newName = UserObject.getUserName(currentUser);
-                    }
-                    this.lastName = newName;
+                    newName = UserObject.getUserName(currentUser);
                 } else {
-                    if (newName == null) {
-                        newName = currentChat.title;
-                    }
-                    this.lastName = newName;
+                    newName = currentChat.title;
                 }
-                this.nameTextView.setText(this.lastName);
-            }
-            if (this.currrntStatus != null) {
-                this.statusTextView.setTextColor(this.statusColor);
-                this.statusTextView.setText(this.currrntStatus);
-            } else if (currentUser != null) {
-                if (currentUser.bot) {
-                    this.statusTextView.setTextColor(this.statusColor);
-                    if (currentUser.bot_chat_history || (this.adminImage != null && this.adminImage.getVisibility() == 0)) {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
-                    } else {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
-                    }
-                } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
-                    this.statusTextView.setTextColor(this.statusOnlineColor);
-                    this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
-                } else {
-                    this.statusTextView.setTextColor(this.statusColor);
-                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
+                if (!newName.equals(this.lastName)) {
+                    continueUpdate = true;
                 }
             }
-            if ((this.imageView.getVisibility() == 0 && this.currentDrawable == 0) || (this.imageView.getVisibility() == 8 && this.currentDrawable != 0)) {
-                ImageView imageView = this.imageView;
-                if (this.currentDrawable != 0) {
-                    i = 0;
-                }
-                imageView.setVisibility(i);
-                this.imageView.setImageResource(this.currentDrawable);
+            if (!continueUpdate) {
+                return;
             }
-            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         }
+        if (currentUser != null) {
+            this.avatarDrawable.setInfo(currentUser);
+            if (currentUser.status != null) {
+                this.lastStatus = currentUser.status.expires;
+            } else {
+                this.lastStatus = 0;
+            }
+        } else if (currentChat != null) {
+            this.avatarDrawable.setInfo(currentChat);
+        } else if (this.currentName != null) {
+            this.avatarDrawable.setInfo(this.currentId, this.currentName.toString(), null, false);
+        } else {
+            this.avatarDrawable.setInfo(this.currentId, "#", null, false);
+        }
+        if (this.currentName != null) {
+            this.lastName = null;
+            this.nameTextView.setText(this.currentName);
+        } else {
+            if (currentUser != null) {
+                String userName;
+                if (newName == null) {
+                    userName = UserObject.getUserName(currentUser);
+                } else {
+                    userName = newName;
+                }
+                this.lastName = userName;
+            } else {
+                this.lastName = newName == null ? currentChat.title : newName;
+            }
+            this.nameTextView.setText(this.lastName);
+        }
+        if (this.currrntStatus != null) {
+            this.statusTextView.setTextColor(this.statusColor);
+            this.statusTextView.setText(this.currrntStatus);
+        } else if (currentUser != null) {
+            if (currentUser.bot) {
+                this.statusTextView.setTextColor(this.statusColor);
+                if (currentUser.bot_chat_history || (this.adminImage != null && this.adminImage.getVisibility() == 0)) {
+                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                } else {
+                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
+                }
+            } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
+                this.statusTextView.setTextColor(this.statusOnlineColor);
+                this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+            } else {
+                this.statusTextView.setTextColor(this.statusColor);
+                this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
+            }
+        }
+        if ((this.imageView.getVisibility() == 0 && this.currentDrawable == 0) || (this.imageView.getVisibility() == 8 && this.currentDrawable != 0)) {
+            this.imageView.setVisibility(this.currentDrawable == 0 ? 8 : 0);
+            this.imageView.setImageResource(this.currentDrawable);
+        }
+        this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
     }
 
     public boolean hasOverlappingRendering() {

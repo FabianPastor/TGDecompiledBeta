@@ -1,13 +1,11 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
-import android.util.Log;
 import android.util.SparseArray;
 import java.io.BufferedInputStream;
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,8 +30,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 class CachedContentIndex {
     public static final String FILE_NAME = "cached_content_index.exi";
     private static final int FLAG_ENCRYPTED_INDEX = 1;
-    private static final String TAG = "CachedContentIndex";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private final AtomicFile atomicFile;
     private ReusableBufferedOutputStream bufferedOutputStream;
     private boolean changed;
@@ -100,10 +97,7 @@ class CachedContentIndex {
 
     public CachedContent getOrAdd(String key) {
         CachedContent cachedContent = (CachedContent) this.keyToContent.get(key);
-        if (cachedContent == null) {
-            return addNew(key, -1);
-        }
-        return cachedContent;
+        return cachedContent == null ? addNew(key) : cachedContent;
     }
 
     public CachedContent get(String key) {
@@ -143,31 +137,27 @@ class CachedContentIndex {
         return this.keyToContent.keySet();
     }
 
-    public void setContentLength(String key, long length) {
-        CachedContent cachedContent = get(key);
-        if (cachedContent == null) {
-            addNew(key, length);
-        } else if (cachedContent.getLength() != length) {
-            cachedContent.setLength(length);
+    public void applyContentMetadataMutations(String key, ContentMetadataMutations mutations) {
+        if (getOrAdd(key).applyMetadataMutations(mutations)) {
             this.changed = true;
         }
     }
 
-    public long getContentLength(String key) {
+    public ContentMetadata getContentMetadata(String key) {
         CachedContent cachedContent = get(key);
-        return cachedContent == null ? -1 : cachedContent.getLength();
+        return cachedContent != null ? cachedContent.getMetadata() : DefaultContentMetadata.EMPTY;
     }
 
     private boolean readFile() {
         GeneralSecurityException e;
-        IOException e2;
         Throwable th;
         Closeable closeable = null;
         try {
             InputStream inputStream = new BufferedInputStream(this.atomicFile.openRead());
             Closeable input = new DataInputStream(inputStream);
             try {
-                if (input.readInt() != 1) {
+                int version = input.readInt();
+                if (version < 0 || version > 2) {
                     if (input != null) {
                         Util.closeQuietly(input);
                     }
@@ -191,22 +181,24 @@ class CachedContentIndex {
                     try {
                         this.cipher.init(2, this.secretKeySpec, new IvParameterSpec(initializationVector));
                         closeable = new DataInputStream(new CipherInputStream(inputStream, this.cipher));
-                    } catch (GeneralSecurityException e3) {
-                        e = e3;
+                    } catch (GeneralSecurityException e2) {
+                        e = e2;
                         throw new IllegalStateException(e);
-                    } catch (GeneralSecurityException e32) {
-                        e = e32;
+                    } catch (GeneralSecurityException e22) {
+                        e = e22;
                         throw new IllegalStateException(e);
                     }
                 }
                 int count = closeable.readInt();
                 int hashCode = 0;
                 for (int i = 0; i < count; i++) {
-                    CachedContent cachedContent = new CachedContent(closeable);
+                    CachedContent cachedContent = CachedContent.readFromStream(version, closeable);
                     add(cachedContent);
-                    hashCode += cachedContent.headerHashCode();
+                    hashCode += cachedContent.headerHashCode(version);
                 }
-                if (closeable.readInt() == hashCode) {
+                int fileHashCode = closeable.readInt();
+                boolean isEOF = closeable.read() == -1;
+                if (fileHashCode == hashCode && isEOF) {
                     if (closeable != null) {
                         Util.closeQuietly(closeable);
                     }
@@ -217,52 +209,33 @@ class CachedContentIndex {
                     Util.closeQuietly(closeable);
                     return false;
                 }
-            } catch (FileNotFoundException e4) {
+            } catch (IOException e3) {
                 closeable = input;
                 if (closeable != null) {
                     return false;
                 }
                 Util.closeQuietly(closeable);
                 return false;
-            } catch (IOException e5) {
-                e2 = e5;
-                closeable = input;
-                try {
-                    Log.e(TAG, "Error reading cache content index file.", e2);
-                    if (closeable != null) {
-                        return false;
-                    }
-                    Util.closeQuietly(closeable);
-                    return false;
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (closeable != null) {
-                        Util.closeQuietly(closeable);
-                    }
-                    throw th;
-                }
-            } catch (Throwable th3) {
-                th = th3;
+            } catch (Throwable th2) {
+                th = th2;
                 closeable = input;
                 if (closeable != null) {
                     Util.closeQuietly(closeable);
                 }
                 throw th;
             }
-        } catch (FileNotFoundException e6) {
+        } catch (IOException e4) {
             if (closeable != null) {
                 return false;
             }
             Util.closeQuietly(closeable);
             return false;
-        } catch (IOException e7) {
-            e2 = e7;
-            Log.e(TAG, "Error reading cache content index file.", e2);
+        } catch (Throwable th3) {
+            th = th3;
             if (closeable != null) {
-                return false;
+                Util.closeQuietly(closeable);
             }
-            Util.closeQuietly(closeable);
-            return false;
+            throw th;
         }
     }
 
@@ -282,7 +255,7 @@ class CachedContentIndex {
             DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
             Object output2;
             try {
-                output.writeInt(1);
+                output.writeInt(2);
                 if (!this.encrypt) {
                     flags = 0;
                 }
@@ -308,7 +281,7 @@ class CachedContentIndex {
                 int hashCode = 0;
                 for (CachedContent cachedContent : this.keyToContent.values()) {
                     cachedContent.writeToStream(closeable);
-                    hashCode += cachedContent.headerHashCode();
+                    hashCode += cachedContent.headerHashCode(2);
                 }
                 closeable.writeInt(hashCode);
                 this.atomicFile.endWrite(closeable);
@@ -335,20 +308,16 @@ class CachedContentIndex {
         }
     }
 
+    private CachedContent addNew(String key) {
+        CachedContent cachedContent = new CachedContent(getNewId(this.idToKey), key);
+        add(cachedContent);
+        this.changed = true;
+        return cachedContent;
+    }
+
     private void add(CachedContent cachedContent) {
         this.keyToContent.put(cachedContent.key, cachedContent);
         this.idToKey.put(cachedContent.id, cachedContent.key);
-    }
-
-    void addNew(CachedContent cachedContent) {
-        add(cachedContent);
-        this.changed = true;
-    }
-
-    private CachedContent addNew(String key, long length) {
-        CachedContent cachedContent = new CachedContent(getNewId(this.idToKey), key, length);
-        addNew(cachedContent);
-        return cachedContent;
     }
 
     private static Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {

@@ -150,6 +150,39 @@ public final class ParsableBitArray {
         assertValidOffset();
     }
 
+    public void putInt(int value, int numBits) {
+        int remainingBitsToRead = numBits;
+        if (numBits < 32) {
+            value &= (1 << numBits) - 1;
+        }
+        int firstByteReadSize = Math.min(8 - this.bitOffset, numBits);
+        int firstByteRightPaddingSize = (8 - this.bitOffset) - firstByteReadSize;
+        int firstByteBitmask = (65280 >> this.bitOffset) | ((1 << firstByteRightPaddingSize) - 1);
+        byte[] bArr = this.data;
+        int i = this.byteOffset;
+        bArr[i] = (byte) (bArr[i] & firstByteBitmask);
+        int firstByteInputBits = value >>> (numBits - firstByteReadSize);
+        bArr = this.data;
+        i = this.byteOffset;
+        bArr[i] = (byte) (bArr[i] | (firstByteInputBits << firstByteRightPaddingSize));
+        remainingBitsToRead -= firstByteReadSize;
+        int currentByteIndex = this.byteOffset + 1;
+        while (remainingBitsToRead > 8) {
+            int currentByteIndex2 = currentByteIndex + 1;
+            this.data[currentByteIndex] = (byte) (value >>> (remainingBitsToRead - 8));
+            remainingBitsToRead -= 8;
+            currentByteIndex = currentByteIndex2;
+        }
+        int lastByteRightPaddingSize = 8 - remainingBitsToRead;
+        bArr = this.data;
+        bArr[currentByteIndex] = (byte) (bArr[currentByteIndex] & ((1 << lastByteRightPaddingSize) - 1));
+        int lastByteInput = value & ((1 << remainingBitsToRead) - 1);
+        bArr = this.data;
+        bArr[currentByteIndex] = (byte) (bArr[currentByteIndex] | (lastByteInput << lastByteRightPaddingSize));
+        skipBits(numBits);
+        assertValidOffset();
+    }
+
     private void assertValidOffset() {
         boolean z = this.byteOffset >= 0 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
         Assertions.checkState(z);

@@ -85,11 +85,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private int selfUserId;
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$3 */
-    class C07823 implements Runnable {
+    class C08133 implements Runnable {
 
         /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$3$1 */
-        class C07801 implements Comparator<RecentSearchObject> {
-            C07801() {
+        class C08111 implements Comparator<RecentSearchObject> {
+            C08111() {
             }
 
             public int compare(RecentSearchObject lhs, RecentSearchObject rhs) {
@@ -103,7 +103,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
         }
 
-        C07823() {
+        C08133() {
         }
 
         public void run() {
@@ -190,7 +190,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                     }
                 }
-                Collections.sort(arrayList, new C07801());
+                Collections.sort(arrayList, new C08111());
                 final LongSparseArray<RecentSearchObject> longSparseArray = hashMap;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -204,8 +204,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$5 */
-    class C07845 implements Runnable {
-        C07845() {
+    class C08155 implements Runnable {
+        C08155() {
         }
 
         public void run() {
@@ -244,8 +244,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
-    class C19051 implements SearchAdapterHelperDelegate {
-        C19051() {
+    class C20301 implements SearchAdapterHelperDelegate {
+        C20301() {
         }
 
         public void onDataSetChanged() {
@@ -314,7 +314,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
-        this.searchAdapterHelper.setDelegate(new C19051());
+        this.searchAdapterHelper.setDelegate(new C20301());
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
@@ -365,7 +365,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             final TL_messages_searchGlobal req = new TL_messages_searchGlobal();
             req.limit = 20;
-            req.f51q = query;
+            req.f53q = query;
             if (this.lastMessagesSearchString == null || !query.equals(this.lastMessagesSearchString) || this.searchResultMessages.isEmpty()) {
                 req.offset_date = 0;
                 req.offset_id = 0;
@@ -448,7 +448,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void loadRecentSearch() {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C07823());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08133());
     }
 
     public void putRecentSearch(final long did, TLObject object) {
@@ -484,7 +484,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.recentSearchObjectsById = new LongSparseArray();
         this.recentSearchObjects = new ArrayList();
         notifyDataSetChanged();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C07845());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08155());
     }
 
     public void addHashtagsFromMessage(CharSequence message) {
@@ -512,8 +512,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$6$1 */
-                class C07851 implements Comparator<DialogSearchResult> {
-                    C07851() {
+                class C08161 implements Comparator<DialogSearchResult> {
+                    C08161() {
                     }
 
                     public int compare(DialogSearchResult lhs, DialogSearchResult rhs) {
@@ -769,7 +769,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                 arrayList.add(dialogSearchResult);
                             }
                         }
-                        Collections.sort(arrayList, new C07851());
+                        Collections.sort(arrayList, new C08161());
                         ArrayList<TLObject> resultArray = new ArrayList();
                         ArrayList<CharSequence> resultArrayNames = new ArrayList();
                         for (a = 0; a < arrayList.size(); a++) {
@@ -917,8 +917,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$8$1 */
-                class C07881 implements Runnable {
-                    C07881() {
+                class C08191 implements Runnable {
+                    C08191() {
                     }
 
                     public void run() {
@@ -938,7 +938,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         FileLog.m3e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
-                    AndroidUtilities.runOnUIThread(new C07881());
+                    AndroidUtilities.runOnUIThread(new C08191());
                 }
             }, 200, 300);
         }
@@ -1025,6 +1025,29 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             return this.searchResultHashtags.get(i - 1);
         } else {
             return null;
+        }
+    }
+
+    public boolean isGlobalSearch(int i) {
+        if (isRecentSearchDisplayed() || !this.searchResultHashtags.isEmpty()) {
+            return false;
+        }
+        ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
+        ArrayList<TLObject> localServerSearch = this.searchAdapterHelper.getLocalServerSearch();
+        int localCount = this.searchResult.size();
+        int localServerCount = localServerSearch.size();
+        int globalCount = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
+        int messagesCount = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
+        if (i >= 0 && i < localCount) {
+            return false;
+        }
+        if (i >= localCount && i < localServerCount + localCount) {
+            return false;
+        }
+        if (i <= localCount + localServerCount || i >= (globalCount + localCount) + localServerCount) {
+            return (i <= (globalCount + localCount) + localServerCount || i >= ((globalCount + localCount) + messagesCount) + localServerCount) ? false : false;
+        } else {
+            return true;
         }
     }
 

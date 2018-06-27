@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
@@ -9,6 +11,10 @@ public interface Renderer extends Target {
     public static final int STATE_DISABLED = 0;
     public static final int STATE_ENABLED = 1;
     public static final int STATE_STARTED = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface State {
+    }
 
     void disable();
 

@@ -54,11 +54,11 @@ public class SearchAdapterHelper {
     private int reqId = 0;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4 */
-    class C08104 implements Runnable {
+    class C08454 implements Runnable {
 
         /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4$1 */
-        class C08081 implements Comparator<HashtagObject> {
-            C08081() {
+        class C08431 implements Comparator<HashtagObject> {
+            C08431() {
             }
 
             public int compare(HashtagObject lhs, HashtagObject rhs) {
@@ -72,7 +72,7 @@ public class SearchAdapterHelper {
             }
         }
 
-        C08104() {
+        C08454() {
         }
 
         public void run() {
@@ -88,7 +88,7 @@ public class SearchAdapterHelper {
                     hashMap.put(hashtagObject.hashtag, hashtagObject);
                 }
                 cursor.dispose();
-                Collections.sort(arrayList, new C08081());
+                Collections.sort(arrayList, new C08431());
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         SearchAdapterHelper.this.setHashtags(arrayList, hashMap);
@@ -101,8 +101,8 @@ public class SearchAdapterHelper {
     }
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$6 */
-    class C08126 implements Runnable {
-        C08126() {
+    class C08476 implements Runnable {
+        C08476() {
         }
 
         public void run() {
@@ -176,7 +176,7 @@ public class SearchAdapterHelper {
             } else {
                 req.filter = new TL_channelParticipantsSearch();
             }
-            req.filter.f32q = query;
+            req.filter.f34q = query;
             req.limit = 50;
             req.offset = 0;
             req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -201,7 +201,7 @@ public class SearchAdapterHelper {
             if (kicked) {
                 req = new TL_channels_getParticipants();
                 req.filter = new TL_channelParticipantsKicked();
-                req.filter.f32q = query;
+                req.filter.f34q = query;
                 req.limit = 50;
                 req.offset = 0;
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -230,7 +230,7 @@ public class SearchAdapterHelper {
         }
         if (query.length() > 0) {
             req = new TL_contacts_search();
-            req.f45q = query;
+            req.f47q = query;
             req.limit = 50;
             currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
@@ -361,7 +361,7 @@ public class SearchAdapterHelper {
         if (this.hashtagsLoadedFromDb) {
             return true;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08104());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08454());
         return false;
     }
 
@@ -493,7 +493,7 @@ public class SearchAdapterHelper {
     public void clearRecentHashtags() {
         this.hashtags = new ArrayList();
         this.hashtagsByText = new HashMap();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08126());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08476());
     }
 
     public void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {

@@ -4,7 +4,7 @@ import android.net.Uri;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class AdPlaybackState {
@@ -23,7 +23,6 @@ public final class AdPlaybackState {
     public static final class AdGroup {
         public final int count;
         public final long[] durationsUs;
-        public final int nextAdIndexToPlay;
         public final int[] states;
         public final Uri[] uris;
 
@@ -37,11 +36,22 @@ public final class AdPlaybackState {
             this.states = states;
             this.uris = uris;
             this.durationsUs = durationsUs;
-            int nextAdIndexToPlay = 0;
-            while (nextAdIndexToPlay < states.length && states[nextAdIndexToPlay] != 0 && states[nextAdIndexToPlay] != 1) {
+        }
+
+        public int getFirstAdIndexToPlay() {
+            return getNextAdIndexToPlay(-1);
+        }
+
+        public int getNextAdIndexToPlay(int lastPlayedAdIndex) {
+            int nextAdIndexToPlay = lastPlayedAdIndex + 1;
+            while (nextAdIndexToPlay < this.states.length && this.states[nextAdIndexToPlay] != 0 && this.states[nextAdIndexToPlay] != 1) {
                 nextAdIndexToPlay++;
             }
-            this.nextAdIndexToPlay = nextAdIndexToPlay;
+            return nextAdIndexToPlay;
+        }
+
+        public boolean hasUnplayedAds() {
+            return this.count == -1 || getFirstAdIndexToPlay() < this.count;
         }
 
         public AdGroup withAdCount(int count) {
@@ -88,7 +98,7 @@ public final class AdPlaybackState {
             }
             Assertions.checkArgument(z);
             int[] states = copyStatesWithSpaceForAdCount(this.states, index + 1);
-            if (states[index] == 0 || states[index] == 1) {
+            if (states[index] == 0 || states[index] == 1 || states[index] == state) {
                 z2 = true;
             }
             Assertions.checkArgument(z2);
@@ -143,7 +153,7 @@ public final class AdPlaybackState {
             int oldDurationsUsCount = durationsUs.length;
             int newDurationsUsCount = Math.max(count, oldDurationsUsCount);
             durationsUs = Arrays.copyOf(durationsUs, newDurationsUsCount);
-            Arrays.fill(durationsUs, oldDurationsUsCount, newDurationsUsCount, C0546C.TIME_UNSET);
+            Arrays.fill(durationsUs, oldDurationsUsCount, newDurationsUsCount, C0554C.TIME_UNSET);
             return durationsUs;
         }
     }
@@ -152,7 +162,7 @@ public final class AdPlaybackState {
     public @interface AdState {
     }
 
-    public AdPlaybackState(long[] adGroupTimesUs) {
+    public AdPlaybackState(long... adGroupTimesUs) {
         int count = adGroupTimesUs.length;
         this.adGroupCount = count;
         this.adGroupTimesUs = Arrays.copyOf(adGroupTimesUs, count);
@@ -161,7 +171,7 @@ public final class AdPlaybackState {
             this.adGroups[i] = new AdGroup();
         }
         this.adResumePositionUs = 0;
-        this.contentDurationUs = C0546C.TIME_UNSET;
+        this.contentDurationUs = C0554C.TIME_UNSET;
     }
 
     private AdPlaybackState(long[] adGroupTimesUs, AdGroup[] adGroups, long adResumePositionUs, long contentDurationUs) {
@@ -170,6 +180,22 @@ public final class AdPlaybackState {
         this.adGroups = adGroups;
         this.adResumePositionUs = adResumePositionUs;
         this.contentDurationUs = contentDurationUs;
+    }
+
+    public int getAdGroupIndexForPositionUs(long positionUs) {
+        int index = this.adGroupTimesUs.length - 1;
+        while (index >= 0 && (this.adGroupTimesUs[index] == Long.MIN_VALUE || this.adGroupTimesUs[index] > positionUs)) {
+            index--;
+        }
+        return (index < 0 || !this.adGroups[index].hasUnplayedAds()) ? -1 : index;
+    }
+
+    public int getAdGroupIndexAfterPositionUs(long positionUs) {
+        int index = 0;
+        while (index < this.adGroupTimesUs.length && this.adGroupTimesUs[index] != Long.MIN_VALUE && (positionUs >= this.adGroupTimesUs[index] || !this.adGroups[index].hasUnplayedAds())) {
+            index++;
+        }
+        return index < this.adGroupTimesUs.length ? index : -1;
     }
 
     public AdPlaybackState withAdCount(int adGroupIndex, int adCount) {

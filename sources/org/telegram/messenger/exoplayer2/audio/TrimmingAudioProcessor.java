@@ -8,19 +8,19 @@ import org.telegram.messenger.exoplayer2.util.Util;
 final class TrimmingAudioProcessor implements AudioProcessor {
     private ByteBuffer buffer = EMPTY_BUFFER;
     private int channelCount = -1;
-    private byte[] endBuffer;
+    private byte[] endBuffer = new byte[0];
     private int endBufferSize;
     private boolean inputEnded;
     private boolean isActive;
     private ByteBuffer outputBuffer = EMPTY_BUFFER;
     private int pendingTrimStartBytes;
-    private int sampleRateHz;
-    private int trimEndSamples;
-    private int trimStartSamples;
+    private int sampleRateHz = -1;
+    private int trimEndFrames;
+    private int trimStartFrames;
 
-    public void setTrimSampleCount(int trimStartSamples, int trimEndSamples) {
-        this.trimStartSamples = trimStartSamples;
-        this.trimEndSamples = trimEndSamples;
+    public void setTrimFrameCount(int trimStartFrames, int trimEndFrames) {
+        this.trimStartFrames = trimStartFrames;
+        this.trimEndFrames = trimEndFrames;
     }
 
     public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
@@ -30,11 +30,11 @@ final class TrimmingAudioProcessor implements AudioProcessor {
         boolean z;
         this.channelCount = channelCount;
         this.sampleRateHz = sampleRateHz;
-        this.endBuffer = new byte[((this.trimEndSamples * channelCount) * 2)];
+        this.endBuffer = new byte[((this.trimEndFrames * channelCount) * 2)];
         this.endBufferSize = 0;
-        this.pendingTrimStartBytes = (this.trimStartSamples * channelCount) * 2;
+        this.pendingTrimStartBytes = (this.trimStartFrames * channelCount) * 2;
         boolean wasActive = this.isActive;
-        if (this.trimStartSamples == 0 && this.trimEndSamples == 0) {
+        if (this.trimStartFrames == 0 && this.trimEndFrames == 0) {
             z = false;
         } else {
             z = true;
@@ -119,6 +119,6 @@ final class TrimmingAudioProcessor implements AudioProcessor {
         this.buffer = EMPTY_BUFFER;
         this.channelCount = -1;
         this.sampleRateHz = -1;
-        this.endBuffer = null;
+        this.endBuffer = new byte[0];
     }
 }

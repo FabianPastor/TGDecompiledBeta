@@ -23,9 +23,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public final class DashUtil {
     public static DashManifest loadManifest(DataSource dataSource, Uri uri) throws IOException {
-        ParsingLoadable<DashManifest> loadable = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new DashManifestParser());
-        loadable.load();
-        return (DashManifest) loadable.getResult();
+        return (DashManifest) ParsingLoadable.load(dataSource, new DashManifestParser(), uri);
     }
 
     public static DrmInitData loadDrmInitData(DataSource dataSource, Period period) throws IOException, InterruptedException {
@@ -86,7 +84,7 @@ public final class DashUtil {
 
     private static ChunkExtractorWrapper newWrappedExtractor(int trackType, Format format) {
         String mimeType = format.containerMimeType;
-        boolean isWebm = mimeType.startsWith(MimeTypes.VIDEO_WEBM) || mimeType.startsWith(MimeTypes.AUDIO_WEBM);
+        boolean isWebm = mimeType != null && (mimeType.startsWith(MimeTypes.VIDEO_WEBM) || mimeType.startsWith(MimeTypes.AUDIO_WEBM));
         return new ChunkExtractorWrapper(isWebm ? new MatroskaExtractor() : new FragmentedMp4Extractor(), trackType, format);
     }
 

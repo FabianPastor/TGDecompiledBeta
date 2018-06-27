@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0546C;
+import org.telegram.messenger.exoplayer2.C0554C;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 
 public final class HlsMediaPlaylist extends HlsPlaylist {
@@ -18,8 +18,7 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
     public final boolean hasEndTag;
     public final boolean hasIndependentSegmentsTag;
     public final boolean hasProgramDateTime;
-    public final Segment initializationSegment;
-    public final int mediaSequence;
+    public final long mediaSequence;
     public final int playlistType;
     public final List<Segment> segments;
     public final long startOffsetUs;
@@ -37,16 +36,19 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
         public final long durationUs;
         public final String encryptionIV;
         public final String fullSegmentEncryptionKeyUri;
+        public final boolean hasGapTag;
+        public final Segment initializationSegment;
         public final int relativeDiscontinuitySequence;
         public final long relativeStartTimeUs;
         public final String url;
 
         public Segment(String uri, long byterangeOffset, long byterangeLength) {
-            this(uri, 0, -1, C0546C.TIME_UNSET, null, null, byterangeOffset, byterangeLength);
+            this(uri, null, 0, -1, C0554C.TIME_UNSET, null, null, byterangeOffset, byterangeLength, false);
         }
 
-        public Segment(String url, long durationUs, int relativeDiscontinuitySequence, long relativeStartTimeUs, String fullSegmentEncryptionKeyUri, String encryptionIV, long byterangeOffset, long byterangeLength) {
+        public Segment(String url, Segment initializationSegment, long durationUs, int relativeDiscontinuitySequence, long relativeStartTimeUs, String fullSegmentEncryptionKeyUri, String encryptionIV, long byterangeOffset, long byterangeLength, boolean hasGapTag) {
             this.url = url;
+            this.initializationSegment = initializationSegment;
             this.durationUs = durationUs;
             this.relativeDiscontinuitySequence = relativeDiscontinuitySequence;
             this.relativeStartTimeUs = relativeStartTimeUs;
@@ -54,6 +56,7 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
             this.encryptionIV = encryptionIV;
             this.byterangeOffset = byterangeOffset;
             this.byterangeLength = byterangeLength;
+            this.hasGapTag = hasGapTag;
         }
 
         public int compareTo(Long relativeStartTimeUs) {
@@ -64,7 +67,7 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
         }
     }
 
-    public HlsMediaPlaylist(int playlistType, String baseUri, List<String> tags, long startOffsetUs, long startTimeUs, boolean hasDiscontinuitySequence, int discontinuitySequence, int mediaSequence, int version, long targetDurationUs, boolean hasIndependentSegmentsTag, boolean hasEndTag, boolean hasProgramDateTime, DrmInitData drmInitData, Segment initializationSegment, List<Segment> segments) {
+    public HlsMediaPlaylist(int playlistType, String baseUri, List<String> tags, long startOffsetUs, long startTimeUs, boolean hasDiscontinuitySequence, int discontinuitySequence, long mediaSequence, int version, long targetDurationUs, boolean hasIndependentSegmentsTag, boolean hasEndTag, boolean hasProgramDateTime, DrmInitData drmInitData, List<Segment> segments) {
         super(baseUri, tags);
         this.playlistType = playlistType;
         this.startTimeUs = startTimeUs;
@@ -77,7 +80,6 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
         this.hasEndTag = hasEndTag;
         this.hasProgramDateTime = hasProgramDateTime;
         this.drmInitData = drmInitData;
-        this.initializationSegment = initializationSegment;
         this.segments = Collections.unmodifiableList(segments);
         if (segments.isEmpty()) {
             this.durationUs = 0;
@@ -85,12 +87,16 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
             Segment last = (Segment) segments.get(segments.size() - 1);
             this.durationUs = last.relativeStartTimeUs + last.durationUs;
         }
-        if (startOffsetUs == C0546C.TIME_UNSET) {
-            startOffsetUs = C0546C.TIME_UNSET;
+        if (startOffsetUs == C0554C.TIME_UNSET) {
+            startOffsetUs = C0554C.TIME_UNSET;
         } else if (startOffsetUs < 0) {
             startOffsetUs += this.durationUs;
         }
         this.startOffsetUs = startOffsetUs;
+    }
+
+    public HlsMediaPlaylist copy(List<RenditionKey> list) {
+        return this;
     }
 
     public boolean isNewerThan(HlsMediaPlaylist other) {
@@ -113,10 +119,10 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
     }
 
     public HlsMediaPlaylist copyWith(long startTimeUs, int discontinuitySequence) {
-        return new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, startTimeUs, true, discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, this.hasEndTag, this.hasProgramDateTime, this.drmInitData, this.initializationSegment, this.segments);
+        return new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, startTimeUs, true, discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, this.hasEndTag, this.hasProgramDateTime, this.drmInitData, this.segments);
     }
 
     public HlsMediaPlaylist copyWithEndTag() {
-        return this.hasEndTag ? this : new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, this.startTimeUs, this.hasDiscontinuitySequence, this.discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, true, this.hasProgramDateTime, this.drmInitData, this.initializationSegment, this.segments);
+        return this.hasEndTag ? this : new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, this.startTimeUs, this.hasDiscontinuitySequence, this.discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, true, this.hasProgramDateTime, this.drmInitData, this.segments);
     }
 }

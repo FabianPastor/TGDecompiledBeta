@@ -2,10 +2,9 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0546C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
-import org.telegram.messenger.exoplayer2.audio.Ac3Util.Ac3SyncFrameInfo;
+import org.telegram.messenger.exoplayer2.audio.Ac3Util.SyncFrameInfo;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
@@ -127,12 +126,12 @@ public final class Ac3Reader implements ElementaryStreamReader {
 
     private void parseHeader() {
         this.headerScratchBits.setPosition(0);
-        Ac3SyncFrameInfo frameInfo = Ac3Util.parseAc3SyncframeInfo(this.headerScratchBits);
+        SyncFrameInfo frameInfo = Ac3Util.parseAc3SyncframeInfo(this.headerScratchBits);
         if (!(this.format != null && frameInfo.channelCount == this.format.channelCount && frameInfo.sampleRate == this.format.sampleRate && frameInfo.mimeType == this.format.sampleMimeType)) {
             this.format = Format.createAudioSampleFormat(this.trackFormatId, frameInfo.mimeType, null, -1, -1, frameInfo.channelCount, frameInfo.sampleRate, null, null, 0, this.language);
             this.output.format(this.format);
         }
         this.sampleSize = frameInfo.frameSize;
-        this.sampleDurationUs = (C0546C.MICROS_PER_SECOND * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
+        this.sampleDurationUs = (1000000 * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
     }
 }

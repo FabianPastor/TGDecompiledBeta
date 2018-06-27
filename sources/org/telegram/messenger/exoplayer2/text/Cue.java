@@ -13,6 +13,9 @@ public class Cue {
     public static final float DIMEN_UNSET = Float.MIN_VALUE;
     public static final int LINE_TYPE_FRACTION = 0;
     public static final int LINE_TYPE_NUMBER = 1;
+    public static final int TEXT_SIZE_TYPE_ABSOLUTE = 2;
+    public static final int TEXT_SIZE_TYPE_FRACTIONAL = 0;
+    public static final int TEXT_SIZE_TYPE_FRACTIONAL_IGNORE_PADDING = 1;
     public static final int TYPE_UNSET = Integer.MIN_VALUE;
     public final Bitmap bitmap;
     public final float bitmapHeight;
@@ -24,6 +27,8 @@ public class Cue {
     public final float size;
     public final CharSequence text;
     public final Alignment textAlignment;
+    public final float textSize;
+    public final int textSizeType;
     public final int windowColor;
     public final boolean windowColorSet;
 
@@ -35,8 +40,12 @@ public class Cue {
     public @interface LineType {
     }
 
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface TextSizeType {
+    }
+
     public Cue(Bitmap bitmap, float horizontalPosition, int horizontalPositionAnchor, float verticalPosition, int verticalPositionAnchor, float width, float height) {
-        this(null, null, bitmap, verticalPosition, 0, verticalPositionAnchor, horizontalPosition, horizontalPositionAnchor, width, height, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+        this(null, null, bitmap, verticalPosition, 0, verticalPositionAnchor, horizontalPosition, horizontalPositionAnchor, Integer.MIN_VALUE, Float.MIN_VALUE, width, height, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
     }
 
     public Cue(CharSequence text) {
@@ -44,14 +53,18 @@ public class Cue {
     }
 
     public Cue(CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size) {
-        this(text, textAlignment, line, lineType, lineAnchor, position, positionAnchor, size, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+        this(text, textAlignment, line, lineType, lineAnchor, position, positionAnchor, size, false, (int) Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+    }
+
+    public Cue(CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size, int textSizeType, float textSize) {
+        this(text, textAlignment, null, line, lineType, lineAnchor, position, positionAnchor, textSizeType, textSize, size, Float.MIN_VALUE, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
     }
 
     public Cue(CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size, boolean windowColorSet, int windowColor) {
-        this(text, textAlignment, null, line, lineType, lineAnchor, position, positionAnchor, size, Float.MIN_VALUE, windowColorSet, windowColor);
+        this(text, textAlignment, null, line, lineType, lineAnchor, position, positionAnchor, Integer.MIN_VALUE, Float.MIN_VALUE, size, Float.MIN_VALUE, windowColorSet, windowColor);
     }
 
-    private Cue(CharSequence text, Alignment textAlignment, Bitmap bitmap, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size, float bitmapHeight, boolean windowColorSet, int windowColor) {
+    private Cue(CharSequence text, Alignment textAlignment, Bitmap bitmap, float line, int lineType, int lineAnchor, float position, int positionAnchor, int textSizeType, float textSize, float size, float bitmapHeight, boolean windowColorSet, int windowColor) {
         this.text = text;
         this.textAlignment = textAlignment;
         this.bitmap = bitmap;
@@ -64,5 +77,7 @@ public class Cue {
         this.bitmapHeight = bitmapHeight;
         this.windowColorSet = windowColorSet;
         this.windowColor = windowColor;
+        this.textSizeType = textSizeType;
+        this.textSize = textSize;
     }
 }
