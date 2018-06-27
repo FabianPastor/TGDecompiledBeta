@@ -1835,10 +1835,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         } else if (id == NotificationCenter.encryptedChatUpdated) {
             updateVisibleRows(0);
         } else if (id == NotificationCenter.contactsDidLoaded) {
-            if (this.dialogsType == 0) {
-                this.dialogsAdapter.notifyDataSetChanged();
-            } else {
+            if (this.dialogsType != 0) {
                 updateVisibleRows(0);
+            } else if (this.dialogsAdapter != null) {
+                this.dialogsAdapter.notifyDataSetChanged();
             }
         } else if (id == NotificationCenter.openedChatChanged) {
             if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {

@@ -435,7 +435,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         public void run(TLObject response, TL_error error) {
-            if (((account_Password) response).has_secure_values) {
+            if (response != null && ((account_Password) response).has_secure_values) {
                 AndroidUtilities.runOnUIThread(new C17681());
             }
         }
