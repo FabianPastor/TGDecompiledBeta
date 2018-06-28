@@ -410,10 +410,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.playButton.setVisibility(0);
                 this.titleTextView.setTypeface(Typeface.DEFAULT);
                 this.titleTextView.setTextSize(1, 15.0f);
-                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
                 if (style == 0) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
+                    if (this.playbackSpeedButton != null) {
+                        this.playbackSpeedButton.setVisibility(0);
+                    }
                 } else if (style == 2) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
@@ -429,6 +431,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.titleTextView.setTextSize(1, 14.0f);
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 2.0f));
+                this.titleTextView.setPadding(0, 0, 0, 0);
+                if (this.playbackSpeedButton != null) {
+                    this.playbackSpeedButton.setVisibility(8);
+                }
             }
         }
     }
@@ -817,10 +823,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 this.visible = true;
                 setVisibility(0);
-                if (this.playbackSpeedButton != null) {
-                    this.playbackSpeedButton.setAlpha(0.0f);
-                    this.playbackSpeedButton.setEnabled(false);
-                }
             }
         } else if (this.visible) {
             this.visible = false;

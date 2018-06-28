@@ -45,9 +45,9 @@ public class ActionBarLayout extends FrameLayout {
     private static Drawable layerShadowDrawable;
     private static Paint scrimPaint;
     private AccelerateDecelerateInterpolator accelerateDecelerateInterpolator = new AccelerateDecelerateInterpolator();
-    private int[] animateEndColors;
+    private int[][] animateEndColors = new int[2][];
     private ThemeInfo animateSetThemeAfterAnimation;
-    private int[] animateStartColors;
+    private int[][] animateStartColors = new int[2][];
     private boolean animateThemeAfterAnimation;
     protected boolean animationInProgress;
     private float animationProgress;
@@ -83,8 +83,8 @@ public class ActionBarLayout extends FrameLayout {
     private int startedTrackingY;
     private String subtitleOverlayText;
     private float themeAnimationValue;
-    private ThemeDescriptionDelegate themeAnimatorDelegate;
-    private ThemeDescription[] themeAnimatorDescriptions;
+    private ThemeDescriptionDelegate[] themeAnimatorDelegate = new ThemeDescriptionDelegate[2];
+    private ThemeDescription[][] themeAnimatorDescriptions = new ThemeDescription[2][];
     private AnimatorSet themeAnimatorSet;
     private String titleOverlayText;
     private boolean transitionAnimationInProgress;
@@ -327,12 +327,15 @@ public class ActionBarLayout extends FrameLayout {
             canvas.clipRect(clipLeft, 0, clipRight, getHeight());
         }
         if ((this.inPreviewMode || this.transitionAnimationPreviewMode) && child == this.containerView) {
-            this.previewBackgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            this.previewBackgroundDrawable.draw(canvas);
-            int x = (getMeasuredWidth() - AndroidUtilities.dp(24.0f)) / 2;
-            int y = (int) ((this.containerView.getTranslationY() + ((float) this.containerView.getChildAt(0).getTop())) - ((float) AndroidUtilities.dp((float) ((VERSION.SDK_INT < 21 ? 20 : 0) + 12))));
-            Theme.moveUpDrawable.setBounds(x, y, AndroidUtilities.dp(24.0f) + x, AndroidUtilities.dp(24.0f) + y);
-            Theme.moveUpDrawable.draw(canvas);
+            View view = this.containerView.getChildAt(0);
+            if (view != null) {
+                this.previewBackgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                this.previewBackgroundDrawable.draw(canvas);
+                int x = (getMeasuredWidth() - AndroidUtilities.dp(24.0f)) / 2;
+                int y = (int) ((this.containerView.getTranslationY() + ((float) view.getTop())) - ((float) AndroidUtilities.dp((float) ((VERSION.SDK_INT < 21 ? 20 : 0) + 12))));
+                Theme.moveUpDrawable.setBounds(x, y, AndroidUtilities.dp(24.0f) + x, AndroidUtilities.dp(24.0f) + y);
+                Theme.moveUpDrawable.draw(canvas);
+            }
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
         canvas.restoreToCount(restoreCount);
@@ -1227,20 +1230,22 @@ public class ActionBarLayout extends FrameLayout {
     @Keep
     public void setThemeAnimationValue(float value) {
         this.themeAnimationValue = value;
-        if (this.themeAnimatorDescriptions != null) {
-            for (int i = 0; i < this.themeAnimatorDescriptions.length; i++) {
-                int rE = Color.red(this.animateEndColors[i]);
-                int gE = Color.green(this.animateEndColors[i]);
-                int bE = Color.blue(this.animateEndColors[i]);
-                int aE = Color.alpha(this.animateEndColors[i]);
-                int rS = Color.red(this.animateStartColors[i]);
-                int gS = Color.green(this.animateStartColors[i]);
-                int bS = Color.blue(this.animateStartColors[i]);
-                int aS = Color.alpha(this.animateStartColors[i]);
-                this.themeAnimatorDescriptions[i].setColor(Color.argb(Math.min(255, (int) (((float) aS) + (((float) (aE - aS)) * value))), Math.min(255, (int) (((float) rS) + (((float) (rE - rS)) * value))), Math.min(255, (int) (((float) gS) + (((float) (gE - gS)) * value))), Math.min(255, (int) (((float) bS) + (((float) (bE - bS)) * value)))), false, false);
-            }
-            if (this.themeAnimatorDelegate != null) {
-                this.themeAnimatorDelegate.didSetColor();
+        for (int j = 0; j < 2; j++) {
+            if (this.themeAnimatorDescriptions[j] != null) {
+                for (int i = 0; i < this.themeAnimatorDescriptions[j].length; i++) {
+                    int rE = Color.red(this.animateEndColors[j][i]);
+                    int gE = Color.green(this.animateEndColors[j][i]);
+                    int bE = Color.blue(this.animateEndColors[j][i]);
+                    int aE = Color.alpha(this.animateEndColors[j][i]);
+                    int rS = Color.red(this.animateStartColors[j][i]);
+                    int gS = Color.green(this.animateStartColors[j][i]);
+                    int bS = Color.blue(this.animateStartColors[j][i]);
+                    int aS = Color.alpha(this.animateStartColors[j][i]);
+                    this.themeAnimatorDescriptions[j][i].setColor(Color.argb(Math.min(255, (int) (((float) aS) + (((float) (aE - aS)) * value))), Math.min(255, (int) (((float) rS) + (((float) (rE - rS)) * value))), Math.min(255, (int) (((float) gS) + (((float) (gE - gS)) * value))), Math.min(255, (int) (((float) bS) + (((float) (bE - bS)) * value)))), false, false);
+                }
+                if (this.themeAnimatorDelegate[j] != null) {
+                    this.themeAnimatorDelegate[j].didSetColor();
+                }
             }
         }
     }
@@ -1251,6 +1256,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void animateThemedValues(ThemeInfo theme) {
+        int i = 1;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = theme;
@@ -1260,48 +1266,76 @@ public class ActionBarLayout extends FrameLayout {
             this.themeAnimatorSet.cancel();
             this.themeAnimatorSet = null;
         }
-        BaseFragment fragment = getLastFragment();
-        if (fragment != null) {
+        boolean startAnimation = false;
+        for (int i2 = 0; i2 < 2; i2++) {
+            BaseFragment fragment;
             int a;
-            this.themeAnimatorDescriptions = fragment.getThemeDescriptions();
-            this.animateStartColors = new int[this.themeAnimatorDescriptions.length];
-            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
-                this.animateStartColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
-                ThemeDescriptionDelegate delegate = this.themeAnimatorDescriptions[a].setDelegateDisabled();
-                if (this.themeAnimatorDelegate == null && delegate != null) {
-                    this.themeAnimatorDelegate = delegate;
+            if (i2 == 0) {
+                fragment = getLastFragment();
+            } else if (this.inPreviewMode || this.transitionAnimationPreviewMode || this.fragmentsStack.size() > 1) {
+                fragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
+            } else {
+                this.themeAnimatorDescriptions[i2] = null;
+                this.animateStartColors[i2] = null;
+                this.animateEndColors[i2] = null;
+                this.themeAnimatorDelegate[i2] = null;
+            }
+            if (fragment != null) {
+                startAnimation = true;
+                this.themeAnimatorDescriptions[i2] = fragment.getThemeDescriptions();
+                this.animateStartColors[i2] = new int[this.themeAnimatorDescriptions[i2].length];
+                for (a = 0; a < this.themeAnimatorDescriptions[i2].length; a++) {
+                    this.animateStartColors[i2][a] = this.themeAnimatorDescriptions[i2][a].getSetColor();
+                    ThemeDescriptionDelegate delegate = this.themeAnimatorDescriptions[i2][a].setDelegateDisabled();
+                    if (this.themeAnimatorDelegate[i2] == null && delegate != null) {
+                        this.themeAnimatorDelegate[i2] = delegate;
+                    }
+                }
+                if (i2 == 0) {
+                    Theme.applyTheme(theme, true);
+                }
+                this.animateEndColors[i2] = new int[this.themeAnimatorDescriptions[i2].length];
+                for (a = 0; a < this.themeAnimatorDescriptions[i2].length; a++) {
+                    this.animateEndColors[i2][a] = this.themeAnimatorDescriptions[i2][a].getSetColor();
                 }
             }
-            Theme.applyTheme(theme, true);
-            this.animateEndColors = new int[this.themeAnimatorDescriptions.length];
-            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
-                this.animateEndColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
-            }
+        }
+        if (startAnimation) {
             this.themeAnimatorSet = new AnimatorSet();
             this.themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
-                        ActionBarLayout.this.themeAnimatorDescriptions = null;
-                        ActionBarLayout.this.themeAnimatorDelegate = null;
+                        for (int a = 0; a < 2; a++) {
+                            ActionBarLayout.this.themeAnimatorDescriptions[a] = null;
+                            ActionBarLayout.this.animateStartColors[a] = null;
+                            ActionBarLayout.this.animateEndColors[a] = null;
+                            ActionBarLayout.this.themeAnimatorDelegate[a] = null;
+                        }
                         ActionBarLayout.this.themeAnimatorSet = null;
-                        ActionBarLayout.this.animateStartColors = null;
-                        ActionBarLayout.this.animateEndColors = null;
                     }
                 }
 
                 public void onAnimationCancel(Animator animation) {
                     if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
-                        ActionBarLayout.this.themeAnimatorDescriptions = null;
+                        for (int a = 0; a < 2; a++) {
+                            ActionBarLayout.this.themeAnimatorDescriptions[a] = null;
+                            ActionBarLayout.this.animateStartColors[a] = null;
+                            ActionBarLayout.this.animateEndColors[a] = null;
+                            ActionBarLayout.this.themeAnimatorDelegate[a] = null;
+                        }
                         ActionBarLayout.this.themeAnimatorSet = null;
-                        ActionBarLayout.this.animateStartColors = null;
-                        ActionBarLayout.this.animateEndColors = null;
                     }
                 }
             });
             this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
             this.themeAnimatorSet.setDuration(200);
             this.themeAnimatorSet.start();
-            for (a = 0; a < this.fragmentsStack.size() - 1; a++) {
+            int size = this.fragmentsStack.size();
+            if (this.inPreviewMode || this.transitionAnimationPreviewMode) {
+                i = 2;
+            }
+            int count = size - i;
+            for (a = 0; a < count; a++) {
                 fragment = (BaseFragment) this.fragmentsStack.get(a);
                 fragment.clearViews();
                 fragment.setParentLayout(this);

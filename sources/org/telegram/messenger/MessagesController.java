@@ -5709,7 +5709,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     AndroidUtilities.runOnUIThread(new C03691());
                 }
             });
-            if (chat.ttl > 0) {
+            if (chat != null && chat.ttl > 0) {
                 int serverTime = Math.max(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime(), maxDate);
                 MessagesStorage.getInstance(this.currentAccount).createTaskForSecretChat(chat.id, serverTime, serverTime, 0, null);
             }

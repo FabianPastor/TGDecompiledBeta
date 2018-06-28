@@ -481,7 +481,9 @@ public class PhonebookShareActivity extends BaseFragment {
 
         public void invalidate() {
             super.invalidate();
-            this.checkBox.invalidate();
+            if (this.checkBox != null) {
+                this.checkBox.invalidate();
+            }
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

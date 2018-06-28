@@ -27,6 +27,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build.VERSION;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
@@ -3706,6 +3707,9 @@ public class DataQuery {
     public CharSequence substring(CharSequence source, int start, int end) {
         if (source instanceof SpannableStringBuilder) {
             return ((SpannableStringBuilder) source).subSequence(start, end);
+        }
+        if (source instanceof SpannedString) {
+            return ((SpannedString) source).subSequence(start, end);
         }
         return TextUtils.substring(source, start, end);
     }

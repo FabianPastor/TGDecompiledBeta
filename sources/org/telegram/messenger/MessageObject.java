@@ -3870,36 +3870,38 @@ public class MessageObject {
         } else {
             document = this.messageOwner.media.document;
         }
-        int a = 0;
-        while (a < document.attributes.size()) {
-            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-            if (attribute instanceof TL_documentAttributeAudio) {
-                if (!attribute.voice) {
-                    String title = attribute.title;
-                    if (title != null && title.length() != 0) {
+        if (document != null) {
+            int a = 0;
+            while (a < document.attributes.size()) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (attribute instanceof TL_documentAttributeAudio) {
+                    if (!attribute.voice) {
+                        String title = attribute.title;
+                        if (title != null && title.length() != 0) {
+                            return title;
+                        }
+                        title = FileLoader.getDocumentFileName(document);
+                        if (TextUtils.isEmpty(title) && unknown) {
+                            return LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
+                        }
                         return title;
+                    } else if (unknown) {
+                        return LocaleController.formatDateAudio((long) this.messageOwner.date);
+                    } else {
+                        return null;
                     }
-                    title = FileLoader.getDocumentFileName(document);
-                    if (TextUtils.isEmpty(title) && unknown) {
-                        return LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
-                    }
-                    return title;
-                } else if (unknown) {
+                } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
                     return LocaleController.formatDateAudio((long) this.messageOwner.date);
                 } else {
-                    return null;
+                    a++;
                 }
-            } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
-                return LocaleController.formatDateAudio((long) this.messageOwner.date);
-            } else {
-                a++;
+            }
+            String fileName = FileLoader.getDocumentFileName(document);
+            if (!TextUtils.isEmpty(fileName)) {
+                return fileName;
             }
         }
-        String fileName = FileLoader.getDocumentFileName(document);
-        if (TextUtils.isEmpty(fileName)) {
-            fileName = LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
-        }
-        return fileName;
+        return LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
     }
 
     public int getDuration() {
@@ -3932,47 +3934,49 @@ public class MessageObject {
         } else {
             document = this.messageOwner.media.document;
         }
-        boolean isVoice = false;
-        for (int a = 0; a < document.attributes.size(); a++) {
-            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-            if (attribute instanceof TL_documentAttributeAudio) {
-                if (attribute.voice) {
-                    isVoice = true;
-                } else {
-                    String performer = attribute.performer;
-                    if (TextUtils.isEmpty(performer) && unknown) {
-                        return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
+        if (document != null) {
+            boolean isVoice = false;
+            for (int a = 0; a < document.attributes.size(); a++) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (attribute instanceof TL_documentAttributeAudio) {
+                    if (attribute.voice) {
+                        isVoice = true;
+                    } else {
+                        String performer = attribute.performer;
+                        if (TextUtils.isEmpty(performer) && unknown) {
+                            return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
+                        }
+                        return performer;
                     }
-                    return performer;
+                } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
+                    isVoice = true;
                 }
-            } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
-                isVoice = true;
-            }
-            if (isVoice) {
-                if (!unknown) {
-                    return null;
-                }
-                if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId())) {
-                    return LocaleController.getString("FromYou", R.string.FromYou);
-                }
-                User user = null;
-                Chat chat = null;
-                if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0) {
-                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
-                } else if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id != 0) {
-                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
-                } else if (this.messageOwner.from_id < 0) {
-                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-this.messageOwner.from_id));
-                } else if (this.messageOwner.from_id != 0 || this.messageOwner.to_id.channel_id == 0) {
-                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
-                } else {
-                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
-                }
-                if (user != null) {
-                    return UserObject.getUserName(user);
-                }
-                if (chat != null) {
-                    return chat.title;
+                if (isVoice) {
+                    if (!unknown) {
+                        return null;
+                    }
+                    if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId())) {
+                        return LocaleController.getString("FromYou", R.string.FromYou);
+                    }
+                    User user = null;
+                    Chat chat = null;
+                    if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0) {
+                        chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
+                    } else if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id != 0) {
+                        user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
+                    } else if (this.messageOwner.from_id < 0) {
+                        chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-this.messageOwner.from_id));
+                    } else if (this.messageOwner.from_id != 0 || this.messageOwner.to_id.channel_id == 0) {
+                        user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
+                    } else {
+                        chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
+                    }
+                    if (user != null) {
+                        return UserObject.getUserName(user);
+                    }
+                    if (chat != null) {
+                        return chat.title;
+                    }
                 }
             }
         }
