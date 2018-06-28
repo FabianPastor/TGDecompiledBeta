@@ -795,6 +795,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             i = this.rowCount;
             this.rowCount = i + 1;
             this.passportRow = i;
+        } else {
+            this.passportRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
