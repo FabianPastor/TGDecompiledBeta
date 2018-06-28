@@ -628,7 +628,13 @@ public class PhonebookShareActivity extends BaseFragment {
                     if (i == 0) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
-                            Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+                            if (item.type != 0 && item.type != 1) {
+                                if (item.type == 3) {
+                                    Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
+                                } else {
+                                    Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+                                }
+                            }
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }

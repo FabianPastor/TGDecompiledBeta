@@ -47,7 +47,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -544,11 +546,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
             public void didPressedInstantButton(ChatMessageCell cell, int type) {
                 MessageObject messageObject = cell.getMessageObject();
-                if (type != 0) {
+                if (type == 0) {
+                    if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
+                        ArticleViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this);
+                        ArticleViewer.getInstance().open(messageObject);
+                    }
+                } else if (type == 5) {
+                    ChannelAdminLogActivity.this.openVCard(messageObject.messageOwner.media.vcard, messageObject.messageOwner.media.first_name, messageObject.messageOwner.media.last_name);
+                } else if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), messageObject.messageOwner.media.webpage.url);
-                } else if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
-                    ArticleViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this);
-                    ArticleViewer.getInstance().open(messageObject);
                 }
             }
 
@@ -2233,6 +2239,20 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         super.onPause();
         this.paused = true;
         this.wasPaused = true;
+    }
+
+    public void openVCard(String vcard, String first_name, String last_name) {
+        try {
+            File f = new File(FileLoader.getDirectory(4), "sharing/");
+            f.mkdirs();
+            File f2 = new File(f, "vcard.vcf");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f2));
+            writer.write(vcard);
+            writer.close();
+            presentFragment(new PhonebookShareActivity(null, null, f2, ContactsController.formatName(first_name, last_name)));
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+        }
     }
 
     private void fixLayout() {

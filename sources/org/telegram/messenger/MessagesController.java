@@ -3194,7 +3194,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (MessagesController.this.proxyDialog != null) {
                             if (MessagesController.this.proxyDialog.id < 0) {
                                 Chat chat = MessagesController.this.getChat(Integer.valueOf(-((int) MessagesController.this.proxyDialog.id)));
-                                if (chat.left || chat.kicked || chat.restricted) {
+                                if (chat == null || chat.left || chat.kicked || chat.restricted) {
                                     MessagesController.this.dialogs_dict.remove(MessagesController.this.proxyDialog.id);
                                     MessagesController.this.dialogs.remove(MessagesController.this.proxyDialog);
                                 }
@@ -3219,7 +3219,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (MessagesController.this.proxyDialog != null) {
                             if (MessagesController.this.proxyDialog.id < 0) {
                                 Chat chat = MessagesController.this.getChat(Integer.valueOf(-((int) MessagesController.this.proxyDialog.id)));
-                                if (chat.left || chat.kicked || chat.restricted) {
+                                if (chat == null || chat.left || chat.kicked || chat.restricted) {
                                     MessagesController.this.dialogs_dict.remove(MessagesController.this.proxyDialog.id);
                                     MessagesController.this.dialogs.remove(MessagesController.this.proxyDialog);
                                 }
@@ -3283,7 +3283,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                                 if (MessagesController.this.proxyDialog != null) {
                                                     if (MessagesController.this.proxyDialog.id < 0) {
                                                         Chat chat = MessagesController.this.getChat(Integer.valueOf(-((int) MessagesController.this.proxyDialog.id)));
-                                                        if (chat.left || chat.kicked || chat.restricted) {
+                                                        if (chat == null || chat.left || chat.kicked || chat.restricted) {
                                                             MessagesController.this.dialogs_dict.remove(MessagesController.this.proxyDialog.id);
                                                             MessagesController.this.dialogs.remove(MessagesController.this.proxyDialog);
                                                         }

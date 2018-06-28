@@ -472,6 +472,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return false;
             }
             int high_id;
+            Chat chat;
             if (BuildVars.ALLOW_CHAT_PREVIEW && !AndroidUtilities.isTablet() && !DialogsActivity.this.onlySelect && (view instanceof DialogCell)) {
                 DialogCell cell = (DialogCell) view;
                 if (cell.isPointInsideAvatar(x, y)) {
@@ -479,6 +480,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     Bundle args = new Bundle();
                     int lower_part = (int) dialog_id;
                     high_id = (int) (dialog_id >> 32);
+                    int message_id = cell.getMessageId();
                     if (lower_part == 0) {
                         args.putInt("enc_id", high_id);
                     } else if (high_id == 1) {
@@ -486,7 +488,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     } else if (lower_part > 0) {
                         args.putInt("user_id", lower_part);
                     } else if (lower_part < 0) {
+                        if (message_id != 0) {
+                            chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_part));
+                            if (!(chat == null || chat.migrated_to == null)) {
+                                args.putInt("migrated_to", lower_part);
+                                lower_part = -chat.migrated_to.channel_id;
+                            }
+                        }
                         args.putInt("chat_id", -lower_part);
+                    }
+                    if (message_id != 0) {
+                        args.putInt("message_id", message_id);
                     }
                     if (DialogsActivity.this.searchString != null) {
                         if (MessagesController.getInstance(DialogsActivity.this.currentAccount).checkCanOpenChat(args, DialogsActivity.this)) {
@@ -517,7 +529,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     String string;
                     if (DialogObject.isChannel(dialog)) {
                         CharSequence[] items;
-                        final Chat chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
+                        chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                         int[] icons = new int[4];
                         icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
                         icons[1] = R.drawable.chats_clear;

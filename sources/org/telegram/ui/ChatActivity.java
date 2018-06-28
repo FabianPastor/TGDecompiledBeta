@@ -6818,6 +6818,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 }
                 this.pendingLinkSearchString = null;
+                this.foundUrls = null;
                 showFieldPanelForWebPage(false, this.foundWebPage, false);
             }
             final MessagesController messagesController = MessagesController.getInstance(this.currentAccount);
@@ -7332,8 +7333,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.foundWebPage != null) {
                     this.foundWebPage = null;
                     this.chatActivityEnterView.setWebPage(null, !cancel);
-                    if (!(webPage == null || (this.replyingMessageObject == null && this.forwardingMessages == null))) {
-                        showFieldPanel(true, this.replyingMessageObject, null, this.forwardingMessages, null, false);
+                    if (!(webPage == null || (this.replyingMessageObject == null && this.forwardingMessages == null && this.editingMessageObject == null))) {
+                        showFieldPanel(true, this.replyingMessageObject, this.editingMessageObject, this.forwardingMessages, null, false);
                         return;
                     }
                 }

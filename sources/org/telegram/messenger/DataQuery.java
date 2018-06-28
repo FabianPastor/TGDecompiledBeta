@@ -3883,11 +3883,15 @@ public class DataQuery {
                             if (entities == null) {
                                 entities = new ArrayList();
                             }
-                            charSequenceArr = new CharSequence[3];
-                            charSequenceArr[0] = substring(message[0], 0, start);
-                            charSequenceArr[1] = substring(message[0], start + 2, index);
-                            charSequenceArr[2] = substring(message[0], index + 2, message[0].length());
-                            message[0] = TextUtils.concat(charSequenceArr);
+                            try {
+                                charSequenceArr = new CharSequence[3];
+                                charSequenceArr[0] = substring(message[0], 0, start);
+                                charSequenceArr[1] = substring(message[0], start + 2, index);
+                                charSequenceArr[2] = substring(message[0], index + 2, message[0].length());
+                                message[0] = TextUtils.concat(charSequenceArr);
+                            } catch (Exception e) {
+                                message[0] = substring(message[0], 0, start).toString() + substring(message[0], start + 2, index).toString() + substring(message[0], index + 2, message[0].length()).toString();
+                            }
                             if (c == 0) {
                                 entity = new TL_messageEntityBold();
                             } else {

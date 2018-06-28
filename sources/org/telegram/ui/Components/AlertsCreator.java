@@ -260,24 +260,31 @@ public class AlertsCreator {
                                                     }
                                                 }
                                             } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                                showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                            } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                                showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                            } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                                showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                            } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                                showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
-                                            } else if (error.code != -1000) {
-                                                showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                                return showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                            } else {
+                                                if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                    return showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                                }
+                                                if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                    return showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                                }
+                                                if (error.text.startsWith("FLOOD_WAIT")) {
+                                                    return showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                                }
+                                                if (error.code != -1000) {
+                                                    return showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                                }
                                             }
                                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID") || error.text.contains("CODE_INVALID") || error.text.contains("CODE_EMPTY")) {
-                                            showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                        } else if (error.text.contains("PHONE_CODE_EXPIRED") || error.text.contains("EMAIL_VERIFY_EXPIRED")) {
-                                            showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                            showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            return showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
                                         } else {
-                                            showSimpleAlert(fragment, error.text);
+                                            if (error.text.contains("PHONE_CODE_EXPIRED") || error.text.contains("EMAIL_VERIFY_EXPIRED")) {
+                                                return showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                            }
+                                            if (error.text.startsWith("FLOOD_WAIT")) {
+                                                return showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            }
+                                            return showSimpleAlert(fragment, error.text);
                                         }
                                     } else if (!(fragment == null || fragment.getParentActivity() == null)) {
                                         Toast.makeText(fragment.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
@@ -403,7 +410,7 @@ public class AlertsCreator {
         }
     }
 
-    public static Builder createDatePickerDialog(Context context, int minYear, int maxYear, String title, final boolean checkMinDate, final DatePickerDelegate datePickerDelegate) {
+    public static Builder createDatePickerDialog(Context context, int minYear, int maxYear, String title, final boolean checkMinDate, DatePickerDelegate datePickerDelegate) {
         if (context == null) {
             return null;
         }
@@ -463,9 +470,14 @@ public class AlertsCreator {
         Builder builder = new Builder(context);
         builder.setTitle(title);
         builder.setView(linearLayout);
+        final boolean z = checkMinDate;
+        final DatePickerDelegate datePickerDelegate2 = datePickerDelegate;
         builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                datePickerDelegate.didSelectDate(yearPicker.getValue(), monthPicker.getValue(), dayPicker.getValue());
+                if (z) {
+                    AlertsCreator.checkPickerDate(dayPicker, monthPicker, yearPicker);
+                }
+                datePickerDelegate2.didSelectDate(yearPicker.getValue(), monthPicker.getValue(), dayPicker.getValue());
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

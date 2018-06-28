@@ -97,6 +97,7 @@ public class DialogCell extends BaseCell {
     private int mentionLeft;
     private int mentionWidth;
     private MessageObject message;
+    private int messageId;
     private StaticLayout messageLayout;
     private int messageLeft;
     private int messageTop = AndroidUtilities.dp(40.0f);
@@ -145,15 +146,18 @@ public class DialogCell extends BaseCell {
         this.isDialogCell = true;
         this.index = i;
         this.dialogsType = type;
+        this.messageId = 0;
         update(0);
     }
 
     public void setDialog(CustomDialog dialog) {
         this.customDialog = dialog;
+        this.messageId = 0;
         update(0);
     }
 
     public void setDialog(long dialog_id, MessageObject messageObject, int date) {
+        int id;
         boolean z;
         this.currentDialogId = dialog_id;
         this.message = messageObject;
@@ -162,6 +166,12 @@ public class DialogCell extends BaseCell {
         this.currentEditDate = messageObject != null ? messageObject.messageOwner.edit_date : 0;
         this.unreadCount = 0;
         this.markUnread = false;
+        if (messageObject != null) {
+            id = messageObject.getId();
+        } else {
+            id = 0;
+        }
+        this.messageId = id;
         this.mentionCount = 0;
         if (messageObject == null || !messageObject.isUnread()) {
             z = false;
@@ -177,6 +187,10 @@ public class DialogCell extends BaseCell {
 
     public long getDialogId() {
         return this.currentDialogId;
+    }
+
+    public int getMessageId() {
+        return this.messageId;
     }
 
     protected void onDetachedFromWindow() {

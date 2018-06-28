@@ -474,7 +474,7 @@ public class ActionBarLayout extends FrameLayout {
                         this.velocityTracker = VelocityTracker.obtain();
                     }
                     this.velocityTracker.computeCurrentVelocity(1000);
-                    if (!this.startedTracking && ((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).swipeBackEnabled) {
+                    if (!(this.inPreviewMode || this.transitionAnimationPreviewMode || this.startedTracking || !((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).swipeBackEnabled)) {
                         velX = this.velocityTracker.getXVelocity();
                         float velY = this.velocityTracker.getYVelocity();
                         if (velX >= 3500.0f && velX > Math.abs(velY)) {
@@ -722,7 +722,7 @@ public class ActionBarLayout extends FrameLayout {
         if (this.parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = !forceWithoutAnimation && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+        boolean needAnimation = preview || (!forceWithoutAnimation && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true));
         final BaseFragment currentFragment = !this.fragmentsStack.isEmpty() ? (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1) : null;
         fragment.setParentLayout(this);
         View fragmentView = fragment.fragmentView;

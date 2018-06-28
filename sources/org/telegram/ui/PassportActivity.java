@@ -1075,7 +1075,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 PassportActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response, true);
                             } else {
                                 AlertDialog dialog = (AlertDialog) AlertsCreator.processError(PassportActivity.this.currentAccount, error, PassportActivity.this, req, new Object[0]);
-                                if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                if (dialog != null && error.text.contains("PHONE_CODE_EXPIRED")) {
                                     dialog.setPositiveButtonListener(new C16641());
                                 }
                             }
@@ -2925,7 +2925,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             });
             this.bottomCell = new TextInfoPrivacyCell(context);
             this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-            this.bottomCell.setText(LocaleController.getString("PassportPhoneUseSameInfo", R.string.PassportPhoneUseSameInfo));
+            this.bottomCell.setText(LocaleController.getString("PassportPhoneUseSameEmailInfo", R.string.PassportPhoneUseSameEmailInfo));
             this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
         }
         this.inputFields = new EditTextBoldCursor[1];
@@ -5872,7 +5872,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
         boolean simcardAvailable = (tm.getSimState() == 1 || tm.getPhoneType() == 0) ? false : true;
         boolean allowCall = true;
-        if (VERSION.SDK_INT >= 23 && simcardAvailable) {
+        if (getParentActivity() != null && VERSION.SDK_INT >= 23 && simcardAvailable) {
             allowCall = getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
             boolean allowSms = getParentActivity().checkSelfPermission("android.permission.RECEIVE_SMS") == 0;
             if (checkPermissions) {

@@ -76,6 +76,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         editText.setHintText(LocaleController.getString("URL", R.string.URL));
         editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
         editText.setTransformHintToHeader(true);
         editText.setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
         editText.setImeOptions(6);
