@@ -1677,7 +1677,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
                 if (message != null && message.messageOwner != null && message.messageOwner.media_unread && message.messageOwner.mentioned) {
-                    if (!(message.isVoice() || message.isRoundVideo())) {
+                    if (!(ChatActivity.this.inPreviewMode || message.isVoice() || message.isRoundVideo())) {
                         ChatActivity.this.newMentionsCount = ChatActivity.this.newMentionsCount - 1;
                         if (ChatActivity.this.newMentionsCount <= 0) {
                             ChatActivity.this.newMentionsCount = 0;
@@ -1689,7 +1689,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         MessagesController.getInstance(ChatActivity.this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(ChatActivity.this.currentChat) ? ChatActivity.this.currentChat.id : 0, ChatActivity.this.dialog_id);
                         message.setContentIsRead();
                     }
-                    if (view instanceof ChatMessageCell) {
+                    if (!(view instanceof ChatMessageCell)) {
+                        return;
+                    }
+                    if (ChatActivity.this.inPreviewMode) {
+                        ((ChatMessageCell) view).setHighlighted(true);
+                    } else {
                         ((ChatMessageCell) view).setHighlightedAnimated();
                     }
                 }
@@ -1764,10 +1769,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         return true;
                     }
                 });
-                if (ChatActivity.this.highlightMessageId == ConnectionsManager.DEFAULT_DATACENTER_ID || messageCell.getMessageObject().getId() != ChatActivity.this.highlightMessageId) {
-                    z = false;
+                if (!ChatActivity.this.inPreviewMode || !messageCell.isHighlighted()) {
+                    if (ChatActivity.this.highlightMessageId == ConnectionsManager.DEFAULT_DATACENTER_ID || messageCell.getMessageObject().getId() != ChatActivity.this.highlightMessageId) {
+                        z = false;
+                    }
+                    messageCell.setHighlighted(z);
                 }
-                messageCell.setHighlighted(z);
             }
         }
 
@@ -11554,37 +11561,48 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     protected void setInPreviewMode(boolean value) {
-        float f = 1.0f;
         super.setInPreviewMode(value);
         if (this.avatarContainer != null) {
-            float f2;
             this.avatarContainer.setOccupyStatusBar(!value);
-            ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
-            if (value) {
-                f2 = 0.0f;
-            } else {
-                f2 = 56.0f;
-            }
-            chatAvatarContainer.setLayoutParams(LayoutHelper.createFrame(-2, -1.0f, 51, f2, 0.0f, 40.0f, 0.0f));
+            this.avatarContainer.setLayoutParams(LayoutHelper.createFrame(-2, -1.0f, 51, !value ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
         }
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.setVisibility(!value ? 0 : 4);
         }
         if (this.actionBar != null) {
-            float f3;
             this.actionBar.setBackButtonDrawable(!value ? new BackDrawable(false) : null);
-            ActionBarMenuItem actionBarMenuItem = this.headerItem;
-            if (value) {
-                f3 = 0.0f;
-            } else {
-                f3 = 1.0f;
+            this.headerItem.setAlpha(!value ? 1.0f : 0.0f);
+            this.attachItem.setAlpha(!value ? 1.0f : 0.0f);
+        }
+        if (this.chatListView != null) {
+            int count = this.chatListView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View view = this.chatListView.getChildAt(a);
+                MessageObject message = null;
+                if (view instanceof ChatMessageCell) {
+                    message = ((ChatMessageCell) view).getMessageObject();
+                } else if (view instanceof ChatActionCell) {
+                    message = ((ChatActionCell) view).getMessageObject();
+                }
+                if (message != null && message.messageOwner != null && message.messageOwner.media_unread && message.messageOwner.mentioned) {
+                    if (!(message.isVoice() || message.isRoundVideo())) {
+                        this.newMentionsCount--;
+                        if (this.newMentionsCount <= 0) {
+                            this.newMentionsCount = 0;
+                            this.hasAllMentionsLocal = true;
+                            showMentiondownButton(false, true);
+                        } else {
+                            this.mentiondownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(this.newMentionsCount)}));
+                        }
+                        MessagesController.getInstance(this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(this.currentChat) ? this.currentChat.id : 0, this.dialog_id);
+                        message.setContentIsRead();
+                    }
+                    if (view instanceof ChatMessageCell) {
+                        ((ChatMessageCell) view).setHighlighted(false);
+                        ((ChatMessageCell) view).setHighlightedAnimated();
+                    }
+                }
             }
-            actionBarMenuItem.setAlpha(f3);
-            ActionBarMenuItem actionBarMenuItem2 = this.attachItem;
-            if (value) {
-                f = 0.0f;
-            }
-            actionBarMenuItem2.setAlpha(f);
         }
         updateBottomOverlay();
     }

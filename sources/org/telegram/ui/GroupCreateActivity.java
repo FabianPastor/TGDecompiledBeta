@@ -115,9 +115,20 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
-    /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
-    class C18755 implements Callback {
-        C18755() {
+    /* renamed from: org.telegram.ui.GroupCreateActivity$4 */
+    class C18744 implements OnClickListener {
+        C18744() {
+        }
+
+        public void onClick(View v) {
+            GroupCreateActivity.this.editText.requestFocus();
+            AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
+    class C18766 implements Callback {
+        C18766() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -136,9 +147,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
-    /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C18766 implements OnEditorActionListener {
-        C18766() {
+    /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
+    class C18777 implements OnEditorActionListener {
+        C18777() {
         }
 
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -146,11 +157,11 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
-    /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C18777 implements OnKeyListener {
+    /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
+    class C18788 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C18777() {
+        C18788() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -168,9 +179,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
-    /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C18788 implements TextWatcher {
-        C18788() {
+    /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
+    class C18799 implements TextWatcher {
+        C18799() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -192,65 +203,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 return;
             }
             GroupCreateActivity.this.closeSearch();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C18799 implements OnItemClickListener {
-        C18799() {
-        }
-
-        public void onItemClick(View view, int position) {
-            boolean z = false;
-            if (view instanceof GroupCreateUserCell) {
-                GroupCreateUserCell cell = (GroupCreateUserCell) view;
-                User user = cell.getUser();
-                if (user != null) {
-                    boolean exists;
-                    if (GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0) {
-                        exists = true;
-                    } else {
-                        exists = false;
-                    }
-                    if (exists) {
-                        GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(user.id));
-                    } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
-                        return;
-                    } else {
-                        if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
-                            Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                            builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0500R.string.SoftUserLimitAlert));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
-                            GroupCreateActivity.this.showDialog(builder.create());
-                            return;
-                        }
-                        boolean z2;
-                        MessagesController instance = MessagesController.getInstance(GroupCreateActivity.this.currentAccount);
-                        if (GroupCreateActivity.this.searching) {
-                            z2 = false;
-                        } else {
-                            z2 = true;
-                        }
-                        instance.putUser(user, z2);
-                        GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
-                        GroupCreateActivity.this.spansContainer.addSpan(span);
-                        span.setOnClickListener(GroupCreateActivity.this);
-                    }
-                    GroupCreateActivity.this.updateHint();
-                    if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
-                        AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
-                    } else {
-                        if (!exists) {
-                            z = true;
-                        }
-                        cell.setChecked(z, true);
-                    }
-                    if (GroupCreateActivity.this.editText.length() > 0) {
-                        GroupCreateActivity.this.editText.setText(null);
-                    }
-                }
-            }
         }
     }
 
@@ -835,6 +787,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         frameLayout.addView(this.scrollView);
         this.spansContainer = new SpansContainer(context);
         this.scrollView.addView(this.spansContainer, LayoutHelper.createFrame(-1, -2.0f));
+        this.spansContainer.setOnClickListener(new C18744());
         this.editText = new EditTextBoldCursor(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 if (GroupCreateActivity.this.currentDeletingSpan != null) {
@@ -874,10 +827,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", C0500R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C18755());
-        this.editText.setOnEditorActionListener(new C18766());
-        this.editText.setOnKeyListener(new C18777());
-        this.editText.addTextChangedListener(new C18788());
+        this.editText.setCustomSelectionActionModeCallback(new C18766());
+        this.editText.setOnEditorActionListener(new C18777());
+        this.editText.setOnKeyListener(new C18788());
+        this.editText.addTextChangedListener(new C18799());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -907,7 +860,60 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.itemDecoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C18799());
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
+                boolean z = false;
+                if (view instanceof GroupCreateUserCell) {
+                    GroupCreateUserCell cell = (GroupCreateUserCell) view;
+                    User user = cell.getUser();
+                    if (user != null) {
+                        boolean exists;
+                        if (GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0) {
+                            exists = true;
+                        } else {
+                            exists = false;
+                        }
+                        if (exists) {
+                            GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(user.id));
+                        } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
+                            return;
+                        } else {
+                            if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
+                                Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
+                                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                                builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0500R.string.SoftUserLimitAlert));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                GroupCreateActivity.this.showDialog(builder.create());
+                                return;
+                            }
+                            boolean z2;
+                            MessagesController instance = MessagesController.getInstance(GroupCreateActivity.this.currentAccount);
+                            if (GroupCreateActivity.this.searching) {
+                                z2 = false;
+                            } else {
+                                z2 = true;
+                            }
+                            instance.putUser(user, z2);
+                            GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
+                            GroupCreateActivity.this.spansContainer.addSpan(span);
+                            span.setOnClickListener(GroupCreateActivity.this);
+                        }
+                        GroupCreateActivity.this.updateHint();
+                        if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
+                            AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
+                        } else {
+                            if (!exists) {
+                                z = true;
+                            }
+                            cell.setChecked(z, true);
+                        }
+                        if (GroupCreateActivity.this.editText.length() > 0) {
+                            GroupCreateActivity.this.editText.setText(null);
+                        }
+                    }
+                }
+            }
+        });
         this.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == 1) {

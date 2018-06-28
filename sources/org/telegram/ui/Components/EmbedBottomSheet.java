@@ -286,6 +286,7 @@ public class EmbedBottomSheet extends BottomSheet {
             this.height = AndroidUtilities.displaySize.y / 2;
         }
         this.fullscreenVideoContainer = new FrameLayout(context);
+        this.fullscreenVideoContainer.setKeepScreenOn(true);
         this.fullscreenVideoContainer.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         if (VERSION.SDK_INT >= 21) {
             this.fullscreenVideoContainer.setFitsSystemWindows(true);

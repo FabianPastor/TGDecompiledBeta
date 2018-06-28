@@ -4793,7 +4793,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (this.placeProvider == null) {
             return;
         }
-        if (this.maxSelectedPhotos < 0 || this.placeProvider.getSelectedPhotos().size() < this.maxSelectedPhotos || this.placeProvider.isPhotoChecked(this.currentIndex)) {
+        if (this.placeProvider.getSelectedPhotos() == null || this.maxSelectedPhotos < 0 || this.placeProvider.getSelectedPhotos().size() < this.maxSelectedPhotos || this.placeProvider.isPhotoChecked(this.currentIndex)) {
             int num = this.placeProvider.setPhotoChecked(this.currentIndex, getCurrentVideoEditedInfo());
             boolean checked = this.placeProvider.isPhotoChecked(this.currentIndex);
             this.checkImageView.setChecked(checked, true);

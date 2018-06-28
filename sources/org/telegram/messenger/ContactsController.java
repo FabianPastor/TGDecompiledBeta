@@ -1717,8 +1717,47 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.ContactsController$14$1 */
-            class C01071 implements Comparator<String> {
+            class C01071 implements Comparator<Object> {
                 C01071() {
+                }
+
+                public int compare(Object o1, Object o2) {
+                    String name1;
+                    Contact contact;
+                    String name2;
+                    if (o1 instanceof User) {
+                        User user = (User) o1;
+                        name1 = ContactsController.formatName(user.first_name, user.last_name);
+                    } else if (o1 instanceof Contact) {
+                        contact = (Contact) o1;
+                        if (contact.user != null) {
+                            name1 = ContactsController.formatName(contact.user.first_name, contact.user.last_name);
+                        } else {
+                            name1 = ContactsController.formatName(contact.first_name, contact.last_name);
+                        }
+                    } else {
+                        name1 = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    if (o2 instanceof User) {
+                        user = (User) o2;
+                        name2 = ContactsController.formatName(user.first_name, user.last_name);
+                    } else if (o2 instanceof Contact) {
+                        contact = (Contact) o2;
+                        if (contact.user != null) {
+                            name2 = ContactsController.formatName(contact.user.first_name, contact.user.last_name);
+                        } else {
+                            name2 = ContactsController.formatName(contact.first_name, contact.last_name);
+                        }
+                    } else {
+                        name2 = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    return name1.compareTo(name2);
+                }
+            }
+
+            /* renamed from: org.telegram.messenger.ContactsController$14$2 */
+            class C01082 implements Comparator<String> {
+                C01082() {
                 }
 
                 public int compare(String s, String s2) {
@@ -1734,9 +1773,9 @@ public class ContactsController {
                 }
             }
 
-            /* renamed from: org.telegram.messenger.ContactsController$14$2 */
-            class C01082 implements Runnable {
-                C01082() {
+            /* renamed from: org.telegram.messenger.ContactsController$14$3 */
+            class C25683 implements Runnable {
+                C25683() {
                 }
 
                 public void run() {
@@ -1748,12 +1787,13 @@ public class ContactsController {
             public void run() {
                 int size = contactsCopy.size();
                 for (int a = 0; a < size; a++) {
+                    ArrayList<Object> arrayList;
                     User user = MessagesController.getInstance(ContactsController.this.currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
                     if (!(user == null || TextUtils.isEmpty(user.phone))) {
                         Contact contact = (Contact) hashMap.get(user.phone.substring(Math.max(0, user.phone.length() - 7)));
                         if (contact == null) {
                             String key = Contact.getLetter(user.first_name, user.last_name);
-                            ArrayList<Object> arrayList = (ArrayList) hashMap2.get(key);
+                            arrayList = (ArrayList) hashMap2.get(key);
                             if (arrayList == null) {
                                 arrayList = new ArrayList();
                                 hashMap2.put(key, arrayList);
@@ -1765,8 +1805,11 @@ public class ContactsController {
                         }
                     }
                 }
-                Collections.sort(arrayList, new C01071());
-                AndroidUtilities.runOnUIThread(new C01082());
+                for (ArrayList<Object> arrayList2 : hashMap2.values()) {
+                    Collections.sort(arrayList2, new C01071());
+                }
+                Collections.sort(arrayList, new C01082());
+                AndroidUtilities.runOnUIThread(new C25683());
             }
         });
     }
