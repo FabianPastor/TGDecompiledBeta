@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -21,28 +22,24 @@ public class BaseFragment {
     protected Bundle arguments;
     protected int classGuid;
     protected int currentAccount;
+    private boolean finishing;
     protected View fragmentView;
     protected boolean hasOwnBackground;
+    protected boolean inPreviewMode;
     private boolean isFinished;
     protected ActionBarLayout parentLayout;
     protected boolean swipeBackEnabled;
     protected Dialog visibleDialog;
 
     public BaseFragment() {
-        this.isFinished = false;
-        this.visibleDialog = null;
         this.currentAccount = UserConfig.selectedAccount;
-        this.classGuid = 0;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public BaseFragment(Bundle args) {
-        this.isFinished = false;
-        this.visibleDialog = null;
         this.currentAccount = UserConfig.selectedAccount;
-        this.classGuid = 0;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
         this.arguments = args;
@@ -74,6 +71,23 @@ public class BaseFragment {
 
     public int getCurrentAccount() {
         return this.currentAccount;
+    }
+
+    protected void setInPreviewMode(boolean value) {
+        boolean z = false;
+        this.inPreviewMode = value;
+        if (this.actionBar == null) {
+            return;
+        }
+        if (this.inPreviewMode) {
+            this.actionBar.setOccupyStatusBar(false);
+            return;
+        }
+        ActionBar actionBar = this.actionBar;
+        if (VERSION.SDK_INT >= 21) {
+            z = true;
+        }
+        actionBar.setOccupyStatusBar(z);
     }
 
     protected void clearViews() {
@@ -155,7 +169,18 @@ public class BaseFragment {
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), true);
         actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarDefaultIcon), false);
         actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon), true);
+        if (this.inPreviewMode) {
+            actionBar.setOccupyStatusBar(false);
+        }
         return actionBar;
+    }
+
+    public void movePreviewFragment(float dy) {
+        this.parentLayout.movePreviewFragment(dy);
+    }
+
+    public void finishPreviewFragment() {
+        this.parentLayout.finishPreviewFragment();
     }
 
     public void finishFragment() {
@@ -164,6 +189,7 @@ public class BaseFragment {
 
     public void finishFragment(boolean animated) {
         if (!this.isFinished && this.parentLayout != null) {
+            this.finishing = true;
             this.parentLayout.closeLastFragment(animated);
         }
     }
@@ -172,6 +198,10 @@ public class BaseFragment {
         if (!this.isFinished && this.parentLayout != null) {
             this.parentLayout.removeFragmentFromStack(this);
         }
+    }
+
+    protected boolean isFinishing() {
+        return this.finishing;
     }
 
     public boolean onFragmentCreate() {
@@ -233,6 +263,10 @@ public class BaseFragment {
     public void restoreSelfArgs(Bundle args) {
     }
 
+    public boolean presentFragmentAsPreview(BaseFragment fragment) {
+        return this.parentLayout != null && this.parentLayout.presentFragmentAsPreview(fragment);
+    }
+
     public boolean presentFragment(BaseFragment fragment) {
         return this.parentLayout != null && this.parentLayout.presentFragment(fragment);
     }
@@ -242,7 +276,7 @@ public class BaseFragment {
     }
 
     public boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation) {
-        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true);
+        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true, false);
     }
 
     public Activity getParentActivity() {

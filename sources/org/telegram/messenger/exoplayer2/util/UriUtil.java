@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.util;
 
 import android.net.Uri;
+import android.net.Uri.Builder;
 import android.text.TextUtils;
 
 public final class UriUtil {
@@ -55,6 +56,19 @@ public final class UriUtil {
             uri.append(baseUri, 0, baseIndices[1]).append('/').append(referenceUri);
             return removeDotSegments(uri, baseIndices[1], (baseIndices[1] + refIndices[2]) + 1);
         }
+    }
+
+    public static Uri removeQueryParameter(Uri uri, String queryParameterName) {
+        Builder builder = uri.buildUpon();
+        builder.clearQuery();
+        for (String key : uri.getQueryParameterNames()) {
+            if (!key.equals(queryParameterName)) {
+                for (String value : uri.getQueryParameters(key)) {
+                    builder.appendQueryParameter(key, value);
+                }
+            }
+        }
+        return builder.build();
     }
 
     private static String removeDotSegments(StringBuilder uri, int offset, int limit) {

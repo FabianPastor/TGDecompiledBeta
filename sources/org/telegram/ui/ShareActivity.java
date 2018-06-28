@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
@@ -26,8 +26,8 @@ public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
     /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class C22821 implements OnDismissListener {
-        C22821() {
+    class C24661 implements OnDismissListener {
+        C24661() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -42,7 +42,7 @@ public class ShareActivity extends Activity {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
-        setTheme(C0493R.style.Theme.TMessages.Transparent);
+        setTheme(C0500R.style.Theme.TMessages.Transparent);
         super.onCreate(savedInstanceState);
         setContentView(new View(this), new LayoutParams(-1, -1));
         Intent intent = getIntent();
@@ -74,7 +74,7 @@ public class ShareActivity extends Activity {
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new C22821());
+                this.visibleDialog.setOnDismissListener(new C24661());
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {

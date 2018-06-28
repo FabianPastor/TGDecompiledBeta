@@ -133,7 +133,7 @@ public class Input {
         double a1 = Math.pow((double) (1.0f - t), 2.0d);
         double a2 = (double) ((2.0f * (1.0f - t)) * t);
         double a3 = (double) (t * t);
-        return new Point(((midPoint1.f50x * a1) + (prev1.f50x * a2)) + (midPoint2.f50x * a3), ((midPoint1.f51y * a1) + (prev1.f51y * a2)) + (midPoint2.f51y * a3), 1.0d);
+        return new Point(((midPoint1.f54x * a1) + (prev1.f54x * a2)) + (midPoint2.f54x * a3), ((midPoint1.f55y * a1) + (prev1.f55y * a2)) + (midPoint2.f55y * a3), 1.0d);
     }
 
     private void paintPath(final Path path) {
@@ -145,8 +145,8 @@ public class Input {
         this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.Paint.Input$1$1 */
-            class C15281 implements Runnable {
-                C15281() {
+            class C15781 implements Runnable {
+                C15781() {
                 }
 
                 public void run() {
@@ -156,7 +156,7 @@ public class Input {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C15281());
+                AndroidUtilities.runOnUIThread(new C15781());
             }
         });
     }

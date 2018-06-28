@@ -10,7 +10,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -26,13 +26,13 @@ public class SendLocationCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
-    private Runnable invalidateRunnable = new C10861();
+    private Runnable invalidateRunnable = new C11251();
     private RectF rect;
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Cells.SendLocationCell$1 */
-    class C10861 implements Runnable {
-        C10861() {
+    class C11251 implements Runnable {
+        C11251() {
         }
 
         public void run() {
@@ -58,7 +58,7 @@ public class SendLocationCell extends FrameLayout {
         CombinedDrawable combinedDrawable;
         if (live) {
             this.rect = new RectF();
-            drawable = getResources().getDrawable(C0493R.drawable.livelocationpin);
+            drawable = getResources().getDrawable(C0500R.drawable.livelocationpin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -66,7 +66,7 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            drawable = getResources().getDrawable(C0493R.drawable.pin);
+            drawable = getResources().getDrawable(C0500R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -150,9 +150,9 @@ public class SendLocationCell extends FrameLayout {
     private void checkText() {
         SharingLocationInfo info = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (info != null) {
-            setText(LocaleController.getString("StopLiveLocation", C0493R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
+            setText(LocaleController.getString("StopLiveLocation", C0500R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
         } else {
-            setText(LocaleController.getString("SendLiveLocation", C0493R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", C0493R.string.SendLiveLocationInfo));
+            setText(LocaleController.getString("SendLiveLocation", C0500R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", C0500R.string.SendLiveLocationInfo));
         }
     }
 
@@ -167,7 +167,7 @@ public class SendLocationCell extends FrameLayout {
                 } else {
                     this.rect.set((float) (getMeasuredWidth() - AndroidUtilities.dp(43.0f)), (float) AndroidUtilities.dp(18.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(13.0f)), (float) AndroidUtilities.dp(48.0f));
                 }
-                int color = Theme.getColor("location_liveLocationProgress");
+                int color = Theme.getColor(Theme.key_location_liveLocationProgress);
                 Theme.chat_radialProgress2Paint.setColor(color);
                 Theme.chat_livePaint.setColor(color);
                 canvas.drawArc(this.rect, -90.0f, -360.0f * progress, false, Theme.chat_radialProgress2Paint);

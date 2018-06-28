@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.util;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public final class ParsableByteArray {
@@ -402,7 +402,7 @@ public final class ParsableByteArray {
     }
 
     public String readString(int length) {
-        return readString(length, Charset.forName(C0605C.UTF8_NAME));
+        return readString(length, Charset.forName(C0615C.UTF8_NAME));
     }
 
     public String readString(int length, Charset charset) {

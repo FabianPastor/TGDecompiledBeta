@@ -48,8 +48,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class C06031 implements Runnable {
-        C06031() {
+    class C06131 implements Runnable {
+        C06131() {
         }
 
         public void run() {
@@ -61,8 +61,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class C06042 implements Runnable {
-        C06042() {
+    class C06142 implements Runnable {
+        C06142() {
         }
 
         public void run() {
@@ -178,7 +178,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 if (this.previewSize != null && surfaceTexture != null) {
                     surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                     this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C06031(), new C06042());
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C06131(), new C06142());
                 }
             }
         }

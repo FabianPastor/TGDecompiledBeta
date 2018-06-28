@@ -24,12 +24,12 @@ import android.widget.ScrollView;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
-    private static final OnScrollChangedListener NOP = new C08601();
+    private static final OnScrollChangedListener NOP = new C08951();
     private static final boolean allowAnimation;
     private static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private static final Field superListenerField;
@@ -43,8 +43,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
-    static class C08601 implements OnScrollChangedListener {
-        C08601() {
+    static class C08951 implements OnScrollChangedListener {
+        C08951() {
         }
 
         public void onScrollChanged() {
@@ -52,8 +52,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$2 */
-    class C08612 implements AnimatorListener {
-        C08612() {
+    class C08962 implements AnimatorListener {
+        C08962() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -72,8 +72,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$3 */
-    class C08623 implements AnimatorListener {
-        C08623() {
+    class C08973 implements AnimatorListener {
+        C08973() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -102,7 +102,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
-        protected Drawable backgroundDrawable = getResources().getDrawable(C0493R.drawable.popup_fixed).mutate();
+        protected Drawable backgroundDrawable = getResources().getDrawable(C0500R.drawable.popup_fixed).mutate();
         private int lastStartedChild = 0;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -391,7 +391,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.windowAnimatorSet = new AnimatorSet();
             this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
-            this.windowAnimatorSet.addListener(new C08612());
+            this.windowAnimatorSet.addListener(new C08962());
             this.windowAnimatorSet.start();
         }
     }
@@ -432,7 +432,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             animatorArr[1] = ObjectAnimator.ofFloat(content, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.windowAnimatorSet.setDuration(150);
-            this.windowAnimatorSet.addListener(new C08623());
+            this.windowAnimatorSet.addListener(new C08973());
             this.windowAnimatorSet.start();
             return;
         }

@@ -26,14 +26,14 @@ import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -56,12 +56,12 @@ public class WebviewActivity extends BaseFragment {
     private ActionBarMenuItem progressItem;
     private ContextProgressView progressView;
     private String short_param;
-    public Runnable typingRunnable = new C23781();
+    public Runnable typingRunnable = new C25631();
     private WebView webView;
 
     /* renamed from: org.telegram.ui.WebviewActivity$1 */
-    class C23781 implements Runnable {
-        C23781() {
+    class C25631 implements Runnable {
+        C25631() {
         }
 
         public void run() {
@@ -73,8 +73,8 @@ public class WebviewActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.WebviewActivity$2 */
-    class C23792 extends ActionBarMenuOnItemClick {
-        C23792() {
+    class C25642 extends ActionBarMenuOnItemClick {
+        C25642() {
         }
 
         public void onItemClick(int id) {
@@ -90,11 +90,11 @@ public class WebviewActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.WebviewActivity$3 */
-    class C23813 extends WebViewClient {
+    class C25663 extends WebViewClient {
 
         /* renamed from: org.telegram.ui.WebviewActivity$3$1 */
-        class C23801 extends AnimatorListenerAdapter {
-            C23801() {
+        class C25651 extends AnimatorListenerAdapter {
+            C25651() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -102,7 +102,7 @@ public class WebviewActivity extends BaseFragment {
             }
         }
 
-        C23813() {
+        C25663() {
         }
 
         private boolean isInternalUrl(String url) {
@@ -141,7 +141,7 @@ public class WebviewActivity extends BaseFragment {
             WebviewActivity.this.progressItem.setEnabled(true);
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "scaleX", new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "scaleY", new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "scaleX", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "scaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), "alpha", new float[]{0.0f, 1.0f})});
-            animatorSet.addListener(new C23801());
+            animatorSet.addListener(new C25651());
             animatorSet.setDuration(150);
             animatorSet.start();
         }
@@ -220,17 +220,17 @@ public class WebviewActivity extends BaseFragment {
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public View createView(Context context) {
         this.swipeBackEnabled = false;
-        this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(this.currentGame);
         this.actionBar.setSubtitle("@" + this.currentBot);
-        this.actionBar.setActionBarMenuOnItemClick(new C23792());
+        this.actionBar.setActionBarMenuOnItemClick(new C25642());
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.progressItem = menu.addItemWithWidth(1, C0493R.drawable.share, AndroidUtilities.dp(54.0f));
+        this.progressItem = menu.addItemWithWidth(1, C0500R.drawable.share, AndroidUtilities.dp(54.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressItem.getImageView().setVisibility(4);
-        menu.addItem(0, (int) C0493R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", C0493R.string.OpenInExternalApp));
+        menu.addItem(0, (int) C0500R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", C0500R.string.OpenInExternalApp));
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
@@ -241,7 +241,7 @@ public class WebviewActivity extends BaseFragment {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
             this.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
         }
-        this.webView.setWebViewClient(new C23813());
+        this.webView.setWebViewClient(new C25663());
         frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
         return this.fragmentView;
     }
@@ -273,7 +273,7 @@ public class WebviewActivity extends BaseFragment {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
             String existing = sharedPreferences.getString(TtmlNode.ANONYMOUS_REGION_ID + messageObject.getId(), null);
             StringBuilder hash = new StringBuilder(existing != null ? existing : TtmlNode.ANONYMOUS_REGION_ID);
-            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C0605C.UTF8_NAME));
+            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C0615C.UTF8_NAME));
             if (existing == null) {
                 char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
                 for (int i = 0; i < 20; i++) {

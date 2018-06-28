@@ -22,7 +22,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -82,7 +82,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_messages_messages;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
-import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty;
+import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_photos;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
@@ -121,8 +121,8 @@ public class MessagesStorage {
     private File walCacheFile;
 
     /* renamed from: org.telegram.messenger.MessagesStorage$1 */
-    class C04221 implements Runnable {
-        C04221() {
+    class C04281 implements Runnable {
+        C04281() {
         }
 
         public void run() {
@@ -131,8 +131,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$5 */
-    class C04405 implements Runnable {
-        C04405() {
+    class C04465 implements Runnable {
+        C04465() {
         }
 
         public void run() {
@@ -184,8 +184,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$8 */
-    class C04538 implements Runnable {
-        C04538() {
+    class C04608 implements Runnable {
+        C04608() {
         }
 
         public void run() {
@@ -198,6 +198,7 @@ public class MessagesStorage {
                         int type = data.readInt32(false);
                         final int channelId;
                         final int newDialogType;
+                        final long did;
                         switch (type) {
                             case 0:
                                 Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
@@ -223,6 +224,7 @@ public class MessagesStorage {
                             case 2:
                             case 5:
                             case 8:
+                            case 10:
                                 final TL_dialog dialog = new TL_dialog();
                                 dialog.id = data.readInt64(false);
                                 dialog.top_message = data.readInt32(false);
@@ -239,6 +241,9 @@ public class MessagesStorage {
                                 if (type >= 8) {
                                     dialog.unread_mentions_count = data.readInt32(false);
                                 }
+                                if (type >= 10) {
+                                    dialog.unread_mark = data.readBool(false);
+                                }
                                 final InputPeer peer = InputPeer.TLdeserialize(data, data.readInt32(false), false);
                                 final long j = taskId;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -252,7 +257,7 @@ public class MessagesStorage {
                                 SendMessagesHelper.getInstance(MessagesStorage.this.currentAccount).sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
                                 break;
                             case 4:
-                                final long did = data.readInt64(false);
+                                did = data.readInt64(false);
                                 final boolean pin = data.readBool(false);
                                 final InputPeer TLdeserialize = InputPeer.TLdeserialize(data, data.readInt32(false), false);
                                 final long j2 = taskId;
@@ -291,6 +296,17 @@ public class MessagesStorage {
                                     break;
                                 }
                                 MessagesStorage.this.removePendingTask(taskId);
+                                break;
+                            case 9:
+                                did = data.readInt64(false);
+                                final long j4 = did;
+                                final InputPeer TLdeserialize2 = InputPeer.TLdeserialize(data, data.readInt32(false), false);
+                                final long j5 = taskId;
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        MessagesController.getInstance(MessagesStorage.this.currentAccount).markDialogAsUnread(j4, TLdeserialize2, j5);
+                                    }
+                                });
                                 break;
                         }
                         data.reuse();
@@ -430,7 +446,7 @@ public class MessagesStorage {
 
     public MessagesStorage(int instance) {
         this.currentAccount = instance;
-        this.storageQueue.postRunnable(new C04221());
+        this.storageQueue.postRunnable(new C04281());
     }
 
     public SQLiteDatabase getDatabase() {
@@ -491,7 +507,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER, flags INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_dialogs ON dialogs(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_idx_dialogs ON dialogs(last_mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
@@ -541,7 +557,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
@@ -578,7 +594,7 @@ public class MessagesStorage {
                         FileLog.m3e(e2);
                     }
                 }
-                if (version < 47) {
+                if (version < 48) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -760,7 +776,7 @@ public class MessagesStorage {
                                     TL_chatFull chatFull = new TL_chatFull();
                                     chatFull.id = chat_id;
                                     chatFull.chat_photo = new TL_photoEmpty();
-                                    chatFull.notify_settings = new TL_peerNotifySettingsEmpty();
+                                    chatFull.notify_settings = new TL_peerNotifySettingsEmpty_layer77();
                                     chatFull.exported_invite = new TL_chatInviteEmpty();
                                     chatFull.participants = participants;
                                     NativeByteBuffer data2 = new NativeByteBuffer(chatFull.getObjectSize());
@@ -910,6 +926,11 @@ public class MessagesStorage {
                     if (version == 46) {
                         MessagesStorage.this.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
+                        version = 47;
+                    }
+                    if (version == 47) {
+                        MessagesStorage.this.database.executeFast("ALTER TABLE dialogs ADD COLUMN flags INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.m3e(e);
@@ -955,8 +976,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$3$1 */
-            class C04301 implements Runnable {
-                C04301() {
+            class C04361 implements Runnable {
+                C04361() {
                 }
 
                 public void run() {
@@ -968,7 +989,7 @@ public class MessagesStorage {
                 MessagesStorage.this.cleanupInternal();
                 MessagesStorage.this.openDatabase(false);
                 if (isLogin) {
-                    Utilities.stageQueue.postRunnable(new C04301());
+                    Utilities.stageQueue.postRunnable(new C04361());
                 }
             }
         });
@@ -1001,7 +1022,7 @@ public class MessagesStorage {
     }
 
     private void fixNotificationSettings() {
-        this.storageQueue.postRunnable(new C04405());
+        this.storageQueue.postRunnable(new C04465());
     }
 
     public long createPendingTask(final NativeByteBuffer data) {
@@ -1040,7 +1061,7 @@ public class MessagesStorage {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new C04538());
+        this.storageQueue.postRunnable(new C04608());
     }
 
     public void saveChannelPts(final int channelId, final int pts) {
@@ -1335,7 +1356,17 @@ public class MessagesStorage {
                         if (!cursor.isNull(8)) {
                             NativeByteBuffer data = cursor.byteBufferValue(8);
                             if (data != null) {
-                                searchImage.document = Document.TLdeserialize(data, data.readInt32(false), false);
+                                int constructor = data.readInt32(false);
+                                searchImage.document = Document.TLdeserialize(data, constructor, false);
+                                if (searchImage.document == null) {
+                                    searchImage.photo = Photo.TLdeserialize(data, constructor, false);
+                                    if (searchImage.photo != null) {
+                                        PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(searchImage.photo.sizes, AndroidUtilities.getPhotoSize());
+                                        PhotoSize size2 = FileLoader.getClosestPhotoSizeWithSize(searchImage.photo.sizes, 80);
+                                        searchImage.photoSize = size;
+                                        searchImage.thumbPhotoSize = size2;
+                                    }
+                                }
                                 data.reuse();
                             }
                         }
@@ -1421,7 +1452,11 @@ public class MessagesStorage {
                         state.bindInteger(8, searchImage.size);
                         state.bindInteger(9, searchImage.date);
                         NativeByteBuffer data = null;
-                        if (searchImage.document != null) {
+                        if (searchImage.photo != null) {
+                            data = new NativeByteBuffer(searchImage.photo.getObjectSize());
+                            searchImage.photo.serializeToStream(data);
+                            state.bindByteBuffer(10, data);
+                        } else if (searchImage.document != null) {
                             data = new NativeByteBuffer(searchImage.document.getObjectSize());
                             searchImage.document.serializeToStream(data);
                             state.bindByteBuffer(10, data);
@@ -1615,8 +1650,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$23$1 */
-            class C04251 implements Runnable {
-                C04251() {
+            class C04311 implements Runnable {
+                C04311() {
                 }
 
                 public void run() {
@@ -1742,7 +1777,7 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
                     DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
-                    AndroidUtilities.runOnUIThread(new C04251());
+                    AndroidUtilities.runOnUIThread(new C04311());
                 } catch (Throwable e22) {
                     FileLog.m3e(e22);
                 }
@@ -2662,7 +2697,7 @@ public class MessagesStorage {
                     state.dispose();
                     data.reuse();
                     if (info instanceof TL_channelFull) {
-                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i FROM dialogs WHERE did = " + (-info.id), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.id), new Object[0]);
                         if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
                             int dialog_date = cursor.intValue(0);
                             int pts = cursor.intValue(1);
@@ -2670,7 +2705,8 @@ public class MessagesStorage {
                             int outbox_max = cursor.intValue(4);
                             int pinned = cursor.intValue(5);
                             int mentions = cursor.intValue(6);
-                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            int flags = cursor.intValue(7);
+                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             state.bindLong(1, (long) (-info.id));
                             state.bindInteger(2, dialog_date);
                             state.bindInteger(3, info.unread_count);
@@ -2682,6 +2718,7 @@ public class MessagesStorage {
                             state.bindInteger(9, pts);
                             state.bindInteger(10, 0);
                             state.bindInteger(11, pinned);
+                            state.bindInteger(12, flags);
                             state.step();
                             state.dispose();
                         }
@@ -3460,11 +3497,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     ArrayList<Integer> chatsToLoad = new ArrayList();
                     ArrayList<Integer> broadcastIds = new ArrayList();
                     ArrayList<Integer> encryptedChatIds = new ArrayList();
-                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.uid, s.seq_in, s.seq_out, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.mid < 0 AND m.send_state = 1 ORDER BY m.mid DESC LIMIT " + count, new Object[0]);
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.uid, s.seq_in, s.seq_out, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE (m.mid < 0 AND m.send_state = 1) OR (m.mid > 0 AND m.send_state = 3) ORDER BY m.mid DESC LIMIT " + count, new Object[0]);
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(1);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                            message.send_state = cursor.intValue(2);
                             message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                             data.reuse();
                             if (messageHashMap.indexOfKey(message.id) < 0) {
@@ -3498,8 +3536,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     encryptedChatIds.add(Integer.valueOf(high_id));
                                 }
                                 MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                                message.send_state = cursor.intValue(2);
-                                if (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0) {
+                                if (message.send_state != 3 && (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0)) {
                                     message.send_state = 0;
                                 }
                                 if (lower_id == 0 && !cursor.isNull(5)) {
@@ -3619,8 +3656,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$58$1 */
-            class C04391 implements Comparator<Message> {
-                C04391() {
+            class C04451 implements Comparator<Message> {
+                C04451() {
                 }
 
                 public int compare(Message lhs, Message rhs) {
@@ -3878,9 +3915,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                                 } else {
                                     if (holeMessageMaxId == 0) {
-                                        holeMessageMaxId = C0605C.NANOS_PER_SECOND;
+                                        holeMessageMaxId = C0615C.NANOS_PER_SECOND;
                                         if (channelId != 0) {
-                                            holeMessageMaxId = C0605C.NANOS_PER_SECOND | (((long) channelId) << 32);
+                                            holeMessageMaxId = C0615C.NANOS_PER_SECOND | (((long) channelId) << 32);
                                         }
                                     }
                                     cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
@@ -4031,6 +4068,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             data = cursor.byteBufferValue(1);
                             if (data != null) {
                                 message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                message.send_state = cursor.intValue(2);
+                                if (!(message.id <= 0 || message.send_state == 0 || message.send_state == 3)) {
+                                    message.send_state = 0;
+                                }
                                 message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                 data.reuse();
                                 MessageObject.setUnreadFlags(message, cursor.intValue(0));
@@ -4093,10 +4134,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         }
                                     }
                                 }
-                                message.send_state = cursor.intValue(2);
-                                if (message.id > 0 && message.send_state != 0) {
-                                    message.send_state = 0;
-                                }
                                 if (lower_id == 0 && !cursor.isNull(5)) {
                                     message.random_id = cursor.longValue(5);
                                 }
@@ -4117,7 +4154,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                         cursor.dispose();
                     }
-                    Collections.sort(res.messages, new C04391());
+                    Collections.sort(res.messages, new C04451());
                     if (lower_id != 0) {
                         if ((i3 == 3 || i3 == 4 || (i3 == 2 && queryFromServer && !unreadCountIsLocal)) && !res.messages.isEmpty()) {
                             int minId = ((Message) res.messages.get(res.messages.size() - 1)).id;
@@ -5018,7 +5055,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         data4.reuse();
                         data5.reuse();
                         if (dialog != null) {
-                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             state.bindLong(1, dialog.id);
                             state.bindInteger(2, dialog.last_message_date);
                             state.bindInteger(3, dialog.unread_count);
@@ -5030,6 +5067,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             state.bindInteger(9, dialog.pts);
                             state.bindInteger(10, 0);
                             state.bindInteger(11, dialog.pinnedNum);
+                            state.bindInteger(12, dialog.flags);
                             state.step();
                             state.dispose();
                         }
@@ -5872,7 +5910,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         state3.dispose();
         state4.dispose();
         state5.dispose();
-        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         for (a = 0; a < messagesMap.size(); a++) {
             key = messagesMap.keyAt(a);
             if (key != 0) {
@@ -5881,7 +5919,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 if (message != null) {
                     channelId = message.to_id.channel_id;
                 }
-                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i FROM dialogs WHERE did = " + key, new Object[0]);
+                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + key, new Object[0]);
                 int dialog_date = 0;
                 int last_mid = 0;
                 int old_unread_count = 0;
@@ -5890,6 +5928,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 int outbox_max = 0;
                 int pinned = 0;
                 int old_mentions_count = 0;
+                int flags = 0;
                 if (cursor.next()) {
                     dialog_date = cursor.intValue(0);
                     old_unread_count = cursor.intValue(1);
@@ -5899,6 +5938,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     outbox_max = cursor.intValue(5);
                     pinned = cursor.intValue(6);
                     old_mentions_count = cursor.intValue(7);
+                    flags = cursor.intValue(8);
                 } else if (channelId != 0) {
                     MessagesController.getInstance(this.currentAccount).checkChannelInviter(channelId);
                 }
@@ -5942,6 +5982,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.bindInteger(9, pts);
                 state.bindInteger(10, 0);
                 state.bindInteger(11, pinned);
+                state.bindInteger(12, flags);
                 state.step();
             }
         }
@@ -6567,7 +6608,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<Integer> chatsToLoad = new ArrayList();
             ArrayList<Integer> encryptedToLoad = new ArrayList();
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
+            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
                 dialog.id = cursor.longValue(0);
@@ -6581,6 +6622,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 dialog.flags = channelId == 0 ? 0 : 1;
                 dialog.pinnedNum = cursor.intValue(12);
                 dialog.pinned = dialog.pinnedNum != 0;
+                dialog.unread_mark = (cursor.intValue(14) & 1) != 0;
                 dialogs.dialogs.add(dialog);
                 NativeByteBuffer data = cursor.byteBufferValue(4);
                 if (data != null) {
@@ -6779,12 +6821,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 78;
+                    message.media.bytes[0] = (byte) 82;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 78;
+                message.media.bytes[0] = (byte) 82;
                 message.flags |= 512;
             }
         }
@@ -7016,7 +7058,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 messageId |= ((long) channelId) << 32;
                             }
                             if (i == -2) {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl, mention, read_state FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl, mention, read_state, send_state FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
                                 boolean exist = cursor.next();
                                 if (exist) {
                                     AbstractSerializedData data = cursor.byteBufferValue(1);
@@ -7024,7 +7066,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         Message oldMessage = Message.TLdeserialize(data, data.readInt32(false), false);
                                         oldMessage.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                         data.reuse();
-                                        if (oldMessage != null) {
+                                        int send_state = cursor.intValue(5);
+                                        if (!(oldMessage == null || send_state == 3)) {
                                             message.attachPath = oldMessage.attachPath;
                                             message.ttl = cursor.intValue(2);
                                         }
@@ -7055,13 +7098,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             if (a == 0 && z) {
                                 int pinned = 0;
                                 int mentions = 0;
-                                cursor = MessagesStorage.this.database.queryFinalized("SELECT pinned, unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
+                                int flags = 0;
+                                cursor = MessagesStorage.this.database.queryFinalized("SELECT pinned, unread_count_i, flags FROM dialogs WHERE did = " + j, new Object[0]);
                                 if (cursor.next()) {
                                     pinned = cursor.intValue(0);
                                     mentions = cursor.intValue(1);
+                                    flags = cursor.intValue(2);
                                 }
                                 cursor.dispose();
-                                SQLitePreparedStatement state3 = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                SQLitePreparedStatement state3 = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 state3.bindLong(1, j);
                                 state3.bindInteger(2, message.date);
                                 state3.bindInteger(3, 0);
@@ -7073,6 +7118,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 state3.bindInteger(9, messages_messages.pts);
                                 state3.bindInteger(10, message.date);
                                 state3.bindInteger(11, pinned);
+                                state3.bindInteger(12, flags);
                                 state3.step();
                                 state3.dispose();
                             }
@@ -7233,7 +7279,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 ArrayList<Integer> encryptedToLoad = new ArrayList();
                 ArrayList<Long> replyMessages = new ArrayList();
                 LongSparseArray<Message> replyMessageOwners = new LongSparseArray();
-                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
+                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
                     Message message;
                     TL_dialog dialog = new TL_dialog();
@@ -7249,6 +7295,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     dialog.pinnedNum = cursor.intValue(14);
                     dialog.pinned = dialog.pinnedNum != 0;
                     dialog.unread_mentions_count = cursor.intValue(15);
+                    dialog.unread_mark = (cursor.intValue(16) & 1) != 0;
                     long flags = cursor.longValue(8);
                     int low_flags = (int) flags;
                     dialog.notify_settings = new TL_peerNotifySettings();
@@ -7408,14 +7455,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             int a;
             Message message;
             this.database.beginTransaction();
-            LongSparseArray<Message> longSparseArray = new LongSparseArray(dialogs.messages.size());
+            LongSparseArray<Message> new_dialogMessage = new LongSparseArray(dialogs.messages.size());
             for (a = 0; a < dialogs.messages.size(); a++) {
                 message = (Message) dialogs.messages.get(a);
-                longSparseArray.put(MessageObject.getDialogId(message), message);
+                new_dialogMessage.put(MessageObject.getDialogId(message), message);
             }
             if (!dialogs.dialogs.isEmpty()) {
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
                 SQLitePreparedStatement state5 = this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
@@ -7439,7 +7486,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                     int messageDate = 0;
-                    message = (Message) longSparseArray.get(dialog.id);
+                    message = (Message) new_dialogMessage.get(dialog.id);
                     if (message != null) {
                         messageDate = Math.max(message.date, 0);
                         if (isValidKeyboardToSave(message)) {
@@ -7493,6 +7540,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     state2.bindInteger(9, dialog.pts);
                     state2.bindInteger(10, 0);
                     state2.bindInteger(11, dialog.pinnedNum);
+                    int flags = 0;
+                    if (dialog.unread_mark) {
+                        flags = 0 | 1;
+                    }
+                    state2.bindInteger(12, flags);
                     state2.step();
                     if (dialog.notify_settings != null) {
                         state4.requery();
@@ -7542,6 +7594,48 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
+            }
+        });
+    }
+
+    public void setDialogUnread(final long did, final boolean unread) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                int flags = 0;
+                SQLiteCursor cursor = null;
+                try {
+                    cursor = MessagesStorage.this.database.queryFinalized("SELECT flags FROM dialogs WHERE did = " + did, new Object[0]);
+                    if (cursor.next()) {
+                        flags = cursor.intValue(0);
+                    }
+                    if (cursor != null) {
+                        try {
+                            cursor.dispose();
+                        } catch (Throwable e) {
+                            FileLog.m3e(e);
+                            return;
+                        }
+                    }
+                } catch (Throwable e2) {
+                    FileLog.m3e(e2);
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                } catch (Throwable th) {
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                }
+                if (unread) {
+                    flags |= 1;
+                } else {
+                    flags &= -2;
+                }
+                SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET flags = ? WHERE did = ?");
+                state.bindInteger(1, flags);
+                state.bindLong(2, did);
+                state.step();
+                state.dispose();
             }
         });
     }

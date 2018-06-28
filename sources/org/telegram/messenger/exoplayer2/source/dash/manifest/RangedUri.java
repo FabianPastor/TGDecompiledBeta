@@ -69,4 +69,8 @@ public final class RangedUri {
         }
         return false;
     }
+
+    public String toString() {
+        return "RangedUri(referenceUri=" + this.referenceUri + ", start=" + this.start + ", length=" + this.length + ")";
+    }
 }

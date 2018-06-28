@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.ParserException;
@@ -33,8 +33,8 @@ public final class PlayerEmsgHandler implements Callback {
     private long expiredManifestPublishTimeUs;
     private final Handler handler = new Handler(this);
     private boolean isWaitingForManifestRefresh;
-    private long lastLoadedChunkEndTimeBeforeRefreshUs = C0605C.TIME_UNSET;
-    private long lastLoadedChunkEndTimeUs = C0605C.TIME_UNSET;
+    private long lastLoadedChunkEndTimeBeforeRefreshUs = C0615C.TIME_UNSET;
+    private long lastLoadedChunkEndTimeUs = C0615C.TIME_UNSET;
     private DashManifest manifest;
     private final TreeMap<Long, Long> manifestPublishTimeToExpiryTimeUs = new TreeMap();
     private final PlayerEmsgCallback playerEmsgCallback;
@@ -125,7 +125,7 @@ public final class PlayerEmsgHandler implements Callback {
 
         private void parsePlayerEmsgEvent(long eventTimeUs, EventMessage eventMessage) {
             long manifestPublishTimeMsInEmsg = PlayerEmsgHandler.getManifestPublishTimeMsInEmsg(eventMessage);
-            if (manifestPublishTimeMsInEmsg != C0605C.TIME_UNSET) {
+            if (manifestPublishTimeMsInEmsg != C0615C.TIME_UNSET) {
                 if (PlayerEmsgHandler.isMessageSignalingMediaPresentationEnded(eventMessage)) {
                     onMediaPresentationEndedMessageEncountered();
                 } else {
@@ -151,7 +151,7 @@ public final class PlayerEmsgHandler implements Callback {
 
     public void updateManifest(DashManifest newManifest) {
         this.isWaitingForManifestRefresh = false;
-        this.expiredManifestPublishTimeUs = C0605C.TIME_UNSET;
+        this.expiredManifestPublishTimeUs = C0615C.TIME_UNSET;
         this.manifest = newManifest;
         removePreviouslyExpiredManifestPublishTimeValues();
     }
@@ -189,7 +189,7 @@ public final class PlayerEmsgHandler implements Callback {
             return true;
         }
         boolean isAfterForwardSeek;
-        if (this.lastLoadedChunkEndTimeUs == C0605C.TIME_UNSET || this.lastLoadedChunkEndTimeUs >= chunk.startTimeUs) {
+        if (this.lastLoadedChunkEndTimeUs == C0615C.TIME_UNSET || this.lastLoadedChunkEndTimeUs >= chunk.startTimeUs) {
             isAfterForwardSeek = false;
         } else {
             isAfterForwardSeek = true;
@@ -202,7 +202,7 @@ public final class PlayerEmsgHandler implements Callback {
     }
 
     void onChunkLoadCompleted(Chunk chunk) {
-        if (this.lastLoadedChunkEndTimeUs != C0605C.TIME_UNSET || chunk.endTimeUs > this.lastLoadedChunkEndTimeUs) {
+        if (this.lastLoadedChunkEndTimeUs != C0615C.TIME_UNSET || chunk.endTimeUs > this.lastLoadedChunkEndTimeUs) {
             this.lastLoadedChunkEndTimeUs = chunk.endTimeUs;
         }
     }
@@ -238,9 +238,10 @@ public final class PlayerEmsgHandler implements Callback {
     }
 
     private void handleManifestExpiredMessage(long eventTimeUs, long manifestPublishTimeMsInEmsg) {
-        if (!this.manifestPublishTimeToExpiryTimeUs.containsKey(Long.valueOf(manifestPublishTimeMsInEmsg))) {
+        Long previousExpiryTimeUs = (Long) this.manifestPublishTimeToExpiryTimeUs.get(Long.valueOf(manifestPublishTimeMsInEmsg));
+        if (previousExpiryTimeUs == null) {
             this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(manifestPublishTimeMsInEmsg), Long.valueOf(eventTimeUs));
-        } else if (((Long) this.manifestPublishTimeToExpiryTimeUs.get(Long.valueOf(manifestPublishTimeMsInEmsg))).longValue() > eventTimeUs) {
+        } else if (previousExpiryTimeUs.longValue() > eventTimeUs) {
             this.manifestPublishTimeToExpiryTimeUs.put(Long.valueOf(manifestPublishTimeMsInEmsg), Long.valueOf(eventTimeUs));
         }
     }
@@ -251,9 +252,6 @@ public final class PlayerEmsgHandler implements Callback {
     }
 
     private Entry<Long, Long> ceilingExpiryEntryForPublishTime(long publishTimeMs) {
-        if (this.manifestPublishTimeToExpiryTimeUs.isEmpty()) {
-            return null;
-        }
         return this.manifestPublishTimeToExpiryTimeUs.ceilingEntry(Long.valueOf(publishTimeMs));
     }
 
@@ -275,7 +273,7 @@ public final class PlayerEmsgHandler implements Callback {
     }
 
     private void maybeNotifyDashManifestRefreshNeeded() {
-        if (this.lastLoadedChunkEndTimeBeforeRefreshUs == C0605C.TIME_UNSET || this.lastLoadedChunkEndTimeBeforeRefreshUs != this.lastLoadedChunkEndTimeUs) {
+        if (this.lastLoadedChunkEndTimeBeforeRefreshUs == C0615C.TIME_UNSET || this.lastLoadedChunkEndTimeBeforeRefreshUs != this.lastLoadedChunkEndTimeUs) {
             this.isWaitingForManifestRefresh = true;
             this.lastLoadedChunkEndTimeBeforeRefreshUs = this.lastLoadedChunkEndTimeUs;
             this.playerEmsgCallback.onDashManifestRefreshRequested();
@@ -286,7 +284,7 @@ public final class PlayerEmsgHandler implements Callback {
         try {
             return Util.parseXsDateTime(new String(eventMessage.messageData));
         } catch (ParserException e) {
-            return C0605C.TIME_UNSET;
+            return C0615C.TIME_UNSET;
         }
     }
 

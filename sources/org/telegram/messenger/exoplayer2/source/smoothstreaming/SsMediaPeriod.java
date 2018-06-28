@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source.smoothstreaming;
 import android.util.Base64;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.mp4.TrackEncryptionBox;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -32,6 +32,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     private SsManifest manifest;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int minLoadableRetryCount;
+    private boolean notifiedReadingStarted;
     private ChunkSampleStream<SsChunkSource>[] sampleStreams;
     private final TrackEncryptionBox[] trackEncryptionBoxes;
     private final TrackGroupArray trackGroups;
@@ -52,6 +53,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         this.manifest = manifest;
         this.sampleStreams = newSampleStreamArray(0);
         this.compositeSequenceableLoader = compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.sampleStreams);
+        eventDispatcher.mediaPeriodCreated();
     }
 
     public void updateManifest(SsManifest manifest) {
@@ -66,6 +68,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
             sampleStream.release();
         }
+        this.eventDispatcher.mediaPeriodReleased();
     }
 
     public void prepare(MediaPeriod.Callback callback, long positionUs) {
@@ -128,7 +131,11 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     }
 
     public long readDiscontinuity() {
-        return C0605C.TIME_UNSET;
+        if (!this.notifiedReadingStarted) {
+            this.eventDispatcher.readingStarted();
+            this.notifiedReadingStarted = true;
+        }
+        return C0615C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

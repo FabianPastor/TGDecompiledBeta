@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0605C;
 
 public class Track {
     private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap();
@@ -45,8 +44,8 @@ public class Track {
     private int width;
 
     /* renamed from: org.telegram.messenger.video.Track$1 */
-    class C07901 implements Comparator<SamplePresentationTime> {
-        C07901() {
+    class C08241 implements Comparator<SamplePresentationTime> {
+        C08241() {
         }
 
         public int compare(SamplePresentationTime o1, SamplePresentationTime o2) {
@@ -255,13 +254,13 @@ public class Track {
         if (this.syncSamples != null && isSyncFrame) {
             this.syncSamples.add(Integer.valueOf(this.samples.size()));
         }
-        this.samplePresentationTimes.add(new SamplePresentationTime(this.samplePresentationTimes.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / C0605C.MICROS_PER_SECOND));
+        this.samplePresentationTimes.add(new SamplePresentationTime(this.samplePresentationTimes.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / 1000000));
     }
 
     public void prepare() {
         int a;
         ArrayList<SamplePresentationTime> original = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, new C07901());
+        Collections.sort(this.samplePresentationTimes, new C08241());
         long lastPresentationTimeUs = 0;
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long minDelta = Long.MAX_VALUE;

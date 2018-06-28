@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class SpliceInsertCommand extends SpliceCommand {
-    public static final Creator<SpliceInsertCommand> CREATOR = new C06691();
+    public static final Creator<SpliceInsertCommand> CREATOR = new C06821();
     public final boolean autoReturn;
     public final int availNum;
     public final int availsExpected;
@@ -23,8 +23,8 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final int uniqueProgramId;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.SpliceInsertCommand$1 */
-    static class C06691 implements Creator<SpliceInsertCommand> {
-        C06691() {
+    static class C06821 implements Creator<SpliceInsertCommand> {
+        C06821() {
         }
 
         public SpliceInsertCommand createFromParcel(Parcel in) {

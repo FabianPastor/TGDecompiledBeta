@@ -1,12 +1,11 @@
 package org.telegram.messenger.exoplayer2.source.hls;
 
-import android.os.Handler;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -33,12 +32,12 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
     private MediaPeriod.Callback callback;
     private SequenceableLoader compositeSequenceableLoader;
     private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
-    private final Handler continueLoadingHandler = new Handler();
     private final HlsDataSourceFactory dataSourceFactory;
     private HlsSampleStreamWrapper[] enabledSampleStreamWrappers = new HlsSampleStreamWrapper[0];
     private final EventDispatcher eventDispatcher;
     private final HlsExtractorFactory extractorFactory;
     private final int minLoadableRetryCount;
+    private boolean notifiedReadingStarted;
     private int pendingPrepareCount;
     private final HlsPlaylistTracker playlistTracker;
     private HlsSampleStreamWrapper[] sampleStreamWrappers = new HlsSampleStreamWrapper[0];
@@ -55,14 +54,16 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
         this.allocator = allocator;
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
         this.allowChunklessPreparation = allowChunklessPreparation;
+        this.compositeSequenceableLoader = compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(new SequenceableLoader[0]);
+        eventDispatcher.mediaPeriodCreated();
     }
 
     public void release() {
         this.playlistTracker.removeListener(this);
-        this.continueLoadingHandler.removeCallbacksAndMessages(null);
         for (HlsSampleStreamWrapper sampleStreamWrapper : this.sampleStreamWrappers) {
             sampleStreamWrapper.release();
         }
+        this.eventDispatcher.mediaPeriodReleased();
     }
 
     public void prepare(MediaPeriod.Callback callback, long positionUs) {
@@ -167,7 +168,13 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
     }
 
     public boolean continueLoading(long positionUs) {
-        return this.compositeSequenceableLoader.continueLoading(positionUs);
+        if (this.trackGroups != null) {
+            return this.compositeSequenceableLoader.continueLoading(positionUs);
+        }
+        for (HlsSampleStreamWrapper wrapper : this.sampleStreamWrappers) {
+            wrapper.continuePreparing();
+        }
+        return false;
     }
 
     public long getNextLoadPositionUs() {
@@ -175,7 +182,11 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
     }
 
     public long readDiscontinuity() {
-        return C0605C.TIME_UNSET;
+        if (!this.notifiedReadingStarted) {
+            this.eventDispatcher.readingStarted();
+            this.notifiedReadingStarted = true;
+        }
+        return C0615C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {
@@ -237,20 +248,20 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
     }
 
     public void onContinueLoadingRequested(HlsSampleStreamWrapper sampleStreamWrapper) {
-        if (this.trackGroups != null) {
-            this.callback.onContinueLoadingRequested(this);
-        }
+        this.callback.onContinueLoadingRequested(this);
     }
 
     public void onPlaylistChanged() {
-        continuePreparingOrLoading();
+        this.callback.onContinueLoadingRequested(this);
     }
 
-    public void onPlaylistBlacklisted(HlsUrl url, long blacklistMs) {
+    public boolean onPlaylistError(HlsUrl url, boolean shouldBlacklist) {
+        boolean noBlacklistingFailure = true;
         for (HlsSampleStreamWrapper streamWrapper : this.sampleStreamWrappers) {
-            streamWrapper.onPlaylistBlacklisted(url, blacklistMs);
+            noBlacklistingFailure &= streamWrapper.onPlaylistError(url, shouldBlacklist);
         }
-        continuePreparingOrLoading();
+        this.callback.onContinueLoadingRequested(this);
+        return noBlacklistingFailure;
     }
 
     private void buildAndPrepareSampleStreamWrappers(long positionUs) {
@@ -273,7 +284,7 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
             } else {
                 TrackGroup[] trackGroupArr = new TrackGroup[1];
                 trackGroupArr[0] = new TrackGroup(audioRendition.format);
-                sampleStreamWrapper.prepareWithMasterPlaylistInfo(new TrackGroupArray(trackGroupArr), 0);
+                sampleStreamWrapper.prepareWithMasterPlaylistInfo(new TrackGroupArray(trackGroupArr), 0, TrackGroupArray.EMPTY);
             }
             i++;
             currentWrapperIndex = currentWrapperIndex2;
@@ -286,17 +297,17 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
             this.sampleStreamWrappers[currentWrapperIndex] = sampleStreamWrapper;
             trackGroupArr = new TrackGroup[1];
             trackGroupArr[0] = new TrackGroup(url.format);
-            sampleStreamWrapper.prepareWithMasterPlaylistInfo(new TrackGroupArray(trackGroupArr), 0);
+            sampleStreamWrapper.prepareWithMasterPlaylistInfo(new TrackGroupArray(trackGroupArr), 0, TrackGroupArray.EMPTY);
             i++;
             currentWrapperIndex = currentWrapperIndex2;
         }
         this.enabledSampleStreamWrappers = this.sampleStreamWrappers;
     }
 
-    private void buildAndPrepareMainSampleStreamWrapper(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist r25, long r26) {
+    private void buildAndPrepareMainSampleStreamWrapper(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist r27, long r28) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r18_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) in PHI: PHI: (r18_2 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) = (r18_1 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>), (r18_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>), (r18_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) binds: {(r18_1 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:14:0x0052, (r18_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:34:0x00cc, (r18_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:35:0x00ce}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r19_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) in PHI: PHI: (r19_2 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) = (r19_1 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>), (r19_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>), (r19_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>) binds: {(r19_1 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:14:0x0052, (r19_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:34:0x00cc, (r19_0 'selectedVariants' java.util.List<org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist$HlsUrl>)=B:35:0x00ce}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -309,11 +320,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
         /*
-        r24 = this;
-        r18 = new java.util.ArrayList;
-        r0 = r25;
+        r26 = this;
+        r19 = new java.util.ArrayList;
+        r0 = r27;
         r3 = r0.variants;
-        r0 = r18;
+        r0 = r19;
         r0.<init>(r3);
         r13 = new java.util.ArrayList;
         r13.<init>();
@@ -321,13 +332,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r12.<init>();
         r15 = 0;
     L_0x0016:
-        r3 = r18.size();
+        r3 = r19.size();
         if (r15 >= r3) goto L_0x004c;
     L_0x001c:
-        r0 = r18;
-        r19 = r0.get(r15);
-        r19 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl) r19;
         r0 = r19;
+        r20 = r0.get(r15);
+        r20 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl) r20;
+        r0 = r20;
         r14 = r0.format;
         r3 = r14.height;
         if (r3 > 0) goto L_0x0035;
@@ -337,7 +348,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = org.telegram.messenger.exoplayer2.util.Util.getCodecsOfType(r3, r4);
         if (r3 == 0) goto L_0x003d;
     L_0x0035:
-        r0 = r19;
+        r0 = r20;
         r13.add(r0);
     L_0x003a:
         r15 = r15 + 1;
@@ -348,16 +359,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = org.telegram.messenger.exoplayer2.util.Util.getCodecsOfType(r3, r4);
         if (r3 == 0) goto L_0x003a;
     L_0x0046:
-        r0 = r19;
+        r0 = r20;
         r12.add(r0);
         goto L_0x003a;
     L_0x004c:
         r3 = r13.isEmpty();
         if (r3 != 0) goto L_0x00c4;
     L_0x0052:
-        r18 = r13;
+        r19 = r13;
     L_0x0054:
-        r3 = r18.isEmpty();
+        r3 = r19.isEmpty();
         if (r3 != 0) goto L_0x00d4;
     L_0x005a:
         r3 = 1;
@@ -365,7 +376,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         org.telegram.messenger.exoplayer2.util.Assertions.checkArgument(r3);
         r3 = 0;
         r3 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl[r3];
-        r0 = r18;
+        r0 = r19;
         r5 = r0.toArray(r3);
         r5 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl[]) r5;
         r3 = 0;
@@ -373,84 +384,84 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = r3.format;
         r11 = r3.codecs;
         r4 = 0;
-        r0 = r25;
+        r0 = r27;
         r6 = r0.muxedAudioFormat;
-        r0 = r25;
+        r0 = r27;
         r7 = r0.muxedCaptionFormats;
-        r3 = r24;
-        r8 = r26;
-        r17 = r3.buildSampleStreamWrapper(r4, r5, r6, r7, r8);
-        r0 = r24;
+        r3 = r26;
+        r8 = r28;
+        r18 = r3.buildSampleStreamWrapper(r4, r5, r6, r7, r8);
+        r0 = r26;
         r3 = r0.sampleStreamWrappers;
         r4 = 0;
-        r3[r4] = r17;
-        r0 = r24;
+        r3[r4] = r18;
+        r0 = r26;
         r3 = r0.allowChunklessPreparation;
-        if (r3 == 0) goto L_0x019e;
+        if (r3 == 0) goto L_0x01cd;
     L_0x008e:
-        if (r11 == 0) goto L_0x019e;
+        if (r11 == 0) goto L_0x01cd;
     L_0x0090:
         r3 = 2;
         r3 = org.telegram.messenger.exoplayer2.util.Util.getCodecsOfType(r11, r3);
         if (r3 == 0) goto L_0x00d6;
     L_0x0097:
-        r22 = 1;
+        r23 = 1;
     L_0x0099:
         r3 = 1;
         r3 = org.telegram.messenger.exoplayer2.util.Util.getCodecsOfType(r11, r3);
         if (r3 == 0) goto L_0x00d9;
     L_0x00a0:
-        r21 = 1;
+        r22 = 1;
     L_0x00a2:
-        r16 = new java.util.ArrayList;
-        r16.<init>();
-        if (r22 == 0) goto L_0x013e;
+        r17 = new java.util.ArrayList;
+        r17.<init>();
+        if (r23 == 0) goto L_0x013e;
     L_0x00a9:
-        r3 = r18.size();
+        r3 = r19.size();
         r0 = new org.telegram.messenger.exoplayer2.Format[r3];
-        r23 = r0;
+        r24 = r0;
         r15 = 0;
     L_0x00b2:
-        r0 = r23;
+        r0 = r24;
         r3 = r0.length;
         if (r15 >= r3) goto L_0x00dc;
     L_0x00b7:
         r3 = r5[r15];
         r3 = r3.format;
         r3 = deriveVideoFormat(r3);
-        r23[r15] = r3;
+        r24[r15] = r3;
         r15 = r15 + 1;
         goto L_0x00b2;
     L_0x00c4:
         r3 = r12.size();
-        r4 = r18.size();
+        r4 = r19.size();
         if (r3 >= r4) goto L_0x0054;
     L_0x00ce:
-        r0 = r18;
+        r0 = r19;
         r0.removeAll(r12);
         goto L_0x0054;
     L_0x00d4:
         r3 = 0;
         goto L_0x005b;
     L_0x00d6:
-        r22 = 0;
+        r23 = 0;
         goto L_0x0099;
     L_0x00d9:
-        r21 = 0;
+        r22 = 0;
         goto L_0x00a2;
     L_0x00dc:
         r3 = new org.telegram.messenger.exoplayer2.source.TrackGroup;
-        r0 = r23;
+        r0 = r24;
         r3.<init>(r0);
-        r0 = r16;
+        r0 = r17;
         r0.add(r3);
-        if (r21 == 0) goto L_0x0118;
+        if (r22 == 0) goto L_0x0118;
     L_0x00ea:
-        r0 = r25;
+        r0 = r27;
         r3 = r0.muxedAudioFormat;
         if (r3 != 0) goto L_0x00fa;
     L_0x00f0:
-        r0 = r25;
+        r0 = r27;
         r3 = r0.audios;
         r3 = r3.isEmpty();
         if (r3 == 0) goto L_0x0118;
@@ -462,16 +473,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r7 = 0;
         r7 = r5[r7];
         r7 = r7.format;
-        r0 = r25;
+        r0 = r27;
         r8 = r0.muxedAudioFormat;
         r9 = -1;
         r7 = deriveMuxedAudioFormat(r7, r8, r9);
         r4[r6] = r7;
         r3.<init>(r4);
-        r0 = r16;
+        r0 = r17;
         r0.add(r3);
     L_0x0118:
-        r0 = r25;
+        r0 = r27;
         r10 = r0.muxedCaptionFormats;
         if (r10 == 0) goto L_0x016d;
     L_0x011e:
@@ -488,14 +499,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = (org.telegram.messenger.exoplayer2.Format) r3;
         r6[r7] = r3;
         r4.<init>(r6);
-        r0 = r16;
+        r0 = r17;
         r0.add(r4);
         r15 = r15 + 1;
         goto L_0x011f;
     L_0x013e:
-        if (r21 == 0) goto L_0x0184;
+        if (r22 == 0) goto L_0x01b3;
     L_0x0140:
-        r3 = r18.size();
+        r3 = r19.size();
         r2 = new org.telegram.messenger.exoplayer2.Format[r3];
         r15 = 0;
     L_0x0147:
@@ -504,12 +515,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x014a:
         r3 = r5[r15];
         r0 = r3.format;
-        r20 = r0;
-        r0 = r25;
+        r21 = r0;
+        r0 = r27;
         r3 = r0.muxedAudioFormat;
-        r0 = r20;
+        r0 = r21;
         r4 = r0.bitrate;
-        r0 = r20;
+        r0 = r21;
         r3 = deriveMuxedAudioFormat(r0, r3, r4);
         r2[r15] = r3;
         r15 = r15 + 1;
@@ -517,22 +528,45 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x0163:
         r3 = new org.telegram.messenger.exoplayer2.source.TrackGroup;
         r3.<init>(r2);
-        r0 = r16;
+        r0 = r17;
         r0.add(r3);
     L_0x016d:
+        r16 = new org.telegram.messenger.exoplayer2.source.TrackGroup;
+        r3 = 1;
+        r3 = new org.telegram.messenger.exoplayer2.Format[r3];
+        r4 = 0;
+        r6 = "ID3";
+        r7 = "application/id3";
+        r8 = 0;
+        r9 = -1;
+        r25 = 0;
+        r0 = r25;
+        r6 = org.telegram.messenger.exoplayer2.Format.createSampleFormat(r6, r7, r8, r9, r0);
+        r3[r4] = r6;
+        r0 = r16;
+        r0.<init>(r3);
+        r0 = r17;
+        r1 = r16;
+        r0.add(r1);
         r4 = new org.telegram.messenger.exoplayer2.source.TrackGroupArray;
         r3 = 0;
         r3 = new org.telegram.messenger.exoplayer2.source.TrackGroup[r3];
-        r0 = r16;
+        r0 = r17;
         r3 = r0.toArray(r3);
         r3 = (org.telegram.messenger.exoplayer2.source.TrackGroup[]) r3;
         r4.<init>(r3);
         r3 = 0;
-        r0 = r17;
-        r0.prepareWithMasterPlaylistInfo(r4, r3);
-    L_0x0183:
+        r6 = new org.telegram.messenger.exoplayer2.source.TrackGroupArray;
+        r7 = 1;
+        r7 = new org.telegram.messenger.exoplayer2.source.TrackGroup[r7];
+        r8 = 0;
+        r7[r8] = r16;
+        r6.<init>(r7);
+        r0 = r18;
+        r0.prepareWithMasterPlaylistInfo(r4, r3, r6);
+    L_0x01b2:
         return;
-    L_0x0184:
+    L_0x01b3:
         r3 = new java.lang.IllegalArgumentException;
         r4 = new java.lang.StringBuilder;
         r4.<init>();
@@ -542,28 +576,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r4.toString();
         r3.<init>(r4);
         throw r3;
-    L_0x019e:
+    L_0x01cd:
         r3 = 1;
-        r0 = r17;
+        r0 = r18;
         r0.setIsTimestampMaster(r3);
-        r17.continuePreparing();
-        goto L_0x0183;
+        r18.continuePreparing();
+        goto L_0x01b2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.hls.HlsMediaPeriod.buildAndPrepareMainSampleStreamWrapper(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist, long):void");
     }
 
     private HlsSampleStreamWrapper buildSampleStreamWrapper(int trackType, HlsUrl[] variants, Format muxedAudioFormat, List<Format> muxedCaptionFormats, long positionUs) {
         return new HlsSampleStreamWrapper(trackType, this, new HlsChunkSource(this.extractorFactory, this.playlistTracker, variants, this.dataSourceFactory, this.timestampAdjusterProvider, muxedCaptionFormats), this.allocator, positionUs, muxedAudioFormat, this.minLoadableRetryCount, this.eventDispatcher);
-    }
-
-    private void continuePreparingOrLoading() {
-        if (this.trackGroups != null) {
-            this.callback.onContinueLoadingRequested(this);
-            return;
-        }
-        for (HlsSampleStreamWrapper wrapper : this.sampleStreamWrappers) {
-            wrapper.continuePreparing();
-        }
     }
 
     private static Format deriveVideoFormat(Format variantFormat) {

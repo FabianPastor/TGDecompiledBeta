@@ -20,8 +20,14 @@ public final class ParsingLoadable<T> implements Loadable {
         T parse(Uri uri, InputStream inputStream) throws IOException;
     }
 
+    public static <T> T load(DataSource dataSource, Parser<? extends T> parser, Uri uri) throws IOException {
+        ParsingLoadable<T> loadable = new ParsingLoadable(dataSource, uri, 0, (Parser) parser);
+        loadable.load();
+        return loadable.getResult();
+    }
+
     public ParsingLoadable(DataSource dataSource, Uri uri, int type, Parser<? extends T> parser) {
-        this(dataSource, new DataSpec(uri, 1), type, (Parser) parser);
+        this(dataSource, new DataSpec(uri, 3), type, (Parser) parser);
     }
 
     public ParsingLoadable(DataSource dataSource, DataSpec dataSpec, int type, Parser<? extends T> parser) {

@@ -1495,13 +1495,13 @@ public class DarkTheme {
                 return -3019777;
             case 77:
                 return -723724;
-            case TLRPC.LAYER /*78*/:
+            case 78:
                 return -11099429;
             case 79:
                 return -5648402;
             case 81:
                 return -10052929;
-            case 82:
+            case TLRPC.LAYER /*82*/:
                 return -8812393;
             case 83:
                 return -11234874;

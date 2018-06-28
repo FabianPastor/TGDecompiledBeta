@@ -9,23 +9,23 @@ final class SingleSegmentIndex implements DashSegmentIndex {
         this.uri = uri;
     }
 
-    public int getSegmentNum(long timeUs, long periodDurationUs) {
+    public long getSegmentNum(long timeUs, long periodDurationUs) {
         return 0;
     }
 
-    public long getTimeUs(int segmentNum) {
+    public long getTimeUs(long segmentNum) {
         return 0;
     }
 
-    public long getDurationUs(int segmentNum, long periodDurationUs) {
+    public long getDurationUs(long segmentNum, long periodDurationUs) {
         return periodDurationUs;
     }
 
-    public RangedUri getSegmentUrl(int segmentNum) {
+    public RangedUri getSegmentUrl(long segmentNum) {
         return this.uri;
     }
 
-    public int getFirstSegmentNum() {
+    public long getFirstSegmentNum() {
         return 0;
     }
 

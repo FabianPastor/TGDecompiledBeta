@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -106,17 +105,11 @@ public final class DefaultDataSource implements DataSource {
     private DataSource getRtmpDataSource() {
         if (this.rtmpDataSource == null) {
             try {
-                this.rtmpDataSource = (DataSource) Class.forName("org.telegram.messenger.exoplayer2.ext.rtmp.RtmpDataSource").getDeclaredConstructor(new Class[0]).newInstance(new Object[0]);
+                this.rtmpDataSource = (DataSource) Class.forName("org.telegram.messenger.exoplayer2.ext.rtmp.RtmpDataSource").getConstructor(new Class[0]).newInstance(new Object[0]);
             } catch (ClassNotFoundException e) {
                 Log.w(TAG, "Attempting to play RTMP stream without depending on the RTMP extension");
-            } catch (InstantiationException e2) {
-                Log.e(TAG, "Error instantiating RtmpDataSource", e2);
-            } catch (IllegalAccessException e3) {
-                Log.e(TAG, "Error instantiating RtmpDataSource", e3);
-            } catch (NoSuchMethodException e4) {
-                Log.e(TAG, "Error instantiating RtmpDataSource", e4);
-            } catch (InvocationTargetException e5) {
-                Log.e(TAG, "Error instantiating RtmpDataSource", e5);
+            } catch (Exception e2) {
+                throw new RuntimeException("Error instantiating RTMP extension", e2);
             }
             if (this.rtmpDataSource == null) {
                 this.rtmpDataSource = this.baseDataSource;

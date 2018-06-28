@@ -32,14 +32,14 @@ public final class UrlTemplate {
         this.identifierCount = identifierCount;
     }
 
-    public String buildUri(String representationId, int segmentNumber, int bandwidth, long time) {
+    public String buildUri(String representationId, long segmentNumber, int bandwidth, long time) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.identifierCount; i++) {
             builder.append(this.urlPieces[i]);
             if (this.identifiers[i] == 1) {
                 builder.append(representationId);
             } else if (this.identifiers[i] == 2) {
-                builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Integer.valueOf(segmentNumber)}));
+                builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Long.valueOf(segmentNumber)}));
             } else if (this.identifiers[i] == 3) {
                 builder.append(String.format(Locale.US, this.identifierFormatTags[i], new Object[]{Integer.valueOf(bandwidth)}));
             } else if (this.identifiers[i] == 4) {

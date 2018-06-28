@@ -5,7 +5,9 @@ import java.io.IOException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class TeeDataSource implements DataSource {
+    private long bytesRemaining;
     private final DataSink dataSink;
+    private boolean dataSinkNeedsClosing;
     private final DataSource upstream;
 
     public TeeDataSource(DataSource upstream, DataSink dataSink) {
@@ -14,20 +16,32 @@ public final class TeeDataSource implements DataSource {
     }
 
     public long open(DataSpec dataSpec) throws IOException {
-        long dataLength = this.upstream.open(dataSpec);
-        if (dataSpec.length == -1 && dataLength != -1) {
-            dataSpec = new DataSpec(dataSpec.uri, dataSpec.absoluteStreamPosition, dataSpec.position, dataLength, dataSpec.key, dataSpec.flags);
+        this.bytesRemaining = this.upstream.open(dataSpec);
+        if (this.bytesRemaining == 0) {
+            return 0;
         }
+        if (dataSpec.length == -1 && this.bytesRemaining != -1) {
+            dataSpec = new DataSpec(dataSpec.uri, dataSpec.absoluteStreamPosition, dataSpec.position, this.bytesRemaining, dataSpec.key, dataSpec.flags);
+        }
+        this.dataSinkNeedsClosing = true;
         this.dataSink.open(dataSpec);
-        return dataLength;
+        return this.bytesRemaining;
     }
 
     public int read(byte[] buffer, int offset, int max) throws IOException {
-        int num = this.upstream.read(buffer, offset, max);
-        if (num > 0) {
-            this.dataSink.write(buffer, offset, num);
+        if (this.bytesRemaining == 0) {
+            return -1;
         }
-        return num;
+        int bytesRead = this.upstream.read(buffer, offset, max);
+        if (bytesRead <= 0) {
+            return bytesRead;
+        }
+        this.dataSink.write(buffer, offset, bytesRead);
+        if (this.bytesRemaining == -1) {
+            return bytesRead;
+        }
+        this.bytesRemaining -= (long) bytesRead;
+        return bytesRead;
     }
 
     public Uri getUri() {
@@ -38,7 +52,10 @@ public final class TeeDataSource implements DataSource {
         try {
             this.upstream.close();
         } finally {
-            this.dataSink.close();
+            if (this.dataSinkNeedsClosing) {
+                this.dataSinkNeedsClosing = false;
+                this.dataSink.close();
+            }
         }
     }
 }

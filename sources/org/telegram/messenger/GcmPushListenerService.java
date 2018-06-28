@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.voip.VoIPService;
@@ -41,8 +41,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C02121 implements Runnable {
-                C02121() {
+            class C02171 implements Runnable {
+                C02171() {
                 }
 
                 public void run() {
@@ -74,7 +74,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     int a;
                                     byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                                     nativeByteBuffer.readBytes(strBytes, true);
-                                    JSONObject json = new JSONObject(new String(strBytes, C0605C.UTF8_NAME));
+                                    JSONObject json = new JSONObject(new String(strBytes, C0615C.UTF8_NAME));
                                     JSONObject custom = json.getJSONObject("custom");
                                     if (json.has("user_id")) {
                                         obj = json.get("user_id");
@@ -751,385 +751,389 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                             }
                                                             switch (obj3) {
                                                                 case null:
-                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0493R.string.NotificationMessageText, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0500R.string.NotificationMessageText, args[0], args[1]);
                                                                     message = args[1];
                                                                     break;
                                                                 case 1:
-                                                                    messageText = LocaleController.formatString("NotificationMessageNoText", C0493R.string.NotificationMessageNoText, args[0]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    messageText = LocaleController.formatString("NotificationMessageNoText", C0500R.string.NotificationMessageNoText, args[0]);
+                                                                    message = LocaleController.getString("Message", C0500R.string.Message);
                                                                     break;
                                                                 case 2:
-                                                                    messageText = LocaleController.formatString("NotificationMessagePhoto", C0493R.string.NotificationMessagePhoto, args[0]);
-                                                                    message = LocaleController.getString("AttachPhoto", C0493R.string.AttachPhoto);
+                                                                    messageText = LocaleController.formatString("NotificationMessagePhoto", C0500R.string.NotificationMessagePhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0500R.string.AttachPhoto);
                                                                     break;
                                                                 case 3:
-                                                                    messageText = LocaleController.formatString("NotificationMessageSDPhoto", C0493R.string.NotificationMessageSDPhoto, args[0]);
-                                                                    message = LocaleController.getString("AttachPhoto", C0493R.string.AttachPhoto);
+                                                                    messageText = LocaleController.formatString("NotificationMessageSDPhoto", C0500R.string.NotificationMessageSDPhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachDestructingPhoto", C0500R.string.AttachDestructingPhoto);
                                                                     break;
                                                                 case 4:
-                                                                    messageText = LocaleController.formatString("NotificationMessageVideo", C0493R.string.NotificationMessageVideo, args[0]);
-                                                                    message = LocaleController.getString("AttachVideo", C0493R.string.AttachVideo);
+                                                                    messageText = LocaleController.formatString("NotificationMessageVideo", C0500R.string.NotificationMessageVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachVideo", C0500R.string.AttachVideo);
                                                                     break;
                                                                 case 5:
-                                                                    messageText = LocaleController.formatString("NotificationMessageSDVideo", C0493R.string.NotificationMessageSDVideo, args[0]);
-                                                                    message = LocaleController.getString("AttachVideo", C0493R.string.AttachVideo);
+                                                                    messageText = LocaleController.formatString("NotificationMessageSDVideo", C0500R.string.NotificationMessageSDVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachDestructingVideo", C0500R.string.AttachDestructingVideo);
                                                                     break;
                                                                 case 6:
-                                                                    messageText = LocaleController.getString("ActionTakeScreenshoot", C0493R.string.ActionTakeScreenshoot).replace("un1", args[0]);
+                                                                    messageText = LocaleController.getString("ActionTakeScreenshoot", C0500R.string.ActionTakeScreenshoot).replace("un1", args[0]);
                                                                     break;
                                                                 case 7:
-                                                                    messageText = LocaleController.formatString("NotificationMessageRound", C0493R.string.NotificationMessageRound, args[0]);
-                                                                    message = LocaleController.getString("AttachRound", C0493R.string.AttachRound);
+                                                                    messageText = LocaleController.formatString("NotificationMessageRound", C0500R.string.NotificationMessageRound, args[0]);
+                                                                    message = LocaleController.getString("AttachRound", C0500R.string.AttachRound);
                                                                     break;
                                                                 case 8:
-                                                                    messageText = LocaleController.formatString("NotificationMessageDocument", C0493R.string.NotificationMessageDocument, args[0]);
-                                                                    message = LocaleController.getString("AttachDocument", C0493R.string.AttachDocument);
+                                                                    messageText = LocaleController.formatString("NotificationMessageDocument", C0500R.string.NotificationMessageDocument, args[0]);
+                                                                    message = LocaleController.getString("AttachDocument", C0500R.string.AttachDocument);
                                                                     break;
                                                                 case 9:
-                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
-                                                                        messageText = LocaleController.formatString("NotificationMessageSticker", C0493R.string.NotificationMessageSticker, args[0]);
-                                                                    } else {
-                                                                        messageText = LocaleController.formatString("NotificationMessageStickerEmoji", C0493R.string.NotificationMessageStickerEmoji, args[0], args[1]);
+                                                                    if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
+                                                                        messageText = LocaleController.formatString("NotificationMessageStickerEmoji", C0500R.string.NotificationMessageStickerEmoji, args[0], args[1]);
+                                                                        message = args[1] + " " + LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
+                                                                        break;
                                                                     }
-                                                                    message = LocaleController.getString("AttachSticker", C0493R.string.AttachSticker);
+                                                                    messageText = LocaleController.formatString("NotificationMessageSticker", C0500R.string.NotificationMessageSticker, args[0]);
+                                                                    message = LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
                                                                     break;
                                                                 case 10:
-                                                                    messageText = LocaleController.formatString("NotificationMessageAudio", C0493R.string.NotificationMessageAudio, args[0]);
-                                                                    message = LocaleController.getString("AttachAudio", C0493R.string.AttachAudio);
+                                                                    messageText = LocaleController.formatString("NotificationMessageAudio", C0500R.string.NotificationMessageAudio, args[0]);
+                                                                    message = LocaleController.getString("AttachAudio", C0500R.string.AttachAudio);
                                                                     break;
                                                                 case 11:
-                                                                    messageText = LocaleController.formatString("NotificationMessageContact", C0493R.string.NotificationMessageContact, args[0]);
-                                                                    message = LocaleController.getString("AttachContact", C0493R.string.AttachContact);
+                                                                    messageText = LocaleController.formatString("NotificationMessageContact", C0500R.string.NotificationMessageContact, args[0]);
+                                                                    message = LocaleController.getString("AttachContact", C0500R.string.AttachContact);
                                                                     break;
                                                                 case 12:
-                                                                    messageText = LocaleController.formatString("NotificationMessageMap", C0493R.string.NotificationMessageMap, args[0]);
-                                                                    message = LocaleController.getString("AttachLocation", C0493R.string.AttachLocation);
+                                                                    messageText = LocaleController.formatString("NotificationMessageMap", C0500R.string.NotificationMessageMap, args[0]);
+                                                                    message = LocaleController.getString("AttachLocation", C0500R.string.AttachLocation);
                                                                     break;
                                                                 case 13:
-                                                                    messageText = LocaleController.formatString("NotificationMessageLiveLocation", C0493R.string.NotificationMessageLiveLocation, args[0]);
-                                                                    message = LocaleController.getString("AttachLiveLocation", C0493R.string.AttachLiveLocation);
+                                                                    messageText = LocaleController.formatString("NotificationMessageLiveLocation", C0500R.string.NotificationMessageLiveLocation, args[0]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation);
                                                                     break;
                                                                 case 14:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGif", C0493R.string.NotificationMessageGif, args[0]);
-                                                                    message = LocaleController.getString("AttachGif", C0493R.string.AttachGif);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGif", C0500R.string.NotificationMessageGif, args[0]);
+                                                                    message = LocaleController.getString("AttachGif", C0500R.string.AttachGif);
                                                                     break;
                                                                 case 15:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0493R.string.NotificationMessageGame, args[0]);
-                                                                    message = LocaleController.getString("AttachGame", C0493R.string.AttachGame);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0500R.string.NotificationMessageGame, args[0]);
+                                                                    message = LocaleController.getString("AttachGame", C0500R.string.AttachGame);
                                                                     break;
                                                                 case 16:
-                                                                    messageText = LocaleController.formatString("NotificationMessageInvoice", C0493R.string.NotificationMessageInvoice, args[0], args[1]);
-                                                                    message = LocaleController.getString("PaymentInvoice", C0493R.string.PaymentInvoice);
+                                                                    messageText = LocaleController.formatString("NotificationMessageInvoice", C0500R.string.NotificationMessageInvoice, args[0], args[1]);
+                                                                    message = LocaleController.getString("PaymentInvoice", C0500R.string.PaymentInvoice);
                                                                     break;
                                                                 case 17:
-                                                                    messageText = LocaleController.formatString("NotificationMessageForwardFew", C0493R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationMessageForwardFew", C0500R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 18:
-                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0493R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0500R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 19:
-                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0493R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationMessageFew", C0500R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 20:
-                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0493R.string.NotificationMessageText, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationMessageText", C0500R.string.NotificationMessageText, args[0], args[1]);
                                                                     message = args[1];
                                                                     break;
                                                                 case 21:
-                                                                    messageText = LocaleController.formatString("ChannelMessageNoText", C0493R.string.ChannelMessageNoText, args[0]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    messageText = LocaleController.formatString("ChannelMessageNoText", C0500R.string.ChannelMessageNoText, args[0]);
+                                                                    message = LocaleController.getString("Message", C0500R.string.Message);
                                                                     break;
                                                                 case 22:
-                                                                    messageText = LocaleController.formatString("ChannelMessagePhoto", C0493R.string.ChannelMessagePhoto, args[0]);
-                                                                    message = LocaleController.getString("AttachPhoto", C0493R.string.AttachPhoto);
+                                                                    messageText = LocaleController.formatString("ChannelMessagePhoto", C0500R.string.ChannelMessagePhoto, args[0]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0500R.string.AttachPhoto);
                                                                     break;
                                                                 case 23:
-                                                                    messageText = LocaleController.formatString("ChannelMessageVideo", C0493R.string.ChannelMessageVideo, args[0]);
-                                                                    message = LocaleController.getString("AttachVideo", C0493R.string.AttachVideo);
+                                                                    messageText = LocaleController.formatString("ChannelMessageVideo", C0500R.string.ChannelMessageVideo, args[0]);
+                                                                    message = LocaleController.getString("AttachVideo", C0500R.string.AttachVideo);
                                                                     break;
                                                                 case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
-                                                                    messageText = LocaleController.formatString("ChannelMessageRound", C0493R.string.ChannelMessageRound, args[0]);
-                                                                    message = LocaleController.getString("AttachRound", C0493R.string.AttachRound);
+                                                                    messageText = LocaleController.formatString("ChannelMessageRound", C0500R.string.ChannelMessageRound, args[0]);
+                                                                    message = LocaleController.getString("AttachRound", C0500R.string.AttachRound);
                                                                     break;
                                                                 case 25:
-                                                                    messageText = LocaleController.formatString("ChannelMessageDocument", C0493R.string.ChannelMessageDocument, args[0]);
-                                                                    message = LocaleController.getString("AttachDocument", C0493R.string.AttachDocument);
+                                                                    messageText = LocaleController.formatString("ChannelMessageDocument", C0500R.string.ChannelMessageDocument, args[0]);
+                                                                    message = LocaleController.getString("AttachDocument", C0500R.string.AttachDocument);
                                                                     break;
                                                                 case 26:
-                                                                    if (args.length <= 1 || TextUtils.isEmpty(args[1])) {
-                                                                        messageText = LocaleController.formatString("ChannelMessageSticker", C0493R.string.ChannelMessageSticker, args[0]);
-                                                                    } else {
-                                                                        messageText = LocaleController.formatString("ChannelMessageStickerEmoji", C0493R.string.ChannelMessageStickerEmoji, args[0], args[1]);
+                                                                    if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
+                                                                        messageText = LocaleController.formatString("ChannelMessageStickerEmoji", C0500R.string.ChannelMessageStickerEmoji, args[0], args[1]);
+                                                                        message = args[1] + " " + LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
+                                                                        break;
                                                                     }
-                                                                    message = LocaleController.getString("AttachSticker", C0493R.string.AttachSticker);
+                                                                    messageText = LocaleController.formatString("ChannelMessageSticker", C0500R.string.ChannelMessageSticker, args[0]);
+                                                                    message = LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
+                                                                    break;
                                                                     break;
                                                                 case 27:
-                                                                    messageText = LocaleController.formatString("ChannelMessageAudio", C0493R.string.ChannelMessageAudio, args[0]);
-                                                                    message = LocaleController.getString("AttachAudio", C0493R.string.AttachAudio);
+                                                                    messageText = LocaleController.formatString("ChannelMessageAudio", C0500R.string.ChannelMessageAudio, args[0]);
+                                                                    message = LocaleController.getString("AttachAudio", C0500R.string.AttachAudio);
                                                                     break;
                                                                 case 28:
-                                                                    messageText = LocaleController.formatString("ChannelMessageContact", C0493R.string.ChannelMessageContact, args[0]);
-                                                                    message = LocaleController.getString("AttachContact", C0493R.string.AttachContact);
+                                                                    messageText = LocaleController.formatString("ChannelMessageContact", C0500R.string.ChannelMessageContact, args[0]);
+                                                                    message = LocaleController.getString("AttachContact", C0500R.string.AttachContact);
                                                                     break;
                                                                 case 29:
-                                                                    messageText = LocaleController.formatString("ChannelMessageMap", C0493R.string.ChannelMessageMap, args[0]);
-                                                                    message = LocaleController.getString("AttachLocation", C0493R.string.AttachLocation);
+                                                                    messageText = LocaleController.formatString("ChannelMessageMap", C0500R.string.ChannelMessageMap, args[0]);
+                                                                    message = LocaleController.getString("AttachLocation", C0500R.string.AttachLocation);
                                                                     break;
                                                                 case 30:
-                                                                    messageText = LocaleController.formatString("ChannelMessageLiveLocation", C0493R.string.ChannelMessageLiveLocation, args[0]);
-                                                                    message = LocaleController.getString("AttachLiveLocation", C0493R.string.AttachLiveLocation);
+                                                                    messageText = LocaleController.formatString("ChannelMessageLiveLocation", C0500R.string.ChannelMessageLiveLocation, args[0]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation);
                                                                     break;
                                                                 case 31:
-                                                                    messageText = LocaleController.formatString("ChannelMessageGIF", C0493R.string.ChannelMessageGIF, args[0]);
-                                                                    message = LocaleController.getString("AttachGif", C0493R.string.AttachGif);
+                                                                    messageText = LocaleController.formatString("ChannelMessageGIF", C0500R.string.ChannelMessageGIF, args[0]);
+                                                                    message = LocaleController.getString("AttachGif", C0500R.string.AttachGif);
                                                                     break;
                                                                 case 32:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0493R.string.NotificationMessageGame, args[0]);
-                                                                    message = LocaleController.getString("AttachGame", C0493R.string.AttachGame);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGame", C0500R.string.NotificationMessageGame, args[0]);
+                                                                    message = LocaleController.getString("AttachGame", C0500R.string.AttachGame);
                                                                     break;
                                                                 case 33:
-                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0493R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1]).intValue()).toLowerCase());
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0500R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1]).intValue()).toLowerCase());
                                                                     localMessage = true;
                                                                     break;
                                                                 case 34:
-                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0493R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0500R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 35:
-                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0493R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
+                                                                    messageText = LocaleController.formatString("ChannelMessageFew", C0500R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupText", C0493R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
-                                                                    message = args[1];
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupText", C0500R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
+                                                                    message = args[2];
                                                                     break;
                                                                 case 37:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupNoText", C0493R.string.NotificationMessageGroupNoText, args[0], args[1]);
-                                                                    message = TtmlNode.ANONYMOUS_REGION_ID;
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupNoText", C0500R.string.NotificationMessageGroupNoText, args[0], args[1]);
+                                                                    message = LocaleController.getString("Message", C0500R.string.Message);
                                                                     break;
                                                                 case 38:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupPhoto", C0493R.string.NotificationMessageGroupPhoto, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachPhoto", C0493R.string.AttachPhoto);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupPhoto", C0500R.string.NotificationMessageGroupPhoto, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachPhoto", C0500R.string.AttachPhoto);
                                                                     break;
                                                                 case 39:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupVideo", C0493R.string.NotificationMessageGroupVideo, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachVideo", C0493R.string.AttachVideo);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupVideo", C0500R.string.NotificationMessageGroupVideo, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachVideo", C0500R.string.AttachVideo);
                                                                     break;
                                                                 case 40:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupRound", C0493R.string.NotificationMessageGroupRound, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachRound", C0493R.string.AttachRound);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupRound", C0500R.string.NotificationMessageGroupRound, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachRound", C0500R.string.AttachRound);
                                                                     break;
                                                                 case 41:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupDocument", C0493R.string.NotificationMessageGroupDocument, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachDocument", C0493R.string.AttachDocument);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupDocument", C0500R.string.NotificationMessageGroupDocument, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachDocument", C0500R.string.AttachDocument);
                                                                     break;
                                                                 case 42:
-                                                                    if (args.length <= 2 || TextUtils.isEmpty(args[2])) {
-                                                                        messageText = LocaleController.formatString("NotificationMessageGroupSticker", C0493R.string.NotificationMessageGroupSticker, args[0], args[1]);
-                                                                    } else {
-                                                                        messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", C0493R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
+                                                                    if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
+                                                                        messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", C0500R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
+                                                                        message = args[2] + " " + LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
+                                                                        break;
                                                                     }
-                                                                    message = LocaleController.getString("AttachSticker", C0493R.string.AttachSticker);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupSticker", C0500R.string.NotificationMessageGroupSticker, args[0], args[1]);
+                                                                    message = args[1] + " " + LocaleController.getString("AttachSticker", C0500R.string.AttachSticker);
                                                                     break;
                                                                 case 43:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupAudio", C0493R.string.NotificationMessageGroupAudio, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachAudio", C0493R.string.AttachAudio);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupAudio", C0500R.string.NotificationMessageGroupAudio, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachAudio", C0500R.string.AttachAudio);
                                                                     break;
                                                                 case 44:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupContact", C0493R.string.NotificationMessageGroupContact, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachContact", C0493R.string.AttachContact);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupContact", C0500R.string.NotificationMessageGroupContact, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachContact", C0500R.string.AttachContact);
                                                                     break;
                                                                 case 45:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupMap", C0493R.string.NotificationMessageGroupMap, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachLocation", C0493R.string.AttachLocation);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupMap", C0500R.string.NotificationMessageGroupMap, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachLocation", C0500R.string.AttachLocation);
                                                                     break;
                                                                 case 46:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", C0493R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachLiveLocation", C0493R.string.AttachLiveLocation);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", C0500R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation);
                                                                     break;
                                                                 case 47:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGif", C0493R.string.NotificationMessageGroupGif, args[0], args[1]);
-                                                                    message = LocaleController.getString("AttachGif", C0493R.string.AttachGif);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGif", C0500R.string.NotificationMessageGroupGif, args[0], args[1]);
+                                                                    message = LocaleController.getString("AttachGif", C0500R.string.AttachGif);
                                                                     break;
                                                                 case 48:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGame", C0493R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
-                                                                    message = LocaleController.getString("AttachGame", C0493R.string.AttachGame);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupGame", C0500R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
+                                                                    message = LocaleController.getString("AttachGame", C0500R.string.AttachGame);
                                                                     break;
                                                                 case 49:
-                                                                    messageText = LocaleController.formatString("NotificationMessageGroupInvoice", C0493R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
-                                                                    message = LocaleController.getString("PaymentInvoice", C0493R.string.PaymentInvoice);
+                                                                    messageText = LocaleController.formatString("NotificationMessageGroupInvoice", C0500R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
+                                                                    message = LocaleController.getString("PaymentInvoice", C0500R.string.PaymentInvoice);
                                                                     break;
                                                                 case 50:
-                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0493R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0500R.string.NotificationInvitedToGroup, args[0], args[1]);
                                                                     break;
                                                                 case 51:
-                                                                    messageText = LocaleController.formatString("NotificationEditedGroupName", C0493R.string.NotificationEditedGroupName, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationEditedGroupName", C0500R.string.NotificationEditedGroupName, args[0], args[1]);
                                                                     break;
                                                                 case 52:
-                                                                    messageText = LocaleController.formatString("NotificationEditedGroupPhoto", C0493R.string.NotificationEditedGroupPhoto, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationEditedGroupPhoto", C0500R.string.NotificationEditedGroupPhoto, args[0], args[1]);
                                                                     break;
                                                                 case 53:
-                                                                    messageText = LocaleController.formatString("NotificationGroupAddMember", C0493R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddMember", C0500R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
                                                                     break;
                                                                 case 54:
-                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0493R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationInvitedToGroup", C0500R.string.NotificationInvitedToGroup, args[0], args[1]);
                                                                     break;
                                                                 case 55:
-                                                                    messageText = LocaleController.formatString("NotificationGroupKickMember", C0493R.string.NotificationGroupKickMember, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupKickMember", C0500R.string.NotificationGroupKickMember, args[0], args[1]);
                                                                     break;
                                                                 case 56:
-                                                                    messageText = LocaleController.formatString("NotificationGroupKickYou", C0493R.string.NotificationGroupKickYou, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupKickYou", C0500R.string.NotificationGroupKickYou, args[0], args[1]);
                                                                     break;
                                                                 case 57:
-                                                                    messageText = LocaleController.formatString("NotificationGroupLeftMember", C0493R.string.NotificationGroupLeftMember, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupLeftMember", C0500R.string.NotificationGroupLeftMember, args[0], args[1]);
                                                                     break;
                                                                 case 58:
-                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelf", C0493R.string.NotificationGroupAddSelf, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelf", C0500R.string.NotificationGroupAddSelf, args[0], args[1]);
                                                                     break;
                                                                 case 59:
-                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelfMega", C0493R.string.NotificationGroupAddSelfMega, args[0], args[1]);
+                                                                    messageText = LocaleController.formatString("NotificationGroupAddSelfMega", C0500R.string.NotificationGroupAddSelfMega, args[0], args[1]);
                                                                     break;
                                                                 case 60:
-                                                                    messageText = LocaleController.formatString("NotificationGroupForwardedFew", C0493R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationGroupForwardedFew", C0500R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 61:
-                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0493R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0500R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 62:
-                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0493R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
+                                                                    messageText = LocaleController.formatString("NotificationGroupFew", C0500R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2]).intValue()));
                                                                     localMessage = true;
                                                                     break;
                                                                 case 63:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", C0493R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", C0500R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedText", C0493R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedText", C0500R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
                                                                         break;
                                                                     }
                                                                 case 64:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", C0493R.string.NotificationActionPinnedNoTextChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", C0500R.string.NotificationActionPinnedNoTextChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoText", C0493R.string.NotificationActionPinnedNoText, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedNoText", C0500R.string.NotificationActionPinnedNoText, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case VoIPService.CALL_MIN_LAYER /*65*/:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", C0493R.string.NotificationActionPinnedPhotoChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", C0500R.string.NotificationActionPinnedPhotoChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhoto", C0493R.string.NotificationActionPinnedPhoto, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedPhoto", C0500R.string.NotificationActionPinnedPhoto, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 66:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", C0493R.string.NotificationActionPinnedVideoChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", C0500R.string.NotificationActionPinnedVideoChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideo", C0493R.string.NotificationActionPinnedVideo, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVideo", C0500R.string.NotificationActionPinnedVideo, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 67:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", C0493R.string.NotificationActionPinnedRoundChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", C0500R.string.NotificationActionPinnedRoundChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRound", C0493R.string.NotificationActionPinnedRound, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedRound", C0500R.string.NotificationActionPinnedRound, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 68:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", C0493R.string.NotificationActionPinnedFileChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", C0500R.string.NotificationActionPinnedFileChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFile", C0493R.string.NotificationActionPinnedFile, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedFile", C0500R.string.NotificationActionPinnedFile, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 69:
                                                                     if (chat_from_id == 0) {
                                                                         if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", C0493R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
+                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", C0500R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
                                                                             break;
                                                                         } else {
-                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", C0493R.string.NotificationActionPinnedStickerChannel, args[0]);
+                                                                            messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", C0500R.string.NotificationActionPinnedStickerChannel, args[0]);
                                                                             break;
                                                                         }
                                                                     } else if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", C0493R.string.NotificationActionPinnedStickerEmoji, args[0], args[1], args[2]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", C0500R.string.NotificationActionPinnedStickerEmoji, args[0], args[1], args[2]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedSticker", C0493R.string.NotificationActionPinnedSticker, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedSticker", C0500R.string.NotificationActionPinnedSticker, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                     break;
                                                                 case 70:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", C0493R.string.NotificationActionPinnedVoiceChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", C0500R.string.NotificationActionPinnedVoiceChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoice", C0493R.string.NotificationActionPinnedVoice, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedVoice", C0500R.string.NotificationActionPinnedVoice, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 71:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContactChannel", C0493R.string.NotificationActionPinnedContactChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContactChannel", C0500R.string.NotificationActionPinnedContactChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContact", C0493R.string.NotificationActionPinnedContact, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedContact", C0500R.string.NotificationActionPinnedContact, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 72:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", C0493R.string.NotificationActionPinnedGeoChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", C0500R.string.NotificationActionPinnedGeoChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeo", C0493R.string.NotificationActionPinnedGeo, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeo", C0500R.string.NotificationActionPinnedGeo, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*73*/:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", C0493R.string.NotificationActionPinnedGeoLiveChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", C0500R.string.NotificationActionPinnedGeoLiveChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", C0493R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", C0500R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case VoIPService.CALL_MAX_LAYER /*74*/:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", C0493R.string.NotificationActionPinnedGameChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", C0500R.string.NotificationActionPinnedGameChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGame", C0493R.string.NotificationActionPinnedGame, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGame", C0500R.string.NotificationActionPinnedGame, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 75:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoiceChannel", C0493R.string.NotificationActionPinnedInvoiceChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoiceChannel", C0500R.string.NotificationActionPinnedInvoiceChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoice", C0493R.string.NotificationActionPinnedInvoice, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedInvoice", C0500R.string.NotificationActionPinnedInvoice, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 76:
                                                                     if (chat_from_id == 0) {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGifChannel", C0493R.string.NotificationActionPinnedGifChannel, args[0]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGifChannel", C0500R.string.NotificationActionPinnedGifChannel, args[0]);
                                                                         break;
                                                                     } else {
-                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGif", C0493R.string.NotificationActionPinnedGif, args[0], args[1]);
+                                                                        messageText = LocaleController.formatString("NotificationActionPinnedGif", C0500R.string.NotificationActionPinnedGif, args[0], args[1]);
                                                                         break;
                                                                     }
                                                                 case 77:
-                                                                case TLRPC.LAYER /*78*/:
+                                                                case 78:
                                                                 case 79:
                                                                 case 80:
                                                                 case 81:
-                                                                case 82:
+                                                                case TLRPC.LAYER /*82*/:
                                                                 case 83:
                                                                 case 84:
                                                                 case 85:
@@ -1242,7 +1246,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C02121());
+                Utilities.stageQueue.postRunnable(new C02171());
             }
         });
     }

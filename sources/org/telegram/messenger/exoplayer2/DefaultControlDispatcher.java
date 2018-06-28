@@ -20,4 +20,9 @@ public class DefaultControlDispatcher implements ControlDispatcher {
         player.setShuffleModeEnabled(shuffleModeEnabled);
         return true;
     }
+
+    public boolean dispatchStop(Player player, boolean reset) {
+        player.stop(reset);
+        return true;
+    }
 }

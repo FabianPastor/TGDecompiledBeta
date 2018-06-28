@@ -1,20 +1,17 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import java.io.IOException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.source.ShuffleOrder.UnshuffledShuffleOrder;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.tgnet.ConnectionsManager;
 
-public final class LoopingMediaSource implements MediaSource {
+public final class LoopingMediaSource extends CompositeMediaSource<Void> {
     private int childPeriodCount;
     private final MediaSource childSource;
     private final int loopCount;
-    private boolean wasPrepareSourceCalled;
 
     private static final class InfinitelyLoopingTimeline extends ForwardingTimeline {
         public InfinitelyLoopingTimeline(Timeline timeline) {
@@ -39,13 +36,17 @@ public final class LoopingMediaSource implements MediaSource {
         private final int loopCount;
 
         public LoopingTimeline(Timeline childTimeline, int loopCount) {
-            super(new UnshuffledShuffleOrder(loopCount));
+            boolean z = false;
+            super(false, new UnshuffledShuffleOrder(loopCount));
             this.childTimeline = childTimeline;
             this.childPeriodCount = childTimeline.getPeriodCount();
             this.childWindowCount = childTimeline.getWindowCount();
             this.loopCount = loopCount;
             if (this.childPeriodCount > 0) {
-                Assertions.checkState(loopCount <= ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount, "LoopingMediaSource contains too many periods");
+                if (loopCount <= ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount) {
+                    z = true;
+                }
+                Assertions.checkState(z, "LoopingMediaSource contains too many periods");
             }
         }
 
@@ -99,19 +100,9 @@ public final class LoopingMediaSource implements MediaSource {
         this.loopCount = loopCount;
     }
 
-    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, final Listener listener) {
-        Assertions.checkState(!this.wasPrepareSourceCalled, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
-        this.wasPrepareSourceCalled = true;
-        this.childSource.prepareSource(player, false, new Listener() {
-            public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
-                LoopingMediaSource.this.childPeriodCount = timeline.getPeriodCount();
-                listener.onSourceInfoRefreshed(LoopingMediaSource.this, LoopingMediaSource.this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID ? new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount) : new InfinitelyLoopingTimeline(timeline), manifest);
-            }
-        });
-    }
-
-    public void maybeThrowSourceInfoRefreshError() throws IOException {
-        this.childSource.maybeThrowSourceInfoRefreshError();
+    public void prepareSourceInternal(ExoPlayer player, boolean isTopLevelSource) {
+        super.prepareSourceInternal(player, isTopLevelSource);
+        prepareChildSource(null, this.childSource);
     }
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
@@ -125,7 +116,13 @@ public final class LoopingMediaSource implements MediaSource {
         this.childSource.releasePeriod(mediaPeriod);
     }
 
-    public void releaseSource() {
-        this.childSource.releaseSource();
+    public void releaseSourceInternal() {
+        super.releaseSourceInternal();
+        this.childPeriodCount = 0;
+    }
+
+    protected void onChildSourceInfoRefreshed(Void id, MediaSource mediaSource, Timeline timeline, Object manifest) {
+        this.childPeriodCount = timeline.getPeriodCount();
+        refreshSourceInfo(this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID ? new LoopingTimeline(timeline, this.loopCount) : new InfinitelyLoopingTimeline(timeline), manifest);
     }
 }

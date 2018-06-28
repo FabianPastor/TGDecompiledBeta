@@ -31,6 +31,9 @@ public final class DefaultHlsExtractorFactory implements HlsExtractorFactory {
     public Pair<Extractor, Boolean> createExtractor(Extractor previousExtractor, Uri uri, Format format, List<Format> muxedCaptionFormats, DrmInitData drmInitData, TimestampAdjuster timestampAdjuster) {
         Extractor extractor;
         String lastPathSegment = uri.getLastPathSegment();
+        if (lastPathSegment == null) {
+            lastPathSegment = TtmlNode.ANONYMOUS_REGION_ID;
+        }
         boolean isPackedAudioExtractor = false;
         if (MimeTypes.TEXT_VTT.equals(format.sampleMimeType) || lastPathSegment.endsWith(WEBVTT_FILE_EXTENSION) || lastPathSegment.endsWith(VTT_FILE_EXTENSION)) {
             extractor = new WebvttExtractor(format.language, timestampAdjuster);

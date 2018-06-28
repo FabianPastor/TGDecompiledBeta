@@ -4,6 +4,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class TrackSampleTable {
+    public final long durationUs;
     public final int[] flags;
     public final int maximumSize;
     public final long[] offsets;
@@ -11,7 +12,7 @@ final class TrackSampleTable {
     public final int[] sizes;
     public final long[] timestampsUs;
 
-    public TrackSampleTable(long[] offsets, int[] sizes, int maximumSize, long[] timestampsUs, int[] flags) {
+    public TrackSampleTable(long[] offsets, int[] sizes, int maximumSize, long[] timestampsUs, int[] flags, long durationUs) {
         boolean z;
         boolean z2 = true;
         Assertions.checkArgument(sizes.length == timestampsUs.length);
@@ -30,6 +31,7 @@ final class TrackSampleTable {
         this.maximumSize = maximumSize;
         this.timestampsUs = timestampsUs;
         this.flags = flags;
+        this.durationUs = durationUs;
         this.sampleCount = offsets.length;
     }
 

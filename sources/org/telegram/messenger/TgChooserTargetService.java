@@ -113,7 +113,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         }
                         if (name != null) {
                             if (icon == null) {
-                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0493R.drawable.logo_avatar);
+                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0500R.drawable.logo_avatar);
                             }
                             targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
                         }

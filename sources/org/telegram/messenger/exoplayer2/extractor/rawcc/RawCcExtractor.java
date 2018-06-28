@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.rawcc;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -36,7 +36,7 @@ public final class RawCcExtractor implements Extractor {
     }
 
     public void init(ExtractorOutput output) {
-        output.seekMap(new Unseekable(C0605C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0615C.TIME_UNSET));
         this.trackOutput = output.track(0, 3);
         output.endTracks();
         this.trackOutput.format(this.format);

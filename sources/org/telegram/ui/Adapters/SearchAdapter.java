@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -48,8 +48,8 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean useUserCell;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
-    class C09391 implements SearchAdapterHelperDelegate {
-        C09391() {
+    class C09781 implements SearchAdapterHelperDelegate {
+        C09781() {
         }
 
         public void onDataSetChanged() {
@@ -69,7 +69,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowBots = bots;
         this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C09391());
+        this.searchAdapterHelper.setDelegate(new C09781());
     }
 
     public void setCheckedMap(SparseArray<?> map) {
@@ -118,8 +118,7 @@ public class SearchAdapter extends SelectionAdapter {
                     SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true, SearchAdapter.this.channelId, false);
                 }
                 final int currentAccount = UserConfig.selectedAccount;
-                final ArrayList<TL_contact> contactsCopy = new ArrayList();
-                contactsCopy.addAll(ContactsController.getInstance(currentAccount).contacts);
+                final ArrayList<TL_contact> contactsCopy = new ArrayList(ContactsController.getInstance(currentAccount).contacts);
                 Utilities.searchQueue.postRunnable(new Runnable() {
                     public void run() {
                         String search1 = query.trim().toLowerCase();
@@ -236,7 +235,7 @@ public class SearchAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0493R.string.GlobalSearch));
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0500R.string.GlobalSearch));
                 break;
         }
         return new Holder(view);

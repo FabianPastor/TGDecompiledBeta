@@ -4,10 +4,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 
 public class NativeByteBuffer extends AbstractSerializedData {
-    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new C08351();
+    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new C08701();
     protected long address;
     public ByteBuffer buffer;
     private boolean justCalc;
@@ -15,8 +15,8 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public boolean reused;
 
     /* renamed from: org.telegram.tgnet.NativeByteBuffer$1 */
-    static class C08351 extends ThreadLocal<NativeByteBuffer> {
-        C08351() {
+    static class C08701 extends ThreadLocal<NativeByteBuffer> {
+        C08701() {
         }
 
         protected NativeByteBuffer initialValue() {
@@ -204,7 +204,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes(C0605C.UTF8_NAME));
+            writeByteArray(s.getBytes(C0615C.UTF8_NAME));
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m1e("write string error");
@@ -459,7 +459,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return new String(b, C0605C.UTF8_NAME);
+            return new String(b, C0615C.UTF8_NAME);
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

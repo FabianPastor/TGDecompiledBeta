@@ -10,7 +10,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ProxyDrawable extends Drawable {
@@ -20,20 +20,22 @@ public class ProxyDrawable extends Drawable {
     private int currentColorType;
     private Drawable emptyDrawable;
     private Drawable fullDrawable;
+    private boolean isEnabled;
     private long lastUpdateTime;
     private Paint outerPaint = new Paint(1);
     private int radOffset = 0;
 
     public ProxyDrawable(Context context) {
-        this.emptyDrawable = context.getResources().getDrawable(C0493R.drawable.proxy_off);
-        this.fullDrawable = context.getResources().getDrawable(C0493R.drawable.proxy_on);
+        this.emptyDrawable = context.getResources().getDrawable(C0500R.drawable.proxy_off);
+        this.fullDrawable = context.getResources().getDrawable(C0500R.drawable.proxy_on);
         this.outerPaint.setStyle(Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.outerPaint.setStrokeCap(Cap.ROUND);
         this.lastUpdateTime = SystemClock.uptimeMillis();
     }
 
-    public void setConnected(boolean value, boolean animated) {
+    public void setConnected(boolean enabled, boolean value, boolean animated) {
+        this.isEnabled = enabled;
         this.connected = value;
         this.lastUpdateTime = SystemClock.uptimeMillis();
         if (!animated) {
@@ -46,7 +48,10 @@ public class ProxyDrawable extends Drawable {
         long newTime = SystemClock.uptimeMillis();
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
-        if (!(this.connected && this.connectedAnimationProgress == 1.0f)) {
+        if (!this.isEnabled) {
+            this.emptyDrawable.setBounds(getBounds());
+            this.emptyDrawable.draw(canvas);
+        } else if (!(this.connected && this.connectedAnimationProgress == 1.0f)) {
             this.emptyDrawable.setBounds(getBounds());
             this.emptyDrawable.draw(canvas);
             this.outerPaint.setColor(Theme.getColor(Theme.key_contextProgressOuter2));
@@ -59,7 +64,7 @@ public class ProxyDrawable extends Drawable {
             canvas.drawArc(this.cicleRect, (float) (this.radOffset - 90), 90.0f, false, this.outerPaint);
             invalidateSelf();
         }
-        if (this.connected || this.connectedAnimationProgress != 0.0f) {
+        if (this.isEnabled && (this.connected || this.connectedAnimationProgress != 0.0f)) {
             this.fullDrawable.setAlpha((int) (255.0f * this.connectedAnimationProgress));
             this.fullDrawable.setBounds(getBounds());
             this.fullDrawable.draw(canvas);

@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -141,7 +141,7 @@ public class SharedLinkCell extends FrameLayout {
         setWillNotDraw(false);
         this.linkImageView = new ImageReceiver(this);
         this.letterDrawable = new LetterDrawable();
-        this.checkBox = new CheckBox(context, C0493R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, C0500R.drawable.round_check2);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 44.0f, 44.0f, LocaleController.isRTL ? 44.0f : 0.0f, 0.0f));

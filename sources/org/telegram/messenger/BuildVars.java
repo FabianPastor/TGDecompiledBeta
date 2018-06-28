@@ -1,11 +1,11 @@
 package org.telegram.messenger;
 
 public class BuildVars {
+    public static boolean ALLOW_CHAT_PREVIEW = true;
     public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e";
     public static int APP_ID = 6;
-    public static String BING_SEARCH_KEY = "300f7735cfd04393a38d7838a0bf246b";
     public static int BUILD_VERSION = BuildConfig.VERSION_CODE;
-    public static String BUILD_VERSION_STRING = "4.8.5";
+    public static String BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = false;
     public static String GOOGLE_API_KEY = "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k";

@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 
 public class EmuDetector {
     private static final String[] ANDY_FILES = new String[]{"fstab.andy", "ueventd.andy.rc"};
@@ -155,7 +155,7 @@ public class EmuDetector {
         PackageManager packageManager = this.mContext.getPackageManager();
         for (String pkgName : this.mListPackageName) {
             Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0605C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
+            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0615C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
                 return true;
             }
         }

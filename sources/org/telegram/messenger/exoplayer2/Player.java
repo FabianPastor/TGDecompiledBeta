@@ -151,6 +151,8 @@ public interface Player {
 
     long getCurrentPosition();
 
+    Object getCurrentTag();
+
     Timeline getCurrentTimeline();
 
     TrackGroupArray getCurrentTrackGroups();
@@ -164,6 +166,8 @@ public interface Player {
     int getNextWindowIndex();
 
     boolean getPlayWhenReady();
+
+    ExoPlaybackException getPlaybackError();
 
     PlaybackParameters getPlaybackParameters();
 

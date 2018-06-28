@@ -132,30 +132,79 @@ public final class MimeTypes {
             return VIDEO_VP8;
         }
         if (codec.startsWith(AudioSampleEntry.TYPE3)) {
-            return AUDIO_AAC;
-        }
-        if (codec.startsWith(AudioSampleEntry.TYPE8) || codec.startsWith("dac3")) {
+            String mimeType = null;
+            if (codec.startsWith("mp4a.")) {
+                String objectTypeString = codec.substring(5);
+                if (objectTypeString.length() >= 2) {
+                    try {
+                        mimeType = getMimeTypeFromMp4ObjectType(Integer.parseInt(Util.toUpperInvariant(objectTypeString.substring(0, 2)), 16));
+                    } catch (NumberFormatException e) {
+                    }
+                }
+            }
+            if (mimeType == null) {
+                return AUDIO_AAC;
+            }
+            return mimeType;
+        } else if (codec.startsWith(AudioSampleEntry.TYPE8) || codec.startsWith("dac3")) {
             return AUDIO_AC3;
+        } else {
+            if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith("dec3")) {
+                return AUDIO_E_AC3;
+            }
+            if (codec.startsWith("ec+3")) {
+                return AUDIO_E_AC3_JOC;
+            }
+            if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {
+                return AUDIO_DTS;
+            }
+            if (codec.startsWith(AudioSampleEntry.TYPE12) || codec.startsWith(AudioSampleEntry.TYPE11)) {
+                return AUDIO_DTS_HD;
+            }
+            if (codec.startsWith("opus")) {
+                return AUDIO_OPUS;
+            }
+            if (codec.startsWith("vorbis")) {
+                return AUDIO_VORBIS;
+            }
+            return null;
         }
-        if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith("dec3")) {
-            return AUDIO_E_AC3;
+    }
+
+    public static String getMimeTypeFromMp4ObjectType(int objectType) {
+        switch (objectType) {
+            case 32:
+                return VIDEO_MP4V;
+            case 33:
+                return "video/avc";
+            case 35:
+                return VIDEO_H265;
+            case 64:
+            case 102:
+            case 103:
+            case 104:
+                return AUDIO_AAC;
+            case 96:
+            case 97:
+                return VIDEO_MPEG2;
+            case 105:
+            case 107:
+                return AUDIO_MPEG;
+            case 165:
+                return AUDIO_AC3;
+            case 166:
+                return AUDIO_E_AC3;
+            case 169:
+            case 172:
+                return AUDIO_DTS;
+            case 170:
+            case 171:
+                return AUDIO_DTS_HD;
+            case 173:
+                return AUDIO_OPUS;
+            default:
+                return null;
         }
-        if (codec.startsWith("ec+3")) {
-            return AUDIO_E_AC3_JOC;
-        }
-        if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {
-            return AUDIO_DTS;
-        }
-        if (codec.startsWith(AudioSampleEntry.TYPE12) || codec.startsWith(AudioSampleEntry.TYPE11)) {
-            return AUDIO_DTS_HD;
-        }
-        if (codec.startsWith("opus")) {
-            return AUDIO_OPUS;
-        }
-        if (codec.startsWith("vorbis")) {
-            return AUDIO_VORBIS;
-        }
-        return null;
     }
 
     public static int getTrackType(String mimeType) {

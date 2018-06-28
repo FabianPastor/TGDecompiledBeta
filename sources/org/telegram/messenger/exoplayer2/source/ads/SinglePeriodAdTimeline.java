@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.source.ads;
 
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -33,9 +33,9 @@ final class SinglePeriodAdTimeline extends ForwardingTimeline {
         return period;
     }
 
-    public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-        window = super.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
-        if (window.durationUs == C0605C.TIME_UNSET) {
+    public Window getWindow(int windowIndex, Window window, boolean setTag, long defaultPositionProjectionUs) {
+        window = super.getWindow(windowIndex, window, setTag, defaultPositionProjectionUs);
+        if (window.durationUs == C0615C.TIME_UNSET) {
             window.durationUs = this.adPlaybackState.contentDurationUs;
         }
         return window;

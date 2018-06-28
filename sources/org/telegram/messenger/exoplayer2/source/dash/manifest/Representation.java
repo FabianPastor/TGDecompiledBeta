@@ -38,23 +38,23 @@ public abstract class Representation {
             return null;
         }
 
-        public RangedUri getSegmentUrl(int segmentIndex) {
+        public RangedUri getSegmentUrl(long segmentIndex) {
             return this.segmentBase.getSegmentUrl(this, segmentIndex);
         }
 
-        public int getSegmentNum(long timeUs, long periodDurationUs) {
+        public long getSegmentNum(long timeUs, long periodDurationUs) {
             return this.segmentBase.getSegmentNum(timeUs, periodDurationUs);
         }
 
-        public long getTimeUs(int segmentIndex) {
+        public long getTimeUs(long segmentIndex) {
             return this.segmentBase.getSegmentTimeUs(segmentIndex);
         }
 
-        public long getDurationUs(int segmentIndex, long periodDurationUs) {
+        public long getDurationUs(long segmentIndex, long periodDurationUs) {
             return this.segmentBase.getSegmentDurationUs(segmentIndex, periodDurationUs);
         }
 
-        public int getFirstSegmentNum() {
+        public long getFirstSegmentNum() {
             return this.segmentBase.getFirstSegmentNum();
         }
 

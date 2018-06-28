@@ -5,17 +5,17 @@ import org.telegram.messenger.exoplayer2.source.dash.manifest.RangedUri;
 public interface DashSegmentIndex {
     public static final int INDEX_UNBOUNDED = -1;
 
-    long getDurationUs(int i, long j);
+    long getDurationUs(long j, long j2);
 
-    int getFirstSegmentNum();
+    long getFirstSegmentNum();
 
     int getSegmentCount(long j);
 
-    int getSegmentNum(long j, long j2);
+    long getSegmentNum(long j, long j2);
 
-    RangedUri getSegmentUrl(int i);
+    RangedUri getSegmentUrl(long j);
 
-    long getTimeUs(int i);
+    long getTimeUs(long j);
 
     boolean isExplicit();
 }

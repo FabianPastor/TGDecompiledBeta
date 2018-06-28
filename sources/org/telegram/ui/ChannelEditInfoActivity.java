@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -55,6 +55,7 @@ import org.telegram.tgnet.TLRPC.TL_chatPhoto;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_chats;
+import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -72,13 +73,13 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.AvatarUpdater;
-import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.ImageUpdater;
+import org.telegram.ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.ui.Components.LayoutHelper;
 
-public class ChannelEditInfoActivity extends BaseFragment implements NotificationCenterDelegate, AvatarUpdaterDelegate {
+public class ChannelEditInfoActivity extends BaseFragment implements NotificationCenterDelegate, ImageUpdaterDelegate {
     private static final int done_button = 1;
     private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList();
     private ShadowSectionCell adminedInfoCell;
@@ -86,7 +87,6 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     private FileLocation avatar;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImage;
-    private AvatarUpdater avatarUpdater = new AvatarUpdater();
     private boolean canCreatePublic = true;
     private int chatId;
     private int checkReqId;
@@ -105,6 +105,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     private HeaderCell headerCell;
     private HeaderCell headerCell2;
     private boolean historyHidden;
+    private ImageUpdater imageUpdater = new ImageUpdater();
     private ChatFull info;
     private TextInfoPrivacyCell infoCell;
     private TextInfoPrivacyCell infoCell2;
@@ -145,8 +146,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     private EditTextBoldCursor usernameTextView;
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$2 */
-    class C12292 implements RequestDelegate {
-        C12292() {
+    class C12682 implements RequestDelegate {
+        C12682() {
         }
 
         public void run(TLObject response, final TL_error error) {
@@ -164,11 +165,11 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$3 */
-    class C12313 extends ActionBarMenuOnItemClick {
+    class C12703 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ChannelEditInfoActivity$3$1 */
-        class C12301 implements OnClickListener {
-            C12301() {
+        class C12691 implements OnClickListener {
+            C12691() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -183,7 +184,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             }
         }
 
-        C12313() {
+        C12703() {
         }
 
         public void onItemClick(int id) {
@@ -199,13 +200,13 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     AndroidUtilities.shakeView(ChannelEditInfoActivity.this.nameTextView, 2.0f, 0);
                 } else if (ChannelEditInfoActivity.this.usernameTextView == null || ChannelEditInfoActivity.this.isPrivate || (((ChannelEditInfoActivity.this.currentChat.username != null || ChannelEditInfoActivity.this.usernameTextView.length() == 0) && (ChannelEditInfoActivity.this.currentChat.username == null || ChannelEditInfoActivity.this.currentChat.username.equalsIgnoreCase(ChannelEditInfoActivity.this.usernameTextView.getText().toString()))) || ChannelEditInfoActivity.this.nameTextView.length() == 0 || ChannelEditInfoActivity.this.lastNameAvailable)) {
                     ChannelEditInfoActivity.this.donePressed = true;
-                    if (ChannelEditInfoActivity.this.avatarUpdater.uploadingAvatar != null) {
+                    if (ChannelEditInfoActivity.this.imageUpdater.uploadingImage != null) {
                         ChannelEditInfoActivity.this.createAfterUpload = true;
                         ChannelEditInfoActivity.this.progressDialog = new AlertDialog(ChannelEditInfoActivity.this.getParentActivity(), 1);
-                        ChannelEditInfoActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", C0493R.string.Loading));
+                        ChannelEditInfoActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", C0500R.string.Loading));
                         ChannelEditInfoActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                         ChannelEditInfoActivity.this.progressDialog.setCancelable(false);
-                        ChannelEditInfoActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", C0493R.string.Cancel), new C12301());
+                        ChannelEditInfoActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", C0500R.string.Cancel), new C12691());
                         ChannelEditInfoActivity.this.progressDialog.show();
                         return;
                     }
@@ -253,18 +254,18 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$4 */
-    class C12334 implements View.OnClickListener {
+    class C12724 implements View.OnClickListener {
 
         /* renamed from: org.telegram.ui.ChannelEditInfoActivity$4$1 */
-        class C12321 implements OnClickListener {
-            C12321() {
+        class C12711 implements OnClickListener {
+            C12711() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    ChannelEditInfoActivity.this.avatarUpdater.openCamera();
+                    ChannelEditInfoActivity.this.imageUpdater.openCamera();
                 } else if (i == 1) {
-                    ChannelEditInfoActivity.this.avatarUpdater.openGallery();
+                    ChannelEditInfoActivity.this.imageUpdater.openGallery();
                 } else if (i == 2) {
                     ChannelEditInfoActivity.this.avatar = null;
                     ChannelEditInfoActivity.this.uploadedAvatar = null;
@@ -273,21 +274,21 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             }
         }
 
-        C12334() {
+        C12724() {
         }
 
         public void onClick(View view) {
             if (ChannelEditInfoActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(ChannelEditInfoActivity.this.getParentActivity());
-                builder.setItems(ChannelEditInfoActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley), LocaleController.getString("DeletePhoto", C0493R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", C0493R.string.FromCamera), LocaleController.getString("FromGalley", C0493R.string.FromGalley)}, new C12321());
+                builder.setItems(ChannelEditInfoActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", C0500R.string.FromCamera), LocaleController.getString("FromGalley", C0500R.string.FromGalley), LocaleController.getString("DeletePhoto", C0500R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", C0500R.string.FromCamera), LocaleController.getString("FromGalley", C0500R.string.FromGalley)}, new C12711());
                 ChannelEditInfoActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$5 */
-    class C12345 implements TextWatcher {
-        C12345() {
+    class C12735 implements TextWatcher {
+        C12735() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -310,8 +311,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$6 */
-    class C12356 implements OnEditorActionListener {
-        C12356() {
+    class C12746 implements OnEditorActionListener {
+        C12746() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -324,8 +325,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$7 */
-    class C12367 implements TextWatcher {
-        C12367() {
+    class C12757 implements TextWatcher {
+        C12757() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -339,8 +340,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$8 */
-    class C12378 implements View.OnClickListener {
-        C12378() {
+    class C12768 implements View.OnClickListener {
+        C12768() {
         }
 
         public void onClick(View v) {
@@ -352,8 +353,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$9 */
-    class C12389 implements View.OnClickListener {
-        C12389() {
+    class C12779 implements View.OnClickListener {
+        C12779() {
         }
 
         public void onClick(View v) {
@@ -409,10 +410,10 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             TL_channels_checkUsername req = new TL_channels_checkUsername();
             req.username = "1";
             req.channel = new TL_inputChannelEmpty();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C12292());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C12682());
         }
-        this.avatarUpdater.parentFragment = this;
-        this.avatarUpdater.delegate = this;
+        this.imageUpdater.parentFragment = this;
+        this.imageUpdater.delegate = this;
         this.signMessages = this.currentChat.signatures;
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
         return super.onFragmentCreate();
@@ -420,8 +421,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        if (this.avatarUpdater != null) {
-            this.avatarUpdater.clear();
+        if (this.imageUpdater != null) {
+            this.imageUpdater.clear();
         }
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
@@ -432,9 +433,9 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         if (this.textCell2 != null && this.info != null) {
             if (this.info.stickerset != null) {
-                this.textCell2.setTextAndValue(LocaleController.getString("GroupStickers", C0493R.string.GroupStickers), this.info.stickerset.title, false);
+                this.textCell2.setTextAndValue(LocaleController.getString("GroupStickers", C0500R.string.GroupStickers), this.info.stickerset.title, false);
             } else {
-                this.textCell2.setText(LocaleController.getString("GroupStickers", C0493R.string.GroupStickers), false);
+                this.textCell2.setText(LocaleController.getString("GroupStickers", C0500R.string.GroupStickers), false);
             }
         }
     }
@@ -442,10 +443,10 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     public View createView(Context context) {
         float f;
         float f2;
-        this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C12313());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0493R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C12703());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0500R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         ScrollView scrollView = this.fragmentView;
@@ -453,7 +454,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         this.linearLayout = new LinearLayout(context);
         scrollView.addView(this.linearLayout, new LayoutParams(-1, -2));
         this.linearLayout.setOrientation(1);
-        this.actionBar.setTitle(LocaleController.getString("ChannelEdit", C0493R.string.ChannelEdit));
+        this.actionBar.setTitle(LocaleController.getString("ChannelEdit", C0500R.string.ChannelEdit));
         this.linearLayout2 = new LinearLayout(context);
         this.linearLayout2.setOrientation(1);
         this.linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -477,12 +478,12 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             f2 = 0.0f;
         }
         frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-        this.avatarImage.setOnClickListener(new C12334());
+        this.avatarImage.setOnClickListener(new C12724());
         this.nameTextView = new EditTextBoldCursor(context);
         if (this.currentChat.megagroup) {
-            this.nameTextView.setHint(LocaleController.getString("GroupName", C0493R.string.GroupName));
+            this.nameTextView.setHint(LocaleController.getString("GroupName", C0500R.string.GroupName));
         } else {
-            this.nameTextView.setHint(LocaleController.getString("EnterChannelName", C0493R.string.EnterChannelName));
+            this.nameTextView.setHint(LocaleController.getString("EnterChannelName", C0500R.string.EnterChannelName));
         }
         this.nameTextView.setMaxLines(4);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
@@ -507,7 +508,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             f2 = 16.0f;
         }
         frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f, 0.0f, f2, 0.0f));
-        this.nameTextView.addTextChangedListener(new C12345());
+        this.nameTextView.addTextChangedListener(new C12735());
         this.lineView = new View(context);
         this.lineView.setBackgroundColor(Theme.getColor(Theme.key_divider));
         this.linearLayout.addView(this.lineView, new LinearLayout.LayoutParams(-1, 1));
@@ -527,13 +528,13 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         this.descriptionTextView.setEnabled(ChatObject.canChangeChatInfo(this.currentChat));
         this.descriptionTextView.setFocusable(this.descriptionTextView.isEnabled());
         this.descriptionTextView.setFilters(new InputFilter[]{new LengthFilter(255)});
-        this.descriptionTextView.setHint(LocaleController.getString("DescriptionOptionalPlaceholder", C0493R.string.DescriptionOptionalPlaceholder));
+        this.descriptionTextView.setHint(LocaleController.getString("DescriptionOptionalPlaceholder", C0500R.string.DescriptionOptionalPlaceholder));
         this.descriptionTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
         this.descriptionTextView.setCursorWidth(1.5f);
         this.linearLayout3.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, -2, 17.0f, 12.0f, 17.0f, 6.0f));
-        this.descriptionTextView.setOnEditorActionListener(new C12356());
-        this.descriptionTextView.addTextChangedListener(new C12367());
+        this.descriptionTextView.setOnEditorActionListener(new C12746());
+        this.descriptionTextView.addTextChangedListener(new C12757());
         this.sectionCell = new ShadowSectionCell(context);
         this.linearLayout.addView(this.sectionCell, LayoutHelper.createLinear(-1, -2));
         this.container1 = new FrameLayout(context);
@@ -547,21 +548,21 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             this.radioButtonCell1 = new RadioButtonCell(context);
             this.radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.currentChat.megagroup) {
-                this.radioButtonCell1.setTextAndValue(LocaleController.getString("MegaPublic", C0493R.string.MegaPublic), LocaleController.getString("MegaPublicInfo", C0493R.string.MegaPublicInfo), !this.isPrivate);
+                this.radioButtonCell1.setTextAndValue(LocaleController.getString("MegaPublic", C0500R.string.MegaPublic), LocaleController.getString("MegaPublicInfo", C0500R.string.MegaPublicInfo), !this.isPrivate);
             } else {
-                this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", C0493R.string.ChannelPublic), LocaleController.getString("ChannelPublicInfo", C0493R.string.ChannelPublicInfo), !this.isPrivate);
+                this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", C0500R.string.ChannelPublic), LocaleController.getString("ChannelPublicInfo", C0500R.string.ChannelPublicInfo), !this.isPrivate);
             }
             this.linearLayoutTypeContainer.addView(this.radioButtonCell1, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell1.setOnClickListener(new C12378());
+            this.radioButtonCell1.setOnClickListener(new C12768());
             this.radioButtonCell2 = new RadioButtonCell(context);
             this.radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.currentChat.megagroup) {
-                this.radioButtonCell2.setTextAndValue(LocaleController.getString("MegaPrivate", C0493R.string.MegaPrivate), LocaleController.getString("MegaPrivateInfo", C0493R.string.MegaPrivateInfo), this.isPrivate);
+                this.radioButtonCell2.setTextAndValue(LocaleController.getString("MegaPrivate", C0500R.string.MegaPrivate), LocaleController.getString("MegaPrivateInfo", C0500R.string.MegaPrivateInfo), this.isPrivate);
             } else {
-                this.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", C0493R.string.ChannelPrivate), LocaleController.getString("ChannelPrivateInfo", C0493R.string.ChannelPrivateInfo), this.isPrivate);
+                this.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", C0500R.string.ChannelPrivate), LocaleController.getString("ChannelPrivateInfo", C0500R.string.ChannelPrivateInfo), this.isPrivate);
             }
             this.linearLayoutTypeContainer.addView(this.radioButtonCell2, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell2.setOnClickListener(new C12389());
+            this.radioButtonCell2.setOnClickListener(new C12779());
             this.sectionCell2 = new ShadowSectionCell(context);
             this.linearLayout.addView(this.sectionCell2, LayoutHelper.createLinear(-1, -2));
             this.linkContainer = new LinearLayout(context);
@@ -601,7 +602,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             this.usernameTextView.setSingleLine(true);
             this.usernameTextView.setInputType(163872);
             this.usernameTextView.setImeOptions(6);
-            this.usernameTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", C0493R.string.ChannelUsernamePlaceholder));
+            this.usernameTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", C0500R.string.ChannelUsernamePlaceholder));
             this.usernameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.usernameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             this.usernameTextView.setCursorWidth(1.5f);
@@ -625,7 +626,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     if (ChannelEditInfoActivity.this.invite != null) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", ChannelEditInfoActivity.this.invite.link));
-                            Toast.makeText(ChannelEditInfoActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", C0493R.string.LinkCopied), 0).show();
+                            Toast.makeText(ChannelEditInfoActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", C0500R.string.LinkCopied), 0).show();
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -638,7 +639,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             this.checkTextView.setVisibility(8);
             this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 17, 3, 17, 7));
             this.typeInfoCell = new TextInfoPrivacyCell(context);
-            this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             this.linearLayout.addView(this.typeInfoCell, LayoutHelper.createLinear(-1, -2));
             this.loadingAdminedCell = new LoadingCell(context);
             this.linearLayout.addView(this.loadingAdminedCell, LayoutHelper.createLinear(-1, -2));
@@ -652,7 +653,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         }
         if (this.currentChat.creator && this.currentChat.megagroup) {
             this.headerCell2 = new HeaderCell(context);
-            this.headerCell2.setText(LocaleController.getString("ChatHistory", C0493R.string.ChatHistory));
+            this.headerCell2.setText(LocaleController.getString("ChatHistory", C0500R.string.ChatHistory));
             this.headerCell2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             this.linearLayout.addView(this.headerCell2);
             this.linearLayoutInviteContainer = new LinearLayout(context);
@@ -661,7 +662,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             this.linearLayout.addView(this.linearLayoutInviteContainer, LayoutHelper.createLinear(-1, -2));
             this.radioButtonCell3 = new RadioButtonCell(context);
             this.radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.radioButtonCell3.setTextAndValue(LocaleController.getString("ChatHistoryVisible", C0493R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", C0493R.string.ChatHistoryVisibleInfo), !this.historyHidden);
+            this.radioButtonCell3.setTextAndValue(LocaleController.getString("ChatHistoryVisible", C0500R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", C0500R.string.ChatHistoryVisibleInfo), !this.historyHidden);
             this.linearLayoutInviteContainer.addView(this.radioButtonCell3, LayoutHelper.createLinear(-1, -2));
             this.radioButtonCell3.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -672,7 +673,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             });
             this.radioButtonCell4 = new RadioButtonCell(context);
             this.radioButtonCell4.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", C0493R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", C0493R.string.ChatHistoryHiddenInfo), this.historyHidden);
+            this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", C0500R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", C0500R.string.ChatHistoryHiddenInfo), this.historyHidden);
             this.linearLayoutInviteContainer.addView(this.radioButtonCell4, LayoutHelper.createLinear(-1, -2));
             this.radioButtonCell4.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -700,7 +701,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         if (!this.currentChat.megagroup) {
             this.textCheckCell = new TextCheckCell(context);
             this.textCheckCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.textCheckCell.setTextAndCheck(LocaleController.getString("ChannelSignMessages", C0493R.string.ChannelSignMessages), this.signMessages, false);
+            this.textCheckCell.setTextAndCheck(LocaleController.getString("ChannelSignMessages", C0500R.string.ChannelSignMessages), this.signMessages, false);
             this.container2.addView(this.textCheckCell, LayoutHelper.createFrame(-1, -2.0f));
             this.textCheckCell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -709,17 +710,17 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 }
             });
             this.infoCell = new TextInfoPrivacyCell(context);
-            this.infoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-            this.infoCell.setText(LocaleController.getString("ChannelSignMessagesInfo", C0493R.string.ChannelSignMessagesInfo));
+            this.infoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+            this.infoCell.setText(LocaleController.getString("ChannelSignMessagesInfo", C0500R.string.ChannelSignMessagesInfo));
             this.linearLayout.addView(this.infoCell, LayoutHelper.createLinear(-1, -2));
         } else if (this.info != null && this.info.can_set_stickers) {
             this.textCell2 = new TextSettingsCell(context);
             this.textCell2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.textCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.info.stickerset != null) {
-                this.textCell2.setTextAndValue(LocaleController.getString("GroupStickers", C0493R.string.GroupStickers), this.info.stickerset.title, false);
+                this.textCell2.setTextAndValue(LocaleController.getString("GroupStickers", C0500R.string.GroupStickers), this.info.stickerset.title, false);
             } else {
-                this.textCell2.setText(LocaleController.getString("GroupStickers", C0493R.string.GroupStickers), false);
+                this.textCell2.setText(LocaleController.getString("GroupStickers", C0500R.string.GroupStickers), false);
             }
             this.container3.addView(this.textCell2, LayoutHelper.createFrame(-1, -2.0f));
             this.textCell2.setOnClickListener(new View.OnClickListener() {
@@ -730,7 +731,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 }
             });
             this.infoCell3 = new TextInfoPrivacyCell(context);
-            this.infoCell3.setText(LocaleController.getString("GroupStickersInfo", C0493R.string.GroupStickersInfo));
+            this.infoCell3.setText(LocaleController.getString("GroupStickersInfo", C0500R.string.GroupStickersInfo));
             this.linearLayout.addView(this.infoCell3, LayoutHelper.createLinear(-1, -2));
         }
         if (this.currentChat.creator) {
@@ -741,16 +742,16 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             this.textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
             this.textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.currentChat.megagroup) {
-                this.textCell.setText(LocaleController.getString("DeleteMega", C0493R.string.DeleteMega), false);
+                this.textCell.setText(LocaleController.getString("DeleteMega", C0500R.string.DeleteMega), false);
             } else {
-                this.textCell.setText(LocaleController.getString("ChannelDelete", C0493R.string.ChannelDelete), false);
+                this.textCell.setText(LocaleController.getString("ChannelDelete", C0500R.string.ChannelDelete), false);
             }
             this.container3.addView(this.textCell, LayoutHelper.createFrame(-1, -2.0f));
             this.textCell.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChannelEditInfoActivity$16$1 */
-                class C12181 implements OnClickListener {
-                    C12181() {
+                class C12571 implements OnClickListener {
+                    C12571() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -767,38 +768,38 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 public void onClick(View v) {
                     Builder builder = new Builder(ChannelEditInfoActivity.this.getParentActivity());
                     if (ChannelEditInfoActivity.this.currentChat.megagroup) {
-                        builder.setMessage(LocaleController.getString("MegaDeleteAlert", C0493R.string.MegaDeleteAlert));
+                        builder.setMessage(LocaleController.getString("MegaDeleteAlert", C0500R.string.MegaDeleteAlert));
                     } else {
-                        builder.setMessage(LocaleController.getString("ChannelDeleteAlert", C0493R.string.ChannelDeleteAlert));
+                        builder.setMessage(LocaleController.getString("ChannelDeleteAlert", C0500R.string.ChannelDeleteAlert));
                     }
-                    builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0493R.string.OK), new C12181());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C12571());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
                     ChannelEditInfoActivity.this.showDialog(builder.create());
                 }
             });
             this.infoCell2 = new TextInfoPrivacyCell(context);
-            this.infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            this.infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             if (this.currentChat.megagroup) {
-                this.infoCell2.setText(LocaleController.getString("MegaDeleteInfo", C0493R.string.MegaDeleteInfo));
+                this.infoCell2.setText(LocaleController.getString("MegaDeleteInfo", C0500R.string.MegaDeleteInfo));
             } else {
-                this.infoCell2.setText(LocaleController.getString("ChannelDeleteInfo", C0493R.string.ChannelDeleteInfo));
+                this.infoCell2.setText(LocaleController.getString("ChannelDeleteInfo", C0500R.string.ChannelDeleteInfo));
             }
             this.linearLayout.addView(this.infoCell2, LayoutHelper.createLinear(-1, -2));
         } else {
             if (!this.currentChat.megagroup) {
-                this.infoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                this.infoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             } else if (this.infoCell3 == null) {
-                this.sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                this.sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             }
             this.lineView3.setVisibility(8);
             this.lineView2.setVisibility(8);
         }
         if (this.infoCell3 != null) {
             if (this.infoCell2 == null) {
-                this.infoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                this.infoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             } else {
-                this.infoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                this.infoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, C0500R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             }
         }
         this.nameTextView.setText(this.currentChat.title);
@@ -841,7 +842,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         }
     }
 
-    public void didUploadedPhoto(final InputFile file, final PhotoSize small, PhotoSize big) {
+    public void didUploadedPhoto(final InputFile file, final PhotoSize small, PhotoSize big, TL_secureFile secureFile) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 ChannelEditInfoActivity.this.uploadedAvatar = file;
@@ -864,12 +865,12 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
-        this.avatarUpdater.onActivityResult(requestCode, resultCode, data);
+        this.imageUpdater.onActivityResult(requestCode, resultCode, data);
     }
 
     public void saveSelfArgs(Bundle args) {
-        if (!(this.avatarUpdater == null || this.avatarUpdater.currentPicturePath == null)) {
-            args.putString("path", this.avatarUpdater.currentPicturePath);
+        if (!(this.imageUpdater == null || this.imageUpdater.currentPicturePath == null)) {
+            args.putString("path", this.imageUpdater.currentPicturePath);
         }
         if (this.nameTextView != null) {
             String text = this.nameTextView.getText().toString();
@@ -880,8 +881,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     }
 
     public void restoreSelfArgs(Bundle args) {
-        if (this.avatarUpdater != null) {
-            this.avatarUpdater.currentPicturePath = args.getString("path");
+        if (this.imageUpdater != null) {
+            this.imageUpdater.currentPicturePath = args.getString("path");
         }
     }
 
@@ -909,28 +910,28 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.ChannelEditInfoActivity$18$1$1 */
-                        class C12221 implements View.OnClickListener {
-                            C12221() {
+                        class C12611 implements View.OnClickListener {
+                            C12611() {
                             }
 
                             public void onClick(View view) {
                                 final Chat channel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
                                 Builder builder = new Builder(ChannelEditInfoActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0493R.string.AppName));
+                                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
                                 if (channel.megagroup) {
-                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", C0493R.string.RevokeLinkAlert, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", C0500R.string.RevokeLinkAlert, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                 } else {
-                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", C0493R.string.RevokeLinkAlertChannel, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", C0500R.string.RevokeLinkAlertChannel, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                 }
-                                builder.setNegativeButton(LocaleController.getString("Cancel", C0493R.string.Cancel), null);
-                                builder.setPositiveButton(LocaleController.getString("RevokeButton", C0493R.string.RevokeButton), new OnClickListener() {
+                                builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                                builder.setPositiveButton(LocaleController.getString("RevokeButton", C0500R.string.RevokeButton), new OnClickListener() {
 
                                     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$18$1$1$1$1 */
-                                    class C12201 implements RequestDelegate {
+                                    class C12591 implements RequestDelegate {
 
                                         /* renamed from: org.telegram.ui.ChannelEditInfoActivity$18$1$1$1$1$1 */
-                                        class C12191 implements Runnable {
-                                            C12191() {
+                                        class C12581 implements Runnable {
+                                            C12581() {
                                             }
 
                                             public void run() {
@@ -942,12 +943,12 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                                             }
                                         }
 
-                                        C12201() {
+                                        C12591() {
                                         }
 
                                         public void run(TLObject response, TL_error error) {
                                             if (response instanceof TL_boolTrue) {
-                                                AndroidUtilities.runOnUIThread(new C12191());
+                                                AndroidUtilities.runOnUIThread(new C12581());
                                             }
                                         }
                                     }
@@ -956,7 +957,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                                         TL_channels_updateUsername req = new TL_channels_updateUsername();
                                         req.channel = MessagesController.getInputChannel(channel);
                                         req.username = TtmlNode.ANONYMOUS_REGION_ID;
-                                        ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new C12201(), 64);
+                                        ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new C12591(), 64);
                                     }
                                 });
                                 ChannelEditInfoActivity.this.showDialog(builder.create());
@@ -974,7 +975,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                                 TL_messages_chats res = response;
                                 a = 0;
                                 while (a < res.chats.size()) {
-                                    AdminedChannelCell adminedChannelCell = new AdminedChannelCell(ChannelEditInfoActivity.this.getParentActivity(), new C12221());
+                                    AdminedChannelCell adminedChannelCell = new AdminedChannelCell(ChannelEditInfoActivity.this.getParentActivity(), new C12611());
                                     adminedChannelCell.setChannel((Chat) res.chats.get(a), a == res.chats.size() + -1);
                                     ChannelEditInfoActivity.this.adminedChannelCells.add(adminedChannelCell);
                                     ChannelEditInfoActivity.this.adminnedChannelsLayout.addView(adminedChannelCell, LayoutHelper.createLinear(-1, 72));
@@ -999,16 +1000,16 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 this.typeInfoCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
                 this.sectionCell2.setVisibility(0);
                 this.adminedInfoCell.setVisibility(8);
-                this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0500R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 this.adminnedChannelsLayout.setVisibility(8);
                 this.linkContainer.setVisibility(0);
                 this.loadingAdminedCell.setVisibility(8);
                 if (this.currentChat.megagroup) {
-                    this.typeInfoCell.setText(this.isPrivate ? LocaleController.getString("MegaPrivateLinkHelp", C0493R.string.MegaPrivateLinkHelp) : LocaleController.getString("MegaUsernameHelp", C0493R.string.MegaUsernameHelp));
-                    this.headerCell.setText(this.isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", C0493R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", C0493R.string.ChannelLinkTitle));
+                    this.typeInfoCell.setText(this.isPrivate ? LocaleController.getString("MegaPrivateLinkHelp", C0500R.string.MegaPrivateLinkHelp) : LocaleController.getString("MegaUsernameHelp", C0500R.string.MegaUsernameHelp));
+                    this.headerCell.setText(this.isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", C0500R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", C0500R.string.ChannelLinkTitle));
                 } else {
-                    this.typeInfoCell.setText(this.isPrivate ? LocaleController.getString("ChannelPrivateLinkHelp", C0493R.string.ChannelPrivateLinkHelp) : LocaleController.getString("ChannelUsernameHelp", C0493R.string.ChannelUsernameHelp));
-                    this.headerCell.setText(this.isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", C0493R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", C0493R.string.ChannelLinkTitle));
+                    this.typeInfoCell.setText(this.isPrivate ? LocaleController.getString("ChannelPrivateLinkHelp", C0500R.string.ChannelPrivateLinkHelp) : LocaleController.getString("ChannelUsernameHelp", C0500R.string.ChannelUsernameHelp));
+                    this.headerCell.setText(this.isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", C0500R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", C0500R.string.ChannelLinkTitle));
                 }
                 LinearLayout linearLayout = this.publicContainer;
                 if (this.isPrivate) {
@@ -1025,7 +1026,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 }
                 textBlockCell.setVisibility(i2);
                 this.linkContainer.setPadding(0, 0, 0, this.isPrivate ? 0 : AndroidUtilities.dp(7.0f));
-                this.privateContainer.setText(this.invite != null ? this.invite.link : LocaleController.getString("Loading", C0493R.string.Loading), false);
+                this.privateContainer.setText(this.invite != null ? this.invite.link : LocaleController.getString("Loading", C0500R.string.Loading), false);
                 TextView textView = this.checkTextView;
                 if (this.isPrivate || this.checkTextView.length() == 0) {
                     i2 = 8;
@@ -1055,7 +1056,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     shadowSectionCell.setVisibility(i);
                 }
             } else {
-                this.typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", C0493R.string.ChangePublicLimitReached));
+                this.typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", C0500R.string.ChangePublicLimitReached));
                 this.typeInfoCell.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 this.typeInfoCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                 this.linkContainer.setVisibility(8);
@@ -1064,11 +1065,11 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 if (this.loadingAdminedChannels) {
                     this.loadingAdminedCell.setVisibility(0);
                     this.adminnedChannelsLayout.setVisibility(8);
-                    this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     this.adminedInfoCell.setBackgroundDrawable(null);
                 } else {
-                    this.adminedInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.adminedInfoCell.getContext(), C0493R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0493R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    this.adminedInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.adminedInfoCell.getContext(), C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(this.typeInfoCell.getContext(), C0500R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     this.loadingAdminedCell.setVisibility(8);
                     this.adminnedChannelsLayout.setVisibility(0);
                 }
@@ -1106,7 +1107,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         this.lastNameAvailable = false;
         if (name != null) {
             if (name.startsWith("_") || name.endsWith("_")) {
-                this.checkTextView.setText(LocaleController.getString("LinkInvalid", C0493R.string.LinkInvalid));
+                this.checkTextView.setText(LocaleController.getString("LinkInvalid", C0500R.string.LinkInvalid));
                 this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                 return false;
@@ -1116,19 +1117,19 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                 char ch = name.charAt(a);
                 if (a != 0 || ch < '0' || ch > '9') {
                     if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
-                        this.checkTextView.setText(LocaleController.getString("LinkInvalid", C0493R.string.LinkInvalid));
+                        this.checkTextView.setText(LocaleController.getString("LinkInvalid", C0500R.string.LinkInvalid));
                         this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                         this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                         return false;
                     }
                     a++;
                 } else if (this.currentChat.megagroup) {
-                    this.checkTextView.setText(LocaleController.getString("LinkInvalidStartNumberMega", C0493R.string.LinkInvalidStartNumberMega));
+                    this.checkTextView.setText(LocaleController.getString("LinkInvalidStartNumberMega", C0500R.string.LinkInvalidStartNumberMega));
                     this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                     this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     return false;
                 } else {
-                    this.checkTextView.setText(LocaleController.getString("LinkInvalidStartNumber", C0493R.string.LinkInvalidStartNumber));
+                    this.checkTextView.setText(LocaleController.getString("LinkInvalidStartNumber", C0500R.string.LinkInvalidStartNumber));
                     this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                     this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     return false;
@@ -1137,30 +1138,30 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         }
         if (name == null || name.length() < 5) {
             if (this.currentChat.megagroup) {
-                this.checkTextView.setText(LocaleController.getString("LinkInvalidShortMega", C0493R.string.LinkInvalidShortMega));
+                this.checkTextView.setText(LocaleController.getString("LinkInvalidShortMega", C0500R.string.LinkInvalidShortMega));
                 this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                 return false;
             }
-            this.checkTextView.setText(LocaleController.getString("LinkInvalidShort", C0493R.string.LinkInvalidShort));
+            this.checkTextView.setText(LocaleController.getString("LinkInvalidShort", C0500R.string.LinkInvalidShort));
             this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
             this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             return false;
         } else if (name.length() > 32) {
-            this.checkTextView.setText(LocaleController.getString("LinkInvalidLong", C0493R.string.LinkInvalidLong));
+            this.checkTextView.setText(LocaleController.getString("LinkInvalidLong", C0500R.string.LinkInvalidLong));
             this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
             this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             return false;
         } else {
-            this.checkTextView.setText(LocaleController.getString("LinkChecking", C0493R.string.LinkChecking));
+            this.checkTextView.setText(LocaleController.getString("LinkChecking", C0500R.string.LinkChecking));
             this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
             this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
             this.lastCheckName = name;
             this.checkRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChannelEditInfoActivity$19$1 */
-                class C12251 implements RequestDelegate {
-                    C12251() {
+                class C12641 implements RequestDelegate {
+                    C12641() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -1169,14 +1170,14 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                                 ChannelEditInfoActivity.this.checkReqId = 0;
                                 if (ChannelEditInfoActivity.this.lastCheckName != null && ChannelEditInfoActivity.this.lastCheckName.equals(name)) {
                                     if (error == null && (response instanceof TL_boolTrue)) {
-                                        ChannelEditInfoActivity.this.checkTextView.setText(LocaleController.formatString("LinkAvailable", C0493R.string.LinkAvailable, name));
+                                        ChannelEditInfoActivity.this.checkTextView.setText(LocaleController.formatString("LinkAvailable", C0500R.string.LinkAvailable, name));
                                         ChannelEditInfoActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                                         ChannelEditInfoActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                                         ChannelEditInfoActivity.this.lastNameAvailable = true;
                                         return;
                                     }
                                     if (error == null || !error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
-                                        ChannelEditInfoActivity.this.checkTextView.setText(LocaleController.getString("LinkInUse", C0493R.string.LinkInUse));
+                                        ChannelEditInfoActivity.this.checkTextView.setText(LocaleController.getString("LinkInUse", C0500R.string.LinkInUse));
                                     } else {
                                         ChannelEditInfoActivity.this.canCreatePublic = false;
                                         ChannelEditInfoActivity.this.loadAdminedChannels();
@@ -1194,7 +1195,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     TL_channels_checkUsername req = new TL_channels_checkUsername();
                     req.username = name;
                     req.channel = MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).getInputChannel(ChannelEditInfoActivity.this.chatId);
-                    ChannelEditInfoActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new C12251(), 2);
+                    ChannelEditInfoActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new C12641(), 2);
                 }
             };
             AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
@@ -1216,7 +1217,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                             }
                             ChannelEditInfoActivity.this.loadingInvite = false;
                             if (ChannelEditInfoActivity.this.privateContainer != null) {
-                                ChannelEditInfoActivity.this.privateContainer.setText(ChannelEditInfoActivity.this.invite != null ? ChannelEditInfoActivity.this.invite.link : LocaleController.getString("Loading", C0493R.string.Loading), false);
+                                ChannelEditInfoActivity.this.privateContainer.setText(ChannelEditInfoActivity.this.invite != null ? ChannelEditInfoActivity.this.invite.link : LocaleController.getString("Loading", C0500R.string.Loading), false);
                             }
                         }
                     });

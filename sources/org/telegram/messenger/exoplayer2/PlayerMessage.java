@@ -6,11 +6,12 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 public final class PlayerMessage {
     private boolean deleteAfterDelivery = true;
     private Handler handler;
+    private boolean isCanceled;
     private boolean isDelivered;
     private boolean isProcessed;
     private boolean isSent;
     private Object payload;
-    private long positionMs = C0605C.TIME_UNSET;
+    private long positionMs = C0615C.TIME_UNSET;
     private final Sender sender;
     private final Target target;
     private final Timeline timeline;
@@ -90,7 +91,7 @@ public final class PlayerMessage {
             z = true;
         }
         Assertions.checkState(z);
-        if (positionMs == C0605C.TIME_UNSET) {
+        if (positionMs == C0615C.TIME_UNSET) {
             z2 = false;
         }
         Assertions.checkArgument(z2);
@@ -118,12 +119,23 @@ public final class PlayerMessage {
 
     public PlayerMessage send() {
         Assertions.checkState(!this.isSent);
-        if (this.positionMs == C0605C.TIME_UNSET) {
+        if (this.positionMs == C0615C.TIME_UNSET) {
             Assertions.checkArgument(this.deleteAfterDelivery);
         }
         this.isSent = true;
         this.sender.sendMessage(this);
         return this;
+    }
+
+    public synchronized PlayerMessage cancel() {
+        Assertions.checkState(this.isSent);
+        this.isCanceled = true;
+        markAsProcessed(false);
+        return this;
+    }
+
+    public synchronized boolean isCanceled() {
+        return this.isCanceled;
     }
 
     public synchronized boolean blockUntilDelivered() throws InterruptedException {

@@ -33,10 +33,12 @@ public class NotificationCenter {
     public static final int closeChats;
     public static final int closeInCallActivity;
     public static final int closeOtherAppActivities;
+    public static final int closeSearchByActiveAction;
     public static final int contactsDidLoaded;
     public static final int contactsImported;
     public static final int dialogPhotosLoaded;
     public static final int dialogsNeedReload;
+    public static final int dialogsUnreadCounterChanged;
     public static final int didCreatedNewDeleteTask;
     public static final int didEndedCall;
     public static final int didLoadedPinnedMessage;
@@ -388,6 +390,9 @@ public class NotificationCenter {
         FilePreparingFailed = i;
         i = totalEvents;
         totalEvents = i + 1;
+        dialogsUnreadCounterChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         messagePlayingProgressDidChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -500,6 +505,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         playerDidStartPlaying = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        closeSearchByActiveAction = i;
     }
 
     public static NotificationCenter getInstance(int num) {

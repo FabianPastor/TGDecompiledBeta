@@ -2,12 +2,12 @@ package org.telegram.ui.Components;
 
 public class Point {
     /* renamed from: x */
-    public float f54x;
+    public float f58x;
     /* renamed from: y */
-    public float f55y;
+    public float f59y;
 
     public Point(float x, float y) {
-        this.f54x = x;
-        this.f55y = y;
+        this.f58x = x;
+        this.f59y = y;
     }
 }

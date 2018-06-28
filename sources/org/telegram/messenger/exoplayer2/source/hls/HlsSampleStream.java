@@ -4,6 +4,7 @@ import java.io.IOException;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class HlsSampleStream implements SampleStream {
     private int sampleQueueIndex = -1;
@@ -15,6 +16,11 @@ final class HlsSampleStream implements SampleStream {
         this.trackGroupIndex = trackGroupIndex;
     }
 
+    public void bindSampleQueue() {
+        Assertions.checkArgument(this.sampleQueueIndex == -1);
+        this.sampleQueueIndex = this.sampleStreamWrapper.bindSampleQueueToSampleStream(this.trackGroupIndex);
+    }
+
     public void unbindSampleQueue() {
         if (this.sampleQueueIndex != -1) {
             this.sampleStreamWrapper.unbindSampleQueue(this.trackGroupIndex);
@@ -23,39 +29,25 @@ final class HlsSampleStream implements SampleStream {
     }
 
     public boolean isReady() {
-        return ensureBoundSampleQueue() && this.sampleStreamWrapper.isReady(this.sampleQueueIndex);
+        return this.sampleQueueIndex == -3 || (hasValidSampleQueueIndex() && this.sampleStreamWrapper.isReady(this.sampleQueueIndex));
     }
 
     public void maybeThrowError() throws IOException {
-        if (ensureBoundSampleQueue() || !this.sampleStreamWrapper.isMappingFinished()) {
-            this.sampleStreamWrapper.maybeThrowError();
-            return;
+        if (this.sampleQueueIndex == -2) {
+            throw new SampleQueueMappingException(this.sampleStreamWrapper.getTrackGroups().get(this.trackGroupIndex).getFormat(0).sampleMimeType);
         }
-        throw new SampleQueueMappingException(this.sampleStreamWrapper.getTrackGroups().get(this.trackGroupIndex).getFormat(0).sampleMimeType);
+        this.sampleStreamWrapper.maybeThrowError();
     }
 
     public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
-        if (ensureBoundSampleQueue()) {
-            return this.sampleStreamWrapper.readData(this.sampleQueueIndex, formatHolder, buffer, requireFormat);
-        }
-        return -3;
+        return hasValidSampleQueueIndex() ? this.sampleStreamWrapper.readData(this.sampleQueueIndex, formatHolder, buffer, requireFormat) : -3;
     }
 
     public int skipData(long positionUs) {
-        if (ensureBoundSampleQueue()) {
-            return this.sampleStreamWrapper.skipData(this.sampleQueueIndex, positionUs);
-        }
-        return 0;
+        return hasValidSampleQueueIndex() ? this.sampleStreamWrapper.skipData(this.sampleQueueIndex, positionUs) : 0;
     }
 
-    private boolean ensureBoundSampleQueue() {
-        if (this.sampleQueueIndex != -1) {
-            return true;
-        }
-        this.sampleQueueIndex = this.sampleStreamWrapper.bindSampleQueueToSampleStream(this.trackGroupIndex);
-        if (this.sampleQueueIndex == -1) {
-            return false;
-        }
-        return true;
+    private boolean hasValidSampleQueueIndex() {
+        return (this.sampleQueueIndex == -1 || this.sampleQueueIndex == -3 || this.sampleQueueIndex == -2) ? false : true;
     }
 }

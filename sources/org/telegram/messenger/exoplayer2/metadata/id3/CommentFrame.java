@@ -5,15 +5,15 @@ import android.os.Parcelable.Creator;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class CommentFrame extends Id3Frame {
-    public static final Creator<CommentFrame> CREATOR = new C06631();
+    public static final Creator<CommentFrame> CREATOR = new C06751();
     public static final String ID = "COMM";
     public final String description;
     public final String language;
     public final String text;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame$1 */
-    static class C06631 implements Creator<CommentFrame> {
-        C06631() {
+    static class C06751 implements Creator<CommentFrame> {
+        C06751() {
         }
 
         public CommentFrame createFromParcel(Parcel in) {
@@ -72,6 +72,10 @@ public final class CommentFrame extends Id3Frame {
             i = this.text.hashCode();
         }
         return hashCode + i;
+    }
+
+    public String toString() {
+        return this.id + ": language=" + this.language + ", description=" + this.description;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

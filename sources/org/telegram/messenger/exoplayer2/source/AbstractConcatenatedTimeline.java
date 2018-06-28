@@ -7,6 +7,7 @@ import org.telegram.messenger.exoplayer2.Timeline.Window;
 
 abstract class AbstractConcatenatedTimeline extends Timeline {
     private final int childCount;
+    private final boolean isAtomic;
     private final ShuffleOrder shuffleOrder;
 
     protected abstract int getChildIndexByChildUid(Object obj);
@@ -23,13 +24,20 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
 
     protected abstract Timeline getTimelineByChildIndex(int i);
 
-    public AbstractConcatenatedTimeline(ShuffleOrder shuffleOrder) {
+    public AbstractConcatenatedTimeline(boolean isAtomic, ShuffleOrder shuffleOrder) {
+        this.isAtomic = isAtomic;
         this.shuffleOrder = shuffleOrder;
         this.childCount = shuffleOrder.getLength();
     }
 
     public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
         int i;
+        if (this.isAtomic) {
+            if (repeatMode == 1) {
+                repeatMode = 2;
+            }
+            shuffleModeEnabled = false;
+        }
         int childIndex = getChildIndexByWindowIndex(windowIndex);
         int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
         Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
@@ -55,6 +63,12 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
 
     public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
         int i;
+        if (this.isAtomic) {
+            if (repeatMode == 1) {
+                repeatMode = 2;
+            }
+            shuffleModeEnabled = false;
+        }
         int childIndex = getChildIndexByWindowIndex(windowIndex);
         int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
         Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
@@ -82,6 +96,9 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         if (this.childCount == 0) {
             return -1;
         }
+        if (this.isAtomic) {
+            shuffleModeEnabled = false;
+        }
         int lastChildIndex = shuffleModeEnabled ? this.shuffleOrder.getLastIndex() : this.childCount - 1;
         while (getTimelineByChildIndex(lastChildIndex).isEmpty()) {
             lastChildIndex = getPreviousChildIndex(lastChildIndex, shuffleModeEnabled);
@@ -96,6 +113,9 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         if (this.childCount == 0) {
             return -1;
         }
+        if (this.isAtomic) {
+            shuffleModeEnabled = false;
+        }
         int firstChildIndex = shuffleModeEnabled ? this.shuffleOrder.getFirstIndex() : 0;
         while (getTimelineByChildIndex(firstChildIndex).isEmpty()) {
             firstChildIndex = getNextChildIndex(firstChildIndex, shuffleModeEnabled);
@@ -106,11 +126,11 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         return getFirstWindowIndexByChildIndex(firstChildIndex) + getTimelineByChildIndex(firstChildIndex).getFirstWindowIndex(shuffleModeEnabled);
     }
 
-    public final Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+    public final Window getWindow(int windowIndex, Window window, boolean setTag, long defaultPositionProjectionUs) {
         int childIndex = getChildIndexByWindowIndex(windowIndex);
         int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
         int firstPeriodIndexInChild = getFirstPeriodIndexByChildIndex(childIndex);
-        getTimelineByChildIndex(childIndex).getWindow(windowIndex - firstWindowIndexInChild, window, setIds, defaultPositionProjectionUs);
+        getTimelineByChildIndex(childIndex).getWindow(windowIndex - firstWindowIndexInChild, window, setTag, defaultPositionProjectionUs);
         window.firstPeriodIndex += firstPeriodIndexInChild;
         window.lastPeriodIndex += firstPeriodIndexInChild;
         return window;

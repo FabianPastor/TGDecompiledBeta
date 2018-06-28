@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -63,7 +63,7 @@ public class FileUploadOperation {
     private RandomAccessFile stream;
     private long totalFileSize;
     private int totalPartsCount;
-    private int uploadChunkSize = C0605C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    private int uploadChunkSize = C0615C.DEFAULT_BUFFER_SEGMENT_SIZE;
     private boolean uploadFirstPartLater;
     private int uploadStartTime;
     private long uploadedBytesCount;
@@ -78,8 +78,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
-    class C02021 implements Runnable {
-        C02021() {
+    class C02071 implements Runnable {
+        C02071() {
         }
 
         public void run() {
@@ -91,8 +91,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$2 */
-    class C02032 implements Runnable {
-        C02032() {
+    class C02082 implements Runnable {
+        C02082() {
         }
 
         public void run() {
@@ -103,11 +103,11 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$5 */
-    class C02075 implements WriteToSocketDelegate {
+    class C02125 implements WriteToSocketDelegate {
 
         /* renamed from: org.telegram.messenger.FileUploadOperation$5$1 */
-        class C02061 implements Runnable {
-            C02061() {
+        class C02111 implements Runnable {
+            C02111() {
             }
 
             public void run() {
@@ -117,11 +117,11 @@ public class FileUploadOperation {
             }
         }
 
-        C02075() {
+        C02125() {
         }
 
         public void run() {
-            Utilities.stageQueue.postRunnable(new C02061());
+            Utilities.stageQueue.postRunnable(new C02111());
         }
     }
 
@@ -154,14 +154,14 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new C02021());
+            Utilities.stageQueue.postRunnable(new C02071());
         }
     }
 
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new C02032());
+            Utilities.stageQueue.postRunnable(new C02082());
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -579,7 +579,7 @@ public class FileUploadOperation {
                                     }
                                 }
                             }
-                        }, null, new C02075(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, ((requestNumFinal % 4) << 16) | 4, true));
+                        }, null, new C02125(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, ((requestNumFinal % 4) << 16) | 4, true));
                     }
                 }
             } catch (Throwable e2) {

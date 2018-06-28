@@ -36,8 +36,8 @@ public final class HlsMasterPlaylist extends HlsPlaylist {
         this.muxedCaptionFormats = muxedCaptionFormats != null ? Collections.unmodifiableList(muxedCaptionFormats) : null;
     }
 
-    public HlsMasterPlaylist copy(List<String> renditionUrls) {
-        return new HlsMasterPlaylist(this.baseUri, this.tags, copyRenditionsList(this.variants, renditionUrls), copyRenditionsList(this.audios, renditionUrls), copyRenditionsList(this.subtitles, renditionUrls), this.muxedAudioFormat, this.muxedCaptionFormats);
+    public HlsMasterPlaylist copy(List<RenditionKey> renditionKeys) {
+        return new HlsMasterPlaylist(this.baseUri, this.tags, copyRenditionsList(this.variants, 0, renditionKeys), copyRenditionsList(this.audios, 1, renditionKeys), copyRenditionsList(this.subtitles, 2, renditionKeys), this.muxedAudioFormat, this.muxedCaptionFormats);
     }
 
     public static HlsMasterPlaylist createSingleVariantMasterPlaylist(String variantUrl) {
@@ -46,13 +46,19 @@ public final class HlsMasterPlaylist extends HlsPlaylist {
         return new HlsMasterPlaylist(null, Collections.emptyList(), variant, emptyList, emptyList, null, null);
     }
 
-    private static List<HlsUrl> copyRenditionsList(List<HlsUrl> renditions, List<String> urls) {
-        List<HlsUrl> copiedRenditions = new ArrayList(urls.size());
-        for (int i = 0; i < renditions.size(); i++) {
+    private static List<HlsUrl> copyRenditionsList(List<HlsUrl> renditions, int renditionType, List<RenditionKey> renditionKeys) {
+        List<HlsUrl> copiedRenditions = new ArrayList(renditionKeys.size());
+        int i = 0;
+        while (i < renditions.size()) {
             HlsUrl rendition = (HlsUrl) renditions.get(i);
-            if (urls.contains(rendition.url)) {
-                copiedRenditions.add(rendition);
+            for (int j = 0; j < renditionKeys.size(); j++) {
+                RenditionKey renditionKey = (RenditionKey) renditionKeys.get(j);
+                if (renditionKey.type == renditionType && renditionKey.trackIndex == i) {
+                    copiedRenditions.add(rendition);
+                    break;
+                }
             }
+            i++;
         }
         return copiedRenditions;
     }

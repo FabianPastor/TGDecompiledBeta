@@ -14,32 +14,35 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(16)
 public final class MediaCodecInfo {
+    public static final int MAX_SUPPORTED_INSTANCES_UNKNOWN = -1;
     public static final String TAG = "MediaCodecInfo";
     public final boolean adaptive;
-    private final CodecCapabilities capabilities;
-    private final String mimeType;
+    public final CodecCapabilities capabilities;
+    public final String mimeType;
     public final String name;
+    public final boolean passthrough;
     public final boolean secure;
     public final boolean tunneling;
 
     public static MediaCodecInfo newPassthroughInstance(String name) {
-        return new MediaCodecInfo(name, null, null, false, false);
+        return new MediaCodecInfo(name, null, null, true, false, false);
     }
 
     public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities) {
-        return new MediaCodecInfo(name, mimeType, capabilities, false, false);
+        return new MediaCodecInfo(name, mimeType, capabilities, false, false, false);
     }
 
     public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
-        return new MediaCodecInfo(name, mimeType, capabilities, forceDisableAdaptive, forceSecure);
+        return new MediaCodecInfo(name, mimeType, capabilities, false, forceDisableAdaptive, forceSecure);
     }
 
-    private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
+    private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities, boolean passthrough, boolean forceDisableAdaptive, boolean forceSecure) {
         boolean z;
         boolean z2 = false;
         this.name = (String) Assertions.checkNotNull(name);
         this.mimeType = mimeType;
         this.capabilities = capabilities;
+        this.passthrough = passthrough;
         if (forceDisableAdaptive || capabilities == null || !isAdaptive(capabilities)) {
             z = false;
         } else {
@@ -60,6 +63,13 @@ public final class MediaCodecInfo {
 
     public CodecProfileLevel[] getProfileLevels() {
         return (this.capabilities == null || this.capabilities.profileLevels == null) ? new CodecProfileLevel[0] : this.capabilities.profileLevels;
+    }
+
+    public int getMaxSupportedInstances() {
+        if (Util.SDK_INT < 23 || this.capabilities == null) {
+            return -1;
+        }
+        return getMaxSupportedInstancesV23(this.capabilities);
     }
 
     public boolean isCodecSupported(String codec) {
@@ -220,5 +230,10 @@ public final class MediaCodecInfo {
             return capabilities.isSizeSupported(width, height);
         }
         return capabilities.areSizeAndRateSupported(width, height, frameRate);
+    }
+
+    @TargetApi(23)
+    private static int getMaxSupportedInstancesV23(CodecCapabilities capabilities) {
+        return capabilities.getMaxSupportedInstances();
     }
 }

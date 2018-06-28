@@ -1,5 +1,7 @@
 package org.telegram.messenger.exoplayer2.audio;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -17,10 +19,10 @@ public final class Ac3Util {
     private static final int[] SAMPLE_RATE_BY_FSCOD = new int[]{48000, 44100, 32000};
     private static final int[] SAMPLE_RATE_BY_FSCOD2 = new int[]{24000, 22050, 16000};
     private static final int[] SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1 = new int[]{69, 87, 104, 121, 139, 174, 208, 243, 278, 348, 417, 487, 557, 696, 835, 975, 1114, 1253, 1393};
-    public static final int TRUEHD_RECHUNK_SAMPLE_COUNT = 8;
-    public static final int TRUEHD_SYNCFRAME_PREFIX_LENGTH = 12;
+    public static final int TRUEHD_RECHUNK_SAMPLE_COUNT = 16;
+    public static final int TRUEHD_SYNCFRAME_PREFIX_LENGTH = 10;
 
-    public static final class Ac3SyncFrameInfo {
+    public static final class SyncFrameInfo {
         public static final int STREAM_TYPE_TYPE0 = 0;
         public static final int STREAM_TYPE_TYPE1 = 1;
         public static final int STREAM_TYPE_TYPE2 = 2;
@@ -32,7 +34,11 @@ public final class Ac3Util {
         public final int sampleRate;
         public final int streamType;
 
-        private Ac3SyncFrameInfo(String mimeType, int streamType, int channelCount, int sampleRate, int frameSize, int sampleCount) {
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface StreamType {
+        }
+
+        private SyncFrameInfo(String mimeType, int streamType, int channelCount, int sampleRate, int frameSize, int sampleCount) {
             this.mimeType = mimeType;
             this.streamType = streamType;
             this.channelCount = channelCount;
@@ -70,7 +76,7 @@ public final class Ac3Util {
         return Format.createAudioSampleFormat(trackId, mimeType, null, -1, -1, channelCount, sampleRate, null, drmInitData, 0, language);
     }
 
-    public static Ac3SyncFrameInfo parseAc3SyncframeInfo(ParsableBitArray data) {
+    public static SyncFrameInfo parseAc3SyncframeInfo(ParsableBitArray data) {
         int frameSize;
         int sampleRate;
         int sampleCount;
@@ -87,7 +93,20 @@ public final class Ac3Util {
             int numblkscod;
             int audioBlocks;
             data.skipBits(16);
-            streamType = data.readBits(2);
+            switch (data.readBits(2)) {
+                case 0:
+                    streamType = 0;
+                    break;
+                case 1:
+                    streamType = 1;
+                    break;
+                case 2:
+                    streamType = 2;
+                    break;
+                default:
+                    streamType = -1;
+                    break;
+            }
             data.skipBits(3);
             frameSize = (data.readBits(11) + 1) * 2;
             fscod = data.readBits(2);
@@ -260,7 +279,7 @@ public final class Ac3Util {
             sampleCount = AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
             channelCount = CHANNEL_COUNT_BY_ACMOD[acmod] + (data.readBit() ? 1 : 0);
         }
-        return new Ac3SyncFrameInfo(mimeType, streamType, channelCount, sampleRate, frameSize, sampleCount);
+        return new SyncFrameInfo(mimeType, streamType, channelCount, sampleRate, frameSize, sampleCount);
     }
 
     public static int parseAc3SyncframeSize(byte[] data) {
@@ -284,18 +303,32 @@ public final class Ac3Util {
         return i * 256;
     }
 
-    public static int parseTrueHdSyncframeAudioSampleCount(byte[] syncframe) {
-        if (syncframe[4] == (byte) -8 && syncframe[5] == (byte) 114 && syncframe[6] == (byte) 111 && syncframe[7] == (byte) -70) {
-            return 40 << (syncframe[8] & 7);
+    public static int findTrueHdSyncframeOffset(ByteBuffer buffer) {
+        int startIndex = buffer.position();
+        int endIndex = buffer.limit() - 10;
+        for (int i = startIndex; i <= endIndex; i++) {
+            if ((buffer.getInt(i + 4) & -16777217) == -NUM) {
+                return i - startIndex;
+            }
         }
-        return 0;
+        return -1;
     }
 
-    public static int parseTrueHdSyncframeAudioSampleCount(ByteBuffer buffer) {
-        if (buffer.getInt(buffer.position() + 4) != -NUM) {
+    public static int parseTrueHdSyncframeAudioSampleCount(byte[] syncframe) {
+        if (syncframe[4] != (byte) -8 || syncframe[5] != (byte) 114 || syncframe[6] != (byte) 111 || (syncframe[7] & 254) != 186) {
             return 0;
         }
-        return 40 << (buffer.get(buffer.position() + 8) & 7);
+        boolean isMlp;
+        if ((syncframe[7] & 255) == 187) {
+            isMlp = true;
+        } else {
+            isMlp = false;
+        }
+        return 40 << ((syncframe[isMlp ? 9 : 8] >> 4) & 7);
+    }
+
+    public static int parseTrueHdSyncframeAudioSampleCount(ByteBuffer buffer, int offset) {
+        return 40 << ((buffer.get(((buffer.get((buffer.position() + offset) + 7) & 255) == 187 ? 9 : 8) + (buffer.position() + offset)) >> 4) & 7);
     }
 
     private static int getAc3SyncframeSize(int fscod, int frmsizecod) {

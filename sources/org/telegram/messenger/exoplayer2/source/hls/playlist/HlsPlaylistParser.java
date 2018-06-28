@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
@@ -56,7 +56,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final Pattern REGEX_LANGUAGE = Pattern.compile("LANGUAGE=\"(.+?)\"");
     private static final Pattern REGEX_MEDIA_DURATION = Pattern.compile("#EXTINF:([\\d\\.]+)\\b");
     private static final Pattern REGEX_MEDIA_SEQUENCE = Pattern.compile("#EXT-X-MEDIA-SEQUENCE:(\\d+)\\b");
-    private static final Pattern REGEX_METHOD = Pattern.compile("METHOD=(NONE|AES-128|SAMPLE-AES|SAMPLE-AES-CENC|SAMPLE-AES-CTR)");
+    private static final Pattern REGEX_METHOD = Pattern.compile("METHOD=(NONE|AES-128|SAMPLE-AES|SAMPLE-AES-CENC|SAMPLE-AES-CTR)\\s*(,|$)");
     private static final Pattern REGEX_NAME = Pattern.compile("NAME=\"(.+?)\"");
     private static final Pattern REGEX_PLAYLIST_TYPE = Pattern.compile("#EXT-X-PLAYLIST-TYPE:(.+)\\b");
     private static final Pattern REGEX_RESOLUTION = Pattern.compile("RESOLUTION=(\\d+x\\d+)");
@@ -69,6 +69,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final String TAG_DISCONTINUITY = "#EXT-X-DISCONTINUITY";
     private static final String TAG_DISCONTINUITY_SEQUENCE = "#EXT-X-DISCONTINUITY-SEQUENCE";
     private static final String TAG_ENDLIST = "#EXT-X-ENDLIST";
+    private static final String TAG_GAP = "#EXT-X-GAP";
     private static final String TAG_INDEPENDENT_SEGMENTS = "#EXT-X-INDEPENDENT-SEGMENTS";
     private static final String TAG_INIT_SEGMENT = "#EXT-X-MAP";
     private static final String TAG_KEY = "#EXT-X-KEY";
@@ -335,10 +336,10 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         return i3 | i2;
     }
 
-    private static org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist parseMediaPlaylist(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistParser.LineIterator r49, java.lang.String r50) throws java.io.IOException {
+    private static org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist parseMediaPlaylist(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistParser.LineIterator r54, java.lang.String r55) throws java.io.IOException {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r35_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) in PHI: PHI: (r35_3 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) = (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) binds: {(r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:101:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:103:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:102:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:104:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:105:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:106:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:107:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:108:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:109:0x0036, (r35_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:115:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:114:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:113:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:112:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:111:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:110:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:117:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:116:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:118:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:119:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:121:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:120:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:122:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:123:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:125:0x0036, (r35_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:124:0x0036}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r42_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) in PHI: PHI: (r42_3 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) = (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData), (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData) binds: {(r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:104:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:106:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:105:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:107:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:108:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:109:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:110:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:111:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:112:0x0038, (r42_2 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:118:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:117:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:116:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:115:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:114:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:113:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:120:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:119:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:121:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:122:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:124:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:123:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:125:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:126:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:127:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:129:0x0038, (r42_1 'drmInitData' org.telegram.messenger.exoplayer2.drm.DrmInitData)=B:128:0x0038}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -346,350 +347,353 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
 	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
 	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
         /*
-        r41 = 0;
-        r22 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
-        r28 = 0;
-        r29 = 1;
-        r30 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r25 = 0;
+        r28 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r34 = 0;
+        r36 = 1;
+        r37 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r39 = 0;
+        r40 = 0;
+        r2 = 0;
+        r43 = new java.util.ArrayList;
+        r43.<init>();
+        r27 = new java.util.ArrayList;
+        r27.<init>();
+        r11 = 0;
         r32 = 0;
         r33 = 0;
-        r2 = 0;
-        r37 = new java.util.ArrayList;
-        r37.<init>();
-        r48 = new java.util.ArrayList;
-        r48.<init>();
-        r11 = 0;
-        r26 = 0;
-        r27 = 0;
         r13 = 0;
-        r24 = 0;
+        r30 = 0;
         r14 = 0;
         r4 = 0;
         r6 = -1;
-        r46 = 0;
+        r52 = 0;
+        r22 = 0;
         r16 = 0;
-        r38 = 0;
-        r35 = 0;
-    L_0x0036:
-        r9 = r49.hasNext();
-        if (r9 == 0) goto L_0x028c;
-    L_0x003c:
-        r10 = r49.next();
-        r9 = "#EXT";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x004e;
-    L_0x0049:
-        r0 = r48;
-        r0.add(r10);
-    L_0x004e:
-        r9 = "#EXT-X-PLAYLIST-TYPE";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0079;
-    L_0x0057:
-        r9 = REGEX_PLAYLIST_TYPE;
-        r42 = parseStringAttr(r10, r9);
-        r9 = "VOD";
-        r0 = r42;
-        r9 = r9.equals(r0);
-        if (r9 == 0) goto L_0x006b;
-    L_0x0068:
-        r41 = 1;
-        goto L_0x0036;
-    L_0x006b:
-        r9 = "EVENT";
-        r0 = r42;
-        r9 = r9.equals(r0);
-        if (r9 == 0) goto L_0x0036;
-    L_0x0076:
-        r41 = 2;
-        goto L_0x0036;
-    L_0x0079:
-        r9 = "#EXT-X-START";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0095;
-    L_0x0082:
-        r9 = REGEX_TIME_OFFSET;
-        r18 = parseDoubleAttr(r10, r9);
+        r44 = 0;
+        r42 = 0;
+    L_0x0038:
+        r8 = r54.hasNext();
+        if (r8 == 0) goto L_0x0297;
+    L_0x003e:
+        r9 = r54.next();
+        r8 = "#EXT";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x0050;
+    L_0x004b:
+        r0 = r27;
+        r0.add(r9);
+    L_0x0050:
+        r8 = "#EXT-X-PLAYLIST-TYPE";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x007b;
+    L_0x0059:
+        r8 = REGEX_PLAYLIST_TYPE;
+        r47 = parseStringAttr(r9, r8);
+        r8 = "VOD";
+        r0 = r47;
+        r8 = r8.equals(r0);
+        if (r8 == 0) goto L_0x006d;
+    L_0x006a:
+        r25 = 1;
+        goto L_0x0038;
+    L_0x006d:
+        r8 = "EVENT";
+        r0 = r47;
+        r8 = r8.equals(r0);
+        if (r8 == 0) goto L_0x0038;
+    L_0x0078:
+        r25 = 2;
+        goto L_0x0038;
+    L_0x007b:
+        r8 = "#EXT-X-START";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x0097;
+    L_0x0084:
+        r8 = REGEX_TIME_OFFSET;
+        r18 = parseDoubleAttr(r9, r8);
         r20 = 469683714NUM; // 0x412e84NUM float:0.0 double:1000000.0;
         r18 = r18 * r20;
         r0 = r18;
         r0 = (long) r0;
-        r22 = r0;
-        goto L_0x0036;
-    L_0x0095:
-        r9 = "#EXT-X-MAP";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x00d5;
-    L_0x009e:
-        r9 = REGEX_URI;
-        r3 = parseStringAttr(r10, r9);
-        r9 = REGEX_ATTR_BYTERANGE;
-        r8 = parseOptionalStringAttr(r10, r9);
-        if (r8 == 0) goto L_0x00ca;
-    L_0x00ac:
-        r9 = "@";
-        r47 = r8.split(r9);
-        r9 = 0;
-        r9 = r47[r9];
-        r6 = java.lang.Long.parseLong(r9);
-        r0 = r47;
-        r9 = r0.length;
-        r18 = 1;
-        r0 = r18;
-        if (r9 <= r0) goto L_0x00ca;
-    L_0x00c3:
-        r9 = 1;
-        r9 = r47[r9];
-        r4 = java.lang.Long.parseLong(r9);
-    L_0x00ca:
+        r28 = r0;
+        goto L_0x0038;
+    L_0x0097:
+        r8 = "#EXT-X-MAP";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x00d6;
+    L_0x00a0:
+        r8 = REGEX_URI;
+        r3 = parseStringAttr(r9, r8);
+        r8 = REGEX_ATTR_BYTERANGE;
+        r23 = parseOptionalStringAttr(r9, r8);
+        if (r23 == 0) goto L_0x00cb;
+    L_0x00ae:
+        r8 = "@";
+        r0 = r23;
+        r51 = r0.split(r8);
+        r8 = 0;
+        r8 = r51[r8];
+        r6 = java.lang.Long.parseLong(r8);
+        r0 = r51;
+        r8 = r0.length;
+        r10 = 1;
+        if (r8 <= r10) goto L_0x00cb;
+    L_0x00c4:
+        r8 = 1;
+        r8 = r51[r8];
+        r4 = java.lang.Long.parseLong(r8);
+    L_0x00cb:
         r2 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist$Segment;
         r2.<init>(r3, r4, r6);
         r4 = 0;
         r6 = -1;
-        goto L_0x0036;
-    L_0x00d5:
-        r9 = "#EXT-X-TARGETDURATION";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x00ee;
-    L_0x00de:
-        r9 = REGEX_TARGET_DURATION;
-        r9 = parseIntAttr(r10, r9);
-        r0 = (long) r9;
+        goto L_0x0038;
+    L_0x00d6:
+        r8 = "#EXT-X-TARGETDURATION";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x00ef;
+    L_0x00df:
+        r8 = REGEX_TARGET_DURATION;
+        r8 = parseIntAttr(r9, r8);
+        r0 = (long) r8;
         r18 = r0;
         r20 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r30 = r18 * r20;
-        goto L_0x0036;
-    L_0x00ee:
-        r9 = "#EXT-X-MEDIA-SEQUENCE";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0101;
-    L_0x00f7:
-        r9 = REGEX_MEDIA_SEQUENCE;
-        r28 = parseIntAttr(r10, r9);
-        r46 = r28;
-        goto L_0x0036;
-    L_0x0101:
-        r9 = "#EXT-X-VERSION";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0112;
-    L_0x010a:
-        r9 = REGEX_VERSION;
-        r29 = parseIntAttr(r10, r9);
-        goto L_0x0036;
-    L_0x0112:
-        r9 = "#EXTINF";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x012d;
-    L_0x011b:
-        r9 = REGEX_MEDIA_DURATION;
-        r18 = parseDoubleAttr(r10, r9);
+        r37 = r18 * r20;
+        goto L_0x0038;
+    L_0x00ef:
+        r8 = "#EXT-X-MEDIA-SEQUENCE";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x0102;
+    L_0x00f8:
+        r8 = REGEX_MEDIA_SEQUENCE;
+        r34 = parseLongAttr(r9, r8);
+        r52 = r34;
+        goto L_0x0038;
+    L_0x0102:
+        r8 = "#EXT-X-VERSION";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x0113;
+    L_0x010b:
+        r8 = REGEX_VERSION;
+        r36 = parseIntAttr(r9, r8);
+        goto L_0x0038;
+    L_0x0113:
+        r8 = "#EXTINF";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x012e;
+    L_0x011c:
+        r8 = REGEX_MEDIA_DURATION;
+        r18 = parseDoubleAttr(r9, r8);
         r20 = 469683714NUM; // 0x412e84NUM float:0.0 double:1000000.0;
         r18 = r18 * r20;
         r0 = r18;
         r11 = (long) r0;
-        goto L_0x0036;
-    L_0x012d:
-        r9 = "#EXT-X-KEY";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x01b5;
-    L_0x0136:
-        r9 = REGEX_METHOD;
-        r40 = parseOptionalStringAttr(r10, r9);
-        r9 = REGEX_KEYFORMAT;
-        r39 = parseOptionalStringAttr(r10, r9);
+        goto L_0x0038;
+    L_0x012e:
+        r8 = "#EXT-X-KEY";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x01af;
+    L_0x0137:
+        r8 = REGEX_METHOD;
+        r46 = parseOptionalStringAttr(r9, r8);
+        r8 = REGEX_KEYFORMAT;
+        r45 = parseOptionalStringAttr(r9, r8);
         r16 = 0;
-        r38 = 0;
-        r9 = "NONE";
-        r0 = r40;
-        r9 = r9.equals(r0);
-        if (r9 != 0) goto L_0x0036;
-    L_0x0151:
-        r9 = REGEX_IV;
-        r38 = parseOptionalStringAttr(r10, r9);
-        r9 = "identity";
-        r0 = r39;
-        r9 = r9.equals(r0);
-        if (r9 != 0) goto L_0x0164;
-    L_0x0162:
-        if (r39 != 0) goto L_0x0177;
-    L_0x0164:
-        r9 = "AES-128";
-        r0 = r40;
-        r9 = r9.equals(r0);
-        if (r9 == 0) goto L_0x0036;
-    L_0x016f:
-        r9 = REGEX_URI;
-        r16 = parseStringAttr(r10, r9);
-        goto L_0x0036;
-    L_0x0177:
-        if (r40 == 0) goto L_0x0036;
-    L_0x0179:
-        r0 = r39;
-        r43 = parseWidevineSchemeData(r10, r0);
-        if (r43 == 0) goto L_0x0036;
-    L_0x0181:
-        r35 = new org.telegram.messenger.exoplayer2.drm.DrmInitData;
-        r9 = "SAMPLE-AES-CENC";
-        r0 = r40;
-        r9 = r9.equals(r0);
-        if (r9 != 0) goto L_0x0199;
-    L_0x018e:
-        r9 = "SAMPLE-AES-CTR";
-        r0 = r40;
-        r9 = r9.equals(r0);
-        if (r9 == 0) goto L_0x01b1;
-    L_0x0199:
-        r9 = "cenc";
-    L_0x019c:
-        r18 = 1;
-        r0 = r18;
-        r0 = new org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData[r0];
-        r18 = r0;
-        r19 = 0;
-        r18[r19] = r43;
-        r0 = r35;
-        r1 = r18;
-        r0.<init>(r9, r1);
-        goto L_0x0036;
-    L_0x01b1:
-        r9 = "cbcs";
-        goto L_0x019c;
-    L_0x01b5:
-        r9 = "#EXT-X-BYTERANGE";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x01e4;
-    L_0x01be:
-        r9 = REGEX_BYTERANGE;
-        r8 = parseStringAttr(r10, r9);
-        r9 = "@";
-        r47 = r8.split(r9);
-        r9 = 0;
-        r9 = r47[r9];
-        r6 = java.lang.Long.parseLong(r9);
-        r0 = r47;
-        r9 = r0.length;
-        r18 = 1;
-        r0 = r18;
-        if (r9 <= r0) goto L_0x0036;
-    L_0x01db:
-        r9 = 1;
-        r9 = r47[r9];
-        r4 = java.lang.Long.parseLong(r9);
-        goto L_0x0036;
-    L_0x01e4:
-        r9 = "#EXT-X-DISCONTINUITY-SEQUENCE";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0201;
-    L_0x01ed:
-        r26 = 1;
-        r9 = 58;
-        r9 = r10.indexOf(r9);
-        r9 = r9 + 1;
-        r9 = r10.substring(r9);
-        r27 = java.lang.Integer.parseInt(r9);
-        goto L_0x0036;
-    L_0x0201:
-        r9 = "#EXT-X-DISCONTINUITY";
-        r9 = r10.equals(r9);
-        if (r9 == 0) goto L_0x020e;
-    L_0x020a:
-        r13 = r13 + 1;
-        goto L_0x0036;
-    L_0x020e:
-        r9 = "#EXT-X-PROGRAM-DATE-TIME";
-        r9 = r10.startsWith(r9);
-        if (r9 == 0) goto L_0x0235;
-    L_0x0217:
+        r44 = 0;
+        r8 = "NONE";
+        r0 = r46;
+        r8 = r8.equals(r0);
+        if (r8 != 0) goto L_0x0038;
+    L_0x0152:
+        r8 = REGEX_IV;
+        r44 = parseOptionalStringAttr(r9, r8);
+        r8 = "identity";
+        r0 = r45;
+        r8 = r8.equals(r0);
+        if (r8 != 0) goto L_0x0165;
+    L_0x0163:
+        if (r45 != 0) goto L_0x0178;
+    L_0x0165:
+        r8 = "AES-128";
+        r0 = r46;
+        r8 = r8.equals(r0);
+        if (r8 == 0) goto L_0x0038;
+    L_0x0170:
+        r8 = REGEX_URI;
+        r16 = parseStringAttr(r9, r8);
+        goto L_0x0038;
+    L_0x0178:
+        if (r46 == 0) goto L_0x0038;
+    L_0x017a:
+        r0 = r45;
+        r50 = parseWidevineSchemeData(r9, r0);
+        if (r50 == 0) goto L_0x0038;
+    L_0x0182:
+        r42 = new org.telegram.messenger.exoplayer2.drm.DrmInitData;
+        r8 = "SAMPLE-AES-CENC";
+        r0 = r46;
+        r8 = r8.equals(r0);
+        if (r8 != 0) goto L_0x019a;
+    L_0x018f:
+        r8 = "SAMPLE-AES-CTR";
+        r0 = r46;
+        r8 = r8.equals(r0);
+        if (r8 == 0) goto L_0x01ab;
+    L_0x019a:
+        r8 = "cenc";
+    L_0x019d:
+        r10 = 1;
+        r10 = new org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData[r10];
         r18 = 0;
-        r9 = (r24 > r18 ? 1 : (r24 == r18 ? 0 : -1));
-        if (r9 != 0) goto L_0x0036;
-    L_0x021d:
-        r9 = 58;
-        r9 = r10.indexOf(r9);
-        r9 = r9 + 1;
-        r9 = r10.substring(r9);
-        r18 = org.telegram.messenger.exoplayer2.util.Util.parseXsDateTime(r9);
-        r44 = org.telegram.messenger.exoplayer2.C0605C.msToUs(r18);
-        r24 = r44 - r14;
-        goto L_0x0036;
-    L_0x0235:
-        r9 = "#";
-        r9 = r10.startsWith(r9);
-        if (r9 != 0) goto L_0x0272;
-    L_0x023e:
-        if (r16 != 0) goto L_0x0268;
-    L_0x0240:
+        r10[r18] = r50;
+        r0 = r42;
+        r0.<init>(r8, r10);
+        goto L_0x0038;
+    L_0x01ab:
+        r8 = "cbcs";
+        goto L_0x019d;
+    L_0x01af:
+        r8 = "#EXT-X-BYTERANGE";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x01dd;
+    L_0x01b8:
+        r8 = REGEX_BYTERANGE;
+        r23 = parseStringAttr(r9, r8);
+        r8 = "@";
+        r0 = r23;
+        r51 = r0.split(r8);
+        r8 = 0;
+        r8 = r51[r8];
+        r6 = java.lang.Long.parseLong(r8);
+        r0 = r51;
+        r8 = r0.length;
+        r10 = 1;
+        if (r8 <= r10) goto L_0x0038;
+    L_0x01d4:
+        r8 = 1;
+        r8 = r51[r8];
+        r4 = java.lang.Long.parseLong(r8);
+        goto L_0x0038;
+    L_0x01dd:
+        r8 = "#EXT-X-DISCONTINUITY-SEQUENCE";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x01fa;
+    L_0x01e6:
+        r32 = 1;
+        r8 = 58;
+        r8 = r9.indexOf(r8);
+        r8 = r8 + 1;
+        r8 = r9.substring(r8);
+        r33 = java.lang.Integer.parseInt(r8);
+        goto L_0x0038;
+    L_0x01fa:
+        r8 = "#EXT-X-DISCONTINUITY";
+        r8 = r9.equals(r8);
+        if (r8 == 0) goto L_0x0207;
+    L_0x0203:
+        r13 = r13 + 1;
+        goto L_0x0038;
+    L_0x0207:
+        r8 = "#EXT-X-PROGRAM-DATE-TIME";
+        r8 = r9.startsWith(r8);
+        if (r8 == 0) goto L_0x022e;
+    L_0x0210:
+        r18 = 0;
+        r8 = (r30 > r18 ? 1 : (r30 == r18 ? 0 : -1));
+        if (r8 != 0) goto L_0x0038;
+    L_0x0216:
+        r8 = 58;
+        r8 = r9.indexOf(r8);
+        r8 = r8 + 1;
+        r8 = r9.substring(r8);
+        r18 = org.telegram.messenger.exoplayer2.util.Util.parseXsDateTime(r8);
+        r48 = org.telegram.messenger.exoplayer2.C0615C.msToUs(r18);
+        r30 = r48 - r14;
+        goto L_0x0038;
+    L_0x022e:
+        r8 = "#EXT-X-GAP";
+        r8 = r9.equals(r8);
+        if (r8 == 0) goto L_0x023b;
+    L_0x0237:
+        r22 = 1;
+        goto L_0x0038;
+    L_0x023b:
+        r8 = "#EXT-X-INDEPENDENT-SEGMENTS";
+        r8 = r9.equals(r8);
+        if (r8 == 0) goto L_0x0248;
+    L_0x0244:
+        r39 = 1;
+        goto L_0x0038;
+    L_0x0248:
+        r8 = "#EXT-X-ENDLIST";
+        r8 = r9.equals(r8);
+        if (r8 == 0) goto L_0x0255;
+    L_0x0251:
+        r40 = 1;
+        goto L_0x0038;
+    L_0x0255:
+        r8 = "#";
+        r8 = r9.startsWith(r8);
+        if (r8 != 0) goto L_0x0038;
+    L_0x025e:
+        if (r16 != 0) goto L_0x028d;
+    L_0x0260:
         r17 = 0;
-    L_0x0242:
-        r46 = r46 + 1;
+    L_0x0262:
+        r18 = 1;
+        r52 = r52 + r18;
         r18 = -1;
-        r9 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
-        if (r9 != 0) goto L_0x024c;
-    L_0x024a:
+        r8 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
+        if (r8 != 0) goto L_0x026e;
+    L_0x026c:
         r4 = 0;
-    L_0x024c:
-        r9 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist$Segment;
+    L_0x026e:
+        r8 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist$Segment;
+        r10 = r2;
         r18 = r4;
         r20 = r6;
-        r9.<init>(r10, r11, r13, r14, r16, r17, r18, r20);
-        r0 = r37;
-        r0.add(r9);
+        r8.<init>(r9, r10, r11, r13, r14, r16, r17, r18, r20, r22);
+        r0 = r43;
+        r0.add(r8);
         r14 = r14 + r11;
         r11 = 0;
         r18 = -1;
-        r9 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
-        if (r9 == 0) goto L_0x0264;
-    L_0x0263:
+        r8 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
+        if (r8 == 0) goto L_0x0287;
+    L_0x0286:
         r4 = r4 + r6;
-    L_0x0264:
+    L_0x0287:
         r6 = -1;
-        goto L_0x0036;
-    L_0x0268:
-        if (r38 == 0) goto L_0x026d;
-    L_0x026a:
-        r17 = r38;
-        goto L_0x0242;
-    L_0x026d:
-        r17 = java.lang.Integer.toHexString(r46);
-        goto L_0x0242;
-    L_0x0272:
-        r9 = "#EXT-X-INDEPENDENT-SEGMENTS";
-        r9 = r10.equals(r9);
-        if (r9 == 0) goto L_0x027f;
-    L_0x027b:
-        r32 = 1;
-        goto L_0x0036;
-    L_0x027f:
-        r9 = "#EXT-X-ENDLIST";
-        r9 = r10.equals(r9);
-        if (r9 == 0) goto L_0x0036;
-    L_0x0288:
-        r33 = 1;
-        goto L_0x0036;
-    L_0x028c:
-        r18 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist;
-        r20 = 0;
-        r9 = (r24 > r20 ? 1 : (r24 == r20 ? 0 : -1));
-        if (r9 == 0) goto L_0x02a2;
-    L_0x0294:
-        r34 = 1;
-    L_0x0296:
-        r19 = r41;
-        r20 = r50;
-        r21 = r48;
-        r36 = r2;
-        r18.<init>(r19, r20, r21, r22, r24, r26, r27, r28, r29, r30, r32, r33, r34, r35, r36, r37);
-        return r18;
-    L_0x02a2:
-        r34 = 0;
-        goto L_0x0296;
+        r22 = 0;
+        goto L_0x0038;
+    L_0x028d:
+        if (r44 == 0) goto L_0x0292;
+    L_0x028f:
+        r17 = r44;
+        goto L_0x0262;
+    L_0x0292:
+        r17 = java.lang.Long.toHexString(r52);
+        goto L_0x0262;
+    L_0x0297:
+        r24 = new org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist;
+        r18 = 0;
+        r8 = (r30 > r18 ? 1 : (r30 == r18 ? 0 : -1));
+        if (r8 == 0) goto L_0x02a7;
+    L_0x029f:
+        r41 = 1;
+    L_0x02a1:
+        r26 = r55;
+        r24.<init>(r25, r26, r27, r28, r30, r32, r33, r34, r36, r37, r39, r40, r41, r42, r43);
+        return r24;
+    L_0x02a7:
+        r41 = 0;
+        goto L_0x02a1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistParser.parseMediaPlaylist(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistParser$LineIterator, java.lang.String):org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist");
     }
@@ -697,12 +701,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private static SchemeData parseWidevineSchemeData(String line, String keyFormat) throws ParserException {
         if (KEYFORMAT_WIDEVINE_PSSH_BINARY.equals(keyFormat)) {
             String uriString = parseStringAttr(line, REGEX_URI);
-            return new SchemeData(C0605C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
+            return new SchemeData(C0615C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
         } else if (!KEYFORMAT_WIDEVINE_PSSH_JSON.equals(keyFormat)) {
             return null;
         } else {
             try {
-                return new SchemeData(C0605C.WIDEVINE_UUID, "hls", line.getBytes(C0605C.UTF8_NAME));
+                return new SchemeData(C0615C.WIDEVINE_UUID, "hls", line.getBytes(C0615C.UTF8_NAME));
             } catch (Throwable e) {
                 throw new ParserException(e);
             }
@@ -711,6 +715,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private static int parseIntAttr(String line, Pattern pattern) throws ParserException {
         return Integer.parseInt(parseStringAttr(line, pattern));
+    }
+
+    private static long parseLongAttr(String line, Pattern pattern) throws ParserException {
+        return Long.parseLong(parseStringAttr(line, pattern));
     }
 
     private static double parseDoubleAttr(String line, Pattern pattern) throws ParserException {

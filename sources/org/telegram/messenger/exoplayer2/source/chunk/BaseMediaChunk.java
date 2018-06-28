@@ -7,9 +7,11 @@ import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 public abstract class BaseMediaChunk extends MediaChunk {
     private int[] firstSampleIndices;
     private BaseMediaChunkOutput output;
+    public final long seekTimeUs;
 
-    public BaseMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex) {
+    public BaseMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, long seekTimeUs, long chunkIndex) {
         super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
+        this.seekTimeUs = seekTimeUs;
     }
 
     public void init(BaseMediaChunkOutput output) {

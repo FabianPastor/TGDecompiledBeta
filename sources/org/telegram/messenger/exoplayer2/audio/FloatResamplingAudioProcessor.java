@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.audio;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.telegram.messenger.exoplayer2.audio.AudioProcessor.UnhandledFormatException;
-import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class FloatResamplingAudioProcessor implements AudioProcessor {
@@ -46,7 +45,6 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
     }
 
     public void queueInput(ByteBuffer inputBuffer) {
-        Assertions.checkState(isActive());
         boolean isInput32Bit = this.sourceEncoding == NUM;
         int position = inputBuffer.position();
         int limit = inputBuffer.limit();
@@ -93,10 +91,10 @@ final class FloatResamplingAudioProcessor implements AudioProcessor {
 
     public void reset() {
         flush();
-        this.buffer = EMPTY_BUFFER;
         this.sampleRateHz = -1;
         this.channelCount = -1;
         this.sourceEncoding = 0;
+        this.buffer = EMPTY_BUFFER;
     }
 
     private static void writePcm32BitFloat(int pcm32BitInt, ByteBuffer buffer) {

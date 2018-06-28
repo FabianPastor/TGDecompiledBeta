@@ -2,6 +2,9 @@ package org.telegram.ui.Components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnShowListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
@@ -17,9 +20,14 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.MeasureSpec;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.FrameLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.Theme;
 
 public class EditTextCaption extends EditTextBoldCursor {
     private String caption;
@@ -53,6 +61,72 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     private void makeSelectedItalic() {
         applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")));
+    }
+
+    private void makeSelectedUrl() {
+        Builder builder = new Builder(getContext());
+        builder.setTitle(LocaleController.getString("CreateLink", C0500R.string.CreateLink));
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
+            }
+        };
+        editText.setTextSize(1, 18.0f);
+        editText.setText("http://");
+        editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        editText.setHintText(LocaleController.getString("URL", C0500R.string.URL));
+        editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setImeOptions(6);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+        final int start = getSelectionStart();
+        final int end = getSelectionEnd();
+        builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Editable editable = EditTextCaption.this.getText();
+                CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
+                if (spans != null && spans.length > 0) {
+                    for (CharacterStyle oldSpan : spans) {
+                        int spanStart = editable.getSpanStart(oldSpan);
+                        int spanEnd = editable.getSpanEnd(oldSpan);
+                        editable.removeSpan(oldSpan);
+                        if (spanStart < start) {
+                            editable.setSpan(oldSpan, spanStart, start, 33);
+                        }
+                        if (spanEnd > end) {
+                            editable.setSpan(oldSpan, end, spanEnd, 33);
+                        }
+                    }
+                }
+                editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+        builder.show().setOnShowListener(new OnShowListener() {
+            public void onShow(DialogInterface dialog) {
+                editText.requestFocus();
+                AndroidUtilities.showKeyboard(editText);
+            }
+        });
+        if (editText != null) {
+            MarginLayoutParams layoutParams = (MarginLayoutParams) editText.getLayoutParams();
+            if (layoutParams != null) {
+                if (layoutParams instanceof LayoutParams) {
+                    ((LayoutParams) layoutParams).gravity = 1;
+                }
+                int dp = AndroidUtilities.dp(24.0f);
+                layoutParams.leftMargin = dp;
+                layoutParams.rightMargin = dp;
+                layoutParams.height = AndroidUtilities.dp(36.0f);
+                editText.setLayoutParams(layoutParams);
+            }
+            editText.setSelection(editText.getText().length());
+        }
     }
 
     private void makeSelectedRegular() {
@@ -101,14 +175,17 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 boolean z = true;
-                if (item.getItemId() == C0493R.id.menu_regular) {
+                if (item.getItemId() == C0500R.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
-                } else if (item.getItemId() == C0493R.id.menu_bold) {
+                } else if (item.getItemId() == C0500R.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
-                } else if (item.getItemId() == C0493R.id.menu_italic) {
+                } else if (item.getItemId() == C0500R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
+                    mode.finish();
+                } else if (item.getItemId() == C0500R.id.menu_link) {
+                    EditTextCaption.this.makeSelectedUrl();
                     mode.finish();
                 } else {
                     try {

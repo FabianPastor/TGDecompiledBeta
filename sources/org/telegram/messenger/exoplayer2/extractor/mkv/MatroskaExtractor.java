@@ -1,5 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.mkv;
 
+import android.util.Log;
+import android.util.Pair;
 import android.util.SparseArray;
 import java.io.IOException;
 import java.lang.annotation.Retention;
@@ -11,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -69,8 +71,9 @@ public final class MatroskaExtractor implements Extractor {
     private static final String DOC_TYPE_MATROSKA = "matroska";
     private static final String DOC_TYPE_WEBM = "webm";
     private static final int ENCRYPTION_IV_SIZE = 8;
-    public static final ExtractorsFactory FACTORY = new C06401();
+    public static final ExtractorsFactory FACTORY = new C06521();
     public static final int FLAG_DISABLE_SEEK_FOR_CUES = 1;
+    private static final int FOURCC_COMPRESSION_DIVX = NUM;
     private static final int FOURCC_COMPRESSION_VC1 = 826496599;
     private static final int ID_AUDIO = 225;
     private static final int ID_AUDIO_BIT_DEPTH = 25188;
@@ -228,8 +231,8 @@ public final class MatroskaExtractor implements Extractor {
     private final ParsableByteArray vorbisNumPageSamples;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$1 */
-    static class C06401 implements ExtractorsFactory {
-        C06401() {
+    static class C06521 implements ExtractorsFactory {
+        C06521() {
         }
 
         public Extractor[] createExtractors() {
@@ -246,11 +249,97 @@ public final class MatroskaExtractor implements Extractor {
         }
 
         public int getElementType(int id) {
-            return MatroskaExtractor.this.getElementType(id);
+            switch (id) {
+                case MatroskaExtractor.ID_TRACK_TYPE /*131*/:
+                case MatroskaExtractor.ID_FLAG_DEFAULT /*136*/:
+                case MatroskaExtractor.ID_BLOCK_DURATION /*155*/:
+                case MatroskaExtractor.ID_CHANNELS /*159*/:
+                case MatroskaExtractor.ID_PIXEL_WIDTH /*176*/:
+                case MatroskaExtractor.ID_CUE_TIME /*179*/:
+                case MatroskaExtractor.ID_PIXEL_HEIGHT /*186*/:
+                case MatroskaExtractor.ID_TRACK_NUMBER /*215*/:
+                case MatroskaExtractor.ID_TIME_CODE /*231*/:
+                case MatroskaExtractor.ID_CUE_CLUSTER_POSITION /*241*/:
+                case MatroskaExtractor.ID_REFERENCE_BLOCK /*251*/:
+                case MatroskaExtractor.ID_CONTENT_COMPRESSION_ALGORITHM /*16980*/:
+                case MatroskaExtractor.ID_DOC_TYPE_READ_VERSION /*17029*/:
+                case MatroskaExtractor.ID_EBML_READ_VERSION /*17143*/:
+                case MatroskaExtractor.ID_CONTENT_ENCRYPTION_ALGORITHM /*18401*/:
+                case MatroskaExtractor.ID_CONTENT_ENCRYPTION_AES_SETTINGS_CIPHER_MODE /*18408*/:
+                case MatroskaExtractor.ID_CONTENT_ENCODING_ORDER /*20529*/:
+                case MatroskaExtractor.ID_CONTENT_ENCODING_SCOPE /*20530*/:
+                case MatroskaExtractor.ID_SEEK_POSITION /*21420*/:
+                case MatroskaExtractor.ID_STEREO_MODE /*21432*/:
+                case MatroskaExtractor.ID_DISPLAY_WIDTH /*21680*/:
+                case MatroskaExtractor.ID_DISPLAY_UNIT /*21682*/:
+                case MatroskaExtractor.ID_DISPLAY_HEIGHT /*21690*/:
+                case MatroskaExtractor.ID_FLAG_FORCED /*21930*/:
+                case MatroskaExtractor.ID_COLOUR_RANGE /*21945*/:
+                case MatroskaExtractor.ID_COLOUR_TRANSFER /*21946*/:
+                case MatroskaExtractor.ID_COLOUR_PRIMARIES /*21947*/:
+                case MatroskaExtractor.ID_MAX_CLL /*21948*/:
+                case MatroskaExtractor.ID_MAX_FALL /*21949*/:
+                case MatroskaExtractor.ID_CODEC_DELAY /*22186*/:
+                case MatroskaExtractor.ID_SEEK_PRE_ROLL /*22203*/:
+                case MatroskaExtractor.ID_AUDIO_BIT_DEPTH /*25188*/:
+                case MatroskaExtractor.ID_DEFAULT_DURATION /*2352003*/:
+                case MatroskaExtractor.ID_TIMECODE_SCALE /*2807729*/:
+                    return 2;
+                case 134:
+                case MatroskaExtractor.ID_DOC_TYPE /*17026*/:
+                case MatroskaExtractor.ID_LANGUAGE /*2274716*/:
+                    return 3;
+                case MatroskaExtractor.ID_BLOCK_GROUP /*160*/:
+                case MatroskaExtractor.ID_TRACK_ENTRY /*174*/:
+                case MatroskaExtractor.ID_CUE_TRACK_POSITIONS /*183*/:
+                case MatroskaExtractor.ID_CUE_POINT /*187*/:
+                case 224:
+                case MatroskaExtractor.ID_AUDIO /*225*/:
+                case MatroskaExtractor.ID_CONTENT_ENCRYPTION_AES_SETTINGS /*18407*/:
+                case MatroskaExtractor.ID_SEEK /*19899*/:
+                case MatroskaExtractor.ID_CONTENT_COMPRESSION /*20532*/:
+                case MatroskaExtractor.ID_CONTENT_ENCRYPTION /*20533*/:
+                case MatroskaExtractor.ID_COLOUR /*21936*/:
+                case MatroskaExtractor.ID_MASTERING_METADATA /*21968*/:
+                case MatroskaExtractor.ID_CONTENT_ENCODING /*25152*/:
+                case MatroskaExtractor.ID_CONTENT_ENCODINGS /*28032*/:
+                case MatroskaExtractor.ID_PROJECTION /*30320*/:
+                case MatroskaExtractor.ID_SEEK_HEAD /*290298740*/:
+                case 357149030:
+                case MatroskaExtractor.ID_TRACKS /*374648427*/:
+                case MatroskaExtractor.ID_SEGMENT /*408125543*/:
+                case MatroskaExtractor.ID_EBML /*440786851*/:
+                case MatroskaExtractor.ID_CUES /*475249515*/:
+                case MatroskaExtractor.ID_CLUSTER /*524531317*/:
+                    return 1;
+                case MatroskaExtractor.ID_BLOCK /*161*/:
+                case MatroskaExtractor.ID_SIMPLE_BLOCK /*163*/:
+                case MatroskaExtractor.ID_CONTENT_COMPRESSION_SETTINGS /*16981*/:
+                case MatroskaExtractor.ID_CONTENT_ENCRYPTION_KEY_ID /*18402*/:
+                case MatroskaExtractor.ID_SEEK_ID /*21419*/:
+                case MatroskaExtractor.ID_CODEC_PRIVATE /*25506*/:
+                case MatroskaExtractor.ID_PROJECTION_PRIVATE /*30322*/:
+                    return 4;
+                case MatroskaExtractor.ID_SAMPLING_FREQUENCY /*181*/:
+                case MatroskaExtractor.ID_DURATION /*17545*/:
+                case MatroskaExtractor.ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
+                case MatroskaExtractor.ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
+                case MatroskaExtractor.ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
+                case MatroskaExtractor.ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
+                case MatroskaExtractor.ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
+                case MatroskaExtractor.ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
+                case MatroskaExtractor.ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
+                case MatroskaExtractor.ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
+                case MatroskaExtractor.ID_LUMNINANCE_MAX /*21977*/:
+                case MatroskaExtractor.ID_LUMNINANCE_MIN /*21978*/:
+                    return 5;
+                default:
+                    return 0;
+            }
         }
 
         public boolean isLevel1Element(int id) {
-            return MatroskaExtractor.this.isLevel1Element(id);
+            return id == 357149030 || id == MatroskaExtractor.ID_CLUSTER || id == MatroskaExtractor.ID_CUES || id == MatroskaExtractor.ID_TRACKS;
         }
 
         public void startMasterElement(int id, long contentPosition, long contentSize) throws ParserException {
@@ -360,10 +449,10 @@ public final class MatroskaExtractor implements Extractor {
             this.language = "eng";
         }
 
-        public void initializeOutput(org.telegram.messenger.exoplayer2.extractor.ExtractorOutput r45, int r46) throws org.telegram.messenger.exoplayer2.ParserException {
+        public void initializeOutput(org.telegram.messenger.exoplayer2.extractor.ExtractorOutput r46, int r47) throws org.telegram.messenger.exoplayer2.ParserException {
             /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) in PHI: PHI: (r26_2 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) = (r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo), (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) binds: {(r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:162:0x044c, (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:163:0x044e}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) in PHI: PHI: (r26_2 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) = (r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo), (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) binds: {(r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:159:0x0445, (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:160:0x0447}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -379,11 +468,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
             /*
-            r44 = this;
+            r45 = this;
             r6 = -1;
             r9 = -1;
             r10 = 0;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecId;
             r2 = -1;
             r5 = r4.hashCode();
@@ -430,26 +519,26 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 case 6: goto L_0x01ee;
                 case 7: goto L_0x020c;
                 case 8: goto L_0x022a;
-                case 9: goto L_0x024c;
-                case 10: goto L_0x0251;
-                case 11: goto L_0x0260;
-                case 12: goto L_0x02ae;
-                case 13: goto L_0x02bb;
-                case 14: goto L_0x02c2;
-                case 15: goto L_0x02c9;
-                case 16: goto L_0x02ce;
-                case 17: goto L_0x02d3;
-                case 18: goto L_0x02e1;
-                case 19: goto L_0x02e1;
-                case 20: goto L_0x02e6;
-                case 21: goto L_0x02eb;
-                case 22: goto L_0x02f8;
-                case 23: goto L_0x0362;
-                case 24: goto L_0x039e;
-                case 25: goto L_0x03a3;
-                case 26: goto L_0x03a8;
-                case 27: goto L_0x03b5;
-                case 28: goto L_0x03ba;
+                case 9: goto L_0x0245;
+                case 10: goto L_0x024a;
+                case 11: goto L_0x0259;
+                case 12: goto L_0x02a7;
+                case 13: goto L_0x02b4;
+                case 14: goto L_0x02bb;
+                case 15: goto L_0x02c2;
+                case 16: goto L_0x02c7;
+                case 17: goto L_0x02cc;
+                case 18: goto L_0x02da;
+                case 19: goto L_0x02da;
+                case 20: goto L_0x02df;
+                case 21: goto L_0x02e4;
+                case 22: goto L_0x02f1;
+                case 23: goto L_0x035b;
+                case 24: goto L_0x0397;
+                case 25: goto L_0x039c;
+                case 26: goto L_0x03a1;
+                case 27: goto L_0x03ae;
+                case 28: goto L_0x03b3;
                 default: goto L_0x0012;
             };
         L_0x0012:
@@ -664,45 +753,45 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r3 = "video/x-vnd.on2.vp8";
         L_0x0185:
             r12 = 0;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.flagDefault;
-            if (r2 == 0) goto L_0x03ee;
+            if (r2 == 0) goto L_0x03e7;
         L_0x018c:
             r2 = 1;
         L_0x018d:
             r12 = r12 | r2;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.flagForced;
-            if (r2 == 0) goto L_0x03f1;
+            if (r2 == 0) goto L_0x03ea;
         L_0x0194:
             r2 = 2;
         L_0x0195:
             r12 = r12 | r2;
             r2 = org.telegram.messenger.exoplayer2.util.MimeTypes.isAudio(r3);
-            if (r2 == 0) goto L_0x03f4;
+            if (r2 == 0) goto L_0x03ed;
         L_0x019c:
-            r43 = 1;
-            r2 = java.lang.Integer.toString(r46);
+            r44 = 1;
+            r2 = java.lang.Integer.toString(r47);
             r4 = 0;
             r5 = -1;
-            r0 = r44;
+            r0 = r45;
             r7 = r0.channelCount;
-            r0 = r44;
+            r0 = r45;
             r8 = r0.sampleRate;
-            r0 = r44;
+            r0 = r45;
             r11 = r0.drmInitData;
-            r0 = r44;
+            r0 = r45;
             r13 = r0.language;
             r40 = org.telegram.messenger.exoplayer2.Format.createAudioSampleFormat(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
         L_0x01b8:
-            r0 = r44;
-            r2 = r0.number;
             r0 = r45;
-            r1 = r43;
+            r2 = r0.number;
+            r0 = r46;
+            r1 = r44;
             r2 = r0.track(r2, r1);
-            r0 = r44;
+            r0 = r45;
             r0.output = r2;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.output;
             r0 = r40;
             r2.format(r0);
@@ -715,7 +804,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             goto L_0x0185;
         L_0x01da:
             r3 = "video/mp4v-es";
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             if (r2 != 0) goto L_0x01e5;
         L_0x01e3:
@@ -723,14 +812,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         L_0x01e4:
             goto L_0x0185;
         L_0x01e5:
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10 = java.util.Collections.singletonList(r2);
             goto L_0x01e4;
         L_0x01ee:
             r3 = "video/avc";
             r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecPrivate;
             r2.<init>(r4);
             r39 = org.telegram.messenger.exoplayer2.video.AvcConfig.parse(r2);
@@ -738,13 +827,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r10 = r0.initializationData;
             r0 = r39;
             r2 = r0.nalUnitLengthFieldLength;
-            r0 = r44;
+            r0 = r45;
             r0.nalUnitLengthFieldLength = r2;
             goto L_0x0185;
         L_0x020c:
             r3 = "video/hevc";
             r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecPrivate;
             r2.<init>(r4);
             r42 = org.telegram.messenger.exoplayer2.video.HevcConfig.parse(r2);
@@ -752,49 +841,46 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r10 = r0.initializationData;
             r0 = r42;
             r2 = r0.nalUnitLengthFieldLength;
-            r0 = r44;
+            r0 = r45;
             r0.nalUnitLengthFieldLength = r2;
             goto L_0x0185;
         L_0x022a:
             r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecPrivate;
             r2.<init>(r4);
-            r10 = parseFourCcVc1Private(r2);
-            if (r10 == 0) goto L_0x023e;
-        L_0x0239:
-            r3 = "video/wvc1";
+            r43 = parseFourCcPrivate(r2);
+            r0 = r43;
+            r3 = r0.first;
+            r3 = (java.lang.String) r3;
+            r0 = r43;
+            r10 = r0.second;
+            r10 = (java.util.List) r10;
             goto L_0x0185;
-        L_0x023e:
-            r2 = "MatroskaExtractor";
-            r4 = "Unsupported FourCC. Setting mimeType to video/x-unknown";
-            android.util.Log.w(r2, r4);
+        L_0x0245:
             r3 = "video/x-unknown";
             goto L_0x0185;
-        L_0x024c:
-            r3 = "video/x-unknown";
-            goto L_0x0185;
-        L_0x0251:
+        L_0x024a:
             r3 = "audio/vorbis";
             r6 = 8192; // 0x2000 float:1.14794E-41 double:4.0474E-320;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10 = parseVorbisCodecPrivate(r2);
             goto L_0x0185;
-        L_0x0260:
+        L_0x0259:
             r3 = "audio/opus";
             r6 = 5760; // 0x1680 float:8.071E-42 double:2.846E-320;
             r10 = new java.util.ArrayList;
             r2 = 3;
             r10.<init>(r2);
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10.add(r2);
             r2 = 8;
             r2 = java.nio.ByteBuffer.allocate(r2);
             r4 = java.nio.ByteOrder.nativeOrder();
             r2 = r2.order(r4);
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecDelayNs;
             r2 = r2.putLong(r4);
             r2 = r2.array();
@@ -803,65 +889,65 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r2 = java.nio.ByteBuffer.allocate(r2);
             r4 = java.nio.ByteOrder.nativeOrder();
             r2 = r2.order(r4);
-            r0 = r44;
+            r0 = r45;
             r4 = r0.seekPreRollNs;
             r2 = r2.putLong(r4);
             r2 = r2.array();
             r10.add(r2);
             goto L_0x0185;
-        L_0x02ae:
+        L_0x02a7:
             r3 = "audio/mp4a-latm";
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10 = java.util.Collections.singletonList(r2);
             goto L_0x0185;
-        L_0x02bb:
+        L_0x02b4:
             r3 = "audio/mpeg-L2";
             r6 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
             goto L_0x0185;
-        L_0x02c2:
+        L_0x02bb:
             r3 = "audio/mpeg";
             r6 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
             goto L_0x0185;
-        L_0x02c9:
+        L_0x02c2:
             r3 = "audio/ac3";
             goto L_0x0185;
-        L_0x02ce:
+        L_0x02c7:
             r3 = "audio/eac3";
             goto L_0x0185;
-        L_0x02d3:
+        L_0x02cc:
             r3 = "audio/true-hd";
             r2 = new org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$TrueHdSampleRechunker;
             r2.<init>();
-            r0 = r44;
+            r0 = r45;
             r0.trueHdSampleRechunker = r2;
             goto L_0x0185;
-        L_0x02e1:
+        L_0x02da:
             r3 = "audio/vnd.dts";
             goto L_0x0185;
-        L_0x02e6:
+        L_0x02df:
             r3 = "audio/vnd.dts.hd";
             goto L_0x0185;
-        L_0x02eb:
+        L_0x02e4:
             r3 = "audio/flac";
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10 = java.util.Collections.singletonList(r2);
             goto L_0x0185;
-        L_0x02f8:
+        L_0x02f1:
             r3 = "audio/raw";
             r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.codecPrivate;
             r2.<init>(r4);
             r2 = parseMsAcmCodecPrivate(r2);
-            if (r2 == 0) goto L_0x0343;
-        L_0x030a:
-            r0 = r44;
+            if (r2 == 0) goto L_0x033c;
+        L_0x0303:
+            r0 = r45;
             r2 = r0.audioBitDepth;
             r9 = org.telegram.messenger.exoplayer2.util.Util.getPcmEncoding(r2);
             if (r9 != 0) goto L_0x0185;
-        L_0x0314:
+        L_0x030d:
             r9 = -1;
             r3 = "audio/x-unknown";
             r2 = "MatroskaExtractor";
@@ -869,7 +955,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4.<init>();
             r5 = "Unsupported PCM bit depth: ";
             r4 = r4.append(r5);
-            r0 = r44;
+            r0 = r45;
             r5 = r0.audioBitDepth;
             r4 = r4.append(r5);
             r5 = ". Setting mimeType to ";
@@ -878,7 +964,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4 = r4.toString();
             android.util.Log.w(r2, r4);
             goto L_0x0185;
-        L_0x0343:
+        L_0x033c:
             r3 = "audio/x-unknown";
             r2 = "MatroskaExtractor";
             r4 = new java.lang.StringBuilder;
@@ -889,13 +975,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4 = r4.toString();
             android.util.Log.w(r2, r4);
             goto L_0x0185;
-        L_0x0362:
+        L_0x035b:
             r3 = "audio/raw";
-            r0 = r44;
+            r0 = r45;
             r2 = r0.audioBitDepth;
             r9 = org.telegram.messenger.exoplayer2.util.Util.getPcmEncoding(r2);
             if (r9 != 0) goto L_0x0185;
-        L_0x036f:
+        L_0x0368:
             r9 = -1;
             r3 = "audio/x-unknown";
             r2 = "MatroskaExtractor";
@@ -903,7 +989,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4.<init>();
             r5 = "Unsupported PCM bit depth: ";
             r4 = r4.append(r5);
-            r0 = r44;
+            r0 = r45;
             r5 = r0.audioBitDepth;
             r4 = r4.append(r5);
             r5 = ". Setting mimeType to ";
@@ -912,147 +998,147 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r4 = r4.toString();
             android.util.Log.w(r2, r4);
             goto L_0x0185;
-        L_0x039e:
+        L_0x0397:
             r3 = "application/x-subrip";
             goto L_0x0185;
-        L_0x03a3:
+        L_0x039c:
             r3 = "text/x-ssa";
             goto L_0x0185;
-        L_0x03a8:
+        L_0x03a1:
             r3 = "application/vobsub";
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10 = java.util.Collections.singletonList(r2);
             goto L_0x0185;
-        L_0x03b5:
+        L_0x03ae:
             r3 = "application/pgs";
             goto L_0x0185;
-        L_0x03ba:
+        L_0x03b3:
             r3 = "application/dvbsubs";
             r2 = 4;
             r2 = new byte[r2];
             r4 = 0;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.codecPrivate;
             r7 = 0;
             r5 = r5[r7];
             r2[r4] = r5;
             r4 = 1;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.codecPrivate;
             r7 = 1;
             r5 = r5[r7];
             r2[r4] = r5;
             r4 = 2;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.codecPrivate;
             r7 = 2;
             r5 = r5[r7];
             r2[r4] = r5;
             r4 = 3;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.codecPrivate;
             r7 = 3;
             r5 = r5[r7];
             r2[r4] = r5;
             r10 = java.util.Collections.singletonList(r2);
             goto L_0x0185;
-        L_0x03ee:
+        L_0x03e7:
             r2 = 0;
             goto L_0x018d;
-        L_0x03f1:
+        L_0x03ea:
             r2 = 0;
             goto L_0x0195;
-        L_0x03f4:
+        L_0x03ed:
             r2 = org.telegram.messenger.exoplayer2.util.MimeTypes.isVideo(r3);
-            if (r2 == 0) goto L_0x04a7;
-        L_0x03fa:
-            r43 = 2;
-            r0 = r44;
+            if (r2 == 0) goto L_0x04a0;
+        L_0x03f3:
+            r44 = 2;
+            r0 = r45;
             r2 = r0.displayUnit;
-            if (r2 != 0) goto L_0x0420;
+            if (r2 != 0) goto L_0x0419;
+        L_0x03fb:
+            r0 = r45;
+            r2 = r0.displayWidth;
+            r4 = -1;
+            if (r2 != r4) goto L_0x0494;
         L_0x0402:
-            r0 = r44;
-            r2 = r0.displayWidth;
-            r4 = -1;
-            if (r2 != r4) goto L_0x049b;
-        L_0x0409:
-            r0 = r44;
+            r0 = r45;
             r2 = r0.width;
-        L_0x040d:
-            r0 = r44;
+        L_0x0406:
+            r0 = r45;
             r0.displayWidth = r2;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.displayHeight;
             r4 = -1;
-            if (r2 != r4) goto L_0x04a1;
-        L_0x0418:
-            r0 = r44;
+            if (r2 != r4) goto L_0x049a;
+        L_0x0411:
+            r0 = r45;
             r2 = r0.height;
-        L_0x041c:
-            r0 = r44;
+        L_0x0415:
+            r0 = r45;
             r0.displayHeight = r2;
-        L_0x0420:
+        L_0x0419:
             r23 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.displayWidth;
             r4 = -1;
-            if (r2 == r4) goto L_0x0446;
-        L_0x0429:
-            r0 = r44;
+            if (r2 == r4) goto L_0x043f;
+        L_0x0422:
+            r0 = r45;
             r2 = r0.displayHeight;
             r4 = -1;
-            if (r2 == r4) goto L_0x0446;
-        L_0x0430:
-            r0 = r44;
+            if (r2 == r4) goto L_0x043f;
+        L_0x0429:
+            r0 = r45;
             r2 = r0.height;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.displayWidth;
             r2 = r2 * r4;
             r2 = (float) r2;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.width;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.displayHeight;
             r4 = r4 * r5;
             r4 = (float) r4;
             r23 = r2 / r4;
-        L_0x0446:
+        L_0x043f:
             r26 = 0;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.hasColorInfo;
-            if (r2 == 0) goto L_0x0467;
-        L_0x044e:
-            r41 = r44.getHdrStaticInfo();
+            if (r2 == 0) goto L_0x0460;
+        L_0x0447:
+            r41 = r45.getHdrStaticInfo();
             r26 = new org.telegram.messenger.exoplayer2.video.ColorInfo;
-            r0 = r44;
+            r0 = r45;
             r2 = r0.colorSpace;
-            r0 = r44;
+            r0 = r45;
             r4 = r0.colorRange;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.colorTransfer;
             r0 = r26;
             r1 = r41;
             r0.<init>(r2, r4, r5, r1);
-        L_0x0467:
-            r13 = java.lang.Integer.toString(r46);
+        L_0x0460:
+            r13 = java.lang.Integer.toString(r47);
             r15 = 0;
             r16 = -1;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.width;
             r18 = r0;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.height;
             r19 = r0;
             r20 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
             r22 = -1;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.projectionData;
             r24 = r0;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.stereoMode;
             r25 = r0;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.drmInitData;
             r27 = r0;
             r14 = r3;
@@ -1060,49 +1146,49 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r21 = r10;
             r40 = org.telegram.messenger.exoplayer2.Format.createVideoSampleFormat(r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27);
             goto L_0x01b8;
-        L_0x049b:
-            r0 = r44;
+        L_0x0494:
+            r0 = r45;
             r2 = r0.displayWidth;
-            goto L_0x040d;
-        L_0x04a1:
-            r0 = r44;
+            goto L_0x0406;
+        L_0x049a:
+            r0 = r45;
             r2 = r0.displayHeight;
-            goto L_0x041c;
-        L_0x04a7:
+            goto L_0x0415;
+        L_0x04a0:
             r2 = "application/x-subrip";
             r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x04c4;
-        L_0x04b0:
-            r43 = 3;
-            r2 = java.lang.Integer.toString(r46);
-            r0 = r44;
+            if (r2 == 0) goto L_0x04bd;
+        L_0x04a9:
+            r44 = 3;
+            r2 = java.lang.Integer.toString(r47);
+            r0 = r45;
             r4 = r0.language;
-            r0 = r44;
+            r0 = r45;
             r5 = r0.drmInitData;
             r40 = org.telegram.messenger.exoplayer2.Format.createTextSampleFormat(r2, r3, r12, r4, r5);
             goto L_0x01b8;
-        L_0x04c4:
+        L_0x04bd:
             r2 = "text/x-ssa";
             r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x050a;
-        L_0x04cd:
-            r43 = 3;
+            if (r2 == 0) goto L_0x0503;
+        L_0x04c6:
+            r44 = 3;
             r10 = new java.util.ArrayList;
             r2 = 2;
             r10.<init>(r2);
             r2 = org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor.SSA_DIALOGUE_FORMAT;
             r10.add(r2);
-            r0 = r44;
+            r0 = r45;
             r2 = r0.codecPrivate;
             r10.add(r2);
-            r28 = java.lang.Integer.toString(r46);
+            r28 = java.lang.Integer.toString(r47);
             r30 = 0;
             r31 = -1;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.language;
             r33 = r0;
             r34 = -1;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.drmInitData;
             r35 = r0;
             r36 = 922337203NUM; // 0x7fffffffffffffff float:NaN double:NaN;
@@ -1111,27 +1197,27 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r38 = r10;
             r40 = org.telegram.messenger.exoplayer2.Format.createTextSampleFormat(r28, r29, r30, r31, r32, r33, r34, r35, r36, r38);
             goto L_0x01b8;
-        L_0x050a:
+        L_0x0503:
             r2 = "application/vobsub";
             r2 = r2.equals(r3);
-            if (r2 != 0) goto L_0x0525;
-        L_0x0513:
+            if (r2 != 0) goto L_0x051e;
+        L_0x050c:
             r2 = "application/pgs";
             r2 = r2.equals(r3);
-            if (r2 != 0) goto L_0x0525;
-        L_0x051c:
+            if (r2 != 0) goto L_0x051e;
+        L_0x0515:
             r2 = "application/dvbsubs";
             r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x0545;
-        L_0x0525:
-            r43 = 3;
-            r13 = java.lang.Integer.toString(r46);
+            if (r2 == 0) goto L_0x053e;
+        L_0x051e:
+            r44 = 3;
+            r13 = java.lang.Integer.toString(r47);
             r15 = 0;
             r16 = -1;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.language;
             r19 = r0;
-            r0 = r44;
+            r0 = r45;
             r0 = r0.drmInitData;
             r20 = r0;
             r14 = r3;
@@ -1139,7 +1225,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r18 = r10;
             r40 = org.telegram.messenger.exoplayer2.Format.createImageSampleFormat(r13, r14, r15, r16, r17, r18, r19, r20);
             goto L_0x01b8;
-        L_0x0545:
+        L_0x053e:
             r2 = new org.telegram.messenger.exoplayer2.ParserException;
             r4 = "Unexpected MIME type.";
             r2.<init>(r4);
@@ -1182,24 +1268,29 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             return hdrStaticInfoData;
         }
 
-        private static List<byte[]> parseFourCcVc1Private(ParsableByteArray buffer) throws ParserException {
+        private static Pair<String, List<byte[]>> parseFourCcPrivate(ParsableByteArray buffer) throws ParserException {
             try {
                 buffer.skipBytes(16);
-                if (buffer.readLittleEndianUnsignedInt() != 826496599) {
-                    return null;
+                long compression = buffer.readLittleEndianUnsignedInt();
+                if (compression == NUM) {
+                    return new Pair(MimeTypes.VIDEO_H263, null);
                 }
-                int startOffset = buffer.getPosition() + 20;
-                byte[] bufferData = buffer.data;
-                int offset = startOffset;
-                while (offset < bufferData.length - 4) {
-                    if (bufferData[offset] == (byte) 0 && bufferData[offset + 1] == (byte) 0 && bufferData[offset + 2] == (byte) 1 && bufferData[offset + 3] == (byte) 15) {
-                        return Collections.singletonList(Arrays.copyOfRange(bufferData, offset, bufferData.length));
+                if (compression == 826496599) {
+                    int startOffset = buffer.getPosition() + 20;
+                    byte[] bufferData = buffer.data;
+                    int offset = startOffset;
+                    while (offset < bufferData.length - 4) {
+                        if (bufferData[offset] == (byte) 0 && bufferData[offset + 1] == (byte) 0 && bufferData[offset + 2] == (byte) 1 && bufferData[offset + 3] == (byte) 15) {
+                            return new Pair(MimeTypes.VIDEO_VC1, Collections.singletonList(Arrays.copyOfRange(bufferData, offset, bufferData.length)));
+                        }
+                        offset++;
                     }
-                    offset++;
+                    throw new ParserException("Failed to find FourCC VC1 initialization data");
                 }
-                throw new ParserException("Failed to find FourCC VC1 initialization data");
+                Log.w(MatroskaExtractor.TAG, "Unknown FourCC. Setting mimeType to video/x-unknown");
+                return new Pair(MimeTypes.VIDEO_UNKNOWN, null);
             } catch (ArrayIndexOutOfBoundsException e) {
-                throw new ParserException("Error parsing FourCC VC1 codec private");
+                throw new ParserException("Error parsing FourCC private data");
             }
         }
 
@@ -1272,7 +1363,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         private int chunkSize;
         private boolean foundSyncframe;
         private int sampleCount;
-        private final byte[] syncframePrefix = new byte[12];
+        private final byte[] syncframePrefix = new byte[10];
         private long timeUs;
 
         public void reset() {
@@ -1281,7 +1372,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
         public void startSample(ExtractorInput input, int blockFlags, int size) throws IOException, InterruptedException {
             if (!this.foundSyncframe) {
-                input.peekFully(this.syncframePrefix, 0, 12);
+                input.peekFully(this.syncframePrefix, 0, 10);
                 input.resetPeekPosition();
                 if (Ac3Util.parseTrueHdSyncframeAudioSampleCount(this.syncframePrefix) != -1) {
                     this.foundSyncframe = true;
@@ -1304,7 +1395,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (i == 0) {
                     this.timeUs = timeUs;
                 }
-                if (this.sampleCount >= 8) {
+                if (this.sampleCount >= 16) {
                     track.output.sampleMetadata(this.timeUs, this.blockFlags, this.chunkSize, 0, track.cryptoData);
                     this.sampleCount = 0;
                 }
@@ -1329,12 +1420,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     MatroskaExtractor(EbmlReader reader, int flags) {
         this.segmentContentPosition = -1;
-        this.timecodeScale = C0605C.TIME_UNSET;
-        this.durationTimecode = C0605C.TIME_UNSET;
-        this.durationUs = C0605C.TIME_UNSET;
+        this.timecodeScale = C0615C.TIME_UNSET;
+        this.durationTimecode = C0615C.TIME_UNSET;
+        this.durationUs = C0615C.TIME_UNSET;
         this.cuesContentPosition = -1;
         this.seekPositionAfterBuildingCues = -1;
-        this.clusterTimecodeUs = C0605C.TIME_UNSET;
+        this.clusterTimecodeUs = C0615C.TIME_UNSET;
         this.reader = reader;
         this.reader.init(new InnerEbmlReaderOutput());
         this.seekForCuesEnabled = (flags & 1) == 0;
@@ -1360,7 +1451,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void seek(long position, long timeUs) {
-        this.clusterTimecodeUs = C0605C.TIME_UNSET;
+        this.clusterTimecodeUs = C0615C.TIME_UNSET;
         this.blockState = 0;
         this.reader.reset();
         this.varintReader.reset();
@@ -1389,100 +1480,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             ((Track) this.tracks.valueAt(i)).outputPendingSampleMetadata();
         }
         return -1;
-    }
-
-    int getElementType(int id) {
-        switch (id) {
-            case ID_TRACK_TYPE /*131*/:
-            case ID_FLAG_DEFAULT /*136*/:
-            case ID_BLOCK_DURATION /*155*/:
-            case ID_CHANNELS /*159*/:
-            case ID_PIXEL_WIDTH /*176*/:
-            case ID_CUE_TIME /*179*/:
-            case ID_PIXEL_HEIGHT /*186*/:
-            case ID_TRACK_NUMBER /*215*/:
-            case ID_TIME_CODE /*231*/:
-            case ID_CUE_CLUSTER_POSITION /*241*/:
-            case ID_REFERENCE_BLOCK /*251*/:
-            case ID_CONTENT_COMPRESSION_ALGORITHM /*16980*/:
-            case ID_DOC_TYPE_READ_VERSION /*17029*/:
-            case ID_EBML_READ_VERSION /*17143*/:
-            case ID_CONTENT_ENCRYPTION_ALGORITHM /*18401*/:
-            case ID_CONTENT_ENCRYPTION_AES_SETTINGS_CIPHER_MODE /*18408*/:
-            case ID_CONTENT_ENCODING_ORDER /*20529*/:
-            case ID_CONTENT_ENCODING_SCOPE /*20530*/:
-            case ID_SEEK_POSITION /*21420*/:
-            case ID_STEREO_MODE /*21432*/:
-            case ID_DISPLAY_WIDTH /*21680*/:
-            case ID_DISPLAY_UNIT /*21682*/:
-            case ID_DISPLAY_HEIGHT /*21690*/:
-            case ID_FLAG_FORCED /*21930*/:
-            case ID_COLOUR_RANGE /*21945*/:
-            case ID_COLOUR_TRANSFER /*21946*/:
-            case ID_COLOUR_PRIMARIES /*21947*/:
-            case ID_MAX_CLL /*21948*/:
-            case ID_MAX_FALL /*21949*/:
-            case ID_CODEC_DELAY /*22186*/:
-            case ID_SEEK_PRE_ROLL /*22203*/:
-            case ID_AUDIO_BIT_DEPTH /*25188*/:
-            case ID_DEFAULT_DURATION /*2352003*/:
-            case ID_TIMECODE_SCALE /*2807729*/:
-                return 2;
-            case 134:
-            case ID_DOC_TYPE /*17026*/:
-            case ID_LANGUAGE /*2274716*/:
-                return 3;
-            case ID_BLOCK_GROUP /*160*/:
-            case ID_TRACK_ENTRY /*174*/:
-            case ID_CUE_TRACK_POSITIONS /*183*/:
-            case ID_CUE_POINT /*187*/:
-            case 224:
-            case ID_AUDIO /*225*/:
-            case ID_CONTENT_ENCRYPTION_AES_SETTINGS /*18407*/:
-            case ID_SEEK /*19899*/:
-            case ID_CONTENT_COMPRESSION /*20532*/:
-            case ID_CONTENT_ENCRYPTION /*20533*/:
-            case ID_COLOUR /*21936*/:
-            case ID_MASTERING_METADATA /*21968*/:
-            case ID_CONTENT_ENCODING /*25152*/:
-            case ID_CONTENT_ENCODINGS /*28032*/:
-            case ID_PROJECTION /*30320*/:
-            case ID_SEEK_HEAD /*290298740*/:
-            case 357149030:
-            case ID_TRACKS /*374648427*/:
-            case ID_SEGMENT /*408125543*/:
-            case ID_EBML /*440786851*/:
-            case ID_CUES /*475249515*/:
-            case ID_CLUSTER /*524531317*/:
-                return 1;
-            case ID_BLOCK /*161*/:
-            case ID_SIMPLE_BLOCK /*163*/:
-            case ID_CONTENT_COMPRESSION_SETTINGS /*16981*/:
-            case ID_CONTENT_ENCRYPTION_KEY_ID /*18402*/:
-            case ID_SEEK_ID /*21419*/:
-            case ID_CODEC_PRIVATE /*25506*/:
-            case ID_PROJECTION_PRIVATE /*30322*/:
-                return 4;
-            case ID_SAMPLING_FREQUENCY /*181*/:
-            case ID_DURATION /*17545*/:
-            case ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
-            case ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
-            case ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
-            case ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
-            case ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
-            case ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
-            case ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
-            case ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
-            case ID_LUMNINANCE_MAX /*21977*/:
-            case ID_LUMNINANCE_MIN /*21978*/:
-                return 5;
-            default:
-                return 0;
-        }
-    }
-
-    boolean isLevel1Element(int id) {
-        return id == 357149030 || id == ID_CLUSTER || id == ID_CUES || id == ID_TRACKS;
     }
 
     void startMasterElement(int id, long contentPosition, long contentSize) throws ParserException {
@@ -1568,7 +1565,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
-                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0605C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
+                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0615C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
                 return;
             case ID_CONTENT_ENCODINGS /*28032*/:
                 if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
@@ -1576,10 +1573,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 return;
             case 357149030:
-                if (this.timecodeScale == C0605C.TIME_UNSET) {
-                    this.timecodeScale = C0605C.MICROS_PER_SECOND;
+                if (this.timecodeScale == C0615C.TIME_UNSET) {
+                    this.timecodeScale = 1000000;
                 }
-                if (this.durationTimecode != C0605C.TIME_UNSET) {
+                if (this.durationTimecode != C0615C.TIME_UNSET) {
                     this.durationUs = scaleTimecodeToUs(this.durationTimecode);
                     return;
                 }
@@ -1857,7 +1854,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.blockState == 0) {
                     this.blockTrackNumber = (int) this.varintReader.readUnsignedVarint(input, false, true, 8);
                     this.blockTrackNumberLength = this.varintReader.getLastLength();
-                    this.blockDurationUs = C0605C.TIME_UNSET;
+                    this.blockDurationUs = C0615C.TIME_UNSET;
                     this.blockState = 1;
                     this.scratch.reset();
                 }
@@ -2012,7 +2009,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             track.trueHdSampleRechunker.sampleMetadata(track, timeUs);
         } else {
             if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-                commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
+                commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, 1000, SUBRIP_TIMECODE_EMPTY);
             } else if (CODEC_ID_ASS.equals(track.codecId)) {
                 commitSubtitleSample(track, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
             }
@@ -2181,12 +2178,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private static void setSampleDuration(byte[] subripSampleData, long durationUs, String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
         byte[] timeCodeData;
-        if (durationUs == C0605C.TIME_UNSET) {
+        if (durationUs == C0615C.TIME_UNSET) {
             timeCodeData = emptyTimecode;
         } else {
-            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0605C.MICROS_PER_SECOND;
-            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * C0605C.MICROS_PER_SECOND;
-            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / C0605C.MICROS_PER_SECOND))) * C0605C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
+            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * 1000000;
+            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * 1000000;
+            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / 1000000))) * 1000000)) / lastTimecodeValueScalingFactor);
             timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(seconds), Integer.valueOf(lastValue)}));
         }
         System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
@@ -2216,7 +2213,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private SeekMap buildSeekMap() {
-        if (this.segmentContentPosition == -1 || this.durationUs == C0605C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null || this.cueClusterPositions.size() != this.cueTimesUs.size()) {
+        if (this.segmentContentPosition == -1 || this.durationUs == C0615C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null || this.cueClusterPositions.size() != this.cueTimesUs.size()) {
             this.cueTimesUs = null;
             this.cueClusterPositions = null;
             return new Unseekable(this.durationUs);
@@ -2258,10 +2255,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private long scaleTimecodeToUs(long unscaledTimecode) throws ParserException {
-        if (this.timecodeScale == C0605C.TIME_UNSET) {
+        if (this.timecodeScale == C0615C.TIME_UNSET) {
             throw new ParserException("Can't scale timecode prior to timecodeScale being set.");
         }
-        return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR);
+        return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, 1000);
     }
 
     private static boolean isCodecSupported(String codecId) {

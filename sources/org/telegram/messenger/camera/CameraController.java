@@ -30,6 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
@@ -54,11 +55,11 @@ public class CameraController implements OnInfoListener {
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
     /* renamed from: org.telegram.messenger.camera.CameraController$1 */
-    class C05921 implements Runnable {
+    class C06021 implements Runnable {
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$1 */
-        class C05881 implements Comparator<Size> {
-            C05881() {
+        class C05981 implements Comparator<Size> {
+            C05981() {
             }
 
             public int compare(Size o1, Size o2) {
@@ -79,8 +80,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$2 */
-        class C05892 implements Runnable {
-            C05892() {
+        class C05992 implements Runnable {
+            C05992() {
             }
 
             public void run() {
@@ -91,8 +92,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$3 */
-        class C05903 implements Runnable {
-            C05903() {
+        class C06003 implements Runnable {
+            C06003() {
             }
 
             public void run() {
@@ -101,7 +102,7 @@ public class CameraController implements OnInfoListener {
             }
         }
 
-        C05921() {
+        C06021() {
         }
 
         public void run() {
@@ -111,10 +112,13 @@ public class CameraController implements OnInfoListener {
                     ArrayList<CameraInfo> result = new ArrayList();
                     CameraInfo info = new CameraInfo();
                     for (int cameraId = 0; cameraId < count; cameraId++) {
-                        int a;
-                        Size size;
                         Camera.getCameraInfo(cameraId, info);
                         CameraInfo cameraInfo = new CameraInfo(cameraId, info);
+                        if (ApplicationLoader.mainInterfacePaused) {
+                            throw new RuntimeException("app paused");
+                        }
+                        int a;
+                        Size size;
                         Camera camera = Camera.open(cameraInfo.getCameraId());
                         Parameters params = camera.getParameters();
                         List<Size> list = params.getSupportedPreviewSizes();
@@ -139,23 +143,22 @@ public class CameraController implements OnInfoListener {
                         }
                         camera.release();
                         result.add(cameraInfo);
-                        Comparator<Size> comparator = new C05881();
+                        Comparator<Size> comparator = new C05981();
                         Collections.sort(cameraInfo.previewSizes, comparator);
                         Collections.sort(cameraInfo.pictureSizes, comparator);
                     }
                     CameraController.this.cameraInfos = result;
                 }
-                AndroidUtilities.runOnUIThread(new C05892());
-            } catch (Throwable e) {
-                AndroidUtilities.runOnUIThread(new C05903());
-                FileLog.m3e(e);
+                AndroidUtilities.runOnUIThread(new C05992());
+            } catch (Exception e) {
+                AndroidUtilities.runOnUIThread(new C06003());
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraController$2 */
-    class C05932 implements Runnable {
-        C05932() {
+    class C06032 implements Runnable {
+        C06032() {
         }
 
         public void run() {
@@ -216,7 +219,7 @@ public class CameraController implements OnInfoListener {
     public void initCamera() {
         if (!this.loadingCameras && !this.cameraInitied) {
             this.loadingCameras = true;
-            this.threadPool.execute(new C05921());
+            this.threadPool.execute(new C06021());
         }
     }
 
@@ -225,7 +228,7 @@ public class CameraController implements OnInfoListener {
     }
 
     public void cleanup() {
-        this.threadPool.execute(new C05932());
+        this.threadPool.execute(new C06032());
     }
 
     public void close(final CameraSession session, final CountDownLatch countDownLatch, final Runnable beforeDestroyRunnable) {
@@ -365,17 +368,20 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    public boolean takePicture(final File path, CameraSession session, final Runnable callback) {
+    public boolean takePicture(File path, CameraSession session, Runnable callback) {
         if (session == null) {
             return false;
         }
         final CameraInfo info = session.cameraInfo;
+        final boolean flipFront = session.isFlipFront();
         try {
+            final File file = path;
+            final Runnable runnable = callback;
             info.camera.takePicture(null, null, new PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     Bitmap bitmap = null;
                     int size = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
-                    String key = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(path.getAbsolutePath()), Integer.valueOf(size), Integer.valueOf(size)});
+                    String key = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(file.getAbsolutePath()), Integer.valueOf(size), Integer.valueOf(size)});
                     try {
                         Options options = new Options();
                         options.inJustDecodeBounds = true;
@@ -393,7 +399,7 @@ public class CameraController implements OnInfoListener {
                     }
                     try {
                         FileOutputStream outputStream;
-                        if (info.frontCamera != 0) {
+                        if (info.frontCamera != 0 && flipFront) {
                             try {
                                 Matrix matrix = new Matrix();
                                 matrix.setRotate((float) CameraController.getOrientation(data));
@@ -402,7 +408,7 @@ public class CameraController implements OnInfoListener {
                                 if (scaled != bitmap) {
                                     bitmap.recycle();
                                 }
-                                outputStream = new FileOutputStream(path);
+                                outputStream = new FileOutputStream(file);
                                 scaled.compress(CompressFormat.JPEG, 80, outputStream);
                                 outputStream.flush();
                                 outputStream.getFD().sync();
@@ -410,8 +416,8 @@ public class CameraController implements OnInfoListener {
                                 if (scaled != null) {
                                     ImageLoader.getInstance().putImageToCache(new BitmapDrawable(scaled), key);
                                 }
-                                if (callback != null) {
-                                    callback.run();
+                                if (runnable != null) {
+                                    runnable.run();
                                     return;
                                 }
                                 return;
@@ -419,7 +425,7 @@ public class CameraController implements OnInfoListener {
                                 FileLog.m3e(e2);
                             }
                         }
-                        outputStream = new FileOutputStream(path);
+                        outputStream = new FileOutputStream(file);
                         outputStream.write(data);
                         outputStream.flush();
                         outputStream.getFD().sync();
@@ -430,8 +436,8 @@ public class CameraController implements OnInfoListener {
                     } catch (Throwable e22) {
                         FileLog.m3e(e22);
                     }
-                    if (callback != null) {
-                        callback.run();
+                    if (runnable != null) {
+                        runnable.run();
                     }
                 }
             });

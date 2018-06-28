@@ -15,6 +15,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextInfoPrivacyCell extends FrameLayout {
+    private String linkTextColorKey = Theme.key_windowBackgroundWhiteLinkText;
     private TextView textView;
 
     public TextInfoPrivacyCell(Context context) {
@@ -42,7 +43,11 @@ public class TextInfoPrivacyCell extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
-        this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+        this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
+    }
+
+    public void setLinkTextColorKey(String key) {
+        this.linkTextColorKey = key;
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

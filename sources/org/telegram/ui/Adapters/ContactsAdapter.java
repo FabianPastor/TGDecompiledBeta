@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
@@ -200,7 +200,7 @@ public class ContactsAdapter extends SectionsAdapter {
                 break;
             case 2:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", C0493R.string.Contacts).toUpperCase());
+                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", C0500R.string.Contacts).toUpperCase());
                 break;
             default:
                 float f2;
@@ -257,19 +257,19 @@ public class ContactsAdapter extends SectionsAdapter {
                         return;
                     }
                 } else if (this.needPhonebook) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", C0493R.string.InviteFriends), C0493R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", C0500R.string.InviteFriends), C0500R.drawable.menu_invite);
                     return;
                 } else if (this.isAdmin) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", C0493R.string.InviteToGroupByLink), C0493R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", C0500R.string.InviteToGroupByLink), C0500R.drawable.menu_invite);
                     return;
                 } else if (position == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", C0493R.string.NewGroup), C0493R.drawable.menu_newgroup);
+                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", C0500R.string.NewGroup), C0500R.drawable.menu_newgroup);
                     return;
                 } else if (position == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", C0493R.string.NewSecretChat), C0493R.drawable.menu_secret);
+                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", C0500R.string.NewSecretChat), C0500R.drawable.menu_secret);
                     return;
                 } else if (position == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", C0493R.string.NewChannel), C0493R.drawable.menu_broadcast);
+                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", C0500R.string.NewChannel), C0500R.drawable.menu_broadcast);
                     return;
                 } else {
                     return;

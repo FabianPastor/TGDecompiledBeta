@@ -3,20 +3,18 @@ package org.telegram.messenger.exoplayer2.source;
 import android.net.Uri;
 import android.os.Handler;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
-import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
-import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
-import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.LoadEventInfo;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.MediaLoadData;
 import org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource.MediaSourceFactory;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
-import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class ExtractorMediaSource implements Listener, MediaSource {
+public final class ExtractorMediaSource extends BaseMediaSource implements Listener {
     public static final int DEFAULT_LOADING_CHECK_INTERVAL_BYTES = 1048576;
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT_LIVE = 6;
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT_ON_DEMAND = 3;
@@ -24,10 +22,9 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
     private final int continueLoadingCheckIntervalBytes;
     private final String customCacheKey;
     private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
-    private final EventDispatcher eventDispatcher;
     private final ExtractorsFactory extractorsFactory;
     private final int minLoadableRetryCount;
-    private Listener sourceListener;
+    private final Object tag;
     private long timelineDurationUs;
     private boolean timelineIsSeekable;
     private final Uri uri;
@@ -37,30 +34,15 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
         void onLoadError(IOException iOException);
     }
 
-    private static final class EventListenerWrapper implements MediaSourceEventListener {
+    private static final class EventListenerWrapper extends DefaultMediaSourceEventListener {
         private final EventListener eventListener;
 
         public EventListenerWrapper(EventListener eventListener) {
             this.eventListener = (EventListener) Assertions.checkNotNull(eventListener);
         }
 
-        public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
-        }
-
-        public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-        }
-
-        public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-        }
-
-        public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
+        public void onLoadError(int windowIndex, MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
             this.eventListener.onLoadError(error);
-        }
-
-        public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
-        }
-
-        public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
         }
     }
 
@@ -71,6 +53,7 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
         private ExtractorsFactory extractorsFactory;
         private boolean isCreateCalled;
         private int minLoadableRetryCount = -1;
+        private Object tag;
 
         public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
             this.dataSourceFactory = dataSourceFactory;
@@ -88,6 +71,12 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
             return this;
         }
 
+        public Factory setTag(Object tag) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.tag = tag;
+            return this;
+        }
+
         public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
             Assertions.checkState(!this.isCreateCalled);
             this.minLoadableRetryCount = minLoadableRetryCount;
@@ -101,15 +90,20 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
         }
 
         public ExtractorMediaSource createMediaSource(Uri uri) {
-            return createMediaSource(uri, null, null);
-        }
-
-        public ExtractorMediaSource createMediaSource(Uri uri, Handler eventHandler, MediaSourceEventListener eventListener) {
             this.isCreateCalled = true;
             if (this.extractorsFactory == null) {
                 this.extractorsFactory = new DefaultExtractorsFactory();
             }
-            return new ExtractorMediaSource(uri, this.dataSourceFactory, this.extractorsFactory, this.minLoadableRetryCount, eventHandler, eventListener, this.customCacheKey, this.continueLoadingCheckIntervalBytes);
+            return new ExtractorMediaSource(uri, this.dataSourceFactory, this.extractorsFactory, this.minLoadableRetryCount, this.customCacheKey, this.continueLoadingCheckIntervalBytes, this.tag);
+        }
+
+        @Deprecated
+        public ExtractorMediaSource createMediaSource(Uri uri, Handler eventHandler, MediaSourceEventListener eventListener) {
+            ExtractorMediaSource mediaSource = createMediaSource(uri);
+            if (!(eventHandler == null || eventListener == null)) {
+                mediaSource.addEventListener(eventHandler, eventListener);
+            }
+            return mediaSource;
         }
 
         public int[] getSupportedTypes() {
@@ -129,29 +123,25 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
 
     @Deprecated
     public ExtractorMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, String customCacheKey, int continueLoadingCheckIntervalBytes) {
-        this(uri, dataSourceFactory, extractorsFactory, minLoadableRetryCount, eventHandler, eventListener == null ? null : new EventListenerWrapper(eventListener), customCacheKey, continueLoadingCheckIntervalBytes);
+        this(uri, dataSourceFactory, extractorsFactory, minLoadableRetryCount, customCacheKey, continueLoadingCheckIntervalBytes, null);
+        if (eventListener != null && eventHandler != null) {
+            addEventListener(eventHandler, new EventListenerWrapper(eventListener));
+        }
     }
 
-    private ExtractorMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, String customCacheKey, int continueLoadingCheckIntervalBytes) {
+    private ExtractorMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, String customCacheKey, int continueLoadingCheckIntervalBytes, Object tag) {
         this.uri = uri;
         this.dataSourceFactory = dataSourceFactory;
         this.extractorsFactory = extractorsFactory;
         this.minLoadableRetryCount = minLoadableRetryCount;
-        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
         this.customCacheKey = customCacheKey;
         this.continueLoadingCheckIntervalBytes = continueLoadingCheckIntervalBytes;
+        this.timelineDurationUs = C0615C.TIME_UNSET;
+        this.tag = tag;
     }
 
-    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        boolean z;
-        if (this.sourceListener == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
-        this.sourceListener = listener;
-        notifySourceInfoRefreshed(C0605C.TIME_UNSET, false);
+    public void prepareSourceInternal(ExoPlayer player, boolean isTopLevelSource) {
+        notifySourceInfoRefreshed(this.timelineDurationUs, false);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
@@ -159,18 +149,18 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         Assertions.checkArgument(id.periodIndex == 0);
-        return new ExtractorMediaPeriod(this.uri, this.dataSourceFactory.createDataSource(), this.extractorsFactory.createExtractors(), this.minLoadableRetryCount, this.eventDispatcher, this, allocator, this.customCacheKey, this.continueLoadingCheckIntervalBytes);
+        return new ExtractorMediaPeriod(this.uri, this.dataSourceFactory.createDataSource(), this.extractorsFactory.createExtractors(), this.minLoadableRetryCount, createEventDispatcher(id), this, allocator, this.customCacheKey, this.continueLoadingCheckIntervalBytes);
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
         ((ExtractorMediaPeriod) mediaPeriod).release();
     }
 
-    public void releaseSource() {
+    public void releaseSourceInternal() {
     }
 
     public void onSourceInfoRefreshed(long durationUs, boolean isSeekable) {
-        if (durationUs == C0605C.TIME_UNSET) {
+        if (durationUs == C0615C.TIME_UNSET) {
             durationUs = this.timelineDurationUs;
         }
         if (this.timelineDurationUs != durationUs || this.timelineIsSeekable != isSeekable) {
@@ -181,6 +171,6 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
     private void notifySourceInfoRefreshed(long durationUs, boolean isSeekable) {
         this.timelineDurationUs = durationUs;
         this.timelineIsSeekable = isSeekable;
-        this.sourceListener.onSourceInfoRefreshed(this, new SinglePeriodTimeline(this.timelineDurationUs, this.timelineIsSeekable, false), null);
+        refreshSourceInfo(new SinglePeriodTimeline(this.timelineDurationUs, this.timelineIsSeekable, false, this.tag), null);
     }
 }

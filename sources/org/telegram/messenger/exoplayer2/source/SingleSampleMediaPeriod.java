@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -31,6 +31,7 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     boolean loadingFinished;
     boolean loadingSucceeded;
     private final int minLoadableRetryCount;
+    boolean notifiedReadingStarted;
     byte[] sampleData;
     int sampleSize;
     private final ArrayList<SampleStreamImpl> sampleStreams = new ArrayList();
@@ -154,10 +155,12 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         TrackGroup[] trackGroupArr = new TrackGroup[1];
         trackGroupArr[0] = new TrackGroup(format);
         this.tracks = new TrackGroupArray(trackGroupArr);
+        eventDispatcher.mediaPeriodCreated();
     }
 
     public void release() {
         this.loader.release();
+        this.eventDispatcher.mediaPeriodReleased();
     }
 
     public void prepare(MediaPeriod.Callback callback, long positionUs) {
@@ -204,7 +207,11 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     }
 
     public long readDiscontinuity() {
-        return C0605C.TIME_UNSET;
+        if (!this.notifiedReadingStarted) {
+            this.eventDispatcher.readingStarted();
+            this.notifiedReadingStarted = true;
+        }
+        return C0615C.TIME_UNSET;
     }
 
     public long getNextLoadPositionUs() {

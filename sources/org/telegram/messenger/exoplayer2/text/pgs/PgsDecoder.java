@@ -5,6 +5,8 @@ import android.graphics.Bitmap.Config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.Subtitle;
@@ -13,12 +15,16 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class PgsDecoder extends SimpleSubtitleDecoder {
+    private static final byte INFLATE_HEADER = (byte) 120;
     private static final int SECTION_TYPE_BITMAP_PICTURE = 21;
     private static final int SECTION_TYPE_END = 128;
     private static final int SECTION_TYPE_IDENTIFIER = 22;
     private static final int SECTION_TYPE_PALETTE = 20;
     private final ParsableByteArray buffer = new ParsableByteArray();
     private final CueBuilder cueBuilder = new CueBuilder();
+    private byte[] inflatedData;
+    private int inflatedDataSize;
+    private Inflater inflater;
 
     private static final class CueBuilder {
         private final ParsableByteArray bitmapData = new ParsableByteArray();
@@ -132,7 +138,11 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
     }
 
     protected Subtitle decode(byte[] data, int size, boolean reset) throws SubtitleDecoderException {
-        this.buffer.reset(data, size);
+        if (maybeInflateData(data, size)) {
+            this.buffer.reset(this.inflatedData, this.inflatedDataSize);
+        } else {
+            this.buffer.reset(data, size);
+        }
         this.cueBuilder.reset();
         ArrayList<Cue> cues = new ArrayList();
         while (this.buffer.bytesLeft() >= 3) {
@@ -142,6 +152,31 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
             }
         }
         return new PgsSubtitle(Collections.unmodifiableList(cues));
+    }
+
+    private boolean maybeInflateData(byte[] data, int size) {
+        boolean z = false;
+        if (size != 0 && data[z] == INFLATE_HEADER) {
+            if (this.inflater == null) {
+                this.inflater = new Inflater();
+                this.inflatedData = new byte[size];
+            }
+            this.inflatedDataSize = z;
+            this.inflater.setInput(data, z, size);
+            while (!this.inflater.finished() && !this.inflater.needsDictionary() && !this.inflater.needsInput()) {
+                try {
+                    if (this.inflatedDataSize == this.inflatedData.length) {
+                        this.inflatedData = Arrays.copyOf(this.inflatedData, this.inflatedData.length * 2);
+                    }
+                    this.inflatedDataSize += this.inflater.inflate(this.inflatedData, this.inflatedDataSize, this.inflatedData.length - this.inflatedDataSize);
+                } catch (DataFormatException e) {
+                } finally {
+                    this.inflater.reset();
+                }
+            }
+            z = this.inflater.finished();
+        }
+        return z;
     }
 
     private static Cue readNextSection(ParsableByteArray buffer, CueBuilder cueBuilder) {

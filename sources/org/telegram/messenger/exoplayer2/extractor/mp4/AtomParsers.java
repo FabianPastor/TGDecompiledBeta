@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0605C;
+import org.telegram.messenger.exoplayer2.C0615C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
@@ -23,8 +23,8 @@ import org.telegram.messenger.exoplayer2.video.AvcConfig;
 import org.telegram.messenger.exoplayer2.video.HevcConfig;
 
 final class AtomParsers {
+    private static final int MAX_GAPLESS_TRIM_SIZE_SAMPLES = 3;
     private static final String TAG = "AtomParsers";
-    private static final int TYPE_cenc = Util.getIntegerCodeForString(C0605C.CENC_TYPE_cenc);
     private static final int TYPE_clcp = Util.getIntegerCodeForString("clcp");
     private static final int TYPE_meta = Util.getIntegerCodeForString(MetaBox.TYPE);
     private static final int TYPE_sbtl = Util.getIntegerCodeForString("sbtl");
@@ -184,14 +184,14 @@ final class AtomParsers {
         }
         long durationUs;
         TkhdData tkhdData = parseTkhd(trak.getLeafAtomOfType(Atom.TYPE_tkhd).data);
-        if (duration == C0605C.TIME_UNSET) {
+        if (duration == C0615C.TIME_UNSET) {
             duration = tkhdData.duration;
         }
         long movieTimescale = parseMvhd(mvhd.data);
-        if (duration == C0605C.TIME_UNSET) {
-            durationUs = C0605C.TIME_UNSET;
+        if (duration == C0615C.TIME_UNSET) {
+            durationUs = C0615C.TIME_UNSET;
         } else {
-            durationUs = Util.scaleLargeTimestamp(duration, C0605C.MICROS_PER_SECOND, movieTimescale);
+            durationUs = Util.scaleLargeTimestamp(duration, 1000000, movieTimescale);
         }
         ContainerAtom stbl = mdia.getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl);
         Pair<Long, String> mdhdData = parseMdhd(mdia.getLeafAtomOfType(Atom.TYPE_mdhd).data);
@@ -209,10 +209,10 @@ final class AtomParsers {
         return new Track(tkhdData.id, trackType, ((Long) mdhdData.first).longValue(), movieTimescale, durationUs, stsdData.format, stsdData.requiredSampleTransformation, stsdData.trackEncryptionBoxes, stsdData.nalUnitLengthFieldLength, editListDurations, editListMediaTimes);
     }
 
-    public static org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable parseStbl(org.telegram.messenger.exoplayer2.extractor.mp4.Track r88, org.telegram.messenger.exoplayer2.extractor.mp4.Atom.ContainerAtom r89, org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder r90) throws org.telegram.messenger.exoplayer2.ParserException {
+    public static org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable parseStbl(org.telegram.messenger.exoplayer2.extractor.mp4.Track r102, org.telegram.messenger.exoplayer2.extractor.mp4.Atom.ContainerAtom r103, org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder r104) throws org.telegram.messenger.exoplayer2.ParserException {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r74_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) in PHI: PHI: (r74_1 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) = (r74_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox), (r74_2 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) binds: {(r74_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox)=B:2:0x000a, (r74_2 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox)=B:10:0x003f}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r86_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) in PHI: PHI: (r86_1 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) = (r86_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox), (r86_2 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox) binds: {(r86_0 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox)=B:2:0x000a, (r86_2 'sampleSizeBox' org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox)=B:10:0x0045}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -225,751 +225,795 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
         /*
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stsz;
-        r0 = r89;
-        r79 = r0.getLeafAtomOfType(r4);
-        if (r79 == 0) goto L_0x002c;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stsz;
+        r0 = r103;
+        r92 = r0.getLeafAtomOfType(r8);
+        if (r92 == 0) goto L_0x0032;
     L_0x000a:
-        r74 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$StszSampleSizeBox;
-        r0 = r74;
-        r1 = r79;
+        r86 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$StszSampleSizeBox;
+        r0 = r86;
+        r1 = r92;
         r0.<init>(r1);
     L_0x0013:
-        r72 = r74.getSampleCount();
-        if (r72 != 0) goto L_0x0049;
+        r84 = r86.getSampleCount();
+        if (r84 != 0) goto L_0x004f;
     L_0x0019:
-        r4 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r12 = 0;
-        r5 = new long[r12];
-        r12 = 0;
-        r6 = new int[r12];
-        r7 = 0;
-        r12 = 0;
-        r8 = new long[r12];
-        r12 = 0;
-        r9 = new int[r12];
-        r4.<init>(r5, r6, r7, r8, r9);
-    L_0x002b:
-        return r4;
-    L_0x002c:
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stz2;
-        r0 = r89;
-        r81 = r0.getLeafAtomOfType(r4);
-        if (r81 != 0) goto L_0x003f;
-    L_0x0036:
-        r4 = new org.telegram.messenger.exoplayer2.ParserException;
-        r12 = "Track has no sample table size information";
-        r4.<init>(r12);
-        throw r4;
-    L_0x003f:
-        r74 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$Stz2SampleSizeBox;
-        r0 = r74;
-        r1 = r81;
+        r6 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r8 = 0;
+        r7 = new long[r8];
+        r8 = 0;
+        r8 = new int[r8];
+        r9 = 0;
+        r10 = 0;
+        r10 = new long[r10];
+        r11 = 0;
+        r11 = new int[r11];
+        r12 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r6.<init>(r7, r8, r9, r10, r11, r12);
+        r8 = r6;
+    L_0x0031:
+        return r8;
+    L_0x0032:
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stz2;
+        r0 = r103;
+        r94 = r0.getLeafAtomOfType(r8);
+        if (r94 != 0) goto L_0x0045;
+    L_0x003c:
+        r8 = new org.telegram.messenger.exoplayer2.ParserException;
+        r9 = "Track has no sample table size information";
+        r8.<init>(r9);
+        throw r8;
+    L_0x0045:
+        r86 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$Stz2SampleSizeBox;
+        r0 = r86;
+        r1 = r94;
         r0.<init>(r1);
         goto L_0x0013;
-    L_0x0049:
-        r20 = 0;
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stco;
-        r0 = r89;
-        r21 = r0.getLeafAtomOfType(r4);
-        if (r21 != 0) goto L_0x005f;
-    L_0x0055:
-        r20 = 1;
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_co64;
-        r0 = r89;
-        r21 = r0.getLeafAtomOfType(r4);
-    L_0x005f:
-        r0 = r21;
+    L_0x004f:
+        r36 = 0;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stco;
+        r0 = r103;
+        r37 = r0.getLeafAtomOfType(r8);
+        if (r37 != 0) goto L_0x0065;
+    L_0x005b:
+        r36 = 1;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_co64;
+        r0 = r103;
+        r37 = r0.getLeafAtomOfType(r8);
+    L_0x0065:
+        r0 = r37;
         r0 = r0.data;
-        r19 = r0;
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stsc;
-        r0 = r89;
-        r4 = r0.getLeafAtomOfType(r4);
-        r0 = r4.data;
-        r76 = r0;
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stts;
-        r0 = r89;
-        r4 = r0.getLeafAtomOfType(r4);
-        r0 = r4.data;
-        r80 = r0;
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stss;
-        r0 = r89;
-        r78 = r0.getLeafAtomOfType(r4);
-        if (r78 == 0) goto L_0x013f;
-    L_0x0087:
-        r0 = r78;
-        r0 = r0.data;
-        r77 = r0;
+        r35 = r0;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stsc;
+        r0 = r103;
+        r8 = r0.getLeafAtomOfType(r8);
+        r0 = r8.data;
+        r89 = r0;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stts;
+        r0 = r103;
+        r8 = r0.getLeafAtomOfType(r8);
+        r0 = r8.data;
+        r93 = r0;
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_stss;
+        r0 = r103;
+        r91 = r0.getLeafAtomOfType(r8);
+        if (r91 == 0) goto L_0x014a;
     L_0x008d:
-        r4 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_ctts;
-        r0 = r89;
-        r27 = r0.getLeafAtomOfType(r4);
-        if (r27 == 0) goto L_0x0143;
-    L_0x0097:
-        r0 = r27;
+        r0 = r91;
         r0 = r0.data;
-        r26 = r0;
+        r90 = r0;
+    L_0x0093:
+        r8 = org.telegram.messenger.exoplayer2.extractor.mp4.Atom.TYPE_ctts;
+        r0 = r103;
+        r43 = r0.getLeafAtomOfType(r8);
+        if (r43 == 0) goto L_0x014e;
     L_0x009d:
-        r18 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator;
-        r0 = r18;
-        r1 = r76;
-        r2 = r19;
-        r3 = r20;
-        r0.<init>(r1, r2, r3);
-        r4 = 12;
-        r0 = r80;
-        r0.setPosition(r4);
-        r4 = r80.readUnsignedIntToInt();
-        r70 = r4 + -1;
-        r66 = r80.readUnsignedIntToInt();
-        r84 = r80.readUnsignedIntToInt();
-        r67 = 0;
-        r71 = 0;
-        r85 = 0;
-        if (r26 == 0) goto L_0x00d2;
-    L_0x00c7:
-        r4 = 12;
-        r0 = r26;
-        r0.setPosition(r4);
-        r71 = r26.readUnsignedIntToInt();
-    L_0x00d2:
-        r55 = -1;
-        r69 = 0;
-        if (r77 == 0) goto L_0x00eb;
-    L_0x00d8:
-        r4 = 12;
-        r0 = r77;
-        r0.setPosition(r4);
-        r69 = r77.readUnsignedIntToInt();
-        if (r69 <= 0) goto L_0x0147;
-    L_0x00e5:
-        r4 = r77.readUnsignedIntToInt();
-        r55 = r4 + -1;
-    L_0x00eb:
-        r4 = r74.isFixedSampleSize();
-        if (r4 == 0) goto L_0x014a;
-    L_0x00f1:
-        r4 = "audio/raw";
-        r0 = r88;
-        r12 = r0.format;
-        r12 = r12.sampleMimeType;
-        r4 = r4.equals(r12);
-        if (r4 == 0) goto L_0x014a;
-    L_0x0100:
-        if (r70 != 0) goto L_0x014a;
-    L_0x0102:
-        if (r71 != 0) goto L_0x014a;
-    L_0x0104:
-        if (r69 != 0) goto L_0x014a;
-    L_0x0106:
-        r48 = 1;
-    L_0x0108:
-        r7 = 0;
-        r86 = 0;
-        if (r48 != 0) goto L_0x0242;
-    L_0x010d:
-        r0 = r72;
-        r5 = new long[r0];
-        r0 = r72;
-        r6 = new int[r0];
-        r0 = r72;
-        r8 = new long[r0];
-        r0 = r72;
-        r9 = new int[r0];
-        r56 = 0;
-        r68 = 0;
-        r47 = 0;
-    L_0x0123:
-        r0 = r47;
-        r1 = r72;
-        if (r0 >= r1) goto L_0x01af;
-    L_0x0129:
-        if (r68 != 0) goto L_0x014d;
-    L_0x012b:
-        r4 = r18.moveNext();
-        org.telegram.messenger.exoplayer2.util.Assertions.checkState(r4);
-        r0 = r18;
-        r0 = r0.offset;
-        r56 = r0;
-        r0 = r18;
-        r0 = r0.numSamples;
-        r68 = r0;
-        goto L_0x0129;
-    L_0x013f:
-        r77 = 0;
-        goto L_0x008d;
-    L_0x0143:
-        r26 = 0;
-        goto L_0x009d;
-    L_0x0147:
-        r77 = 0;
-        goto L_0x00eb;
-    L_0x014a:
-        r48 = 0;
-        goto L_0x0108;
-    L_0x014d:
-        if (r26 == 0) goto L_0x0160;
-    L_0x014f:
-        if (r67 != 0) goto L_0x015e;
-    L_0x0151:
-        if (r71 <= 0) goto L_0x015e;
-    L_0x0153:
-        r67 = r26.readUnsignedIntToInt();
-        r85 = r26.readInt();
-        r71 = r71 + -1;
-        goto L_0x014f;
-    L_0x015e:
-        r67 = r67 + -1;
-    L_0x0160:
-        r5[r47] = r56;
-        r4 = r74.readNextSampleSize();
-        r6[r47] = r4;
-        r4 = r6[r47];
-        if (r4 <= r7) goto L_0x016e;
-    L_0x016c:
-        r7 = r6[r47];
-    L_0x016e:
-        r0 = r85;
-        r12 = (long) r0;
-        r12 = r12 + r86;
-        r8[r47] = r12;
-        if (r77 != 0) goto L_0x01ad;
-    L_0x0177:
-        r4 = 1;
-    L_0x0178:
-        r9[r47] = r4;
-        r0 = r47;
-        r1 = r55;
-        if (r0 != r1) goto L_0x018d;
-    L_0x0180:
-        r4 = 1;
-        r9[r47] = r4;
-        r69 = r69 + -1;
-        if (r69 <= 0) goto L_0x018d;
-    L_0x0187:
-        r4 = r77.readUnsignedIntToInt();
-        r55 = r4 + -1;
-    L_0x018d:
-        r0 = r84;
-        r12 = (long) r0;
-        r86 = r86 + r12;
-        r66 = r66 + -1;
-        if (r66 != 0) goto L_0x01a2;
-    L_0x0196:
-        if (r70 <= 0) goto L_0x01a2;
-    L_0x0198:
-        r66 = r80.readUnsignedIntToInt();
-        r84 = r80.readInt();
-        r70 = r70 + -1;
-    L_0x01a2:
-        r4 = r6[r47];
-        r12 = (long) r4;
-        r56 = r56 + r12;
-        r68 = r68 + -1;
-        r47 = r47 + 1;
-        goto L_0x0123;
-    L_0x01ad:
-        r4 = 0;
-        goto L_0x0178;
-    L_0x01af:
-        if (r67 != 0) goto L_0x01c7;
-    L_0x01b1:
-        r4 = 1;
-    L_0x01b2:
-        org.telegram.messenger.exoplayer2.util.Assertions.checkArgument(r4);
-    L_0x01b5:
-        if (r71 <= 0) goto L_0x01cb;
-    L_0x01b7:
-        r4 = r26.readUnsignedIntToInt();
-        if (r4 != 0) goto L_0x01c9;
-    L_0x01bd:
-        r4 = 1;
-    L_0x01be:
-        org.telegram.messenger.exoplayer2.util.Assertions.checkArgument(r4);
-        r26.readInt();
-        r71 = r71 + -1;
-        goto L_0x01b5;
-    L_0x01c7:
-        r4 = 0;
-        goto L_0x01b2;
-    L_0x01c9:
-        r4 = 0;
-        goto L_0x01be;
-    L_0x01cb:
-        if (r69 != 0) goto L_0x01d3;
-    L_0x01cd:
-        if (r66 != 0) goto L_0x01d3;
-    L_0x01cf:
-        if (r68 != 0) goto L_0x01d3;
-    L_0x01d1:
-        if (r70 == 0) goto L_0x0225;
-    L_0x01d3:
-        r4 = "AtomParsers";
-        r12 = new java.lang.StringBuilder;
-        r12.<init>();
-        r13 = "Inconsistent stbl box for track ";
-        r12 = r12.append(r13);
-        r0 = r88;
-        r13 = r0.id;
-        r12 = r12.append(r13);
-        r13 = ": remainingSynchronizationSamples ";
-        r12 = r12.append(r13);
-        r0 = r69;
-        r12 = r12.append(r0);
-        r13 = ", remainingSamplesAtTimestampDelta ";
-        r12 = r12.append(r13);
-        r0 = r66;
-        r12 = r12.append(r0);
-        r13 = ", remainingSamplesInChunk ";
-        r12 = r12.append(r13);
-        r0 = r68;
-        r12 = r12.append(r0);
-        r13 = ", remainingTimestampDeltaChanges ";
-        r12 = r12.append(r13);
-        r0 = r70;
-        r12 = r12.append(r0);
-        r12 = r12.toString();
-        android.util.Log.w(r4, r12);
-    L_0x0225:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        if (r4 == 0) goto L_0x0231;
-    L_0x022b:
-        r4 = r90.hasGaplessInfo();
-        if (r4 == 0) goto L_0x0293;
-    L_0x0231:
-        r12 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r0 = r88;
-        r14 = r0.timescale;
-        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r8, r12, r14);
-        r4 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r4.<init>(r5, r6, r7, r8, r9);
-        goto L_0x002b;
-    L_0x0242:
-        r0 = r18;
-        r4 = r0.length;
-        r0 = new long[r4];
-        r22 = r0;
-        r0 = r18;
-        r4 = r0.length;
-        r0 = new int[r4];
-        r23 = r0;
-    L_0x0252:
-        r4 = r18.moveNext();
-        if (r4 == 0) goto L_0x026d;
-    L_0x0258:
-        r0 = r18;
-        r4 = r0.index;
-        r0 = r18;
-        r12 = r0.offset;
-        r22[r4] = r12;
-        r0 = r18;
-        r4 = r0.index;
-        r0 = r18;
-        r12 = r0.numSamples;
-        r23[r4] = r12;
-        goto L_0x0252;
-    L_0x026d:
-        r43 = r74.readNextSampleSize();
-        r0 = r84;
-        r12 = (long) r0;
         r0 = r43;
-        r1 = r22;
-        r2 = r23;
-        r59 = org.telegram.messenger.exoplayer2.extractor.mp4.FixedSampleSizeRechunker.rechunk(r0, r1, r2, r12);
-        r0 = r59;
-        r5 = r0.offsets;
-        r0 = r59;
-        r6 = r0.sizes;
-        r0 = r59;
-        r7 = r0.maximumSize;
-        r0 = r59;
-        r8 = r0.timestamps;
-        r0 = r59;
-        r9 = r0.flags;
-        goto L_0x0225;
-    L_0x0293:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r4 = r4.length;
-        r12 = 1;
-        if (r4 != r12) goto L_0x033f;
-    L_0x029b:
-        r0 = r88;
-        r4 = r0.type;
-        r12 = 1;
-        if (r4 != r12) goto L_0x033f;
-    L_0x02a2:
-        r4 = r8.length;
-        r12 = 2;
-        if (r4 < r12) goto L_0x033f;
-    L_0x02a6:
-        r0 = r88;
-        r4 = r0.editListMediaTimes;
-        r12 = 0;
-        r30 = r4[r12];
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r12 = 0;
-        r10 = r4[r12];
-        r0 = r88;
-        r12 = r0.timescale;
-        r0 = r88;
-        r14 = r0.movieTimescale;
-        r12 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r28 = r30 + r12;
-        r50 = r86;
-        r4 = 0;
-        r12 = r8[r4];
-        r4 = (r12 > r30 ? 1 : (r12 == r30 ? 0 : -1));
-        if (r4 > 0) goto L_0x033f;
-    L_0x02cb:
-        r4 = 1;
-        r12 = r8[r4];
-        r4 = (r30 > r12 ? 1 : (r30 == r12 ? 0 : -1));
-        if (r4 >= 0) goto L_0x033f;
-    L_0x02d2:
-        r4 = r8.length;
-        r4 = r4 + -1;
-        r12 = r8[r4];
-        r4 = (r12 > r28 ? 1 : (r12 == r28 ? 0 : -1));
-        if (r4 >= 0) goto L_0x033f;
-    L_0x02db:
-        r4 = (r28 > r50 ? 1 : (r28 == r50 ? 0 : -1));
-        if (r4 > 0) goto L_0x033f;
-    L_0x02df:
-        r60 = r50 - r28;
-        r4 = 0;
-        r12 = r8[r4];
-        r10 = r30 - r12;
-        r0 = r88;
-        r4 = r0.format;
-        r4 = r4.sampleRate;
-        r12 = (long) r4;
-        r0 = r88;
-        r14 = r0.timescale;
-        r38 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r0 = r88;
-        r4 = r0.format;
-        r4 = r4.sampleRate;
-        r12 = (long) r4;
-        r0 = r88;
-        r14 = r0.timescale;
-        r10 = r60;
-        r40 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r12 = 0;
-        r4 = (r38 > r12 ? 1 : (r38 == r12 ? 0 : -1));
-        if (r4 != 0) goto L_0x0312;
-    L_0x030c:
-        r12 = 0;
-        r4 = (r40 > r12 ? 1 : (r40 == r12 ? 0 : -1));
-        if (r4 == 0) goto L_0x033f;
-    L_0x0312:
-        r12 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r4 = (r38 > r12 ? 1 : (r38 == r12 ? 0 : -1));
-        if (r4 > 0) goto L_0x033f;
-    L_0x0319:
-        r12 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r4 = (r40 > r12 ? 1 : (r40 == r12 ? 0 : -1));
-        if (r4 > 0) goto L_0x033f;
-    L_0x0320:
-        r0 = r38;
-        r4 = (int) r0;
+        r0 = r0.data;
+        r42 = r0;
+    L_0x00a3:
+        r34 = new org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator;
+        r0 = r34;
+        r1 = r89;
+        r2 = r35;
+        r3 = r36;
+        r0.<init>(r1, r2, r3);
+        r8 = 12;
+        r0 = r93;
+        r0.setPosition(r8);
+        r8 = r93.readUnsignedIntToInt();
+        r82 = r8 + -1;
+        r78 = r93.readUnsignedIntToInt();
+        r95 = r93.readUnsignedIntToInt();
+        r79 = 0;
+        r83 = 0;
+        r98 = 0;
+        if (r42 == 0) goto L_0x00d8;
+    L_0x00cd:
+        r8 = 12;
+        r0 = r42;
+        r0.setPosition(r8);
+        r83 = r42.readUnsignedIntToInt();
+    L_0x00d8:
+        r68 = -1;
+        r81 = 0;
+        if (r90 == 0) goto L_0x00f1;
+    L_0x00de:
+        r8 = 12;
         r0 = r90;
-        r0.encoderDelay = r4;
-        r0 = r40;
-        r4 = (int) r0;
-        r0 = r90;
-        r0.encoderPadding = r4;
-        r12 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r0 = r88;
-        r14 = r0.timescale;
-        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r8, r12, r14);
-        r4 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r4.<init>(r5, r6, r7, r8, r9);
-        goto L_0x002b;
-    L_0x033f:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r4 = r4.length;
-        r12 = 1;
-        if (r4 != r12) goto L_0x037d;
-    L_0x0347:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r12 = 0;
-        r12 = r4[r12];
-        r14 = 0;
-        r4 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1));
-        if (r4 != 0) goto L_0x037d;
-    L_0x0354:
-        r47 = 0;
-    L_0x0356:
-        r4 = r8.length;
-        r0 = r47;
-        if (r0 >= r4) goto L_0x0376;
-    L_0x035b:
-        r12 = r8[r47];
-        r0 = r88;
-        r4 = r0.editListMediaTimes;
-        r14 = 0;
-        r14 = r4[r14];
-        r10 = r12 - r14;
-        r12 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r0 = r88;
-        r14 = r0.timescale;
-        r12 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r8[r47] = r12;
-        r47 = r47 + 1;
-        goto L_0x0356;
-    L_0x0376:
-        r4 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r4.<init>(r5, r6, r7, r8, r9);
-        goto L_0x002b;
-    L_0x037d:
-        r0 = r88;
-        r4 = r0.type;
-        r12 = 1;
-        if (r4 != r12) goto L_0x03d8;
-    L_0x0384:
-        r58 = 1;
-    L_0x0386:
-        r35 = 0;
-        r54 = 0;
-        r24 = 0;
-        r47 = 0;
-    L_0x038e:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r4 = r4.length;
-        r0 = r47;
-        if (r0 >= r4) goto L_0x03dd;
-    L_0x0397:
-        r0 = r88;
-        r4 = r0.editListMediaTimes;
-        r52 = r4[r47];
-        r12 = -1;
-        r4 = (r52 > r12 ? 1 : (r52 == r12 ? 0 : -1));
-        if (r4 == 0) goto L_0x03d5;
-    L_0x03a3:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r10 = r4[r47];
-        r0 = r88;
-        r12 = r0.timescale;
-        r0 = r88;
-        r14 = r0.movieTimescale;
-        r10 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r4 = 1;
-        r12 = 1;
-        r0 = r52;
-        r75 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r8, r0, r4, r12);
-        r12 = r52 + r10;
-        r4 = 0;
-        r0 = r58;
-        r42 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r8, r12, r0, r4);
-        r4 = r42 - r75;
-        r35 = r35 + r4;
-        r0 = r54;
-        r1 = r75;
-        if (r0 == r1) goto L_0x03db;
-    L_0x03d0:
-        r4 = 1;
-    L_0x03d1:
-        r24 = r24 | r4;
-        r54 = r42;
-    L_0x03d5:
-        r47 = r47 + 1;
-        goto L_0x038e;
-    L_0x03d8:
-        r58 = 0;
-        goto L_0x0386;
-    L_0x03db:
-        r4 = 0;
-        goto L_0x03d1;
-    L_0x03dd:
-        r0 = r35;
-        r1 = r72;
-        if (r0 == r1) goto L_0x04a8;
-    L_0x03e3:
-        r4 = 1;
-    L_0x03e4:
-        r24 = r24 | r4;
-        if (r24 == 0) goto L_0x04ab;
-    L_0x03e8:
-        r0 = r35;
+        r0.setPosition(r8);
+        r81 = r90.readUnsignedIntToInt();
+        if (r81 <= 0) goto L_0x0152;
+    L_0x00eb:
+        r8 = r90.readUnsignedIntToInt();
+        r68 = r8 + -1;
+    L_0x00f1:
+        r8 = r86.isFixedSampleSize();
+        if (r8 == 0) goto L_0x0155;
+    L_0x00f7:
+        r8 = "audio/raw";
+        r0 = r102;
+        r9 = r0.format;
+        r9 = r9.sampleMimeType;
+        r8 = r8.equals(r9);
+        if (r8 == 0) goto L_0x0155;
+    L_0x0106:
+        if (r82 != 0) goto L_0x0155;
+    L_0x0108:
+        if (r83 != 0) goto L_0x0155;
+    L_0x010a:
+        if (r81 != 0) goto L_0x0155;
+    L_0x010c:
+        r64 = 1;
+    L_0x010e:
+        r66 = 0;
+        r100 = 0;
+        if (r64 != 0) goto L_0x0265;
+    L_0x0114:
+        r0 = r84;
         r0 = new long[r0];
-        r34 = r0;
-    L_0x03ee:
-        if (r24 == 0) goto L_0x04af;
-    L_0x03f0:
-        r0 = r35;
+        r69 = r0;
+        r0 = r84;
         r0 = new int[r0];
-        r36 = r0;
-    L_0x03f6:
-        if (r24 == 0) goto L_0x04b3;
-    L_0x03f8:
-        r33 = 0;
-    L_0x03fa:
-        if (r24 == 0) goto L_0x04b7;
-    L_0x03fc:
-        r0 = r35;
-        r0 = new int[r0];
-        r32 = r0;
-    L_0x0402:
-        r0 = r35;
-        r0 = new long[r0];
-        r37 = r0;
-        r62 = 0;
-        r73 = 0;
-        r47 = 0;
-    L_0x040e:
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r4 = r4.length;
-        r0 = r47;
-        if (r0 >= r4) goto L_0x04c1;
-    L_0x0417:
-        r0 = r88;
-        r4 = r0.editListMediaTimes;
-        r52 = r4[r47];
-        r0 = r88;
-        r4 = r0.editListDurations;
-        r10 = r4[r47];
-        r12 = -1;
-        r4 = (r52 > r12 ? 1 : (r52 == r12 ? 0 : -1));
-        if (r4 == 0) goto L_0x04bb;
-    L_0x0429:
-        r0 = r88;
-        r12 = r0.timescale;
-        r0 = r88;
-        r14 = r0.movieTimescale;
-        r12 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r10, r12, r14);
-        r44 = r52 + r12;
-        r4 = 1;
-        r12 = 1;
-        r0 = r52;
-        r75 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r8, r0, r4, r12);
-        r4 = 0;
-        r0 = r44;
-        r2 = r58;
-        r42 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r8, r0, r2, r4);
-        if (r24 == 0) goto L_0x046d;
-    L_0x044a:
-        r25 = r42 - r75;
-        r0 = r75;
-        r1 = r34;
-        r2 = r73;
-        r3 = r25;
-        java.lang.System.arraycopy(r5, r0, r1, r2, r3);
-        r0 = r75;
-        r1 = r36;
-        r2 = r73;
-        r3 = r25;
-        java.lang.System.arraycopy(r6, r0, r1, r2, r3);
-        r0 = r75;
-        r1 = r32;
-        r2 = r73;
-        r3 = r25;
-        java.lang.System.arraycopy(r9, r0, r1, r2, r3);
-    L_0x046d:
-        r49 = r75;
-    L_0x046f:
-        r0 = r49;
-        r1 = r42;
-        if (r0 >= r1) goto L_0x04bb;
-    L_0x0475:
-        r14 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r0 = r88;
-        r0 = r0.movieTimescale;
-        r16 = r0;
-        r12 = r62;
-        r64 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r12, r14, r16);
-        r12 = r8[r49];
-        r12 = r12 - r52;
-        r14 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
-        r0 = r88;
+        r87 = r0;
+        r0 = r84;
+        r12 = new long[r0];
+        r0 = r84;
+        r13 = new int[r0];
+        r70 = 0;
+        r80 = 0;
+        r63 = 0;
+    L_0x012e:
+        r0 = r63;
+        r1 = r84;
+        if (r0 >= r1) goto L_0x01bc;
+    L_0x0134:
+        if (r80 != 0) goto L_0x0158;
+    L_0x0136:
+        r8 = r34.moveNext();
+        org.telegram.messenger.exoplayer2.util.Assertions.checkState(r8);
+        r0 = r34;
+        r0 = r0.offset;
+        r70 = r0;
+        r0 = r34;
+        r0 = r0.numSamples;
+        r80 = r0;
+        goto L_0x0134;
+    L_0x014a:
+        r90 = 0;
+        goto L_0x0093;
+    L_0x014e:
+        r42 = 0;
+        goto L_0x00a3;
+    L_0x0152:
+        r90 = 0;
+        goto L_0x00f1;
+    L_0x0155:
+        r64 = 0;
+        goto L_0x010e;
+    L_0x0158:
+        if (r42 == 0) goto L_0x016b;
+    L_0x015a:
+        if (r79 != 0) goto L_0x0169;
+    L_0x015c:
+        if (r83 <= 0) goto L_0x0169;
+    L_0x015e:
+        r79 = r42.readUnsignedIntToInt();
+        r98 = r42.readInt();
+        r83 = r83 + -1;
+        goto L_0x015a;
+    L_0x0169:
+        r79 = r79 + -1;
+    L_0x016b:
+        r69[r63] = r70;
+        r8 = r86.readNextSampleSize();
+        r87[r63] = r8;
+        r8 = r87[r63];
+        r0 = r66;
+        if (r8 <= r0) goto L_0x017b;
+    L_0x0179:
+        r66 = r87[r63];
+    L_0x017b:
+        r0 = r98;
+        r8 = (long) r0;
+        r8 = r8 + r100;
+        r12[r63] = r8;
+        if (r90 != 0) goto L_0x01ba;
+    L_0x0184:
+        r8 = 1;
+    L_0x0185:
+        r13[r63] = r8;
+        r0 = r63;
+        r1 = r68;
+        if (r0 != r1) goto L_0x019a;
+    L_0x018d:
+        r8 = 1;
+        r13[r63] = r8;
+        r81 = r81 + -1;
+        if (r81 <= 0) goto L_0x019a;
+    L_0x0194:
+        r8 = r90.readUnsignedIntToInt();
+        r68 = r8 + -1;
+    L_0x019a:
+        r0 = r95;
+        r8 = (long) r0;
+        r100 = r100 + r8;
+        r78 = r78 + -1;
+        if (r78 != 0) goto L_0x01af;
+    L_0x01a3:
+        if (r82 <= 0) goto L_0x01af;
+    L_0x01a5:
+        r78 = r93.readUnsignedIntToInt();
+        r95 = r93.readInt();
+        r82 = r82 + -1;
+    L_0x01af:
+        r8 = r87[r63];
+        r8 = (long) r8;
+        r70 = r70 + r8;
+        r80 = r80 + -1;
+        r63 = r63 + 1;
+        goto L_0x012e;
+    L_0x01ba:
+        r8 = 0;
+        goto L_0x0185;
+    L_0x01bc:
+        r0 = r98;
+        r8 = (long) r0;
+        r6 = r100 + r8;
+        if (r79 != 0) goto L_0x01d9;
+    L_0x01c3:
+        r8 = 1;
+    L_0x01c4:
+        org.telegram.messenger.exoplayer2.util.Assertions.checkArgument(r8);
+    L_0x01c7:
+        if (r83 <= 0) goto L_0x01dd;
+    L_0x01c9:
+        r8 = r42.readUnsignedIntToInt();
+        if (r8 != 0) goto L_0x01db;
+    L_0x01cf:
+        r8 = 1;
+    L_0x01d0:
+        org.telegram.messenger.exoplayer2.util.Assertions.checkArgument(r8);
+        r42.readInt();
+        r83 = r83 + -1;
+        goto L_0x01c7;
+    L_0x01d9:
+        r8 = 0;
+        goto L_0x01c4;
+    L_0x01db:
+        r8 = 0;
+        goto L_0x01d0;
+    L_0x01dd:
+        if (r81 != 0) goto L_0x01e5;
+    L_0x01df:
+        if (r78 != 0) goto L_0x01e5;
+    L_0x01e1:
+        if (r80 != 0) goto L_0x01e5;
+    L_0x01e3:
+        if (r82 == 0) goto L_0x0237;
+    L_0x01e5:
+        r8 = "AtomParsers";
+        r9 = new java.lang.StringBuilder;
+        r9.<init>();
+        r10 = "Inconsistent stbl box for track ";
+        r9 = r9.append(r10);
+        r0 = r102;
+        r10 = r0.id;
+        r9 = r9.append(r10);
+        r10 = ": remainingSynchronizationSamples ";
+        r9 = r9.append(r10);
+        r0 = r81;
+        r9 = r9.append(r0);
+        r10 = ", remainingSamplesAtTimestampDelta ";
+        r9 = r9.append(r10);
+        r0 = r78;
+        r9 = r9.append(r0);
+        r10 = ", remainingSamplesInChunk ";
+        r9 = r9.append(r10);
+        r0 = r80;
+        r9 = r9.append(r0);
+        r10 = ", remainingTimestampDeltaChanges ";
+        r9 = r9.append(r10);
+        r0 = r82;
+        r9 = r9.append(r0);
+        r9 = r9.toString();
+        android.util.Log.w(r8, r9);
+    L_0x0237:
+        r8 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r10 = r0.timescale;
+        r14 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r6, r8, r10);
+        r0 = r102;
+        r8 = r0.editListDurations;
+        if (r8 == 0) goto L_0x024e;
+    L_0x0248:
+        r8 = r104.hasGaplessInfo();
+        if (r8 == 0) goto L_0x02cd;
+    L_0x024e:
+        r8 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r10 = r0.timescale;
+        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r12, r8, r10);
+        r8 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r9 = r69;
+        r10 = r87;
+        r11 = r66;
+        r8.<init>(r9, r10, r11, r12, r13, r14);
+        goto L_0x0031;
+    L_0x0265:
+        r0 = r34;
+        r8 = r0.length;
+        r0 = new long[r8];
+        r38 = r0;
+        r0 = r34;
+        r8 = r0.length;
+        r0 = new int[r8];
+        r39 = r0;
+    L_0x0275:
+        r8 = r34.moveNext();
+        if (r8 == 0) goto L_0x0290;
+    L_0x027b:
+        r0 = r34;
+        r8 = r0.index;
+        r0 = r34;
+        r10 = r0.offset;
+        r38[r8] = r10;
+        r0 = r34;
+        r8 = r0.index;
+        r0 = r34;
+        r9 = r0.numSamples;
+        r39[r8] = r9;
+        goto L_0x0275;
+    L_0x0290:
+        r0 = r102;
+        r8 = r0.format;
+        r8 = r8.pcmEncoding;
+        r0 = r102;
+        r9 = r0.format;
+        r9 = r9.channelCount;
+        r59 = org.telegram.messenger.exoplayer2.util.Util.getPcmFrameSize(r8, r9);
+        r0 = r95;
+        r8 = (long) r0;
+        r0 = r59;
+        r1 = r38;
+        r2 = r39;
+        r73 = org.telegram.messenger.exoplayer2.extractor.mp4.FixedSampleSizeRechunker.rechunk(r0, r1, r2, r8);
+        r0 = r73;
+        r0 = r0.offsets;
+        r69 = r0;
+        r0 = r73;
+        r0 = r0.sizes;
+        r87 = r0;
+        r0 = r73;
+        r0 = r0.maximumSize;
+        r66 = r0;
+        r0 = r73;
+        r12 = r0.timestamps;
+        r0 = r73;
+        r13 = r0.flags;
+        r0 = r73;
+        r6 = r0.duration;
+        goto L_0x0237;
+    L_0x02cd:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r8 = r8.length;
+        r9 = 1;
+        if (r8 != r9) goto L_0x037a;
+    L_0x02d5:
+        r0 = r102;
+        r8 = r0.type;
+        r9 = 1;
+        if (r8 != r9) goto L_0x037a;
+    L_0x02dc:
+        r8 = r12.length;
+        r9 = 2;
+        if (r8 < r9) goto L_0x037a;
+    L_0x02e0:
+        r0 = r102;
+        r8 = r0.editListMediaTimes;
+        r9 = 0;
+        r46 = r8[r9];
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r9 = 0;
+        r16 = r8[r9];
+        r0 = r102;
         r0 = r0.timescale;
-        r16 = r0;
-        r82 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r12, r14, r16);
-        r12 = r64 + r82;
-        r37[r73] = r12;
-        if (r24 == 0) goto L_0x04a3;
-    L_0x049b:
-        r4 = r36[r73];
-        r0 = r33;
-        if (r4 <= r0) goto L_0x04a3;
-    L_0x04a1:
-        r33 = r6[r49];
-    L_0x04a3:
-        r73 = r73 + 1;
-        r49 = r49 + 1;
-        goto L_0x046f;
-    L_0x04a8:
-        r4 = 0;
-        goto L_0x03e4;
-    L_0x04ab:
-        r34 = r5;
-        goto L_0x03ee;
-    L_0x04af:
-        r36 = r6;
-        goto L_0x03f6;
-    L_0x04b3:
-        r33 = r7;
-        goto L_0x03fa;
-    L_0x04b7:
-        r32 = r9;
-        goto L_0x0402;
-    L_0x04bb:
-        r62 = r62 + r10;
-        r47 = r47 + 1;
-        goto L_0x040e;
-    L_0x04c1:
-        r46 = 0;
-        r47 = 0;
-    L_0x04c5:
-        r0 = r32;
-        r4 = r0.length;
-        r0 = r47;
-        if (r0 >= r4) goto L_0x04dc;
-    L_0x04cc:
-        if (r46 != 0) goto L_0x04dc;
-    L_0x04ce:
-        r4 = r32[r47];
-        r4 = r4 & 1;
-        if (r4 == 0) goto L_0x04da;
-    L_0x04d4:
-        r4 = 1;
-    L_0x04d5:
-        r46 = r46 | r4;
-        r47 = r47 + 1;
-        goto L_0x04c5;
-    L_0x04da:
-        r4 = 0;
-        goto L_0x04d5;
-    L_0x04dc:
-        if (r46 != 0) goto L_0x04f8;
-    L_0x04de:
-        r4 = "AtomParsers";
-        r12 = "Ignoring edit list: Edited sample sequence does not contain a sync sample.";
-        android.util.Log.w(r4, r12);
-        r12 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r18 = r0;
+        r0 = r102;
+        r0 = r0.movieTimescale;
+        r20 = r0;
+        r8 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r22 = r46 + r8;
+        r17 = r12;
+        r18 = r6;
+        r20 = r46;
+        r8 = canApplyEditWithGaplessInfo(r17, r18, r20, r22);
+        if (r8 == 0) goto L_0x037a;
+    L_0x030c:
+        r74 = r6 - r22;
+        r8 = 0;
+        r8 = r12[r8];
+        r16 = r46 - r8;
+        r0 = r102;
+        r8 = r0.format;
+        r8 = r8.sampleRate;
+        r0 = (long) r8;
+        r18 = r0;
+        r0 = r102;
+        r0 = r0.timescale;
+        r20 = r0;
+        r54 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r0 = r102;
+        r8 = r0.format;
+        r8 = r8.sampleRate;
+        r0 = (long) r8;
+        r18 = r0;
+        r0 = r102;
+        r0 = r0.timescale;
+        r20 = r0;
+        r16 = r74;
+        r56 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r8 = 0;
+        r8 = (r54 > r8 ? 1 : (r54 == r8 ? 0 : -1));
+        if (r8 != 0) goto L_0x0347;
+    L_0x0341:
+        r8 = 0;
+        r8 = (r56 > r8 ? 1 : (r56 == r8 ? 0 : -1));
+        if (r8 == 0) goto L_0x037a;
+    L_0x0347:
+        r8 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        r8 = (r54 > r8 ? 1 : (r54 == r8 ? 0 : -1));
+        if (r8 > 0) goto L_0x037a;
+    L_0x034e:
+        r8 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        r8 = (r56 > r8 ? 1 : (r56 == r8 ? 0 : -1));
+        if (r8 > 0) goto L_0x037a;
+    L_0x0355:
+        r0 = r54;
+        r8 = (int) r0;
+        r0 = r104;
+        r0.encoderDelay = r8;
+        r0 = r56;
+        r8 = (int) r0;
+        r0 = r104;
+        r0.encoderPadding = r8;
+        r8 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r10 = r0.timescale;
+        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r12, r8, r10);
+        r8 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r9 = r69;
+        r10 = r87;
+        r11 = r66;
+        r8.<init>(r9, r10, r11, r12, r13, r14);
+        goto L_0x0031;
+    L_0x037a:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r8 = r8.length;
+        r9 = 1;
+        if (r8 != r9) goto L_0x03cf;
+    L_0x0382:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r9 = 0;
+        r8 = r8[r9];
+        r10 = 0;
+        r8 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
+        if (r8 != 0) goto L_0x03cf;
+    L_0x038f:
+        r0 = r102;
+        r8 = r0.editListMediaTimes;
+        r9 = 0;
+        r46 = r8[r9];
+        r63 = 0;
+    L_0x0398:
+        r8 = r12.length;
+        r0 = r63;
+        if (r0 >= r8) goto L_0x03b3;
+    L_0x039d:
+        r8 = r12[r63];
+        r16 = r8 - r46;
+        r18 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r0 = r0.timescale;
+        r20 = r0;
+        r8 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r12[r63] = r8;
+        r63 = r63 + 1;
+        goto L_0x0398;
+    L_0x03b3:
+        r16 = r6 - r46;
+        r18 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r0 = r0.timescale;
+        r20 = r0;
+        r14 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r8 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r9 = r69;
+        r10 = r87;
+        r11 = r66;
+        r8.<init>(r9, r10, r11, r12, r13, r14);
+        goto L_0x0031;
+    L_0x03cf:
+        r0 = r102;
+        r8 = r0.type;
+        r9 = 1;
+        if (r8 != r9) goto L_0x042e;
+    L_0x03d6:
+        r72 = 1;
+    L_0x03d8:
+        r51 = 0;
+        r67 = 0;
+        r40 = 0;
+        r63 = 0;
+    L_0x03e0:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r8 = r8.length;
+        r0 = r63;
+        if (r0 >= r8) goto L_0x0433;
+    L_0x03e9:
+        r0 = r102;
+        r8 = r0.editListMediaTimes;
+        r44 = r8[r63];
+        r8 = -1;
+        r8 = (r44 > r8 ? 1 : (r44 == r8 ? 0 : -1));
+        if (r8 == 0) goto L_0x042b;
+    L_0x03f5:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r16 = r8[r63];
+        r0 = r102;
+        r0 = r0.timescale;
+        r18 = r0;
+        r0 = r102;
+        r0 = r0.movieTimescale;
+        r20 = r0;
+        r16 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r8 = 1;
+        r9 = 1;
+        r0 = r44;
+        r88 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r12, r0, r8, r9);
+        r8 = r44 + r16;
+        r10 = 0;
+        r0 = r72;
+        r58 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r12, r8, r0, r10);
+        r8 = r58 - r88;
+        r51 = r51 + r8;
+        r0 = r67;
+        r1 = r88;
+        if (r0 == r1) goto L_0x0431;
+    L_0x0426:
+        r8 = 1;
+    L_0x0427:
+        r40 = r40 | r8;
+        r67 = r58;
+    L_0x042b:
+        r63 = r63 + 1;
+        goto L_0x03e0;
+    L_0x042e:
+        r72 = 0;
+        goto L_0x03d8;
+    L_0x0431:
+        r8 = 0;
+        goto L_0x0427;
+    L_0x0433:
+        r0 = r51;
+        r1 = r84;
+        if (r0 == r1) goto L_0x0504;
+    L_0x0439:
+        r8 = 1;
+    L_0x043a:
+        r40 = r40 | r8;
+        if (r40 == 0) goto L_0x0507;
+    L_0x043e:
+        r0 = r51;
+        r0 = new long[r0];
+        r50 = r0;
+    L_0x0444:
+        if (r40 == 0) goto L_0x050b;
+    L_0x0446:
+        r0 = r51;
+        r0 = new int[r0];
+        r52 = r0;
+    L_0x044c:
+        if (r40 == 0) goto L_0x050f;
+    L_0x044e:
+        r49 = 0;
+    L_0x0450:
+        if (r40 == 0) goto L_0x0513;
+    L_0x0452:
+        r0 = r51;
+        r0 = new int[r0];
+        r48 = r0;
+    L_0x0458:
+        r0 = r51;
+        r0 = new long[r0];
+        r53 = r0;
+        r24 = 0;
+        r85 = 0;
+        r63 = 0;
+    L_0x0464:
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r8 = r8.length;
+        r0 = r63;
+        if (r0 >= r8) goto L_0x051d;
+    L_0x046d:
+        r0 = r102;
+        r8 = r0.editListMediaTimes;
+        r44 = r8[r63];
+        r0 = r102;
+        r8 = r0.editListDurations;
+        r16 = r8[r63];
+        r8 = -1;
+        r8 = (r44 > r8 ? 1 : (r44 == r8 ? 0 : -1));
+        if (r8 == 0) goto L_0x0517;
+    L_0x047f:
+        r0 = r102;
+        r0 = r0.timescale;
+        r18 = r0;
+        r0 = r102;
+        r0 = r0.movieTimescale;
+        r20 = r0;
+        r8 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r16, r18, r20);
+        r60 = r44 + r8;
+        r8 = 1;
+        r9 = 1;
+        r0 = r44;
+        r88 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r12, r0, r8, r9);
+        r8 = 0;
+        r0 = r60;
+        r2 = r72;
+        r58 = org.telegram.messenger.exoplayer2.util.Util.binarySearchCeil(r12, r0, r2, r8);
+        if (r40 == 0) goto L_0x04cb;
+    L_0x04a4:
+        r41 = r58 - r88;
+        r0 = r69;
+        r1 = r88;
+        r2 = r50;
+        r3 = r85;
+        r4 = r41;
+        java.lang.System.arraycopy(r0, r1, r2, r3, r4);
+        r0 = r87;
+        r1 = r88;
+        r2 = r52;
+        r3 = r85;
+        r4 = r41;
+        java.lang.System.arraycopy(r0, r1, r2, r3, r4);
         r0 = r88;
-        r14 = r0.timescale;
-        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r8, r12, r14);
-        r4 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r4.<init>(r5, r6, r7, r8, r9);
-        goto L_0x002b;
-    L_0x04f8:
-        r12 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
-        r13 = r34;
-        r14 = r36;
-        r15 = r33;
-        r16 = r37;
-        r17 = r32;
-        r12.<init>(r13, r14, r15, r16, r17);
-        r4 = r12;
-        goto L_0x002b;
+        r1 = r48;
+        r2 = r85;
+        r3 = r41;
+        java.lang.System.arraycopy(r13, r0, r1, r2, r3);
+    L_0x04cb:
+        r65 = r88;
+    L_0x04cd:
+        r0 = r65;
+        r1 = r58;
+        if (r0 >= r1) goto L_0x0517;
+    L_0x04d3:
+        r26 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r0 = r0.movieTimescale;
+        r28 = r0;
+        r76 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r24, r26, r28);
+        r8 = r12[r65];
+        r26 = r8 - r44;
+        r28 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r0 = r0.timescale;
+        r30 = r0;
+        r96 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r26, r28, r30);
+        r8 = r76 + r96;
+        r53[r85] = r8;
+        if (r40 == 0) goto L_0x04ff;
+    L_0x04f7:
+        r8 = r52[r85];
+        r0 = r49;
+        if (r8 <= r0) goto L_0x04ff;
+    L_0x04fd:
+        r49 = r87[r65];
+    L_0x04ff:
+        r85 = r85 + 1;
+        r65 = r65 + 1;
+        goto L_0x04cd;
+    L_0x0504:
+        r8 = 0;
+        goto L_0x043a;
+    L_0x0507:
+        r50 = r69;
+        goto L_0x0444;
+    L_0x050b:
+        r52 = r87;
+        goto L_0x044c;
+    L_0x050f:
+        r49 = r66;
+        goto L_0x0450;
+    L_0x0513:
+        r48 = r13;
+        goto L_0x0458;
+    L_0x0517:
+        r24 = r24 + r16;
+        r63 = r63 + 1;
+        goto L_0x0464;
+    L_0x051d:
+        r26 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r0 = r0.timescale;
+        r28 = r0;
+        r32 = org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestamp(r24, r26, r28);
+        r62 = 0;
+        r63 = 0;
+    L_0x052e:
+        r0 = r48;
+        r8 = r0.length;
+        r0 = r63;
+        if (r0 >= r8) goto L_0x0545;
+    L_0x0535:
+        if (r62 != 0) goto L_0x0545;
+    L_0x0537:
+        r8 = r48[r63];
+        r8 = r8 & 1;
+        if (r8 == 0) goto L_0x0543;
+    L_0x053d:
+        r8 = 1;
+    L_0x053e:
+        r62 = r62 | r8;
+        r63 = r63 + 1;
+        goto L_0x052e;
+    L_0x0543:
+        r8 = 0;
+        goto L_0x053e;
+    L_0x0545:
+        if (r62 != 0) goto L_0x0567;
+    L_0x0547:
+        r8 = "AtomParsers";
+        r9 = "Ignoring edit list: Edited sample sequence does not contain a sync sample.";
+        android.util.Log.w(r8, r9);
+        r8 = 1000000; // 0xf4240 float:1.401298E-39 double:4.940656E-318;
+        r0 = r102;
+        r10 = r0.timescale;
+        org.telegram.messenger.exoplayer2.util.Util.scaleLargeTimestampsInPlace(r12, r8, r10);
+        r8 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r9 = r69;
+        r10 = r87;
+        r11 = r66;
+        r8.<init>(r9, r10, r11, r12, r13, r14);
+        goto L_0x0031;
+    L_0x0567:
+        r26 = new org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable;
+        r27 = r50;
+        r28 = r52;
+        r29 = r49;
+        r30 = r53;
+        r31 = r48;
+        r26.<init>(r27, r28, r29, r30, r31, r32);
+        r8 = r26;
+        goto L_0x0031;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.extractor.mp4.AtomParsers.parseStbl(org.telegram.messenger.exoplayer2.extractor.mp4.Track, org.telegram.messenger.exoplayer2.extractor.mp4.Atom$ContainerAtom, org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder):org.telegram.messenger.exoplayer2.extractor.mp4.TrackSampleTable");
     }
@@ -1047,11 +1091,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         if (durationUnknown) {
             tkhd.skipBytes(durationByteCount);
-            duration = C0605C.TIME_UNSET;
+            duration = C0615C.TIME_UNSET;
         } else {
             duration = version == 0 ? tkhd.readUnsignedInt() : tkhd.readUnsignedLongToLong();
             if (duration == 0) {
-                duration = C0605C.TIME_UNSET;
+                duration = C0615C.TIME_UNSET;
             }
         }
         tkhd.skipBytes(16);
@@ -1060,9 +1104,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         tkhd.skipBytes(4);
         int a10 = tkhd.readInt();
         int a11 = tkhd.readInt();
-        if (a00 == 0 && a01 == C0605C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
+        if (a00 == 0 && a01 == C0615C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
             rotationDegrees = 90;
-        } else if (a00 == 0 && a01 == (-65536) && a10 == C0605C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
+        } else if (a00 == 0 && a01 == (-65536) && a10 == C0615C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
             rotationDegrees = 270;
         } else if (a00 == (-65536) && a01 == 0 && a10 == 0 && a11 == (-65536)) {
             rotationDegrees = 180;
@@ -1409,7 +1453,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private static Pair<String, byte[]> parseEsdsFromParent(ParsableByteArray parent, int position) {
-        String mimeType;
         parent.setPosition((position + 8) + 4);
         parent.skipBytes(1);
         parseExpandableClassSize(parent);
@@ -1426,43 +1469,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         parent.skipBytes(1);
         parseExpandableClassSize(parent);
-        switch (parent.readUnsignedByte()) {
-            case 32:
-                mimeType = MimeTypes.VIDEO_MP4V;
-                break;
-            case 33:
-                mimeType = "video/avc";
-                break;
-            case 35:
-                mimeType = MimeTypes.VIDEO_H265;
-                break;
-            case 64:
-            case 102:
-            case 103:
-            case 104:
-                mimeType = MimeTypes.AUDIO_AAC;
-                break;
-            case 96:
-            case 97:
-                mimeType = MimeTypes.VIDEO_MPEG2;
-                break;
-            case 107:
-                return Pair.create(MimeTypes.AUDIO_MPEG, null);
-            case 165:
-                mimeType = MimeTypes.AUDIO_AC3;
-                break;
-            case 166:
-                mimeType = MimeTypes.AUDIO_E_AC3;
-                break;
-            case 169:
-            case 172:
-                return Pair.create(MimeTypes.AUDIO_DTS, null);
-            case 170:
-            case 171:
-                return Pair.create(MimeTypes.AUDIO_DTS_HD, null);
-            default:
-                mimeType = null;
-                break;
+        String mimeType = MimeTypes.getMimeTypeFromMp4ObjectType(parent.readUnsignedByte());
+        if (MimeTypes.AUDIO_MPEG.equals(mimeType) || MimeTypes.AUDIO_DTS.equals(mimeType) || MimeTypes.AUDIO_DTS_HD.equals(mimeType)) {
+            return Pair.create(mimeType, null);
         }
         parent.skipBytes(12);
         parent.skipBytes(1);
@@ -1511,7 +1520,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             childPosition += childAtomSize;
         }
-        if (!C0605C.CENC_TYPE_cenc.equals(schemeType) && !C0605C.CENC_TYPE_cbc1.equals(schemeType) && !C0605C.CENC_TYPE_cens.equals(schemeType) && !C0605C.CENC_TYPE_cbcs.equals(schemeType)) {
+        if (!C0615C.CENC_TYPE_cenc.equals(schemeType) && !C0615C.CENC_TYPE_cbc1.equals(schemeType) && !C0615C.CENC_TYPE_cens.equals(schemeType) && !C0615C.CENC_TYPE_cbcs.equals(schemeType)) {
             return null;
         }
         boolean z2;
@@ -1585,6 +1594,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             size = (size << 7) | (currentByte & 127);
         }
         return size;
+    }
+
+    private static boolean canApplyEditWithGaplessInfo(long[] timestamps, long duration, long editStartTime, long editEndTime) {
+        int lastIndex = timestamps.length - 1;
+        int latestDelayIndex = Util.constrainValue(3, 0, lastIndex);
+        int earliestPaddingIndex = Util.constrainValue(timestamps.length - 3, 0, lastIndex);
+        if (timestamps[0] > editStartTime || editStartTime >= timestamps[latestDelayIndex] || timestamps[earliestPaddingIndex] >= editEndTime || editEndTime > duration) {
+            return false;
+        }
+        return true;
     }
 
     private AtomParsers() {

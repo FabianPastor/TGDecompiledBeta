@@ -17,7 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
@@ -56,8 +56,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$1 */
-    class C17501 extends ActionBarMenuOnItemClick {
-        C17501() {
+    class C18101 extends ActionBarMenuOnItemClick {
+        C18101() {
         }
 
         public void onItemClick(int id) {
@@ -68,8 +68,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$2 */
-    class C17512 extends ActionBarMenuItemSearchListener {
-        C17512() {
+    class C18112 extends ActionBarMenuItemSearchListener {
+        C18112() {
         }
 
         public void onSearchExpand() {
@@ -82,7 +82,7 @@ public class CountrySelectActivity extends BaseFragment {
             CountrySelectActivity.this.searchWas = false;
             CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.listViewAdapter);
             CountrySelectActivity.this.listView.setFastScrollVisible(true);
-            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", C0493R.string.ChooseCountry));
+            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", C0500R.string.ChooseCountry));
         }
 
         public void onTextChanged(EditText editText) {
@@ -101,8 +101,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$3 */
-    class C17523 implements OnItemClickListener {
-        C17523() {
+    class C18123 implements OnItemClickListener {
+        C18123() {
         }
 
         public void onItemClick(View view, int position) {
@@ -128,8 +128,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$4 */
-    class C17534 extends OnScrollListener {
-        C17534() {
+    class C18134 extends OnScrollListener {
+        C18134() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -405,11 +405,11 @@ public class CountrySelectActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0493R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", C0493R.string.ChooseCountry));
-        this.actionBar.setActionBarMenuOnItemClick(new C17501());
-        this.actionBar.createMenu().addItem(0, (int) C0493R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17512()).getSearchField().setHint(LocaleController.getString("Search", C0493R.string.Search));
+        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", C0500R.string.ChooseCountry));
+        this.actionBar.setActionBarMenuOnItemClick(new C18101());
+        this.actionBar.createMenu().addItem(0, (int) C0500R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C18112()).getSearchField().setHint(LocaleController.getString("Search", C0500R.string.Search));
         this.searching = false;
         this.searchWas = false;
         this.listViewAdapter = new CountryAdapter(context);
@@ -419,7 +419,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0493R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setSectionsType(1);
@@ -434,8 +434,8 @@ public class CountrySelectActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C17523());
-        this.listView.setOnScrollListener(new C17534());
+        this.listView.setOnItemClickListener(new C18123());
+        this.listView.setOnScrollListener(new C18134());
         return this.fragmentView;
     }
 

@@ -67,7 +67,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -82,7 +82,6 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraInfo;
 import org.telegram.messenger.camera.CameraSession;
 import org.telegram.messenger.camera.Size;
-import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.video.MP4Builder;
@@ -147,14 +146,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private ImageView switchCameraButton;
     private FloatBuffer textureBuffer;
     private TextureView textureView;
-    private Runnable timerRunnable = new C15021();
+    private Runnable timerRunnable = new C15521();
     private FloatBuffer vertexBuffer;
     private VideoEditedInfo videoEditedInfo;
     private VideoPlayer videoPlayer;
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$1 */
-    class C15021 implements Runnable {
-        C15021() {
+    class C15521 implements Runnable {
+        C15521() {
         }
 
         public void run() {
@@ -166,11 +165,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$2 */
-    class C15042 implements OnTouchListener {
+    class C15542 implements OnTouchListener {
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$2$1 */
-        class C15031 extends AnimatorListenerAdapter {
-            C15031() {
+        class C15531 extends AnimatorListenerAdapter {
+            C15531() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -180,7 +179,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        C15042() {
+        C15542() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -220,7 +219,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     fArr[0] = f;
                     animatorArr[2] = ObjectAnimator.ofFloat(access$800, str, fArr);
                     access$700.playTogether(animatorArr);
-                    InstantCameraView.this.muteAnimation.addListener(new C15031());
+                    InstantCameraView.this.muteAnimation.addListener(new C15531());
                     InstantCameraView.this.muteAnimation.setDuration(180);
                     InstantCameraView.this.muteAnimation.setInterpolator(new DecelerateInterpolator());
                     InstantCameraView.this.muteAnimation.start();
@@ -233,8 +232,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$5 */
-    class C15075 extends ViewOutlineProvider {
-        C15075() {
+    class C15575 extends ViewOutlineProvider {
+        C15575() {
         }
 
         @TargetApi(21)
@@ -244,35 +243,35 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$7 */
-    class C15107 implements OnClickListener {
+    class C15607 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$7$1 */
-        class C15091 extends AnimatorListenerAdapter {
-            C15091() {
+        class C15591 extends AnimatorListenerAdapter {
+            C15591() {
             }
 
             public void onAnimationEnd(Animator animator) {
-                InstantCameraView.this.switchCameraButton.setImageResource(InstantCameraView.this.isFrontface ? C0493R.drawable.camera_revert1 : C0493R.drawable.camera_revert2);
+                InstantCameraView.this.switchCameraButton.setImageResource(InstantCameraView.this.isFrontface ? C0500R.drawable.camera_revert1 : C0500R.drawable.camera_revert2);
                 ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, "scaleX", new float[]{1.0f}).setDuration(100).start();
             }
         }
 
-        C15107() {
+        C15607() {
         }
 
         public void onClick(View v) {
             if (InstantCameraView.this.cameraReady && InstantCameraView.this.cameraSession != null && InstantCameraView.this.cameraSession.isInitied() && InstantCameraView.this.cameraThread != null) {
                 InstantCameraView.this.switchCamera();
                 ObjectAnimator animator = ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
-                animator.addListener(new C15091());
+                animator.addListener(new C15591());
                 animator.start();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$8 */
-    class C15118 implements SurfaceTextureListener {
-        C15118() {
+    class C15618 implements SurfaceTextureListener {
+        C15618() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -306,8 +305,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.Components.InstantCameraView$9 */
-    class C15129 extends AnimatorListenerAdapter {
-        C15129() {
+    class C15629 extends AnimatorListenerAdapter {
+        C15629() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -361,8 +360,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private VideoRecorder videoEncoder;
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$CameraGLThread$1 */
-        class C15131 implements OnFrameAvailableListener {
-            C15131() {
+        class C15631 implements OnFrameAvailableListener {
+            C15631() {
             }
 
             public void onFrameAvailable(SurfaceTexture surfaceTexture) {
@@ -371,8 +370,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$CameraGLThread$2 */
-        class C15142 implements OnFrameAvailableListener {
-            C15142() {
+        class C15642 implements OnFrameAvailableListener {
+            C15642() {
             }
 
             public void onFrameAvailable(SurfaceTexture surfaceTexture) {
@@ -485,7 +484,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             GLES20.glTexParameteri(36197, 10243, 33071);
                             Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
                             this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
-                            this.cameraSurface.setOnFrameAvailableListener(new C15131());
+                            this.cameraSurface.setOnFrameAvailableListener(new C15631());
                             InstantCameraView.this.createCamera(this.cameraSurface);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.m1e("gl initied");
@@ -625,7 +624,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         GLES20.glTexParameteri(36197, 10242, 33071);
                         GLES20.glTexParameteri(36197, 10243, 33071);
                         this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
-                        this.cameraSurface.setOnFrameAvailableListener(new C15142());
+                        this.cameraSurface.setOnFrameAvailableListener(new C15642());
                         InstantCameraView.this.createCamera(this.cameraSurface);
                         return;
                     } else if (BuildVars.LOGS_ENABLED) {
@@ -775,8 +774,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int zeroTimeStamps;
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$VideoRecorder$1 */
-        class C15151 implements Runnable {
-            C15151() {
+        class C15651 implements Runnable {
+            C15651() {
             }
 
             /* JADX WARNING: inconsistent code. */
@@ -846,8 +845,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         /* renamed from: org.telegram.ui.Components.InstantCameraView$VideoRecorder$3 */
-        class C15183 implements Runnable {
-            C15183() {
+        class C15683 implements Runnable {
+            C15683() {
             }
 
             public void run() {
@@ -881,7 +880,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.audioFirst = -1;
             this.lastCameraId = Integer.valueOf(0);
             this.buffers = new ArrayBlockingQueue(10);
-            this.recorderRunnable = new C15151();
+            this.recorderRunnable = new C15651();
         }
 
         public void startRecording(File outputFile, android.opengl.EGLContext sharedContext) {
@@ -1104,7 +1103,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (this.lastTimestamp == -1) {
                 this.lastTimestamp = timestampNanos;
                 if (this.currentTimestamp != 0) {
-                    dt = (System.currentTimeMillis() - this.lastCommitedFrameTime) * C0605C.MICROS_PER_SECOND;
+                    dt = (System.currentTimeMillis() - this.lastCommitedFrameTime) * 1000000;
                     alphaDt = 0;
                 } else {
                     dt = 0;
@@ -1218,8 +1217,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.Components.InstantCameraView$VideoRecorder$2$1 */
-                    class C15161 implements VideoPlayerDelegate {
-                        C15161() {
+                    class C15661 implements VideoPlayerDelegate {
+                        C15661() {
                         }
 
                         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -1273,7 +1272,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, VideoRecorder.this.videoFile.getAbsolutePath(), 0, true), InstantCameraView.this.videoEditedInfo);
                         } else {
                             InstantCameraView.this.videoPlayer = new VideoPlayer();
-                            InstantCameraView.this.videoPlayer.setDelegate(new C15161());
+                            InstantCameraView.this.videoPlayer.setDelegate(new C15661());
                             InstantCameraView.this.videoPlayer.setTextureView(InstantCameraView.this.textureView);
                             InstantCameraView.this.videoPlayer.preparePlayer(Uri.fromFile(VideoRecorder.this.videoFile), "other");
                             InstantCameraView.this.videoPlayer.play();
@@ -1364,7 +1363,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 movie.setRotation(0);
                 movie.setSize(this.videoWidth, this.videoHeight);
                 this.mediaMuxer = new MP4Builder().createMovie(movie, InstantCameraView.this.isSecretChat);
-                AndroidUtilities.runOnUIThread(new C15183());
+                AndroidUtilities.runOnUIThread(new C15683());
                 if (this.eglDisplay != EGL14.EGL_NO_DISPLAY) {
                     throw new RuntimeException("EGL already set up");
                 }
@@ -1612,7 +1611,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.mMVPMatrix = new float[16];
         this.mSTMatrix = new float[16];
         this.moldSTMatrix = new float[16];
-        setOnTouchListener(new C15042());
+        setOnTouchListener(new C15542());
         setWillNotDraw(false);
         setBackgroundColor(-NUM);
         this.baseFragment = parentFragment;
@@ -1640,7 +1639,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     InstantCameraView.this.invalidate();
                 }
             };
-            this.cameraContainer.setOutlineProvider(new C15075());
+            this.cameraContainer.setOutlineProvider(new C15575());
             this.cameraContainer.setClipToOutline(true);
             this.cameraContainer.setWillNotDraw(false);
         } else {
@@ -1676,10 +1675,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.switchCameraButton = new ImageView(context);
         this.switchCameraButton.setScaleType(ScaleType.CENTER);
         addView(this.switchCameraButton, LayoutHelper.createFrame(48, 48.0f, 83, 20.0f, 0.0f, 0.0f, 14.0f));
-        this.switchCameraButton.setOnClickListener(new C15107());
+        this.switchCameraButton.setOnClickListener(new C15607());
         this.muteImageView = new ImageView(context);
         this.muteImageView.setScaleType(ScaleType.CENTER);
-        this.muteImageView.setImageResource(C0493R.drawable.video_mute);
+        this.muteImageView.setImageResource(C0500R.drawable.video_mute);
         this.muteImageView.setAlpha(0.0f);
         addView(this.muteImageView, LayoutHelper.createFrame(48, 48, 17));
         ((LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (AndroidUtilities.roundMessageSize / 2) - AndroidUtilities.dp(24.0f);
@@ -1784,7 +1783,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public void showCamera() {
         if (this.textureView == null) {
-            this.switchCameraButton.setImageResource(C0493R.drawable.camera_revert1);
+            this.switchCameraButton.setImageResource(C0500R.drawable.camera_revert1);
             this.isFrontface = true;
             this.selectedCamera = null;
             this.recordedTime = 0;
@@ -1802,7 +1801,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     FileLog.m0d("show round camera");
                 }
                 this.textureView = new TextureView(getContext());
-                this.textureView.setSurfaceTextureListener(new C15118());
+                this.textureView.setSurfaceTextureListener(new C15618());
                 this.cameraContainer.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
                 setVisibility(0);
                 startAnimation(true);
@@ -1903,7 +1902,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         animatorArr[7] = ObjectAnimator.ofFloat(frameLayout3, str, fArr);
         animatorSet.playTogether(animatorArr);
         if (!open) {
-            this.animatorSet.addListener(new C15129());
+            this.animatorSet.addListener(new C15629());
         }
         this.animatorSet.setDuration(180);
         this.animatorSet.setInterpolator(new DecelerateInterpolator());
@@ -2143,8 +2142,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.InstantCameraView$10$1 */
-            class C14991 implements Runnable {
-                C14991() {
+            class C15491 implements Runnable {
+                C15491() {
                 }
 
                 public void run() {
@@ -2158,8 +2157,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             /* renamed from: org.telegram.ui.Components.InstantCameraView$10$2 */
-            class C15002 implements Runnable {
-                C15002() {
+            class C15502 implements Runnable {
+                C15502() {
                 }
 
                 public void run() {
@@ -2175,7 +2174,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     surfaceTexture.setDefaultBufferSize(InstantCameraView.this.previewSize.getWidth(), InstantCameraView.this.previewSize.getHeight());
                     InstantCameraView.this.cameraSession = new CameraSession(InstantCameraView.this.selectedCamera, InstantCameraView.this.previewSize, InstantCameraView.this.pictureSize, 256);
                     InstantCameraView.this.cameraThread.setCurrentSession(InstantCameraView.this.cameraSession);
-                    CameraController.getInstance().openRound(InstantCameraView.this.cameraSession, surfaceTexture, new C14991(), new C15002());
+                    CameraController.getInstance().openRound(InstantCameraView.this.cameraSession, surfaceTexture, new C15491(), new C15502());
                 }
             }
         });
@@ -2210,8 +2209,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.progressTimer.schedule(new TimerTask() {
 
             /* renamed from: org.telegram.ui.Components.InstantCameraView$11$1 */
-            class C15011 implements Runnable {
-                C15011() {
+            class C15511 implements Runnable {
+                C15511() {
                 }
 
                 public void run() {
@@ -2231,7 +2230,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C15011());
+                AndroidUtilities.runOnUIThread(new C15511());
             }
         }, 0, 17);
     }

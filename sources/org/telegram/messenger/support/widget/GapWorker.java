@@ -13,15 +13,15 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
 final class GapWorker implements Runnable {
     static final ThreadLocal<GapWorker> sGapWorker = new ThreadLocal();
-    static Comparator<Task> sTaskComparator = new C07571();
+    static Comparator<Task> sTaskComparator = new C07911();
     long mFrameIntervalNs;
     long mPostTimeNs;
     ArrayList<RecyclerView> mRecyclerViews = new ArrayList();
     private ArrayList<Task> mTasks = new ArrayList();
 
     /* renamed from: org.telegram.messenger.support.widget.GapWorker$1 */
-    static class C07571 implements Comparator<Task> {
-        C07571() {
+    static class C07911 implements Comparator<Task> {
+        C07911() {
         }
 
         public int compare(Task lhs, Task rhs) {

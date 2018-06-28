@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.upstream.cache;
 import android.net.Uri;
 import java.io.EOFException;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
@@ -55,11 +56,11 @@ public final class CacheUtil {
         }
     }
 
-    public static void cache(DataSpec dataSpec, Cache cache, DataSource upstream, CachingCounters counters) throws IOException, InterruptedException {
-        cache(dataSpec, cache, new CacheDataSource(cache, upstream), new byte[131072], null, 0, counters, false);
+    public static void cache(DataSpec dataSpec, Cache cache, DataSource upstream, CachingCounters counters, AtomicBoolean isCanceled) throws IOException, InterruptedException {
+        cache(dataSpec, cache, new CacheDataSource(cache, upstream), new byte[131072], null, 0, counters, null, false);
     }
 
-    public static void cache(DataSpec dataSpec, Cache cache, CacheDataSource dataSource, byte[] buffer, PriorityTaskManager priorityTaskManager, int priority, CachingCounters counters, boolean enableEOFException) throws IOException, InterruptedException {
+    public static void cache(DataSpec dataSpec, Cache cache, CacheDataSource dataSource, byte[] buffer, PriorityTaskManager priorityTaskManager, int priority, CachingCounters counters, AtomicBoolean isCanceled, boolean enableEOFException) throws IOException, InterruptedException {
         Assertions.checkNotNull(dataSource);
         Assertions.checkNotNull(buffer);
         if (counters != null) {
@@ -71,21 +72,25 @@ public final class CacheUtil {
         long start = dataSpec.absoluteStreamPosition;
         long left = dataSpec.length != -1 ? dataSpec.length : cache.getContentLength(key);
         while (left != 0) {
-            long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
-            if (blockLength <= 0) {
-                blockLength = -blockLength;
-                if (readAndDiscard(dataSpec, start, blockLength, dataSource, buffer, priorityTaskManager, priority, counters) < blockLength) {
-                    if (enableEOFException && left != -1) {
-                        throw new EOFException();
+            if (isCanceled == null || !isCanceled.get()) {
+                long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
+                if (blockLength <= 0) {
+                    blockLength = -blockLength;
+                    if (readAndDiscard(dataSpec, start, blockLength, dataSource, buffer, priorityTaskManager, priority, counters) < blockLength) {
+                        if (enableEOFException && left != -1) {
+                            throw new EOFException();
+                        }
+                        return;
                     }
-                    return;
                 }
+                start += blockLength;
+                if (left == -1) {
+                    blockLength = 0;
+                }
+                left -= blockLength;
+            } else {
+                throw new InterruptedException();
             }
-            start += blockLength;
-            if (left == -1) {
-                blockLength = 0;
-            }
-            left -= blockLength;
         }
     }
 

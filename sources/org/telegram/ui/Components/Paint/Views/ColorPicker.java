@@ -20,7 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
@@ -47,8 +47,8 @@ public class ColorPicker extends FrameLayout {
     private float weight = 0.27f;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$1 */
-    class C15491 implements OnClickListener {
-        C15491() {
+    class C15991 implements OnClickListener {
+        C15991() {
         }
 
         public void onClick(View v) {
@@ -59,8 +59,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$2 */
-    class C15502 implements OnClickListener {
-        C15502() {
+    class C16002 implements OnClickListener {
+        C16002() {
         }
 
         public void onClick(View v) {
@@ -85,20 +85,20 @@ public class ColorPicker extends FrameLayout {
     public ColorPicker(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.shadowDrawable = getResources().getDrawable(C0493R.drawable.knob_shadow);
+        this.shadowDrawable = getResources().getDrawable(C0500R.drawable.knob_shadow);
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Style.STROKE);
         this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.settingsButton = new ImageView(context);
         this.settingsButton.setScaleType(ScaleType.CENTER);
-        this.settingsButton.setImageResource(C0493R.drawable.photo_paint_brush);
+        this.settingsButton.setImageResource(C0500R.drawable.photo_paint_brush);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
-        this.settingsButton.setOnClickListener(new C15491());
+        this.settingsButton.setOnClickListener(new C15991());
         this.undoButton = new ImageView(context);
         this.undoButton.setScaleType(ScaleType.CENTER);
-        this.undoButton.setImageResource(C0493R.drawable.photo_undo);
+        this.undoButton.setImageResource(C0500R.drawable.photo_undo);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
-        this.undoButton.setOnClickListener(new C15502());
+        this.undoButton.setOnClickListener(new C16002());
         this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
         setLocation(this.location);
     }

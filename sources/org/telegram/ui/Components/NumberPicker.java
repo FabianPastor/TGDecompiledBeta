@@ -85,6 +85,18 @@ public class NumberPicker extends LinearLayout {
         String format(int i);
     }
 
+    public interface OnValueChangeListener {
+        void onValueChange(NumberPicker numberPicker, int i, int i2);
+    }
+
+    public interface OnScrollListener {
+        public static final int SCROLL_STATE_FLING = 2;
+        public static final int SCROLL_STATE_IDLE = 0;
+        public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
+
+        void onScrollStateChange(NumberPicker numberPicker, int i);
+    }
+
     class ChangeCurrentByOneFromLongPressCommand implements Runnable {
         private boolean mIncrement;
 
@@ -99,18 +111,6 @@ public class NumberPicker extends LinearLayout {
             NumberPicker.this.changeValueByOne(this.mIncrement);
             NumberPicker.this.postDelayed(this, NumberPicker.this.mLongPressUpdateInterval);
         }
-    }
-
-    public interface OnScrollListener {
-        public static final int SCROLL_STATE_FLING = 2;
-        public static final int SCROLL_STATE_IDLE = 0;
-        public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
-
-        void onScrollStateChange(NumberPicker numberPicker, int i);
-    }
-
-    public interface OnValueChangeListener {
-        void onValueChange(NumberPicker numberPicker, int i, int i2);
     }
 
     class PressedStateHelper implements Runnable {
@@ -359,6 +359,15 @@ public class NumberPicker extends LinearLayout {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    public void finishScroll() {
+        if (!this.mFlingScroller.isFinished() || !this.mAdjustScroller.isFinished()) {
+            this.mFlingScroller.forceFinished(true);
+            this.mAdjustScroller.forceFinished(true);
+            this.mCurrentScrollOffset = this.mInitialScrollOffset;
+            invalidate();
         }
     }
 

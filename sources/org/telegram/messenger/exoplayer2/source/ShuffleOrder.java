@@ -99,6 +99,10 @@ public interface ShuffleOrder {
             return new DefaultShuffleOrder(newShuffled, new Random(this.random.nextLong()));
         }
 
+        public ShuffleOrder cloneAndClear() {
+            return new DefaultShuffleOrder(0, new Random(this.random.nextLong()));
+        }
+
         private static int[] createShuffledList(int length, Random random) {
             int[] shuffled = new int[length];
             for (int i = 0; i < length; i++) {
@@ -146,7 +150,13 @@ public interface ShuffleOrder {
         public ShuffleOrder cloneAndRemove(int removalIndex) {
             return new UnshuffledShuffleOrder(this.length - 1);
         }
+
+        public ShuffleOrder cloneAndClear() {
+            return new UnshuffledShuffleOrder(0);
+        }
     }
+
+    ShuffleOrder cloneAndClear();
 
     ShuffleOrder cloneAndInsert(int i, int i2);
 

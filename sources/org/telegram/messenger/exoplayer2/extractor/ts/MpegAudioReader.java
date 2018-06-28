@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import org.telegram.messenger.exoplayer2.C0605C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
@@ -111,7 +110,7 @@ public final class MpegAudioReader implements ElementaryStreamReader {
             if (MpegAudioHeader.populateHeader(this.headerScratch.readInt(), this.header)) {
                 this.frameSize = this.header.frameSize;
                 if (!this.hasOutputFormat) {
-                    this.frameDurationUs = (C0605C.MICROS_PER_SECOND * ((long) this.header.samplesPerFrame)) / ((long) this.header.sampleRate);
+                    this.frameDurationUs = (1000000 * ((long) this.header.samplesPerFrame)) / ((long) this.header.sampleRate);
                     this.output.format(Format.createAudioSampleFormat(this.formatId, this.header.mimeType, null, -1, 4096, this.header.channels, this.header.sampleRate, null, null, 0, this.language));
                     this.hasOutputFormat = true;
                 }

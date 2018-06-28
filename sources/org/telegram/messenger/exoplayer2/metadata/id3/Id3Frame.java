@@ -10,6 +10,10 @@ public abstract class Id3Frame implements Entry {
         this.id = (String) Assertions.checkNotNull(id);
     }
 
+    public String toString() {
+        return this.id;
+    }
+
     public int describeContents() {
         return 0;
     }

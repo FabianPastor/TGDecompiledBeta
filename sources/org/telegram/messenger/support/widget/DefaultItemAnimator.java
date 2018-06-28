@@ -82,31 +82,29 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
             }
             this.mPendingRemovals.clear();
             if (movesPending) {
-                ArrayList<MoveInfo> moves = new ArrayList();
-                moves.addAll(this.mPendingMoves);
-                this.mMovesList.add(moves);
+                ArrayList<MoveInfo> arrayList = new ArrayList(this.mPendingMoves);
+                this.mMovesList.add(arrayList);
                 this.mPendingMoves.clear();
-                final ArrayList<MoveInfo> arrayList = moves;
+                final ArrayList<MoveInfo> arrayList2 = arrayList;
                 Runnable mover = new Runnable() {
                     public void run() {
-                        Iterator it = arrayList.iterator();
+                        Iterator it = arrayList2.iterator();
                         while (it.hasNext()) {
                             MoveInfo moveInfo = (MoveInfo) it.next();
                             DefaultItemAnimator.this.animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
                         }
-                        arrayList.clear();
-                        DefaultItemAnimator.this.mMovesList.remove(arrayList);
+                        arrayList2.clear();
+                        DefaultItemAnimator.this.mMovesList.remove(arrayList2);
                     }
                 };
                 if (this.delayAnimations && removalsPending) {
-                    ViewCompat.postOnAnimationDelayed(((MoveInfo) moves.get(0)).holder.itemView, mover, getRemoveDuration());
+                    ViewCompat.postOnAnimationDelayed(((MoveInfo) arrayList.get(0)).holder.itemView, mover, getRemoveDuration());
                 } else {
                     mover.run();
                 }
             }
             if (changesPending) {
-                final ArrayList<ChangeInfo> changes = new ArrayList();
-                changes.addAll(this.mPendingChanges);
+                final ArrayList<ChangeInfo> changes = new ArrayList(this.mPendingChanges);
                 this.mChangesList.add(changes);
                 this.mPendingChanges.clear();
                 Runnable changer = new Runnable() {
@@ -119,15 +117,14 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                         DefaultItemAnimator.this.mChangesList.remove(changes);
                     }
                 };
-                if (removalsPending) {
+                if (this.delayAnimations && removalsPending) {
                     ViewCompat.postOnAnimationDelayed(((ChangeInfo) changes.get(0)).oldHolder.itemView, changer, getRemoveDuration());
                 } else {
                     changer.run();
                 }
             }
             if (additionsPending) {
-                final ArrayList<ViewHolder> additions = new ArrayList();
-                additions.addAll(this.mPendingAdditions);
+                final ArrayList<ViewHolder> additions = new ArrayList(this.mPendingAdditions);
                 this.mAdditionsList.add(additions);
                 this.mPendingAdditions.clear();
                 Runnable adder = new Runnable() {

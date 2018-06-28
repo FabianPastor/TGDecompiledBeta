@@ -13,6 +13,7 @@ public class BackDrawable extends Drawable {
     private boolean alwaysClose;
     private boolean animationInProgress;
     private float animationTime = 300.0f;
+    private int arrowRotation;
     private int color = -1;
     private int currentAnimationTime;
     private float currentRotation;
@@ -36,6 +37,11 @@ public class BackDrawable extends Drawable {
 
     public void setRotatedColor(int value) {
         this.rotatedColor = value;
+        invalidateSelf();
+    }
+
+    public void setArrowRotation(int angle) {
+        this.arrowRotation = angle;
         invalidateSelf();
     }
 
@@ -88,6 +94,9 @@ public class BackDrawable extends Drawable {
         this.paint.setColor(Color.rgb(Color.red(this.color) + (this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0), Color.green(this.color) + (this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0), Color.blue(this.color) + (this.rotated ? (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation) : 0)));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
+        if (this.arrowRotation != 0) {
+            canvas.rotate((float) this.arrowRotation);
+        }
         float rotation = this.currentRotation;
         if (this.alwaysClose) {
             canvas.rotate((((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation) + 135.0f);

@@ -38,28 +38,42 @@ public class DefaultRenderersFactory implements RenderersFactory {
     }
 
     public DefaultRenderersFactory(Context context) {
-        this(context, null);
+        this(context, 0);
     }
 
+    @Deprecated
     public DefaultRenderersFactory(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager) {
-        this(context, drmSessionManager, 0);
+        this(context, (DrmSessionManager) drmSessionManager, 0);
     }
 
+    public DefaultRenderersFactory(Context context, int extensionRendererMode) {
+        this(context, null, extensionRendererMode, DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+    }
+
+    @Deprecated
     public DefaultRenderersFactory(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode) {
         this(context, drmSessionManager, extensionRendererMode, DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
     }
 
-    public DefaultRenderersFactory(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
-        this.context = context;
-        this.drmSessionManager = drmSessionManager;
-        this.extensionRendererMode = extensionRendererMode;
-        this.allowedVideoJoiningTimeMs = allowedVideoJoiningTimeMs;
+    public DefaultRenderersFactory(Context context, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
+        this(context, null, extensionRendererMode, allowedVideoJoiningTimeMs);
     }
 
-    public Renderer[] createRenderers(Handler eventHandler, VideoRendererEventListener videoRendererEventListener, AudioRendererEventListener audioRendererEventListener, TextOutput textRendererOutput, MetadataOutput metadataRendererOutput) {
+    @Deprecated
+    public DefaultRenderersFactory(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
+        this.context = context;
+        this.extensionRendererMode = extensionRendererMode;
+        this.allowedVideoJoiningTimeMs = allowedVideoJoiningTimeMs;
+        this.drmSessionManager = drmSessionManager;
+    }
+
+    public Renderer[] createRenderers(Handler eventHandler, VideoRendererEventListener videoRendererEventListener, AudioRendererEventListener audioRendererEventListener, TextOutput textRendererOutput, MetadataOutput metadataRendererOutput, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager) {
+        if (drmSessionManager == null) {
+            drmSessionManager = this.drmSessionManager;
+        }
         ArrayList<Renderer> renderersList = new ArrayList();
-        buildVideoRenderers(this.context, this.drmSessionManager, this.allowedVideoJoiningTimeMs, eventHandler, videoRendererEventListener, this.extensionRendererMode, renderersList);
-        buildAudioRenderers(this.context, this.drmSessionManager, buildAudioProcessors(), eventHandler, audioRendererEventListener, this.extensionRendererMode, renderersList);
+        buildVideoRenderers(this.context, drmSessionManager, this.allowedVideoJoiningTimeMs, eventHandler, videoRendererEventListener, this.extensionRendererMode, renderersList);
+        buildAudioRenderers(this.context, drmSessionManager, buildAudioProcessors(), eventHandler, audioRendererEventListener, this.extensionRendererMode, renderersList);
         buildTextRenderers(this.context, textRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, renderersList);
         buildMetadataRenderers(this.context, metadataRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, renderersList);
         buildMiscellaneousRenderers(this.context, eventHandler, this.extensionRendererMode, renderersList);
@@ -86,14 +100,14 @@ public class DefaultRenderersFactory implements RenderersFactory {
                 } catch (ClassNotFoundException e2) {
                 } catch (Exception e3) {
                     e = e3;
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Error instantiating VP9 extension", e);
                 }
             } catch (ClassNotFoundException e4) {
                 extensionRendererIndex2 = extensionRendererIndex;
             } catch (Exception e5) {
                 e = e5;
                 extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error instantiating VP9 extension", e);
             }
         }
     }
@@ -101,7 +115,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
     protected void buildAudioRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
         Exception e;
         ArrayList<Renderer> arrayList = out;
-        arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, eventHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
+        arrayList.add(new MediaCodecAudioRenderer(context, MediaCodecSelector.DEFAULT, drmSessionManager, false, eventHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
         if (extensionRendererMode != 0) {
             int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
@@ -130,7 +144,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
                         Log.i(TAG, "Loaded FfmpegAudioRenderer.");
                     } catch (Exception e4) {
                         e = e4;
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("Error instantiating FLAC extension", e);
                     }
                     extensionRendererIndex2 = extensionRendererIndex + 1;
                     try {
@@ -140,11 +154,11 @@ public class DefaultRenderersFactory implements RenderersFactory {
                         return;
                     } catch (Exception e6) {
                         e = e6;
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("Error instantiating FFmpeg extension", e);
                     }
                 } catch (Exception e7) {
                     e = e7;
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Error instantiating Opus extension", e);
                 }
             } catch (ClassNotFoundException e8) {
                 extensionRendererIndex2 = extensionRendererIndex;
@@ -159,7 +173,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
             } catch (Exception e9) {
                 e = e9;
                 extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error instantiating Opus extension", e);
             }
             try {
                 extensionRendererIndex2 = extensionRendererIndex + 1;
@@ -175,7 +189,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
             } catch (Exception e11) {
                 e = e11;
                 extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error instantiating FLAC extension", e);
             }
             try {
                 extensionRendererIndex2 = extensionRendererIndex + 1;
@@ -186,7 +200,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
             } catch (Exception e13) {
                 e = e13;
                 extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error instantiating FFmpeg extension", e);
             }
         }
     }

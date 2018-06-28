@@ -6,7 +6,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -41,7 +41,7 @@ public class ShareDialogCell extends FrameLayout {
         this.nameTextView.setLines(2);
         this.nameTextView.setEllipsize(TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0493R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, C0500R.drawable.round_check2);
         this.checkBox.setSize(24);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setVisibility(0);
@@ -59,7 +59,7 @@ public class ShareDialogCell extends FrameLayout {
             User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
             this.avatarDrawable.setInfo(user);
             if (UserObject.isUserSelf(user)) {
-                this.nameTextView.setText(LocaleController.getString("SavedMessages", C0493R.string.SavedMessages));
+                this.nameTextView.setText(LocaleController.getString("SavedMessages", C0500R.string.SavedMessages));
                 this.avatarDrawable.setSavedMessages(1);
             } else {
                 if (name != null) {

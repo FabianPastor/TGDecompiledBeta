@@ -5,13 +5,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View.MeasureSpec;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
+import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
@@ -28,8 +30,8 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     private boolean zoomOnSelect;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerPhotoCell$1 */
-    class C10821 extends AnimatorListenerAdapter {
-        C10821() {
+    class C11211 extends AnimatorListenerAdapter {
+        C11211() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -47,17 +49,17 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkFrame = new FrameLayout(context);
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42, 53));
         this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(C0493R.drawable.phototime);
+        this.videoInfoContainer.setBackgroundResource(C0500R.drawable.phototime);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(C0493R.drawable.ic_video);
+        imageView1.setImageResource(C0500R.drawable.ic_video);
         this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0493R.drawable.checkbig);
+        this.checkBox = new CheckBox(context, C0500R.drawable.checkbig);
         this.checkBox.setSize(zoom ? 30 : 26);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
@@ -94,12 +96,29 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         fArr2[0] = f;
         animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
         animatorSet.playTogether(animatorArr);
-        this.animatorSet.addListener(new C10821());
+        this.animatorSet.addListener(new C11211());
         this.animatorSet.start();
     }
 
     public void setNum(int num) {
         this.checkBox.setNum(num);
+    }
+
+    public void setImage(SearchImage searchImage) {
+        Drawable thumb = getResources().getDrawable(C0500R.drawable.nophotos);
+        if (searchImage.thumbPhotoSize != null) {
+            this.photoImage.setImage(searchImage.thumbPhotoSize.location, null, thumb);
+        } else if (searchImage.photoSize != null) {
+            this.photoImage.setImage(searchImage.photoSize.location, "80_80", thumb);
+        } else if (searchImage.thumbPath != null) {
+            this.photoImage.setImage(searchImage.thumbPath, null, thumb);
+        } else if (searchImage.thumbUrl != null && searchImage.thumbUrl.length() > 0) {
+            this.photoImage.setImage(searchImage.thumbUrl, null, thumb);
+        } else if (searchImage.document == null || searchImage.document.thumb == null) {
+            this.photoImage.setImageDrawable(thumb);
+        } else {
+            this.photoImage.setImage(searchImage.document.thumb.location, null, thumb);
+        }
     }
 
     public void setChecked(int num, final boolean checked, boolean animated) {

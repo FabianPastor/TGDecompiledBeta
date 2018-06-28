@@ -23,7 +23,6 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
-import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 
 public class ImageReceiver implements NotificationCenterDelegate {
@@ -207,17 +206,20 @@ public class ImageReceiver implements NotificationCenterDelegate {
         ImageReceiverDelegate imageReceiverDelegate;
         boolean z;
         boolean z2;
-        if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof TL_webDocument) || (fileLocation instanceof TL_documentEncrypted))) {
+        if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof WebFile) || (fileLocation instanceof TL_documentEncrypted) || (fileLocation instanceof SecureDocument))) {
             if (!((thumbLocation instanceof TL_fileLocation) || (thumbLocation instanceof TL_fileEncryptedLocation))) {
                 thumbLocation = null;
             }
             String key = null;
             if (fileLocation != null) {
-                if (fileLocation instanceof FileLocation) {
+                if (fileLocation instanceof SecureDocument) {
+                    SecureDocument document = (SecureDocument) fileLocation;
+                    key = document.secureFile.dc_id + "_" + document.secureFile.id;
+                } else if (fileLocation instanceof FileLocation) {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
-                } else if (fileLocation instanceof TL_webDocument) {
-                    key = Utilities.MD5(((TL_webDocument) fileLocation).url);
+                } else if (fileLocation instanceof WebFile) {
+                    key = Utilities.MD5(((WebFile) fileLocation).url);
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
@@ -1297,6 +1299,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private void recycleBitmap(String newKey, int type) {
         String key;
         Drawable image;
+        String replacedKey;
         if (type == 2) {
             key = this.crossfadeKey;
             image = this.crossfadeImage;
@@ -1307,6 +1310,13 @@ public class ImageReceiver implements NotificationCenterDelegate {
             key = this.currentKey;
             image = this.currentImage;
         }
+        if (key != null && key.startsWith("-")) {
+            replacedKey = ImageLoader.getInstance().getReplacedKey(key);
+            if (replacedKey != null) {
+                key = replacedKey;
+            }
+        }
+        replacedKey = ImageLoader.getInstance().getReplacedKey(key);
         if (key != null && ((newKey == null || !newKey.equals(key)) && image != null)) {
             if (image instanceof AnimatedFileDrawable) {
                 ((AnimatedFileDrawable) image).recycle();

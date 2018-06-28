@@ -15,6 +15,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFileLocation;
+import org.telegram.tgnet.TLRPC.InputWebFileLocation;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -24,7 +25,6 @@ import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputDocumentFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputEncryptedFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputFileLocation;
-import org.telegram.tgnet.TLRPC.TL_inputWebFileLocation;
 import org.telegram.tgnet.TLRPC.TL_upload_cdnFile;
 import org.telegram.tgnet.TLRPC.TL_upload_cdnFileReuploadNeeded;
 import org.telegram.tgnet.TLRPC.TL_upload_file;
@@ -35,7 +35,6 @@ import org.telegram.tgnet.TLRPC.TL_upload_getFile;
 import org.telegram.tgnet.TLRPC.TL_upload_getWebFile;
 import org.telegram.tgnet.TLRPC.TL_upload_reuploadCdnFile;
 import org.telegram.tgnet.TLRPC.TL_upload_webFile;
-import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.Vector;
 
 public class FileLoadOperation {
@@ -102,11 +101,12 @@ public class FileLoadOperation {
     private int streamStartOffset;
     private File tempPath;
     private int totalBytesCount;
-    private TL_inputWebFileLocation webLocation;
+    private WebFile webFile;
+    private InputWebFileLocation webLocation;
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$4 */
-    class C01794 implements Runnable {
-        C01794() {
+    class C01844 implements Runnable {
+        C01844() {
         }
 
         public void run() {
@@ -115,8 +115,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$6 */
-    class C01816 implements Runnable {
-        C01816() {
+    class C01866 implements Runnable {
+        C01866() {
         }
 
         public void run() {
@@ -125,8 +125,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$7 */
-    class C01827 implements Runnable {
-        C01827() {
+    class C01877 implements Runnable {
+        C01877() {
         }
 
         public void run() {
@@ -143,8 +143,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$8 */
-    class C01838 implements Runnable {
-        C01838() {
+    class C01888 implements Runnable {
+        C01888() {
         }
 
         public void run() {
@@ -224,13 +224,25 @@ public class FileLoadOperation {
         this.ext = extension;
     }
 
-    public FileLoadOperation(TL_webDocument webDocument) {
+    public FileLoadOperation(SecureDocument secureDocument) {
         this.state = 0;
-        this.webLocation = new TL_inputWebFileLocation();
-        this.webLocation.url = webDocument.url;
-        this.webLocation.access_hash = webDocument.access_hash;
+        this.location = new TL_inputDocumentFileLocation();
+        this.location.id = secureDocument.secureFile.id;
+        this.location.access_hash = secureDocument.secureFile.access_hash;
+        this.datacenterId = secureDocument.secureFile.dc_id;
+        this.totalBytesCount = secureDocument.secureFile.size;
+        this.allowDisordererFileSave = true;
+        this.currentType = ConnectionsManager.FileTypeFile;
+        this.ext = ".jpg";
+    }
+
+    public FileLoadOperation(int instance, WebFile webDocument) {
+        this.state = 0;
+        this.currentAccount = instance;
+        this.webFile = webDocument;
+        this.webLocation = webDocument.location;
         this.totalBytesCount = webDocument.size;
-        int i = webDocument.dc_id;
+        int i = MessagesController.getInstance(this.currentAccount).webFileDatacenterId;
         this.datacenterId = i;
         this.initialDatacenterId = i;
         String defaultExt = FileLoader.getExtensionByMime(webDocument.mime_type);
@@ -561,11 +573,15 @@ public class FileLoadOperation {
         return result[0];
     }
 
+    private String getWebFileUrl() {
+        return Utilities.MD5(this.webFile.url) + "." + this.ext;
+    }
+
     public String getFileName() {
         if (this.location != null) {
             return this.location.volume_id + "_" + this.location.local_id + "." + this.ext;
         }
-        return Utilities.MD5(this.webLocation.url) + "." + this.ext;
+        return Utilities.MD5(getWebFileUrl()) + "." + this.ext;
     }
 
     protected void removeStreamListener(final FileStreamLoadOperation operation) {
@@ -586,7 +602,7 @@ public class FileLoadOperation {
 
     public void pause() {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new C01794());
+            Utilities.stageQueue.postRunnable(new C01844());
         }
     }
 
@@ -618,7 +634,7 @@ public class FileLoadOperation {
                 }
             });
         } else if (wasPaused && alreadyStarted) {
-            Utilities.stageQueue.postRunnable(new C01816());
+            Utilities.stageQueue.postRunnable(new C01866());
         }
         if (alreadyStarted) {
             return wasPaused;
@@ -637,7 +653,7 @@ public class FileLoadOperation {
         String fileNameParts = null;
         String fileNameIv = null;
         if (this.webLocation != null) {
-            String md5 = Utilities.MD5(this.webLocation.url);
+            String md5 = Utilities.MD5(getWebFileUrl());
             if (this.encryptFile) {
                 fileNameTemp = md5 + ".temp.enc";
                 fileNameFinal = md5 + "." + this.ext + ".enc";
@@ -828,7 +844,7 @@ public class FileLoadOperation {
                 return false;
             }
             this.started = true;
-            Utilities.stageQueue.postRunnable(new C01827());
+            Utilities.stageQueue.postRunnable(new C01877());
         }
         return true;
     }
@@ -838,7 +854,7 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new C01838());
+        Utilities.stageQueue.postRunnable(new C01888());
     }
 
     private void cleanup() {
@@ -907,7 +923,7 @@ public class FileLoadOperation {
         }
     }
 
-    private void onFinishLoadingFile(final boolean increment) throws Exception {
+    private void onFinishLoadingFile(final boolean increment) {
         if (this.state == 1) {
             this.state = 3;
             cleanup();
@@ -1115,7 +1131,7 @@ public class FileLoadOperation {
                                         if (this.location != null) {
                                             FileLog.m1e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                                         } else if (this.webLocation != null) {
-                                            FileLog.m1e("invalid cdn hash  " + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                                            FileLog.m1e("invalid cdn hash  " + this.webLocation + " id = " + getWebFileUrl());
                                         }
                                     }
                                     onFail(false, 0);
@@ -1207,7 +1223,7 @@ public class FileLoadOperation {
                 if (this.location != null) {
                     FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                 } else if (this.webLocation != null) {
-                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + getWebFileUrl());
                 }
             }
             onFail(false, 0);
@@ -1338,8 +1354,8 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass12 = new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.FileLoadOperation$12$1 */
-                        class C01751 implements RequestDelegate {
-                            C01751() {
+                        class C01801 implements RequestDelegate {
+                            C01801() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -1433,7 +1449,7 @@ public class FileLoadOperation {
                                 TL_upload_reuploadCdnFile req = new TL_upload_reuploadCdnFile();
                                 req.file_token = FileLoadOperation.this.cdnToken;
                                 req.request_token = res2.request_token;
-                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C01751(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
+                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C01801(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
                             }
                         }
                     };

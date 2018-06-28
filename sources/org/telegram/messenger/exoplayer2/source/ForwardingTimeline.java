@@ -31,8 +31,8 @@ public abstract class ForwardingTimeline extends Timeline {
         return this.timeline.getFirstWindowIndex(shuffleModeEnabled);
     }
 
-    public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-        return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
+    public Window getWindow(int windowIndex, Window window, boolean setTag, long defaultPositionProjectionUs) {
+        return this.timeline.getWindow(windowIndex, window, setTag, defaultPositionProjectionUs);
     }
 
     public int getPeriodCount() {

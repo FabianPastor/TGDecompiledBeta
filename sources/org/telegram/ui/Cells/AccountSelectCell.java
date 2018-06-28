@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0493R;
+import org.telegram.messenger.C0500R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
@@ -44,7 +44,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setEllipsize(TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 61.0f, 0.0f, 56.0f, 0.0f));
         this.checkImageView = new ImageView(context);
-        this.checkImageView.setImageResource(C0493R.drawable.account_check);
+        this.checkImageView.setImageResource(C0500R.drawable.account_check);
         this.checkImageView.setScaleType(ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), Mode.MULTIPLY));
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));
@@ -59,7 +59,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
     }
 
-    public void setAccount(int account) {
+    public void setAccount(int account, boolean check) {
         TLObject avatar;
         this.accountNumber = account;
         User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
@@ -72,7 +72,9 @@ public class AccountSelectCell extends FrameLayout {
         }
         this.imageView.getImageReceiver().setCurrentAccount(account);
         this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
-        this.checkImageView.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
+        ImageView imageView = this.checkImageView;
+        int i = (check && account == UserConfig.selectedAccount) ? 0 : 4;
+        imageView.setVisibility(i);
     }
 
     public int getAccountNumber() {

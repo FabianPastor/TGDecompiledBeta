@@ -1,7 +1,5 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import org.telegram.messenger.exoplayer2.C0605C;
-
 public final class FlacStreamInfo {
     public final int bitsPerSample;
     public final int channels;
@@ -45,6 +43,18 @@ public final class FlacStreamInfo {
     }
 
     public long durationUs() {
-        return (this.totalSamples * C0605C.MICROS_PER_SECOND) / ((long) this.sampleRate);
+        return (this.totalSamples * 1000000) / ((long) this.sampleRate);
+    }
+
+    public long getSampleIndex(long timeUs) {
+        return Util.constrainValue((((long) this.sampleRate) * timeUs) / 1000000, 0, this.totalSamples - 1);
+    }
+
+    public long getApproxBytesPerFrame() {
+        if (this.maxFrameSize > 0) {
+            return ((((long) this.maxFrameSize) + ((long) this.minFrameSize)) / 2) + 1;
+        }
+        long blockSize = (this.minBlockSize != this.maxBlockSize || this.minBlockSize <= 0) ? 4096 : (long) this.minBlockSize;
+        return (((((long) this.channels) * blockSize) * ((long) this.bitsPerSample)) / 8) + 64;
     }
 }

@@ -12,9 +12,9 @@ public class CropState {
     private float[] values = new float[9];
     private float width;
     /* renamed from: x */
-    private float f41x = 0.0f;
+    private float f45x = 0.0f;
     /* renamed from: y */
-    private float f42y = 0.0f;
+    private float f46y = 0.0f;
 
     public CropState(Bitmap bitmap) {
         this.width = (float) bitmap.getWidth();
@@ -34,8 +34,8 @@ public class CropState {
     }
 
     public void translate(float x, float y) {
-        this.f41x += x;
-        this.f42y += y;
+        this.f45x += x;
+        this.f46y += y;
         this.matrix.postTranslate(x, y);
     }
 
@@ -73,8 +73,8 @@ public class CropState {
 
     public void reset(CropAreaView areaView) {
         this.matrix.reset();
-        this.f41x = 0.0f;
-        this.f42y = 0.0f;
+        this.f45x = 0.0f;
+        this.f46y = 0.0f;
         this.rotation = 0.0f;
         this.minimumScale = areaView.getCropWidth() / this.width;
         this.scale = this.minimumScale;
