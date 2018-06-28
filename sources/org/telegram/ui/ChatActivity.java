@@ -204,6 +204,7 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
 import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -11831,6 +11832,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                             } else if (entity instanceof TL_messageEntityItalic) {
                                 stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                            } else if (entity instanceof TL_messageEntityTextUrl) {
+                                stringBuilder.setSpan(new URLSpanReplacement(entity.url), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                             }
                         }
                         message = stringBuilder;

@@ -817,6 +817,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 this.visible = true;
                 setVisibility(0);
+                if (this.playbackSpeedButton != null) {
+                    this.playbackSpeedButton.setAlpha(0.0f);
+                    this.playbackSpeedButton.setEnabled(false);
+                }
             }
         } else if (this.visible) {
             this.visible = false;

@@ -482,8 +482,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     high_id = (int) (dialog_id >> 32);
                     int message_id = cell.getMessageId();
                     if (lower_part == 0) {
-                        args.putInt("enc_id", high_id);
-                    } else if (high_id == 1) {
+                        return false;
+                    }
+                    if (high_id == 1) {
                         args.putInt("chat_id", lower_part);
                     } else if (lower_part > 0) {
                         args.putInt("user_id", lower_part);
