@@ -1848,7 +1848,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         } else if (id == NotificationCenter.encryptedChatUpdated) {
             updateVisibleRows(0);
         } else if (id == NotificationCenter.contactsDidLoaded) {
-            if (this.dialogsType != 0) {
+            if (this.dialogsType != 0 || !MessagesController.getInstance(this.currentAccount).dialogs.isEmpty()) {
                 updateVisibleRows(0);
             } else if (this.dialogsAdapter != null) {
                 this.dialogsAdapter.notifyDataSetChanged();

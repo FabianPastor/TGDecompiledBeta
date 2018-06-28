@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -121,8 +122,14 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
             }
             if (object != null) {
                 Contact contact;
+                String name;
                 if (object instanceof Contact) {
                     contact = object;
+                    if (contact.user != null) {
+                        name = ContactsController.formatName(contact.user.first_name, contact.user.last_name);
+                    } else {
+                        name = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
                 } else {
                     User user = (User) object;
                     contact = new Contact();
@@ -130,8 +137,9 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                     contact.last_name = user.last_name;
                     contact.phones.add(user.phone);
                     contact.user = user;
+                    name = ContactsController.formatName(contact.first_name, contact.last_name);
                 }
-                PhonebookShareActivity activity = new PhonebookShareActivity(contact, null, null, null);
+                PhonebookShareActivity activity = new PhonebookShareActivity(contact, null, null, name);
                 activity.setDelegate(new C23981());
                 PhonebookSelectActivity.this.presentFragment(activity);
             }

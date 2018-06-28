@@ -350,7 +350,10 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     public static void updateWatchConnectionState() {
-        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C19679());
+        try {
+            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C19679());
+        } catch (Throwable th) {
+        }
     }
 
     public static boolean isWatchConnected() {

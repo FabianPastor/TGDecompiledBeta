@@ -2882,7 +2882,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.messageEditText.postDelayed(new Runnable() {
                         public void run() {
                             boolean allowFocus;
-                            if (AndroidUtilities.isTablet()) {
+                            if (!AndroidUtilities.isTablet()) {
+                                allowFocus = true;
+                            } else if (ChatActivityEnterView.this.parentActivity instanceof LaunchActivity) {
                                 LaunchActivity launchActivity = (LaunchActivity) ChatActivityEnterView.this.parentActivity;
                                 if (launchActivity != null) {
                                     View layout = launchActivity.getLayersActionBarLayout();
