@@ -634,8 +634,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (which == 6) {
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                 } else if (which == 7) {
-                    SharedConfig.toggleInitCamera();
-                } else if (which == 8) {
                     SharedConfig.toggleRoundCamera16to9();
                 }
             }
@@ -650,17 +648,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             this.pressCount++;
             if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
+                String string;
                 Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                CharSequence[] items = new CharSequence[8];
+                CharSequence[] items = new CharSequence[7];
                 items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
                 items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                 items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                 items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
                 items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
-                items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                if (SharedConfig.inappCamera) {
+                    string = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
+                } else {
+                    string = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                }
+                items[5] = string;
                 items[6] = LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache);
-                items[7] = SharedConfig.initCamera ? "Disable Camera Init in Chat" : "Enable Camera Init in Chat";
                 builder.setItems(items, new C18351());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 SettingsActivity.this.showDialog(builder.create());

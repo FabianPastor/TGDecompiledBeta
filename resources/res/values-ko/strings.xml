@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">프록시 연결</string>
     <string name="ConnectingToProxy">프록시에 연결 중</string>
     <string name="ConnectingToProxyEnable">활성화</string>
+    <string name="ContactBirthday">Birthday</string>
     <string name="ContactJob">Job</string>
     <string name="ContactJobTitle">Title</string>
     <string name="ContactJoined">친구의 텔레그램 가입</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">Tap to edit media</string>
     <string name="EditName">이름 수정</string>
     <string name="EditedMessage">수정됨</string>
+    <string name="EmailCopied">Email copied to clipboard</string>
     <string name="EmailPasswordConfirmText">2단계 인증 설정을 완료하시려면 아래의 절차대로 진행해주세요:\n\n1.이메일 확인(스팸 폴더 확인)\n%1$s\n\n2.인증 링크 클릭</string>
     <string name="Emoji">이모지</string>
     <string name="EmojiBigSize">큰 이모지 하나 그리기</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d분</string>
     <string name="Minutes_zero">%1$d분</string>
     <string name="MobileUsage">모바일 데이터 사용량</string>
+    <string name="Mono">Mono</string>
     <string name="Months_few">%1$d개월</string>
     <string name="Months_many">%1$d개월</string>
     <string name="Months_one">%1$d개월</string>
@@ -1436,6 +1439,7 @@
     <string name="PermissionOpenSettings">설정</string>
     <string name="PermissionStorage">사진, 동영상, 음악과 그 밖의 미디어를 보내고 저장하려면 텔레그램에게 저장소 접근 권한을 부여하셔야 합니다.</string>
     <string name="Phone">전화번호</string>
+    <string name="PhoneCopied">Phone copied to clipboard</string>
     <string name="PhoneHome">집</string>
     <string name="PhoneMain">주</string>
     <string name="PhoneMobile">휴대전화</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">비밀번호를 입력해주세요</string>
     <string name="PleaseEnterFirstPassword">비밀번호 입력</string>
     <string name="PleaseEnterPassword">새로운 비밀번호 입력</string>
+    <string name="PleaseLoginPassport">Please log in to your Telegram account to use Telegram Passport.</string>
     <string name="PleaseReEnterPassword">비밀번호 재입력</string>
     <string name="PleaseStreamDownload">동영상을 완전히 다운로드할 때까지 기다려 주세요.</string>
     <string name="Points_few">%1$d</string>

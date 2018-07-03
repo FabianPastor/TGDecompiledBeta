@@ -573,15 +573,11 @@ public class FileLoadOperation {
         return result[0];
     }
 
-    private String getWebFileUrl() {
-        return Utilities.MD5(this.webFile.url) + "." + this.ext;
-    }
-
     public String getFileName() {
         if (this.location != null) {
             return this.location.volume_id + "_" + this.location.local_id + "." + this.ext;
         }
-        return Utilities.MD5(getWebFileUrl()) + "." + this.ext;
+        return Utilities.MD5(this.webFile.url) + "." + this.ext;
     }
 
     protected void removeStreamListener(final FileStreamLoadOperation operation) {
@@ -653,7 +649,7 @@ public class FileLoadOperation {
         String fileNameParts = null;
         String fileNameIv = null;
         if (this.webLocation != null) {
-            String md5 = Utilities.MD5(getWebFileUrl());
+            String md5 = Utilities.MD5(this.webFile.url);
             if (this.encryptFile) {
                 fileNameTemp = md5 + ".temp.enc";
                 fileNameFinal = md5 + "." + this.ext + ".enc";
@@ -1131,7 +1127,7 @@ public class FileLoadOperation {
                                         if (this.location != null) {
                                             FileLog.m1e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                                         } else if (this.webLocation != null) {
-                                            FileLog.m1e("invalid cdn hash  " + this.webLocation + " id = " + getWebFileUrl());
+                                            FileLog.m1e("invalid cdn hash  " + this.webLocation + " id = " + getFileName());
                                         }
                                     }
                                     onFail(false, 0);
@@ -1223,7 +1219,7 @@ public class FileLoadOperation {
                 if (this.location != null) {
                     FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                 } else if (this.webLocation != null) {
-                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + getWebFileUrl());
+                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + getFileName());
                 }
             }
             onFail(false, 0);

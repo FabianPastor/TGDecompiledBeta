@@ -7881,7 +7881,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private void setIndexToImage(org.telegram.messenger.ImageReceiver r40, int r41) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r17_0 android.graphics.drawable.Drawable) in PHI: PHI: (r17_1 android.graphics.drawable.Drawable) = (r17_0 android.graphics.drawable.Drawable), (r17_2 android.graphics.drawable.Drawable) binds: {(r17_0 android.graphics.drawable.Drawable)=B:96:0x02d6, (r17_2 android.graphics.drawable.Drawable)=B:98:0x030a}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r17_0 android.graphics.drawable.Drawable) in PHI: PHI: (r17_1 android.graphics.drawable.Drawable) = (r17_0 android.graphics.drawable.Drawable), (r17_2 android.graphics.drawable.Drawable) binds: {(r17_0 android.graphics.drawable.Drawable)=B:96:0x02cd, (r17_2 android.graphics.drawable.Drawable)=B:98:0x0301}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -7981,18 +7981,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r39;
         r3 = r0.imagesArrLocals;
         r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x037d;
+        if (r3 != 0) goto L_0x0374;
     L_0x0093:
         r3 = 0;
         r0 = r40;
         r0.setParentMessageObject(r3);
-        if (r41 < 0) goto L_0x0373;
+        if (r41 < 0) goto L_0x036a;
     L_0x009b:
         r0 = r39;
         r3 = r0.imagesArrLocals;
         r3 = r3.size();
         r0 = r41;
-        if (r0 >= r3) goto L_0x0373;
+        if (r0 >= r3) goto L_0x036a;
     L_0x00a7:
         r0 = r39;
         r3 = r0.imagesArrLocals;
@@ -8027,9 +8027,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r41;
         r35 = r3.getThumbForPhoto(r5, r7, r0);
     L_0x00e0:
-        r18 = 0;
-        r4 = 0;
         r6 = 0;
+        r4 = 0;
+        r18 = 0;
         r14 = 0;
         r10 = 0;
         r16 = 0;
@@ -8037,7 +8037,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r12 = 0;
         r0 = r33;
         r3 = r0 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r3 == 0) goto L_0x01a6;
+        if (r3 == 0) goto L_0x01a0;
     L_0x00f1:
         r34 = r33;
         r34 = (org.telegram.messenger.MediaController.PhotoEntry) r34;
@@ -8046,16 +8046,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r31 = r0;
         r0 = r34;
         r3 = r0.isVideo;
-        if (r3 != 0) goto L_0x0171;
+        if (r3 != 0) goto L_0x016d;
     L_0x0101:
         r0 = r34;
         r3 = r0.imagePath;
-        if (r3 == 0) goto L_0x0160;
+        if (r3 == 0) goto L_0x015e;
     L_0x0107:
         r0 = r34;
-        r0 = r0.imagePath;
-        r18 = r0;
-    L_0x010d:
+        r6 = r0.imagePath;
+    L_0x010b:
         r3 = java.util.Locale.US;
         r5 = "%d_%d";
         r7 = 2;
@@ -8067,23 +8066,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r9 = java.lang.Integer.valueOf(r36);
         r7[r8] = r9;
         r16 = java.lang.String.format(r3, r5, r7);
+    L_0x0125:
+        if (r4 == 0) goto L_0x02c8;
     L_0x0127:
-        if (r4 == 0) goto L_0x02d1;
-    L_0x0129:
         r5 = 0;
         r6 = "d";
-        if (r35 == 0) goto L_0x02cb;
-    L_0x012f:
+        if (r35 == 0) goto L_0x02c2;
+    L_0x012d:
         r7 = new android.graphics.drawable.BitmapDrawable;
         r0 = r35;
         r3 = r0.bitmap;
         r7.<init>(r3);
+    L_0x0136:
+        if (r35 != 0) goto L_0x02c5;
     L_0x0138:
-        if (r35 != 0) goto L_0x02ce;
-    L_0x013a:
         r3 = r4.thumb;
         r8 = r3.location;
-    L_0x013e:
+    L_0x013c:
         r3 = java.util.Locale.US;
         r9 = "%d_%d";
         r11 = 2;
@@ -8099,26 +8098,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = r40;
         r3.setImage(r4, r5, r6, r7, r8, r9, r10, r11, r12);
         goto L_0x0086;
-    L_0x0160:
+    L_0x015e:
         r0 = r34;
         r3 = r0.orientation;
         r5 = 0;
         r0 = r40;
         r0.setOrientation(r3, r5);
         r0 = r34;
-        r0 = r0.path;
-        r18 = r0;
-        goto L_0x010d;
-    L_0x0171:
+        r6 = r0.path;
+        goto L_0x010b;
+    L_0x016d:
         r0 = r34;
         r3 = r0.thumbPath;
-        if (r3 == 0) goto L_0x017e;
-    L_0x0177:
+        if (r3 == 0) goto L_0x0178;
+    L_0x0173:
         r0 = r34;
-        r0 = r0.thumbPath;
-        r18 = r0;
-        goto L_0x0127;
-    L_0x017e:
+        r6 = r0.thumbPath;
+        goto L_0x0125;
+    L_0x0178:
         r3 = new java.lang.StringBuilder;
         r3.<init>();
         r5 = "vthumb://";
@@ -8131,68 +8128,69 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r34;
         r5 = r0.path;
         r3 = r3.append(r5);
-        r18 = r3.toString();
-        goto L_0x0127;
-    L_0x01a6:
+        r6 = r3.toString();
+        goto L_0x0125;
+    L_0x01a0:
         r0 = r33;
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
-        if (r3 == 0) goto L_0x0280;
-    L_0x01ac:
+        if (r3 == 0) goto L_0x027b;
+    L_0x01a6:
+        r12 = 1;
         r29 = r33;
         r29 = (org.telegram.tgnet.TLRPC.BotInlineResult) r29;
         r0 = r29;
         r3 = r0.type;
         r5 = "video";
         r3 = r3.equals(r5);
-        if (r3 != 0) goto L_0x01c7;
-    L_0x01bd:
+        if (r3 != 0) goto L_0x01c2;
+    L_0x01b8:
         r0 = r29;
         r3 = r0.document;
         r3 = org.telegram.messenger.MessageObject.isVideoDocument(r3);
-        if (r3 == 0) goto L_0x01e9;
-    L_0x01c7:
+        if (r3 == 0) goto L_0x01e4;
+    L_0x01c2:
         r0 = r29;
         r3 = r0.document;
-        if (r3 == 0) goto L_0x01d7;
-    L_0x01cd:
+        if (r3 == 0) goto L_0x01d2;
+    L_0x01c8:
         r0 = r29;
         r3 = r0.document;
         r3 = r3.thumb;
         r14 = r3.location;
-        goto L_0x0127;
-    L_0x01d7:
+        goto L_0x0125;
+    L_0x01d2:
         r0 = r29;
         r3 = r0.thumb;
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r3 == 0) goto L_0x0127;
-    L_0x01df:
+        if (r3 == 0) goto L_0x0125;
+    L_0x01da:
         r0 = r29;
         r3 = r0.thumb;
-        r6 = org.telegram.messenger.WebFile.createWithWebDocument(r3);
-        goto L_0x0127;
-    L_0x01e9:
+        r18 = org.telegram.messenger.WebFile.createWithWebDocument(r3);
+        goto L_0x0125;
+    L_0x01e4:
         r0 = r29;
         r3 = r0.type;
         r5 = "gif";
         r3 = r3.equals(r5);
-        if (r3 == 0) goto L_0x020b;
-    L_0x01f6:
+        if (r3 == 0) goto L_0x0206;
+    L_0x01f1:
         r0 = r29;
         r3 = r0.document;
-        if (r3 == 0) goto L_0x020b;
-    L_0x01fc:
+        if (r3 == 0) goto L_0x0206;
+    L_0x01f7:
         r0 = r29;
         r4 = r0.document;
         r0 = r29;
         r3 = r0.document;
         r10 = r3.size;
         r16 = "d";
-        goto L_0x0127;
-    L_0x020b:
+        goto L_0x0125;
+    L_0x0206:
         r0 = r29;
         r3 = r0.photo;
-        if (r3 == 0) goto L_0x0243;
-    L_0x0211:
+        if (r3 == 0) goto L_0x023e;
+    L_0x020c:
         r0 = r29;
         r3 = r0.photo;
         r3 = r3.sizes;
@@ -8213,26 +8211,26 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r9 = java.lang.Integer.valueOf(r36);
         r7[r8] = r9;
         r16 = java.lang.String.format(r3, r5, r7);
-        goto L_0x0127;
-    L_0x0243:
+        goto L_0x0125;
+    L_0x023e:
         r0 = r29;
         r3 = r0.content;
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r3 == 0) goto L_0x0127;
-    L_0x024b:
+        if (r3 == 0) goto L_0x0125;
+    L_0x0246:
         r0 = r29;
         r3 = r0.type;
         r5 = "gif";
         r3 = r3.equals(r5);
-        if (r3 == 0) goto L_0x0265;
-    L_0x0258:
+        if (r3 == 0) goto L_0x0260;
+    L_0x0253:
         r16 = "d";
-    L_0x025b:
+    L_0x0256:
         r0 = r29;
         r3 = r0.content;
-        r6 = org.telegram.messenger.WebFile.createWithWebDocument(r3);
-        goto L_0x0127;
-    L_0x0265:
+        r18 = org.telegram.messenger.WebFile.createWithWebDocument(r3);
+        goto L_0x0125;
+    L_0x0260:
         r3 = java.util.Locale.US;
         r5 = "%d_%d";
         r7 = 2;
@@ -8244,73 +8242,71 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r9 = java.lang.Integer.valueOf(r36);
         r7[r8] = r9;
         r16 = java.lang.String.format(r3, r5, r7);
-        goto L_0x025b;
-    L_0x0280:
+        goto L_0x0256;
+    L_0x027b:
         r0 = r33;
         r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0127;
-    L_0x0286:
+        if (r3 == 0) goto L_0x0125;
+    L_0x0281:
         r12 = 1;
         r34 = r33;
         r34 = (org.telegram.messenger.MediaController.SearchImage) r34;
         r0 = r34;
         r3 = r0.photoSize;
-        if (r3 == 0) goto L_0x02a2;
-    L_0x0291:
+        if (r3 == 0) goto L_0x029d;
+    L_0x028c:
         r0 = r34;
         r3 = r0.photoSize;
         r14 = r3.location;
         r0 = r34;
         r3 = r0.photoSize;
         r10 = r3.size;
-    L_0x029d:
+    L_0x0298:
         r16 = "d";
-        goto L_0x0127;
-    L_0x02a2:
+        goto L_0x0125;
+    L_0x029d:
         r0 = r34;
         r3 = r0.imagePath;
-        if (r3 == 0) goto L_0x02af;
+        if (r3 == 0) goto L_0x02a8;
+    L_0x02a3:
+        r0 = r34;
+        r6 = r0.imagePath;
+        goto L_0x0298;
     L_0x02a8:
         r0 = r34;
-        r0 = r0.imagePath;
-        r18 = r0;
-        goto L_0x029d;
-    L_0x02af:
-        r0 = r34;
         r3 = r0.document;
-        if (r3 == 0) goto L_0x02c0;
-    L_0x02b5:
+        if (r3 == 0) goto L_0x02b9;
+    L_0x02ae:
         r0 = r34;
         r4 = r0.document;
         r0 = r34;
         r3 = r0.document;
         r10 = r3.size;
-        goto L_0x029d;
-    L_0x02c0:
+        goto L_0x0298;
+    L_0x02b9:
         r0 = r34;
-        r0 = r0.imageUrl;
-        r18 = r0;
+        r6 = r0.imageUrl;
         r0 = r34;
         r10 = r0.size;
-        goto L_0x029d;
-    L_0x02cb:
+        goto L_0x0298;
+    L_0x02c2:
         r7 = 0;
-        goto L_0x0138;
-    L_0x02ce:
+        goto L_0x0136;
+    L_0x02c5:
         r8 = 0;
-        goto L_0x013e;
-    L_0x02d1:
-        if (r14 == 0) goto L_0x030d;
-    L_0x02d3:
+        goto L_0x013c;
+    L_0x02c8:
+        if (r14 == 0) goto L_0x0304;
+    L_0x02ca:
         r15 = 0;
-        if (r35 == 0) goto L_0x030a;
-    L_0x02d6:
+        if (r35 == 0) goto L_0x0301;
+    L_0x02cd:
         r17 = new android.graphics.drawable.BitmapDrawable;
         r0 = r35;
         r3 = r0.bitmap;
         r0 = r17;
         r0.<init>(r3);
-    L_0x02e1:
+    L_0x02d8:
         r18 = 0;
         r3 = java.util.Locale.US;
         r5 = "%d_%d";
@@ -8329,78 +8325,78 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r22 = r12;
         r13.setImage(r14, r15, r16, r17, r18, r19, r20, r21, r22);
         goto L_0x0086;
-    L_0x030a:
+    L_0x0301:
         r17 = 0;
-        goto L_0x02e1;
-    L_0x030d:
-        if (r6 == 0) goto L_0x033e;
-    L_0x030f:
-        if (r35 == 0) goto L_0x0324;
-    L_0x0311:
-        r8 = new android.graphics.drawable.BitmapDrawable;
-        r0 = r35;
-        r3 = r0.bitmap;
-        r8.<init>(r3);
-    L_0x031a:
-        r9 = 0;
-        r5 = r40;
-        r7 = r16;
-        r5.setImage(r6, r7, r8, r9, r10);
-        goto L_0x0086;
-    L_0x0324:
-        if (r31 == 0) goto L_0x033c;
-    L_0x0326:
-        r0 = r39;
-        r3 = r0.parentActivity;
-        if (r3 == 0) goto L_0x033c;
-    L_0x032c:
-        r0 = r39;
-        r3 = r0.parentActivity;
-        r3 = r3.getResources();
-        r5 = NUM; // 0x7f07016c float:1.7945316E38 double:1.052935683E-314;
-        r8 = r3.getDrawable(r5);
-        goto L_0x031a;
-    L_0x033c:
-        r8 = 0;
-        goto L_0x031a;
-    L_0x033e:
-        if (r35 == 0) goto L_0x0358;
-    L_0x0340:
+        goto L_0x02d8;
+    L_0x0304:
+        if (r18 == 0) goto L_0x033b;
+    L_0x0306:
+        if (r35 == 0) goto L_0x0320;
+    L_0x0308:
         r20 = new android.graphics.drawable.BitmapDrawable;
         r0 = r35;
         r3 = r0.bitmap;
         r0 = r20;
         r0.<init>(r3);
-    L_0x034b:
+    L_0x0313:
         r21 = 0;
         r17 = r40;
         r19 = r16;
-        r22 = r10;
+        r22 = r12;
         r17.setImage(r18, r19, r20, r21, r22);
         goto L_0x0086;
-    L_0x0358:
-        if (r31 == 0) goto L_0x0370;
-    L_0x035a:
+    L_0x0320:
+        if (r31 == 0) goto L_0x0338;
+    L_0x0322:
         r0 = r39;
         r3 = r0.parentActivity;
-        if (r3 == 0) goto L_0x0370;
-    L_0x0360:
+        if (r3 == 0) goto L_0x0338;
+    L_0x0328:
         r0 = r39;
         r3 = r0.parentActivity;
         r3 = r3.getResources();
         r5 = NUM; // 0x7f07016c float:1.7945316E38 double:1.052935683E-314;
         r20 = r3.getDrawable(r5);
-        goto L_0x034b;
-    L_0x0370:
+        goto L_0x0313;
+    L_0x0338:
         r20 = 0;
-        goto L_0x034b;
-    L_0x0373:
+        goto L_0x0313;
+    L_0x033b:
+        if (r35 == 0) goto L_0x0350;
+    L_0x033d:
+        r8 = new android.graphics.drawable.BitmapDrawable;
+        r0 = r35;
+        r3 = r0.bitmap;
+        r8.<init>(r3);
+    L_0x0346:
+        r9 = 0;
+        r5 = r40;
+        r7 = r16;
+        r5.setImage(r6, r7, r8, r9, r10);
+        goto L_0x0086;
+    L_0x0350:
+        if (r31 == 0) goto L_0x0368;
+    L_0x0352:
+        r0 = r39;
+        r3 = r0.parentActivity;
+        if (r3 == 0) goto L_0x0368;
+    L_0x0358:
+        r0 = r39;
+        r3 = r0.parentActivity;
+        r3 = r3.getResources();
+        r5 = NUM; // 0x7f07016c float:1.7945316E38 double:1.052935683E-314;
+        r8 = r3.getDrawable(r5);
+        goto L_0x0346;
+    L_0x0368:
+        r8 = 0;
+        goto L_0x0346;
+    L_0x036a:
         r3 = 0;
         r3 = (android.graphics.Bitmap) r3;
         r0 = r40;
         r0.setImageBitmap(r3);
         goto L_0x0086;
-    L_0x037d:
+    L_0x0374:
         r3 = 1;
         r0 = new int[r3];
         r36 = r0;
@@ -8408,60 +8404,60 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r1 = r41;
         r2 = r36;
         r20 = r0.getFileLocation(r1, r2);
-        if (r20 == 0) goto L_0x04e1;
-    L_0x038e:
+        if (r20 == 0) goto L_0x04d8;
+    L_0x0385:
         r32 = 0;
         r0 = r39;
         r3 = r0.imagesArr;
         r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x03a6;
-    L_0x039a:
+        if (r3 != 0) goto L_0x039d;
+    L_0x0391:
         r0 = r39;
         r3 = r0.imagesArr;
         r0 = r41;
         r32 = r3.get(r0);
         r32 = (org.telegram.messenger.MessageObject) r32;
-    L_0x03a6:
+    L_0x039d:
         r0 = r40;
         r1 = r32;
         r0.setParentMessageObject(r1);
-        if (r32 == 0) goto L_0x03b5;
-    L_0x03af:
+        if (r32 == 0) goto L_0x03ac;
+    L_0x03a6:
         r3 = 1;
         r0 = r40;
         r0.setShouldGenerateQualityThumb(r3);
-    L_0x03b5:
-        if (r32 == 0) goto L_0x0435;
-    L_0x03b7:
+    L_0x03ac:
+        if (r32 == 0) goto L_0x042c;
+    L_0x03ae:
         r3 = r32.isVideo();
-        if (r3 == 0) goto L_0x0435;
-    L_0x03bd:
+        if (r3 == 0) goto L_0x042c;
+    L_0x03b4:
         r3 = 1;
         r0 = r40;
         r0.setNeedsQualityThumb(r3);
         r0 = r32;
         r3 = r0.photoThumbs;
-        if (r3 == 0) goto L_0x041f;
-    L_0x03c9:
+        if (r3 == 0) goto L_0x0416;
+    L_0x03c0:
         r0 = r32;
         r3 = r0.photoThumbs;
         r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x041f;
-    L_0x03d3:
+        if (r3 != 0) goto L_0x0416;
+    L_0x03ca:
         r35 = 0;
         r0 = r39;
         r3 = r0.currentThumb;
-        if (r3 == 0) goto L_0x03e9;
-    L_0x03db:
+        if (r3 == 0) goto L_0x03e0;
+    L_0x03d2:
         r0 = r39;
         r3 = r0.centerImage;
         r0 = r40;
-        if (r0 != r3) goto L_0x03e9;
-    L_0x03e3:
+        if (r0 != r3) goto L_0x03e0;
+    L_0x03da:
         r0 = r39;
         r0 = r0.currentThumb;
         r35 = r0;
-    L_0x03e9:
+    L_0x03e0:
         r0 = r32;
         r3 = r0.photoThumbs;
         r5 = 100;
@@ -8469,14 +8465,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r20 = 0;
         r21 = 0;
         r22 = 0;
-        if (r35 == 0) goto L_0x041c;
-    L_0x03fb:
+        if (r35 == 0) goto L_0x0413;
+    L_0x03f2:
         r23 = new android.graphics.drawable.BitmapDrawable;
         r0 = r35;
         r3 = r0.bitmap;
         r0 = r23;
         r0.<init>(r3);
-    L_0x0406:
+    L_0x03fd:
         r0 = r38;
         r0 = r0.location;
         r24 = r0;
@@ -8487,10 +8483,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r19 = r40;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27, r28);
         goto L_0x0086;
-    L_0x041c:
+    L_0x0413:
         r23 = 0;
-        goto L_0x0406;
-    L_0x041f:
+        goto L_0x03fd;
+    L_0x0416:
         r0 = r39;
         r3 = r0.parentActivity;
         r3 = r3.getResources();
@@ -8499,13 +8495,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r40;
         r0.setImageBitmap(r3);
         goto L_0x0086;
-    L_0x0435:
-        if (r32 == 0) goto L_0x0453;
-    L_0x0437:
+    L_0x042c:
+        if (r32 == 0) goto L_0x044a;
+    L_0x042e:
         r0 = r39;
         r3 = r0.currentAnimation;
-        if (r3 == 0) goto L_0x0453;
-    L_0x043d:
+        if (r3 == 0) goto L_0x044a;
+    L_0x0434:
         r0 = r39;
         r3 = r0.currentAnimation;
         r0 = r40;
@@ -8516,106 +8512,106 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r0.containerView;
         r3.setSecondParentView(r5);
         goto L_0x0086;
-    L_0x0453:
+    L_0x044a:
         r3 = 1;
         r0 = r40;
         r0.setNeedsQualityThumb(r3);
         r35 = 0;
         r0 = r39;
         r3 = r0.currentThumb;
-        if (r3 == 0) goto L_0x046f;
-    L_0x0461:
+        if (r3 == 0) goto L_0x0466;
+    L_0x0458:
         r0 = r39;
         r3 = r0.centerImage;
         r0 = r40;
-        if (r0 != r3) goto L_0x046f;
-    L_0x0469:
+        if (r0 != r3) goto L_0x0466;
+    L_0x0460:
         r0 = r39;
         r0 = r0.currentThumb;
         r35 = r0;
-    L_0x046f:
+    L_0x0466:
         r3 = 0;
         r3 = r36[r3];
-        if (r3 != 0) goto L_0x0478;
-    L_0x0474:
+        if (r3 != 0) goto L_0x046f;
+    L_0x046b:
         r3 = 0;
         r5 = -1;
         r36[r3] = r5;
-    L_0x0478:
-        if (r32 == 0) goto L_0x04d2;
-    L_0x047a:
+    L_0x046f:
+        if (r32 == 0) goto L_0x04c9;
+    L_0x0471:
         r0 = r32;
         r3 = r0.photoThumbs;
         r5 = 100;
         r38 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r5);
-    L_0x0484:
-        if (r38 == 0) goto L_0x0490;
-    L_0x0486:
+    L_0x047b:
+        if (r38 == 0) goto L_0x0487;
+    L_0x047d:
         r0 = r38;
         r3 = r0.location;
         r0 = r20;
-        if (r3 != r0) goto L_0x0490;
-    L_0x048e:
+        if (r3 != r0) goto L_0x0487;
+    L_0x0485:
         r38 = 0;
-    L_0x0490:
-        if (r32 == 0) goto L_0x0498;
-    L_0x0492:
+    L_0x0487:
+        if (r32 == 0) goto L_0x048f;
+    L_0x0489:
         r3 = r32.isWebpage();
-        if (r3 != 0) goto L_0x04a4;
-    L_0x0498:
+        if (r3 != 0) goto L_0x049b;
+    L_0x048f:
         r0 = r39;
         r3 = r0.avatarsDialogId;
-        if (r3 != 0) goto L_0x04a4;
-    L_0x049e:
+        if (r3 != 0) goto L_0x049b;
+    L_0x0495:
         r0 = r39;
         r3 = r0.isEvent;
-        if (r3 == 0) goto L_0x04d5;
-    L_0x04a4:
+        if (r3 == 0) goto L_0x04cc;
+    L_0x049b:
         r30 = 1;
-    L_0x04a6:
+    L_0x049d:
         r21 = 0;
         r22 = 0;
-        if (r35 == 0) goto L_0x04d8;
-    L_0x04ac:
+        if (r35 == 0) goto L_0x04cf;
+    L_0x04a3:
         r23 = new android.graphics.drawable.BitmapDrawable;
         r0 = r35;
         r3 = r0.bitmap;
         r0 = r23;
         r0.<init>(r3);
-    L_0x04b7:
-        if (r38 == 0) goto L_0x04db;
-    L_0x04b9:
+    L_0x04ae:
+        if (r38 == 0) goto L_0x04d2;
+    L_0x04b0:
         r0 = r38;
         r0 = r0.location;
         r24 = r0;
-    L_0x04bf:
+    L_0x04b6:
         r25 = "b";
         r3 = 0;
         r26 = r36[r3];
         r27 = 0;
-        if (r30 == 0) goto L_0x04de;
-    L_0x04c9:
+        if (r30 == 0) goto L_0x04d5;
+    L_0x04c0:
         r28 = 1;
-    L_0x04cb:
+    L_0x04c2:
         r19 = r40;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27, r28);
         goto L_0x0086;
-    L_0x04d2:
+    L_0x04c9:
         r38 = 0;
-        goto L_0x0484;
-    L_0x04d5:
+        goto L_0x047b;
+    L_0x04cc:
         r30 = 0;
-        goto L_0x04a6;
-    L_0x04d8:
+        goto L_0x049d;
+    L_0x04cf:
         r23 = 0;
-        goto L_0x04b7;
-    L_0x04db:
+        goto L_0x04ae;
+    L_0x04d2:
         r24 = 0;
-        goto L_0x04bf;
-    L_0x04de:
+        goto L_0x04b6;
+    L_0x04d5:
         r28 = 0;
-        goto L_0x04cb;
-    L_0x04e1:
+        goto L_0x04c2;
+    L_0x04d8:
         r3 = 1;
         r0 = r40;
         r0.setNeedsQualityThumb(r3);
@@ -8624,14 +8620,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0.setParentMessageObject(r3);
         r3 = 0;
         r3 = r36[r3];
-        if (r3 != 0) goto L_0x04fc;
-    L_0x04f2:
+        if (r3 != 0) goto L_0x04f3;
+    L_0x04e9:
         r3 = 0;
         r3 = (android.graphics.Bitmap) r3;
         r0 = r40;
         r0.setImageBitmap(r3);
         goto L_0x0086;
-    L_0x04fc:
+    L_0x04f3:
         r0 = r39;
         r3 = r0.parentActivity;
         r3 = r3.getResources();

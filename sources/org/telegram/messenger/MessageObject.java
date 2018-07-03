@@ -2127,6 +2127,7 @@ public class MessageObject {
                     for (int a = 0; a < count; a++) {
                         this.previousCaptionEntities.add(MessageEntity.TLdeserialize(serializedData, serializedData.readInt32(false), false));
                     }
+                    serializedData.cleanup();
                 }
             }
         }

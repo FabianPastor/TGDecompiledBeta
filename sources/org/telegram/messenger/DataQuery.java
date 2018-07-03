@@ -334,6 +334,7 @@ public class DataQuery {
                         this.drafts.put(did, draftMessage);
                     }
                 }
+                serializedData.cleanup();
             } catch (Exception e) {
             }
         }
@@ -4019,6 +4020,7 @@ public class DataQuery {
                 SerializedData serializedData = new SerializedData(draft.getObjectSize());
                 draft.serializeToStream(serializedData);
                 editor.putString(TtmlNode.ANONYMOUS_REGION_ID + did, Utilities.bytesToHex(serializedData.toByteArray()));
+                serializedData.cleanup();
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
@@ -4031,6 +4033,7 @@ public class DataQuery {
             serializedData = new SerializedData(replyToMessage.getObjectSize());
             replyToMessage.serializeToStream(serializedData);
             editor.putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray()));
+            serializedData.cleanup();
         }
         editor.commit();
         if (fromServer) {
@@ -4133,6 +4136,7 @@ public class DataQuery {
                         message.serializeToStream(serializedData);
                         DataQuery.this.preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).commit();
                         NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(did));
+                        serializedData.cleanup();
                     }
                 }
             });

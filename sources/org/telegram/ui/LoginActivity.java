@@ -1038,6 +1038,7 @@ public class LoginActivity extends BaseFragment {
                 SerializedData data = new SerializedData(LoginActivity.this.currentTermsOfService.getObjectSize());
                 LoginActivity.this.currentTermsOfService.serializeToStream(data);
                 bundle.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
+                data.cleanup();
             }
             if (this.currentParams != null) {
                 bundle.putBundle("registerview_params", this.currentParams);

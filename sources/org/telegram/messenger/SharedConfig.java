@@ -23,8 +23,8 @@ public class SharedConfig {
     public static boolean directShare = true;
     public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
+    public static boolean hasCameraCache;
     public static boolean inappCamera = true;
-    public static boolean initCamera = false;
     public static boolean isWaitingForPasscodeEnter;
     public static long lastAppPauseTime;
     private static int lastLocalId = -210000;
@@ -165,7 +165,7 @@ public class SharedConfig {
             shuffleMusic = preferences.getBoolean("shuffleMusic", false);
             playOrderReversed = preferences.getBoolean("playOrderReversed", false);
             inappCamera = preferences.getBoolean("inappCamera", true);
-            initCamera = preferences.getBoolean("initCamera", false);
+            hasCameraCache = preferences.contains("cameraCache");
             roundCamera16to9 = true;
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
@@ -332,13 +332,6 @@ public class SharedConfig {
         editor.commit();
     }
 
-    public static void toggleInitCamera() {
-        initCamera = !initCamera;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("initCamera", initCamera);
-        editor.commit();
-    }
-
     public static void toggleRoundCamera16to9() {
         roundCamera16to9 = !roundCamera16to9;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
@@ -378,6 +371,7 @@ public class SharedConfig {
                         }
                     }
                 }
+                data.cleanup();
             }
             if (currentProxy == null && !TextUtils.isEmpty(proxyAddress)) {
                 info = new ProxyInfo(proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
@@ -406,6 +400,7 @@ public class SharedConfig {
             serializedData.writeString(str);
         }
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("proxy_list", Base64.encodeToString(serializedData.toByteArray(), 2)).commit();
+        serializedData.cleanup();
     }
 
     public static ProxyInfo addProxy(ProxyInfo proxyInfo) {

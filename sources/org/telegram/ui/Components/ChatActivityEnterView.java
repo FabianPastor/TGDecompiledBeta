@@ -405,8 +405,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$7 */
-    class C25337 implements OnClickListener {
-        C25337() {
+    class C11387 implements OnClickListener {
+        C11387() {
         }
 
         public void onClick(View view) {
@@ -802,8 +802,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$9 */
-    class C11389 implements EditTextCaptionDelegate {
-        C11389() {
+    class C21909 implements EditTextCaptionDelegate {
+        C21909() {
         }
 
         public void onSpansChanged() {
@@ -856,12 +856,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.emojiButton.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
         setEmojiButtonImage();
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
-        this.emojiButton.setOnClickListener(new C25337());
+        this.emojiButton.setOnClickListener(new C11387());
         this.messageEditText = new EditTextCaption(context) {
 
             /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$8$1 */
-            class C25721 implements OnCommitContentListener {
-                C25721() {
+            class C21891 implements OnCommitContentListener {
+                C21891() {
                 }
 
                 public boolean onCommitContent(InputContentInfoCompat inputContentInfo, int flags, Bundle opts) {
@@ -887,7 +887,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                 InputConnection ic = super.onCreateInputConnection(editorInfo);
                 EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/gif", "image/*", "image/jpg", "image/png"});
-                return InputConnectionCompat.createWrapper(ic, editorInfo, new C25721());
+                return InputConnectionCompat.createWrapper(ic, editorInfo, new C21891());
             }
 
             public boolean onTouchEvent(MotionEvent event) {
@@ -915,7 +915,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         };
-        this.messageEditText.setDelegate(new C11389());
+        this.messageEditText.setDelegate(new C21909());
         updateFieldHint();
         int flags = 268435456;
         if (!(this.parentFragment == null || this.parentFragment.getCurrentEncryptedChat() == null)) {
@@ -2084,7 +2084,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.hasRecordVideo = false;
             }
             if (this.hasRecordVideo) {
-                if (SharedConfig.initCamera) {
+                if (SharedConfig.hasCameraCache) {
                     CameraController.getInstance().initCamera(null);
                 }
                 setRecordVideoButtonVisible(MessagesController.getGlobalMainSettings().getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel), false);
@@ -3174,8 +3174,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.emojiView.setListener(new Listener() {
 
                 /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$42$1 */
-                class C25711 implements DialogInterface.OnClickListener {
-                    C25711() {
+                class C11341 implements DialogInterface.OnClickListener {
+                    C11341() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -3269,7 +3269,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         Builder builder = new Builder(ChatActivityEnterView.this.parentActivity);
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C25711());
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C11341());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
                     }

@@ -2744,7 +2744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (!SharedConfig.inappCamera) {
                 this.deviceHasGoodCamera = false;
             } else if (VERSION.SDK_INT < 23) {
-                if (request || SharedConfig.initCamera) {
+                if (request || SharedConfig.hasCameraCache) {
                     CameraController.getInstance().initCamera(null);
                 }
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
@@ -2757,7 +2757,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
                 this.deviceHasGoodCamera = false;
             } else {
-                if (request || SharedConfig.initCamera) {
+                if (request || SharedConfig.hasCameraCache) {
                     CameraController.getInstance().initCamera(null);
                 }
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();

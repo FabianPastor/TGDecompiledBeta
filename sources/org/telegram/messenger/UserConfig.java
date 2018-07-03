@@ -149,6 +149,7 @@ public class UserConfig {
                         data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
                         this.unacceptedTermsOfService.serializeToStream(data);
                         editor.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
+                        data.cleanup();
                     } catch (Exception e) {
                     }
                 } else {

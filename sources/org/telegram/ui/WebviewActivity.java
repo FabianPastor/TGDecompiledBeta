@@ -302,6 +302,7 @@ public class WebviewActivity extends BaseFragment {
             editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + short_name));
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
+            serializedData.cleanup();
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
