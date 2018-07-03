@@ -95,6 +95,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.setHintText(LocaleController.getString("URL", R.string.URL));
         editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
+        editText.setFocusable(true);
         editText.setTransformHintToHeader(true);
         editText.setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
         editText.setImeOptions(6);
@@ -153,7 +154,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 layoutParams.height = AndroidUtilities.dp(36.0f);
                 editText.setLayoutParams(layoutParams);
             }
-            editText.setSelection(editText.getText().length());
+            editText.setSelection(0, editText.getText().length());
         }
     }
 

@@ -1027,11 +1027,15 @@ public class NotificationsController {
             if (chat_id == 0 && from_id != 0) {
                 if (!MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewAll", true)) {
                     return LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, messageObject.localName);
+                } else if (VERSION.SDK_INT > 27) {
+                    userName[0] = messageObject.localName;
                 }
             } else if (chat_id != 0) {
                 if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnablePreviewGroup", true)) {
                     if (messageObject.messageOwner.to_id.channel_id == 0 || messageObject.isMegagroup()) {
                         userName[0] = messageObject.localUserName;
+                    } else if (VERSION.SDK_INT > 27) {
+                        userName[0] = messageObject.localName;
                     }
                 } else if (messageObject.isMegagroup() || messageObject.messageOwner.to_id.channel_id == 0) {
                     return LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
@@ -1066,6 +1070,8 @@ public class NotificationsController {
                 name = UserObject.getUserName(user);
                 if (chat_id != 0) {
                     userName[0] = name;
+                } else if (VERSION.SDK_INT > 27) {
+                    userName[0] = name;
                 } else {
                     userName[0] = null;
                 }
@@ -1086,7 +1092,7 @@ public class NotificationsController {
             if (chat == null) {
                 return null;
             }
-            if (ChatObject.isChannel(chat) && !chat.megagroup) {
+            if (ChatObject.isChannel(chat) && !chat.megagroup && VERSION.SDK_INT <= 27) {
                 userName[0] = null;
             }
         }

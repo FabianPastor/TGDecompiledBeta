@@ -5154,9 +5154,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.editTextItem.setVisibility(0);
                             ChatActivity.this.headerItem.setVisibility(8);
                             ChatActivity.this.attachItem.setVisibility(8);
-                            ChatActivity.this.editTextStart = start;
-                            ChatActivity.this.editTextEnd = end;
                         }
+                        ChatActivity.this.editTextStart = start;
+                        ChatActivity.this.editTextEnd = end;
                     } else if (ChatActivity.this.editTextItem.getTag() != null) {
                         ChatActivity.this.editTextItem.setTag(null);
                         ChatActivity.this.editTextItem.setVisibility(8);
