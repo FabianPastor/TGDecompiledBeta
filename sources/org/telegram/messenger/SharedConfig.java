@@ -24,6 +24,7 @@ public class SharedConfig {
     public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean inappCamera = true;
+    public static boolean initCamera = false;
     public static boolean isWaitingForPasscodeEnter;
     public static long lastAppPauseTime;
     private static int lastLocalId = -210000;
@@ -164,6 +165,7 @@ public class SharedConfig {
             shuffleMusic = preferences.getBoolean("shuffleMusic", false);
             playOrderReversed = preferences.getBoolean("playOrderReversed", false);
             inappCamera = preferences.getBoolean("inappCamera", true);
+            initCamera = preferences.getBoolean("initCamera", false);
             roundCamera16to9 = true;
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
@@ -326,7 +328,14 @@ public class SharedConfig {
     public static void toggleInappCamera() {
         inappCamera = !inappCamera;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("direct_share", inappCamera);
+        editor.putBoolean("inappCamera", inappCamera);
+        editor.commit();
+    }
+
+    public static void toggleInitCamera() {
+        initCamera = !initCamera;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("initCamera", initCamera);
         editor.commit();
     }
 

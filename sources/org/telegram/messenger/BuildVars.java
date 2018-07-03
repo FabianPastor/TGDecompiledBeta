@@ -5,7 +5,7 @@ public class BuildVars {
     public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e";
     public static int APP_ID = 6;
     public static int BUILD_VERSION = BuildConfig.VERSION_CODE;
-    public static String BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
+    public static String BUILD_VERSION_STRING = "4.8.10";
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
     public static String GOOGLE_API_KEY = "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k";

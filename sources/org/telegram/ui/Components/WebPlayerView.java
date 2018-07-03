@@ -2247,7 +2247,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
         this.isLoading = true;
         this.controlsView.setProgress(0);
-        if (!(youtubeId == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
+        if (youtubeId != null) {
             this.currentYoutubeId = youtubeId;
             youtubeId = null;
         }

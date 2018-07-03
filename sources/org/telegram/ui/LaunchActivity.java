@@ -2468,7 +2468,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     return;
                 } else if (requestCode == 3) {
                     if (SharedConfig.inappCamera) {
-                        CameraController.getInstance().initCamera();
+                        CameraController.getInstance().initCamera(null);
                         return;
                     }
                     return;

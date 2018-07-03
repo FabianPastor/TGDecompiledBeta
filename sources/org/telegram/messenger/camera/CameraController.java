@@ -49,6 +49,7 @@ public class CameraController implements OnInfoListener {
     protected ArrayList<CameraInfo> cameraInfos = null;
     private boolean cameraInitied;
     private boolean loadingCameras;
+    private ArrayList<Runnable> onFinishCameraInitRunnables = new ArrayList();
     private VideoTakeCallback onVideoTakeCallback;
     private String recordedFile;
     private MediaRecorder recorder;
@@ -87,6 +88,12 @@ public class CameraController implements OnInfoListener {
             public void run() {
                 CameraController.this.loadingCameras = false;
                 CameraController.this.cameraInitied = true;
+                if (!CameraController.this.onFinishCameraInitRunnables.isEmpty()) {
+                    for (int a = 0; a < CameraController.this.onFinishCameraInitRunnables.size(); a++) {
+                        ((Runnable) CameraController.this.onFinishCameraInitRunnables.get(a)).run();
+                    }
+                    CameraController.this.onFinishCameraInitRunnables.clear();
+                }
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
             }
         }
@@ -97,6 +104,7 @@ public class CameraController implements OnInfoListener {
             }
 
             public void run() {
+                CameraController.this.onFinishCameraInitRunnables.clear();
                 CameraController.this.loadingCameras = false;
                 CameraController.this.cameraInitied = false;
             }
@@ -216,7 +224,14 @@ public class CameraController implements OnInfoListener {
         return localInstance;
     }
 
-    public void initCamera() {
+    public void cancelOnInitRunnable(Runnable onInitRunnable) {
+        this.onFinishCameraInitRunnables.remove(onInitRunnable);
+    }
+
+    public void initCamera(Runnable onInitRunnable) {
+        if (!(onInitRunnable == null || this.onFinishCameraInitRunnables.contains(onInitRunnable))) {
+            this.onFinishCameraInitRunnables.add(onInitRunnable);
+        }
         if (!this.loadingCameras && !this.cameraInitied) {
             this.loadingCameras = true;
             this.threadPool.execute(new C05421());

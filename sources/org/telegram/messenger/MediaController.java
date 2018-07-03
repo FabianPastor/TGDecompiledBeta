@@ -1834,7 +1834,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? this.shuffledPlaylist : this.playlist;
         if (byStop && SharedConfig.repeatMode == 2 && !this.forceLoopCurrentPlaylist) {
             cleanupPlayer(false, false);
-            playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+            MessageObject messageObject = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
+            messageObject.audioProgress = 0.0f;
+            messageObject.audioProgressSec = 0;
+            playMessage(messageObject);
             return;
         }
         boolean last = false;

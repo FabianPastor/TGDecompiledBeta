@@ -395,7 +395,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     protected User currentUser;
     private long dialog_id;
     private ChatMessageCell drawLaterRoundProgressCell;
+    private int editTextEnd;
     private ActionBarMenuItem editTextItem;
+    private int editTextStart;
     private MessageObject editingMessageObject;
     private int editingMessageObjectReqId;
     private View emojiButtonRed;
@@ -875,21 +877,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             } else if (id == ChatActivity.text_bold) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
                     ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedBold();
                 }
             } else if (id == ChatActivity.text_italic) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
                     ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedItalic();
                 }
             } else if (id == ChatActivity.text_mono) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
                     ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedMono();
                 }
             } else if (id == ChatActivity.text_link) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
                     ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedUrl();
                 }
             } else if (id == ChatActivity.text_regular && ChatActivity.this.chatActivityEnterView != null) {
+                ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
                 ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedRegular();
             }
         }
@@ -929,9 +936,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             arrayList.add(messageObject);
                         }
                         ChatActivity chatActivity = ChatActivity.this;
-                        Context access$29300 = ChatActivityAdapter.this.mContext;
+                        Context access$29500 = ChatActivityAdapter.this.mContext;
                         boolean z = ChatObject.isChannel(ChatActivity.this.currentChat) && !ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.username != null && ChatActivity.this.currentChat.username.length() > 0;
-                        chatActivity.showDialog(new ShareAlert(access$29300, arrayList, null, z, null, false));
+                        chatActivity.showDialog(new ShareAlert(access$29500, arrayList, null, z, null, false));
                         return;
                     }
                     Bundle args = new Bundle();
@@ -3282,7 +3289,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 if (child == ChatActivity.this.actionBar && ChatActivity.this.parentLayout != null) {
                     int i;
-                    ActionBarLayout access$7600 = ChatActivity.this.parentLayout;
+                    ActionBarLayout access$7800 = ChatActivity.this.parentLayout;
                     if (ChatActivity.this.actionBar.getVisibility() == 0) {
                         int measuredHeight = ChatActivity.this.actionBar.getMeasuredHeight();
                         i = (!ChatActivity.this.inPreviewMode || VERSION.SDK_INT < 21) ? 0 : AndroidUtilities.statusBarHeight;
@@ -3290,7 +3297,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } else {
                         i = 0;
                     }
-                    access$7600.drawHeaderShadow(canvas, i);
+                    access$7800.drawHeaderShadow(canvas, i);
                 }
                 return result;
             }
@@ -3400,10 +3407,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     ChatActivity.this.globalIgnoreLayout = false;
                 }
                 if (ChatActivity.this.scrollToPositionOnRecreate != -1) {
-                    final int access$9400 = ChatActivity.this.scrollToPositionOnRecreate;
+                    final int access$9600 = ChatActivity.this.scrollToPositionOnRecreate;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            ChatActivity.this.chatLayoutManager.scrollToPositionWithOffset(access$9400, ChatActivity.this.scrollToOffsetOnRecreate);
+                            ChatActivity.this.chatLayoutManager.scrollToPositionWithOffset(access$9600, ChatActivity.this.scrollToOffsetOnRecreate);
                         }
                     });
                     ChatActivity.this.globalIgnoreLayout = true;
@@ -4191,10 +4198,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.floatingDateView.setTag(Integer.valueOf(1));
                         ChatActivity.this.floatingDateAnimation = new AnimatorSet();
                         ChatActivity.this.floatingDateAnimation.setDuration(150);
-                        AnimatorSet access$13400 = ChatActivity.this.floatingDateAnimation;
+                        AnimatorSet access$13600 = ChatActivity.this.floatingDateAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.floatingDateView, "alpha", new float[]{1.0f});
-                        access$13400.playTogether(animatorArr);
+                        access$13600.playTogether(animatorArr);
                         ChatActivity.this.floatingDateAnimation.addListener(new C10671());
                         ChatActivity.this.floatingDateAnimation.start();
                     }
@@ -4848,10 +4855,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                     if (ChatActivity.this.allowStickersPanel) {
                         ChatActivity.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$17100 = ChatActivity.this.mentionListAnimation;
+                        AnimatorSet access$17300 = ChatActivity.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f});
-                        access$17100.playTogether(animatorArr);
+                        access$17300.playTogether(animatorArr);
                         ChatActivity.this.mentionListAnimation.addListener(new C10722());
                         ChatActivity.this.mentionListAnimation.setDuration(200);
                         ChatActivity.this.mentionListAnimation.start();
@@ -5147,6 +5154,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.editTextItem.setVisibility(0);
                             ChatActivity.this.headerItem.setVisibility(8);
                             ChatActivity.this.attachItem.setVisibility(8);
+                            ChatActivity.this.editTextStart = start;
+                            ChatActivity.this.editTextEnd = end;
                         }
                     } else if (ChatActivity.this.editTextItem.getTag() != null) {
                         ChatActivity.this.editTextItem.setTag(null);
@@ -5226,9 +5235,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
             public void onMessageEditEnd(boolean loading) {
                 if (!loading) {
-                    MentionsAdapter access$5100 = ChatActivity.this.mentionsAdapter;
+                    MentionsAdapter access$5300 = ChatActivity.this.mentionsAdapter;
                     boolean z = ChatActivity.this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(ChatActivity.this.currentEncryptedChat.layer) >= 46;
-                    access$5100.setNeedBotContext(z);
+                    access$5300.setNeedBotContext(z);
                     ChatActivity.this.chatListView.setOnItemLongClickListener(ChatActivity.this.onItemLongClickListener);
                     ChatActivity.this.chatListView.setOnItemClickListener(ChatActivity.this.onItemClickListener);
                     ChatActivity.this.chatListView.setClickable(true);
@@ -5352,11 +5361,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.pagedownButton.setTranslationY(translationY);
                     }
                     if (ChatActivity.this.mentiondownButton != null) {
-                        FrameLayout access$10300 = ChatActivity.this.mentiondownButton;
+                        FrameLayout access$10500 = ChatActivity.this.mentiondownButton;
                         if (ChatActivity.this.pagedownButton.getVisibility() == 0) {
                             translationY -= (float) AndroidUtilities.dp(72.0f);
                         }
-                        access$10300.setTranslationY(translationY);
+                        access$10500.setTranslationY(translationY);
                     }
                 }
             }
@@ -5369,7 +5378,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 float f = 0.0f;
                 super.setVisibility(visibility);
                 if (visibility == 8) {
-                    FrameLayout access$10100;
+                    FrameLayout access$10300;
                     if (ChatActivity.this.chatListView != null) {
                         ChatActivity.this.chatListView.setTranslationY(0.0f);
                     }
@@ -5380,20 +5389,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.mentionContainer.setTranslationY(0.0f);
                     }
                     if (ChatActivity.this.pagedownButton != null) {
-                        access$10100 = ChatActivity.this.pagedownButton;
+                        access$10300 = ChatActivity.this.pagedownButton;
                         if (ChatActivity.this.pagedownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         }
-                        access$10100.setTranslationY(f);
+                        access$10300.setTranslationY(f);
                     }
                     if (ChatActivity.this.mentiondownButton != null) {
-                        access$10100 = ChatActivity.this.mentiondownButton;
+                        access$10300 = ChatActivity.this.mentiondownButton;
                         if (ChatActivity.this.mentiondownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         } else {
                             f = (float) (ChatActivity.this.pagedownButton.getVisibility() == 0 ? -AndroidUtilities.dp(72.0f) : 0);
                         }
-                        access$10100.setTranslationY(f);
+                        access$10300.setTranslationY(f);
                     }
                 }
             }
@@ -6143,9 +6152,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (ChatActivity.this.stickersPanel.getVisibility() != 4) {
                                     float f2;
                                     ChatActivity.this.runningAnimation = new AnimatorSet();
-                                    AnimatorSet access$23000 = ChatActivity.this.runningAnimation;
+                                    AnimatorSet access$23200 = ChatActivity.this.runningAnimation;
                                     Animator[] animatorArr = new Animator[1];
-                                    FrameLayout access$19300 = ChatActivity.this.stickersPanel;
+                                    FrameLayout access$19500 = ChatActivity.this.stickersPanel;
                                     String str = "alpha";
                                     float[] fArr = new float[2];
                                     if (show) {
@@ -6158,8 +6167,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         f = 0.0f;
                                     }
                                     fArr[1] = f;
-                                    animatorArr[0] = ObjectAnimator.ofFloat(access$19300, str, fArr);
-                                    access$23000.playTogether(animatorArr);
+                                    animatorArr[0] = ObjectAnimator.ofFloat(access$19500, str, fArr);
+                                    access$23200.playTogether(animatorArr);
                                     ChatActivity.this.runningAnimation.setDuration(150);
                                     ChatActivity.this.runningAnimation.addListener(new AnimatorListenerAdapter() {
                                         public void onAnimationEnd(Animator animation) {
@@ -11317,10 +11326,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$26600 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$26800 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$26600.playTogether(animatorArr);
+                        access$26800.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new C10961());
                         ChatActivity.this.alertViewAnimator.start();

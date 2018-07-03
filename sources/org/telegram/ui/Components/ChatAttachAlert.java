@@ -2744,7 +2744,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (!SharedConfig.inappCamera) {
                 this.deviceHasGoodCamera = false;
             } else if (VERSION.SDK_INT < 23) {
-                CameraController.getInstance().initCamera();
+                if (request || SharedConfig.initCamera) {
+                    CameraController.getInstance().initCamera(null);
+                }
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             } else if (this.baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0) {
                 if (request) {
@@ -2755,7 +2757,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
                 this.deviceHasGoodCamera = false;
             } else {
-                CameraController.getInstance().initCamera();
+                if (request || SharedConfig.initCamera) {
+                    CameraController.getInstance().initCamera(null);
+                }
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
             if (!(old == this.deviceHasGoodCamera || this.photoAttachAdapter == null)) {

@@ -444,6 +444,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private LongSparseArray<Boolean> loadingPeerSettings = new LongSparseArray();
     private boolean loadingUnreadDialogs;
     private SharedPreferences mainPreferences;
+    public String mapKey;
     public int mapProvider;
     public int maxBroadcastCount = 100;
     public int maxCaptionLength;
@@ -797,6 +798,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.maxMessageLength = this.mainPreferences.getInt("maxMessageLength", 4096);
         this.maxCaptionLength = this.mainPreferences.getInt("maxCaptionLength", Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         this.mapProvider = this.mainPreferences.getInt("mapProvider", 0);
+        this.mapKey = this.mainPreferences.getString("pk", null);
         this.installReferer = this.mainPreferences.getString("installReferer", null);
         this.defaultP2pContacts = this.mainPreferences.getBoolean("defaultP2pContacts", false);
         this.revokeTimeLimit = this.mainPreferences.getInt("revokeTimeLimit", this.revokeTimeLimit);
@@ -857,16 +859,32 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.blockedCountry = config.blocked_mode;
                 MessagesController.this.dcDomainName = config.dc_txt_domain_name;
                 MessagesController.this.webFileDatacenterId = config.webfile_dc_id;
-                if ("yandex".equals(config.static_maps_provider)) {
-                    MessagesController.this.mapProvider = 1;
-                } else if ("telegram".equals(config.static_maps_provider)) {
-                    MessagesController.this.mapProvider = 2;
-                } else if ("yandex+mtignore".equals(config.static_maps_provider)) {
-                    MessagesController.this.mapProvider = 3;
-                } else if ("google+mtignore".equals(config.static_maps_provider)) {
-                    MessagesController.this.mapProvider = 4;
-                } else {
-                    MessagesController.this.mapProvider = 0;
+                if (config.static_maps_provider == null) {
+                    config.static_maps_provider = "google";
+                }
+                MessagesController.this.mapKey = null;
+                MessagesController.this.mapProvider = 0;
+                String[] mapArgs = config.static_maps_provider.split("\\+");
+                if (mapArgs.length > 0) {
+                    String[] typeAndKey = mapArgs[0].split(":");
+                    if (typeAndKey.length > 0) {
+                        if ("yandex".equals(typeAndKey[0])) {
+                            if (mapArgs.length > 1) {
+                                MessagesController.this.mapProvider = 3;
+                            } else {
+                                MessagesController.this.mapProvider = 1;
+                            }
+                        } else if ("google".equals(typeAndKey[0])) {
+                            if (mapArgs.length > 1) {
+                                MessagesController.this.mapProvider = 4;
+                            }
+                        } else if ("telegram".equals(typeAndKey[0])) {
+                            MessagesController.this.mapProvider = 2;
+                        }
+                        if (typeAndKey.length > 1) {
+                            MessagesController.this.mapKey = typeAndKey[1];
+                        }
+                    }
                 }
                 Editor editor = MessagesController.this.mainPreferences.edit();
                 editor.putInt("maxGroupCount", MessagesController.this.maxGroupCount);
@@ -889,6 +907,11 @@ public class MessagesController implements NotificationCenterDelegate {
                 editor.putInt("revokeTimeLimit", MessagesController.this.revokeTimeLimit);
                 editor.putInt("revokeTimePmLimit", MessagesController.this.revokeTimePmLimit);
                 editor.putInt("mapProvider", MessagesController.this.mapProvider);
+                if (MessagesController.this.mapKey != null) {
+                    editor.putString("pk", MessagesController.this.mapKey);
+                } else {
+                    editor.remove("pk");
+                }
                 editor.putBoolean("canRevokePmInbox", MessagesController.this.canRevokePmInbox);
                 editor.putBoolean("blockedCountry", MessagesController.this.blockedCountry);
                 editor.putString("venueSearchBot", MessagesController.this.venueSearchBot);
@@ -3314,10 +3337,10 @@ public class MessagesController implements NotificationCenterDelegate {
                                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, false);
                                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                                         public void run() {
-                                                            MessagesController.getInstance(MessagesController.this.currentAccount).putUsers(res.users, false);
-                                                            MessagesController.getInstance(MessagesController.this.currentAccount).putChats(res.chats, false);
-                                                            MessagesController.getInstance(MessagesController.this.currentAccount).putUsers(res2.users, false);
-                                                            MessagesController.getInstance(MessagesController.this.currentAccount).putChats(res2.chats, false);
+                                                            MessagesController.this.putUsers(res.users, false);
+                                                            MessagesController.this.putChats(res.chats, false);
+                                                            MessagesController.this.putUsers(res2.users, false);
+                                                            MessagesController.this.putChats(res2.chats, false);
                                                             MessagesController.this.proxyDialog = (TL_dialog) res2.dialogs.get(0);
                                                             MessagesController.this.proxyDialog.id = did;
                                                             if (DialogObject.isChannel(MessagesController.this.proxyDialog)) {
@@ -5226,7 +5249,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
                     Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
-                    if (MessagesController.this.proxyDialog == null || MessagesController.this.proxyDialog.id != message.dialog_id) {
+                    if (MessagesController.this.proxyDialogId == 0 || MessagesController.this.proxyDialogId != message.dialog_id) {
                         if (message.to_id.channel_id != 0) {
                             chat = (Chat) chatsDict.get(message.to_id.channel_id);
                             if (chat != null && chat.left) {
@@ -5251,7 +5274,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             d.id = (long) (-d.peer.channel_id);
                         }
                     }
-                    if (MessagesController.this.proxyDialog == null || MessagesController.this.proxyDialog.id != d.id) {
+                    if (MessagesController.this.proxyDialogId == 0 || MessagesController.this.proxyDialogId != d.id) {
                         if (DialogObject.isChannel(d)) {
                             chat = (Chat) chatsDict.get(-((int) d.id));
                             if (chat != null && chat.left) {

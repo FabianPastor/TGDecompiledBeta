@@ -564,7 +564,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void onBackPressed() {
-        if (!this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
+        if (!this.transitionAnimationPreviewMode && !this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
             if (this.currentActionBar != null && this.currentActionBar.isSearchFieldVisible) {
                 this.currentActionBar.closeSearchField();
             } else if (((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onBackPressed() && !this.fragmentsStack.isEmpty()) {

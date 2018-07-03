@@ -36,6 +36,8 @@ public class EditTextCaption extends EditTextBoldCursor {
     private boolean copyPasteShowed;
     private EditTextCaptionDelegate delegate;
     private int hintColor;
+    private int selectionEnd = -1;
+    private int selectionStart = -1;
     private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
@@ -78,6 +80,8 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     public void makeSelectedUrl() {
+        int start;
+        int end;
         Builder builder = new Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
@@ -98,8 +102,15 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.requestFocus();
         editText.setPadding(0, 0, 0, 0);
         builder.setView(editText);
-        final int start = getSelectionStart();
-        final int end = getSelectionEnd();
+        if (this.selectionStart < 0 || this.selectionEnd < 0) {
+            start = getSelectionStart();
+            end = getSelectionEnd();
+        } else {
+            start = this.selectionStart;
+            end = this.selectionEnd;
+            this.selectionEnd = -1;
+            this.selectionStart = -1;
+        }
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Editable editable = EditTextCaption.this.getText();
@@ -150,9 +161,23 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(null);
     }
 
+    public void setSelectionOverride(int start, int end) {
+        this.selectionStart = start;
+        this.selectionEnd = end;
+    }
+
     private void applyTextStyleToSelection(TypefaceSpan span) {
-        int start = getSelectionStart();
-        int end = getSelectionEnd();
+        int start;
+        int end;
+        if (this.selectionStart < 0 || this.selectionEnd < 0) {
+            start = getSelectionStart();
+            end = getSelectionEnd();
+        } else {
+            start = this.selectionStart;
+            end = this.selectionEnd;
+            this.selectionEnd = -1;
+            this.selectionStart = -1;
+        }
         Editable editable = getText();
         CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
         if (spans != null && spans.length > 0) {
