@@ -19,8 +19,8 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
     private int skippedOutputBufferCount;
 
     /* renamed from: org.telegram.messenger.exoplayer2.decoder.SimpleDecoder$1 */
-    class C05731 extends Thread {
-        C05731() {
+    class C05741 extends Thread {
+        C05741() {
         }
 
         public void run() {
@@ -48,7 +48,7 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
         for (i = 0; i < this.availableOutputBufferCount; i++) {
             this.availableOutputBuffers[i] = createOutputBuffer();
         }
-        this.decodeThread = new C05731();
+        this.decodeThread = new C05741();
         this.decodeThread.start();
     }
 

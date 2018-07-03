@@ -99,8 +99,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.PrivacyControlActivity$1 */
-    class C24261 extends ActionBarMenuOnItemClick {
-        C24261() {
+    class C24291 extends ActionBarMenuOnItemClick {
+        C24291() {
         }
 
         public void onItemClick(int id) {
@@ -134,8 +134,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.PrivacyControlActivity$2 */
-    class C24292 implements OnItemClickListener {
-        C24292() {
+    class C24322 implements OnItemClickListener {
+        C24322() {
         }
 
         public void onItemClick(View view, final int position) {
@@ -441,7 +441,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         } else {
             this.actionBar.setTitle(LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C24261());
+        this.actionBar.setActionBarMenuOnItemClick(new C24291());
         int visibility = this.doneButton != null ? this.doneButton.getVisibility() : 8;
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.doneButton.setVisibility(visibility);
@@ -454,7 +454,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24292());
+        this.listView.setOnItemClickListener(new C24322());
         return this.fragmentView;
     }
 

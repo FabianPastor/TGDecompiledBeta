@@ -46,8 +46,8 @@ public class DialogsAdapter extends SelectionAdapter {
     private boolean showContacts;
 
     /* renamed from: org.telegram.ui.Adapters.DialogsAdapter$1 */
-    class C08081 implements OnClickListener {
-        C08081() {
+    class C08091 implements OnClickListener {
+        C08091() {
         }
 
         public void onClick(View view) {
@@ -206,7 +206,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 textView.setText(LocaleController.getString("RecentlyViewedHide", R.string.RecentlyViewedHide));
                 textView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
                 headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 17.0f, 15.0f, 17.0f, 0.0f));
-                textView.setOnClickListener(new C08081());
+                textView.setOnClickListener(new C08091());
                 view = headerCell;
                 break;
             case 3:

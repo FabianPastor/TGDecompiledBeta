@@ -92,11 +92,11 @@ public class PhonebookShareActivity extends BaseFragment {
     private int vcardStartRow;
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$7 */
-    class C17017 implements OnClickListener {
+    class C17047 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.PhonebookShareActivity$7$1 */
-        class C17001 implements DialogInterface.OnClickListener {
-            C17001() {
+        class C17031 implements DialogInterface.OnClickListener {
+            C17031() {
             }
 
             private void fillRowWithType(String type, ContentValues row) {
@@ -322,7 +322,7 @@ public class PhonebookShareActivity extends BaseFragment {
             }
         }
 
-        C17017() {
+        C17047() {
         }
 
         public void onClick(View v) {
@@ -366,15 +366,15 @@ public class PhonebookShareActivity extends BaseFragment {
                 Builder builder2 = new Builder(PhonebookShareActivity.this.getParentActivity());
                 builder2.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
                 builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new C17001());
+                builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new C17031());
                 builder2.show();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$8 */
-    class C17028 implements OnPreDrawListener {
-        C17028() {
+    class C17058 implements OnPreDrawListener {
+        C17058() {
         }
 
         public boolean onPreDraw() {
@@ -527,8 +527,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$1 */
-    class C24021 extends ActionBarMenuOnItemClick {
-        C24021() {
+    class C24051 extends ActionBarMenuOnItemClick {
+        C24051() {
         }
 
         public void onItemClick(int id) {
@@ -539,8 +539,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$4 */
-    class C24034 implements OnItemClickListener {
-        C24034() {
+    class C24064 implements OnItemClickListener {
+        C24064() {
         }
 
         public void onItemClick(View view, int position) {
@@ -608,8 +608,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$5 */
-    class C24045 implements OnItemLongClickListener {
-        C24045() {
+    class C24075 implements OnItemLongClickListener {
+        C24075() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -630,12 +630,14 @@ public class PhonebookShareActivity extends BaseFragment {
                     if (i == 0) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
-                            if (item.type != 0 && item.type != 1) {
-                                if (item.type == 3) {
-                                    Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
-                                } else {
-                                    Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
-                                }
+                            if (item.type == 0) {
+                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("PhoneCopied", R.string.PhoneCopied), 0).show();
+                            } else if (item.type == 1) {
+                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("EmailCopied", R.string.EmailCopied), 0).show();
+                            } else if (item.type == 3) {
+                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
+                            } else {
+                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
                             }
                         } catch (Throwable e) {
                             FileLog.m3e(e);
@@ -649,8 +651,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$6 */
-    class C24056 extends OnScrollListener {
-        C24056() {
+    class C24086 extends OnScrollListener {
+        C24086() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -868,7 +870,7 @@ public class PhonebookShareActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C24021());
+        this.actionBar.setActionBarMenuOnItemClick(new C24051());
         this.fragmentView = new FrameLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 if (child != PhonebookShareActivity.this.listView) {
@@ -899,20 +901,20 @@ public class PhonebookShareActivity extends BaseFragment {
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c25423 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager c25453 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c25423;
-        recyclerListView.setLayoutManager(c25423);
+        this.layoutManager = c25453;
+        recyclerListView.setLayoutManager(c25453);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         this.listView.setAdapter(new ListAdapter(context));
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setOnItemClickListener(new C24034());
-        this.listView.setOnItemLongClickListener(new C24045());
+        this.listView.setOnItemClickListener(new C24064());
+        this.listView.setOnItemLongClickListener(new C24075());
         frameLayout.addView(this.actionBar);
         this.extraHeightView = new View(context);
         this.extraHeightView.setPivotY(0.0f);
@@ -939,11 +941,11 @@ public class PhonebookShareActivity extends BaseFragment {
         this.nameTextView.setPivotY(0.0f);
         frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 8.0f, 10.0f, 0.0f));
         needLayout();
-        this.listView.setOnScrollListener(new C24056());
+        this.listView.setOnScrollListener(new C24086());
         this.bottomLayout = new FrameLayout(context);
         this.bottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(Theme.key_passport_authorizeBackground), Theme.getColor(Theme.key_passport_authorizeBackgroundSelected)));
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.setOnClickListener(new C17017());
+        this.bottomLayout.setOnClickListener(new C17047());
         this.shareTextView = new TextView(context);
         this.shareTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
         this.shareTextView.setTextColor(Theme.getColor(Theme.key_passport_authorizeText));
@@ -1024,7 +1026,7 @@ public class PhonebookShareActivity extends BaseFragment {
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C17028());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C17058());
         }
     }
 

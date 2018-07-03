@@ -83,6 +83,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -94,7 +95,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -190,7 +191,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0554C.UTF8_NAME;
+            String nameCharset = C0555C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -230,7 +231,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0554C.UTF8_NAME;
+            String nameCharset = C0555C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -264,8 +265,23 @@ public class AndroidUtilities {
                     }
                 }
             }
-            if (format && this.type == 0) {
-                return PhoneFormat.getInstance().format(result.toString());
+            if (format) {
+                if (this.type == 0) {
+                    return PhoneFormat.getInstance().format(result.toString());
+                }
+                if (this.type == 5) {
+                    String[] date = result.toString().split("T");
+                    if (date.length > 0) {
+                        date = date[0].split("-");
+                        if (date.length == 3) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(1, Utilities.parseInt(date[0]).intValue());
+                            calendar.set(2, Utilities.parseInt(date[1]).intValue() - 1);
+                            calendar.set(5, Utilities.parseInt(date[2]).intValue());
+                            return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
+                        }
+                    }
+                }
             }
             return result.toString();
         }
@@ -297,6 +313,9 @@ public class AndroidUtilities {
         }
 
         public String getType() {
+            if (this.type == 5) {
+                return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
+            }
             if (this.type != 6) {
                 int idx = this.fullData.indexOf(58);
                 if (idx < 0) {
@@ -337,8 +356,8 @@ public class AndroidUtilities {
     }
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C19235 extends CrashManagerListener {
-        C19235() {
+    static class C19265 extends CrashManagerListener {
+        C19265() {
         }
 
         public boolean includeDeviceData() {
@@ -694,7 +713,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0554C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0555C.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -1517,7 +1536,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19235());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19265());
     }
 
     public static void checkForUpdates(Activity context) {

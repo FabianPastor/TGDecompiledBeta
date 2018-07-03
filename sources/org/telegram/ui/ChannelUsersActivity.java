@@ -138,8 +138,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     private int type = this.arguments.getInt("type");
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$8 */
-    class C10538 implements Runnable {
-        C10538() {
+    class C10548 implements Runnable {
+        C10548() {
         }
 
         public void run() {
@@ -149,8 +149,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$1 */
-    class C21351 extends ActionBarMenuOnItemClick {
-        C21351() {
+    class C21381 extends ActionBarMenuOnItemClick {
+        C21381() {
         }
 
         public void onItemClick(int id) {
@@ -161,8 +161,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$2 */
-    class C21362 extends ActionBarMenuItemSearchListener {
-        C21362() {
+    class C21392 extends ActionBarMenuItemSearchListener {
+        C21392() {
         }
 
         public void onSearchExpand() {
@@ -199,11 +199,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$3 */
-    class C21403 implements OnItemClickListener {
+    class C21433 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ChannelUsersActivity$3$1 */
-        class C21371 implements ContactsActivityDelegate {
-            C21371() {
+        class C21401 implements ContactsActivityDelegate {
+            C21401() {
             }
 
             public void didSelectContact(User user, String param, ContactsActivity activity) {
@@ -211,7 +211,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C21403() {
+        C21433() {
         }
 
         public void onItemClick(View view, int position) {
@@ -238,7 +238,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     args.putBoolean("needForwardCount", false);
                     args.putString("selectAlertString", LocaleController.getString("ChannelAddTo", R.string.ChannelAddTo));
                     ContactsActivity fragment = new ContactsActivity(args);
-                    fragment.setDelegate(new C21371());
+                    fragment.setDelegate(new C21401());
                     ChannelUsersActivity.this.presentFragment(fragment);
                 }
             } else if (position == ChannelUsersActivity.this.addNew2Row) {
@@ -387,8 +387,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$4 */
-    class C21414 implements OnItemLongClickListener {
-        C21414() {
+    class C21444 implements OnItemLongClickListener {
+        C21444() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -397,8 +397,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ChannelUsersActivity$5 */
-    class C21425 extends OnScrollListener {
-        C21425() {
+    class C21455 extends OnScrollListener {
+        C21455() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -415,8 +415,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ChannelUsersActivity$ListAdapter$1 */
-        class C21461 implements ManageChatUserCellDelegate {
-            C21461() {
+        class C21491 implements ManageChatUserCellDelegate {
+            C21491() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -454,7 +454,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     view = new ManageChatUserCell(context, i, z);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C21461());
+                    ((ManageChatUserCell) view).setDelegate(new C21491());
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
@@ -712,8 +712,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         private int totalCount;
 
         /* renamed from: org.telegram.ui.ChannelUsersActivity$SearchAdapter$5 */
-        class C21485 implements ManageChatUserCellDelegate {
-            C21485() {
+        class C21515 implements ManageChatUserCellDelegate {
+            C21515() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -957,7 +957,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 case 0:
                     view = new ManageChatUserCell(this.mContext, 2, ChannelUsersActivity.this.selectType == 0);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C21485());
+                    ((ManageChatUserCell) view).setDelegate(new C21515());
                     break;
                 default:
                     view = new GraySectionCell(this.mContext);
@@ -1278,10 +1278,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 this.actionBar.setTitle(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser));
             }
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21351());
+        this.actionBar.setActionBarMenuOnItemClick(new C21381());
         if (this.selectType != 0 || this.type == 2 || this.type == 0) {
             this.searchListViewAdapter = new SearchAdapter(context);
-            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21362());
+            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21392());
             this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         }
         this.fragmentView = new FrameLayout(context);
@@ -1305,10 +1305,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21403());
-        this.listView.setOnItemLongClickListener(new C21414());
+        this.listView.setOnItemClickListener(new C21433());
+        this.listView.setOnItemLongClickListener(new C21444());
         if (this.searchItem != null) {
-            this.listView.setOnScrollListener(new C21425());
+            this.listView.setOnScrollListener(new C21455());
         }
         if (this.loadingUsers) {
             this.emptyView.showProgress();
@@ -1447,8 +1447,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         builder.setItems(items2, new OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChannelUsersActivity$7$1 */
-            class C21441 implements RequestDelegate {
-                C21441() {
+            class C21471 implements RequestDelegate {
+                C21471() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -1478,7 +1478,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     req.user_id = MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getInputUser(participant.user_id);
                     req.channel = MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getInputChannel(ChannelUsersActivity.this.chatId);
                     req.banned_rights = new TL_channelBannedRights();
-                    ConnectionsManager.getInstance(ChannelUsersActivity.this.currentAccount).sendRequest(req, new C21441());
+                    ConnectionsManager.getInstance(ChannelUsersActivity.this.currentAccount).sendRequest(req, new C21471());
                 } else if (ChannelUsersActivity.this.type == 1) {
                     MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).setUserAdminRole(ChannelUsersActivity.this.chatId, MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id)), new TL_channelAdminRights(), ChannelUsersActivity.this.currentChat.megagroup, ChannelUsersActivity.this);
                 } else if (ChannelUsersActivity.this.type == 2) {
@@ -1495,7 +1495,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
             if (chatFull.id == this.chatId && !byChannelUsers) {
-                AndroidUtilities.runOnUIThread(new C10538());
+                AndroidUtilities.runOnUIThread(new C10548());
             }
         }
     }
@@ -1541,8 +1541,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.ChannelUsersActivity$9$1$1 */
-                        class C10541 implements Comparator<ChannelParticipant> {
-                            C10541() {
+                        class C10551 implements Comparator<ChannelParticipant> {
+                            C10551() {
                             }
 
                             public int compare(ChannelParticipant lhs, ChannelParticipant rhs) {
@@ -1588,8 +1588,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
 
                         /* renamed from: org.telegram.ui.ChannelUsersActivity$9$1$2 */
-                        class C10552 implements Comparator<ChannelParticipant> {
-                            C10552() {
+                        class C10562 implements Comparator<ChannelParticipant> {
+                            C10562() {
                             }
 
                             public int compare(ChannelParticipant lhs, ChannelParticipant rhs) {
@@ -1651,9 +1651,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 }
                                 try {
                                     if (ChannelUsersActivity.this.type == 0 || ChannelUsersActivity.this.type == 2) {
-                                        Collections.sort(res.participants, new C10541());
+                                        Collections.sort(res.participants, new C10551());
                                     } else if (ChannelUsersActivity.this.type == 1) {
-                                        Collections.sort(res.participants, new C10552());
+                                        Collections.sort(res.participants, new C10562());
                                     }
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);

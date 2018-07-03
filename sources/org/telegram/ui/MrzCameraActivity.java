@@ -43,8 +43,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private TextView titleTextView;
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$3 */
-    class C15983 implements OnTouchListener {
-        C15983() {
+    class C16013 implements OnTouchListener {
+        C16013() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -53,8 +53,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$5 */
-    class C15995 implements Runnable {
-        C15995() {
+    class C16025 implements Runnable {
+        C16025() {
         }
 
         public void run() {
@@ -70,8 +70,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$1 */
-    class C23551 extends ActionBarMenuOnItemClick {
-        C23551() {
+    class C23581 extends ActionBarMenuOnItemClick {
+        C23581() {
         }
 
         public void onItemClick(int id) {
@@ -82,8 +82,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$4 */
-    class C23564 implements CameraViewDelegate {
-        C23564() {
+    class C23594 implements CameraViewDelegate {
+        C23594() {
         }
 
         public void onCameraCreated(Camera camera) {
@@ -114,7 +114,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C23551());
+        this.actionBar.setActionBarMenuOnItemClick(new C23581());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -140,9 +140,9 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C15983());
+        viewGroup.setOnTouchListener(new C16013());
         this.cameraView = new CameraView(context, false);
-        this.cameraView.setDelegate(new C23564());
+        this.cameraView.setDelegate(new C23594());
         viewGroup.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -188,7 +188,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private void startRecognizing() {
         this.backgroundHandlerThread.start();
         this.handler = new Handler(this.backgroundHandlerThread.getLooper());
-        AndroidUtilities.runOnUIThread(new C15995());
+        AndroidUtilities.runOnUIThread(new C16025());
     }
 
     public void onPreviewFrame(final byte[] data, final Camera camera) {
@@ -204,8 +204,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.MrzCameraActivity$6$1$1 */
-                                class C16001 implements Runnable {
-                                    C16001() {
+                                class C16031 implements Runnable {
+                                    C16031() {
                                     }
 
                                     public void run() {
@@ -219,7 +219,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     if (MrzCameraActivity.this.delegate != null) {
                                         MrzCameraActivity.this.delegate.didFindMrzInfo(res);
                                     }
-                                    AndroidUtilities.runOnUIThread(new C16001(), 1200);
+                                    AndroidUtilities.runOnUIThread(new C16031(), 1200);
                                 }
                             });
                         }

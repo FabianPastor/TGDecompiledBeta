@@ -173,7 +173,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private ImageView searchIconImageView;
     private View shadowLine;
     private boolean showGifs;
-    private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new C21951();
+    private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new C21991();
     private ArrayList<TL_messages_stickerSet> stickerSets = new ArrayList();
     private Drawable stickersDrawable;
     private TextView stickersEmptyView;
@@ -736,8 +736,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.Components.EmojiView$1 */
-    class C21951 implements StickerPreviewViewerDelegate {
-        C21951() {
+    class C21991 implements StickerPreviewViewerDelegate {
+        C21991() {
         }
 
         public void sendSticker(Document sticker) {
@@ -756,8 +756,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.Components.EmojiView$5 */
-    class C21965 extends SpanSizeLookup {
-        C21965() {
+    class C22005 extends SpanSizeLookup {
+        C22005() {
         }
 
         public int getSpanSize(int position) {
@@ -778,8 +778,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.Components.EmojiView$7 */
-    class C21977 implements OnItemClickListener {
-        C21977() {
+    class C22017 implements OnItemClickListener {
+        C22017() {
         }
 
         public void onItemClick(View view, int position) {
@@ -2019,7 +2019,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             LayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
             this.stickersLayoutManager = gridLayoutManager;
             recyclerListView.setLayoutManager(gridLayoutManager);
-            this.stickersLayoutManager.setSpanSizeLookup(new C21965());
+            this.stickersLayoutManager.setSpanSizeLookup(new C22005());
             this.stickersGridView.setPadding(0, AndroidUtilities.dp(52.0f), 0, 0);
             this.stickersGridView.setClipToPadding(false);
             this.views.add(this.stickersWrap);
@@ -2029,7 +2029,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.stickersGridAdapter = stickersGridAdapter;
             recyclerListView.setAdapter(stickersGridAdapter);
             this.stickersGridView.setOnTouchListener(new C11976());
-            this.stickersOnItemClickListener = new C21977();
+            this.stickersOnItemClickListener = new C22017();
             this.stickersGridView.setOnItemClickListener(this.stickersOnItemClickListener);
             this.stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
             this.stickersWrap.addView(this.stickersGridView);

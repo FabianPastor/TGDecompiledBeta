@@ -59,8 +59,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
-    class C22101 implements CropViewListener {
-        C22101() {
+    class C22141 implements CropViewListener {
+        C22141() {
         }
 
         public void onChange(boolean reset) {
@@ -75,8 +75,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
-    class C22112 implements RotationWheelListener {
-        C22112() {
+    class C22152 implements RotationWheelListener {
+        C22152() {
         }
 
         public void onStart() {
@@ -124,11 +124,11 @@ public class PhotoCropView extends FrameLayout {
         requestLayout();
         if (this.cropView == null) {
             this.cropView = new CropView(getContext());
-            this.cropView.setListener(new C22101());
+            this.cropView.setListener(new C22141());
             this.cropView.setBottomPadding((float) AndroidUtilities.dp(64.0f));
             addView(this.cropView);
             this.wheelView = new CropRotationWheel(getContext());
-            this.wheelView.setListener(new C22112());
+            this.wheelView.setListener(new C22152());
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);

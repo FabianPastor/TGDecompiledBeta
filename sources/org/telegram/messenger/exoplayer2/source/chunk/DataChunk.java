@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.source.chunk;
 
 import java.io.IOException;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
@@ -17,7 +17,7 @@ public abstract class DataChunk extends Chunk {
     protected abstract void consume(byte[] bArr, int i) throws IOException;
 
     public DataChunk(DataSource dataSource, DataSpec dataSpec, int type, Format trackFormat, int trackSelectionReason, Object trackSelectionData, byte[] data) {
-        super(dataSource, dataSpec, type, trackFormat, trackSelectionReason, trackSelectionData, C0554C.TIME_UNSET, C0554C.TIME_UNSET);
+        super(dataSource, dataSpec, type, trackFormat, trackSelectionReason, trackSelectionData, C0555C.TIME_UNSET, C0555C.TIME_UNSET);
         this.data = data;
     }
 

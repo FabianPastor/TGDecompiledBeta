@@ -22,7 +22,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -121,8 +121,8 @@ public class MessagesStorage {
     private File walCacheFile;
 
     /* renamed from: org.telegram.messenger.MessagesStorage$1 */
-    class C03831 implements Runnable {
-        C03831() {
+    class C03841 implements Runnable {
+        C03841() {
         }
 
         public void run() {
@@ -131,8 +131,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$5 */
-    class C04015 implements Runnable {
-        C04015() {
+    class C04025 implements Runnable {
+        C04025() {
         }
 
         public void run() {
@@ -184,8 +184,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$8 */
-    class C04158 implements Runnable {
-        C04158() {
+    class C04168 implements Runnable {
+        C04168() {
         }
 
         public void run() {
@@ -446,7 +446,7 @@ public class MessagesStorage {
 
     public MessagesStorage(int instance) {
         this.currentAccount = instance;
-        this.storageQueue.postRunnable(new C03831());
+        this.storageQueue.postRunnable(new C03841());
     }
 
     public SQLiteDatabase getDatabase() {
@@ -976,8 +976,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$3$1 */
-            class C03911 implements Runnable {
-                C03911() {
+            class C03921 implements Runnable {
+                C03921() {
                 }
 
                 public void run() {
@@ -989,7 +989,7 @@ public class MessagesStorage {
                 MessagesStorage.this.cleanupInternal();
                 MessagesStorage.this.openDatabase(false);
                 if (isLogin) {
-                    Utilities.stageQueue.postRunnable(new C03911());
+                    Utilities.stageQueue.postRunnable(new C03921());
                 }
             }
         });
@@ -1022,7 +1022,7 @@ public class MessagesStorage {
     }
 
     private void fixNotificationSettings() {
-        this.storageQueue.postRunnable(new C04015());
+        this.storageQueue.postRunnable(new C04025());
     }
 
     public long createPendingTask(final NativeByteBuffer data) {
@@ -1061,7 +1061,7 @@ public class MessagesStorage {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new C04158());
+        this.storageQueue.postRunnable(new C04168());
     }
 
     public void saveChannelPts(final int channelId, final int pts) {
@@ -1650,8 +1650,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$23$1 */
-            class C03861 implements Runnable {
-                C03861() {
+            class C03871 implements Runnable {
+                C03871() {
                 }
 
                 public void run() {
@@ -1777,7 +1777,7 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
                     DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
-                    AndroidUtilities.runOnUIThread(new C03861());
+                    AndroidUtilities.runOnUIThread(new C03871());
                 } catch (Throwable e22) {
                     FileLog.m3e(e22);
                 }
@@ -3656,8 +3656,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$58$1 */
-            class C04001 implements Comparator<Message> {
-                C04001() {
+            class C04011 implements Comparator<Message> {
+                C04011() {
                 }
 
                 public int compare(Message lhs, Message rhs) {
@@ -3915,9 +3915,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                                 } else {
                                     if (holeMessageMaxId == 0) {
-                                        holeMessageMaxId = C0554C.NANOS_PER_SECOND;
+                                        holeMessageMaxId = C0555C.NANOS_PER_SECOND;
                                         if (channelId != 0) {
-                                            holeMessageMaxId = C0554C.NANOS_PER_SECOND | (((long) channelId) << 32);
+                                            holeMessageMaxId = C0555C.NANOS_PER_SECOND | (((long) channelId) << 32);
                                         }
                                     }
                                     cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
@@ -4154,7 +4154,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                         cursor.dispose();
                     }
-                    Collections.sort(res.messages, new C04001());
+                    Collections.sort(res.messages, new C04011());
                     if (lower_id != 0) {
                         if ((i3 == 3 || i3 == 4 || (i3 == 2 && queryFromServer && !unreadCountIsLocal)) && !res.messages.isEmpty()) {
                             int minId = ((Message) res.messages.get(res.messages.size() - 1)).id;

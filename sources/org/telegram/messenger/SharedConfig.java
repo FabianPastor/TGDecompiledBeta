@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 
@@ -188,7 +188,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0554C.UTF8_NAME);
+                    passcodeBytes = passcode.getBytes(C0555C.UTF8_NAME);
                     bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -201,7 +201,7 @@ public class SharedConfig {
             }
         } else {
             try {
-                passcodeBytes = passcode.getBytes(C0554C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(C0555C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);

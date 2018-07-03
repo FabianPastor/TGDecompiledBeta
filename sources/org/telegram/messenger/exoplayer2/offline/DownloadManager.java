@@ -43,8 +43,8 @@ public final class DownloadManager {
     private final ArrayList<Task> tasks;
 
     /* renamed from: org.telegram.messenger.exoplayer2.offline.DownloadManager$2 */
-    class C06112 implements Runnable {
-        C06112() {
+    class C06122 implements Runnable {
+        C06122() {
         }
 
         public void run() {
@@ -110,8 +110,8 @@ public final class DownloadManager {
         private Thread thread;
 
         /* renamed from: org.telegram.messenger.exoplayer2.offline.DownloadManager$Task$1 */
-        class C06131 implements Runnable {
-            C06131() {
+        class C06141 implements Runnable {
+            C06141() {
             }
 
             public void run() {
@@ -199,7 +199,7 @@ public final class DownloadManager {
 
         private void cancel() {
             if (changeStateAndNotify(0, 5)) {
-                this.downloadManager.handler.post(new C06131());
+                this.downloadManager.handler.post(new C06141());
             } else if (changeStateAndNotify(1, 6)) {
                 cancelDownload();
             }
@@ -563,7 +563,7 @@ public final class DownloadManager {
     }
 
     private void loadActions() {
-        this.fileIOHandler.post(new C06112());
+        this.fileIOHandler.post(new C06122());
     }
 
     private void saveActions() {

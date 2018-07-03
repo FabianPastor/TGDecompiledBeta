@@ -193,15 +193,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private int currentAccount;
     private ChatFull currentChatInfo = null;
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap();
-    private LocationProvider locationProvider = new LocationProvider(new C19581());
+    private LocationProvider locationProvider = new LocationProvider(new C19611());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$2 */
-    class C05092 implements Runnable {
-        C05092() {
+    class C05102 implements Runnable {
+        C05102() {
         }
 
         public void run() {
@@ -323,8 +323,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private GpsLocationListener networkLocationListener = new GpsLocationListener();
 
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
-        class C05231 implements Runnable {
-            C05231() {
+        class C05241 implements Runnable {
+            C05241() {
             }
 
             public void run() {
@@ -419,7 +419,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
             }
-            this.locationQueryCancelRunnable = new C05231();
+            this.locationQueryCancelRunnable = new C05241();
             AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
@@ -454,8 +454,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C19581 implements LocationProviderDelegate {
-        C19581() {
+    class C19611 implements LocationProviderDelegate {
+        C19611() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -509,7 +509,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public SendMessagesHelper(int instance) {
         this.currentAccount = instance;
-        AndroidUtilities.runOnUIThread(new C05092());
+        AndroidUtilities.runOnUIThread(new C05102());
     }
 
     public void cleanup() {
@@ -925,7 +925,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             int channelId2 = object.messageOwner.to_id.channel_id;
             Message sendingMessage = removeFromSendingMessages(object.getId());
             if (sendingMessage != null) {
-                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(sendingMessage.reqId, false);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(sendingMessage.reqId, true);
             }
             for (Entry<String, ArrayList<DelayedMessage>> entry : this.delayedMessages.entrySet()) {
                 ArrayList<DelayedMessage> messages = (ArrayList) entry.getValue();
@@ -1500,8 +1500,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                                                 /* renamed from: org.telegram.messenger.SendMessagesHelper$5$1$1 */
-                                                                class C05141 implements Runnable {
-                                                                    C05141() {
+                                                                class C05151 implements Runnable {
+                                                                    C05151() {
                                                                     }
 
                                                                     public void run() {
@@ -1516,7 +1516,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                                 public void run() {
                                                                     MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, to_id.channel_id);
                                                                     MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-                                                                    AndroidUtilities.runOnUIThread(new C05141());
+                                                                    AndroidUtilities.runOnUIThread(new C05151());
                                                                 }
                                                             });
                                                         }
@@ -2486,8 +2486,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.messenger.SendMessagesHelper$6$2 */
-            class C05192 implements Runnable {
-                C05192() {
+            class C05202 implements Runnable {
+                C05202() {
                 }
 
                 public void run() {
@@ -2505,7 +2505,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     });
                 }
-                AndroidUtilities.runOnUIThread(new C05192());
+                AndroidUtilities.runOnUIThread(new C05202());
             }
         });
     }
@@ -2568,8 +2568,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 ConnectionsManager.getInstance(SendMessagesHelper.this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.SendMessagesHelper$7$1$1 */
-                    class C05201 implements Runnable {
-                        C05201() {
+                    class C05211 implements Runnable {
+                        C05211() {
                         }
 
                         public void run() {
@@ -2578,7 +2578,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
 
                     public void run(TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new C05201());
+                        AndroidUtilities.runOnUIThread(new C05211());
                     }
                 }, 2);
                 MessagesController.getInstance(SendMessagesHelper.this.currentAccount).markDialogAsRead(j, i, i, 0, false, 0, true);
@@ -6944,8 +6944,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.SendMessagesHelper$11$1 */
-            class C04791 implements Runnable {
-                C04791() {
+            class C04801 implements Runnable {
+                C04801() {
                 }
 
                 public void run() {
@@ -6954,7 +6954,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C04791());
+                AndroidUtilities.runOnUIThread(new C04801());
             }
         });
     }
@@ -7061,8 +7061,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.SendMessagesHelper$12$1$3$1 */
-                                        class C04821 implements Runnable {
-                                            C04821() {
+                                        class C04831 implements Runnable {
+                                            C04831() {
                                             }
 
                                             public void run() {
@@ -7076,7 +7076,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         public void run() {
                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-                                            AndroidUtilities.runOnUIThread(new C04821());
+                                            AndroidUtilities.runOnUIThread(new C04831());
                                         }
                                     });
                                 }
@@ -7185,8 +7185,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.SendMessagesHelper$13$1$1$1 */
-                                    class C04861 implements Runnable {
-                                        C04861() {
+                                    class C04871 implements Runnable {
+                                        C04871() {
                                         }
 
                                         public void run() {
@@ -7197,7 +7197,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                                     public void run() {
                                         MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates(updates, false);
-                                        AndroidUtilities.runOnUIThread(new C04861());
+                                        AndroidUtilities.runOnUIThread(new C04871());
                                     }
                                 });
                                 if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
@@ -7339,8 +7339,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.SendMessagesHelper$13$2$5$1 */
-                                        class C04931 implements Runnable {
-                                            C04931() {
+                                        class C04941 implements Runnable {
+                                            C04941() {
                                             }
 
                                             public void run() {
@@ -7377,7 +7377,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                                 currentMessage.add(newMsgObj);
                                                 MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(currentMessage, true, false, false, 0);
                                             }
-                                            AndroidUtilities.runOnUIThread(new C04931());
+                                            AndroidUtilities.runOnUIThread(new C04941());
                                             if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
                                                 SendMessagesHelper.this.stopVideoService(str);
                                             }
@@ -8444,8 +8444,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 new Thread(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.SendMessagesHelper$18$1 */
-                    class C04981 implements Runnable {
-                        C04981() {
+                    class C04991 implements Runnable {
+                        C04991() {
                         }
 
                         public void run() {
@@ -8478,7 +8478,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             inputContentInfoCompat.releasePermission();
                         }
                         if (error) {
-                            AndroidUtilities.runOnUIThread(new C04981());
+                            AndroidUtilities.runOnUIThread(new C04991());
                         }
                     }
                 }).start();
@@ -8891,11 +8891,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1 */
-            class C05011 implements Runnable {
+            class C05021 implements Runnable {
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1$1 */
-                class C05001 implements Runnable {
-                    C05001() {
+                class C05011 implements Runnable {
+                    C05011() {
                     }
 
                     public void run() {
@@ -8909,16 +8909,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 }
 
-                C05011() {
+                C05021() {
                 }
 
                 public void run() {
-                    AndroidUtilities.runOnUIThread(new C05001());
+                    AndroidUtilities.runOnUIThread(new C05011());
                 }
             }
 
             public void run() {
-                Utilities.stageQueue.postRunnable(new C05011());
+                Utilities.stageQueue.postRunnable(new C05021());
             }
         });
     }
@@ -8936,13 +8936,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             mediaSendQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$21$2 */
-                class C05032 implements Runnable {
+                class C05042 implements Runnable {
                     final /* synthetic */ TL_document val$documentFinal;
                     final /* synthetic */ SendingMediaInfo val$info;
                     final /* synthetic */ HashMap val$params;
                     final /* synthetic */ String val$pathFinal;
 
-                    C05032(TL_document tL_document, String str, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
+                    C05042(TL_document tL_document, String str, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
                         this.val$documentFinal = tL_document;
                         this.val$pathFinal = str;
                         this.val$params = hashMap;
@@ -8959,13 +8959,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$21$3 */
-                class C05043 implements Runnable {
+                class C05053 implements Runnable {
                     final /* synthetic */ SendingMediaInfo val$info;
                     final /* synthetic */ boolean val$needDownloadHttpFinal;
                     final /* synthetic */ HashMap val$params;
                     final /* synthetic */ TL_photo val$photoFinal;
 
-                    C05043(TL_photo tL_photo, boolean z, SendingMediaInfo sendingMediaInfo, HashMap hashMap) {
+                    C05053(TL_photo tL_photo, boolean z, SendingMediaInfo sendingMediaInfo, HashMap hashMap) {
                         this.val$photoFinal = tL_photo;
                         this.val$needDownloadHttpFinal = z;
                         this.val$info = sendingMediaInfo;
@@ -8982,7 +8982,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$21$4 */
-                class C05054 implements Runnable {
+                class C05064 implements Runnable {
                     final /* synthetic */ String val$finalPath;
                     final /* synthetic */ SendingMediaInfo val$info;
                     final /* synthetic */ HashMap val$params;
@@ -8991,7 +8991,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     final /* synthetic */ VideoEditedInfo val$videoEditedInfo;
                     final /* synthetic */ TL_document val$videoFinal;
 
-                    C05054(Bitmap bitmap, String str, VideoEditedInfo videoEditedInfo, TL_document tL_document, String str2, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
+                    C05064(Bitmap bitmap, String str, VideoEditedInfo videoEditedInfo, TL_document tL_document, String str2, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
                         this.val$thumbFinal = bitmap;
                         this.val$thumbKeyFinal = str;
                         this.val$videoEditedInfo = videoEditedInfo;
@@ -9014,12 +9014,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$21$5 */
-                class C05065 implements Runnable {
+                class C05075 implements Runnable {
                     final /* synthetic */ SendingMediaInfo val$info;
                     final /* synthetic */ HashMap val$params;
                     final /* synthetic */ TL_photo val$photoFinal;
 
-                    C05065(TL_photo tL_photo, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
+                    C05075(TL_photo tL_photo, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
                         this.val$photoFinal = tL_photo;
                         this.val$params = hashMap;
                         this.val$info = sendingMediaInfo;
@@ -9035,10 +9035,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$21$6 */
-                class C05076 implements Runnable {
+                class C05086 implements Runnable {
                     final /* synthetic */ long val$lastGroupIdFinal;
 
-                    C05076(long j) {
+                    C05086(long j) {
                         this.val$lastGroupIdFinal = j;
                     }
 

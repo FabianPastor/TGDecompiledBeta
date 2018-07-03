@@ -104,8 +104,8 @@ public class AlertsCreator {
     }
 
     /* renamed from: org.telegram.ui.Components.AlertsCreator$2 */
-    static class C21752 implements Formatter {
-        C21752() {
+    static class C21782 implements Formatter {
+        C21782() {
         }
 
         public String format(int value) {
@@ -346,21 +346,22 @@ public class AlertsCreator {
         return toast;
     }
 
-    public static void showUpdateAppAlert(final Context context, String text, boolean updateApp) {
-        if (context != null && text != null) {
-            Builder builder = new Builder(context);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(text);
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            if (updateApp) {
-                builder.setNegativeButton(LocaleController.getString("UpdateApp", R.string.UpdateApp), new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL);
-                    }
-                });
-            }
-            builder.show();
+    public static AlertDialog showUpdateAppAlert(final Context context, String text, boolean updateApp) {
+        if (context == null || text == null) {
+            return null;
         }
+        Builder builder = new Builder(context);
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setMessage(text);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        if (updateApp) {
+            builder.setNegativeButton(LocaleController.getString("UpdateApp", R.string.UpdateApp), new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL);
+                }
+            });
+        }
+        return builder.show();
     }
 
     public static Builder createSimpleAlert(Context context, String text) {
@@ -423,7 +424,7 @@ public class AlertsCreator {
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, -2, 0.4f));
-        monthPicker.setFormatter(new C21752());
+        monthPicker.setFormatter(new C21782());
         monthPicker.setOnValueChangedListener(new OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 AlertsCreator.updateDayPicker(dayPicker, monthPicker, yearPicker);
@@ -544,8 +545,8 @@ public class AlertsCreator {
         builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
 
             /* renamed from: org.telegram.ui.Components.AlertsCreator$10$1 */
-            class C21741 implements RequestDelegate {
-                C21741() {
+            class C21771 implements RequestDelegate {
+                C21771() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -587,7 +588,7 @@ public class AlertsCreator {
                     }
                     req = request;
                 }
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C21741());
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C21771());
                 Toast.makeText(context2, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
             }
         });
@@ -1440,6 +1441,7 @@ public class AlertsCreator {
         }
         Builder builder = new Builder((Context) parentActivity);
         final Runnable dismissRunnable = builder.getDismissRunnable();
+        final AlertDialog[] alertDialog = new AlertDialog[1];
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
         for (int a = 0; a < 3; a++) {
@@ -1451,6 +1453,9 @@ public class AlertsCreator {
                 linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
                 cell.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        if (alertDialog[0] != null) {
+                            alertDialog[0].setOnDismissListener(null);
+                        }
                         dismissRunnable.run();
                         delegate.didSelectAccount(((AccountSelectCell) v).getAccountNumber());
                     }
@@ -1460,6 +1465,8 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("SelectAccount", R.string.SelectAccount));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        return builder.create();
+        AlertDialog create = builder.create();
+        alertDialog[0] = create;
+        return create;
     }
 }

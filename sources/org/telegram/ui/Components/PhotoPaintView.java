@@ -163,8 +163,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
-    class C22151 implements UndoStoreDelegate {
-        C22151() {
+    class C22191 implements UndoStoreDelegate {
+        C22191() {
         }
 
         public void historyChanged() {
@@ -173,8 +173,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$2 */
-    class C22162 implements RenderViewDelegate {
-        C22162() {
+    class C22202 implements RenderViewDelegate {
+        C22202() {
         }
 
         public void onBeganDrawing() {
@@ -197,8 +197,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$3 */
-    class C22173 implements EntitiesContainerViewDelegate {
-        C22173() {
+    class C22213 implements EntitiesContainerViewDelegate {
+        C22213() {
         }
 
         public boolean shouldReceiveTouches() {
@@ -215,8 +215,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$6 */
-    class C22186 implements ColorPickerDelegate {
-        C22186() {
+    class C22226 implements ColorPickerDelegate {
+        C22226() {
         }
 
         public void onBeganColorPicking() {
@@ -256,19 +256,19 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.bitmapToEdit = bitmap;
         this.orientation = rotation;
         this.undoStore = new UndoStore();
-        this.undoStore.setDelegate(new C22151());
+        this.undoStore.setDelegate(new C22191());
         this.curtainView = new FrameLayout(context);
         this.curtainView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.curtainView.setVisibility(4);
         addView(this.curtainView);
         this.renderView = new RenderView(context, new Painting(getPaintingSize()), bitmap, this.orientation);
-        this.renderView.setDelegate(new C22162());
+        this.renderView.setDelegate(new C22202());
         this.renderView.setUndoStore(this.undoStore);
         this.renderView.setQueue(this.queue);
         this.renderView.setVisibility(4);
         this.renderView.setBrush(this.brushes[0]);
         addView(this.renderView, LayoutHelper.createFrame(-1, -1, 51));
-        this.entitiesView = new EntitiesContainerView(context, new C22173());
+        this.entitiesView = new EntitiesContainerView(context, new C22213());
         this.entitiesView.setPivotX(0.0f);
         this.entitiesView.setPivotY(0.0f);
         addView(this.entitiesView);
@@ -290,7 +290,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         addView(this.selectionContainerView);
         this.colorPicker = new ColorPicker(context);
         addView(this.colorPicker);
-        this.colorPicker.setDelegate(new C22186());
+        this.colorPicker.setDelegate(new C22226());
         this.toolsView = new FrameLayout(context);
         this.toolsView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 48, 83));

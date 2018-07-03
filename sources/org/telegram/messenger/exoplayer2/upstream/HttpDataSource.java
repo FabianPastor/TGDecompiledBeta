@@ -13,7 +13,7 @@ import org.telegram.messenger.exoplayer2.util.Predicate;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public interface HttpDataSource extends DataSource {
-    public static final Predicate<String> REJECT_PAYWALL_TYPES = new C19941();
+    public static final Predicate<String> REJECT_PAYWALL_TYPES = new C19971();
 
     public static class HttpDataSourceException extends IOException {
         public static final int TYPE_CLOSE = 3;
@@ -89,8 +89,8 @@ public interface HttpDataSource extends DataSource {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.upstream.HttpDataSource$1 */
-    static class C19941 implements Predicate<String> {
-        C19941() {
+    static class C19971 implements Predicate<String> {
+        C19971() {
         }
 
         public boolean evaluate(String contentType) {

@@ -58,8 +58,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     private int sendStickersRow;
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$4 */
-    class C10424 implements OnClickListener {
-        C10424() {
+    class C10434 implements OnClickListener {
+        C10434() {
         }
 
         public void onClick(View v) {
@@ -70,8 +70,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$5 */
-    class C10435 implements OnClickListener {
-        C10435() {
+    class C10445 implements OnClickListener {
+        C10445() {
         }
 
         public void onClick(View v) {
@@ -82,8 +82,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$1 */
-    class C21301 extends ActionBarMenuOnItemClick {
-        C21301() {
+    class C21331 extends ActionBarMenuOnItemClick {
+        C21331() {
         }
 
         public void onItemClick(int id) {
@@ -100,8 +100,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$3 */
-    class C21313 implements OnItemClickListener {
-        C21313() {
+    class C21343 implements OnItemClickListener {
+        C21343() {
         }
 
         public void onItemClick(View view, int position) {
@@ -277,7 +277,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         boolean z = true;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C21301());
+        this.actionBar.setActionBarMenuOnItemClick(new C21331());
         this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -297,7 +297,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21313());
+        this.listView.setOnItemClickListener(new C21343());
         this.linearLayout = new LinearLayout(context);
         this.linearLayout.setOrientation(1);
         this.linearLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -316,12 +316,12 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
         radioButtonCell.setTextAndValue(string, string2, z);
         this.linearLayout.addView(this.radioButtonCell3, LayoutHelper.createLinear(-1, -2));
-        this.radioButtonCell3.setOnClickListener(new C10424());
+        this.radioButtonCell3.setOnClickListener(new C10434());
         this.radioButtonCell4 = new RadioButtonCell(context);
         this.radioButtonCell4.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", R.string.ChatHistoryHiddenInfo), this.historyHidden);
         this.linearLayout.addView(this.radioButtonCell4, LayoutHelper.createLinear(-1, -2));
-        this.radioButtonCell4.setOnClickListener(new C10435());
+        this.radioButtonCell4.setOnClickListener(new C10445());
         return this.fragmentView;
     }
 

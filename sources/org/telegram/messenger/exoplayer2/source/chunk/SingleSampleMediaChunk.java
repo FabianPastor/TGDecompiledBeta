@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.chunk;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
@@ -19,7 +19,7 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
     private final int trackType;
 
     public SingleSampleMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, long chunkIndex, int trackType, Format sampleFormat) {
-        super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, C0554C.TIME_UNSET, chunkIndex);
+        super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, C0555C.TIME_UNSET, chunkIndex);
         this.trackType = trackType;
         this.sampleFormat = sampleFormat;
     }

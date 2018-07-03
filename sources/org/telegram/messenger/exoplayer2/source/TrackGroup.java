@@ -8,14 +8,14 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class TrackGroup implements Parcelable {
-    public static final Creator<TrackGroup> CREATOR = new C06321();
+    public static final Creator<TrackGroup> CREATOR = new C06331();
     private final Format[] formats;
     private int hashCode;
     public final int length;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.TrackGroup$1 */
-    static class C06321 implements Creator<TrackGroup> {
-        C06321() {
+    static class C06331 implements Creator<TrackGroup> {
+        C06331() {
         }
 
         public TrackGroup createFromParcel(Parcel in) {

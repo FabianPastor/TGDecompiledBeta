@@ -5,7 +5,7 @@ import android.os.Looper;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
@@ -89,7 +89,7 @@ public interface MediaSourceEventListener {
         }
 
         public void loadStarted(DataSpec dataSpec, int dataType, long elapsedRealtimeMs) {
-            loadStarted(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs);
+            loadStarted(dataSpec, dataType, -1, null, 0, null, C0555C.TIME_UNSET, C0555C.TIME_UNSET, elapsedRealtimeMs);
         }
 
         public void loadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs) {
@@ -110,7 +110,7 @@ public interface MediaSourceEventListener {
         }
 
         public void loadCompleted(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            loadCompleted(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
+            loadCompleted(dataSpec, dataType, -1, null, 0, null, C0555C.TIME_UNSET, C0555C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
         }
 
         public void loadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
@@ -131,7 +131,7 @@ public interface MediaSourceEventListener {
         }
 
         public void loadCanceled(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-            loadCanceled(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
+            loadCanceled(dataSpec, dataType, -1, null, 0, null, C0555C.TIME_UNSET, C0555C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded);
         }
 
         public void loadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
@@ -152,7 +152,7 @@ public interface MediaSourceEventListener {
         }
 
         public void loadError(DataSpec dataSpec, int dataType, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
-            loadError(dataSpec, dataType, -1, null, 0, null, C0554C.TIME_UNSET, C0554C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, wasCanceled);
+            loadError(dataSpec, dataType, -1, null, 0, null, C0555C.TIME_UNSET, C0555C.TIME_UNSET, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, wasCanceled);
         }
 
         public void loadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeUs, long mediaEndTimeUs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
@@ -208,7 +208,7 @@ public interface MediaSourceEventListener {
         }
 
         public void downstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeUs) {
-            downstreamFormatChanged(new MediaLoadData(1, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaTimeUs), C0554C.TIME_UNSET));
+            downstreamFormatChanged(new MediaLoadData(1, trackType, trackFormat, trackSelectionReason, trackSelectionData, adjustMediaTime(mediaTimeUs), C0555C.TIME_UNSET));
         }
 
         public void downstreamFormatChanged(final MediaLoadData mediaLoadData) {
@@ -225,9 +225,9 @@ public interface MediaSourceEventListener {
         }
 
         private long adjustMediaTime(long mediaTimeUs) {
-            long mediaTimeMs = C0554C.usToMs(mediaTimeUs);
-            if (mediaTimeMs == C0554C.TIME_UNSET) {
-                return C0554C.TIME_UNSET;
+            long mediaTimeMs = C0555C.usToMs(mediaTimeUs);
+            if (mediaTimeMs == C0555C.TIME_UNSET) {
+                return C0555C.TIME_UNSET;
             }
             return this.mediaTimeOffsetMs + mediaTimeMs;
         }

@@ -151,8 +151,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zooming;
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class C18014 implements OnApplyWindowInsetsListener {
-        C18014() {
+    class C18044 implements OnApplyWindowInsetsListener {
+        C18044() {
         }
 
         @SuppressLint({"NewApi"})
@@ -167,8 +167,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
-    class C18026 implements Runnable {
-        C18026() {
+    class C18056 implements Runnable {
+        C18056() {
         }
 
         public void run() {
@@ -184,8 +184,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$7 */
-    class C18037 extends AnimatorListenerAdapter {
-        C18037() {
+    class C18067 extends AnimatorListenerAdapter {
+        C18067() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -197,8 +197,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
-    class C18059 extends AnimatorListenerAdapter {
-        C18059() {
+    class C18089 extends AnimatorListenerAdapter {
+        C18089() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -672,8 +672,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C24631 implements VideoPlayerDelegate {
-        C24631() {
+    class C24661 implements VideoPlayerDelegate {
+        C24661() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -744,8 +744,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C24655 extends ActionBarMenuOnItemClick {
-        C24655() {
+    class C24685 extends ActionBarMenuOnItemClick {
+        C24685() {
         }
 
         public void onItemClick(int id) {
@@ -851,7 +851,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C24631());
+                this.videoPlayer.setDelegate(new C24661());
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.videoPlayer.setPlayWhenReady(true);
@@ -947,7 +947,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.containerView.setLayoutParams(layoutParams);
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new C18014());
+                this.containerView.setOnApplyWindowInsetsListener(new C18044());
                 this.containerView.setSystemUiVisibility(1280);
             }
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
@@ -961,7 +961,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C24655());
+            this.actionBar.setActionBarMenuOnItemClick(new C24685());
             this.secretDeleteTimer = new SecretDeleteTimer(activity);
             this.containerView.addView(this.secretDeleteTimer, LayoutHelper.createFrame(119, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
             this.windowLayoutParams = new LayoutParams();
@@ -1101,9 +1101,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation = new AnimatorSet();
                 this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
                 this.photoAnimationInProgress = 3;
-                this.photoAnimationEndRunnable = new C18026();
+                this.photoAnimationEndRunnable = new C18056();
                 this.imageMoveAnimation.setDuration(250);
-                this.imageMoveAnimation.addListener(new C18037());
+                this.imageMoveAnimation.addListener(new C18067());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.containerView.setLayerType(2, null);
@@ -1146,7 +1146,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C18059());
+                this.currentActionBarAnimation.addListener(new C18089());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
@@ -1462,8 +1462,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.SecretMediaViewer$11$1 */
-                    class C17991 implements Runnable {
-                        C17991() {
+                    class C18021 implements Runnable {
+                        C18021() {
                         }
 
                         public void run() {
@@ -1479,7 +1479,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             object.imageReceiver.setVisible(true, true);
                         }
                         SecretMediaViewer.this.isVisible = false;
-                        AndroidUtilities.runOnUIThread(new C17991());
+                        AndroidUtilities.runOnUIThread(new C18021());
                     }
                 });
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();

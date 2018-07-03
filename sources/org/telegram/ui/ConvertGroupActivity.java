@@ -38,8 +38,8 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     private int rowCount;
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$1 */
-    class C22601 extends ActionBarMenuOnItemClick {
-        C22601() {
+    class C22641 extends ActionBarMenuOnItemClick {
+        C22641() {
         }
 
         public void onItemClick(int id) {
@@ -50,7 +50,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$2 */
-    class C22612 implements OnItemClickListener {
+    class C22652 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ConvertGroupActivity$2$1 */
         class C14211 implements OnClickListener {
@@ -62,7 +62,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22612() {
+        C22652() {
         }
 
         public void onItemClick(View view, int position) {
@@ -173,7 +173,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ConvertGroup", R.string.ConvertGroup));
-        this.actionBar.setActionBarMenuOnItemClick(new C22601());
+        this.actionBar.setActionBarMenuOnItemClick(new C22641());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -183,7 +183,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22612());
+        this.listView.setOnItemClickListener(new C22652());
         return this.fragmentView;
     }
 

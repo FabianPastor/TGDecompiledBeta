@@ -193,8 +193,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$2 */
-    class C22732 extends ActionBarMenuItemSearchListener {
-        C22732() {
+    class C22772 extends ActionBarMenuItemSearchListener {
+        C22772() {
         }
 
         public void onSearchExpand() {
@@ -280,8 +280,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$4 */
-    class C22744 extends ActionBarMenuOnItemClick {
-        C22744() {
+    class C22784 extends ActionBarMenuOnItemClick {
+        C22784() {
         }
 
         public void onItemClick(int id) {
@@ -313,8 +313,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$7 */
-    class C22767 implements OnItemClickListener {
-        C22767() {
+    class C22807 implements OnItemClickListener {
+        C22807() {
         }
 
         public void onItemClick(View view, int position) {
@@ -448,7 +448,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$8 */
-    class C22778 implements OnItemLongClickListenerExtended {
+    class C22818 implements OnItemLongClickListenerExtended {
 
         /* renamed from: org.telegram.ui.DialogsActivity$8$1 */
         class C14341 implements OnClickListener {
@@ -464,7 +464,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22778() {
+        C22818() {
         }
 
         public boolean onItemClick(View view, int position, float x, float y) {
@@ -875,7 +875,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             updatePasscodeButton();
             updateProxyButton(false);
         }
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22732()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22772()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         if (this.onlySelect) {
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             if (this.dialogsType == 3 && this.selectAlertString == null) {
@@ -923,7 +923,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C22744());
+        this.actionBar.setActionBarMenuOnItemClick(new C22784());
         if (this.sideMenu != null) {
             this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
             this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
@@ -1048,8 +1048,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.listView.setLayoutManager(this.layoutManager);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         backupImageView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22767());
-        this.listView.setOnItemLongClickListener(new C22778());
+        this.listView.setOnItemClickListener(new C22807());
+        this.listView.setOnItemLongClickListener(new C22818());
         this.searchEmptyView = new EmptyTextProgressView(context);
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
@@ -1419,6 +1419,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 public void onSwitchRecordMode(boolean video) {
                 }
 
+                public void onTextSelectionChanged(int start, int end) {
+                }
+
                 public void onStickersExpandedChange() {
                 }
 
@@ -1426,6 +1429,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
 
                 public void onTextChanged(CharSequence text, boolean bigChange) {
+                }
+
+                public void onTextSpansChanged(CharSequence text) {
                 }
 
                 public void needSendTyping() {

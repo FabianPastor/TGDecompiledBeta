@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ChapterTocFrame extends Id3Frame {
-    public static final Creator<ChapterTocFrame> CREATOR = new C05951();
+    public static final Creator<ChapterTocFrame> CREATOR = new C05961();
     public static final String ID = "CTOC";
     public final String[] children;
     public final String elementId;
@@ -15,8 +15,8 @@ public final class ChapterTocFrame extends Id3Frame {
     private final Id3Frame[] subFrames;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.ChapterTocFrame$1 */
-    static class C05951 implements Creator<ChapterTocFrame> {
-        C05951() {
+    static class C05961 implements Creator<ChapterTocFrame> {
+        C05961() {
         }
 
         public ChapterTocFrame createFromParcel(Parcel in) {

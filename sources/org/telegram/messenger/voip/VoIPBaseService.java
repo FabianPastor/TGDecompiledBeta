@@ -118,7 +118,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     public static final int STATE_WAIT_INIT_ACK = 2;
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
     protected static VoIPBaseService sharedInstance;
-    protected Runnable afterSoundRunnable = new C07091();
+    protected Runnable afterSoundRunnable = new C07101();
     protected boolean audioConfigured;
     protected int audioRouteToSet = 2;
     protected boolean bluetoothScoActive = false;
@@ -145,7 +145,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean playingSound;
     protected Stats prevStats = new Stats();
     protected WakeLock proximityWakelock;
-    protected BroadcastReceiver receiver = new C07102();
+    protected BroadcastReceiver receiver = new C07112();
     protected MediaPlayer ringtonePlayer;
     protected int signalBarCount;
     protected SoundPool soundPool;
@@ -164,8 +164,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     private boolean wasEstablished;
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$1 */
-    class C07091 implements Runnable {
-        C07091() {
+    class C07101 implements Runnable {
+        C07101() {
         }
 
         public void run() {
@@ -180,8 +180,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$2 */
-    class C07102 extends BroadcastReceiver {
-        C07102() {
+    class C07112 extends BroadcastReceiver {
+        C07112() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -245,8 +245,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$3 */
-    class C07113 implements OnClickListener {
-        C07113() {
+    class C07123 implements OnClickListener {
+        C07123() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -283,8 +283,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         case 0:
                             if (!VoIPBaseService.this.bluetoothScoActive) {
                                 VoIPBaseService.this.needSwitchToBluetoothAfterScoActivates = true;
-                                am.startBluetoothSco();
-                                break;
+                                try {
+                                    am.startBluetoothSco();
+                                    break;
+                                } catch (Throwable th) {
+                                    break;
+                                }
                             }
                             am.setBluetoothScoOn(true);
                             am.setSpeakerphoneOn(false);
@@ -315,8 +319,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$4 */
-    class C07124 implements OnPreparedListener {
-        C07124() {
+    class C07134 implements OnPreparedListener {
+        C07134() {
         }
 
         public void onPrepared(MediaPlayer mediaPlayer) {
@@ -325,8 +329,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$5 */
-    class C07135 implements Runnable {
-        C07135() {
+    class C07145 implements Runnable {
+        C07145() {
         }
 
         public void run() {
@@ -335,8 +339,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$7 */
-    class C07157 implements Runnable {
-        C07157() {
+    class C07167 implements Runnable {
+        C07167() {
         }
 
         public void run() {
@@ -348,8 +352,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPBaseService$8 */
-    class C07168 implements Runnable {
-        C07168() {
+    class C07178 implements Runnable {
+        C07178() {
         }
 
         public void run() {
@@ -534,7 +538,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public void toggleSpeakerphoneOrShowRouteSheet(Activity activity) {
         if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C07113()).create();
+            BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new C07123()).create();
             sheet.setBackgroundColor(-13948117);
             sheet.show();
             ViewGroup container = sheet.getSheetContainer();
@@ -711,7 +715,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 am.requestAudioFocus(this, 2, 1);
             }
             this.ringtonePlayer = new MediaPlayer();
-            this.ringtonePlayer.setOnPreparedListener(new C07124());
+            this.ringtonePlayer.setOnPreparedListener(new C07134());
             this.ringtonePlayer.setLooping(true);
             this.ringtonePlayer.setAudioStreamType(2);
             try {
@@ -769,7 +773,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         super.onDestroy();
         sharedInstance = null;
-        AndroidUtilities.runOnUIThread(new C07135());
+        AndroidUtilities.runOnUIThread(new C07145());
         if (this.controller != null && this.controllerStarted) {
             this.lastKnownDuration = this.controller.getCallDuration();
             updateStats();
@@ -1030,7 +1034,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 this.needSwitchToBluetoothAfterScoActivates = true;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        am.startBluetoothSco();
+                        try {
+                            am.startBluetoothSco();
+                        } catch (Throwable th) {
+                        }
                     }
                 }, 500);
             }
@@ -1301,7 +1308,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         vibrator.vibrate(100);
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C07157(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                AndroidUtilities.runOnUIThread(new C07167(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 if (this.isOutgoing) {
                     StatsController.getInstance(this.currentAccount).incrementSentItemsCount(getStatsNetworkType(), 0, 1);
                 } else {
@@ -1340,7 +1347,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             this.timeoutRunnable = null;
         }
         if (USE_CONNECTION_SERVICE) {
-            Runnable r = new C07168();
+            Runnable r = new C07178();
             if (this.needPlayEndSound) {
                 AndroidUtilities.runOnUIThread(r, 700);
             } else {

@@ -224,8 +224,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$9 */
-    class C22199 implements Listener {
-        C22199() {
+    class C22239 implements Listener {
+        C22239() {
         }
 
         public boolean onBackspace() {
@@ -470,7 +470,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void createEmojiView() {
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(false, false, getContext(), null);
-            this.emojiView.setListener(new C22199());
+            this.emojiView.setListener(new C22239());
             this.sizeNotifierLayout.addView(this.emojiView);
         }
     }

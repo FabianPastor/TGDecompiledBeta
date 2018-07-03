@@ -75,8 +75,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C22283 extends OnScrollListener {
-        C22283() {
+    class C22323 extends OnScrollListener {
+        C22323() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -85,8 +85,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C22294 implements OnItemClickListener {
-        C22294() {
+    class C22334 implements OnItemClickListener {
+        C22334() {
         }
 
         public void onItemClick(View view, int position) {
@@ -251,8 +251,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C22283());
-        this.listView.setOnItemClickListener(new C22294());
+        this.listView.setOnScrollListener(new C22323());
+        this.listView.setOnItemClickListener(new C22334());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.header_shadow_reverse);

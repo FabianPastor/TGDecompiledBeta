@@ -43,8 +43,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$2 */
-    class C20282 implements RequestDelegate {
-        C20282() {
+    class C20312 implements RequestDelegate {
+        C20312() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -65,8 +65,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$3 */
-    class C20293 implements RequestDelegate {
-        C20293() {
+    class C20323 implements RequestDelegate {
+        C20323() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -132,8 +132,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.searchTimer.schedule(new TimerTask() {
 
             /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-            class C08041 implements Runnable {
-                C08041() {
+            class C08051 implements Runnable {
+                C08051() {
                 }
 
                 public void run() {
@@ -149,7 +149,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                AndroidUtilities.runOnUIThread(new C08041());
+                AndroidUtilities.runOnUIThread(new C08051());
             }
         }, 200, 500);
     }
@@ -159,7 +159,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             this.searchingUser = true;
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
             req.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20282());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20312());
         }
     }
 
@@ -199,7 +199,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } else {
                     req.peer = new TL_inputPeerEmpty();
                 }
-                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20293());
+                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20323());
                 notifyDataSetChanged();
             } else if (searchUser) {
                 searchBotUser();

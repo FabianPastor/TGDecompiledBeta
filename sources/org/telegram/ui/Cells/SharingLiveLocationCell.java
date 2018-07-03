@@ -38,15 +38,15 @@ public class SharingLiveLocationCell extends FrameLayout {
     private int currentAccount;
     private SharingLocationInfo currentInfo;
     private SimpleTextView distanceTextView;
-    private Runnable invalidateRunnable = new C09391();
+    private Runnable invalidateRunnable = new C09401();
     private LiveLocation liveLocation;
     private Location location = new Location("network");
     private SimpleTextView nameTextView;
     private RectF rect = new RectF();
 
     /* renamed from: org.telegram.ui.Cells.SharingLiveLocationCell$1 */
-    class C09391 implements Runnable {
-        C09391() {
+    class C09401 implements Runnable {
+        C09401() {
         }
 
         public void run() {

@@ -112,8 +112,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private boolean waitingForEmail;
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$2 */
-    class C18672 implements OnEditorActionListener {
-        C18672() {
+    class C18702 implements OnEditorActionListener {
+        C18702() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -126,8 +126,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$3 */
-    class C18683 implements Callback {
-        C18683() {
+    class C18713 implements Callback {
+        C18713() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -147,11 +147,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$4 */
-    class C18734 implements OnClickListener {
+    class C18764 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.TwoStepVerificationActivity$4$2 */
-        class C18712 implements DialogInterface.OnClickListener {
-            C18712() {
+        class C18742 implements DialogInterface.OnClickListener {
+            C18742() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -160,8 +160,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
 
         /* renamed from: org.telegram.ui.TwoStepVerificationActivity$4$3 */
-        class C18723 implements DialogInterface.OnClickListener {
-            C18723() {
+        class C18753 implements DialogInterface.OnClickListener {
+            C18753() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -171,8 +171,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
 
         /* renamed from: org.telegram.ui.TwoStepVerificationActivity$4$1 */
-        class C24981 implements RequestDelegate {
-            C24981() {
+        class C25011 implements RequestDelegate {
+            C25011() {
             }
 
             public void run(final TLObject response, final TL_error error) {
@@ -218,7 +218,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
         }
 
-        C18734() {
+        C18764() {
         }
 
         public void onClick(View v) {
@@ -226,11 +226,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             if (TwoStepVerificationActivity.this.type == 0) {
                 if (TwoStepVerificationActivity.this.currentPassword.has_recovery) {
                     TwoStepVerificationActivity.this.needShowProgress();
-                    ConnectionsManager.getInstance(TwoStepVerificationActivity.this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new C24981(), 10);
+                    ConnectionsManager.getInstance(TwoStepVerificationActivity.this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new C25011(), 10);
                 } else if (TwoStepVerificationActivity.this.getParentActivity() != null) {
                     builder = new Builder(TwoStepVerificationActivity.this.getParentActivity());
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new C18712());
+                    builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new C18742());
                     builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle));
                     builder.setMessage(LocaleController.getString("RestorePasswordNoEmailText", R.string.RestorePasswordNoEmailText));
                     TwoStepVerificationActivity.this.showDialog(builder.create());
@@ -241,7 +241,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 builder = new Builder(TwoStepVerificationActivity.this.getParentActivity());
                 builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", R.string.YourEmailSkipWarningText));
                 builder.setTitle(LocaleController.getString("YourEmailSkipWarning", R.string.YourEmailSkipWarning));
-                builder.setPositiveButton(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip), new C18723());
+                builder.setPositiveButton(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip), new C18753());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 TwoStepVerificationActivity.this.showDialog(builder.create());
             }
@@ -249,8 +249,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$6 */
-    class C18756 implements Runnable {
-        C18756() {
+    class C18786 implements Runnable {
+        C18786() {
         }
 
         public void run() {
@@ -262,8 +262,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$8 */
-    class C18788 implements Runnable {
-        C18788() {
+    class C18818 implements Runnable {
+        C18818() {
         }
 
         public void run() {
@@ -275,8 +275,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$1 */
-    class C24971 extends ActionBarMenuOnItemClick {
-        C24971() {
+    class C25001 extends ActionBarMenuOnItemClick {
+        C25001() {
         }
 
         public void onItemClick(int id) {
@@ -289,11 +289,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$5 */
-    class C24995 implements OnItemClickListener {
+    class C25025 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.TwoStepVerificationActivity$5$1 */
-        class C18741 implements DialogInterface.OnClickListener {
-            C18741() {
+        class C18771 implements DialogInterface.OnClickListener {
+            C18771() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -301,7 +301,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
         }
 
-        C24995() {
+        C25025() {
         }
 
         public void onItemClick(View view, int position) {
@@ -332,7 +332,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 }
                 builder.setMessage(text);
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18741());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18771());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 TwoStepVerificationActivity.this.showDialog(builder.create());
             }
@@ -498,7 +498,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C24971());
+        this.actionBar.setActionBarMenuOnItemClick(new C25001());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -530,8 +530,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.passwordEditText.setCursorWidth(1.5f);
         linearLayout.addView(this.passwordEditText, LayoutHelper.createLinear(-1, 36, 51, 40, 32, 40, 0));
-        this.passwordEditText.setOnEditorActionListener(new C18672());
-        this.passwordEditText.setCustomSelectionActionModeCallback(new C18683());
+        this.passwordEditText.setOnEditorActionListener(new C18702());
+        this.passwordEditText.setCustomSelectionActionModeCallback(new C18713());
         this.bottomTextView = new TextView(context);
         this.bottomTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.bottomTextView.setTextSize(1, 14.0f);
@@ -548,7 +548,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.bottomButton.setText(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip));
         this.bottomButton.setPadding(0, AndroidUtilities.dp(10.0f), 0, 0);
         linearLayout2.addView(this.bottomButton, LayoutHelper.createLinear(-1, -2, (LocaleController.isRTL ? 5 : 3) | 80, 40, 0, 40, 14));
-        this.bottomButton.setOnClickListener(new C18734());
+        this.bottomButton.setOnClickListener(new C18764());
         if (this.type == 0) {
             this.emptyView = new EmptyTextProgressView(context);
             this.emptyView.showProgress();
@@ -562,7 +562,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             Adapter listAdapter = new ListAdapter(context);
             this.listAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
-            this.listView.setOnItemClickListener(new C24995());
+            this.listView.setOnItemClickListener(new C25025());
             updateRows();
             this.actionBar.setTitle(LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification));
             this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPassword", R.string.PleaseEnterCurrentPassword));
@@ -594,7 +594,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         super.onResume();
         this.paused = false;
         if (this.type == 1) {
-            AndroidUtilities.runOnUIThread(new C18756(), 200);
+            AndroidUtilities.runOnUIThread(new C18786(), 200);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
@@ -626,8 +626,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$7$1$1 */
-                    class C18761 implements Runnable {
-                        C18761() {
+                    class C18791 implements Runnable {
+                        C18791() {
                         }
 
                         public void run() {
@@ -679,7 +679,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                             }
                         }
                         if (TwoStepVerificationActivity.this.type == 0 && !TwoStepVerificationActivity.this.destroyed && TwoStepVerificationActivity.this.shortPollRunnable == null) {
-                            TwoStepVerificationActivity.this.shortPollRunnable = new C18761();
+                            TwoStepVerificationActivity.this.shortPollRunnable = new C18791();
                             AndroidUtilities.runOnUIThread(TwoStepVerificationActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                         TwoStepVerificationActivity.this.updateRows();
@@ -843,7 +843,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else {
                 this.passwordEditText.setHint(this.currentPassword.hint);
             }
-            AndroidUtilities.runOnUIThread(new C18788(), 200);
+            AndroidUtilities.runOnUIThread(new C18818(), 200);
         }
     }
 
@@ -944,8 +944,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$9$1$1 */
-                    class C18791 implements DialogInterface.OnClickListener {
-                        C18791() {
+                    class C18821 implements DialogInterface.OnClickListener {
+                        C18821() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -955,8 +955,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     }
 
                     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$9$1$2 */
-                    class C18802 implements DialogInterface.OnClickListener {
-                        C18802() {
+                    class C18832 implements DialogInterface.OnClickListener {
+                        C18832() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -983,7 +983,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                 TwoStepVerificationActivity.this.updateRows();
                             } else if (TwoStepVerificationActivity.this.getParentActivity() != null) {
                                 builder = new Builder(TwoStepVerificationActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18791());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18821());
                                 builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
                                 builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
                                 dialog = TwoStepVerificationActivity.this.showDialog(builder.create());
@@ -996,7 +996,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         } else {
                             if (error.text.equals("EMAIL_UNCONFIRMED")) {
                                 builder = new Builder(TwoStepVerificationActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18802());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18832());
                                 builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
                                 builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
                                 dialog = TwoStepVerificationActivity.this.showDialog(builder.create());
@@ -1145,8 +1145,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.TwoStepVerificationActivity$11$1$1 */
-                            class C18651 implements DialogInterface.OnClickListener {
-                                C18651() {
+                            class C18681 implements DialogInterface.OnClickListener {
+                                C18681() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1158,7 +1158,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                             public void run() {
                                 if (error == null) {
                                     Builder builder = new Builder(TwoStepVerificationActivity.this.getParentActivity());
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18651());
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18681());
                                     builder.setMessage(LocaleController.getString("PasswordReset", R.string.PasswordReset));
                                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                     Dialog dialog = TwoStepVerificationActivity.this.showDialog(builder.create());

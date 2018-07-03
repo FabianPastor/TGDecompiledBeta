@@ -39,8 +39,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     private int shareLiveLocationPotistion = -1;
 
     /* renamed from: org.telegram.ui.Adapters.LocationActivityAdapter$1 */
-    class C08231 implements Runnable {
-        C08231() {
+    class C08241 implements Runnable {
+        C08241() {
         }
 
         public void run() {
@@ -181,7 +181,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     public void setPulledUp() {
         if (!this.pulledUp) {
             this.pulledUp = true;
-            AndroidUtilities.runOnUIThread(new C08231());
+            AndroidUtilities.runOnUIThread(new C08241());
         }
     }
 

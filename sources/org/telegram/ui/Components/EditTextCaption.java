@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.Layout.Alignment;
@@ -33,11 +34,16 @@ public class EditTextCaption extends EditTextBoldCursor {
     private String caption;
     private StaticLayout captionLayout;
     private boolean copyPasteShowed;
+    private EditTextCaptionDelegate delegate;
     private int hintColor;
     private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
+
+    public interface EditTextCaptionDelegate {
+        void onSpansChanged();
+    }
 
     public EditTextCaption(Context context) {
         super(context);
@@ -55,15 +61,23 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    private void makeSelectedBold() {
+    public void setDelegate(EditTextCaptionDelegate editTextCaptionDelegate) {
+        this.delegate = editTextCaptionDelegate;
+    }
+
+    public void makeSelectedBold() {
         applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")));
     }
 
-    private void makeSelectedItalic() {
+    public void makeSelectedItalic() {
         applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")));
     }
 
-    private void makeSelectedUrl() {
+    public void makeSelectedMono() {
+        applyTextStyleToSelection(new TypefaceSpan(Typeface.MONOSPACE));
+    }
+
+    public void makeSelectedUrl() {
         Builder builder = new Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
@@ -104,6 +118,9 @@ public class EditTextCaption extends EditTextBoldCursor {
                     }
                 }
                 editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+                if (EditTextCaption.this.delegate != null) {
+                    EditTextCaption.this.delegate.onSpansChanged();
+                }
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -129,7 +146,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    private void makeSelectedRegular() {
+    public void makeSelectedRegular() {
         applyTextStyleToSelection(null);
     }
 
@@ -153,6 +170,9 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
         if (span != null) {
             editable.setSpan(span, start, end, 33);
+        }
+        if (this.delegate != null) {
+            this.delegate.onSpansChanged();
         }
     }
 
@@ -183,6 +203,9 @@ public class EditTextCaption extends EditTextBoldCursor {
                     mode.finish();
                 } else if (item.getItemId() == R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
+                    mode.finish();
+                } else if (item.getItemId() == R.id.menu_mono) {
+                    EditTextCaption.this.makeSelectedMono();
                     mode.finish();
                 } else if (item.getItemId() == R.id.menu_link) {
                     EditTextCaption.this.makeSelectedUrl();

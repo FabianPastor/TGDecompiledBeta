@@ -205,8 +205,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$6 */
-    class C22256 extends ItemDecoration {
-        C22256() {
+    class C22296 extends ItemDecoration {
+        C22296() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -227,8 +227,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$7 */
-    class C22267 implements OnItemClickListener {
-        C22267() {
+    class C22307 implements OnItemClickListener {
+        C22307() {
         }
 
         public void onItemClick(View view, int position) {
@@ -255,8 +255,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$8 */
-    class C22278 extends OnScrollListener {
-        C22278() {
+    class C22318 extends OnScrollListener {
+        C22318() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -824,15 +824,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         recyclerListView.setLayoutManager(gridLayoutManager);
         this.gridView.setHorizontalScrollBarEnabled(false);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C22256());
+        this.gridView.addItemDecoration(new C22296());
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         recyclerListView = this.gridView;
         Adapter shareDialogsAdapter = new ShareDialogsAdapter(context);
         this.listAdapter = shareDialogsAdapter;
         recyclerListView.setAdapter(shareDialogsAdapter);
         this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.gridView.setOnItemClickListener(new C22267());
-        this.gridView.setOnScrollListener(new C22278());
+        this.gridView.setOnItemClickListener(new C22307());
+        this.gridView.setOnScrollListener(new C22318());
         this.searchEmptyView = new EmptyTextProgressView(context);
         this.searchEmptyView.setShowAtCenter(true);
         this.searchEmptyView.showTextView();

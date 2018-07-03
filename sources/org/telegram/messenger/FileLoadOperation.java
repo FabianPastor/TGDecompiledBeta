@@ -105,8 +105,8 @@ public class FileLoadOperation {
     private InputWebFileLocation webLocation;
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$4 */
-    class C01574 implements Runnable {
-        C01574() {
+    class C01584 implements Runnable {
+        C01584() {
         }
 
         public void run() {
@@ -115,8 +115,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$6 */
-    class C01596 implements Runnable {
-        C01596() {
+    class C01606 implements Runnable {
+        C01606() {
         }
 
         public void run() {
@@ -125,8 +125,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$7 */
-    class C01607 implements Runnable {
-        C01607() {
+    class C01617 implements Runnable {
+        C01617() {
         }
 
         public void run() {
@@ -143,8 +143,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$8 */
-    class C01618 implements Runnable {
-        C01618() {
+    class C01628 implements Runnable {
+        C01628() {
         }
 
         public void run() {
@@ -602,7 +602,7 @@ public class FileLoadOperation {
 
     public void pause() {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new C01574());
+            Utilities.stageQueue.postRunnable(new C01584());
         }
     }
 
@@ -634,7 +634,7 @@ public class FileLoadOperation {
                 }
             });
         } else if (wasPaused && alreadyStarted) {
-            Utilities.stageQueue.postRunnable(new C01596());
+            Utilities.stageQueue.postRunnable(new C01606());
         }
         if (alreadyStarted) {
             return wasPaused;
@@ -844,7 +844,7 @@ public class FileLoadOperation {
                 return false;
             }
             this.started = true;
-            Utilities.stageQueue.postRunnable(new C01607());
+            Utilities.stageQueue.postRunnable(new C01617());
         }
         return true;
     }
@@ -854,7 +854,7 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new C01618());
+        Utilities.stageQueue.postRunnable(new C01628());
     }
 
     private void cleanup() {
@@ -1354,8 +1354,8 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass12 = new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.FileLoadOperation$12$1 */
-                        class C19361 implements RequestDelegate {
-                            C19361() {
+                        class C19391 implements RequestDelegate {
+                            C19391() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -1449,7 +1449,7 @@ public class FileLoadOperation {
                                 TL_upload_reuploadCdnFile req = new TL_upload_reuploadCdnFile();
                                 req.file_token = FileLoadOperation.this.cdnToken;
                                 req.request_token = res2.request_token;
-                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C19361(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
+                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C19391(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
                             }
                         }
                     };

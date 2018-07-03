@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
@@ -42,7 +42,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
     private final DataSource dataSource;
     private final long elapsedRealtimeOffsetMs;
     private IOException fatalError;
-    private long liveEdgeTimeUs = C0554C.TIME_UNSET;
+    private long liveEdgeTimeUs = C0555C.TIME_UNSET;
     private DashManifest manifest;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int maxSegmentsPerLoad;
@@ -235,7 +235,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         if (this.fatalError == null) {
             long bufferedDurationUs = loadPositionUs - playbackPositionUs;
             long timeToLiveEdgeUs = resolveTimeToLiveEdgeUs(playbackPositionUs);
-            long presentationPositionUs = (C0554C.msToUs(this.manifest.availabilityStartTimeMs) + C0554C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs)) + loadPositionUs;
+            long presentationPositionUs = (C0555C.msToUs(this.manifest.availabilityStartTimeMs) + C0555C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs)) + loadPositionUs;
             if (this.playerTrackEmsgHandler == null || !this.playerTrackEmsgHandler.maybeRefreshManifestBeforeLoadingNextChunk(presentationPositionUs)) {
                 this.trackSelection.updateSelectedTrack(playbackPositionUs, bufferedDurationUs, timeToLiveEdgeUs);
                 RepresentationHolder representationHolder = this.representationHolders[this.trackSelection.getSelectedIndex()];
@@ -265,9 +265,9 @@ public class DefaultDashChunkSource implements DashChunkSource {
                 long segmentNum;
                 long firstAvailableSegmentNum = representationHolder.getFirstSegmentNum();
                 if (availableSegmentCount == -1) {
-                    long liveEdgeTimeInPeriodUs = (getNowUnixTimeUs() - C0554C.msToUs(this.manifest.availabilityStartTimeMs)) - C0554C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs);
-                    if (this.manifest.timeShiftBufferDepthMs != C0554C.TIME_UNSET) {
-                        firstAvailableSegmentNum = Math.max(firstAvailableSegmentNum, representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs - C0554C.msToUs(this.manifest.timeShiftBufferDepthMs)));
+                    long liveEdgeTimeInPeriodUs = (getNowUnixTimeUs() - C0555C.msToUs(this.manifest.availabilityStartTimeMs)) - C0555C.msToUs(this.manifest.getPeriod(this.periodIndex).startMs);
+                    if (this.manifest.timeShiftBufferDepthMs != C0555C.TIME_UNSET) {
+                        firstAvailableSegmentNum = Math.max(firstAvailableSegmentNum, representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs - C0555C.msToUs(this.manifest.timeShiftBufferDepthMs)));
                     }
                     lastAvailableSegmentNum = representationHolder.getSegmentNum(liveEdgeTimeInPeriodUs) - 1;
                 } else {
@@ -292,7 +292,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
                     out.endOfStream = z;
                     return;
                 }
-                out.chunk = newMediaChunk(representationHolder, this.dataSource, this.trackType, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), segmentNum, (int) Math.min((long) this.maxSegmentsPerLoad, (lastAvailableSegmentNum - segmentNum) + 1), previous == null ? loadPositionUs : C0554C.TIME_UNSET);
+                out.chunk = newMediaChunk(representationHolder, this.dataSource, this.trackType, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), segmentNum, (int) Math.min((long) this.maxSegmentsPerLoad, (lastAvailableSegmentNum - segmentNum) + 1), previous == null ? loadPositionUs : C0555C.TIME_UNSET);
             }
         }
     }
@@ -342,7 +342,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
     }
 
     private void updateLiveEdgeTimeUs(RepresentationHolder representationHolder, long lastAvailableSegmentNum) {
-        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C0554C.TIME_UNSET;
+        this.liveEdgeTimeUs = this.manifest.dynamic ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C0555C.TIME_UNSET;
     }
 
     private long getNowUnixTimeUs() {
@@ -353,11 +353,11 @@ public class DefaultDashChunkSource implements DashChunkSource {
     }
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
-        boolean resolveTimeToLiveEdgePossible = this.manifest.dynamic && this.liveEdgeTimeUs != C0554C.TIME_UNSET;
+        boolean resolveTimeToLiveEdgePossible = this.manifest.dynamic && this.liveEdgeTimeUs != C0555C.TIME_UNSET;
         if (resolveTimeToLiveEdgePossible) {
             return this.liveEdgeTimeUs - playbackPositionUs;
         }
-        return C0554C.TIME_UNSET;
+        return C0555C.TIME_UNSET;
     }
 
     protected static Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, RangedUri initializationUri, RangedUri indexUri) {

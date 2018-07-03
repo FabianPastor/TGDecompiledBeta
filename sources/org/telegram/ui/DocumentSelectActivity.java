@@ -198,8 +198,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C22782 extends ActionBarMenuOnItemClick {
-        C22782() {
+    class C22822 extends ActionBarMenuOnItemClick {
+        C22822() {
         }
 
         public void onItemClick(int id) {
@@ -227,8 +227,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C22794 extends OnScrollListener {
-        C22794() {
+    class C22834 extends OnScrollListener {
+        C22834() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -237,8 +237,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$5 */
-    class C22805 implements OnItemLongClickListener {
-        C22805() {
+    class C22845 implements OnItemLongClickListener {
+        C22845() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -290,8 +290,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$6 */
-    class C22816 implements OnItemClickListener {
-        C22816() {
+    class C22856 implements OnItemClickListener {
+        C22856() {
         }
 
         public void onItemClick(View view, int position) {
@@ -484,7 +484,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C22782());
+        this.actionBar.setActionBarMenuOnItemClick(new C22822());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -512,9 +512,9 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C22794());
-        this.listView.setOnItemLongClickListener(new C22805());
-        this.listView.setOnItemClickListener(new C22816());
+        this.listView.setOnScrollListener(new C22834());
+        this.listView.setOnItemLongClickListener(new C22845());
+        this.listView.setOnItemClickListener(new C22856());
         listRoots();
         return this.fragmentView;
     }

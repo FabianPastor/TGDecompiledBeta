@@ -1,6 +1,9 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Shader.TileMode;
@@ -38,6 +41,7 @@ import org.telegram.tgnet.TLRPC.account_Password;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
@@ -102,9 +106,20 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
     }
 
-    /* renamed from: org.telegram.ui.ExternalActionActivity$6 */
-    class C14516 implements OnGlobalLayoutListener {
-        C14516() {
+    /* renamed from: org.telegram.ui.ExternalActionActivity$5 */
+    class C14495 implements OnDismissListener {
+        C14495() {
+        }
+
+        public void onDismiss(DialogInterface dialog) {
+            ExternalActionActivity.this.setResult(0);
+            ExternalActionActivity.this.finish();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ExternalActionActivity$7 */
+    class C14537 implements OnGlobalLayoutListener {
+        C14537() {
         }
 
         public void onGlobalLayout() {
@@ -115,9 +130,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
     }
 
-    /* renamed from: org.telegram.ui.ExternalActionActivity$7 */
-    class C14527 implements Runnable {
-        C14527() {
+    /* renamed from: org.telegram.ui.ExternalActionActivity$8 */
+    class C14548 implements Runnable {
+        C14548() {
         }
 
         public void run() {
@@ -136,8 +151,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$3 */
-    class C22823 implements PasscodeViewDelegate {
-        C22823() {
+    class C22863 implements PasscodeViewDelegate {
+        C22863() {
         }
 
         public void didAcceptedPassword() {
@@ -207,7 +222,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
             this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
-            launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 700));
+            launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
@@ -253,29 +268,71 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C22823());
+            this.passcodeView.setDelegate(new C22863());
+        }
+    }
+
+    public void onFinishLogin() {
+        handleIntent(this.passcodeSaveIntent, this.passcodeSaveIntentIsNew, this.passcodeSaveIntentIsRestore, true, this.passcodeSaveIntentAccount, this.passcodeSaveIntentState);
+        this.actionBarLayout.removeAllFragments();
+        if (this.layersActionBarLayout != null) {
+            this.layersActionBarLayout.removeAllFragments();
+        }
+        if (this.backgroundTablet != null) {
+            this.backgroundTablet.setVisibility(0);
         }
     }
 
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword, int intentAccount, int state) {
         if (fromPassword || !(AndroidUtilities.needShowPasscode(true) || SharedConfig.isWaitingForPasscodeEnter)) {
-            if (!"org.telegram.passport.AUTHORIZE".equals(intent.getAction())) {
-                if (AndroidUtilities.isTablet()) {
-                    if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                        this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
+            if ("org.telegram.passport.AUTHORIZE".equals(intent.getAction())) {
+                if (state == 0) {
+                    int activatedAccountsCount = UserConfig.getActivatedAccountsCount();
+                    if (activatedAccountsCount == 0) {
+                        this.passcodeSaveIntent = intent;
+                        this.passcodeSaveIntentIsNew = isNew;
+                        this.passcodeSaveIntentIsRestore = restore;
+                        this.passcodeSaveIntentAccount = intentAccount;
+                        this.passcodeSaveIntentState = state;
+                        LoginActivity fragment = new LoginActivity();
+                        if (AndroidUtilities.isTablet()) {
+                            this.layersActionBarLayout.addFragmentToStack(fragment);
+                        } else {
+                            this.actionBarLayout.addFragmentToStack(fragment);
+                        }
+                        if (!AndroidUtilities.isTablet()) {
+                            this.backgroundTablet.setVisibility(8);
+                        }
+                        this.actionBarLayout.showLastFragment();
+                        if (AndroidUtilities.isTablet()) {
+                            this.layersActionBarLayout.showLastFragment();
+                        }
+                        Builder builder = new Builder((Context) this);
+                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", R.string.PleaseLoginPassport));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.show();
+                        return true;
+                    } else if (activatedAccountsCount >= 2) {
+                        final int i = intentAccount;
+                        final Intent intent2 = intent;
+                        final boolean z = isNew;
+                        final boolean z2 = restore;
+                        final boolean z3 = fromPassword;
+                        AlertDialog alertDialog = AlertsCreator.createAccountSelectDialog(this, new AccountSelectDelegate() {
+                            public void didSelectAccount(int account) {
+                                if (account != i) {
+                                    ExternalActionActivity.this.switchToAccount(account);
+                                }
+                                ExternalActionActivity.this.handleIntent(intent2, z, z2, z3, account, 1);
+                            }
+                        });
+                        alertDialog.show();
+                        alertDialog.setCanceledOnTouchOutside(false);
+                        alertDialog.setOnDismissListener(new C14495());
+                        return true;
                     }
-                } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
-                    this.actionBarLayout.addFragmentToStack(new CacheControlActivity());
                 }
-                if (!AndroidUtilities.isTablet()) {
-                    this.backgroundTablet.setVisibility(8);
-                }
-                this.actionBarLayout.showLastFragment();
-                if (AndroidUtilities.isTablet()) {
-                    this.layersActionBarLayout.showLastFragment();
-                }
-                intent.setAction(null);
-            } else if (state != 0 || UserConfig.getActivatedAccountsCount() < 2) {
                 final AlertDialog progressDialog = new AlertDialog(this, 1);
                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                 progressDialog.setCanceledOnTouchOutside(false);
@@ -292,12 +349,12 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                     return false;
                 }
                 progressDialog.show();
-                final int i = intentAccount;
+                final int i2 = intentAccount;
                 requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, final TL_error error) {
                         final TL_account_authorizationForm authorizationForm = (TL_account_authorizationForm) response;
                         if (authorizationForm != null) {
-                            requestId[0] = ConnectionsManager.getInstance(i).sendRequest(new TL_account_getPassword(), new RequestDelegate() {
+                            requestId[0] = ConnectionsManager.getInstance(i2).sendRequest(new TL_account_getPassword(), new RequestDelegate() {
                                 public void run(final TLObject response, TL_error error) {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
@@ -308,7 +365,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                                             }
                                             if (response != null) {
                                                 account_Password accountPassword = response;
-                                                MessagesController.getInstance(i).putUsers(authorizationForm.users, false);
+                                                MessagesController.getInstance(i2).putUsers(authorizationForm.users, false);
                                                 PassportActivity fragment = new PassportActivity(5, req.bot_id, req.scope, req.public_key, payload, null, authorizationForm, accountPassword);
                                                 fragment.setNeedActivityResult(true);
                                                 if (AndroidUtilities.isTablet()) {
@@ -331,37 +388,59 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                             return;
                         }
                         AndroidUtilities.runOnUIThread(new Runnable() {
+
+                            /* renamed from: org.telegram.ui.ExternalActionActivity$6$2$1 */
+                            class C14511 implements OnDismissListener {
+                                C14511() {
+                                }
+
+                                public void onDismiss(DialogInterface dialog) {
+                                    ExternalActionActivity.this.setResult(1, new Intent().putExtra("error", error.text));
+                                    ExternalActionActivity.this.finish();
+                                }
+                            }
+
                             public void run() {
                                 try {
                                     progressDialog.dismiss();
                                     if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                                        AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                        AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                        if (dialog != null) {
+                                            dialog.setOnDismissListener(new C14511());
+                                            return;
+                                        }
+                                        ExternalActionActivity.this.setResult(1, new Intent().putExtra("error", error.text));
+                                        ExternalActionActivity.this.finish();
                                     } else if ("BOT_INVALID".equals(error.text) || "PUBLIC_KEY_REQUIRED".equals(error.text) || "PUBLIC_KEY_INVALID".equals(error.text) || "SCOPE_EMPTY".equals(error.text) || "PAYLOAD_EMPTY".equals(error.text)) {
                                         ExternalActionActivity.this.setResult(1, new Intent().putExtra("error", error.text));
+                                        ExternalActionActivity.this.finish();
+                                    } else {
+                                        ExternalActionActivity.this.setResult(0);
+                                        ExternalActionActivity.this.finish();
                                     }
-                                    ExternalActionActivity.this.finish();
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
                                 }
                             }
                         });
                     }
-                });
+                }, 10);
             } else {
-                final int i2 = intentAccount;
-                final Intent intent2 = intent;
-                final boolean z = isNew;
-                final boolean z2 = restore;
-                final boolean z3 = fromPassword;
-                AlertsCreator.createAccountSelectDialog(this, new AccountSelectDelegate() {
-                    public void didSelectAccount(int account) {
-                        if (account != i2) {
-                            ExternalActionActivity.this.switchToAccount(account);
-                        }
-                        ExternalActionActivity.this.handleIntent(intent2, z, z2, z3, account, 1);
+                if (AndroidUtilities.isTablet()) {
+                    if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
                     }
-                }).show();
-                return true;
+                } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
+                    this.actionBarLayout.addFragmentToStack(new CacheControlActivity());
+                }
+                if (!AndroidUtilities.isTablet()) {
+                    this.backgroundTablet.setVisibility(8);
+                }
+                this.actionBarLayout.showLastFragment();
+                if (AndroidUtilities.isTablet()) {
+                    this.layersActionBarLayout.showLastFragment();
+                }
+                intent.setAction(null);
             }
             return false;
         }
@@ -446,7 +525,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C14516());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C14537());
         }
     }
 
@@ -456,6 +535,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         if (AndroidUtilities.isTablet()) {
             this.layersActionBarLayout.onPause();
         }
+        ApplicationLoader.externalInterfacePaused = true;
         onPasscodePause();
         if (this.passcodeView != null) {
             this.passcodeView.onPause();
@@ -473,6 +553,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         if (AndroidUtilities.isTablet()) {
             this.layersActionBarLayout.onResume();
         }
+        ApplicationLoader.externalInterfacePaused = false;
         onPasscodeResume();
         if (this.passcodeView.getVisibility() != 0) {
             this.actionBarLayout.onResume();
@@ -496,7 +577,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C14527();
+            this.lockRunnable = new C14548();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

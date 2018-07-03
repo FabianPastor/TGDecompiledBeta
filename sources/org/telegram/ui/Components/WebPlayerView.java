@@ -69,7 +69,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -739,7 +739,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 source.setCharAt(a, lower);
             }
             try {
-                return new String(Base64.decode(source.toString(), 0), C0554C.UTF8_NAME);
+                return new String(Base64.decode(source.toString(), 0), C0555C.UTF8_NAME);
             } catch (Exception e) {
                 return null;
             }
@@ -1083,9 +1083,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             try {
                 JSONObject stream = new JSONObject(streamCode).getJSONObject("stream");
                 JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{this.videoId}), headers, false));
-                String sig = URLEncoder.encode(accessToken.getString("sig"), C0554C.UTF8_NAME);
-                String token = URLEncoder.encode(accessToken.getString("token"), C0554C.UTF8_NAME);
-                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0554C.UTF8_NAME);
+                String sig = URLEncoder.encode(accessToken.getString("sig"), C0555C.UTF8_NAME);
+                String token = URLEncoder.encode(accessToken.getString("token"), C0555C.UTF8_NAME);
+                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0555C.UTF8_NAME);
                 String params = "allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=" + ((int) (Math.random() * 1.0E7d)) + "&sig=" + sig + "&token=" + token;
                 this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, params});
                 this.results[1] = "hls";
@@ -1210,7 +1210,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             Matcher matcher;
             String params = "video_id=" + this.videoId + "&ps=default&gl=US&hl=en";
             try {
-                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0554C.UTF8_NAME);
+                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0555C.UTF8_NAME);
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
@@ -1243,7 +1243,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             args2 = args[a].split("=");
                             if (args2.length == 2) {
                                 try {
-                                    this.result[0] = URLDecoder.decode(args2[1], C0554C.UTF8_NAME);
+                                    this.result[0] = URLDecoder.decode(args2[1], C0555C.UTF8_NAME);
                                 } catch (Throwable e2) {
                                     FileLog.m3e(e2);
                                 }
@@ -1252,17 +1252,17 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             args2 = args[a].split("=");
                             if (args2.length == 2) {
                                 try {
-                                    String[] args3 = URLDecoder.decode(args2[1], C0554C.UTF8_NAME).split("[&,]");
+                                    String[] args3 = URLDecoder.decode(args2[1], C0555C.UTF8_NAME).split("[&,]");
                                     String currentUrl = null;
                                     boolean isMp4 = false;
                                     for (String split : args3) {
                                         String[] args4 = split.split("=");
                                         if (args4[0].startsWith("type")) {
-                                            if (URLDecoder.decode(args4[1], C0554C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
+                                            if (URLDecoder.decode(args4[1], C0555C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
                                                 isMp4 = true;
                                             }
                                         } else if (args4[0].startsWith(UpdateFragment.FRAGMENT_URL)) {
-                                            currentUrl = URLDecoder.decode(args4[1], C0554C.UTF8_NAME);
+                                            currentUrl = URLDecoder.decode(args4[1], C0555C.UTF8_NAME);
                                         } else if (args4[0].startsWith("itag")) {
                                             currentUrl = null;
                                             isMp4 = false;
@@ -1285,7 +1285,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             args2 = args[a].split("=");
                             if (args2.length == 2) {
                                 try {
-                                    hls = URLDecoder.decode(args2[1], C0554C.UTF8_NAME);
+                                    hls = URLDecoder.decode(args2[1], C0555C.UTF8_NAME);
                                 } catch (Throwable e222) {
                                     FileLog.m3e(e222);
                                 }
@@ -1408,7 +1408,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                             return;
                                         }
                                         try {
-                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + str2 + "</script>").getBytes(C0554C.UTF8_NAME), 0));
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + str2 + "</script>").getBytes(C0555C.UTF8_NAME), 0));
                                         } catch (Throwable e) {
                                             FileLog.m3e(e);
                                         }
@@ -1464,8 +1464,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$5 */
-    class C22505 implements CallJavaResultInterface {
-        C22505() {
+    class C22545 implements CallJavaResultInterface {
+        C22545() {
         }
 
         public void jsCallFinished(String value) {
@@ -1591,7 +1591,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                         result = result2;
                                     }
                                     try {
-                                        result.append(new String(data, 0, read, C0554C.UTF8_NAME));
+                                        result.append(new String(data, 0, read, C0555C.UTF8_NAME));
                                         result2 = result;
                                     } catch (Exception e5) {
                                         e42 = e5;
@@ -1684,7 +1684,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
         this.interfaceName = "JavaScriptInterface";
         this.webView = new WebView(context);
-        this.webView.addJavascriptInterface(new JavaScriptInterface(new C22505()), this.interfaceName);
+        this.webView.addJavascriptInterface(new JavaScriptInterface(new C22545()), this.interfaceName);
         WebSettings webSettings = this.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("utf-8");
@@ -1778,7 +1778,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
     public void onStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState != 2) {
-            if (this.videoPlayer.getDuration() != C0554C.TIME_UNSET) {
+            if (this.videoPlayer.getDuration() != C0555C.TIME_UNSET) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
                 this.controlsView.setDuration(0);
@@ -1988,7 +1988,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
             this.videoPlayer.setPlayWhenReady(this.isAutoplay);
             this.isLoading = false;
-            if (this.videoPlayer.getDuration() != C0554C.TIME_UNSET) {
+            if (this.videoPlayer.getDuration() != C0555C.TIME_UNSET) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
                 this.controlsView.setDuration(0);

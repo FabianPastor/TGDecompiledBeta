@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.mp4;
 
 import android.util.Log;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
@@ -34,25 +34,25 @@ public final class TrackEncryptionBox {
         int i = -1;
         switch (schemeType.hashCode()) {
             case 3046605:
-                if (schemeType.equals(C0554C.CENC_TYPE_cbc1)) {
+                if (schemeType.equals(C0555C.CENC_TYPE_cbc1)) {
                     i = 2;
                     break;
                 }
                 break;
             case 3046671:
-                if (schemeType.equals(C0554C.CENC_TYPE_cbcs)) {
+                if (schemeType.equals(C0555C.CENC_TYPE_cbcs)) {
                     i = 3;
                     break;
                 }
                 break;
             case 3049879:
-                if (schemeType.equals(C0554C.CENC_TYPE_cenc)) {
+                if (schemeType.equals(C0555C.CENC_TYPE_cenc)) {
                     i = 0;
                     break;
                 }
                 break;
             case 3049895:
-                if (schemeType.equals(C0554C.CENC_TYPE_cens)) {
+                if (schemeType.equals(C0555C.CENC_TYPE_cens)) {
                     i = 1;
                     break;
                 }

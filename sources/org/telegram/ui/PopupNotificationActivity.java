@@ -117,8 +117,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private WakeLock wakeLock = null;
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class C17515 implements OnClickListener {
-        C17515() {
+    class C17545 implements OnClickListener {
+        C17545() {
         }
 
         @TargetApi(9)
@@ -134,8 +134,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class C17526 implements Runnable {
-        C17526() {
+    class C17556 implements Runnable {
+        C17556() {
         }
 
         public void run() {
@@ -146,8 +146,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class C17537 implements Runnable {
-        C17537() {
+    class C17567 implements Runnable {
+        C17567() {
         }
 
         public void run() {
@@ -158,8 +158,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$8 */
-    class C17548 implements Runnable {
-        C17548() {
+    class C17578 implements Runnable {
+        C17578() {
         }
 
         public void run() {
@@ -170,8 +170,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$9 */
-    class C17559 extends AnimatorListenerAdapter {
-        C17559() {
+    class C17589 extends AnimatorListenerAdapter {
+        C17589() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -210,8 +210,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
-    class C24243 implements ChatActivityEnterViewDelegate {
-        C24243() {
+    class C24273 implements ChatActivityEnterViewDelegate {
+        C24273() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -226,6 +226,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
 
         public void onTextChanged(CharSequence text, boolean big) {
+        }
+
+        public void onTextSelectionChanged(int start, int end) {
+        }
+
+        public void onTextSpansChanged(CharSequence text) {
         }
 
         public void onStickersExpandedChange() {
@@ -275,8 +281,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$4 */
-    class C24254 extends ActionBarMenuOnItemClick {
-        C24254() {
+    class C24284 extends ActionBarMenuOnItemClick {
+        C24284() {
         }
 
         public void onItemClick(int id) {
@@ -426,7 +432,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
-        this.chatActivityEnterView.setDelegate(new C24243());
+        this.chatActivityEnterView.setDelegate(new C24273());
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
@@ -495,7 +501,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.bottomMargin = AndroidUtilities.dp(4.0f);
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
-        this.actionBar.setActionBarMenuOnItemClick(new C24254());
+        this.actionBar.setActionBarMenuOnItemClick(new C24284());
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
@@ -518,7 +524,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             Builder builder = new Builder((Context) this);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C17515());
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C17545());
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             builder.show();
         }
@@ -615,12 +621,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     moveDiff = ((float) width) - this.centerView.getTranslationX();
                     otherView = this.leftView;
                     otherButtonsView = this.leftButtonsView;
-                    this.onAnimationEndRunnable = new C17526();
+                    this.onAnimationEndRunnable = new C17556();
                 } else if ((forceMove == 2 || diff < (-width) / 3) && this.rightView != null) {
                     moveDiff = ((float) (-width)) - this.centerView.getTranslationX();
                     otherView = this.rightView;
                     otherButtonsView = this.rightButtonsView;
-                    this.onAnimationEndRunnable = new C17537();
+                    this.onAnimationEndRunnable = new C17567();
                 } else if (this.centerView.getTranslationX() != 0.0f) {
                     moveDiff = -this.centerView.getTranslationX();
                     otherView = diff > 0 ? this.leftView : this.rightView;
@@ -629,7 +635,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     } else {
                         otherButtonsView = this.rightButtonsView;
                     }
-                    this.onAnimationEndRunnable = new C17548();
+                    this.onAnimationEndRunnable = new C17578();
                 }
                 if (moveDiff != 0.0f) {
                     int time = (int) (Math.abs(moveDiff / ((float) width)) * 200.0f);
@@ -647,7 +653,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animators);
                     animatorSet.setDuration((long) time);
-                    animatorSet.addListener(new C17559());
+                    animatorSet.addListener(new C17589());
                     animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();

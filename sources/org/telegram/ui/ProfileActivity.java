@@ -43,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -220,7 +221,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int phoneRow;
     private boolean playProfileAnimation;
-    private PhotoViewerProvider provider = new C25451();
+    private PhotoViewerProvider provider = new C25481();
     private boolean recreateMenuAfterAnimation;
     private int rowCount = 0;
     private int sectionRow;
@@ -273,8 +274,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$3 */
-    class C24453 implements ImageUpdaterDelegate {
-        C24453() {
+    class C24483 implements ImageUpdaterDelegate {
+        C24483() {
         }
 
         public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big, TL_secureFile secureFile) {
@@ -285,11 +286,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$5 */
-    class C24485 extends ActionBarMenuOnItemClick {
+    class C24515 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ProfileActivity$5$1 */
-        class C17751 implements OnClickListener {
-            C17751() {
+        class C17781 implements OnClickListener {
+            C17781() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -301,7 +302,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C24485() {
+        C24515() {
         }
 
         public void onItemClick(int id) {
@@ -320,7 +321,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             builder.setMessage(LocaleController.getString("AreYouSureBlockContact", R.string.AreYouSureBlockContact));
                         }
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17751());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17781());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (ProfileActivity.this.userBlocked) {
@@ -470,11 +471,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
-    class C24499 implements OnItemClickListener {
+    class C24529 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$2 */
-        class C17792 implements OnClickListener {
-            C17792() {
+        class C17822 implements OnClickListener {
+            C17822() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -484,8 +485,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$3 */
-        class C17803 implements OnClickListener {
-            C17803() {
+        class C17833 implements OnClickListener {
+            C17833() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -493,7 +494,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C24499() {
+        C24529() {
         }
 
         public void onItemClick(View view, int position) {
@@ -614,7 +615,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     builder = new Builder(ProfileActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17792());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17822());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else if (position > ProfileActivity.this.emptyRowChat2 && position < ProfileActivity.this.membersEndRow) {
@@ -655,7 +656,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     builder = new Builder(ProfileActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
                     builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17803());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C17833());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     ProfileActivity.this.showDialog(builder.create());
                 } else {
@@ -666,8 +667,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class C25451 extends EmptyPhotoViewerProvider {
-        C25451() {
+    class C25481 extends EmptyPhotoViewerProvider {
+        C25481() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -721,8 +722,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ProfileActivity$ListAdapter$1 */
-        class C24501 implements AboutLinkCellDelegate {
-            C24501() {
+        class C24531 implements AboutLinkCellDelegate {
+            C24531() {
             }
 
             public void didPressUrl(String url) {
@@ -785,7 +786,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
                 case 8:
                     view = new AboutLinkCell(this.mContext);
-                    ((AboutLinkCell) view).setDelegate(new C24501());
+                    ((AboutLinkCell) view).setDelegate(new C24531());
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -1170,7 +1171,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.sortedUsers = new ArrayList();
             updateOnlineCount();
             this.imageUpdater = new ImageUpdater();
-            this.imageUpdater.delegate = new C24453();
+            this.imageUpdater.delegate = new C24483();
             this.imageUpdater.parentFragment = this;
             if (ChatObject.isChannel(this.currentChat)) {
                 MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
@@ -1243,7 +1244,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         Theme.createProfileResources(context);
         this.hasOwnBackground = true;
         this.extraHeight = AndroidUtilities.dp(88.0f);
-        this.actionBar.setActionBarMenuOnItemClick(new C24485());
+        this.actionBar.setActionBarMenuOnItemClick(new C24515());
         createActionBarMenu();
         this.listAdapter = new ListAdapter(context);
         this.avatarDrawable = new AvatarDrawable();
@@ -1286,7 +1287,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setGlowColor(AvatarDrawable.getProfileBackColorForId(i));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24499());
+        this.listView.setOnItemClickListener(new C24529());
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemClick(View view, int position) {
                 if (position <= ProfileActivity.this.emptyRowChat2 || position >= ProfileActivity.this.membersEndRow) {
@@ -1452,8 +1453,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             frameLayout1.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$13$1 */
-                class C24441 implements ChannelRightsEditActivityDelegate {
-                    C24441() {
+                class C24471 implements ChannelRightsEditActivityDelegate {
+                    C24471() {
                     }
 
                     public void didSetRights(int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {
@@ -1471,7 +1472,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         tL_channelBannedRights = null;
                     }
                     ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(access$000, access$8500, null, tL_channelBannedRights, 1, true);
-                    fragment.setDelegate(new C24441());
+                    fragment.setDelegate(new C24471());
                     ProfileActivity.this.presentFragment(fragment);
                 }
             });
@@ -1595,8 +1596,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.writeButton.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ProfileActivity$16$1 */
-                class C17721 implements OnClickListener {
-                    C17721() {
+                class C17751 implements OnClickListener {
+                    C17751() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1634,7 +1635,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 Builder builder = new Builder(ProfileActivity.this.getParentActivity());
                                 Chat chat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getChat(Integer.valueOf(ProfileActivity.this.chat_id));
                                 CharSequence[] items = (chat.photo == null || chat.photo.photo_big == null || (chat.photo instanceof TL_chatPhotoEmpty)) ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                                builder.setItems(items, new C17721());
+                                builder.setItems(items, new C17751());
                                 ProfileActivity.this.showDialog(builder.create());
                             } else if (ProfileActivity.this.playProfileAnimation && (ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity)) {
                                 ProfileActivity.this.finishFragment();
@@ -1688,6 +1689,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (i == 0) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "@" + username));
+                            Toast.makeText(ProfileActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -1727,6 +1729,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (i == 1) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + user.phone));
+                            Toast.makeText(ProfileActivity.this.getParentActivity(), LocaleController.getString("PhoneCopied", R.string.PhoneCopied), 0).show();
                         } catch (Throwable e2) {
                             FileLog.m3e(e2);
                         }
@@ -1753,6 +1756,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         if (!TextUtils.isEmpty(about)) {
                             AndroidUtilities.addToClipboard(about);
+                            Toast.makeText(ProfileActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
                         }
                     } catch (Throwable e) {
                         FileLog.m3e(e);
@@ -2792,7 +2796,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00d8;
     L_0x0025:
         r19 = "WaitingForNetwork";
-        r20 = NUM; // 0x7f0c079c float:1.8613143E38 double:1.053098361E-314;
+        r20 = NUM; // 0x7f0c07a1 float:1.8613153E38 double:1.0530983634E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
     L_0x002f:
         r0 = r25;
@@ -2893,7 +2897,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r7 != r0) goto L_0x00fc;
     L_0x00f0:
         r19 = "Updating";
-        r20 = NUM; // 0x7f0c0734 float:1.8612932E38 double:1.0530983095E-314;
+        r20 = NUM; // 0x7f0c0739 float:1.8612942E38 double:1.053098312E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x002f;
     L_0x00fc:
@@ -2926,7 +2930,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r0 != r1) goto L_0x013a;
     L_0x012f:
         r19 = "ServiceNotifications";
-        r20 = NUM; // 0x7f0c067b float:1.8612557E38 double:1.053098218E-314;
+        r20 = NUM; // 0x7f0c0680 float:1.8612567E38 double:1.0530982206E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r19, r20);
         goto L_0x00c4;
     L_0x013a:
@@ -3258,7 +3262,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r19 == 0) goto L_0x03d4;
     L_0x03ad:
         r19 = "Loading";
-        r20 = NUM; // 0x7f0c03ab float:1.8611096E38 double:1.0530978624E-314;
+        r20 = NUM; // 0x7f0c03ad float:1.86111E38 double:1.0530978634E-314;
         r19 = org.telegram.messenger.LocaleController.getString(r19, r20);
         r9 = r19.toLowerCase();
     L_0x03bb:
@@ -3823,7 +3827,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             item.addSubItem(10, LocaleController.getString("BotShare", R.string.BotShare));
                         }
                         if (user.phone != null && user.phone.length() != 0) {
-                            String string;
+                            CharSequence string;
                             item.addSubItem(1, LocaleController.getString("AddContact", R.string.AddContact));
                             item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
                             if (this.userBlocked) {
@@ -3953,7 +3957,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate cellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (ProfileActivity.this.listView != null) {
                     int count = ProfileActivity.this.listView.getChildCount();
@@ -3991,16 +3995,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r10[67] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{UserCell.class}, new String[]{"adminImage"}, null, null, null, Theme.key_profile_creatorIcon);
         r10[68] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{UserCell.class}, new String[]{"adminImage"}, null, null, null, Theme.key_profile_adminIcon);
         r10[69] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r10[70] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
-        r10[71] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteBlueText);
+        r10[70] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        r10[71] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteBlueText);
         r10[72] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[73] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[74] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[75] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[76] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[77] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[78] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[79] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[73] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[74] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[75] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[76] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[77] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[78] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[79] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         r10[80] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
         r10[81] = new ThemeDescription(this.listView, 0, new Class[]{AboutLinkCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);
         r10[82] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AboutLinkCell.class}, Theme.profile_aboutTextPaint, null, null, Theme.key_windowBackgroundWhiteBlackText);

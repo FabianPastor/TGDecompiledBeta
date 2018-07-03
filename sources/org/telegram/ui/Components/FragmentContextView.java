@@ -170,8 +170,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     class C12175 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.FragmentContextView$5$1 */
-        class C22041 implements SharingLocationsAlertDelegate {
-            C22041() {
+        class C22081 implements SharingLocationsAlertDelegate {
+            C22081() {
             }
 
             public void didSelectLocation(SharingLocationInfo info) {
@@ -239,7 +239,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (did != 0) {
                     FragmentContextView.this.openSharingLocation(LocationController.getInstance(account).getSharingLocationInfo(did));
                 } else {
-                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C22041()));
+                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C22081()));
                 }
             }
         }

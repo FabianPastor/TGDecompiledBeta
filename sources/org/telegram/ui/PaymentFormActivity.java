@@ -83,7 +83,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -236,8 +236,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         final /* synthetic */ String val$totalPrice;
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$21$1 */
-        class C16731 implements DialogInterface.OnClickListener {
-            C16731() {
+        class C16761 implements DialogInterface.OnClickListener {
+            C16761() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -265,7 +265,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
             builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
             builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, this.val$providerName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16731());
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16761());
             PaymentFormActivity.this.showDialog(builder.create());
         }
     }
@@ -283,8 +283,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$2 */
-    class C16772 implements Comparator<String> {
-        C16772() {
+    class C16802 implements Comparator<String> {
+        C16802() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -293,11 +293,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$3 */
-    class C16883 implements OnTouchListener {
+    class C16913 implements OnTouchListener {
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$3$1 */
-        class C23931 implements CountrySelectActivityDelegate {
-            C23931() {
+        class C23961 implements CountrySelectActivityDelegate {
+            C23961() {
             }
 
             public void didSelectCountry(String name, String shortName) {
@@ -306,7 +306,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C16883() {
+        C16913() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -315,7 +315,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             if (event.getAction() == 1) {
                 CountrySelectActivity fragment = new CountrySelectActivity(false);
-                fragment.setCountrySelectActivityDelegate(new C23931());
+                fragment.setCountrySelectActivityDelegate(new C23961());
                 PaymentFormActivity.this.presentFragment(fragment);
             }
             return true;
@@ -323,8 +323,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$4 */
-    class C16894 implements TextWatcher {
-        C16894() {
+    class C16924 implements TextWatcher {
+        C16924() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -392,11 +392,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$5 */
-    class C16905 implements TextWatcher {
+    class C16935 implements TextWatcher {
         private int actionPosition;
         private int characterAction = -1;
 
-        C16905() {
+        C16935() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -469,8 +469,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$6 */
-    class C16916 implements OnEditorActionListener {
-        C16916() {
+    class C16946 implements OnEditorActionListener {
+        C16946() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -494,8 +494,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$7 */
-    class C16927 implements OnClickListener {
-        C16927() {
+    class C16957 implements OnClickListener {
+        C16957() {
         }
 
         public void onClick(View v) {
@@ -505,8 +505,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$8 */
-    class C16938 extends WebView {
-        C16938(Context x0) {
+    class C16968 extends WebView {
+        C16968(Context x0) {
             super(x0);
         }
 
@@ -517,8 +517,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$9 */
-    class C16949 extends WebViewClient {
-        C16949() {
+    class C16979 extends WebViewClient {
+        C16979() {
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -577,8 +577,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
-    class C23911 extends ActionBarMenuOnItemClick {
-        C23911() {
+    class C23941 extends ActionBarMenuOnItemClick {
+        C23941() {
         }
 
         public void onItemClick(int id) {
@@ -787,7 +787,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentShippingInfo";
-        r6 = NUM; // 0x7f0c0580 float:1.8612048E38 double:1.053098094E-314;
+        r6 = NUM; // 0x7f0c0583 float:1.8612054E38 double:1.0530980956E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
     L_0x0017:
@@ -1040,7 +1040,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentShippingAddress";
-        r6 = NUM; // 0x7f0c057a float:1.8612036E38 double:1.053098091E-314;
+        r6 = NUM; // 0x7f0c057d float:1.8612042E38 double:1.0530980926E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -1323,7 +1323,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentShippingMethod";
-        r6 = NUM; // 0x7f0c0581 float:1.861205E38 double:1.0530980946E-314;
+        r6 = NUM; // 0x7f0c0584 float:1.8612056E38 double:1.053098096E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1336,7 +1336,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentCardInfo";
-        r6 = NUM; // 0x7f0c0558 float:1.8611967E38 double:1.0530980743E-314;
+        r6 = NUM; // 0x7f0c055b float:1.8611973E38 double:1.053098076E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1349,7 +1349,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentCardInfo";
-        r6 = NUM; // 0x7f0c0558 float:1.8611967E38 double:1.0530980743E-314;
+        r6 = NUM; // 0x7f0c055b float:1.8611973E38 double:1.053098076E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1372,7 +1372,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = "Test ";
         r5 = r5.append(r6);
         r6 = "PaymentCheckout";
-        r7 = NUM; // 0x7f0c055f float:1.861198E38 double:1.053098078E-314;
+        r7 = NUM; // 0x7f0c0562 float:1.8611987E38 double:1.0530980793E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5 = r5.append(r6);
         r5 = r5.toString();
@@ -1382,7 +1382,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentCheckout";
-        r6 = NUM; // 0x7f0c055f float:1.861198E38 double:1.053098078E-314;
+        r6 = NUM; // 0x7f0c0562 float:1.8611987E38 double:1.0530980793E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1405,7 +1405,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = "Test ";
         r5 = r5.append(r6);
         r6 = "PaymentReceipt";
-        r7 = NUM; // 0x7f0c0579 float:1.8612034E38 double:1.0530980906E-314;
+        r7 = NUM; // 0x7f0c057c float:1.861204E38 double:1.053098092E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5 = r5.append(r6);
         r5 = r5.toString();
@@ -1415,7 +1415,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0c0579 float:1.8612034E38 double:1.0530980906E-314;
+        r6 = NUM; // 0x7f0c057c float:1.861204E38 double:1.053098092E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1428,7 +1428,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.actionBar;
         r5 = "PaymentPassword";
-        r6 = NUM; // 0x7f0c056e float:1.8612011E38 double:1.053098085E-314;
+        r6 = NUM; // 0x7f0c0571 float:1.8612017E38 double:1.0530980867E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1478,7 +1478,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentShippingReceiver";
-        r6 = NUM; // 0x7f0c0584 float:1.8612056E38 double:1.053098096E-314;
+        r6 = NUM; // 0x7f0c0587 float:1.8612062E38 double:1.0530980976E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -1614,7 +1614,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingName";
-        r6 = NUM; // 0x7f0c0582 float:1.8612052E38 double:1.053098095E-314;
+        r6 = NUM; // 0x7f0c0585 float:1.8612058E38 double:1.0530980966E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1642,7 +1642,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingEmailPlaceholder";
-        r6 = NUM; // 0x7f0c057f float:1.8612046E38 double:1.0530980936E-314;
+        r6 = NUM; // 0x7f0c0582 float:1.8612052E38 double:1.053098095E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1670,7 +1670,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingAddress1Placeholder";
-        r6 = NUM; // 0x7f0c057b float:1.8612038E38 double:1.0530980916E-314;
+        r6 = NUM; // 0x7f0c057e float:1.8612044E38 double:1.053098093E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1699,7 +1699,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingAddress2Placeholder";
-        r6 = NUM; // 0x7f0c057c float:1.861204E38 double:1.053098092E-314;
+        r6 = NUM; // 0x7f0c057f float:1.8612046E38 double:1.0530980936E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1728,7 +1728,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCityPlaceholder";
-        r6 = NUM; // 0x7f0c057d float:1.8612042E38 double:1.0530980926E-314;
+        r6 = NUM; // 0x7f0c0580 float:1.8612048E38 double:1.053098094E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1757,7 +1757,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingStatePlaceholder";
-        r6 = NUM; // 0x7f0c0587 float:1.8612062E38 double:1.0530980976E-314;
+        r6 = NUM; // 0x7f0c058a float:1.8612068E38 double:1.053098099E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1786,7 +1786,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCountry";
-        r6 = NUM; // 0x7f0c057e float:1.8612044E38 double:1.053098093E-314;
+        r6 = NUM; // 0x7f0c0581 float:1.861205E38 double:1.0530980946E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1833,7 +1833,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingZipPlaceholder";
-        r6 = NUM; // 0x7f0c0588 float:1.8612064E38 double:1.053098098E-314;
+        r6 = NUM; // 0x7f0c058b float:1.861207E38 double:1.0530980995E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -1983,7 +1983,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPhoneEmailToProvider";
-        r6 = NUM; // 0x7f0c0576 float:1.8612027E38 double:1.053098089E-314;
+        r6 = NUM; // 0x7f0c0579 float:1.8612034E38 double:1.0530980906E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -2004,7 +2004,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.checkCell1;
         r5 = "PaymentShippingSave";
-        r6 = NUM; // 0x7f0c0585 float:1.8612058E38 double:1.0530980966E-314;
+        r6 = NUM; // 0x7f0c0588 float:1.8612064E38 double:1.053098098E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r47;
         r6 = r0.saveShippingInfo;
@@ -2045,7 +2045,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentShippingSaveInfo";
-        r6 = NUM; // 0x7f0c0586 float:1.861206E38 double:1.053098097E-314;
+        r6 = NUM; // 0x7f0c0589 float:1.8612066E38 double:1.0530980985E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -2076,7 +2076,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentEmailToProvider";
-        r6 = NUM; // 0x7f0c056a float:1.8612003E38 double:1.053098083E-314;
+        r6 = NUM; // 0x7f0c056d float:1.861201E38 double:1.0530980847E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -2090,7 +2090,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPhoneToProvider";
-        r6 = NUM; // 0x7f0c0577 float:1.861203E38 double:1.0530980897E-314;
+        r6 = NUM; // 0x7f0c057a float:1.8612036E38 double:1.053098091E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -2652,7 +2652,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.checkCell1;
         r5 = "PaymentCardSavePaymentInformation";
-        r6 = NUM; // 0x7f0c055b float:1.8611973E38 double:1.053098076E-314;
+        r6 = NUM; // 0x7f0c055e float:1.8611979E38 double:1.0530980773E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r47;
         r6 = r0.saveCardInfo;
@@ -2790,7 +2790,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentCardTitle";
-        r6 = NUM; // 0x7f0c055e float:1.8611979E38 double:1.0530980773E-314;
+        r6 = NUM; // 0x7f0c0561 float:1.8611985E38 double:1.053098079E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -3104,7 +3104,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentBillingAddress";
-        r6 = NUM; // 0x7f0c0555 float:1.861196E38 double:1.053098073E-314;
+        r6 = NUM; // 0x7f0c0558 float:1.8611967E38 double:1.0530980743E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -3179,7 +3179,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardNumber";
-        r6 = NUM; // 0x7f0c055a float:1.861197E38 double:1.0530980753E-314;
+        r6 = NUM; // 0x7f0c055d float:1.8611977E38 double:1.053098077E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3188,7 +3188,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardCvv";
-        r6 = NUM; // 0x7f0c0556 float:1.8611963E38 double:1.0530980734E-314;
+        r6 = NUM; // 0x7f0c0559 float:1.8611969E38 double:1.053098075E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3197,7 +3197,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardExpireDate";
-        r6 = NUM; // 0x7f0c0557 float:1.8611965E38 double:1.053098074E-314;
+        r6 = NUM; // 0x7f0c055a float:1.861197E38 double:1.0530980753E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3206,7 +3206,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardName";
-        r6 = NUM; // 0x7f0c0559 float:1.8611969E38 double:1.053098075E-314;
+        r6 = NUM; // 0x7f0c055c float:1.8611975E38 double:1.0530980763E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3215,7 +3215,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingZipPlaceholder";
-        r6 = NUM; // 0x7f0c0588 float:1.8612064E38 double:1.053098098E-314;
+        r6 = NUM; // 0x7f0c058b float:1.861207E38 double:1.0530980995E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3224,7 +3224,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCountry";
-        r6 = NUM; // 0x7f0c057e float:1.8612044E38 double:1.053098093E-314;
+        r6 = NUM; // 0x7f0c0581 float:1.861205E38 double:1.0530980946E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x106f;
@@ -3277,7 +3277,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.checkCell1;
         r5 = "PaymentCardSavePaymentInformation";
-        r6 = NUM; // 0x7f0c055b float:1.8611973E38 double:1.053098076E-314;
+        r6 = NUM; // 0x7f0c055e float:1.8611979E38 double:1.0530980773E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r47;
         r6 = r0.saveCardInfo;
@@ -3557,7 +3557,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentCardTitle";
-        r6 = NUM; // 0x7f0c055e float:1.8611979E38 double:1.0530980773E-314;
+        r6 = NUM; // 0x7f0c0561 float:1.8611985E38 double:1.053098079E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -3758,7 +3758,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentConfirmationMessage";
-        r6 = NUM; // 0x7f0c0567 float:1.8611997E38 double:1.0530980818E-314;
+        r6 = NUM; // 0x7f0c056a float:1.8612003E38 double:1.053098083E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -3801,7 +3801,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.settingsCell1;
         r5 = "PaymentConfirmationNewCard";
-        r6 = NUM; // 0x7f0c0568 float:1.8612E38 double:1.053098082E-314;
+        r6 = NUM; // 0x7f0c056b float:1.8612005E38 double:1.0530980837E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 0;
         r4.setText(r5, r6);
@@ -3896,7 +3896,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "LoginPassword";
-        r6 = NUM; // 0x7f0c03ba float:1.8611127E38 double:1.05309787E-314;
+        r6 = NUM; // 0x7f0c03bc float:1.861113E38 double:1.053097871E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -4028,7 +4028,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r35;
         r0.setBackgroundColor(r4);
         r4 = "PaymentTransactionTotal";
-        r5 = NUM; // 0x7f0c058e float:1.8612076E38 double:1.053098101E-314;
+        r5 = NUM; // 0x7f0c0591 float:1.8612082E38 double:1.0530981025E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r5 = 1;
         r0 = r35;
@@ -4080,7 +4080,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r5 = r0.cardName;
         r6 = "PaymentCheckoutMethod";
-        r7 = NUM; // 0x7f0c0561 float:1.8611985E38 double:1.053098079E-314;
+        r7 = NUM; // 0x7f0c0564 float:1.861199E38 double:1.0530980803E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4157,7 +4157,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = r0.last_name;
         r36 = org.telegram.messenger.ContactsController.formatName(r5, r6);
         r5 = "PaymentCheckoutProvider";
-        r6 = NUM; // 0x7f0c0565 float:1.8611993E38 double:1.053098081E-314;
+        r6 = NUM; // 0x7f0c0568 float:1.8612E38 double:1.053098082E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 1;
         r0 = r36;
@@ -4245,7 +4245,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 2;
         r4 = r4[r5];
         r5 = "PaymentShippingAddress";
-        r6 = NUM; // 0x7f0c057a float:1.8612036E38 double:1.053098091E-314;
+        r6 = NUM; // 0x7f0c057d float:1.8612042E38 double:1.0530980926E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 1;
         r4.setTextAndValue(r12, r5, r6);
@@ -4286,7 +4286,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r5.info;
         r5 = r5.name;
         r6 = "PaymentCheckoutName";
-        r7 = NUM; // 0x7f0c0562 float:1.8611987E38 double:1.0530980793E-314;
+        r7 = NUM; // 0x7f0c0565 float:1.8611993E38 double:1.053098081E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4329,7 +4329,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = r6.phone;
         r5 = r5.format(r6);
         r6 = "PaymentCheckoutPhoneNumber";
-        r7 = NUM; // 0x7f0c0564 float:1.861199E38 double:1.0530980803E-314;
+        r7 = NUM; // 0x7f0c0567 float:1.8611997E38 double:1.0530980818E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4370,7 +4370,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r5.info;
         r5 = r5.email;
         r6 = "PaymentCheckoutEmail";
-        r7 = NUM; // 0x7f0c0560 float:1.8611983E38 double:1.0530980783E-314;
+        r7 = NUM; // 0x7f0c0563 float:1.8611989E38 double:1.05309808E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4408,7 +4408,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = r0.shippingOption;
         r5 = r5.title;
         r6 = "PaymentCheckoutShippingMethod";
-        r7 = NUM; // 0x7f0c0566 float:1.8611995E38 double:1.0530980813E-314;
+        r7 = NUM; // 0x7f0c0569 float:1.8612001E38 double:1.0530980827E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 0;
         r4.setTextAndValue(r5, r6, r7);
@@ -4464,7 +4464,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r47;
         r4 = r0.payTextView;
         r5 = "PaymentCheckoutPay";
-        r6 = NUM; // 0x7f0c0563 float:1.8611989E38 double:1.05309808E-314;
+        r6 = NUM; // 0x7f0c0566 float:1.8611995E38 double:1.0530980813E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -4724,7 +4724,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentPasswordTitle";
-        r6 = NUM; // 0x7f0c0575 float:1.8612025E38 double:1.0530980887E-314;
+        r6 = NUM; // 0x7f0c0578 float:1.8612031E38 double:1.05309809E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -4909,7 +4909,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentPasswordInfo";
-        r6 = NUM; // 0x7f0c0573 float:1.8612021E38 double:1.0530980877E-314;
+        r6 = NUM; // 0x7f0c0576 float:1.8612027E38 double:1.053098089E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -4957,7 +4957,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPasswordEmailTitle";
-        r6 = NUM; // 0x7f0c0571 float:1.8612017E38 double:1.0530980867E-314;
+        r6 = NUM; // 0x7f0c0574 float:1.8612023E38 double:1.053098088E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -4983,7 +4983,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordEnter";
-        r6 = NUM; // 0x7f0c0572 float:1.861202E38 double:1.053098087E-314;
+        r6 = NUM; // 0x7f0c0575 float:1.8612025E38 double:1.0530980887E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r47;
@@ -4996,7 +4996,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordReEnter";
-        r6 = NUM; // 0x7f0c0574 float:1.8612023E38 double:1.053098088E-314;
+        r6 = NUM; // 0x7f0c0577 float:1.861203E38 double:1.0530980897E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x1f8f;
@@ -5005,7 +5005,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordEmail";
-        r6 = NUM; // 0x7f0c056f float:1.8612013E38 double:1.0530980857E-314;
+        r6 = NUM; // 0x7f0c0572 float:1.861202E38 double:1.053098087E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x1f8f;
@@ -5028,7 +5028,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPasswordEmailInfo";
-        r6 = NUM; // 0x7f0c0570 float:1.8612015E38 double:1.053098086E-314;
+        r6 = NUM; // 0x7f0c0573 float:1.8612021E38 double:1.0530980877E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r47;
@@ -5122,8 +5122,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.PaymentFormActivity$26$1$1 */
-                        class C16751 implements Runnable {
-                            C16751() {
+                        class C16781 implements Runnable {
+                            C16781() {
                             }
 
                             public void run() {
@@ -5152,7 +5152,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
                             }
                             if ((response instanceof TL_account_noPassword) && PaymentFormActivity.this.shortPollRunnable == null) {
-                                PaymentFormActivity.this.shortPollRunnable = new C16751();
+                                PaymentFormActivity.this.shortPollRunnable = new C16781();
                                 AndroidUtilities.runOnUIThread(PaymentFormActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             }
                         }
@@ -5597,7 +5597,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 req.new_settings = new TL_account_passwordInputSettings();
                 byte[] newPasswordBytes = null;
                 try {
-                    newPasswordBytes = firstPassword.getBytes(C0554C.UTF8_NAME);
+                    newPasswordBytes = firstPassword.getBytes(C0555C.UTF8_NAME);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -5632,8 +5632,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$32$1$1 */
-                    class C16781 implements DialogInterface.OnClickListener {
-                        C16781() {
+                    class C16811 implements DialogInterface.OnClickListener {
+                        C16811() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -5657,7 +5657,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         } else {
                             if (error.text.equals("EMAIL_UNCONFIRMED")) {
                                 Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16781());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16811());
                                 builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
                                 builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
                                 Dialog dialog = PaymentFormActivity.this.showDialog(builder.create());
@@ -5723,8 +5723,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 new Stripe(this.stripeApiKey).createToken(card, new TokenCallback() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$33$1 */
-                    class C16801 implements Runnable {
-                        C16801() {
+                    class C16831 implements Runnable {
+                        C16831() {
                         }
 
                         public void run() {
@@ -5737,7 +5737,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     public void onSuccess(Token token) {
                         if (!PaymentFormActivity.this.canceled) {
                             PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
-                            AndroidUtilities.runOnUIThread(new C16801());
+                            AndroidUtilities.runOnUIThread(new C16831());
                         }
                     }
 
@@ -5801,8 +5801,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$34$1$1 */
-                            class C23941 implements RequestDelegate {
-                                C23941() {
+                            class C23971 implements RequestDelegate {
+                                C23971() {
                                 }
 
                                 public void run(TLObject response, TL_error error) {
@@ -5814,7 +5814,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (!(PaymentFormActivity.this.paymentForm.saved_info == null || PaymentFormActivity.this.saveShippingInfo)) {
                                     TL_payments_clearSavedInfo req = new TL_payments_clearSavedInfo();
                                     req.info = true;
-                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C23941());
+                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C23971());
                                 }
                                 PaymentFormActivity.this.goToNextStep();
                                 PaymentFormActivity.this.setDonePressed(false);
@@ -5981,8 +5981,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.ui.PaymentFormActivity$35$1 */
-                class C16831 implements Runnable {
-                    C16831() {
+                class C16861 implements Runnable {
+                    C16861() {
                     }
 
                     public void run() {
@@ -6001,7 +6001,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         });
                     } else if (response instanceof TL_payments_paymentResult) {
                         MessagesController.getInstance(PaymentFormActivity.this.currentAccount).processUpdates(((TL_payments_paymentResult) response).updates, false);
-                        AndroidUtilities.runOnUIThread(new C16831());
+                        AndroidUtilities.runOnUIThread(new C16861());
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -6084,7 +6084,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 TL_account_password currentPassword = response;
                                 byte[] passwordBytes = null;
                                 try {
-                                    passwordBytes = password.getBytes(C0554C.UTF8_NAME);
+                                    passwordBytes = password.getBytes(C0555C.UTF8_NAME);
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
                                 }

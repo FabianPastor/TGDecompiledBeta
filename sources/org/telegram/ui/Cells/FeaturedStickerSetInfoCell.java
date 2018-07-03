@@ -33,7 +33,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private boolean drawProgress;
-    Drawable drawable = new C09211();
+    Drawable drawable = new C09221();
     private boolean hasOnClick;
     private TextView infoTextView;
     private boolean isInstalled;
@@ -44,10 +44,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private StickerSetCovered set;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetInfoCell$1 */
-    class C09211 extends Drawable {
+    class C09221 extends Drawable {
         Paint paint = new Paint(1);
 
-        C09211() {
+        C09221() {
         }
 
         public void draw(Canvas canvas) {

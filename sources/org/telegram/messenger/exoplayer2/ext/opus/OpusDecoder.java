@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.ext.opus;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.decoder.CryptoInfo;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
@@ -158,7 +158,7 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     }
 
     private static int nsToSamples(long ns) {
-        return (int) ((48000 * ns) / C0554C.NANOS_PER_SECOND);
+        return (int) ((48000 * ns) / C0555C.NANOS_PER_SECOND);
     }
 
     private static int readLittleEndian16(byte[] input, int offset) {

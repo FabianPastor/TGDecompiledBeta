@@ -5,7 +5,7 @@ import android.os.SystemClock;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Method;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -78,13 +78,13 @@ final class AudioTrackPositionTracker {
         this.outputSampleRate = audioTrack.getSampleRate();
         this.needsPassthroughWorkarounds = needsPassthroughWorkarounds(outputEncoding);
         this.isOutputPcm = Util.isEncodingPcm(outputEncoding);
-        this.bufferSizeUs = this.isOutputPcm ? framesToDurationUs((long) (bufferSize / outputPcmFrameSize)) : C0554C.TIME_UNSET;
+        this.bufferSizeUs = this.isOutputPcm ? framesToDurationUs((long) (bufferSize / outputPcmFrameSize)) : C0555C.TIME_UNSET;
         this.lastRawPlaybackHeadPosition = 0;
         this.rawPlaybackHeadWrapCount = 0;
         this.passthroughWorkaroundPauseOffset = 0;
         this.hasData = false;
-        this.stopTimestampUs = C0554C.TIME_UNSET;
-        this.forceResetWorkaroundTimeMs = C0554C.TIME_UNSET;
+        this.stopTimestampUs = C0555C.TIME_UNSET;
+        this.forceResetWorkaroundTimeMs = C0555C.TIME_UNSET;
         this.latencyUs = 0;
     }
 
@@ -133,7 +133,7 @@ final class AudioTrackPositionTracker {
         boolean hadData = this.hasData;
         this.hasData = hasPendingData(writtenFrames);
         if (!(!hadData || this.hasData || playState == 1 || this.listener == null)) {
-            this.listener.onUnderrun(this.bufferSize, C0554C.usToMs(this.bufferSizeUs));
+            this.listener.onUnderrun(this.bufferSize, C0555C.usToMs(this.bufferSizeUs));
         }
         return true;
     }
@@ -143,7 +143,7 @@ final class AudioTrackPositionTracker {
     }
 
     public boolean isStalled(long writtenFrames) {
-        return this.forceResetWorkaroundTimeMs != C0554C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
+        return this.forceResetWorkaroundTimeMs != C0555C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
     }
 
     public void handleEndOfStream(long writtenFrames) {
@@ -158,7 +158,7 @@ final class AudioTrackPositionTracker {
 
     public boolean pause() {
         resetSyncParams();
-        if (this.stopTimestampUs != C0554C.TIME_UNSET) {
+        if (this.stopTimestampUs != C0555C.TIME_UNSET) {
             return false;
         }
         this.audioTimestampPoller.reset();
@@ -250,7 +250,7 @@ final class AudioTrackPositionTracker {
     }
 
     private long getPlaybackHeadPosition() {
-        if (this.stopTimestampUs != C0554C.TIME_UNSET) {
+        if (this.stopTimestampUs != C0555C.TIME_UNSET) {
             return Math.min(this.endPlaybackHeadPosition, this.stopPlaybackHeadPosition + ((((long) this.outputSampleRate) * ((SystemClock.elapsedRealtime() * 1000) - this.stopTimestampUs)) / 1000000));
         }
         int state = this.audioTrack.getPlayState();
@@ -266,12 +266,12 @@ final class AudioTrackPositionTracker {
         }
         if (Util.SDK_INT <= 28) {
             if (rawPlaybackHeadPosition == 0 && this.lastRawPlaybackHeadPosition > 0 && state == 3) {
-                if (this.forceResetWorkaroundTimeMs == C0554C.TIME_UNSET) {
+                if (this.forceResetWorkaroundTimeMs == C0555C.TIME_UNSET) {
                     this.forceResetWorkaroundTimeMs = SystemClock.elapsedRealtime();
                 }
                 return this.lastRawPlaybackHeadPosition;
             }
-            this.forceResetWorkaroundTimeMs = C0554C.TIME_UNSET;
+            this.forceResetWorkaroundTimeMs = C0555C.TIME_UNSET;
         }
         if (this.lastRawPlaybackHeadPosition > rawPlaybackHeadPosition) {
             this.rawPlaybackHeadWrapCount++;

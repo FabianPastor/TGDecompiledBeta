@@ -154,8 +154,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$2 */
-    class C22372 implements RequestDelegate {
-        C22372() {
+    class C22412 implements RequestDelegate {
+        C22412() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -178,8 +178,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$5 */
-    class C22385 extends SpanSizeLookup {
-        C22385() {
+    class C22425 extends SpanSizeLookup {
+        C22425() {
         }
 
         public int getSpanSize(int position) {
@@ -191,8 +191,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$6 */
-    class C22396 extends ItemDecoration {
-        C22396() {
+    class C22436 extends ItemDecoration {
+        C22436() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -204,8 +204,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
-    class C22408 extends OnScrollListener {
-        C22408() {
+    class C22448 extends OnScrollListener {
+        C22448() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -214,8 +214,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$9 */
-    class C22419 implements OnItemClickListener {
-        C22419() {
+    class C22459 implements OnItemClickListener {
+        C22459() {
         }
 
         public void onItemClick(View view, int position) {
@@ -491,7 +491,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                 req.stickerset = this.inputStickerSet;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22372());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22412());
             } else if (this.adapter != null) {
                 updateSendButton();
                 updateFields();
@@ -603,20 +603,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         this.layoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.layoutManager.setSpanSizeLookup(new C22385());
+        this.layoutManager.setSpanSizeLookup(new C22425());
         recyclerListView = this.gridView;
         Adapter gridAdapter = new GridAdapter(context);
         this.adapter = gridAdapter;
         recyclerListView.setAdapter(gridAdapter);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C22396());
+        this.gridView.addItemDecoration(new C22436());
         this.gridView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
         this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.gridView.setOnTouchListener(new C13637());
-        this.gridView.setOnScrollListener(new C22408());
-        this.stickersOnItemClickListener = new C22419();
+        this.gridView.setOnScrollListener(new C22448());
+        this.stickersOnItemClickListener = new C22459();
         this.gridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
         this.emptyView = new FrameLayout(context) {
@@ -804,8 +804,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     OnClickListener anonymousClass18 = new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.StickersAlert$18$1 */
-                        class C22351 implements RequestDelegate {
-                            C22351() {
+                        class C22391 implements RequestDelegate {
+                            C22391() {
                             }
 
                             public void run(final TLObject response, final TL_error error) {
@@ -857,7 +857,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             }
                             TL_messages_installStickerSet req = new TL_messages_installStickerSet();
                             req.stickerset = StickersAlert.this.inputStickerSet;
-                            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new C22351());
+                            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new C22391());
                         }
                     };
                     String string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", R.string.AddMasks) : LocaleController.getString("AddStickers", R.string.AddStickers);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
@@ -19,7 +19,7 @@ final class ScriptTagPayloadReader extends TagPayloadReader {
     private static final int AMF_TYPE_STRING = 2;
     private static final String KEY_DURATION = "duration";
     private static final String NAME_METADATA = "onMetaData";
-    private long durationUs = C0554C.TIME_UNSET;
+    private long durationUs = C0555C.TIME_UNSET;
 
     public ScriptTagPayloadReader() {
         super(null);

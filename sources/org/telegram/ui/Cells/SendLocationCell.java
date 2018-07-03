@@ -26,13 +26,13 @@ public class SendLocationCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
-    private Runnable invalidateRunnable = new C09341();
+    private Runnable invalidateRunnable = new C09351();
     private RectF rect;
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Cells.SendLocationCell$1 */
-    class C09341 implements Runnable {
-        C09341() {
+    class C09351 implements Runnable {
+        C09351() {
         }
 
         public void run() {

@@ -5,16 +5,16 @@ import android.os.Parcelable.Creator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class SpliceScheduleCommand extends SpliceCommand {
-    public static final Creator<SpliceScheduleCommand> CREATOR = new C06041();
+    public static final Creator<SpliceScheduleCommand> CREATOR = new C06051();
     public final List<Event> events;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.SpliceScheduleCommand$1 */
-    static class C06041 implements Creator<SpliceScheduleCommand> {
-        C06041() {
+    static class C06051 implements Creator<SpliceScheduleCommand> {
+        C06051() {
         }
 
         public SpliceScheduleCommand createFromParcel(Parcel in) {
@@ -116,13 +116,13 @@ public final class SpliceScheduleCommand extends SpliceCommand {
             boolean spliceEventCancelIndicator = (sectionData.readUnsignedByte() & 128) != 0;
             boolean outOfNetworkIndicator = false;
             boolean programSpliceFlag = false;
-            long utcSpliceTime = C0554C.TIME_UNSET;
+            long utcSpliceTime = C0555C.TIME_UNSET;
             ArrayList<ComponentSplice> componentSplices = new ArrayList();
             int uniqueProgramId = 0;
             int availNum = 0;
             int availsExpected = 0;
             boolean autoReturn = false;
-            long breakDurationUs = C0554C.TIME_UNSET;
+            long breakDurationUs = C0555C.TIME_UNSET;
             if (!spliceEventCancelIndicator) {
                 int headerByte = sectionData.readUnsignedByte();
                 outOfNetworkIndicator = (headerByte & 128) != 0;

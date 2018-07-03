@@ -61,7 +61,7 @@ public class RecyclerListView extends RecyclerView {
     private boolean interceptedByChild;
     private boolean isChildViewEnabled;
     private boolean longPressCalled;
-    private AdapterDataObserver observer = new C22221();
+    private AdapterDataObserver observer = new C22261();
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
@@ -334,8 +334,8 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$1 */
-    class C22221 extends AdapterDataObserver {
-        C22221() {
+    class C22261 extends AdapterDataObserver {
+        C22261() {
         }
 
         public void onChanged() {
@@ -354,10 +354,10 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$2 */
-    class C22232 extends OnScrollListener {
+    class C22272 extends OnScrollListener {
         boolean scrollingByUser;
 
-        C22232() {
+        C22272() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -674,10 +674,7 @@ public class RecyclerListView extends RecyclerView {
                 RecyclerListView.this.currentChildView = null;
                 RecyclerListView.this.interceptedByChild = false;
                 RecyclerListView.this.removeSelection(pressedChild, event);
-                if (action == 3) {
-                    FileLog.m0d("cancel");
-                }
-                if ((action == 1 || action == 6) && RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.longPressCalled) {
+                if ((action == 1 || action == 6 || action == 3) && RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.longPressCalled) {
                     RecyclerListView.this.onItemLongClickListenerExtended.onLongClickRelease();
                     RecyclerListView.this.longPressCalled = false;
                 }
@@ -908,7 +905,7 @@ public class RecyclerListView extends RecyclerView {
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        super.setOnScrollListener(new C22232());
+        super.setOnScrollListener(new C22272());
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
     }
 

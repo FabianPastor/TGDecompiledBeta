@@ -95,11 +95,11 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C01993 extends BroadcastReceiver {
+    class C02003 extends BroadcastReceiver {
 
         /* renamed from: org.telegram.messenger.ImageLoader$3$1 */
-        class C01981 implements Runnable {
-            C01981() {
+        class C01991 implements Runnable {
+            C01991() {
             }
 
             public void run() {
@@ -107,14 +107,14 @@ public class ImageLoader {
             }
         }
 
-        C01993() {
+        C02003() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("file system changed");
             }
-            Runnable r = new C01981();
+            Runnable r = new C01991();
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 AndroidUtilities.runOnUIThread(r, 1000);
             } else {
@@ -124,8 +124,8 @@ public class ImageLoader {
     }
 
     /* renamed from: org.telegram.messenger.ImageLoader$4 */
-    class C02014 implements Runnable {
-        C02014() {
+    class C02024 implements Runnable {
+        C02024() {
         }
 
         public void run() {
@@ -1690,8 +1690,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpFileTask$1$1 */
-                    class C02101 implements Runnable {
-                        C02101() {
+                    class C02111 implements Runnable {
+                        C02111() {
                         }
 
                         public void run() {
@@ -1701,7 +1701,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                     public void run() {
                         ImageLoader.this.fileProgresses.put(HttpFileTask.this.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02101());
+                        AndroidUtilities.runOnUIThread(new C02111());
                     }
                 });
             }
@@ -1838,8 +1838,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         private long lastProgressTime;
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$4 */
-        class C02164 implements Runnable {
-            C02164() {
+        class C02174 implements Runnable {
+            C02174() {
             }
 
             public void run() {
@@ -1848,8 +1848,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5 */
-        class C02175 implements Runnable {
-            C02175() {
+        class C02185 implements Runnable {
+            C02185() {
             }
 
             public void run() {
@@ -1858,11 +1858,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$6 */
-        class C02196 implements Runnable {
+        class C02206 implements Runnable {
 
             /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$6$1 */
-            class C02181 implements Runnable {
-                C02181() {
+            class C02191 implements Runnable {
+                C02191() {
                 }
 
                 public void run() {
@@ -1870,18 +1870,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
 
-            C02196() {
+            C02206() {
             }
 
             public void run() {
                 ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                AndroidUtilities.runOnUIThread(new C02181());
+                AndroidUtilities.runOnUIThread(new C02191());
             }
         }
 
         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$2 */
-        class C19432 implements RequestDelegate {
-            C19432() {
+        class C19462 implements RequestDelegate {
+            C19462() {
             }
 
             public void run(TLObject response, TL_error error) {
@@ -1900,8 +1900,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$1$1 */
-                    class C02121 implements Runnable {
-                        C02121() {
+                    class C02131 implements Runnable {
+                        C02131() {
                         }
 
                         public void run() {
@@ -1911,7 +1911,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                     public void run() {
                         ImageLoader.this.fileProgresses.put(HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02121());
+                        AndroidUtilities.runOnUIThread(new C02131());
                     }
                 });
             }
@@ -1931,7 +1931,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 req.location = webFile.location;
                                 req.offset = 0;
                                 req.limit = 0;
-                                ConnectionsManager.getInstance(this.cacheImage.currentAccount).sendRequest(req, new C19432());
+                                ConnectionsManager.getInstance(this.cacheImage.currentAccount).sendRequest(req, new C19462());
                             }
                         }
                     }
@@ -2051,8 +2051,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.stageQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$3$1 */
-                class C02141 implements Runnable {
-                    C02141() {
+                class C02151 implements Runnable {
+                    C02151() {
                     }
 
                     public void run() {
@@ -2066,15 +2066,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                 public void run() {
                     ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                    AndroidUtilities.runOnUIThread(new C02141());
+                    AndroidUtilities.runOnUIThread(new C02151());
                 }
             });
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02164());
+            ImageLoader.this.imageLoadQueue.postRunnable(new C02174());
         }
 
         protected void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02175());
-            Utilities.stageQueue.postRunnable(new C02196());
+            ImageLoader.this.imageLoadQueue.postRunnable(new C02185());
+            Utilities.stageQueue.postRunnable(new C02206());
         }
     }
 
@@ -2264,8 +2264,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     Utilities.stageQueue.postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.ImageLoader$2$2$1 */
-                        class C01911 implements Runnable {
-                            C01911() {
+                        class C01921 implements Runnable {
+                            C01921() {
                             }
 
                             public void run() {
@@ -2274,7 +2274,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void run() {
-                            AndroidUtilities.runOnUIThread(new C01911());
+                            AndroidUtilities.runOnUIThread(new C01921());
                             ImageLoader.this.fileProgresses.remove(str);
                         }
                     });
@@ -2284,8 +2284,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     Utilities.stageQueue.postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.ImageLoader$2$3$1 */
-                        class C01931 implements Runnable {
-                            C01931() {
+                        class C01941 implements Runnable {
+                            C01941() {
                             }
 
                             public void run() {
@@ -2294,7 +2294,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void run() {
-                            AndroidUtilities.runOnUIThread(new C01931());
+                            AndroidUtilities.runOnUIThread(new C01941());
                             ImageLoader.this.fileProgresses.remove(location);
                         }
                     });
@@ -2338,7 +2338,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
         }
         FileLoader.setMediaDirs(mediaDirs);
-        BroadcastReceiver receiver = new C01993();
+        BroadcastReceiver receiver = new C02003();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
         filter.addAction("android.intent.action.MEDIA_CHECKING");
@@ -2358,7 +2358,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void checkMediaPaths() {
-        this.cacheOutQueue.postRunnable(new C02014());
+        this.cacheOutQueue.postRunnable(new C02024());
     }
 
     public void addTestWebFile(String url, WebFile webFile) {

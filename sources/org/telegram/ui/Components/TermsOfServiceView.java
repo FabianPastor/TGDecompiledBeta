@@ -149,8 +149,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$3 */
-    class C22443 implements RequestDelegate {
-        C22443() {
+    class C22483 implements RequestDelegate {
+        C22483() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -218,7 +218,7 @@ public class TermsOfServiceView extends FrameLayout {
         this.delegate.onAcceptTerms(this.currentAccount);
         TL_help_acceptTermsOfService req = new TL_help_acceptTermsOfService();
         req.id = this.currentTos.id;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22443());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22483());
     }
 
     public void show(int account, TL_help_termsOfService tos) {

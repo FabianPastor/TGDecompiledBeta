@@ -88,8 +88,8 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataSettingsActivity$1 */
-    class C22691 extends ActionBarMenuOnItemClick {
-        C22691() {
+    class C22731 extends ActionBarMenuOnItemClick {
+        C22731() {
         }
 
         public void onItemClick(int id) {
@@ -100,7 +100,7 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataSettingsActivity$2 */
-    class C22702 implements OnItemClickListener {
+    class C22742 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.DataSettingsActivity$2$1 */
         class C14271 implements OnClickListener {
@@ -153,7 +153,7 @@ public class DataSettingsActivity extends BaseFragment {
             }
         }
 
-        C22702() {
+        C22742() {
         }
 
         public void onItemClick(View view, final int position) {
@@ -565,7 +565,7 @@ public class DataSettingsActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C22691());
+        this.actionBar.setActionBarMenuOnItemClick(new C22731());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -575,7 +575,7 @@ public class DataSettingsActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22702());
+        this.listView.setOnItemClickListener(new C22742());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

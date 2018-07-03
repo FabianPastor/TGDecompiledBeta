@@ -121,8 +121,8 @@ public class RenderView extends TextureView {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.RenderView$2 */
-    class C22092 implements PaintingDelegate {
-        C22092() {
+    class C22132 implements PaintingDelegate {
+        C22132() {
         }
 
         public void contentChanged(RectF rect) {
@@ -408,7 +408,7 @@ public class RenderView extends TextureView {
         this.painting = paint;
         this.painting.setRenderView(this);
         setSurfaceTextureListener(new C12581());
-        this.painting.setDelegate(new C22092());
+        this.painting.setDelegate(new C22132());
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

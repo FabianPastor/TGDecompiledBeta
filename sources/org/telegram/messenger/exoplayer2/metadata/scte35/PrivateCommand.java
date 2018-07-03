@@ -5,14 +5,14 @@ import android.os.Parcelable.Creator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class PrivateCommand extends SpliceCommand {
-    public static final Creator<PrivateCommand> CREATOR = new C06011();
+    public static final Creator<PrivateCommand> CREATOR = new C06021();
     public final byte[] commandBytes;
     public final long identifier;
     public final long ptsAdjustment;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.PrivateCommand$1 */
-    static class C06011 implements Creator<PrivateCommand> {
-        C06011() {
+    static class C06021 implements Creator<PrivateCommand> {
+        C06021() {
         }
 
         public PrivateCommand createFromParcel(Parcel in) {

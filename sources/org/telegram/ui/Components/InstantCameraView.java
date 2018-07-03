@@ -880,8 +880,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.Components.InstantCameraView$VideoRecorder$2$1 */
-                    class C22071 implements VideoPlayerDelegate {
-                        C22071() {
+                    class C22111 implements VideoPlayerDelegate {
+                        C22111() {
                         }
 
                         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -935,7 +935,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, VideoRecorder.this.videoFile.getAbsolutePath(), 0, true), InstantCameraView.this.videoEditedInfo);
                         } else {
                             InstantCameraView.this.videoPlayer = new VideoPlayer();
-                            InstantCameraView.this.videoPlayer.setDelegate(new C22071());
+                            InstantCameraView.this.videoPlayer.setDelegate(new C22111());
                             InstantCameraView.this.videoPlayer.setTextureView(InstantCameraView.this.textureView);
                             InstantCameraView.this.videoPlayer.preparePlayer(Uri.fromFile(VideoRecorder.this.videoFile), "other");
                             InstantCameraView.this.videoPlayer.play();

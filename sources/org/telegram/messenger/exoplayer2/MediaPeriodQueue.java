@@ -50,7 +50,7 @@ final class MediaPeriodQueue {
     }
 
     public boolean shouldLoadNextMediaPeriod() {
-        return this.loading == null || (!this.loading.info.isFinal && this.loading.isFullyBuffered() && this.loading.info.durationUs != C0554C.TIME_UNSET && this.length < MAXIMUM_BUFFER_AHEAD_PERIODS);
+        return this.loading == null || (!this.loading.info.isFinal && this.loading.isFullyBuffered() && this.loading.info.durationUs != C0555C.TIME_UNSET && this.length < MAXIMUM_BUFFER_AHEAD_PERIODS);
     }
 
     public MediaPeriodInfo getNextMediaPeriodInfo(long rendererPositionUs, PlaybackInfo playbackInfo) {
@@ -284,7 +284,7 @@ final class MediaPeriodQueue {
             Object nextPeriodUid = this.period.uid;
             long windowSequenceNumber = mediaPeriodInfo.id.windowSequenceNumber;
             if (this.timeline.getWindow(nextWindowIndex, this.window).firstPeriodIndex == nextPeriodIndex) {
-                Pair<Integer, Long> defaultPosition = this.timeline.getPeriodPosition(this.window, this.period, nextWindowIndex, C0554C.TIME_UNSET, Math.max(0, (mediaPeriodHolder.getRendererOffset() + mediaPeriodInfo.durationUs) - rendererPositionUs));
+                Pair<Integer, Long> defaultPosition = this.timeline.getPeriodPosition(this.window, this.period, nextWindowIndex, C0555C.TIME_UNSET, Math.max(0, (mediaPeriodHolder.getRendererOffset() + mediaPeriodInfo.durationUs) - rendererPositionUs));
                 if (defaultPosition == null) {
                     return null;
                 }
@@ -391,7 +391,7 @@ final class MediaPeriodQueue {
         } else {
             durationUs = endUs;
         }
-        return new MediaPeriodInfo(id, startPositionUs, endUs, C0554C.TIME_UNSET, durationUs, isLastInPeriod, isLastInTimeline);
+        return new MediaPeriodInfo(id, startPositionUs, endUs, C0555C.TIME_UNSET, durationUs, isLastInPeriod, isLastInTimeline);
     }
 
     private boolean isLastInPeriod(MediaPeriodId id, long endPositionUs) {

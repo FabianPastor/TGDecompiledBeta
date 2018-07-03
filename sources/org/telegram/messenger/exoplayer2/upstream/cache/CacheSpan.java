@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import java.io.File;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 
 public class CacheSpan implements Comparable<CacheSpan> {
     public final File file;
@@ -12,7 +12,7 @@ public class CacheSpan implements Comparable<CacheSpan> {
     public final long position;
 
     public CacheSpan(String key, long position, long length) {
-        this(key, position, length, C0554C.TIME_UNSET, null);
+        this(key, position, length, C0555C.TIME_UNSET, null);
     }
 
     public CacheSpan(String key, long position, long length, long lastAccessTimestamp, File file) {

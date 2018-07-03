@@ -100,8 +100,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     private int rowCount = 0;
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$1 */
-    class C23601 extends ActionBarMenuOnItemClick {
-        C23601() {
+    class C23631 extends ActionBarMenuOnItemClick {
+        C23631() {
         }
 
         public void onItemClick(int id) {
@@ -112,17 +112,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3 */
-    class C23623 implements OnItemClickListener {
+    class C23653 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1 */
-        class C16151 implements OnClickListener {
+        class C16181 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1 */
-            class C23611 implements RequestDelegate {
+            class C23641 implements RequestDelegate {
 
                 /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1$1 */
-                class C16141 implements Runnable {
-                    C16141() {
+                class C16171 implements Runnable {
+                    C16171() {
                     }
 
                     public void run() {
@@ -138,26 +138,26 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 }
 
-                C23611() {
+                C23641() {
                 }
 
                 public void run(TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new C16141());
+                    AndroidUtilities.runOnUIThread(new C16171());
                 }
             }
 
-            C16151() {
+            C16181() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!NotificationsSettingsActivity.this.reseting) {
                     NotificationsSettingsActivity.this.reseting = true;
-                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C23611());
+                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C23641());
                 }
             }
         }
 
-        C23623() {
+        C23653() {
         }
 
         public void onItemClick(View view, int position) {
@@ -248,7 +248,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ResetNotificationsAlert", R.string.ResetNotificationsAlert));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C16151());
+                    builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C16181());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     NotificationsSettingsActivity.this.showDialog(builder.create());
                 } else if (position == NotificationsSettingsActivity.this.inappSoundRow) {
@@ -849,7 +849,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds));
-        this.actionBar.setActionBarMenuOnItemClick(new C23601());
+        this.actionBar.setActionBarMenuOnItemClick(new C23631());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -867,7 +867,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         Adapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener(new C23623());
+        this.listView.setOnItemClickListener(new C23653());
         return this.fragmentView;
     }
 

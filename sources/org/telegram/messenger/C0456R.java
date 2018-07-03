@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import org.telegram.messenger.beta.R;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0455R {
+public final class C0456R {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -781,6 +781,7 @@ public final class C0455R {
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
         public static final int menu_link = NUM;
+        public static final int menu_mono = NUM;
         public static final int menu_regular = NUM;
         public static final int monochrome = NUM;
         public static final int name = NUM;
@@ -1319,6 +1320,7 @@ public final class C0455R {
         public static final int ConnectingConnectProxy = NUM;
         public static final int ConnectingToProxy = NUM;
         public static final int ConnectingToProxyEnable = NUM;
+        public static final int ContactBirthday = NUM;
         public static final int ContactJob = NUM;
         public static final int ContactJobTitle = NUM;
         public static final int ContactJoined = NUM;
@@ -1461,6 +1463,7 @@ public final class C0455R {
         public static final int EditMessageMedia = NUM;
         public static final int EditName = NUM;
         public static final int EditedMessage = NUM;
+        public static final int EmailCopied = NUM;
         public static final int EmailPasswordConfirmText = NUM;
         public static final int Emoji = NUM;
         public static final int EmojiBigSize = NUM;
@@ -1900,6 +1903,7 @@ public final class C0455R {
         public static final int Minutes_two = NUM;
         public static final int Minutes_zero = NUM;
         public static final int MobileUsage = NUM;
+        public static final int Mono = NUM;
         public static final int Months_few = NUM;
         public static final int Months_many = NUM;
         public static final int Months_one = NUM;
@@ -2308,6 +2312,7 @@ public final class C0455R {
         public static final int PermissionOpenSettings = NUM;
         public static final int PermissionStorage = NUM;
         public static final int Phone = NUM;
+        public static final int PhoneCopied = NUM;
         public static final int PhoneHome = NUM;
         public static final int PhoneMain = NUM;
         public static final int PhoneMobile = NUM;
@@ -2336,6 +2341,7 @@ public final class C0455R {
         public static final int PleaseEnterCurrentPassword = NUM;
         public static final int PleaseEnterFirstPassword = NUM;
         public static final int PleaseEnterPassword = NUM;
+        public static final int PleaseLoginPassport = NUM;
         public static final int PleaseReEnterPassword = NUM;
         public static final int PleaseStreamDownload = NUM;
         public static final int Points_few = NUM;

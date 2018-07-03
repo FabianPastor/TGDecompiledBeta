@@ -77,14 +77,14 @@ public class FileLoader {
     }
 
     /* renamed from: org.telegram.messenger.FileLoader$5 */
-    class C19385 implements FileLoadOperationDelegate {
+    class C19415 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
         final /* synthetic */ String val$finalFileName;
         final /* synthetic */ int val$finalType;
         final /* synthetic */ FileLocation val$location;
         final /* synthetic */ WebFile val$webDocument;
 
-        C19385(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
+        C19415(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
             this.val$finalFileName = str;
             this.val$finalType = i;
             this.val$document = document;
@@ -224,11 +224,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$3$1 */
-                class C19371 implements FileUploadOperationDelegate {
+                class C19401 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$3$1$2 */
-                    class C01662 implements Runnable {
-                        C01662() {
+                    class C01672 implements Runnable {
+                        C01672() {
                         }
 
                         public void run() {
@@ -265,7 +265,7 @@ public class FileLoader {
                         }
                     }
 
-                    C19371() {
+                    C19401() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -309,7 +309,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01662());
+                        FileLoader.fileLoaderQueue.postRunnable(new C01672());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -338,7 +338,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C19371());
+                    operation.setDelegate(new C19401());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;

@@ -17,7 +17,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.InitializationException;
@@ -305,7 +305,7 @@ public final class DefaultAudioSink implements AudioSink {
                 channelConfig = 1276;
                 break;
             case 8:
-                channelConfig = C0554C.CHANNEL_OUT_7POINT1_SURROUND;
+                channelConfig = C0555C.CHANNEL_OUT_7POINT1_SURROUND;
                 break;
             default:
                 throw new ConfigurationException("Unsupported channel count: " + channelCount);
@@ -317,7 +317,7 @@ public final class DefaultAudioSink implements AudioSink {
                     channelConfig = 252;
                     break;
                 case 7:
-                    channelConfig = C0554C.CHANNEL_OUT_7POINT1_SURROUND;
+                    channelConfig = C0555C.CHANNEL_OUT_7POINT1_SURROUND;
                     break;
             }
         }
@@ -541,7 +541,7 @@ public final class DefaultAudioSink implements AudioSink {
                     }
                 }
             } else if (this.tunneling) {
-                if (avSyncPresentationTimeUs == C0554C.TIME_UNSET) {
+                if (avSyncPresentationTimeUs == C0555C.TIME_UNSET) {
                     z = false;
                 }
                 Assertions.checkState(z);
@@ -591,7 +591,7 @@ public final class DefaultAudioSink implements AudioSink {
             if (audioProcessorNeedsEndOfStream) {
                 audioProcessor.queueEndOfStream();
             }
-            processBuffers(C0554C.TIME_UNSET);
+            processBuffers(C0555C.TIME_UNSET);
             if (!audioProcessor.isEnded()) {
                 return false;
             }
@@ -599,7 +599,7 @@ public final class DefaultAudioSink implements AudioSink {
             this.drainingAudioProcessorIndex++;
         }
         if (this.outputBuffer != null) {
-            writeBuffer(this.outputBuffer, C0554C.TIME_UNSET);
+            writeBuffer(this.outputBuffer, C0555C.TIME_UNSET);
             if (this.outputBuffer != null) {
                 return false;
             }

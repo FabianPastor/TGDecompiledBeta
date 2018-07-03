@@ -82,8 +82,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$2 */
-    class C22302 extends SpanSizeLookup {
-        C22302() {
+    class C22342 extends SpanSizeLookup {
+        C22342() {
         }
 
         public int getSpanSize(int position) {
@@ -95,8 +95,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$4 */
-    class C22314 implements OnItemClickListener {
-        C22314() {
+    class C22354 implements OnItemClickListener {
+        C22354() {
         }
 
         public void onItemClick(View view, int position) {
@@ -114,8 +114,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$5 */
-    class C22325 implements ScrollSlidingTabStripDelegate {
-        C22325() {
+    class C22365 implements ScrollSlidingTabStripDelegate {
+        C22365() {
         }
 
         public void onPageSelected(int page) {
@@ -148,8 +148,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$6 */
-    class C22336 extends OnScrollListener {
-        C22336() {
+    class C22376 extends OnScrollListener {
+        C22376() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -305,7 +305,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         LayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
         this.stickersLayoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.stickersLayoutManager.setSpanSizeLookup(new C22302());
+        this.stickersLayoutManager.setSpanSizeLookup(new C22342());
         this.stickersGridView.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
         this.stickersGridView.setClipToPadding(false);
         recyclerListView = this.stickersGridView;
@@ -313,7 +313,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         this.stickersGridAdapter = stickersGridAdapter;
         recyclerListView.setAdapter(stickersGridAdapter);
         this.stickersGridView.setOnTouchListener(new C13573());
-        this.stickersOnItemClickListener = new C22314();
+        this.stickersOnItemClickListener = new C22354();
         this.stickersGridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.stickersGridView.setGlowColor(-657673);
         addView(this.stickersGridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
@@ -330,8 +330,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         this.scrollSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(1.0f) + 1);
         addView(this.scrollSlidingTabStrip, LayoutHelper.createFrame(-1, 48, 51));
         updateStickerTabs();
-        this.scrollSlidingTabStrip.setDelegate(new C22325());
-        this.stickersGridView.setOnScrollListener(new C22336());
+        this.scrollSlidingTabStrip.setDelegate(new C22365());
+        this.stickersGridView.setOnScrollListener(new C22376());
     }
 
     private void checkScroll() {

@@ -87,8 +87,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$1 */
-    class C22531 extends ActionBarMenuOnItemClick {
-        C22531() {
+    class C22571 extends ActionBarMenuOnItemClick {
+        C22571() {
         }
 
         public void onItemClick(int id) {
@@ -108,8 +108,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$5 */
-    class C22545 implements ThemeDescriptionDelegate {
-        C22545() {
+    class C22585 implements ThemeDescriptionDelegate {
+        C22585() {
         }
 
         public void didSetColor() {
@@ -151,7 +151,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         } else {
             this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22531());
+        this.actionBar.setActionBarMenuOnItemClick(new C22571());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context);
         LinearLayout linearLayout = new LinearLayout(context);
@@ -271,7 +271,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C22545();
+        ThemeDescriptionDelegate сellDelegate = new C22585();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);

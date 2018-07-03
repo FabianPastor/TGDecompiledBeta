@@ -91,7 +91,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C20321()) {
+    private LocationProvider locationProvider = new LocationProvider(new C20351()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -130,8 +130,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C20321 implements LocationProviderDelegate {
-        C20321() {
+    class C20351 implements LocationProviderDelegate {
+        C20351() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -147,8 +147,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C20343 implements SearchAdapterHelperDelegate {
-        C20343() {
+    class C20373 implements SearchAdapterHelperDelegate {
+        C20373() {
         }
 
         public void onDataSetChanged() {
@@ -174,7 +174,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C20343());
+        this.searchAdapterHelper.setDelegate(new C20373());
     }
 
     public void onDestroy() {
@@ -395,8 +395,8 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
-                class C20351 implements RequestDelegate {
-                    C20351() {
+                class C20381 implements RequestDelegate {
+                    C20381() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -431,7 +431,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                             req.username = MentionsAdapter.this.searchingContextUsername;
-                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C20351());
+                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C20381());
                         } else if (!MentionsAdapter.this.noUserName) {
                             MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, TtmlNode.ANONYMOUS_REGION_ID);
                         }
@@ -805,7 +805,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C08319 c08319 = new Runnable() {
+                    C08329 c08329 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -846,8 +846,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     };
-                    this.searchGlobalRunnable = c08319;
-                    AndroidUtilities.runOnUIThread(c08319, 200);
+                    this.searchGlobalRunnable = c08329;
+                    AndroidUtilities.runOnUIThread(c08329, 200);
                 }
                 final SparseArray<User> sparseArray = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;

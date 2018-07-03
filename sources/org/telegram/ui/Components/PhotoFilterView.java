@@ -385,8 +385,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
-    class C22122 implements PhotoFilterLinearBlurControlDelegate {
-        C22122() {
+    class C22162 implements PhotoFilterLinearBlurControlDelegate {
+        C22162() {
         }
 
         public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
@@ -401,8 +401,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
-    class C22133 implements PhotoFilterCurvesControlDelegate {
-        C22133() {
+    class C22173 implements PhotoFilterCurvesControlDelegate {
+        C22173() {
         }
 
         public void valueChanged() {
@@ -1268,8 +1268,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$1 */
-        class C22141 implements PhotoEditorSeekBarDelegate {
-            C22141() {
+        class C22181 implements PhotoEditorSeekBarDelegate {
+            C22181() {
             }
 
             public void onProgressChanged(int i, int progress) {
@@ -1319,7 +1319,7 @@ public class PhotoFilterView extends FrameLayout {
             if (i == 0) {
                 View cell = new PhotoEditToolCell(this.mContext);
                 view = cell;
-                cell.setSeekBarDelegate(new C22141());
+                cell.setSeekBarDelegate(new C22181());
             } else {
                 view = new PhotoEditRadioCell(this.mContext);
                 view.setOnClickListener(new C13002());
@@ -1436,9 +1436,9 @@ public class PhotoFilterView extends FrameLayout {
         this.blurControl = new PhotoFilterBlurControl(context);
         this.blurControl.setVisibility(4);
         addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new C22122());
+        this.blurControl.setDelegate(new C22162());
         this.curvesControl = new PhotoFilterCurvesControl(context, this.curvesToolValue);
-        this.curvesControl.setDelegate(new C22133());
+        this.curvesControl.setDelegate(new C22173());
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context);

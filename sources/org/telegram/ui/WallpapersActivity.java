@@ -79,8 +79,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private SparseArray<WallPaper> wallpappersByIds = new SparseArray();
 
     /* renamed from: org.telegram.ui.WallpapersActivity$3 */
-    class C19053 implements OnTouchListener {
-        C19053() {
+    class C19083 implements OnTouchListener {
+        C19083() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -89,8 +89,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$1 */
-    class C25051 implements WallpaperUpdaterDelegate {
-        C25051() {
+    class C25081 implements WallpaperUpdaterDelegate {
+        C25081() {
         }
 
         public void didSelectWallpaper(File file, Bitmap bitmap) {
@@ -107,8 +107,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$2 */
-    class C25062 extends ActionBarMenuOnItemClick {
-        C25062() {
+    class C25092 extends ActionBarMenuOnItemClick {
+        C25092() {
         }
 
         public void onItemClick(int id) {
@@ -158,8 +158,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$4 */
-    class C25074 implements OnItemClickListener {
-        C25074() {
+    class C25104 implements OnItemClickListener {
+        C25104() {
         }
 
         public void onItemClick(View view, int position) {
@@ -186,8 +186,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$5 */
-    class C25085 implements RequestDelegate {
-        C25085() {
+    class C25115 implements RequestDelegate {
+        C25115() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -298,18 +298,18 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
 
     public View createView(Context context) {
         this.themedWallpaper = Theme.getThemedWallpaper(true);
-        this.updater = new WallpaperUpdater(getParentActivity(), new C25051());
+        this.updater = new WallpaperUpdater(getParentActivity(), new C25081());
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
-        this.actionBar.setActionBarMenuOnItemClick(new C25062());
+        this.actionBar.setActionBarMenuOnItemClick(new C25092());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.backgroundImage = new ImageView(context);
         this.backgroundImage.setScaleType(ScaleType.CENTER_CROP);
         frameLayout.addView(this.backgroundImage, LayoutHelper.createFrame(-1, -1.0f));
-        this.backgroundImage.setOnTouchListener(new C19053());
+        this.backgroundImage.setOnTouchListener(new C19083());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 52.0f));
@@ -334,7 +334,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, 102, 83));
-        this.listView.setOnItemClickListener(new C25074());
+        this.listView.setOnItemClickListener(new C25104());
         processSelectedBackground();
         return this.fragmentView;
     }
@@ -482,7 +482,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     private void loadWallpapers() {
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C25085()), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C25115()), this.classGuid);
     }
 
     public void onResume() {

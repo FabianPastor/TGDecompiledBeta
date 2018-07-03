@@ -366,9 +366,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private boolean useCurrentValue;
     private SlideView[] views;
 
-    /* renamed from: org.telegram.ui.PassportActivity$6 */
-    class C16576 implements OnEditorActionListener {
-        C16576() {
+    /* renamed from: org.telegram.ui.PassportActivity$3 */
+    class C16433 implements Runnable {
+        C16433() {
+        }
+
+        public void run() {
+            if (PassportActivity.this.inputFieldContainers != null && PassportActivity.this.inputFieldContainers[0] != null && PassportActivity.this.inputFieldContainers[0].getVisibility() == 0) {
+                PassportActivity.this.inputFields[0].requestFocus();
+                AndroidUtilities.showKeyboard(PassportActivity.this.inputFields[0]);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$7 */
+    class C16617 implements OnEditorActionListener {
+        C16617() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -380,9 +393,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.PassportActivity$7 */
-    class C16587 implements TextWatcher {
-        C16587() {
+    /* renamed from: org.telegram.ui.PassportActivity$8 */
+    class C16628 implements TextWatcher {
+        C16628() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -398,9 +411,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.PassportActivity$8 */
-    class C16598 implements OnClickListener {
-        C16598() {
+    /* renamed from: org.telegram.ui.PassportActivity$9 */
+    class C16639 implements OnClickListener {
+        C16639() {
         }
 
         public void onClick(View v) {
@@ -408,20 +421,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             activity.setCloseAfterSet(true);
             activity.setCurrentPasswordInfo(new byte[0], PassportActivity.this.currentPassword);
             PassportActivity.this.presentFragment(activity);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$9 */
-    class C16609 implements OnEditorActionListener {
-        C16609() {
-        }
-
-        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 5 && i != 6) {
-                return false;
-            }
-            PassportActivity.this.doneItem.callOnClick();
-            return true;
         }
     }
 
@@ -538,8 +537,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PassportActivity$2 */
-    class C23742 implements RequestDelegate {
-        C23742() {
+    class C23772 implements RequestDelegate {
+        C23772() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -558,12 +557,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.PassportActivity$3 */
-    class C23793 extends ActionBarMenuOnItemClick {
+    /* renamed from: org.telegram.ui.PassportActivity$4 */
+    class C23844 extends ActionBarMenuOnItemClick {
 
-        /* renamed from: org.telegram.ui.PassportActivity$3$2 */
-        class C16402 implements Runnable {
-            C16402() {
+        /* renamed from: org.telegram.ui.PassportActivity$4$2 */
+        class C16442 implements Runnable {
+            C16442() {
             }
 
             public void run() {
@@ -571,7 +570,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C23793() {
+        C23844() {
         }
 
         public void onItemClick(int id) {
@@ -616,7 +615,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     PassportActivity.this.onPasswordDone();
                     return;
                 }
-                final Runnable finishRunnable = new C16402();
+                final Runnable finishRunnable = new C16442();
                 final ErrorRunnable errorRunnable = new ErrorRunnable() {
                     public void onError(String error, String text) {
                         if ("PHONE_VERIFICATION_NEEDED".equals(error)) {
@@ -724,10 +723,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         if (PassportActivity.this.documentsErrors != null) {
                             PassportActivity.this.documentsErrors.clear();
                         }
-                        PassportActivityDelegate access$2400 = PassportActivity.this.delegate;
-                        SecureValueType access$3100 = PassportActivity.this.currentType;
+                        PassportActivityDelegate access$2600 = PassportActivity.this.delegate;
+                        SecureValueType access$3200 = PassportActivity.this.currentType;
                         String jSONObject2 = json.toString();
-                        SecureValueType access$3700 = PassportActivity.this.currentDocumentsType;
+                        SecureValueType access$3800 = PassportActivity.this.currentDocumentsType;
                         if (documentsJson != null) {
                             jSONObject = documentsJson.toString();
                         } else {
@@ -740,7 +739,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         } else {
                             secureDocument = PassportActivity.this.reverseDocument;
                         }
-                        access$2400.saveValue(access$3100, null, jSONObject2, access$3700, jSONObject, null, access$300, access$400, secureDocument, finishRunnable, errorRunnable);
+                        access$2600.saveValue(access$3200, null, jSONObject2, access$3800, jSONObject, null, access$300, access$400, secureDocument, finishRunnable, errorRunnable);
                     } else {
                         return;
                     }
@@ -799,11 +798,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         private boolean waitingForEvent;
 
         /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$5 */
-        class C16675 extends TimerTask {
+        class C16705 extends TimerTask {
 
             /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$5$1 */
-            class C16661 implements Runnable {
-                C16661() {
+            class C16691 implements Runnable {
+                C16691() {
                 }
 
                 public void run() {
@@ -814,26 +813,26 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C16675() {
+            C16705() {
             }
 
             public void run() {
                 double currentTime = (double) System.currentTimeMillis();
                 PhoneConfirmationView.this.codeTime = (int) (((double) PhoneConfirmationView.this.codeTime) - (currentTime - PhoneConfirmationView.this.lastCodeTime));
                 PhoneConfirmationView.this.lastCodeTime = currentTime;
-                AndroidUtilities.runOnUIThread(new C16661());
+                AndroidUtilities.runOnUIThread(new C16691());
             }
         }
 
         /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$6 */
-        class C16706 extends TimerTask {
+        class C16736 extends TimerTask {
 
             /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$6$1 */
-            class C16691 implements Runnable {
+            class C16721 implements Runnable {
 
                 /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$6$1$1 */
-                class C23871 implements RequestDelegate {
-                    C23871() {
+                class C23901 implements RequestDelegate {
+                    C23901() {
                     }
 
                     public void run(TLObject response, final TL_error error) {
@@ -847,7 +846,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                C16691() {
+                C16721() {
                 }
 
                 public void run() {
@@ -882,7 +881,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = PhoneConfirmationView.this.phone;
                             req.phone_code_hash = PhoneConfirmationView.this.phoneHash;
-                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23871(), 2);
+                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23901(), 2);
                         } else if (PhoneConfirmationView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -894,7 +893,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C16706() {
+            C16736() {
             }
 
             public void run() {
@@ -902,7 +901,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     double currentTime = (double) System.currentTimeMillis();
                     PhoneConfirmationView.this.time = (int) (((double) PhoneConfirmationView.this.time) - (currentTime - PhoneConfirmationView.this.lastCurrentTime));
                     PhoneConfirmationView.this.lastCurrentTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new C16691());
+                    AndroidUtilities.runOnUIThread(new C16721());
                 }
             }
         }
@@ -931,8 +930,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$8 */
-        class C23898 implements RequestDelegate {
-            C23898() {
+        class C23928 implements RequestDelegate {
+            C23928() {
             }
 
             public void run(TLObject response, TL_error error) {
@@ -1059,8 +1058,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$4$1$1 */
-                        class C16641 implements DialogInterface.OnClickListener {
-                            C16641() {
+                        class C16671 implements DialogInterface.OnClickListener {
+                            C16671() {
                             }
 
                             public void onClick(DialogInterface dialog, int which) {
@@ -1076,7 +1075,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             } else {
                                 AlertDialog dialog = (AlertDialog) AlertsCreator.processError(PassportActivity.this.currentAccount, error, PassportActivity.this, req, new Object[0]);
                                 if (dialog != null && error.text.contains("PHONE_CODE_EXPIRED")) {
-                                    dialog.setPositiveButtonListener(new C16641());
+                                    dialog.setPositiveButtonListener(new C16671());
                                 }
                             }
                             PassportActivity.this.needHideProgress();
@@ -1178,7 +1177,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new C16675(), 0, 1000);
+                this.codeTimer.schedule(new C16705(), 0, 1000);
             }
         }
 
@@ -1198,7 +1197,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         private void createTimer() {
             if (this.timeTimer == null) {
                 this.timeTimer = new Timer();
-                this.timeTimer.schedule(new C16706(), 0, 1000);
+                this.timeTimer.schedule(new C16736(), 0, 1000);
             }
         }
 
@@ -1237,8 +1236,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$7$1$1 */
-                            class C16711 implements Runnable {
-                                C16711() {
+                            class C16741 implements Runnable {
+                                C16741() {
                                 }
 
                                 public void run() {
@@ -1252,7 +1251,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 if (error == null) {
                                     PhoneConfirmationView.this.destroyTimer();
                                     PhoneConfirmationView.this.destroyCodeTimer();
-                                    PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("phone"), null, null, null, null, null, null, null, new C16711(), null);
+                                    PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("phone"), null, null, null, null, null, null, null, new C16741(), null);
                                     return;
                                 }
                                 PhoneConfirmationView.this.lastError = error.text;
@@ -1281,7 +1280,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             TL_auth_cancelCode req = new TL_auth_cancelCode();
             req.phone_number = this.phone;
             req.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23898(), 2);
+            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23928(), 2);
             destroyTimer();
             destroyCodeTimer();
             this.currentParams = null;
@@ -1514,8 +1513,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PassportActivity$1 */
-    class C25411 extends EmptyPhotoViewerProvider {
-        C25411() {
+    class C25441 extends EmptyPhotoViewerProvider {
+        C25441() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -1703,7 +1702,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.typesViews = new HashMap();
         this.errorsMap = new HashMap();
         this.errorsValues = new HashMap();
-        this.provider = new C25411();
+        this.provider = new C25441();
         this.currentActivityType = type;
         this.currentForm = form;
         this.currentType = secureType;
@@ -1724,7 +1723,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             return;
         }
         if (this.currentPassword == null) {
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new C23742()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new C23772()), this.classGuid);
             return;
         }
         byte[] salt = new byte[(this.currentPassword.new_salt.length + 8)];
@@ -1737,6 +1736,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         super.onResume();
         if (this.chatAttachAlert != null) {
             this.chatAttachAlert.onResume();
+        }
+        if (this.currentActivityType == 5 && this.inputFieldContainers != null && this.inputFieldContainers[0] != null && this.inputFieldContainers[0].getVisibility() == 0) {
+            this.inputFields[0].requestFocus();
+            AndroidUtilities.showKeyboard(this.inputFields[0]);
+            AndroidUtilities.runOnUIThread(new C16433(), 200);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
@@ -1787,15 +1791,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C23793());
+        this.actionBar.setActionBarMenuOnItemClick(new C23844());
         if (this.currentActivityType == 7) {
-            View c16484 = new ScrollView(context) {
+            View c16575 = new ScrollView(context) {
                 protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
                     return false;
                 }
             };
-            this.scrollView = c16484;
-            this.fragmentView = c16484;
+            this.scrollView = c16575;
+            this.fragmentView = c16575;
             this.scrollView.setFillViewport(true);
             AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor(Theme.key_actionBarDefault));
         } else {
@@ -1930,8 +1934,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.inputFields[a].setGravity(LocaleController.isRTL ? 5 : 3);
             container.addView(this.inputFields[a], LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, 12.0f, 17.0f, 6.0f));
-            this.inputFields[a].setOnEditorActionListener(new C16576());
-            this.inputFields[a].addTextChangedListener(new C16587());
+            this.inputFields[a].setOnEditorActionListener(new C16617());
+            this.inputFields[a].addTextChangedListener(new C16628());
         }
         this.bottomCell = new TextInfoPrivacyCell(context);
         this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
@@ -1991,7 +1995,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.noPasswordSetTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.noPasswordSetTextView.setText(LocaleController.getString("TelegramPassportCreatePassword", R.string.TelegramPassportCreatePassword));
         this.linearLayout2.addView(this.noPasswordSetTextView, LayoutHelper.createFrame(-1, 24.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 9.0f, 17.0f, 0.0f));
-        this.noPasswordSetTextView.setOnClickListener(new C16598());
+        this.noPasswordSetTextView.setOnClickListener(new C16639());
         this.inputFields = new EditTextBoldCursor[1];
         this.inputFieldContainers = new ViewGroup[1];
         for (a = 0; a < 1; a++) {
@@ -2017,7 +2021,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.inputFields[a].setGravity(LocaleController.isRTL ? 5 : 3);
             this.inputFieldContainers[a].addView(this.inputFields[a], LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, 12.0f, 17.0f, 6.0f));
-            this.inputFields[a].setOnEditorActionListener(new C16609());
+            this.inputFields[a].setOnEditorActionListener(new OnEditorActionListener() {
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    if (i != 5 && i != 6) {
+                        return false;
+                    }
+                    PassportActivity.this.doneItem.callOnClick();
+                    return true;
+                }
+            });
             this.inputFields[a].setCustomSelectionActionModeCallback(new Callback() {
                 public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                     return false;
@@ -2047,9 +2059,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.linearLayout2.addView(this.passwordForgotButton, LayoutHelper.createLinear(-2, 30, (LocaleController.isRTL ? 5 : 3) | 48, 17, 0, 17, 0));
         this.passwordForgotButton.setOnClickListener(new OnClickListener() {
 
-            /* renamed from: org.telegram.ui.PassportActivity$11$2 */
-            class C16302 implements DialogInterface.OnClickListener {
-                C16302() {
+            /* renamed from: org.telegram.ui.PassportActivity$12$2 */
+            class C16332 implements DialogInterface.OnClickListener {
+                C16332() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -2057,9 +2069,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            /* renamed from: org.telegram.ui.PassportActivity$11$1 */
-            class C23661 implements RequestDelegate {
-                C23661() {
+            /* renamed from: org.telegram.ui.PassportActivity$12$1 */
+            class C23691 implements RequestDelegate {
+                C23691() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -2104,11 +2116,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             public void onClick(View v) {
                 if (PassportActivity.this.currentPassword.has_recovery) {
                     PassportActivity.this.needShowProgress();
-                    ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new C23661(), 10), PassportActivity.this.classGuid);
+                    ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new C23691(), 10), PassportActivity.this.classGuid);
                 } else if (PassportActivity.this.getParentActivity() != null) {
                     Builder builder = new Builder(PassportActivity.this.getParentActivity());
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new C16302());
+                    builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new C16332());
                     builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle));
                     builder.setMessage(LocaleController.getString("RestorePasswordNoEmailText", R.string.RestorePasswordNoEmailText));
                     PassportActivity.this.showDialog(builder.create());
@@ -2136,33 +2148,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         req.current_password_hash = computeSHA256;
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.ui.PassportActivity$12$1 */
-            class C23671 implements RequestDelegate {
+            /* renamed from: org.telegram.ui.PassportActivity$13$1 */
+            class C23701 implements RequestDelegate {
 
-                /* renamed from: org.telegram.ui.PassportActivity$12$1$1 */
-                class C16311 implements Runnable {
-                    C16311() {
+                /* renamed from: org.telegram.ui.PassportActivity$13$1$1 */
+                class C16341 implements Runnable {
+                    C16341() {
                     }
 
                     public void run() {
-                        AnonymousClass12.this.generateNewSecret();
+                        AnonymousClass13.this.generateNewSecret();
                     }
                 }
 
-                C23671() {
+                C23701() {
                 }
 
                 public void run(TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new C16311());
+                    AndroidUtilities.runOnUIThread(new C16341());
                 }
             }
 
-            /* renamed from: org.telegram.ui.PassportActivity$12$2 */
-            class C23682 implements RequestDelegate {
+            /* renamed from: org.telegram.ui.PassportActivity$13$2 */
+            class C23712 implements RequestDelegate {
 
-                /* renamed from: org.telegram.ui.PassportActivity$12$2$1 */
-                class C16321 implements Runnable {
-                    C16321() {
+                /* renamed from: org.telegram.ui.PassportActivity$13$2$1 */
+                class C16351 implements Runnable {
+                    C16351() {
                     }
 
                     public void run() {
@@ -2170,15 +2182,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             PassportActivity.this.currentForm = new TL_account_authorizationForm();
                             PassportActivity.this.currentForm.selfie_required = true;
                         }
-                        AnonymousClass12.this.openRequestInterface();
+                        AnonymousClass13.this.openRequestInterface();
                     }
                 }
 
-                C23682() {
+                C23712() {
                 }
 
                 public void run(TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new C16321());
+                    AndroidUtilities.runOnUIThread(new C16351());
                 }
             }
 
@@ -2212,7 +2224,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 req.new_settings.new_secure_secret_id = 0;
                 TL_account_passwordInputSettings tL_account_passwordInputSettings = req.new_settings;
                 tL_account_passwordInputSettings.flags |= 4;
-                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23671());
+                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23701());
             }
 
             private void generateNewSecret() {
@@ -2236,15 +2248,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 req.new_settings.new_secure_secret_id = PassportActivity.this.secureSecretId;
                 TL_account_passwordInputSettings tL_account_passwordInputSettings = req.new_settings;
                 tL_account_passwordInputSettings.flags |= 4;
-                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23682());
+                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23712());
             }
 
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
-                    /* renamed from: org.telegram.ui.PassportActivity$12$3$1 */
-                    class C23691 implements RequestDelegate {
-                        C23691() {
+                    /* renamed from: org.telegram.ui.PassportActivity$13$3$1 */
+                    class C23721 implements RequestDelegate {
+                        C23721() {
                         }
 
                         public void run(final TLObject response, final TL_error error) {
@@ -2258,7 +2270,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         for (int a = 0; a < size; a++) {
                                             PassportActivity.this.currentForm.values.add((TL_secureValue) vector.objects.get(a));
                                         }
-                                        AnonymousClass12.this.openRequestInterface();
+                                        AnonymousClass13.this.openRequestInterface();
                                         return;
                                     }
                                     PassportActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
@@ -2276,17 +2288,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             PassportActivity.this.currentEmail = settings.email;
                             if (!PassportActivity.this.checkSecret(PassportActivity.this.decryptSecret(PassportActivity.this.secureSecret, PassportActivity.this.secureSalt, PassportActivity.this.textPassword), Long.valueOf(PassportActivity.this.secureSecretId)) || PassportActivity.this.secureSalt.length == 0 || PassportActivity.this.secureSecretId == 0) {
                                 if (PassportActivity.this.secureSecret == null || PassportActivity.this.secureSecret.length == 0) {
-                                    AnonymousClass12.this.generateNewSecret();
+                                    AnonymousClass13.this.generateNewSecret();
                                     return;
                                 } else {
-                                    AnonymousClass12.this.resetSecret();
+                                    AnonymousClass13.this.resetSecret();
                                     return;
                                 }
                             } else if (PassportActivity.this.currentBotId == 0) {
-                                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(new TL_account_getAllSecureValues(), new C23691());
+                                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(new TL_account_getAllSecureValues(), new C23721());
                                 return;
                             } else {
-                                AnonymousClass12.this.openRequestInterface();
+                                AnonymousClass13.this.openRequestInterface();
                                 return;
                             }
                         }
@@ -2411,9 +2423,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
         this.bottomLayout.setOnClickListener(new OnClickListener() {
 
-            /* renamed from: org.telegram.ui.PassportActivity$13$1 */
-            class C23701 implements RequestDelegate {
-                C23701() {
+            /* renamed from: org.telegram.ui.PassportActivity$14$1 */
+            class C23731 implements RequestDelegate {
+                C23731() {
                 }
 
                 public void run(TLObject response, final TL_error error) {
@@ -2598,7 +2610,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 } catch (Throwable e4) {
                     FileLog.m3e(e4);
                 }
-                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23701()), PassportActivity.this.classGuid);
+                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23731()), PassportActivity.this.classGuid);
             }
         });
         this.acceptTextView = new TextView(context);
@@ -2645,15 +2657,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.linearLayout2.addView(this.deletePassportCell, LayoutHelper.createLinear(-1, -2));
         this.deletePassportCell.setOnClickListener(new OnClickListener() {
 
-            /* renamed from: org.telegram.ui.PassportActivity$15$1 */
-            class C16371 implements DialogInterface.OnClickListener {
+            /* renamed from: org.telegram.ui.PassportActivity$16$1 */
+            class C16401 implements DialogInterface.OnClickListener {
 
-                /* renamed from: org.telegram.ui.PassportActivity$15$1$1 */
-                class C23711 implements RequestDelegate {
+                /* renamed from: org.telegram.ui.PassportActivity$16$1$1 */
+                class C23741 implements RequestDelegate {
 
-                    /* renamed from: org.telegram.ui.PassportActivity$15$1$1$1 */
-                    class C16361 implements Runnable {
-                        C16361() {
+                    /* renamed from: org.telegram.ui.PassportActivity$16$1$1$1 */
+                    class C16391 implements Runnable {
+                        C16391() {
                         }
 
                         public void run() {
@@ -2674,15 +2686,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                     }
 
-                    C23711() {
+                    C23741() {
                     }
 
                     public void run(TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new C16361());
+                        AndroidUtilities.runOnUIThread(new C16391());
                     }
                 }
 
-                C16371() {
+                C16401() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -2691,13 +2703,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         req.types.add(((TL_secureValue) PassportActivity.this.currentForm.values.get(a)).type);
                     }
                     PassportActivity.this.needShowProgress();
-                    ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23711());
+                    ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23741());
                 }
             }
 
             public void onClick(View v) {
                 Builder builder = new Builder(PassportActivity.this.getParentActivity());
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16371());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16401());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("TelegramPassportDeleteAlert", R.string.TelegramPassportDeleteAlert));
@@ -3056,12 +3068,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (a == 0) {
                 this.inputFields[a].setOnTouchListener(new OnTouchListener() {
 
-                    /* renamed from: org.telegram.ui.PassportActivity$22$1 */
-                    class C23721 implements CountrySelectActivityDelegate {
+                    /* renamed from: org.telegram.ui.PassportActivity$23$1 */
+                    class C23751 implements CountrySelectActivityDelegate {
 
-                        /* renamed from: org.telegram.ui.PassportActivity$22$1$1 */
-                        class C16391 implements Runnable {
-                            C16391() {
+                        /* renamed from: org.telegram.ui.PassportActivity$23$1$1 */
+                        class C16421 implements Runnable {
+                            C16421() {
                             }
 
                             public void run() {
@@ -3069,7 +3081,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             }
                         }
 
-                        C23721() {
+                        C23751() {
                         }
 
                         public void didSelectCountry(String name, String shortName) {
@@ -3082,7 +3094,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 PassportActivity.this.inputFields[2].setHintText(hint != null ? hint.replace('X', '\u2013') : null);
                                 PassportActivity.this.ignoreOnTextChange = false;
                             }
-                            AndroidUtilities.runOnUIThread(new C16391(), 300);
+                            AndroidUtilities.runOnUIThread(new C16421(), 300);
                             PassportActivity.this.inputFields[2].requestFocus();
                             PassportActivity.this.inputFields[2].setSelection(PassportActivity.this.inputFields[2].length());
                         }
@@ -3094,7 +3106,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                         if (event.getAction() == 1) {
                             CountrySelectActivity fragment = new CountrySelectActivity(false);
-                            fragment.setCountrySelectActivityDelegate(new C23721());
+                            fragment.setCountrySelectActivityDelegate(new C23751());
                             PassportActivity.this.presentFragment(fragment);
                         }
                         return true;
@@ -3470,9 +3482,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (a == 5) {
                 this.inputFields[a].setOnTouchListener(new OnTouchListener() {
 
-                    /* renamed from: org.telegram.ui.PassportActivity$28$1 */
-                    class C23731 implements CountrySelectActivityDelegate {
-                        C23731() {
+                    /* renamed from: org.telegram.ui.PassportActivity$29$1 */
+                    class C23761 implements CountrySelectActivityDelegate {
+                        C23761() {
                         }
 
                         public void didSelectCountry(String name, String shortName) {
@@ -3487,7 +3499,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                         if (event.getAction() == 1) {
                             CountrySelectActivity fragment = new CountrySelectActivity(false);
-                            fragment.setCountrySelectActivityDelegate(new C23731());
+                            fragment.setCountrySelectActivityDelegate(new C23761());
                             PassportActivity.this.presentFragment(fragment);
                         }
                         return true;
@@ -3992,7 +4004,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.linearLayout2.addView(textSettingsCell, LayoutHelper.createLinear(-1, -2));
             textSettingsCell.setOnClickListener(new OnClickListener() {
 
-                /* renamed from: org.telegram.ui.PassportActivity$38$1 */
+                /* renamed from: org.telegram.ui.PassportActivity$39$1 */
                 class C23781 implements MrzCameraActivityDelegate {
                     C23781() {
                     }
@@ -4186,11 +4198,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 if (num == 7) {
                                     builder.setNegativeButton(LocaleController.getString("PassportSelectNotExpire", R.string.PassportSelectNotExpire), new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            int[] access$4000 = PassportActivity.this.currentExpireDate;
-                                            int[] access$40002 = PassportActivity.this.currentExpireDate;
+                                            int[] access$4100 = PassportActivity.this.currentExpireDate;
+                                            int[] access$41002 = PassportActivity.this.currentExpireDate;
                                             PassportActivity.this.currentExpireDate[2] = 0;
-                                            access$40002[1] = 0;
-                                            access$4000[0] = 0;
+                                            access$41002[1] = 0;
+                                            access$4100[0] = 0;
                                             field.setText(LocaleController.getString("PassportNoExpireDate", R.string.PassportNoExpireDate));
                                         }
                                     });
@@ -4208,9 +4220,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else if (a == 3) {
                 this.inputFields[a].setOnTouchListener(new OnTouchListener() {
 
-                    /* renamed from: org.telegram.ui.PassportActivity$42$1 */
-                    class C16431 implements DialogInterface.OnClickListener {
-                        C16431() {
+                    /* renamed from: org.telegram.ui.PassportActivity$43$1 */
+                    class C16471 implements DialogInterface.OnClickListener {
+                        C16471() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -4231,7 +4243,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         if (event.getAction() == 1) {
                             Builder builder = new Builder(PassportActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("PassportSelectGender", R.string.PassportSelectGender));
-                            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", R.string.PassportMale), LocaleController.getString("PassportFemale", R.string.PassportFemale)}, new C16431());
+                            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", R.string.PassportMale), LocaleController.getString("PassportFemale", R.string.PassportFemale)}, new C16471());
                             builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             PassportActivity.this.showDialog(builder.create());
                         }
@@ -4661,9 +4673,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     secureDocument = document;
                     cell.setOnLongClickListener(new OnLongClickListener() {
 
-                        /* renamed from: org.telegram.ui.PassportActivity$48$1 */
-                        class C16441 implements DialogInterface.OnClickListener {
-                            C16441() {
+                        /* renamed from: org.telegram.ui.PassportActivity$49$1 */
+                        class C16481 implements DialogInterface.OnClickListener {
+                            C16481() {
                             }
 
                             public void onClick(DialogInterface dialog, int which) {
@@ -4709,7 +4721,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             }
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16441());
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16481());
                             PassportActivity.this.showDialog(builder.create());
                             return true;
                         }
@@ -5009,13 +5021,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             value = LocaleController.getString("PassportEmailInfo", R.string.PassportEmailInfo);
         }
         view.setValue(value);
-        TextView access$11300 = view.valueTextView;
+        TextView access$11400 = view.valueTextView;
         if (isError) {
             str = Theme.key_windowBackgroundWhiteRedText3;
         } else {
             str = Theme.key_windowBackgroundWhiteGrayText2;
         }
-        access$11300.setTextColor(Theme.getColor(str));
+        access$11400.setTextColor(Theme.getColor(str));
     }
 
     private String getErrorsString(HashMap<String, String> errors, HashMap<String, String> documentErrors) {
@@ -5189,7 +5201,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         } else {
                             fileInputSecureValue = null;
                         }
-                        final AnonymousClass49 currentDelegate = this;
+                        final AnonymousClass50 currentDelegate = this;
                         final TL_inputSecureValue finalFileInputSecureValue = fileInputSecureValue;
                         final TL_account_saveSecureValue req = new TL_account_saveSecureValue();
                         req.value = inputSecureValue;
@@ -5207,9 +5219,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         final Runnable runnable = finishRunnable;
                         ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                            /* renamed from: org.telegram.ui.PassportActivity$49$1$2 */
-                            class C23822 implements RequestDelegate {
-                                C23822() {
+                            /* renamed from: org.telegram.ui.PassportActivity$50$1$2 */
+                            class C23852 implements RequestDelegate {
+                                C23852() {
                                 }
 
                                 public void run(final TLObject response, final TL_error error) {
@@ -5275,7 +5287,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                                         if (file instanceof TL_secureFile) {
                                                             secureFile = (TL_secureFile) file;
                                                             if (Utilities.arraysEquals(document.fileSecret, 0, secureFile.secret, 0)) {
-                                                                AnonymousClass49.this.renameFile(document, secureFile);
+                                                                AnonymousClass50.this.renameFile(document, secureFile);
                                                                 break;
                                                             }
                                                         }
@@ -5286,19 +5298,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (!(secureDocument == null || secureDocument.inputFile == null || !(newValue.selfie instanceof TL_secureFile))) {
                                             secureFile = (TL_secureFile) newValue.selfie;
                                             if (Utilities.arraysEquals(secureDocument.fileSecret, 0, secureFile.secret, 0)) {
-                                                AnonymousClass49.this.renameFile(secureDocument, secureFile);
+                                                AnonymousClass50.this.renameFile(secureDocument, secureFile);
                                             }
                                         }
                                         if (!(secureDocument2 == null || secureDocument2.inputFile == null || !(newValue.front_side instanceof TL_secureFile))) {
                                             secureFile = (TL_secureFile) newValue.front_side;
                                             if (Utilities.arraysEquals(secureDocument2.fileSecret, 0, secureFile.secret, 0)) {
-                                                AnonymousClass49.this.renameFile(secureDocument2, secureFile);
+                                                AnonymousClass50.this.renameFile(secureDocument2, secureFile);
                                             }
                                         }
                                         if (!(secureDocument3 == null || secureDocument3.inputFile == null || !(newValue.reverse_side instanceof TL_secureFile))) {
                                             secureFile = (TL_secureFile) newValue.reverse_side;
                                             if (Utilities.arraysEquals(secureDocument3.fileSecret, 0, secureFile.secret, 0)) {
-                                                AnonymousClass49.this.renameFile(secureDocument3, secureFile);
+                                                AnonymousClass50.this.renameFile(secureDocument3, secureFile);
                                             }
                                         }
                                         PassportActivity.this.setTypeValue(secureValueType2, str, str2, secureValueType, str3);
@@ -5314,7 +5326,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     if (error.text.equals("EMAIL_VERIFICATION_NEEDED")) {
                                         TL_account_sendVerifyEmailCode req = new TL_account_sendVerifyEmailCode();
                                         req.email = str;
-                                        ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23822());
+                                        ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new C23852());
                                         return;
                                     } else if (error.text.equals("PHONE_VERIFICATION_NEEDED")) {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -5335,7 +5347,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 req2.secure_secret_id = PassportActivity.this.secureSecretId;
                                 ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req2, new RequestDelegate() {
                                     public void run(TLObject response, TL_error error) {
-                                        C23841.this.onResult(error, (TL_secureValue) response, pendingValue);
+                                        C23871.this.onResult(error, (TL_secureValue) response, pendingValue);
                                     }
                                 });
                             }
@@ -5527,9 +5539,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         final SecureValueType secureValueType = type;
         view.setOnClickListener(new OnClickListener() {
 
-            /* renamed from: org.telegram.ui.PassportActivity$51$1 */
-            class C16501 implements DialogInterface.OnClickListener {
-                C16501() {
+            /* renamed from: org.telegram.ui.PassportActivity$52$1 */
+            class C16531 implements DialogInterface.OnClickListener {
+                C16531() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -5537,12 +5549,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            /* renamed from: org.telegram.ui.PassportActivity$51$2 */
-            class C16522 implements DialogInterface.OnClickListener {
+            /* renamed from: org.telegram.ui.PassportActivity$52$2 */
+            class C16552 implements DialogInterface.OnClickListener {
 
-                /* renamed from: org.telegram.ui.PassportActivity$51$2$1 */
-                class C16511 implements Runnable {
-                    C16511() {
+                /* renamed from: org.telegram.ui.PassportActivity$52$2$1 */
+                class C16541 implements Runnable {
+                    C16541() {
                     }
 
                     public void run() {
@@ -5550,9 +5562,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                /* renamed from: org.telegram.ui.PassportActivity$51$2$2 */
-                class C23852 implements ErrorRunnable {
-                    C23852() {
+                /* renamed from: org.telegram.ui.PassportActivity$52$2$2 */
+                class C23882 implements ErrorRunnable {
+                    C23882() {
                     }
 
                     public void onError(String error, String text) {
@@ -5560,12 +5572,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                C16522() {
+                C16552() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
                     PassportActivity.this.needShowProgress();
-                    PassportActivity.this.deleteValueInternal(secureValueType, null, true, new C16511(), new C23852());
+                    PassportActivity.this.deleteValueInternal(secureValueType, null, true, new C16541(), new C23882());
                 }
             }
 
@@ -5589,7 +5601,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     boolean phoneField = secureValueType instanceof TL_secureValueTypePhone;
                     if ((phoneField || (secureValueType instanceof TL_secureValueTypeEmail)) && PassportActivity.this.getValueByType(secureValueType, false) != null) {
                         builder = new Builder(PassportActivity.this.getParentActivity());
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16522());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16552());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setMessage(phoneField ? LocaleController.getString("PassportDeletePhoneAlert", R.string.PassportDeletePhoneAlert) : LocaleController.getString("PassportDeleteEmailAlert", R.string.PassportDeleteEmailAlert));
@@ -5628,7 +5640,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             strings.add(LocaleController.getString("PassportAddPassportRegistration", R.string.PassportAddPassportRegistration));
                         }
                     }
-                    builder.setItems((CharSequence[]) strings.toArray(new CharSequence[strings.size()]), new C16501());
+                    builder.setItems((CharSequence[]) strings.toArray(new CharSequence[strings.size()]), new C16531());
                     PassportActivity.this.showDialog(builder.create());
                     return;
                 }
@@ -6697,11 +6709,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                                         PassportActivity.this.inputFields[2].setText(String.format(Locale.US, "%02d.%02d.%d", new Object[]{Integer.valueOf(result.birthDay), Integer.valueOf(result.birthMonth), Integer.valueOf(result.birthYear)}));
                                                     }
                                                     if (result.expiryDay <= 0 || result.expiryMonth <= 0 || result.expiryYear <= 0) {
-                                                        int[] access$4000 = PassportActivity.this.currentExpireDate;
-                                                        int[] access$40002 = PassportActivity.this.currentExpireDate;
+                                                        int[] access$4100 = PassportActivity.this.currentExpireDate;
+                                                        int[] access$41002 = PassportActivity.this.currentExpireDate;
                                                         PassportActivity.this.currentExpireDate[2] = 0;
-                                                        access$40002[1] = 0;
-                                                        access$4000[0] = 0;
+                                                        access$41002[1] = 0;
+                                                        access$4100[0] = 0;
                                                         PassportActivity.this.inputFields[7].setText(LocaleController.getString("PassportNoExpireDate", R.string.PassportNoExpireDate));
                                                         return;
                                                     }

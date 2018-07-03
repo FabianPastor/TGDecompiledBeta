@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
@@ -26,7 +26,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     private final EventDispatcher eventDispatcher;
     private final Loader initialPlaylistLoader = new Loader("HlsPlaylistTracker:MasterPlaylist");
     private final Uri initialPlaylistUri;
-    private long initialStartTimeUs = C0554C.TIME_UNSET;
+    private long initialStartTimeUs = C0555C.TIME_UNSET;
     private boolean isLive;
     private final List<PlaylistEventListener> listeners = new ArrayList();
     private HlsMasterPlaylist masterPlaylist;
@@ -90,7 +90,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
                 return false;
             }
             long currentTimeMs = SystemClock.elapsedRealtime();
-            long snapshotValidityDurationMs = Math.max(30000, C0554C.usToMs(this.playlistSnapshot.durationUs));
+            long snapshotValidityDurationMs = Math.max(30000, C0555C.usToMs(this.playlistSnapshot.durationUs));
             if (this.playlistSnapshot.hasEndTag || this.playlistSnapshot.playlistType == 2 || this.playlistSnapshot.playlistType == 1 || this.lastSnapshotLoadMs + snapshotValidityDurationMs > currentTimeMs) {
                 return true;
             }
@@ -171,13 +171,13 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
                 if (loadedPlaylist.mediaSequence + ((long) loadedPlaylist.segments.size()) < this.playlistSnapshot.mediaSequence) {
                     this.playlistError = new PlaylistResetException(this.playlistUrl.url);
                     HlsPlaylistTracker.this.notifyPlaylistError(this.playlistUrl, false);
-                } else if (((double) (currentTimeMs - this.lastSnapshotChangeMs)) > ((double) C0554C.usToMs(this.playlistSnapshot.targetDurationUs)) * HlsPlaylistTracker.PLAYLIST_STUCK_TARGET_DURATION_COEFFICIENT) {
+                } else if (((double) (currentTimeMs - this.lastSnapshotChangeMs)) > ((double) C0555C.usToMs(this.playlistSnapshot.targetDurationUs)) * HlsPlaylistTracker.PLAYLIST_STUCK_TARGET_DURATION_COEFFICIENT) {
                     this.playlistError = new PlaylistStuckException(this.playlistUrl.url);
                     HlsPlaylistTracker.this.notifyPlaylistError(this.playlistUrl, true);
                     blacklistPlaylist();
                 }
             }
-            this.earliestNextLoadTimeMs = C0554C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2) + currentTimeMs;
+            this.earliestNextLoadTimeMs = C0555C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2) + currentTimeMs;
             if (this.playlistUrl == HlsPlaylistTracker.this.primaryHlsUrl && !this.playlistSnapshot.hasEndTag) {
                 loadPlaylist();
             }

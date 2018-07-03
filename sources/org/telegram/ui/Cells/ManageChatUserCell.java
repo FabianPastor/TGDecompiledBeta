@@ -44,8 +44,8 @@ public class ManageChatUserCell extends FrameLayout {
     private SimpleTextView statusTextView;
 
     /* renamed from: org.telegram.ui.Cells.ManageChatUserCell$1 */
-    class C09231 implements OnClickListener {
-        C09231() {
+    class C09241 implements OnClickListener {
+        C09241() {
         }
 
         public void onClick(View v) {
@@ -111,7 +111,7 @@ public class ManageChatUserCell extends FrameLayout {
                 i3 = 5;
             }
             addView(view2, LayoutHelper.createFrame(48, 64, i3 | 48));
-            this.optionsButton.setOnClickListener(new C09231());
+            this.optionsButton.setOnClickListener(new C09241());
         }
     }
 

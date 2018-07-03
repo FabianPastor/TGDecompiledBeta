@@ -8,11 +8,11 @@ import java.util.List;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 
 public class DiffUtil {
-    private static final Comparator<Snake> SNAKE_COMPARATOR = new C06791();
+    private static final Comparator<Snake> SNAKE_COMPARATOR = new C06801();
 
     /* renamed from: org.telegram.messenger.support.util.DiffUtil$1 */
-    static class C06791 implements Comparator<Snake> {
-        C06791() {
+    static class C06801 implements Comparator<Snake> {
+        C06801() {
         }
 
         public int compare(Snake o1, Snake o2) {

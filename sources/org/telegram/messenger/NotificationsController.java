@@ -49,7 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -147,8 +147,8 @@ public class NotificationsController {
     private LongSparseArray<Integer> wearNotificationsIds = new LongSparseArray();
 
     /* renamed from: org.telegram.messenger.NotificationsController$1 */
-    class C04381 implements Runnable {
-        C04381() {
+    class C04391 implements Runnable {
+        C04391() {
         }
 
         public void run() {
@@ -187,8 +187,8 @@ public class NotificationsController {
     }
 
     /* renamed from: org.telegram.messenger.NotificationsController$2 */
-    class C04392 implements Runnable {
-        C04392() {
+    class C04402 implements Runnable {
+        C04402() {
         }
 
         public void run() {
@@ -233,8 +233,8 @@ public class NotificationsController {
     }
 
     /* renamed from: org.telegram.messenger.NotificationsController$5 */
-    class C04435 implements Runnable {
-        C04435() {
+    class C04445 implements Runnable {
+        C04445() {
         }
 
         public void run() {
@@ -328,13 +328,13 @@ public class NotificationsController {
         } catch (Throwable e22) {
             FileLog.m3e(e22);
         }
-        this.notificationDelayRunnable = new C04381();
+        this.notificationDelayRunnable = new C04391();
     }
 
     public void cleanup() {
         this.popupMessages.clear();
         this.popupReplyMessages.clear();
-        notificationsQueue.postRunnable(new C04392());
+        notificationsQueue.postRunnable(new C04402());
     }
 
     public void setInChatSoundEnabled(boolean value) {
@@ -379,7 +379,7 @@ public class NotificationsController {
     }
 
     protected void forceShowPopupForReply() {
-        notificationsQueue.postRunnable(new C04435());
+        notificationsQueue.postRunnable(new C04445());
     }
 
     public void removeDeletedMessagesFromNotifications(final SparseArray<ArrayList<Integer>> deletedMessages) {
@@ -387,8 +387,8 @@ public class NotificationsController {
         notificationsQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.NotificationsController$6$1 */
-            class C04441 implements Runnable {
-                C04441() {
+            class C04451 implements Runnable {
+                C04451() {
                 }
 
                 public void run() {
@@ -440,7 +440,7 @@ public class NotificationsController {
                     }
                 }
                 if (!popupArrayRemove.isEmpty()) {
-                    AndroidUtilities.runOnUIThread(new C04441());
+                    AndroidUtilities.runOnUIThread(new C04451());
                 }
                 if (old_unread_count != NotificationsController.this.total_unread_count) {
                     if (NotificationsController.this.notifyCheck) {
@@ -470,8 +470,8 @@ public class NotificationsController {
         notificationsQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.NotificationsController$7$1 */
-            class C04471 implements Runnable {
-                C04471() {
+            class C04481 implements Runnable {
+                C04481() {
                 }
 
                 public void run() {
@@ -525,7 +525,7 @@ public class NotificationsController {
                     }
                 }
                 if (popupArrayRemove.isEmpty()) {
-                    AndroidUtilities.runOnUIThread(new C04471());
+                    AndroidUtilities.runOnUIThread(new C04481());
                 }
                 if (old_unread_count != NotificationsController.this.total_unread_count) {
                     if (NotificationsController.this.notifyCheck) {
@@ -560,8 +560,8 @@ public class NotificationsController {
         notificationsQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.NotificationsController$8$1 */
-            class C04501 implements Runnable {
-                C04501() {
+            class C04511 implements Runnable {
+                C04511() {
                 }
 
                 public void run() {
@@ -638,7 +638,7 @@ public class NotificationsController {
                     }
                 }
                 if (!popupArrayRemove.isEmpty()) {
-                    AndroidUtilities.runOnUIThread(new C04501());
+                    AndroidUtilities.runOnUIThread(new C04511());
                 }
             }
         });
@@ -802,8 +802,8 @@ public class NotificationsController {
         notificationsQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.NotificationsController$10$1 */
-            class C04331 implements Runnable {
-                C04331() {
+            class C04341 implements Runnable {
+                C04341() {
                 }
 
                 public void run() {
@@ -870,7 +870,7 @@ public class NotificationsController {
                     }
                 }
                 if (!popupArrayToRemove.isEmpty()) {
-                    AndroidUtilities.runOnUIThread(new C04331());
+                    AndroidUtilities.runOnUIThread(new C04341());
                 }
                 if (old_unread_count != NotificationsController.this.total_unread_count) {
                     if (NotificationsController.this.notifyCheck) {
@@ -1824,7 +1824,7 @@ public class NotificationsController {
                     JSONObject o = new JSONObject();
                     o.put(TtmlNode.ATTR_ID, UserConfig.getInstance(this.currentAccount).getClientUserId());
                     o.put("cancel_all", true);
-                    WearDataLayerListenerService.sendMessageToWatch("/notify", o.toString().getBytes(C0554C.UTF8_NAME), "remote_notifications");
+                    WearDataLayerListenerService.sendMessageToWatch("/notify", o.toString().getBytes(C0555C.UTF8_NAME), "remote_notifications");
                 } catch (JSONException e) {
                 }
             }
@@ -1847,8 +1847,8 @@ public class NotificationsController {
                     notificationsQueue.postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.NotificationsController$14$1 */
-                        class C04361 implements OnLoadCompleteListener {
-                            C04361() {
+                        class C04371 implements OnLoadCompleteListener {
+                            C04371() {
                             }
 
                             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
@@ -1867,7 +1867,7 @@ public class NotificationsController {
                                 try {
                                     if (NotificationsController.this.soundPool == null) {
                                         NotificationsController.this.soundPool = new SoundPool(3, 1, 0);
-                                        NotificationsController.this.soundPool.setOnLoadCompleteListener(new C04361());
+                                        NotificationsController.this.soundPool.setOnLoadCompleteListener(new C04371());
                                     }
                                     if (NotificationsController.this.soundIn == 0 && !NotificationsController.this.soundInLoaded) {
                                         NotificationsController.this.soundInLoaded = true;
@@ -3069,7 +3069,7 @@ public class NotificationsController {
                 JSONObject s = new JSONObject();
                 s.put(TtmlNode.ATTR_ID, UserConfig.getInstance(this.currentAccount).getClientUserId());
                 s.put("n", serializedNotifications);
-                WearDataLayerListenerService.sendMessageToWatch("/notify", s.toString().getBytes(C0554C.UTF8_NAME), "remote_notifications");
+                WearDataLayerListenerService.sendMessageToWatch("/notify", s.toString().getBytes(C0555C.UTF8_NAME), "remote_notifications");
             } catch (Exception e3) {
             }
         }
@@ -3087,8 +3087,8 @@ public class NotificationsController {
             notificationsQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.NotificationsController$16$1 */
-                class C04371 implements OnLoadCompleteListener {
-                    C04371() {
+                class C04381 implements OnLoadCompleteListener {
+                    C04381() {
                     }
 
                     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
@@ -3108,7 +3108,7 @@ public class NotificationsController {
                             NotificationsController.this.lastSoundOutPlay = System.currentTimeMillis();
                             if (NotificationsController.this.soundPool == null) {
                                 NotificationsController.this.soundPool = new SoundPool(3, 1, 0);
-                                NotificationsController.this.soundPool.setOnLoadCompleteListener(new C04371());
+                                NotificationsController.this.soundPool.setOnLoadCompleteListener(new C04381());
                             }
                             if (NotificationsController.this.soundOut == 0 && !NotificationsController.this.soundOutLoaded) {
                                 NotificationsController.this.soundOutLoaded = true;

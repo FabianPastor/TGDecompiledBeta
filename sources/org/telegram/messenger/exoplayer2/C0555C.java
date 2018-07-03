@@ -10,7 +10,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 /* renamed from: org.telegram.messenger.exoplayer2.C */
-public final class C0554C {
+public final class C0555C {
     public static final String ASCII_NAME = "US-ASCII";
     public static final int AUDIO_SESSION_ID_UNSET = 0;
     public static final int BUFFER_FLAG_DECODE_ONLY = Integer.MIN_VALUE;
@@ -222,7 +222,7 @@ public final class C0554C {
     public @interface VideoScalingMode {
     }
 
-    private C0554C() {
+    private C0555C() {
     }
 
     static {

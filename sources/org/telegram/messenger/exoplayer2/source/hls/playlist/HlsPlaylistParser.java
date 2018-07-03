@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
@@ -613,7 +613,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r8 = r8 + 1;
         r8 = r9.substring(r8);
         r18 = org.telegram.messenger.exoplayer2.util.Util.parseXsDateTime(r8);
-        r48 = org.telegram.messenger.exoplayer2.C0554C.msToUs(r18);
+        r48 = org.telegram.messenger.exoplayer2.C0555C.msToUs(r18);
         r30 = r48 - r14;
         goto L_0x0038;
     L_0x022e:
@@ -701,12 +701,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private static SchemeData parseWidevineSchemeData(String line, String keyFormat) throws ParserException {
         if (KEYFORMAT_WIDEVINE_PSSH_BINARY.equals(keyFormat)) {
             String uriString = parseStringAttr(line, REGEX_URI);
-            return new SchemeData(C0554C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
+            return new SchemeData(C0555C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
         } else if (!KEYFORMAT_WIDEVINE_PSSH_JSON.equals(keyFormat)) {
             return null;
         } else {
             try {
-                return new SchemeData(C0554C.WIDEVINE_UUID, "hls", line.getBytes(C0554C.UTF8_NAME));
+                return new SchemeData(C0555C.WIDEVINE_UUID, "hls", line.getBytes(C0555C.UTF8_NAME));
             } catch (Throwable e) {
                 throw new ParserException(e);
             }

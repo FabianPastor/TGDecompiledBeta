@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0554C;
+import org.telegram.messenger.exoplayer2.C0555C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
@@ -47,8 +47,8 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
     private final Period period;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$2 */
-    class C06352 implements Runnable {
-        C06352() {
+    class C06362 implements Runnable {
+        C06362() {
         }
 
         public void run() {
@@ -137,8 +137,8 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         private volatile boolean released;
 
         /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$ComponentListener$2 */
-        class C06382 implements Runnable {
-            C06382() {
+        class C06392 implements Runnable {
+            C06392() {
             }
 
             public void run() {
@@ -149,8 +149,8 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         }
 
         /* renamed from: org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource$ComponentListener$3 */
-        class C06393 implements Runnable {
-            C06393() {
+        class C06403 implements Runnable {
+            C06403() {
             }
 
             public void run() {
@@ -179,13 +179,13 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
 
         public void onAdClicked() {
             if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
-                AdsMediaSource.this.eventHandler.post(new C06382());
+                AdsMediaSource.this.eventHandler.post(new C06392());
             }
         }
 
         public void onAdTapped() {
             if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
-                AdsMediaSource.this.eventHandler.post(new C06393());
+                AdsMediaSource.this.eventHandler.post(new C06403());
             }
         }
 
@@ -267,7 +267,7 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
                 int adCount = adIndexInAdGroup + 1;
                 this.adGroupMediaSources[adGroupIndex] = (MediaSource[]) Arrays.copyOf(this.adGroupMediaSources[adGroupIndex], adCount);
                 this.adDurationsUs[adGroupIndex] = Arrays.copyOf(this.adDurationsUs[adGroupIndex], adCount);
-                Arrays.fill(this.adDurationsUs[adGroupIndex], oldAdCount, adCount, C0554C.TIME_UNSET);
+                Arrays.fill(this.adDurationsUs[adGroupIndex], oldAdCount, adCount, C0555C.TIME_UNSET);
             }
             this.adGroupMediaSources[adGroupIndex][adIndexInAdGroup] = adMediaSource;
             this.deferredMediaPeriodByAdMediaSource.put(adMediaSource, new ArrayList());
@@ -304,7 +304,7 @@ public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
         this.adPlaybackState = null;
         this.adGroupMediaSources = new MediaSource[0][];
         this.adDurationsUs = new long[0][];
-        this.mainHandler.post(new C06352());
+        this.mainHandler.post(new C06362());
     }
 
     protected void onChildSourceInfoRefreshed(MediaPeriodId mediaPeriodId, MediaSource mediaSource, Timeline timeline, Object manifest) {
