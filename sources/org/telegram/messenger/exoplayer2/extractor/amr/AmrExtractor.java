@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.amr;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -17,7 +17,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class AmrExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C06491();
+    public static final ExtractorsFactory FACTORY = new C06501();
     private static final int MAX_FRAME_SIZE_BYTES = frameSizeBytesByTypeWb[8];
     private static final int SAMPLE_RATE_NB = 8000;
     private static final int SAMPLE_RATE_WB = 16000;
@@ -35,8 +35,8 @@ public final class AmrExtractor implements Extractor {
     private TrackOutput trackOutput;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.amr.AmrExtractor$1 */
-    static class C06491 implements ExtractorsFactory {
-        C06491() {
+    static class C06501 implements ExtractorsFactory {
+        C06501() {
         }
 
         public Extractor[] createExtractors() {
@@ -49,7 +49,7 @@ public final class AmrExtractor implements Extractor {
     }
 
     public void init(ExtractorOutput output) {
-        output.seekMap(new Unseekable(C0615C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0616C.TIME_UNSET));
         this.trackOutput = output.track(0, 1);
         output.endTracks();
     }

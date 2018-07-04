@@ -7,7 +7,7 @@ import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -18,8 +18,8 @@ public class EmptyTextProgressView extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Components.EmptyTextProgressView$1 */
-    class C15341 implements OnTouchListener {
-        C15341() {
+    class C15351 implements OnTouchListener {
+        C15351() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -38,9 +38,9 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setGravity(17);
         this.textView.setVisibility(4);
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.textView.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
+        this.textView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
-        setOnTouchListener(new C15341());
+        setOnTouchListener(new C15351());
     }
 
     public void showProgress() {

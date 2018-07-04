@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -68,7 +68,7 @@ public class BotHelpCell extends View {
             }
             String[] lines = text.split("\n");
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-            String help = LocaleController.getString("BotInfoTitle", C0500R.string.BotInfoTitle);
+            String help = LocaleController.getString("BotInfoTitle", C0501R.string.BotInfoTitle);
             stringBuilder.append(help);
             stringBuilder.append("\n\n");
             for (a = 0; a < lines.length; a++) {

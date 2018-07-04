@@ -1,6 +1,7 @@
 package org.telegram.messenger.camera;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.media.MediaRecorder;
 import android.media.MediaRecorder.OnInfoListener;
 import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.util.Base64;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -36,9 +38,11 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.SerializedData;
 
 public class CameraController implements OnInfoListener {
     private static final int CORE_POOL_SIZE = 1;
@@ -46,20 +50,21 @@ public class CameraController implements OnInfoListener {
     private static final int KEEP_ALIVE_SECONDS = 60;
     private static final int MAX_POOL_SIZE = 1;
     protected ArrayList<String> availableFlashModes = new ArrayList();
-    protected ArrayList<CameraInfo> cameraInfos = null;
+    protected ArrayList<CameraInfo> cameraInfos;
     private boolean cameraInitied;
     private boolean loadingCameras;
+    private ArrayList<Runnable> onFinishCameraInitRunnables = new ArrayList();
     private VideoTakeCallback onVideoTakeCallback;
     private String recordedFile;
     private MediaRecorder recorder;
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
     /* renamed from: org.telegram.messenger.camera.CameraController$1 */
-    class C06021 implements Runnable {
+    class C06031 implements Runnable {
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$1 */
-        class C05981 implements Comparator<Size> {
-            C05981() {
+        class C05991 implements Comparator<Size> {
+            C05991() {
             }
 
             public int compare(Size o1, Size o2) {
@@ -80,99 +85,140 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$2 */
-        class C05992 implements Runnable {
-            C05992() {
+        class C06002 implements Runnable {
+            C06002() {
             }
 
             public void run() {
                 CameraController.this.loadingCameras = false;
                 CameraController.this.cameraInitied = true;
+                if (!CameraController.this.onFinishCameraInitRunnables.isEmpty()) {
+                    for (int a = 0; a < CameraController.this.onFinishCameraInitRunnables.size(); a++) {
+                        ((Runnable) CameraController.this.onFinishCameraInitRunnables.get(a)).run();
+                    }
+                    CameraController.this.onFinishCameraInitRunnables.clear();
+                }
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
             }
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$3 */
-        class C06003 implements Runnable {
-            C06003() {
+        class C06013 implements Runnable {
+            C06013() {
             }
 
             public void run() {
+                CameraController.this.onFinishCameraInitRunnables.clear();
                 CameraController.this.loadingCameras = false;
                 CameraController.this.cameraInitied = false;
             }
         }
 
-        C06021() {
+        C06031() {
         }
 
         public void run() {
             try {
+                long time = System.currentTimeMillis();
                 if (CameraController.this.cameraInfos == null) {
-                    int count = Camera.getNumberOfCameras();
+                    SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                    String cache = preferences.getString("cameraCache", null);
+                    Comparator<Size> comparator = new C05991();
                     ArrayList<CameraInfo> result = new ArrayList();
-                    CameraInfo info = new CameraInfo();
-                    for (int cameraId = 0; cameraId < count; cameraId++) {
-                        Camera.getCameraInfo(cameraId, info);
-                        CameraInfo cameraInfo = new CameraInfo(cameraId, info);
-                        if (ApplicationLoader.mainInterfacePaused) {
-                            throw new RuntimeException("app paused");
+                    SerializedData serializedData;
+                    int count;
+                    int a;
+                    CameraInfo cameraInfo;
+                    int pCount;
+                    int b;
+                    if (cache != null) {
+                        serializedData = new SerializedData(Base64.decode(cache, 0));
+                        count = serializedData.readInt32(false);
+                        for (a = 0; a < count; a++) {
+                            cameraInfo = new CameraInfo(serializedData.readInt32(false), serializedData.readInt32(false));
+                            pCount = serializedData.readInt32(false);
+                            for (b = 0; b < pCount; b++) {
+                                cameraInfo.previewSizes.add(new Size(serializedData.readInt32(false), serializedData.readInt32(false)));
+                            }
+                            pCount = serializedData.readInt32(false);
+                            for (b = 0; b < pCount; b++) {
+                                cameraInfo.pictureSizes.add(new Size(serializedData.readInt32(false), serializedData.readInt32(false)));
+                            }
+                            result.add(cameraInfo);
+                            Collections.sort(cameraInfo.previewSizes, comparator);
+                            Collections.sort(cameraInfo.pictureSizes, comparator);
                         }
-                        int a;
-                        Size size;
-                        Camera camera = Camera.open(cameraInfo.getCameraId());
-                        Parameters params = camera.getParameters();
-                        List<Size> list = params.getSupportedPreviewSizes();
-                        for (a = 0; a < list.size(); a++) {
-                            size = (Size) list.get(a);
-                            if ((size.width != 1280 || size.height == 720) && size.height < 2160 && size.width < 2160) {
-                                cameraInfo.previewSizes.add(new Size(size.width, size.height));
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("preview size = " + size.width + " " + size.height);
+                        serializedData.cleanup();
+                    } else {
+                        count = Camera.getNumberOfCameras();
+                        CameraInfo info = new CameraInfo();
+                        int bufferSize = 4;
+                        for (int cameraId = 0; cameraId < count; cameraId++) {
+                            Camera.getCameraInfo(cameraId, info);
+                            cameraInfo = new CameraInfo(cameraId, info.facing);
+                            if (ApplicationLoader.mainInterfacePaused && ApplicationLoader.externalInterfacePaused) {
+                                throw new RuntimeException("app paused");
+                            }
+                            Size size;
+                            Camera camera = Camera.open(cameraInfo.getCameraId());
+                            Parameters params = camera.getParameters();
+                            List<Size> list = params.getSupportedPreviewSizes();
+                            for (a = 0; a < list.size(); a++) {
+                                size = (Size) list.get(a);
+                                if ((size.width != 1280 || size.height == 720) && size.height < 2160 && size.width < 2160) {
+                                    cameraInfo.previewSizes.add(new Size(size.width, size.height));
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.m0d("preview size = " + size.width + " " + size.height);
+                                    }
                                 }
                             }
-                        }
-                        list = params.getSupportedPictureSizes();
-                        for (a = 0; a < list.size(); a++) {
-                            size = (Size) list.get(a);
-                            if ((size.width != 1280 || size.height == 720) && !("samsung".equals(Build.MANUFACTURER) && "jflteuc".equals(Build.PRODUCT) && size.width >= 2048)) {
-                                cameraInfo.pictureSizes.add(new Size(size.width, size.height));
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("picture size = " + size.width + " " + size.height);
+                            list = params.getSupportedPictureSizes();
+                            for (a = 0; a < list.size(); a++) {
+                                size = (Size) list.get(a);
+                                if ((size.width != 1280 || size.height == 720) && !("samsung".equals(Build.MANUFACTURER) && "jflteuc".equals(Build.PRODUCT) && size.width >= 2048)) {
+                                    cameraInfo.pictureSizes.add(new Size(size.width, size.height));
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.m0d("picture size = " + size.width + " " + size.height);
+                                    }
                                 }
                             }
+                            camera.release();
+                            result.add(cameraInfo);
+                            Collections.sort(cameraInfo.previewSizes, comparator);
+                            Collections.sort(cameraInfo.pictureSizes, comparator);
+                            bufferSize += ((cameraInfo.previewSizes.size() + cameraInfo.pictureSizes.size()) * 8) + 8;
                         }
-                        camera.release();
-                        result.add(cameraInfo);
-                        Comparator<Size> comparator = new C05981();
-                        Collections.sort(cameraInfo.previewSizes, comparator);
-                        Collections.sort(cameraInfo.pictureSizes, comparator);
+                        serializedData = new SerializedData(bufferSize);
+                        serializedData.writeInt32(result.size());
+                        for (a = 0; a < count; a++) {
+                            Size size2;
+                            cameraInfo = (CameraInfo) result.get(a);
+                            serializedData.writeInt32(cameraInfo.cameraId);
+                            serializedData.writeInt32(cameraInfo.frontCamera);
+                            pCount = cameraInfo.previewSizes.size();
+                            serializedData.writeInt32(pCount);
+                            for (b = 0; b < pCount; b++) {
+                                size2 = (Size) cameraInfo.previewSizes.get(b);
+                                serializedData.writeInt32(size2.mWidth);
+                                serializedData.writeInt32(size2.mHeight);
+                            }
+                            pCount = cameraInfo.pictureSizes.size();
+                            serializedData.writeInt32(pCount);
+                            for (b = 0; b < pCount; b++) {
+                                size2 = (Size) cameraInfo.pictureSizes.get(b);
+                                serializedData.writeInt32(size2.mWidth);
+                                serializedData.writeInt32(size2.mHeight);
+                            }
+                        }
+                        preferences.edit().putString("cameraCache", Base64.encodeToString(serializedData.toByteArray(), 0)).commit();
+                        serializedData.cleanup();
                     }
                     CameraController.this.cameraInfos = result;
                 }
-                AndroidUtilities.runOnUIThread(new C05992());
+                FileLog.m0d("init time = " + (System.currentTimeMillis() - time));
+                AndroidUtilities.runOnUIThread(new C06002());
             } catch (Exception e) {
-                AndroidUtilities.runOnUIThread(new C06003());
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.camera.CameraController$2 */
-    class C06032 implements Runnable {
-        C06032() {
-        }
-
-        public void run() {
-            if (CameraController.this.cameraInfos != null && !CameraController.this.cameraInfos.isEmpty()) {
-                for (int a = 0; a < CameraController.this.cameraInfos.size(); a++) {
-                    CameraInfo info = (CameraInfo) CameraController.this.cameraInfos.get(a);
-                    if (info.camera != null) {
-                        info.camera.stopPreview();
-                        info.camera.setPreviewCallbackWithBuffer(null);
-                        info.camera.release();
-                        info.camera = null;
-                    }
-                }
-                CameraController.this.cameraInfos = null;
+                AndroidUtilities.runOnUIThread(new C06013());
             }
         }
     }
@@ -216,19 +262,22 @@ public class CameraController implements OnInfoListener {
         return localInstance;
     }
 
-    public void initCamera() {
+    public void cancelOnInitRunnable(Runnable onInitRunnable) {
+        this.onFinishCameraInitRunnables.remove(onInitRunnable);
+    }
+
+    public void initCamera(Runnable onInitRunnable) {
+        if (!(onInitRunnable == null || this.onFinishCameraInitRunnables.contains(onInitRunnable))) {
+            this.onFinishCameraInitRunnables.add(onInitRunnable);
+        }
         if (!this.loadingCameras && !this.cameraInitied) {
             this.loadingCameras = true;
-            this.threadPool.execute(new C06021());
+            this.threadPool.execute(new C06031());
         }
     }
 
     public boolean isCameraInitied() {
         return (!this.cameraInitied || this.cameraInfos == null || this.cameraInfos.isEmpty()) ? false : true;
-    }
-
-    public void cleanup() {
-        this.threadPool.execute(new C06032());
     }
 
     public void close(final CameraSession session, final CountDownLatch countDownLatch, final Runnable beforeDestroyRunnable) {

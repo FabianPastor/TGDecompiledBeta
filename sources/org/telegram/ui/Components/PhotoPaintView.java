@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -111,8 +111,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private UndoStore undoStore;
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
-    class C16401 implements UndoStoreDelegate {
-        C16401() {
+    class C16411 implements UndoStoreDelegate {
+        C16411() {
         }
 
         public void historyChanged() {
@@ -121,8 +121,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$2 */
-    class C16412 implements RenderViewDelegate {
-        C16412() {
+    class C16422 implements RenderViewDelegate {
+        C16422() {
         }
 
         public void onBeganDrawing() {
@@ -145,8 +145,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$3 */
-    class C16423 implements EntitiesContainerViewDelegate {
-        C16423() {
+    class C16433 implements EntitiesContainerViewDelegate {
+        C16433() {
         }
 
         public boolean shouldReceiveTouches() {
@@ -163,8 +163,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$4 */
-    class C16434 implements OnClickListener {
-        C16434() {
+    class C16444 implements OnClickListener {
+        C16444() {
         }
 
         public void onClick(View v) {
@@ -173,8 +173,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$6 */
-    class C16456 implements ColorPickerDelegate {
-        C16456() {
+    class C16466 implements ColorPickerDelegate {
+        C16466() {
         }
 
         public void onBeganColorPicking() {
@@ -210,8 +210,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$7 */
-    class C16467 implements OnClickListener {
-        C16467() {
+    class C16477 implements OnClickListener {
+        C16477() {
         }
 
         public void onClick(View v) {
@@ -220,8 +220,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
-    class C16478 implements OnClickListener {
-        C16478() {
+    class C16488 implements OnClickListener {
+        C16488() {
         }
 
         public void onClick(View v) {
@@ -230,8 +230,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$9 */
-    class C16489 implements OnClickListener {
-        C16489() {
+    class C16499 implements OnClickListener {
+        C16499() {
         }
 
         public void onClick(View v) {
@@ -256,19 +256,19 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.bitmapToEdit = bitmap;
         this.orientation = rotation;
         this.undoStore = new UndoStore();
-        this.undoStore.setDelegate(new C16401());
+        this.undoStore.setDelegate(new C16411());
         this.curtainView = new FrameLayout(context);
         this.curtainView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.curtainView.setVisibility(4);
         addView(this.curtainView);
         this.renderView = new RenderView(context, new Painting(getPaintingSize()), bitmap, this.orientation);
-        this.renderView.setDelegate(new C16412());
+        this.renderView.setDelegate(new C16422());
         this.renderView.setUndoStore(this.undoStore);
         this.renderView.setQueue(this.queue);
         this.renderView.setVisibility(4);
         this.renderView.setBrush(this.brushes[0]);
         addView(this.renderView, LayoutHelper.createFrame(-1, -1, 51));
-        this.entitiesView = new EntitiesContainerView(context, new C16423());
+        this.entitiesView = new EntitiesContainerView(context, new C16433());
         this.entitiesView.setPivotX(0.0f);
         this.entitiesView.setPivotY(0.0f);
         addView(this.entitiesView);
@@ -281,7 +281,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.textDimView.setAlpha(0.0f);
         this.textDimView.setBackgroundColor(NUM);
         this.textDimView.setVisibility(8);
-        this.textDimView.setOnClickListener(new C16434());
+        this.textDimView.setOnClickListener(new C16444());
         this.selectionContainerView = new FrameLayout(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 return false;
@@ -290,7 +290,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         addView(this.selectionContainerView);
         this.colorPicker = new ColorPicker(context);
         addView(this.colorPicker);
-        this.colorPicker.setDelegate(new C16456());
+        this.colorPicker.setDelegate(new C16466());
         this.toolsView = new FrameLayout(context);
         this.toolsView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 48, 83));
@@ -300,7 +300,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.cancelTextView.setGravity(17);
         this.cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         this.cancelTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.cancelTextView.setText(LocaleController.getString("Cancel", C0500R.string.Cancel).toUpperCase());
+        this.cancelTextView.setText(LocaleController.getString("Cancel", C0501R.string.Cancel).toUpperCase());
         this.cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.toolsView.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
         this.doneTextView = new TextView(context);
@@ -309,27 +309,27 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.doneTextView.setGravity(17);
         this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.doneTextView.setText(LocaleController.getString("Done", C0500R.string.Done).toUpperCase());
+        this.doneTextView.setText(LocaleController.getString("Done", C0501R.string.Done).toUpperCase());
         this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.toolsView.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
         this.paintButton = new ImageView(context);
         this.paintButton.setScaleType(ScaleType.CENTER);
-        this.paintButton.setImageResource(C0500R.drawable.photo_paint);
+        this.paintButton.setImageResource(C0501R.drawable.photo_paint);
         this.paintButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(this.paintButton, LayoutHelper.createFrame(54, -1.0f, 17, 0.0f, 0.0f, 56.0f, 0.0f));
-        this.paintButton.setOnClickListener(new C16467());
+        this.paintButton.setOnClickListener(new C16477());
         ImageView stickerButton = new ImageView(context);
         stickerButton.setScaleType(ScaleType.CENTER);
-        stickerButton.setImageResource(C0500R.drawable.photo_sticker);
+        stickerButton.setImageResource(C0501R.drawable.photo_sticker);
         stickerButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(stickerButton, LayoutHelper.createFrame(54, -1, 17));
-        stickerButton.setOnClickListener(new C16478());
+        stickerButton.setOnClickListener(new C16488());
         ImageView textButton = new ImageView(context);
         textButton.setScaleType(ScaleType.CENTER);
-        textButton.setImageResource(C0500R.drawable.photo_paint_text);
+        textButton.setImageResource(C0501R.drawable.photo_paint_text);
         textButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(textButton, LayoutHelper.createFrame(54, -1.0f, 17, 56.0f, 0.0f, 0.0f, 0.0f));
-        textButton.setOnClickListener(new C16489());
+        textButton.setOnClickListener(new C16499());
         this.colorPicker.setUndoEnabled(false);
         setCurrentSwatch(this.colorPicker.getSwatch(), false);
         updateSettingsButton();
@@ -368,18 +368,18 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private void updateSettingsButton() {
-        int resource = C0500R.drawable.photo_paint_brush;
+        int resource = C0501R.drawable.photo_paint_brush;
         if (this.currentEntityView != null) {
             if (this.currentEntityView instanceof StickerView) {
-                resource = C0500R.drawable.photo_flip;
+                resource = C0501R.drawable.photo_flip;
             } else if (this.currentEntityView instanceof TextPaintView) {
-                resource = C0500R.drawable.photo_outline;
+                resource = C0501R.drawable.photo_outline;
             }
-            this.paintButton.setImageResource(C0500R.drawable.photo_paint);
+            this.paintButton.setImageResource(C0501R.drawable.photo_paint);
             this.paintButton.setColorFilter(null);
         } else {
             this.paintButton.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
-            this.paintButton.setImageResource(C0500R.drawable.photo_paint);
+            this.paintButton.setImageResource(C0501R.drawable.photo_paint);
         }
         this.colorPicker.setSettingsButtonImage(resource);
     }
@@ -466,14 +466,14 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             okRunnable.run();
         } else if (parentActivity != null) {
             Builder builder = new Builder((Context) parentActivity);
-            builder.setMessage(LocaleController.getString("DiscardChanges", C0500R.string.DiscardChanges));
-            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new DialogInterface.OnClickListener() {
+            builder.setMessage(LocaleController.getString("DiscardChanges", C0501R.string.DiscardChanges));
+            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     okRunnable.run();
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
             photoViewer.showAlertDialog(builder);
         }
     }
@@ -897,8 +897,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         showPopup(new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$1 */
-            class C16371 implements OnClickListener {
-                C16371() {
+            class C16381 implements OnClickListener {
+                C16381() {
                 }
 
                 public void onClick(View v) {
@@ -910,8 +910,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$2 */
-            class C16382 implements OnClickListener {
-                C16382() {
+            class C16392 implements OnClickListener {
+                C16392() {
                 }
 
                 public void onClick(View v) {
@@ -923,8 +923,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$3 */
-            class C16393 implements OnClickListener {
-                C16393() {
+            class C16403 implements OnClickListener {
+                C16403() {
                 }
 
                 public void onClick(View v) {
@@ -945,8 +945,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 deleteView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 deleteView.setTextSize(1, 18.0f);
                 deleteView.setTag(Integer.valueOf(0));
-                deleteView.setText(LocaleController.getString("PaintDelete", C0500R.string.PaintDelete));
-                deleteView.setOnClickListener(new C16371());
+                deleteView.setText(LocaleController.getString("PaintDelete", C0501R.string.PaintDelete));
+                deleteView.setOnClickListener(new C16381());
                 parent.addView(deleteView, LayoutHelper.createLinear(-2, 48));
                 if (entityView instanceof TextPaintView) {
                     TextView editView = new TextView(PhotoPaintView.this.getContext());
@@ -956,8 +956,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                     editView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
                     editView.setTextSize(1, 18.0f);
                     editView.setTag(Integer.valueOf(1));
-                    editView.setText(LocaleController.getString("PaintEdit", C0500R.string.PaintEdit));
-                    editView.setOnClickListener(new C16382());
+                    editView.setText(LocaleController.getString("PaintEdit", C0501R.string.PaintEdit));
+                    editView.setOnClickListener(new C16392());
                     parent.addView(editView, LayoutHelper.createLinear(-2, 48));
                 }
                 TextView duplicateView = new TextView(PhotoPaintView.this.getContext());
@@ -967,8 +967,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 duplicateView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
                 duplicateView.setTextSize(1, 18.0f);
                 duplicateView.setTag(Integer.valueOf(2));
-                duplicateView.setText(LocaleController.getString("PaintDuplicate", C0500R.string.PaintDuplicate));
-                duplicateView.setOnClickListener(new C16393());
+                duplicateView.setText(LocaleController.getString("PaintDuplicate", C0501R.string.PaintDuplicate));
+                duplicateView.setOnClickListener(new C16403());
                 parent.addView(duplicateView, LayoutHelper.createLinear(-2, 48));
                 PhotoPaintView.this.popupLayout.addView(parent);
                 LayoutParams params = (LayoutParams) parent.getLayoutParams();
@@ -995,7 +995,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         button.addView(preview, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
         if (selected) {
             ImageView check = new ImageView(getContext());
-            check.setImageResource(C0500R.drawable.ic_ab_done);
+            check.setImageResource(C0501R.drawable.ic_ab_done);
             check.setScaleType(ScaleType.CENTER);
             button.addView(check, LayoutHelper.createFrame(50, -1.0f));
         }
@@ -1013,7 +1013,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 } else {
                     z = false;
                 }
-                View radial = photoPaintView.buttonForBrush(0, C0500R.drawable.paint_radial_preview, z);
+                View radial = photoPaintView.buttonForBrush(0, C0501R.drawable.paint_radial_preview, z);
                 PhotoPaintView.this.popupLayout.addView(radial);
                 LayoutParams layoutParams = (LayoutParams) radial.getLayoutParams();
                 layoutParams.width = -1;
@@ -1025,7 +1025,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 } else {
                     z = false;
                 }
-                View elliptical = photoPaintView.buttonForBrush(1, C0500R.drawable.paint_elliptical_preview, z);
+                View elliptical = photoPaintView.buttonForBrush(1, C0501R.drawable.paint_elliptical_preview, z);
                 PhotoPaintView.this.popupLayout.addView(elliptical);
                 layoutParams = (LayoutParams) elliptical.getLayoutParams();
                 layoutParams.width = -1;
@@ -1035,7 +1035,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 if (PhotoPaintView.this.currentBrush != 2) {
                     z2 = false;
                 }
-                View neon = photoPaintView2.buttonForBrush(2, C0500R.drawable.paint_neon_preview, z2);
+                View neon = photoPaintView2.buttonForBrush(2, C0501R.drawable.paint_neon_preview, z2);
                 PhotoPaintView.this.popupLayout.addView(neon);
                 layoutParams = (LayoutParams) neon.getLayoutParams();
                 layoutParams.width = -1;
@@ -1078,7 +1078,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         button.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 19, 46.0f, 0.0f, 16.0f, 0.0f));
         if (selected) {
             ImageView check = new ImageView(getContext());
-            check.setImageResource(C0500R.drawable.ic_ab_done);
+            check.setImageResource(C0501R.drawable.ic_ab_done);
             check.setScaleType(ScaleType.CENTER);
             button.addView(check, LayoutHelper.createFrame(50, -1.0f));
         }
@@ -1089,14 +1089,14 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         showPopup(new Runnable() {
             public void run() {
                 boolean z = true;
-                View outline = PhotoPaintView.this.buttonForText(true, LocaleController.getString("PaintOutlined", C0500R.string.PaintOutlined), PhotoPaintView.this.selectedStroke);
+                View outline = PhotoPaintView.this.buttonForText(true, LocaleController.getString("PaintOutlined", C0501R.string.PaintOutlined), PhotoPaintView.this.selectedStroke);
                 PhotoPaintView.this.popupLayout.addView(outline);
                 LayoutParams layoutParams = (LayoutParams) outline.getLayoutParams();
                 layoutParams.width = -1;
                 layoutParams.height = AndroidUtilities.dp(48.0f);
                 outline.setLayoutParams(layoutParams);
                 PhotoPaintView photoPaintView = PhotoPaintView.this;
-                String string = LocaleController.getString("PaintRegular", C0500R.string.PaintRegular);
+                String string = LocaleController.getString("PaintRegular", C0501R.string.PaintRegular);
                 if (PhotoPaintView.this.selectedStroke) {
                     z = false;
                 }
@@ -1141,7 +1141,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             if (this.popupWindow == null) {
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
-                this.popupWindow.setAnimationStyle(C0500R.style.PopupAnimation);
+                this.popupWindow.setAnimationStyle(C0501R.style.PopupAnimation);
                 this.popupWindow.setOutsideTouchable(true);
                 this.popupWindow.setClippingEnabled(true);
                 this.popupWindow.setInputMethodMode(2);

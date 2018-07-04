@@ -59,7 +59,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
@@ -189,7 +189,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private long recordDialogId;
     private DispatchQueue recordQueue = new DispatchQueue("recordQueue");
     private MessageObject recordReplyingMessageObject;
-    private Runnable recordRunnable = new C03021();
+    private Runnable recordRunnable = new C03031();
     private short[] recordSamples = new short[1024];
     private Runnable recordStartRunnable;
     private long recordStartTime;
@@ -220,8 +220,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private boolean voiceMessagesPlaylistUnread;
 
     /* renamed from: org.telegram.messenger.MediaController$1 */
-    class C03021 implements Runnable {
-        C03021() {
+    class C03031 implements Runnable {
+        C03031() {
         }
 
         public void run() {
@@ -278,8 +278,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         MediaController.this.fileEncodingQueue.postRunnable(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.MediaController$1$1$1 */
-                            class C02921 implements Runnable {
-                                C02921() {
+                            class C02931 implements Runnable {
+                                C02931() {
                                 }
 
                                 public void run() {
@@ -305,7 +305,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         finalBuffer.limit(oldLimit);
                                     }
                                 }
-                                MediaController.this.recordQueue.postRunnable(new C02921());
+                                MediaController.this.recordQueue.postRunnable(new C02931());
                             }
                         });
                     }
@@ -324,8 +324,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$3 */
-    class C03083 implements Runnable {
-        C03083() {
+    class C03093 implements Runnable {
+        C03093() {
         }
 
         public void run() {
@@ -346,11 +346,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$4 */
-    class C03114 implements Runnable {
+    class C03124 implements Runnable {
 
         /* renamed from: org.telegram.messenger.MediaController$4$1 */
-        class C03101 extends PhoneStateListener {
-            C03101() {
+        class C03111 extends PhoneStateListener {
+            C03111() {
             }
 
             public void onCallStateChanged(final int state, String incomingNumber) {
@@ -382,7 +382,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
         }
 
-        C03114() {
+        C03124() {
         }
 
         public void run() {
@@ -405,7 +405,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 FileLog.m3e(e);
             }
             try {
-                PhoneStateListener phoneStateListener = new C03101();
+                PhoneStateListener phoneStateListener = new C03111();
                 TelephonyManager mgr = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 if (mgr != null) {
                     mgr.listen(phoneStateListener, 32);
@@ -417,8 +417,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$5 */
-    class C03125 implements Runnable {
-        C03125() {
+    class C03135 implements Runnable {
+        C03135() {
         }
 
         public void run() {
@@ -435,8 +435,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$7 */
-    class C03157 implements Runnable {
-        C03157() {
+    class C03167 implements Runnable {
+        C03167() {
         }
 
         public void run() {
@@ -507,8 +507,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private class GalleryObserverExternal extends ContentObserver {
 
         /* renamed from: org.telegram.messenger.MediaController$GalleryObserverExternal$1 */
-        class C03181 implements Runnable {
-            C03181() {
+        class C03191 implements Runnable {
+            C03191() {
             }
 
             public void run() {
@@ -526,15 +526,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             if (MediaController.refreshGalleryRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
             }
-            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03181(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03191(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
         }
     }
 
     private class GalleryObserverInternal extends ContentObserver {
 
         /* renamed from: org.telegram.messenger.MediaController$GalleryObserverInternal$1 */
-        class C03191 implements Runnable {
-            C03191() {
+        class C03201 implements Runnable {
+            C03201() {
             }
 
             public void run() {
@@ -552,7 +552,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
 
         private void scheduleReloadRunnable() {
-            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03191(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new C03201(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
         }
 
         public void onChange(boolean selfChange) {
@@ -779,6 +779,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
+    public static native void WSOLAInit();
+
+    public static native int WSOLAStretch(ByteBuffer byteBuffer, ByteBuffer byteBuffer2, int i, int i2, int i3, boolean z, float f, int i4);
+
     public static native int isOpusFile(String str);
 
     private native int startRecord(String str);
@@ -874,10 +878,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.recordQueue.setPriority(10);
         this.fileEncodingQueue = new DispatchQueue("fileEncodingQueue");
         this.fileEncodingQueue.setPriority(10);
-        this.recordQueue.postRunnable(new C03083());
-        Utilities.globalQueue.postRunnable(new C03114());
+        this.recordQueue.postRunnable(new C03093());
+        Utilities.globalQueue.postRunnable(new C03124());
         this.fileBuffer = ByteBuffer.allocateDirect(1920);
-        AndroidUtilities.runOnUIThread(new C03125());
+        AndroidUtilities.runOnUIThread(new C03135());
         this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "datetaken", "title", "width", "height"};
         ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
         try {
@@ -962,8 +966,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.progressTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.messenger.MediaController$6$1 */
-                class C03131 implements Runnable {
-                    C03131() {
+                class C03141 implements Runnable {
+                    C03141() {
                     }
 
                     public void run() {
@@ -991,13 +995,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 }
                                 duration = MediaController.this.audioPlayer.getDuration();
                                 progress = MediaController.this.audioPlayer.getCurrentPosition();
-                                if (duration == C0615C.TIME_UNSET || duration < 0) {
+                                if (duration == C0616C.TIME_UNSET || duration < 0) {
                                     value = 0.0f;
                                 } else {
                                     value = ((float) progress) / ((float) duration);
                                 }
                                 bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
-                                if (duration != C0615C.TIME_UNSET && progress >= 0) {
+                                if (duration != C0616C.TIME_UNSET && progress >= 0) {
                                     if (MediaController.this.seekToProgressPending != 0.0f) {
                                         return;
                                     }
@@ -1018,7 +1022,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
                 public void run() {
                     synchronized (MediaController.this.sync) {
-                        AndroidUtilities.runOnUIThread(new C03131());
+                        AndroidUtilities.runOnUIThread(new C03141());
                     }
                 }
             }, 0, 17);
@@ -1090,7 +1094,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.smsObserver = smsObserver;
                 contentResolver.registerContentObserver(parse, false, smsObserver);
             }
-            AndroidUtilities.runOnUIThread(new C03157(), 300000);
+            AndroidUtilities.runOnUIThread(new C03167(), 300000);
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
@@ -1714,7 +1718,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         try {
             if (this.audioPlayer != null) {
                 long duration = this.audioPlayer.getDuration();
-                if (duration == C0615C.TIME_UNSET) {
+                if (duration == C0616C.TIME_UNSET) {
                     this.seekToProgressPending = progress;
                 } else {
                     int seekTo = (int) (((float) duration) * progress);
@@ -1829,7 +1833,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? this.shuffledPlaylist : this.playlist;
         if (byStop && SharedConfig.repeatMode == 2 && !this.forceLoopCurrentPlaylist) {
             cleanupPlayer(false, false);
-            playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+            MessageObject messageObject = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
+            messageObject.audioProgress = 0.0f;
+            messageObject.audioProgressSec = 0;
+            playMessage(messageObject);
             return;
         }
         boolean last = false;
@@ -2200,8 +2207,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.videoPlayer.setDelegate(new VideoPlayerDelegate() {
 
                 /* renamed from: org.telegram.messenger.MediaController$13$1 */
-                class C02951 implements Runnable {
-                    C02951() {
+                class C02961 implements Runnable {
+                    C02961() {
                     }
 
                     public void run() {
@@ -2288,7 +2295,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             if (MediaController.this.pipRoundVideoView == null) {
                                 try {
                                     MediaController.this.pipRoundVideoView = new PipRoundVideoView();
-                                    MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new C02951());
+                                    MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new C02961());
                                 } catch (Exception e) {
                                     MediaController.this.pipRoundVideoView = null;
                                 }
@@ -2402,7 +2409,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     this.audioPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
                 } else {
                     Document document = messageObject.getDocument();
-                    this.audioPlayer.preparePlayer(Uri.parse("tg://" + messageObject.getFileName() + ("?account=" + messageObject.currentAccount + "&id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C0615C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C0615C.UTF8_NAME))), "other");
+                    this.audioPlayer.preparePlayer(Uri.parse("tg://" + messageObject.getFileName() + ("?account=" + messageObject.currentAccount + "&id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C0616C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C0616C.UTF8_NAME))), "other");
                 }
                 if (messageObject.isVoice()) {
                     if (this.currentPlaybackSpeed > VOLUME_NORMAL) {
@@ -2452,7 +2459,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             try {
                 if (this.playingMessageObject.audioProgress != 0.0f) {
                     duration = this.audioPlayer.getDuration();
-                    if (duration == C0615C.TIME_UNSET) {
+                    if (duration == C0616C.TIME_UNSET) {
                         duration = ((long) this.playingMessageObject.getDuration()) * 1000;
                     }
                     this.videoPlayer.seekTo((long) ((int) (((float) duration) * this.playingMessageObject.audioProgress)));
@@ -2467,7 +2474,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             try {
                 if (this.playingMessageObject.audioProgress != 0.0f) {
                     duration = this.audioPlayer.getDuration();
-                    if (duration == C0615C.TIME_UNSET) {
+                    if (duration == C0616C.TIME_UNSET) {
                         duration = ((long) this.playingMessageObject.getDuration()) * 1000;
                     }
                     this.audioPlayer.seekTo((long) ((int) (((float) duration) * this.playingMessageObject.audioProgress)));
@@ -2656,8 +2663,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         Runnable anonymousClass17 = new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$17$1 */
-            class C02961 implements Runnable {
-                C02961() {
+            class C02971 implements Runnable {
+                C02971() {
                 }
 
                 public void run() {
@@ -2667,8 +2674,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
 
             /* renamed from: org.telegram.messenger.MediaController$17$2 */
-            class C02972 implements Runnable {
-                C02972() {
+            class C02982 implements Runnable {
+                C02982() {
                 }
 
                 public void run() {
@@ -2678,8 +2685,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
 
             /* renamed from: org.telegram.messenger.MediaController$17$3 */
-            class C02983 implements Runnable {
-                C02983() {
+            class C02993 implements Runnable {
+                C02993() {
                 }
 
                 public void run() {
@@ -2689,8 +2696,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
 
             /* renamed from: org.telegram.messenger.MediaController$17$4 */
-            class C02994 implements Runnable {
-                C02994() {
+            class C03004 implements Runnable {
+                C03004() {
                 }
 
                 public void run() {
@@ -2701,7 +2708,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
             public void run() {
                 if (MediaController.this.audioRecorder != null) {
-                    AndroidUtilities.runOnUIThread(new C02961());
+                    AndroidUtilities.runOnUIThread(new C02971());
                     return;
                 }
                 MediaController.this.recordingAudio = new TL_document();
@@ -2715,7 +2722,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 MediaController.this.recordingAudioFile = new File(FileLoader.getDirectory(4), FileLoader.getAttachFileName(MediaController.this.recordingAudio));
                 try {
                     if (MediaController.this.startRecord(MediaController.this.recordingAudioFile.getAbsolutePath()) == 0) {
-                        AndroidUtilities.runOnUIThread(new C02972());
+                        AndroidUtilities.runOnUIThread(new C02982());
                         return;
                     }
                     MediaController.this.audioRecorder = new AudioRecord(1, 16000, 16, 2, MediaController.this.recordBufferSize * 10);
@@ -2728,7 +2735,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     MediaController.this.fileBuffer.rewind();
                     MediaController.this.audioRecorder.startRecording();
                     MediaController.this.recordQueue.postRunnable(MediaController.this.recordRunnable);
-                    AndroidUtilities.runOnUIThread(new C02994());
+                    AndroidUtilities.runOnUIThread(new C03004());
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                     MediaController.this.recordingAudio = null;
@@ -2741,7 +2748,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     } catch (Throwable e2) {
                         FileLog.m3e(e2);
                     }
-                    AndroidUtilities.runOnUIThread(new C02983());
+                    AndroidUtilities.runOnUIThread(new C02993());
                 }
             }
         };
@@ -2794,8 +2801,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.fileEncodingQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MediaController$19$1 */
-                class C03011 implements Runnable {
-                    C03011() {
+                class C03021 implements Runnable {
+                    C03021() {
                     }
 
                     public void run() {
@@ -2828,7 +2835,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
                 public void run() {
                     MediaController.this.stopRecord();
-                    AndroidUtilities.runOnUIThread(new C03011());
+                    AndroidUtilities.runOnUIThread(new C03021());
                 }
             });
         }
@@ -2852,8 +2859,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.recordQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$20$1 */
-            class C03031 implements Runnable {
-                C03031() {
+            class C03041 implements Runnable {
+                C03041() {
                 }
 
                 public void run() {
@@ -2887,7 +2894,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         MediaController.this.feedbackView.performHapticFeedback(3, 2);
                     } catch (Exception e2) {
                     }
-                    AndroidUtilities.runOnUIThread(new C03031());
+                    AndroidUtilities.runOnUIThread(new C03041());
                 }
             }
         });
@@ -2916,7 +2923,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         try {
                             AlertDialog progressDialog2 = new AlertDialog(context, 2);
                             try {
-                                progressDialog2.setMessage(LocaleController.getString("Loading", C0500R.string.Loading));
+                                progressDialog2.setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
                                 progressDialog2.setCanceledOnTouchOutside(false);
                                 progressDialog2.setCancelable(true);
                                 progressDialog2.setOnCancelListener(new OnCancelListener() {
@@ -2937,8 +2944,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 new Thread(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.MediaController$22$2 */
-                                    class C03052 implements Runnable {
-                                        C03052() {
+                                    class C03062 implements Runnable {
+                                        C03062() {
                                         }
 
                                         public void run() {
@@ -3066,7 +3073,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             FileLog.m3e(e32);
                                         }
                                         if (finalProgress != null) {
-                                            AndroidUtilities.runOnUIThread(new C03052());
+                                            AndroidUtilities.runOnUIThread(new C03062());
                                         }
                                     }
                                 }).start();
@@ -3352,8 +3359,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         Thread thread = new Thread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MediaController$23$1 */
-            class C03061 implements Comparator<PhotoEntry> {
-                C03061() {
+            class C03071 implements Comparator<PhotoEntry> {
+                C03071() {
                 }
 
                 public int compare(PhotoEntry o1, PhotoEntry o2) {

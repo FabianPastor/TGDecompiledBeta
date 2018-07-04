@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.chunk;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -54,7 +54,7 @@ public class ContainerMediaChunk extends BaseMediaChunk {
             if (this.bytesLoaded == 0) {
                 BaseMediaChunkOutput output = getOutput();
                 output.setSampleOffsetUs(this.sampleOffsetUs);
-                this.extractorWrapper.init(output, this.seekTimeUs == C0615C.TIME_UNSET ? 0 : this.seekTimeUs - this.sampleOffsetUs);
+                this.extractorWrapper.init(output, this.seekTimeUs == C0616C.TIME_UNSET ? 0 : this.seekTimeUs - this.sampleOffsetUs);
             }
             Extractor extractor = this.extractorWrapper.extractor;
             int result = 0;

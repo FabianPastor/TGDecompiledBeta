@@ -10,9 +10,9 @@ public class CameraInfo {
     protected ArrayList<Size> pictureSizes = new ArrayList();
     protected ArrayList<Size> previewSizes = new ArrayList();
 
-    public CameraInfo(int id, android.hardware.Camera.CameraInfo info) {
+    public CameraInfo(int id, int frontFace) {
         this.cameraId = id;
-        this.frontCamera = info.facing;
+        this.frontCamera = frontFace;
     }
 
     public int getCameraId() {

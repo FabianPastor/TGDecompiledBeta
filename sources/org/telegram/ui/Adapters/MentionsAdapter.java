@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -91,7 +91,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C09601()) {
+    private LocationProvider locationProvider = new LocationProvider(new C09611()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -122,8 +122,8 @@ public class MentionsAdapter extends SelectionAdapter {
     private String searchingContextUsername;
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C09601 implements LocationProviderDelegate {
-        C09601() {
+    class C09611 implements LocationProviderDelegate {
+        C09611() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -139,8 +139,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C09623 implements SearchAdapterHelperDelegate {
-        C09623() {
+    class C09633 implements SearchAdapterHelperDelegate {
+        C09633() {
         }
 
         public void onDataSetChanged() {
@@ -174,7 +174,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C09623());
+        this.searchAdapterHelper.setDelegate(new C09633());
     }
 
     public void onDestroy() {
@@ -290,10 +290,10 @@ public class MentionsAdapter extends SelectionAdapter {
                 } else {
                     final User foundContextBotFinal = this.foundContextBot;
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", C0500R.string.ShareYouLocationTitle));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", C0500R.string.ShareYouLocationInline));
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", C0501R.string.ShareYouLocationTitle));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", C0501R.string.ShareYouLocationInline));
                     final boolean[] buttonClicked = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             buttonClicked[0] = true;
                             if (foundContextBotFinal != null) {
@@ -302,7 +302,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), new OnClickListener() {
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             buttonClicked[0] = true;
                             MentionsAdapter.this.onLocationUnavailable();
@@ -395,8 +395,8 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
-                class C09671 implements RequestDelegate {
-                    C09671() {
+                class C09681 implements RequestDelegate {
+                    C09681() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -431,7 +431,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                             req.username = MentionsAdapter.this.searchingContextUsername;
-                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C09671());
+                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C09681());
                         } else if (!MentionsAdapter.this.noUserName) {
                             MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, TtmlNode.ANONYMOUS_REGION_ID);
                         }
@@ -805,7 +805,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C09739 c09739 = new Runnable() {
+                    C09749 c09749 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -846,8 +846,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     };
-                    this.searchGlobalRunnable = c09739;
-                    AndroidUtilities.runOnUIThread(c09739, 200);
+                    this.searchGlobalRunnable = c09749;
+                    AndroidUtilities.runOnUIThread(c09749, 200);
                 }
                 final SparseArray<User> sparseArray = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;
@@ -1131,9 +1131,9 @@ public class MentionsAdapter extends SelectionAdapter {
                 return;
             }
             if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", C0500R.string.AttachInlineRestrictedForever));
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", C0501R.string.AttachInlineRestrictedForever));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0500R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0501R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
             boolean hasTop;

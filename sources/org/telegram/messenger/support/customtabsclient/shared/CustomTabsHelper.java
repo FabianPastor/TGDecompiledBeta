@@ -3,6 +3,8 @@ package org.telegram.messenger.support.customtabsclient.shared;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
+import org.telegram.messenger.ApplicationLoader;
 
 public class CustomTabsHelper {
     private static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
@@ -63,6 +66,17 @@ public class CustomTabsHelper {
             sPackageNameToUse = DEV_PACKAGE;
         } else if (packagesSupportingCustomTabs.contains(LOCAL_PACKAGE)) {
             sPackageNameToUse = LOCAL_PACKAGE;
+        }
+        try {
+            if ("com.sec.android.app.sbrowser".equalsIgnoreCase(sPackageNameToUse)) {
+                pm = ApplicationLoader.applicationContext.getPackageManager();
+                ApplicationInfo applicationInfo = pm.getApplicationInfo(STABLE_PACKAGE, 0);
+                if (applicationInfo != null && applicationInfo.enabled) {
+                    PackageInfo packageInfo = pm.getPackageInfo(STABLE_PACKAGE, 1);
+                    sPackageNameToUse = STABLE_PACKAGE;
+                }
+            }
+        } catch (Throwable th) {
         }
         return sPackageNameToUse;
     }

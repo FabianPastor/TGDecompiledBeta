@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">Verbinden met proxy</string>
     <string name="ConnectingToProxy">Verbinden met proxy</string>
     <string name="ConnectingToProxyEnable">Inschakelen</string>
+    <string name="ContactBirthday">Verjaardag</string>
     <string name="ContactJob">Baan</string>
     <string name="ContactJobTitle">Titel</string>
     <string name="ContactJoined">Contact lid van Telegram</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">Media vervangen</string>
     <string name="EditName">Naam wijzigen</string>
     <string name="EditedMessage">gewijzigd</string>
+    <string name="EmailCopied">E-mail gekopieerd naar klembord</string>
     <string name="EmailPasswordConfirmText">Volg deze stappen om twee-staps-verificatie in te schakelen:\n\n1.Controleer je e-mail (kijk voor de zekerheid ook in de ongewenste post)\n%1$s\n\n2.n klik op de bevestigingslink.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Grote emoji gebruiken</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d minuten</string>
     <string name="Minutes_zero">%1$d minuten</string>
     <string name="MobileUsage">Mobiel datagebruik</string>
+    <string name="Mono">Mono</string>
     <string name="Months_few">%1$d maanden</string>
     <string name="Months_many">%1$d maanden</string>
     <string name="Months_one">%1$d maand</string>
@@ -1436,6 +1439,7 @@
     <string name="PermissionOpenSettings">INSTELLINGEN</string>
     <string name="PermissionStorage">Telegram heeft toegang tot je opslaggeheugen nodig zodat je foto\'s, video\'s, muziek en andere media kunt opslaan en versturen.</string>
     <string name="Phone">Telefoon</string>
+    <string name="PhoneCopied">Nummer gekopieerd naar klembord</string>
     <string name="PhoneHome">Thuis</string>
     <string name="PhoneMain">Hoofd</string>
     <string name="PhoneMobile">Mobiel</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">Wachtwoord invoeren</string>
     <string name="PleaseEnterFirstPassword">Wachtwoord invoeren</string>
     <string name="PleaseEnterPassword">Nieuw wachtwoord invoeren</string>
+    <string name="PleaseLoginPassport">Log in op Telegram om Telegram Passport te gebruiken.</string>
     <string name="PleaseReEnterPassword">Wachtwoord opnieuw invoeren</string>
     <string name="PleaseStreamDownload">Wacht todat de video volledig is gedownload.</string>
     <string name="Points_few">%1$d punten</string>

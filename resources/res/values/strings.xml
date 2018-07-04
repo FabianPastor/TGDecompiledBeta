@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">Connect Proxy</string>
     <string name="ConnectingToProxy">Connecting to proxy</string>
     <string name="ConnectingToProxyEnable">Enable</string>
+    <string name="ContactBirthday">Birthday</string>
     <string name="ContactJob">Job</string>
     <string name="ContactJobTitle">Title</string>
     <string name="ContactJoined">Contact joined Telegram</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">Tap to edit media</string>
     <string name="EditName">Edit name</string>
     <string name="EditedMessage">edited</string>
+    <string name="EmailCopied">Email copied to clipboard</string>
     <string name="EmailPasswordConfirmText">Please follow these steps to complete Two-Step Verification Setup:\n\n1. Check your e-mail (don\'t forget the spam folder)\n%1$s\n\n2. Click on the validation link.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Draw single big emoji</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d minutes</string>
     <string name="Minutes_zero">%1$d minutes</string>
     <string name="MobileUsage">Mobile Data Usage</string>
+    <string name="Mono">Mono</string>
     <string name="Months_few">%1$d months</string>
     <string name="Months_many">%1$d months</string>
     <string name="Months_one">%1$d month</string>
@@ -1436,6 +1439,7 @@
     <string name="PermissionOpenSettings">SETTINGS</string>
     <string name="PermissionStorage">Telegram needs access to your storage so that you can send and save photos, videos, music and other media.</string>
     <string name="Phone">Phone</string>
+    <string name="PhoneCopied">Phone copied to clipboard</string>
     <string name="PhoneHome">Home</string>
     <string name="PhoneMain">Main</string>
     <string name="PhoneMobile">Mobile</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">Please enter your password</string>
     <string name="PleaseEnterFirstPassword">Enter a password</string>
     <string name="PleaseEnterPassword">Please enter your new password</string>
+    <string name="PleaseLoginPassport">Please log in to your Telegram account to use Telegram Passport.</string>
     <string name="PleaseReEnterPassword">Please re-enter your password</string>
     <string name="PleaseStreamDownload">Please wait for the video to be fully downloaded.</string>
     <string name="Points_few">%1$d</string>

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -52,8 +52,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C17003 extends OnScrollListener {
-        C17003() {
+    class C17013 extends OnScrollListener {
+        C17013() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -62,8 +62,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C17014 implements OnItemClickListener {
-        C17014() {
+    class C17024 implements OnItemClickListener {
+        C17024() {
         }
 
         public void onItemClick(View view, int position) {
@@ -76,8 +76,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class C17025 implements OnClickListener {
-        C17025() {
+    class C17035 implements OnClickListener {
+        C17035() {
         }
 
         public void onClick(View view) {
@@ -89,8 +89,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class C17036 implements OnClickListener {
-        C17036() {
+    class C17046 implements OnClickListener {
+        C17046() {
         }
 
         public void onClick(View view) {
@@ -156,7 +156,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     return;
                 case 1:
                     if (SharingLocationsAlert.this.textView != null) {
-                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", C0500R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
+                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", C0501R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
                         return;
                     }
                     return;
@@ -170,7 +170,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         super(context, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
-        this.shadowDrawable = context.getResources().getDrawable(C0500R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(C0501R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -251,23 +251,23 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C17003());
-        this.listView.setOnItemClickListener(new C17014());
+        this.listView.setOnScrollListener(new C17013());
+        this.listView.setOnItemClickListener(new C17024());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(C0500R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(C0501R.drawable.header_shadow_reverse);
         this.containerView.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", C0500R.string.StopAllLocationSharings));
-        pickerBottomLayout.cancelButton.setOnClickListener(new C17025());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", C0501R.string.StopAllLocationSharings));
+        pickerBottomLayout.cancelButton.setOnClickListener(new C17035());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", C0500R.string.Close).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", C0501R.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new C17036());
+        pickerBottomLayout.doneButton.setOnClickListener(new C17046());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }

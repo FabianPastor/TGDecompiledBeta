@@ -13,8 +13,8 @@ public class UndoStore {
     private Map<UUID, Runnable> uuidToOperationMap = new HashMap();
 
     /* renamed from: org.telegram.ui.Components.Paint.UndoStore$1 */
-    class C15981 implements Runnable {
-        C15981() {
+    class C15991 implements Runnable {
+        C15991() {
         }
 
         public void run() {
@@ -67,6 +67,6 @@ public class UndoStore {
     }
 
     private void notifyOfHistoryChanges() {
-        AndroidUtilities.runOnUIThread(new C15981());
+        AndroidUtilities.runOnUIThread(new C15991());
     }
 }

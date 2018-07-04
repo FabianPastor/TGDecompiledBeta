@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">Conectar proxy</string>
     <string name="ConnectingToProxy">Conectando al proxy</string>
     <string name="ConnectingToProxyEnable">Activar</string>
+    <string name="ContactBirthday">Cumpleaños</string>
     <string name="ContactJob">Trabajo</string>
     <string name="ContactJobTitle">Puesto</string>
     <string name="ContactJoined">Un contacto se unió a Telegram</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">Toca para reemplazar</string>
     <string name="EditName">Editar nombre</string>
     <string name="EditedMessage">editado</string>
+    <string name="EmailCopied">Correo copiado al portapapeles</string>
     <string name="EmailPasswordConfirmText">Por favor, sigue estos pasos para completar la configuración de la verificación en dos pasos:\n\n1. Revisa tu correo (no olvides la carpeta de spam).\n%1$s\n\n2. Haz clic en el enlace de validación.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Usar un emoji grande</string>
@@ -821,7 +823,7 @@
     <string name="GroupUserCantBot">Lo sentimos, hay demasiados bots en el grupo.</string>
     <string name="GroupUserLeftError">Lo sentimos, este usuario decidió salir del grupo, así que no puedes invitarlo otra vez.</string>
     <string name="GroupsAndChannels">Grupos</string>
-    <string name="GroupsAndChannelsHelp">Cambia quiénes pueden añadirte a grupos o canales.</string>
+    <string name="GroupsAndChannelsHelp">Elige quién puede añadirte a grupos y canales.</string>
     <string name="GroupsInCommon">Grupos en común</string>
     <string name="GroupsInCommonTitle">Grupos en común</string>
     <string name="Hashtags">HASHTAGS</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d minutos</string>
     <string name="Minutes_zero">%1$d minutos</string>
     <string name="MobileUsage">Uso de datos móviles</string>
+    <string name="Mono">Monoespaciado</string>
     <string name="Months_few">%1$d meses</string>
     <string name="Months_many">%1$d meses</string>
     <string name="Months_one">%1$d mes</string>
@@ -1436,6 +1439,7 @@
     <string name="PermissionOpenSettings">AJUSTES</string>
     <string name="PermissionStorage">Telegram necesita acceso a tu almacenamiento, para que puedas enviar y guardar fotos, vídeos, música y otros archivos.</string>
     <string name="Phone">Teléfono</string>
+    <string name="PhoneCopied">Teléfono copiado al portapapeles</string>
     <string name="PhoneHome">Casa</string>
     <string name="PhoneMain">Principal</string>
     <string name="PhoneMobile">Móvil</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">Por favor, pon tu contraseña</string>
     <string name="PleaseEnterFirstPassword">Pon una contraseña</string>
     <string name="PleaseEnterPassword">Por favor, pon tu nueva contraseña</string>
+    <string name="PleaseLoginPassport">Por favor, inicia sesión en tu cuenta de Telegram para usar Telegram Passport.</string>
     <string name="PleaseReEnterPassword">Pon, otra vez, tu contraseña</string>
     <string name="PleaseStreamDownload">Por favor, espera hasta que el vídeo esté descargado completamente.</string>
     <string name="Points_few">%1$d puntos</string>
@@ -1478,7 +1483,7 @@
     <string name="PreviewFeedback">Enviar comentarios sobre esta vista previa</string>
     <string name="PriorityInfo">Las notificaciones con prioridad alta funcionarán aunque tu teléfono esté en modo no molestar.</string>
     <string name="PrivacyBots">Bots y sitios web</string>
-    <string name="PrivacyBotsInfo">Sitios web en los que usaste Telegram para iniciar sesión.</string>
+    <string name="PrivacyBotsInfo">Sitios web en los que iniciaste sesión con Telegram.</string>
     <string name="PrivacyCallsP2PHelp">Al desactivar peer-to-peer todas las llamadas pasarán por los servidores de Telegram para evitar dar conocer tu dirección IP, pero disminuirá ligeramente la calidad de audio.</string>
     <string name="PrivacyCallsP2PTitle">Peer-to-Peer</string>
     <string name="PrivacyClearPayment">Información de pago</string>
@@ -1628,7 +1633,7 @@
     <string name="Send">Enviar</string>
     <string name="SendAsFile">Enviar como archivo</string>
     <string name="SendAsFiles">Como archivo</string>
-    <string name="SendByEnter">Enviar con “Intro”</string>
+    <string name="SendByEnter">Enviar con la tecla Intro</string>
     <string name="SendContactTo">¿Enviar contacto a %1$s?</string>
     <string name="SendContactToGroup">¿Enviar contacto a %1$s?</string>
     <string name="SendGameTo">¿Compartir el juego con %1$s?</string>

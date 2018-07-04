@@ -31,8 +31,8 @@ public class ArchivedStickerSetCell extends FrameLayout {
     private TextView valueTextView;
 
     /* renamed from: org.telegram.ui.Cells.ArchivedStickerSetCell$1 */
-    class C10951 implements OnClickListener {
-        C10951() {
+    class C10961 implements OnClickListener {
+        C10961() {
         }
 
         public void onClick(View v) {
@@ -134,7 +134,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
         Switch switchR = this.checkBox;
         this.onCheckedChangeListener = listener;
         switchR.setOnCheckedChangeListener(listener);
-        this.checkBox.setOnClickListener(new C10951());
+        this.checkBox.setOnClickListener(new C10961());
     }
 
     public void setChecked(boolean checked) {

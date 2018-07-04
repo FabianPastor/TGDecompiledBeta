@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
@@ -16,7 +16,7 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
     private MediaPeriod mediaPeriod;
     public final MediaSource mediaSource;
     private boolean notifiedPrepareError;
-    private long preparePositionOverrideUs = C0615C.TIME_UNSET;
+    private long preparePositionOverrideUs = C0616C.TIME_UNSET;
     private long preparePositionUs;
 
     public interface PrepareErrorListener {
@@ -83,9 +83,9 @@ public final class DeferredMediaPeriod implements MediaPeriod, Callback {
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
-        if (this.preparePositionOverrideUs != C0615C.TIME_UNSET && positionUs == 0) {
+        if (this.preparePositionOverrideUs != C0616C.TIME_UNSET && positionUs == 0) {
             positionUs = this.preparePositionOverrideUs;
-            this.preparePositionOverrideUs = C0615C.TIME_UNSET;
+            this.preparePositionOverrideUs = C0616C.TIME_UNSET;
         }
         return this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs);
     }

@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 
@@ -23,6 +23,7 @@ public class SharedConfig {
     public static boolean directShare = true;
     public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
+    public static boolean hasCameraCache;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter;
     public static long lastAppPauseTime;
@@ -164,6 +165,7 @@ public class SharedConfig {
             shuffleMusic = preferences.getBoolean("shuffleMusic", false);
             playOrderReversed = preferences.getBoolean("playOrderReversed", false);
             inappCamera = preferences.getBoolean("inappCamera", true);
+            hasCameraCache = preferences.contains("cameraCache");
             roundCamera16to9 = true;
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
@@ -188,7 +190,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0615C.UTF8_NAME);
+                    passcodeBytes = passcode.getBytes(C0616C.UTF8_NAME);
                     bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -201,7 +203,7 @@ public class SharedConfig {
             }
         } else {
             try {
-                passcodeBytes = passcode.getBytes(C0615C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(C0616C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -326,7 +328,7 @@ public class SharedConfig {
     public static void toggleInappCamera() {
         inappCamera = !inappCamera;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("direct_share", inappCamera);
+        editor.putBoolean("inappCamera", inappCamera);
         editor.commit();
     }
 
@@ -369,6 +371,7 @@ public class SharedConfig {
                         }
                     }
                 }
+                data.cleanup();
             }
             if (currentProxy == null && !TextUtils.isEmpty(proxyAddress)) {
                 info = new ProxyInfo(proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
@@ -397,6 +400,7 @@ public class SharedConfig {
             serializedData.writeString(str);
         }
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("proxy_list", Base64.encodeToString(serializedData.toByteArray(), 2)).commit();
+        serializedData.cleanup();
     }
 
     public static ProxyInfo addProxy(ProxyInfo proxyInfo) {

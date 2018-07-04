@@ -24,7 +24,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -56,7 +56,7 @@ import org.telegram.ui.VoIPActivity;
 public class FragmentContextView extends FrameLayout implements NotificationCenterDelegate {
     private FragmentContextView additionalContextView;
     private AnimatorSet animatorSet;
-    private Runnable checkLocationRunnable = new C15361();
+    private Runnable checkLocationRunnable = new C15371();
     private ImageView closeButton;
     private int currentStyle = -1;
     private boolean firstLocationsLoaded;
@@ -75,8 +75,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private float yPosition;
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$1 */
-    class C15361 implements Runnable {
-        C15361() {
+    class C15371 implements Runnable {
+        C15371() {
         }
 
         public void run() {
@@ -86,8 +86,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$2 */
-    class C15372 implements OnClickListener {
-        C15372() {
+    class C15382 implements OnClickListener {
+        C15382() {
         }
 
         public void onClick(View v) {
@@ -103,8 +103,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$3 */
-    class C15383 implements OnClickListener {
-        C15383() {
+    class C15393 implements OnClickListener {
+        C15393() {
         }
 
         public void onClick(View v) {
@@ -118,11 +118,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$4 */
-    class C15404 implements OnClickListener {
+    class C15414 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.FragmentContextView$4$1 */
-        class C15391 implements DialogInterface.OnClickListener {
-            C15391() {
+        class C15401 implements DialogInterface.OnClickListener {
+            C15401() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -136,29 +136,29 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         }
 
-        C15404() {
+        C15414() {
         }
 
         public void onClick(View v) {
             if (FragmentContextView.this.currentStyle == 2) {
                 Builder builder = new Builder(FragmentContextView.this.fragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
                 if (FragmentContextView.this.fragment instanceof DialogsActivity) {
-                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", C0500R.string.StopLiveLocationAlertAll));
+                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", C0501R.string.StopLiveLocationAlertAll));
                 } else {
                     ChatActivity activity = (ChatActivity) FragmentContextView.this.fragment;
                     Chat chat = activity.getCurrentChat();
                     User user = activity.getCurrentUser();
                     if (chat != null) {
-                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", C0500R.string.StopLiveLocationAlertToGroup, chat.title));
+                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", C0501R.string.StopLiveLocationAlertToGroup, chat.title));
                     } else if (user != null) {
-                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", C0500R.string.StopLiveLocationAlertToUser, UserObject.getFirstName(user)));
+                        builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", C0501R.string.StopLiveLocationAlertToUser, UserObject.getFirstName(user)));
                     } else {
-                        builder.setMessage(LocaleController.getString("AreYouSure", C0500R.string.AreYouSure));
+                        builder.setMessage(LocaleController.getString("AreYouSure", C0501R.string.AreYouSure));
                     }
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C15391());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C15401());
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                 builder.show();
                 return;
             }
@@ -167,11 +167,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$5 */
-    class C15425 implements OnClickListener {
+    class C15435 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.FragmentContextView$5$1 */
-        class C15411 implements SharingLocationsAlertDelegate {
-            C15411() {
+        class C15421 implements SharingLocationsAlertDelegate {
+            C15421() {
             }
 
             public void didSelectLocation(SharingLocationInfo info) {
@@ -179,7 +179,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         }
 
-        C15425() {
+        C15435() {
         }
 
         public void onClick(View v) {
@@ -239,15 +239,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (did != 0) {
                     FragmentContextView.this.openSharingLocation(LocationController.getInstance(account).getSharingLocationInfo(did));
                 } else {
-                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C15411()));
+                    FragmentContextView.this.fragment.showDialog(new SharingLocationsAlert(FragmentContextView.this.getContext(), new C15421()));
                 }
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$7 */
-    class C15447 extends AnimatorListenerAdapter {
-        C15447() {
+    class C15457 extends AnimatorListenerAdapter {
+        C15457() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -259,8 +259,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$8 */
-    class C15458 extends AnimatorListenerAdapter {
-        C15458() {
+    class C15468 extends AnimatorListenerAdapter {
+        C15468() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -271,8 +271,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$9 */
-    class C15469 extends AnimatorListenerAdapter {
-        C15469() {
+    class C15479 extends AnimatorListenerAdapter {
+        C15479() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -294,13 +294,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.frameLayout.setWillNotDraw(false);
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(C0500R.drawable.header_shadow);
+        shadow.setBackgroundResource(C0501R.drawable.header_shadow);
         addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         this.playButton = new ImageView(context);
         this.playButton.setScaleType(ScaleType.CENTER);
         this.playButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerPlayPause), Mode.MULTIPLY));
         addView(this.playButton, LayoutHelper.createFrame(36, 36, 51));
-        this.playButton.setOnClickListener(new C15372());
+        this.playButton.setOnClickListener(new C15382());
         this.titleTextView = new TextView(context);
         this.titleTextView.setMaxLines(1);
         this.titleTextView.setLines(1);
@@ -312,21 +312,21 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!location) {
             this.playbackSpeedButton = new ImageView(context);
             this.playbackSpeedButton.setScaleType(ScaleType.CENTER);
-            this.playbackSpeedButton.setImageResource(C0500R.drawable.voice2x);
+            this.playbackSpeedButton.setImageResource(C0501R.drawable.voice2x);
             if (AndroidUtilities.density >= 3.0f) {
                 this.playbackSpeedButton.setPadding(0, 1, 0, 0);
             }
             addView(this.playbackSpeedButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 36.0f, 0.0f));
-            this.playbackSpeedButton.setOnClickListener(new C15383());
+            this.playbackSpeedButton.setOnClickListener(new C15393());
             updatePlaybackButton();
         }
         this.closeButton = new ImageView(context);
-        this.closeButton.setImageResource(C0500R.drawable.miniplayer_close);
+        this.closeButton.setImageResource(C0501R.drawable.miniplayer_close);
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), Mode.MULTIPLY));
         this.closeButton.setScaleType(ScaleType.CENTER);
         addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
-        this.closeButton.setOnClickListener(new C15404());
-        setOnClickListener(new C15425());
+        this.closeButton.setOnClickListener(new C15414());
+        setOnClickListener(new C15435());
     }
 
     private void updatePlaybackButton() {
@@ -410,16 +410,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.playButton.setVisibility(0);
                 this.titleTextView.setTypeface(Typeface.DEFAULT);
                 this.titleTextView.setTextSize(1, 15.0f);
-                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
                 if (style == 0) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
+                    if (this.playbackSpeedButton != null) {
+                        this.playbackSpeedButton.setVisibility(0);
+                    }
                 } else if (style == 2) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
                 }
             } else if (style == 1) {
-                this.titleTextView.setText(LocaleController.getString("ReturnToCall", C0500R.string.ReturnToCall));
+                this.titleTextView.setText(LocaleController.getString("ReturnToCall", C0501R.string.ReturnToCall));
                 this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_returnToCallBackground));
                 this.frameLayout.setTag(Theme.key_returnToCallBackground);
                 this.titleTextView.setTextColor(Theme.getColor(Theme.key_returnToCallText));
@@ -429,6 +431,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.titleTextView.setTextSize(1, 14.0f);
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 2.0f));
+                this.titleTextView.setPadding(0, 0, 0, 0);
+                if (this.playbackSpeedButton != null) {
+                    this.playbackSpeedButton.setVisibility(8);
+                }
             }
         }
     }
@@ -526,7 +532,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                     animatorSet.playTogether(animatorArr);
                     this.animatorSet.setDuration(200);
-                    this.animatorSet.addListener(new C15458());
+                    this.animatorSet.addListener(new C15468());
                     this.animatorSet.start();
                 }
                 this.visible = true;
@@ -534,7 +540,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (this.fragment instanceof DialogsActivity) {
                 String param;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", C0501R.string.AttachLiveLocation);
                 ArrayList<SharingLocationInfo> infos = new ArrayList();
                 for (int a = 0; a < 3; a++) {
                     infos.addAll(LocationController.getInstance(a).sharingLocationsUI);
@@ -555,7 +561,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     param = LocaleController.formatPluralString("Chats", infos.size());
                 }
-                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", C0500R.string.AttachLiveLocationIsSharing), new Object[]{liveLocation, param});
+                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", C0501R.string.AttachLiveLocationIsSharing), new Object[]{liveLocation, param});
                 int start = fullString.indexOf(liveLocation);
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(fullString);
                 this.titleTextView.setEllipsize(TruncateAt.END);
@@ -588,7 +594,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.animatorSet.setDuration(200);
-            this.animatorSet.addListener(new C15447());
+            this.animatorSet.addListener(new C15457());
             this.animatorSet.start();
         }
     }
@@ -621,20 +627,20 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.lastLocationSharingCount != locationSharingCount) {
                 String fullString;
                 this.lastLocationSharingCount = locationSharingCount;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", C0501R.string.AttachLiveLocation);
                 if (locationSharingCount == 0) {
                     fullString = liveLocation;
                 } else {
                     int otherSharingCount = locationSharingCount - 1;
                     if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                         if (otherSharingCount == 0) {
-                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0500R.string.ChatYourSelfName)});
+                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0501R.string.ChatYourSelfName)});
                         } else if (otherSharingCount != 1 || notYouUser == null) {
-                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0500R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount)});
+                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", C0501R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount)});
                         } else {
                             Object[] objArr = new Object[2];
                             objArr[0] = liveLocation;
-                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", C0500R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser));
+                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", C0501R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser));
                             fullString = String.format("%1$s - %2$s", objArr);
                         }
                     } else if (otherSharingCount != 0) {
@@ -688,7 +694,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new C15469());
+                this.animatorSet.addListener(new C15479());
                 this.animatorSet.start();
                 return;
             } else {
@@ -736,9 +742,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             setVisibility(0);
         }
         if (MediaController.getInstance().isMessagePaused()) {
-            this.playButton.setImageResource(C0500R.drawable.miniplayer_play);
+            this.playButton.setImageResource(C0501R.drawable.miniplayer_play);
         } else {
-            this.playButton.setImageResource(C0500R.drawable.miniplayer_pause);
+            this.playButton.setImageResource(C0501R.drawable.miniplayer_pause);
         }
         if (this.lastMessageObject != messageObject || prevStyle != 0) {
             SpannableStringBuilder stringBuilder;
@@ -817,10 +823,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 this.visible = true;
                 setVisibility(0);
-                if (this.playbackSpeedButton != null) {
-                    this.playbackSpeedButton.setAlpha(0.0f);
-                    this.playbackSpeedButton.setEnabled(false);
-                }
             }
         } else if (this.visible) {
             this.visible = false;

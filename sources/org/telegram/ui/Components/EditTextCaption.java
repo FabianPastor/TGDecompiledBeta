@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.Layout.Alignment;
@@ -23,7 +24,7 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.FrameLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -33,11 +34,18 @@ public class EditTextCaption extends EditTextBoldCursor {
     private String caption;
     private StaticLayout captionLayout;
     private boolean copyPasteShowed;
+    private EditTextCaptionDelegate delegate;
     private int hintColor;
+    private int selectionEnd = -1;
+    private int selectionStart = -1;
     private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
+
+    public interface EditTextCaptionDelegate {
+        void onSpansChanged();
+    }
 
     public EditTextCaption(Context context) {
         super(context);
@@ -55,17 +63,27 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    private void makeSelectedBold() {
+    public void setDelegate(EditTextCaptionDelegate editTextCaptionDelegate) {
+        this.delegate = editTextCaptionDelegate;
+    }
+
+    public void makeSelectedBold() {
         applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")));
     }
 
-    private void makeSelectedItalic() {
+    public void makeSelectedItalic() {
         applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")));
     }
 
-    private void makeSelectedUrl() {
+    public void makeSelectedMono() {
+        applyTextStyleToSelection(new TypefaceSpan(Typeface.MONOSPACE));
+    }
+
+    public void makeSelectedUrl() {
+        int start;
+        int end;
         Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("CreateLink", C0500R.string.CreateLink));
+        builder.setTitle(LocaleController.getString("CreateLink", C0501R.string.CreateLink));
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
@@ -74,7 +92,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.setTextSize(1, 18.0f);
         editText.setText("http://");
         editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        editText.setHintText(LocaleController.getString("URL", C0500R.string.URL));
+        editText.setHintText(LocaleController.getString("URL", C0501R.string.URL));
         editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
         editText.setTransformHintToHeader(true);
@@ -84,9 +102,16 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.requestFocus();
         editText.setPadding(0, 0, 0, 0);
         builder.setView(editText);
-        final int start = getSelectionStart();
-        final int end = getSelectionEnd();
-        builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+        if (this.selectionStart < 0 || this.selectionEnd < 0) {
+            start = getSelectionStart();
+            end = getSelectionEnd();
+        } else {
+            start = this.selectionStart;
+            end = this.selectionEnd;
+            this.selectionEnd = -1;
+            this.selectionStart = -1;
+        }
+        builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Editable editable = EditTextCaption.this.getText();
                 CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
@@ -104,9 +129,12 @@ public class EditTextCaption extends EditTextBoldCursor {
                     }
                 }
                 editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+                if (EditTextCaption.this.delegate != null) {
+                    EditTextCaption.this.delegate.onSpansChanged();
+                }
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
         builder.show().setOnShowListener(new OnShowListener() {
             public void onShow(DialogInterface dialog) {
                 editText.requestFocus();
@@ -129,13 +157,27 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    private void makeSelectedRegular() {
+    public void makeSelectedRegular() {
         applyTextStyleToSelection(null);
     }
 
+    public void setSelectionOverride(int start, int end) {
+        this.selectionStart = start;
+        this.selectionEnd = end;
+    }
+
     private void applyTextStyleToSelection(TypefaceSpan span) {
-        int start = getSelectionStart();
-        int end = getSelectionEnd();
+        int start;
+        int end;
+        if (this.selectionStart < 0 || this.selectionEnd < 0) {
+            start = getSelectionStart();
+            end = getSelectionEnd();
+        } else {
+            start = this.selectionStart;
+            end = this.selectionEnd;
+            this.selectionEnd = -1;
+            this.selectionStart = -1;
+        }
         Editable editable = getText();
         CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
         if (spans != null && spans.length > 0) {
@@ -153,6 +195,9 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
         if (span != null) {
             editable.setSpan(span, start, end, 33);
+        }
+        if (this.delegate != null) {
+            this.delegate.onSpansChanged();
         }
     }
 
@@ -175,16 +220,19 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 boolean z = true;
-                if (item.getItemId() == C0500R.id.menu_regular) {
+                if (item.getItemId() == C0501R.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
-                } else if (item.getItemId() == C0500R.id.menu_bold) {
+                } else if (item.getItemId() == C0501R.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
-                } else if (item.getItemId() == C0500R.id.menu_italic) {
+                } else if (item.getItemId() == C0501R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
-                } else if (item.getItemId() == C0500R.id.menu_link) {
+                } else if (item.getItemId() == C0501R.id.menu_mono) {
+                    EditTextCaption.this.makeSelectedMono();
+                    mode.finish();
+                } else if (item.getItemId() == C0501R.id.menu_link) {
                     EditTextCaption.this.makeSelectedUrl();
                     mode.finish();
                 } else {

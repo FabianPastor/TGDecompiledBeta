@@ -192,7 +192,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x0006:
         r0 = r34;
         r10 = r0.startTimeUs;
-        r6 = org.telegram.messenger.exoplayer2.C0615C.usToMs(r10);
+        r6 = org.telegram.messenger.exoplayer2.C0616C.usToMs(r10);
     L_0x000e:
         r0 = r34;
         r10 = r0.playlistType;

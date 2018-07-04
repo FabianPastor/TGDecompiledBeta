@@ -5,7 +5,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -22,7 +22,7 @@ public class LocationLoadingCell extends FrameLayout {
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.textView.setTextSize(1, 16.0f);
-        this.textView.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
+        this.textView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
     }
 

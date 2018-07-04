@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
@@ -33,7 +33,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private boolean drawProgress;
-    Drawable drawable = new C11091();
+    Drawable drawable = new C11101();
     private boolean hasOnClick;
     private TextView infoTextView;
     private boolean isInstalled;
@@ -44,10 +44,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private StickerSetCovered set;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetInfoCell$1 */
-    class C11091 extends Drawable {
+    class C11101 extends Drawable {
         Paint paint = new Paint(1);
 
-        C11091() {
+        C11101() {
         }
 
         public void draw(Canvas canvas) {
@@ -170,10 +170,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);
-                this.addButton.setText(LocaleController.getString("StickersRemove", C0500R.string.StickersRemove).toUpperCase());
+                this.addButton.setText(LocaleController.getString("StickersRemove", C0501R.string.StickersRemove).toUpperCase());
             } else {
                 this.addButton.setBackgroundDrawable(this.addDrawable);
-                this.addButton.setText(LocaleController.getString("Add", C0500R.string.Add).toUpperCase());
+                this.addButton.setText(LocaleController.getString("Add", C0501R.string.Add).toUpperCase());
             }
             this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         } else {

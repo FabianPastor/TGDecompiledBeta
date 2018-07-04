@@ -121,7 +121,7 @@
     <string name="AndMoreTypingGroup_one">%1$s و شخص اخر يقوموا بالكتابة</string>
     <string name="AndMoreTypingGroup_other">%1$s و %2$d شخص يقوموا بالكتابة</string>
     <string name="AndMoreTypingGroup_two">%1$s و شخصان يقوموا بالكتابة</string>
-    <string name="AndMoreTypingGroup_zero">%1$s</string>
+    <string name="AndMoreTypingGroup_zero" />
     <string name="AndMoreTyping_few">كذلك %1$d أعضاء آخرون يقومون بالكتابة</string>
     <string name="AndMoreTyping_many">كذلك %1$d عضو آخرون يقومون بالكتابة</string>
     <string name="AndMoreTyping_one">كذلك %1$d عضو آخر يقوم بالكتابة</string>
@@ -421,7 +421,7 @@
     <string name="ClearHistory">مسح سجل المحادثة</string>
     <string name="ClearHistoryCache">حذف من الذاكرة المخبئية</string>
     <string name="ClearMediaCache">مسح الذاكرة المخبئية</string>
-    <string name="ClearOtherSessionsHelp">قم بتسجيل الخروج من جميع الأجهزة الأخرى باستثناء هذا الجهاز</string>
+    <string name="ClearOtherSessionsHelp">لتسجيل الخروج من جميع الأجهزة عدا هذا الجهاز</string>
     <string name="ClearOtherWebSessionsHelp">يمكنك تسجيل الدخول عبر تيليجرام إلى المواقع التي تدعم ذلك.</string>
     <string name="ClearRecentEmoji">مسح سجل الإيموجي؟</string>
     <string name="ClearSearch">مسح سجل البحث؟</string>
@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">وصل البروكسي</string>
     <string name="ConnectingToProxy">جارٍ الاتصال بالبروكسي</string>
     <string name="ConnectingToProxyEnable">تفعيل</string>
+    <string name="ContactBirthday">الميلاد</string>
     <string name="ContactJob">مهنة</string>
     <string name="ContactJobTitle">اللقب</string>
     <string name="ContactJoined">انضمام جهة اتصال لتيليجرام</string>
@@ -488,7 +489,7 @@
     <string name="CurvesGreen">أخضر</string>
     <string name="CurvesRed">أحمر</string>
     <string name="CustomCallInfo">هؤلاء المستخدمين بإمكانهم أو ليس بإمكانهم الاتصال بك بغض النظر عن الإعدادات أعلاه.</string>
-    <string name="CustomHelp">هام: لن تستطيع رؤية آخر ظهور للأشخاص اللذين اخترت ألا يروا آخر ظهور لك. سيتم عرض آخر ظهور تقريبي كبديل (قريب، خلال أسبوع، خلال شهر).</string>
+    <string name="CustomHelp">هام: لن تستطيع رؤية آخر ظهور للأشخاص الذين اخترت ألا يروا آخر ظهور لك. سيتم عرض آخر ظهور تقريبي كبديل (قريبًا، خلال أسبوع، خلال شهر).</string>
     <string name="CustomNotifications">الإشعارات المخصصة</string>
     <string name="CustomShareInfo">هؤلاء المستخدمين يمكنهم أو لا يمكنهم إضافتك للمجموعات والقنوات بغض النظر عن الأعدادات أعلاه.</string>
     <string name="CustomShareSettingsHelp">هذه الإعدادات ستتجاوز القيم في الأعلى.</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">انقر لتعديل الوسائط</string>
     <string name="EditName">تعديل الاسم</string>
     <string name="EditedMessage">معدلة</string>
+    <string name="EmailCopied">تم نسخ البريد للحافظة</string>
     <string name="EmailPasswordConfirmText">فضلًا اتّبع هذه الخطوات لإكمال إعدادات التحقق بخطوتين:\n\n١. قم بالإطلاع على بريدة الإلكتروني بما فيه مجلد الرسائل غير المرغوب بها\n%1$s\n\n٢. اضغط على رابط التأكيد</string>
     <string name="Emoji">إيموجي</string>
     <string name="EmojiBigSize">رسم إيموجي واحد كبير</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d دقيقتان</string>
     <string name="Minutes_zero">%1$d دقيقة</string>
     <string name="MobileUsage">استخدام بيانات الجوال</string>
+    <string name="Mono">رمز</string>
     <string name="Months_few">%1$d أشهر</string>
     <string name="Months_many">%1$d شهر</string>
     <string name="Months_one">شهر واحد</string>
@@ -1436,6 +1439,7 @@
     <string name="PermissionOpenSettings">الإعدادات</string>
     <string name="PermissionStorage">تيليجرام يحتاج للسماح له بالوصول للذاكرة الخاصة بك لتتمكن من إرسال وحفظ الصور، المقاطع المرئية، الموسيقى وغيرها من الوسائط.</string>
     <string name="Phone">هاتف</string>
+    <string name="PhoneCopied">تم نسخ رقم الهاتف للحافظة</string>
     <string name="PhoneHome">منزل</string>
     <string name="PhoneMain">الرئيسية</string>
     <string name="PhoneMobile">جوال</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">يرجى إعادة إدخال كلمة المرور الخاصة بك:</string>
     <string name="PleaseEnterFirstPassword">قم بإدخال كلمة مرور</string>
     <string name="PleaseEnterPassword">يرجى إدخال كلمة المرور الجديدة الخاصة بك:</string>
+    <string name="PleaseLoginPassport">يرجى تسجيل الدخول لحسابك في تيليجرام لتستطيع استخدام جواز تيليجرام</string>
     <string name="PleaseReEnterPassword">يرجى إعادة إدخال كلمة المرور الخاصة بك:</string>
     <string name="PleaseStreamDownload">يرجى الانتظار إلى حين تحميل كامل المقطع المرئي.</string>
     <string name="Points_few">%1$d</string>
@@ -1720,7 +1725,7 @@
     <string name="StartMessaging">ابدأ المراسلة</string>
     <string name="StartText">يرجى التحقق من صحة رمز بلدك وإدخال رقم هاتفك المحمول.</string>
     <string name="StickersCopy">نسخ الرابط</string>
-    <string name="StickersHide">أرشف</string>
+    <string name="StickersHide">أرشفة</string>
     <string name="StickersName">الملصقات</string>
     <string name="StickersRemove">إزالة</string>
     <string name="StickersRemoved">تم إزالة الملصقات</string>
@@ -1813,7 +1818,7 @@
     <string name="TotalDataUsage">إجمالي</string>
     <string name="TurnPasswordOff">إيقاف كلمة المرور</string>
     <string name="TurnPasswordOffPassport">تحذير! سيتم فقدان جميع البيانات المحفوظة في جواز تيليجرام!</string>
-    <string name="TurnPasswordOffQuestion">هل أنت متأكد من رغبتك في تعطيل كلمة المرور؟</string>
+    <string name="TurnPasswordOffQuestion">هل أنت متأكد من رغبتك في تعطيل كلمة مرورك؟</string>
     <string name="TwoStepVerification">التحقق بخطوتين</string>
     <string name="TypeMessage">الرسالة</string>
     <string name="Typing">يكتب...</string>
@@ -1941,7 +1946,7 @@
     <string name="VoipPeerOutdated">تطبيق %1$s لا يدعم المكالمات. يتوجب عليه تحديث تطبيقه قبل أن تتمكن من الاتصال به.</string>
     <string name="VoipQuickReplies">الرد برسالة</string>
     <string name="VoipQuickRepliesExplain">هذه الردود السريعة ستكون متاحة لك للرد على مكالمات تيليجرام برسائل تيليجرام. يمكنك تغييرها لما تحب.</string>
-    <string name="VoipRateCallAlert">فضلًا قم بتقييم جودة الاتصال في تيليجرام</string>
+    <string name="VoipRateCallAlert">فضلًا قم بتقييم مكالمتك في تيليجرام</string>
     <string name="VoipRequesting">جارٍ الطلب</string>
     <string name="VoipRinging">يرن</string>
     <string name="VoipRingtoneInfo">يمكنك تخصيص نغمة الرنين عندما يتصل بك هذا المستخدم في تيليجرام.</string>
@@ -1995,7 +2000,7 @@
     <string name="YourEmailInfo">فضلًا أضف بريد إلكتروني صحيح. هذه هي الطريقة الوحيدة لإستعادة كلمة المرور بعد نسيانها.</string>
     <string name="YourEmailSkip">تخطي</string>
     <string name="YourEmailSkipWarning">تحذير</string>
-    <string name="YourEmailSkipWarningText">الموضوع جدّيّ.\n\nإذا نسيت كلمة المرور الخاصة بك، لن تستطيع الدخول إلى حسابك في تيليجرام. لن يكون هناك طريقة لإستعادته.</string>
+    <string name="YourEmailSkipWarningText">الموضوع جدّيّ.\n\nإن نسيت كلمة مرورك، ستفقد الوصول لحسابك في تيليجرام. لن يكون هناك أي طريقة لاستعادته.</string>
     <string name="YourName">اسمك</string>
     <string name="YourPassword">كلمة مرورك</string>
     <string name="YourPasswordSuccess">تم بنجاح!</string>

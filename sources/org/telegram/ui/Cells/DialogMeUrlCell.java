@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -217,7 +217,7 @@ public class DialogMeUrlCell extends BaseCell {
         CharSequence messageString = MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.recentMeUrl.url;
         this.avatarImage.setImage(image, "50_50", this.avatarDrawable, null, 0);
         if (TextUtils.isEmpty(nameString)) {
-            nameString = LocaleController.getString("HiddenName", C0500R.string.HiddenName);
+            nameString = LocaleController.getString("HiddenName", C0501R.string.HiddenName);
         }
         if (LocaleController.isRTL) {
             nameWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);

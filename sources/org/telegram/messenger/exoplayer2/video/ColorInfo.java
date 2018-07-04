@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ColorInfo implements Parcelable {
-    public static final Creator<ColorInfo> CREATOR = new C07501();
+    public static final Creator<ColorInfo> CREATOR = new C07511();
     public final int colorRange;
     public final int colorSpace;
     public final int colorTransfer;
@@ -15,8 +15,8 @@ public final class ColorInfo implements Parcelable {
     public final byte[] hdrStaticInfo;
 
     /* renamed from: org.telegram.messenger.exoplayer2.video.ColorInfo$1 */
-    static class C07501 implements Creator<ColorInfo> {
-        C07501() {
+    static class C07511 implements Creator<ColorInfo> {
+        C07511() {
         }
 
         public ColorInfo createFromParcel(Parcel in) {

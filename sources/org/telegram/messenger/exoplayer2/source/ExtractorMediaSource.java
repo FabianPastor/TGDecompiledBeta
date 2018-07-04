@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import android.net.Uri;
 import android.os.Handler;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
@@ -136,7 +136,7 @@ public final class ExtractorMediaSource extends BaseMediaSource implements Liste
         this.minLoadableRetryCount = minLoadableRetryCount;
         this.customCacheKey = customCacheKey;
         this.continueLoadingCheckIntervalBytes = continueLoadingCheckIntervalBytes;
-        this.timelineDurationUs = C0615C.TIME_UNSET;
+        this.timelineDurationUs = C0616C.TIME_UNSET;
         this.tag = tag;
     }
 
@@ -160,7 +160,7 @@ public final class ExtractorMediaSource extends BaseMediaSource implements Liste
     }
 
     public void onSourceInfoRefreshed(long durationUs, boolean isSeekable) {
-        if (durationUs == C0615C.TIME_UNSET) {
+        if (durationUs == C0616C.TIME_UNSET) {
             durationUs = this.timelineDurationUs;
         }
         if (this.timelineDurationUs != durationUs || this.timelineIsSeekable != isSeekable) {

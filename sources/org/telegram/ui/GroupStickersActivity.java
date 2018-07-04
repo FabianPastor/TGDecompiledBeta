@@ -26,7 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -101,8 +101,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     private EditTextBoldCursor usernameTextView;
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$1 */
-    class C19031 extends ActionBarMenuOnItemClick {
-        C19031() {
+    class C19061 extends ActionBarMenuOnItemClick {
+        C19061() {
         }
 
         public void onItemClick(int id) {
@@ -120,10 +120,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$3 */
-    class C19053 implements TextWatcher {
+    class C19083 implements TextWatcher {
         boolean ignoreTextChange;
 
-        C19053() {
+        C19083() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -158,8 +158,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$4 */
-    class C19064 implements OnClickListener {
-        C19064() {
+    class C19094 implements OnClickListener {
+        C19094() {
         }
 
         public void onClick(View v) {
@@ -171,8 +171,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$6 */
-    class C19086 implements OnItemClickListener {
-        C19086() {
+    class C19116 implements OnItemClickListener {
+        C19116() {
         }
 
         public void onItemClick(View view, int position) {
@@ -210,8 +210,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$7 */
-    class C19097 extends OnScrollListener {
-        C19097() {
+    class C19127 extends OnScrollListener {
+        C19127() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -225,8 +225,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$9 */
-    class C19139 implements Runnable {
-        C19139() {
+    class C19169 implements Runnable {
+        C19169() {
         }
 
         public void run() {
@@ -275,7 +275,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     return;
                 case 1:
                     if (position == GroupStickersActivity.this.infoRow) {
-                        String text = LocaleController.getString("ChooseStickerSetMy", C0500R.string.ChooseStickerSetMy);
+                        String text = LocaleController.getString("ChooseStickerSetMy", C0501R.string.ChooseStickerSetMy);
                         String botName = "@stickers";
                         int index = text.indexOf(botName);
                         if (index != -1) {
@@ -299,7 +299,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     }
                     return;
                 case 4:
-                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", C0500R.string.ChooseFromYourStickers));
+                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", C0501R.string.ChooseFromYourStickers));
                     return;
                 case 5:
                     cell = (StickerSetCell) holder.itemView;
@@ -307,10 +307,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         cell.setStickersSet(GroupStickersActivity.this.selectedStickerSet, false);
                         return;
                     } else if (GroupStickersActivity.this.searching) {
-                        cell.setText(LocaleController.getString("Loading", C0500R.string.Loading), null, 0, false);
+                        cell.setText(LocaleController.getString("Loading", C0501R.string.Loading), null, 0, false);
                         return;
                     } else {
-                        cell.setText(LocaleController.getString("ChooseStickerSetNotFound", C0500R.string.ChooseStickerSetNotFound), LocaleController.getString("ChooseStickerSetNotFoundInfo", C0500R.string.ChooseStickerSetNotFoundInfo), C0500R.drawable.ic_smiles2_sad, false);
+                        cell.setText(LocaleController.getString("ChooseStickerSetNotFound", C0501R.string.ChooseStickerSetNotFound), LocaleController.getString("ChooseStickerSetNotFoundInfo", C0501R.string.ChooseStickerSetNotFoundInfo), C0501R.drawable.ic_smiles2_sad, false);
                         return;
                     }
                 default:
@@ -333,14 +333,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = GroupStickersActivity.this.nameContainer;
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 4:
                     view = new HeaderCell(this.mContext);
@@ -396,11 +396,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupStickers", C0500R.string.GroupStickers));
-        this.actionBar.setActionBarMenuOnItemClick(new C19031());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, C0500R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("GroupStickers", C0501R.string.GroupStickers));
+        this.actionBar.setActionBarMenuOnItemClick(new C19061());
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, C0501R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView.setVisibility(4);
@@ -451,16 +451,16 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView.setGravity(16);
         this.usernameTextView.setInputType(163872);
         this.usernameTextView.setImeOptions(6);
-        this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", C0500R.string.ChooseStickerSetPlaceholder));
-        this.usernameTextView.addTextChangedListener(new C19053());
+        this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", C0501R.string.ChooseStickerSetPlaceholder));
+        this.usernameTextView.addTextChangedListener(new C19083());
         this.nameContainer.addView(this.usernameTextView, LayoutHelper.createLinear(0, 42, 1.0f));
         this.eraseImageView = new ImageView(context);
         this.eraseImageView.setScaleType(ScaleType.CENTER);
-        this.eraseImageView.setImageResource(C0500R.drawable.ic_close_white);
+        this.eraseImageView.setImageResource(C0501R.drawable.ic_close_white);
         this.eraseImageView.setPadding(AndroidUtilities.dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
-        this.eraseImageView.setOnClickListener(new C19064());
+        this.eraseImageView.setOnClickListener(new C19094());
         this.nameContainer.addView(this.eraseImageView, LayoutHelper.createLinear(42, 42, 0.0f));
         if (!(this.info == null || this.info.stickerset == null)) {
             this.ignoreTextChanges = true;
@@ -489,8 +489,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C19086());
-        this.listView.setOnScrollListener(new C19097());
+        this.listView.setOnItemClickListener(new C19116());
+        this.listView.setOnScrollListener(new C19127());
         return this.fragmentView;
     }
 
@@ -559,11 +559,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            Runnable c19128 = new Runnable() {
+            Runnable c19158 = new Runnable() {
 
                 /* renamed from: org.telegram.ui.GroupStickersActivity$8$1 */
-                class C19111 implements RequestDelegate {
-                    C19111() {
+                class C19141 implements RequestDelegate {
+                    C19141() {
                     }
 
                     public void run(final TLObject response, TL_error error) {
@@ -587,7 +587,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                         GroupStickersActivity.this.donePressed = false;
                                         GroupStickersActivity.this.showEditDoneProgress(false);
                                         if (GroupStickersActivity.this.getParentActivity() != null) {
-                                            Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("AddStickersNotFound", C0500R.string.AddStickersNotFound), 0).show();
+                                            Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("AddStickersNotFound", C0501R.string.AddStickersNotFound), 0).show();
                                         }
                                     }
                                 }
@@ -602,18 +602,18 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                         req.stickerset = new TL_inputStickerSetShortName();
                         req.stickerset.short_name = query;
-                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C19111());
+                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C19141());
                     }
                 }
             };
-            this.queryRunnable = c19128;
-            AndroidUtilities.runOnUIThread(c19128, 500);
+            this.queryRunnable = c19158;
+            AndroidUtilities.runOnUIThread(c19158, 500);
         }
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C19139(), 100);
+            AndroidUtilities.runOnUIThread(new C19169(), 100);
         }
     }
 
@@ -655,7 +655,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                             GroupStickersActivity.this.finishFragment();
                             return;
                         }
-                        Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", C0500R.string.ErrorOccurred) + "\n" + error.text, 0).show();
+                        Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", C0501R.string.ErrorOccurred) + "\n" + error.text, 0).show();
                         GroupStickersActivity.this.donePressed = false;
                         GroupStickersActivity.this.showEditDoneProgress(false);
                     }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -186,7 +186,7 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
             this.eventDispatcher.readingStarted();
             this.notifiedReadingStarted = true;
         }
-        return C0615C.TIME_UNSET;
+        return C0616C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.source.chunk;
 
 import android.util.SparseArray;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DummyTrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -91,7 +91,7 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
         this.trackOutputProvider = trackOutputProvider;
         if (this.extractorInitialized) {
             Extractor extractor = this.extractor;
-            if (seekTimeUs == C0615C.TIME_UNSET) {
+            if (seekTimeUs == C0616C.TIME_UNSET) {
                 seekTimeUs = 0;
             }
             extractor.seek(0, seekTimeUs);
@@ -101,7 +101,7 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
             return;
         }
         this.extractor.init(this);
-        if (seekTimeUs != C0615C.TIME_UNSET) {
+        if (seekTimeUs != C0616C.TIME_UNSET) {
             this.extractor.seek(0, seekTimeUs);
         }
         this.extractorInitialized = true;

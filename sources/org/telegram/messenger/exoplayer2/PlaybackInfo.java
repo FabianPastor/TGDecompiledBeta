@@ -18,7 +18,7 @@ final class PlaybackInfo {
     public final TrackSelectorResult trackSelectorResult;
 
     public PlaybackInfo(Timeline timeline, long startPositionUs, TrackGroupArray trackGroups, TrackSelectorResult trackSelectorResult) {
-        this(timeline, null, new MediaPeriodId(0), startPositionUs, C0615C.TIME_UNSET, 1, false, trackGroups, trackSelectorResult);
+        this(timeline, null, new MediaPeriodId(0), startPositionUs, C0616C.TIME_UNSET, 1, false, trackGroups, trackSelectorResult);
     }
 
     public PlaybackInfo(Timeline timeline, Object manifest, MediaPeriodId periodId, long startPositionUs, long contentPositionUs, int playbackState, boolean isLoading, TrackGroupArray trackGroups, TrackSelectorResult trackSelectorResult) {
@@ -42,7 +42,7 @@ final class PlaybackInfo {
         if (periodId.isAd()) {
             j = contentPositionUs;
         } else {
-            j = C0615C.TIME_UNSET;
+            j = C0616C.TIME_UNSET;
         }
         return new PlaybackInfo(timeline, obj, periodId, startPositionUs, j, this.playbackState, this.isLoading, this.trackGroups, this.trackSelectorResult);
     }

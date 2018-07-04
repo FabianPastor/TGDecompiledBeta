@@ -15,7 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -39,19 +39,19 @@ public class TermsOfServiceView extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1 */
-    class C17381 implements OnClickListener {
+    class C17391 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1 */
-        class C17371 implements DialogInterface.OnClickListener {
+        class C17381 implements DialogInterface.OnClickListener {
 
             /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1$1 */
-            class C17361 implements DialogInterface.OnClickListener {
-                C17361() {
+            class C17371 implements DialogInterface.OnClickListener {
+                C17371() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
                     final AlertDialog progressDialog = new AlertDialog(TermsOfServiceView.this.getContext(), 1);
-                    progressDialog.setMessage(LocaleController.getString("Loading", C0500R.string.Loading));
+                    progressDialog.setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.setCancelable(false);
                     TL_account_deleteAccount req = new TL_account_deleteAccount();
@@ -69,14 +69,14 @@ public class TermsOfServiceView extends FrameLayout {
                                         MessagesController.getInstance(TermsOfServiceView.this.currentAccount).performLogout(0);
                                         return;
                                     }
-                                    String errorText = LocaleController.getString("ErrorOccurred", C0500R.string.ErrorOccurred);
+                                    String errorText = LocaleController.getString("ErrorOccurred", C0501R.string.ErrorOccurred);
                                     if (error != null) {
                                         errorText = errorText + "\n" + error.text;
                                     }
                                     Builder builder = new Builder(TermsOfServiceView.this.getContext());
-                                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
                                     builder.setMessage(errorText);
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                     builder.show();
                                 }
                             });
@@ -86,38 +86,38 @@ public class TermsOfServiceView extends FrameLayout {
                 }
             }
 
-            C17371() {
+            C17381() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
                 Builder builder = new Builder(TermsOfServiceView.this.getContext());
-                builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", C0500R.string.TosDeclineDeleteAccount));
-                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("Deactivate", C0500R.string.Deactivate), new C17361());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", C0501R.string.TosDeclineDeleteAccount));
+                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                builder.setPositiveButton(LocaleController.getString("Deactivate", C0501R.string.Deactivate), new C17371());
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                 builder.show();
             }
         }
 
-        C17381() {
+        C17391() {
         }
 
         public void onClick(View view) {
             Builder builder = new Builder(view.getContext());
-            builder.setTitle(LocaleController.getString("TermsOfService", C0500R.string.TermsOfService));
-            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", C0500R.string.DeclineDeactivate), new C17371());
-            builder.setNegativeButton(LocaleController.getString("Back", C0500R.string.Back), null);
-            builder.setMessage(LocaleController.getString("TosUpdateDecline", C0500R.string.TosUpdateDecline));
+            builder.setTitle(LocaleController.getString("TermsOfService", C0501R.string.TermsOfService));
+            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", C0501R.string.DeclineDeactivate), new C17381());
+            builder.setNegativeButton(LocaleController.getString("Back", C0501R.string.Back), null);
+            builder.setMessage(LocaleController.getString("TosUpdateDecline", C0501R.string.TosUpdateDecline));
             builder.show();
         }
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2 */
-    class C17402 implements OnClickListener {
+    class C17412 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2$1 */
-        class C17391 implements DialogInterface.OnClickListener {
-            C17391() {
+        class C17401 implements DialogInterface.OnClickListener {
+            C17401() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -125,16 +125,16 @@ public class TermsOfServiceView extends FrameLayout {
             }
         }
 
-        C17402() {
+        C17412() {
         }
 
         public void onClick(View view) {
             if (TermsOfServiceView.this.currentTos.min_age_confirm != 0) {
                 Builder builder = new Builder(view.getContext());
-                builder.setTitle(LocaleController.getString("TosAgeTitle", C0500R.string.TosAgeTitle));
-                builder.setPositiveButton(LocaleController.getString("Agree", C0500R.string.Agree), new C17391());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
-                builder.setMessage(LocaleController.formatString("TosAgeText", C0500R.string.TosAgeText, LocaleController.formatPluralString("Years", TermsOfServiceView.this.currentTos.min_age_confirm)));
+                builder.setTitle(LocaleController.getString("TosAgeTitle", C0501R.string.TosAgeTitle));
+                builder.setPositiveButton(LocaleController.getString("Agree", C0501R.string.Agree), new C17401());
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+                builder.setMessage(LocaleController.formatString("TosAgeText", C0501R.string.TosAgeText, LocaleController.formatPluralString("Years", TermsOfServiceView.this.currentTos.min_age_confirm)));
                 builder.show();
                 return;
             }
@@ -143,8 +143,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$3 */
-    class C17413 implements RequestDelegate {
-        C17413() {
+    class C17423 implements RequestDelegate {
+        C17423() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -167,14 +167,14 @@ public class TermsOfServiceView extends FrameLayout {
             addView(view, new LayoutParams(-1, AndroidUtilities.statusBarHeight));
         }
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(C0500R.drawable.logo_middle);
+        imageView.setImageResource(C0501R.drawable.logo_middle);
         addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, (float) (top + 30), 0.0f, 0.0f));
         TextView titleTextView = new TextView(context);
         titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         titleTextView.setTextSize(1, 17.0f);
         titleTextView.setGravity(51);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", C0500R.string.PrivacyPolicyAndTerms));
+        titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", C0501R.string.PrivacyPolicyAndTerms));
         addView(titleTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 27.0f, (float) (top + 126), 27.0f, 75.0f));
         ScrollView scrollView = new ScrollView(context);
         AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor(Theme.key_actionBarDefault));
@@ -188,21 +188,21 @@ public class TermsOfServiceView extends FrameLayout {
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         scrollView.addView(this.textView, new LayoutParams(-2, -2));
         TextView declineTextView = new TextView(context);
-        declineTextView.setText(LocaleController.getString("Decline", C0500R.string.Decline).toUpperCase());
+        declineTextView.setText(LocaleController.getString("Decline", C0501R.string.Decline).toUpperCase());
         declineTextView.setGravity(17);
         declineTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         declineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         declineTextView.setTextSize(1, 16.0f);
         declineTextView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         addView(declineTextView, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
-        declineTextView.setOnClickListener(new C17381());
+        declineTextView.setOnClickListener(new C17391());
         TextView acceptTextView = new TextView(context);
-        acceptTextView.setText(LocaleController.getString("Accept", C0500R.string.Accept).toUpperCase());
+        acceptTextView.setText(LocaleController.getString("Accept", C0501R.string.Accept).toUpperCase());
         acceptTextView.setGravity(17);
         acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         acceptTextView.setTextColor(-1);
         acceptTextView.setTextSize(1, 16.0f);
-        acceptTextView.setBackgroundResource(C0500R.drawable.regbtn_states);
+        acceptTextView.setBackgroundResource(C0501R.drawable.regbtn_states);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(acceptTextView, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -211,14 +211,14 @@ public class TermsOfServiceView extends FrameLayout {
         }
         acceptTextView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         addView(acceptTextView, LayoutHelper.createFrame(-2, -2.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
-        acceptTextView.setOnClickListener(new C17402());
+        acceptTextView.setOnClickListener(new C17412());
     }
 
     private void accept() {
         this.delegate.onAcceptTerms(this.currentAccount);
         TL_help_acceptTermsOfService req = new TL_help_acceptTermsOfService();
         req.id = this.currentTos.id;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C17413());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C17423());
     }
 
     public void show(int account, TL_help_termsOfService tos) {

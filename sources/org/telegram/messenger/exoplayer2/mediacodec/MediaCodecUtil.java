@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -161,7 +161,7 @@ public final class MediaCodecUtil {
         AVC_LEVEL_NUMBER_TO_CONST.put(42, MessagesController.UPDATE_MASK_CHANNEL);
         AVC_LEVEL_NUMBER_TO_CONST.put(50, MessagesController.UPDATE_MASK_CHAT_ADMINS);
         AVC_LEVEL_NUMBER_TO_CONST.put(51, 32768);
-        AVC_LEVEL_NUMBER_TO_CONST.put(52, C0615C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        AVC_LEVEL_NUMBER_TO_CONST.put(52, C0616C.DEFAULT_BUFFER_SEGMENT_SIZE);
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L30", Integer.valueOf(1));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L60", Integer.valueOf(4));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L63", Integer.valueOf(16));
@@ -170,7 +170,7 @@ public final class MediaCodecUtil {
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L120", Integer.valueOf(1024));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L123", Integer.valueOf(4096));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L150", Integer.valueOf(MessagesController.UPDATE_MASK_CHAT_ADMINS));
-        HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L153", Integer.valueOf(C0615C.DEFAULT_BUFFER_SEGMENT_SIZE));
+        HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L153", Integer.valueOf(C0616C.DEFAULT_BUFFER_SEGMENT_SIZE));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L156", Integer.valueOf(262144));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L180", Integer.valueOf(ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L183", Integer.valueOf(4194304));
@@ -500,7 +500,7 @@ public final class MediaCodecUtil {
                 return 5652480;
             case 32768:
                 return 9437184;
-            case C0615C.DEFAULT_BUFFER_SEGMENT_SIZE /*65536*/:
+            case C0616C.DEFAULT_BUFFER_SEGMENT_SIZE /*65536*/:
                 return 9437184;
             default:
                 return -1;

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -26,8 +26,8 @@ public class ChannelIntroActivity extends BaseFragment {
     private TextView whatIsChannelText;
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class C12781 extends ActionBarMenuOnItemClick {
-        C12781() {
+    class C12791 extends ActionBarMenuOnItemClick {
+        C12791() {
         }
 
         public void onItemClick(int id) {
@@ -38,8 +38,8 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
-    class C12803 implements OnTouchListener {
-        C12803() {
+    class C12813 implements OnTouchListener {
+        C12813() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -48,8 +48,8 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$4 */
-    class C12814 implements OnClickListener {
-        C12814() {
+    class C12824 implements OnClickListener {
+        C12824() {
         }
 
         public void onClick(View v) {
@@ -61,14 +61,14 @@ public class ChannelIntroActivity extends BaseFragment {
 
     public View createView(Context context) {
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         this.actionBar.setCastShadows(false);
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C12781());
+        this.actionBar.setActionBarMenuOnItemClick(new C12791());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -116,31 +116,31 @@ public class ChannelIntroActivity extends BaseFragment {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C12803());
+        viewGroup.setOnTouchListener(new C12813());
         this.imageView = new ImageView(context);
-        this.imageView.setImageResource(C0500R.drawable.channelintro);
+        this.imageView.setImageResource(C0501R.drawable.channelintro);
         this.imageView.setScaleType(ScaleType.FIT_CENTER);
         viewGroup.addView(this.imageView);
         this.whatIsChannelText = new TextView(context);
         this.whatIsChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.whatIsChannelText.setGravity(1);
         this.whatIsChannelText.setTextSize(1, 24.0f);
-        this.whatIsChannelText.setText(LocaleController.getString("ChannelAlertTitle", C0500R.string.ChannelAlertTitle));
+        this.whatIsChannelText.setText(LocaleController.getString("ChannelAlertTitle", C0501R.string.ChannelAlertTitle));
         viewGroup.addView(this.whatIsChannelText);
         this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        this.descriptionText.setText(LocaleController.getString("ChannelAlertText", C0500R.string.ChannelAlertText));
+        this.descriptionText.setText(LocaleController.getString("ChannelAlertText", C0501R.string.ChannelAlertText));
         viewGroup.addView(this.descriptionText);
         this.createChannelText = new TextView(context);
         this.createChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText5));
         this.createChannelText.setGravity(17);
         this.createChannelText.setTextSize(1, 16.0f);
         this.createChannelText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", C0500R.string.ChannelAlertCreate));
+        this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", C0501R.string.ChannelAlertCreate));
         viewGroup.addView(this.createChannelText);
-        this.createChannelText.setOnClickListener(new C12814());
+        this.createChannelText.setOnClickListener(new C12824());
         return this.fragmentView;
     }
 

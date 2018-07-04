@@ -4,7 +4,7 @@ import android.net.Uri;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class AdPlaybackState {
@@ -153,7 +153,7 @@ public final class AdPlaybackState {
             int oldDurationsUsCount = durationsUs.length;
             int newDurationsUsCount = Math.max(count, oldDurationsUsCount);
             durationsUs = Arrays.copyOf(durationsUs, newDurationsUsCount);
-            Arrays.fill(durationsUs, oldDurationsUsCount, newDurationsUsCount, C0615C.TIME_UNSET);
+            Arrays.fill(durationsUs, oldDurationsUsCount, newDurationsUsCount, C0616C.TIME_UNSET);
             return durationsUs;
         }
     }
@@ -171,7 +171,7 @@ public final class AdPlaybackState {
             this.adGroups[i] = new AdGroup();
         }
         this.adResumePositionUs = 0;
-        this.contentDurationUs = C0615C.TIME_UNSET;
+        this.contentDurationUs = C0616C.TIME_UNSET;
     }
 
     private AdPlaybackState(long[] adGroupTimesUs, AdGroup[] adGroups, long adResumePositionUs, long contentDurationUs) {

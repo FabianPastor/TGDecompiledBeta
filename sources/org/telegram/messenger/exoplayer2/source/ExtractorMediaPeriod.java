@@ -5,7 +5,7 @@ import android.os.Handler;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -75,8 +75,8 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     private final Uri uri;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.ExtractorMediaPeriod$1 */
-    class C07001 implements Runnable {
-        C07001() {
+    class C07011 implements Runnable {
+        C07011() {
         }
 
         public void run() {
@@ -85,8 +85,8 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.ExtractorMediaPeriod$2 */
-    class C07012 implements Runnable {
-        C07012() {
+    class C07022 implements Runnable {
+        C07022() {
         }
 
         public void run() {
@@ -272,14 +272,14 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         this.continueLoadingCheckIntervalBytes = (long) continueLoadingCheckIntervalBytes;
         this.extractorHolder = new ExtractorHolder(extractors, this);
         this.loadCondition = new ConditionVariable();
-        this.maybeFinishPrepareRunnable = new C07001();
-        this.onContinueLoadingRequestedRunnable = new C07012();
+        this.maybeFinishPrepareRunnable = new C07011();
+        this.onContinueLoadingRequestedRunnable = new C07022();
         this.handler = new Handler();
         this.sampleQueueTrackIds = new int[0];
         this.sampleQueues = new SampleQueue[0];
-        this.pendingResetPositionUs = C0615C.TIME_UNSET;
+        this.pendingResetPositionUs = C0616C.TIME_UNSET;
         this.length = -1;
-        this.durationUs = C0615C.TIME_UNSET;
+        this.durationUs = C0616C.TIME_UNSET;
         if (minLoadableRetryCount == -1) {
             minLoadableRetryCount = 3;
         }
@@ -417,7 +417,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             this.notifiedReadingStarted = true;
         }
         if (!this.notifyDiscontinuity || (!this.loadingFinished && getExtractedSamplesCount() <= this.extractedSamplesCountAtStartOfLoad)) {
-            return C0615C.TIME_UNSET;
+            return C0616C.TIME_UNSET;
         }
         this.notifyDiscontinuity = false;
         return this.lastSeekPositionUs;
@@ -555,7 +555,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public void onLoadCompleted(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
-        if (this.durationUs == C0615C.TIME_UNSET) {
+        if (this.durationUs == C0616C.TIME_UNSET) {
             long largestQueuedTimestampUs = getLargestQueuedTimestampUs();
             this.durationUs = largestQueuedTimestampUs == Long.MIN_VALUE ? 0 : DEFAULT_LAST_SAMPLE_DURATION_US + largestQueuedTimestampUs;
             this.listener.onSourceInfoRefreshed(this.durationUs, this.seekMap.isSeekable());
@@ -657,7 +657,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 this.haveAudioVideoTracks |= isAudioVideo;
             }
             this.tracks = new TrackGroupArray(trackArray);
-            if (this.minLoadableRetryCount == -1 && this.length == -1 && this.seekMap.getDurationUs() == C0615C.TIME_UNSET) {
+            if (this.minLoadableRetryCount == -1 && this.length == -1 && this.seekMap.getDurationUs() == C0616C.TIME_UNSET) {
                 this.actualMinLoadableRetryCount = 6;
             }
             this.prepared = true;
@@ -676,12 +676,12 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         ExtractingLoadable loadable = new ExtractingLoadable(this.uri, this.dataSource, this.extractorHolder, this.loadCondition);
         if (this.prepared) {
             Assertions.checkState(isPendingReset());
-            if (this.durationUs == C0615C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
+            if (this.durationUs == C0616C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
                 loadable.setLoadPosition(this.seekMap.getSeekPoints(this.pendingResetPositionUs).first.position, this.pendingResetPositionUs);
-                this.pendingResetPositionUs = C0615C.TIME_UNSET;
+                this.pendingResetPositionUs = C0616C.TIME_UNSET;
             } else {
                 this.loadingFinished = true;
-                this.pendingResetPositionUs = C0615C.TIME_UNSET;
+                this.pendingResetPositionUs = C0616C.TIME_UNSET;
                 return;
             }
         }
@@ -691,7 +691,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
 
     private boolean configureRetry(ExtractingLoadable loadable, int currentExtractedSampleCount) {
         int i = 0;
-        if (this.length != -1 || (this.seekMap != null && this.seekMap.getDurationUs() != C0615C.TIME_UNSET)) {
+        if (this.length != -1 || (this.seekMap != null && this.seekMap.getDurationUs() != C0616C.TIME_UNSET)) {
             this.extractedSamplesCountAtStartOfLoad = currentExtractedSampleCount;
             return true;
         } else if (!this.prepared || suppressRead()) {
@@ -749,7 +749,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     private boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0615C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0616C.TIME_UNSET;
     }
 
     private static boolean isLoadableExceptionFatal(IOException e) {

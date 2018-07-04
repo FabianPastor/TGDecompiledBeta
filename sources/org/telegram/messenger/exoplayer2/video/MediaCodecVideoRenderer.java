@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.Surface;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.exoplayer2.BaseRenderer;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
@@ -128,9 +128,9 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         this.deviceNeedsAutoFrcWorkaround = deviceNeedsAutoFrcWorkaround();
         this.pendingOutputStreamOffsetsUs = new long[10];
         this.pendingOutputStreamSwitchTimesUs = new long[10];
-        this.outputStreamOffsetUs = C0615C.TIME_UNSET;
-        this.lastInputTimeUs = C0615C.TIME_UNSET;
-        this.joiningDeadlineMs = C0615C.TIME_UNSET;
+        this.outputStreamOffsetUs = C0616C.TIME_UNSET;
+        this.lastInputTimeUs = C0616C.TIME_UNSET;
+        this.joiningDeadlineMs = C0616C.TIME_UNSET;
         this.currentWidth = -1;
         this.currentHeight = -1;
         this.currentPixelWidthHeightRatio = -1.0f;
@@ -182,7 +182,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
-        if (this.outputStreamOffsetUs == C0615C.TIME_UNSET) {
+        if (this.outputStreamOffsetUs == C0616C.TIME_UNSET) {
             this.outputStreamOffsetUs = offsetUs;
         } else {
             if (this.pendingOutputStreamOffsetCount == this.pendingOutputStreamOffsetsUs.length) {
@@ -199,9 +199,9 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
         super.onPositionReset(positionUs, joining);
         clearRenderedFirstFrame();
-        this.initialPositionUs = C0615C.TIME_UNSET;
+        this.initialPositionUs = C0616C.TIME_UNSET;
         this.consecutiveDroppedFrameCount = 0;
-        this.lastInputTimeUs = C0615C.TIME_UNSET;
+        this.lastInputTimeUs = C0616C.TIME_UNSET;
         if (this.pendingOutputStreamOffsetCount != 0) {
             this.outputStreamOffsetUs = this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1];
             this.pendingOutputStreamOffsetCount = 0;
@@ -209,21 +209,21 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         if (joining) {
             setJoiningDeadlineMs();
         } else {
-            this.joiningDeadlineMs = C0615C.TIME_UNSET;
+            this.joiningDeadlineMs = C0616C.TIME_UNSET;
         }
     }
 
     public boolean isReady() {
         if (super.isReady() && (this.renderedFirstFrame || ((this.dummySurface != null && this.surface == this.dummySurface) || getCodec() == null || this.tunneling))) {
-            this.joiningDeadlineMs = C0615C.TIME_UNSET;
+            this.joiningDeadlineMs = C0616C.TIME_UNSET;
             return true;
-        } else if (this.joiningDeadlineMs == C0615C.TIME_UNSET) {
+        } else if (this.joiningDeadlineMs == C0616C.TIME_UNSET) {
             return false;
         } else {
             if (SystemClock.elapsedRealtime() < this.joiningDeadlineMs) {
                 return true;
             }
-            this.joiningDeadlineMs = C0615C.TIME_UNSET;
+            this.joiningDeadlineMs = C0616C.TIME_UNSET;
             return false;
         }
     }
@@ -236,7 +236,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected void onStopped() {
-        this.joiningDeadlineMs = C0615C.TIME_UNSET;
+        this.joiningDeadlineMs = C0616C.TIME_UNSET;
         maybeNotifyDroppedFrames();
         super.onStopped();
     }
@@ -246,8 +246,8 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         this.currentHeight = -1;
         this.currentPixelWidthHeightRatio = -1.0f;
         this.pendingPixelWidthHeightRatio = -1.0f;
-        this.outputStreamOffsetUs = C0615C.TIME_UNSET;
-        this.lastInputTimeUs = C0615C.TIME_UNSET;
+        this.outputStreamOffsetUs = C0616C.TIME_UNSET;
+        this.lastInputTimeUs = C0616C.TIME_UNSET;
         this.pendingOutputStreamOffsetCount = 0;
         clearReportedVideoSize();
         clearRenderedFirstFrame();
@@ -412,7 +412,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
-        if (this.initialPositionUs == C0615C.TIME_UNSET) {
+        if (this.initialPositionUs == C0616C.TIME_UNSET) {
             this.initialPositionUs = positionUs;
         }
         long presentationTimeUs = bufferPresentationTimeUs - this.outputStreamOffsetUs;
@@ -562,7 +562,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     private void setJoiningDeadlineMs() {
-        this.joiningDeadlineMs = this.allowedJoiningTimeMs > 0 ? SystemClock.elapsedRealtime() + this.allowedJoiningTimeMs : C0615C.TIME_UNSET;
+        this.joiningDeadlineMs = this.allowedJoiningTimeMs > 0 ? SystemClock.elapsedRealtime() + this.allowedJoiningTimeMs : C0616C.TIME_UNSET;
     }
 
     private void clearRenderedFirstFrame() {

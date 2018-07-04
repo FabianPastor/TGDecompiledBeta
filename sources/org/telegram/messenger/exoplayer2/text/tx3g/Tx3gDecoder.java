@@ -7,7 +7,7 @@ import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 import java.nio.charset.Charset;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.Subtitle;
@@ -53,7 +53,7 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
             byte[] initializationBytes = (byte[]) initializationData.get(0);
             this.defaultFontFace = initializationBytes[24];
             this.defaultColorRgba = ((((initializationBytes[26] & 255) << 24) | ((initializationBytes[27] & 255) << 16)) | ((initializationBytes[28] & 255) << 8)) | (initializationBytes[29] & 255);
-            this.defaultFontFamily = TX3G_SERIF.equals(new String(initializationBytes, 43, initializationBytes.length + -43)) ? C0615C.SERIF_NAME : "sans-serif";
+            this.defaultFontFamily = TX3G_SERIF.equals(new String(initializationBytes, 43, initializationBytes.length + -43)) ? C0616C.SERIF_NAME : "sans-serif";
             this.calculatedVideoTrackHeight = initializationBytes[25] * 20;
             if ((initializationBytes[0] & 32) != 0) {
                 z = true;
@@ -115,10 +115,10 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
         if (parsableByteArray.bytesLeft() >= 2) {
             char firstChar = parsableByteArray.peekChar();
             if (firstChar == BOM_UTF16_BE || firstChar == BOM_UTF16_LE) {
-                return parsableByteArray.readString(textLength, Charset.forName(C0615C.UTF16_NAME));
+                return parsableByteArray.readString(textLength, Charset.forName(C0616C.UTF16_NAME));
             }
         }
-        return parsableByteArray.readString(textLength, Charset.forName(C0615C.UTF8_NAME));
+        return parsableByteArray.readString(textLength, Charset.forName(C0616C.UTF8_NAME));
     }
 
     private void applyStyleRecord(ParsableByteArray parsableByteArray, SpannableStringBuilder cueText) throws SubtitleDecoderException {

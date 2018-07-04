@@ -5,13 +5,13 @@ import android.os.Parcelable.Creator;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class UrlLinkFrame extends Id3Frame {
-    public static final Creator<UrlLinkFrame> CREATOR = new C06801();
+    public static final Creator<UrlLinkFrame> CREATOR = new C06811();
     public final String description;
     public final String url;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.UrlLinkFrame$1 */
-    static class C06801 implements Creator<UrlLinkFrame> {
-        C06801() {
+    static class C06811 implements Creator<UrlLinkFrame> {
+        C06811() {
         }
 
         public UrlLinkFrame createFromParcel(Parcel in) {

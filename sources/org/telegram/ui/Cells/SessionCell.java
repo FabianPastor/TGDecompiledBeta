@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -100,7 +100,7 @@ public class SessionCell extends FrameLayout {
             this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
             if ((session.flags & 1) != 0) {
                 setTag(Theme.key_windowBackgroundWhiteValueText);
-                this.onlineTextView.setText(LocaleController.getString("Online", C0500R.string.Online));
+                this.onlineTextView.setText(LocaleController.getString("Online", C0501R.string.Online));
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
             } else {
                 setTag(Theme.key_windowBackgroundWhiteGrayText3);
@@ -141,7 +141,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", C0500R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString("UnofficialApp", C0501R.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");

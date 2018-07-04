@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -54,10 +54,10 @@ public class VideoTimelinePlayView extends View {
     private long videoLength;
 
     /* renamed from: org.telegram.ui.Components.VideoTimelinePlayView$1 */
-    class C17611 extends AsyncTask<Integer, Integer, Bitmap> {
+    class C17621 extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C17611() {
+        C17621() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -125,9 +125,9 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(-1);
         this.paint2 = new Paint();
         this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.drawableLeft = context.getResources().getDrawable(C0500R.drawable.video_cropleft);
+        this.drawableLeft = context.getResources().getDrawable(C0501R.drawable.video_cropleft);
         this.drawableLeft.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
-        this.drawableRight = context.getResources().getDrawable(C0500R.drawable.video_cropright);
+        this.drawableRight = context.getResources().getDrawable(C0501R.drawable.video_cropright);
         this.drawableRight.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
     }
 
@@ -323,7 +323,7 @@ public class VideoTimelinePlayView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C17611();
+            this.currentTask = new C17621();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }

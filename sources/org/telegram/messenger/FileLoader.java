@@ -63,14 +63,14 @@ public class FileLoader {
     private LinkedList<FileUploadOperation> uploadSmallOperationQueue = new LinkedList();
 
     /* renamed from: org.telegram.messenger.FileLoader$5 */
-    class C01975 implements FileLoadOperationDelegate {
+    class C01985 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
         final /* synthetic */ String val$finalFileName;
         final /* synthetic */ int val$finalType;
         final /* synthetic */ FileLocation val$location;
         final /* synthetic */ WebFile val$webDocument;
 
-        C01975(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
+        C01985(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
             this.val$finalFileName = str;
             this.val$finalType = i;
             this.val$document = document;
@@ -224,11 +224,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$3$1 */
-                class C01941 implements FileUploadOperationDelegate {
+                class C01951 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$3$1$2 */
-                    class C01932 implements Runnable {
-                        C01932() {
+                    class C01942 implements Runnable {
+                        C01942() {
                         }
 
                         public void run() {
@@ -265,7 +265,7 @@ public class FileLoader {
                         }
                     }
 
-                    C01941() {
+                    C01951() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -309,7 +309,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01932());
+                        FileLoader.fileLoaderQueue.postRunnable(new C01942());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -338,7 +338,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C01941());
+                    operation.setDelegate(new C01951());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;

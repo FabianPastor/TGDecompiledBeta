@@ -447,6 +447,7 @@
     <string name="ConnectingConnectProxy">Mit Proxy verbinden</string>
     <string name="ConnectingToProxy">Verbinde mit Proxy</string>
     <string name="ConnectingToProxyEnable">Aktivieren</string>
+    <string name="ContactBirthday">Geburtstag</string>
     <string name="ContactJob">Arbeit</string>
     <string name="ContactJobTitle">Position</string>
     <string name="ContactJoined">Kontakt ist Telegram beigetreten</string>
@@ -589,6 +590,7 @@
     <string name="EditMessageMedia">Antippen, um Medium zu bearbeiten</string>
     <string name="EditName">Name bearbeiten</string>
     <string name="EditedMessage">bearbeitet</string>
+    <string name="EmailCopied">E-Mail in die Zwischenablage kopiert</string>
     <string name="EmailPasswordConfirmText">Bitte folge diesen Schritten um die zweistufige Bestätigung abzuschließen:\n\n1. Überprüfe deine Mails (auch den Spam-Ordner)\n%1$s\n\n2. Auf den Link klicken.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Draw single big emoji</string>
@@ -1028,6 +1030,7 @@
     <string name="Minutes_two">%1$d Minuten</string>
     <string name="Minutes_zero">%1$d Minuten</string>
     <string name="MobileUsage">Mobile Datennutzung</string>
+    <string name="Mono">Mono</string>
     <string name="Months_few">%1$d Monate</string>
     <string name="Months_many">%1$d Monate</string>
     <string name="Months_one">%1$d Monat</string>
@@ -1035,7 +1038,7 @@
     <string name="Months_two">%1$d Monate</string>
     <string name="Months_zero">%1$d Monate</string>
     <string name="MoreInfo">Mehr Infos</string>
-    <string name="MuteDisable">Dauerhaft Stumm</string>
+    <string name="MuteDisable">Deaktivieren</string>
     <string name="MuteFor">Stumm für %1$s</string>
     <string name="MuteNotifications">Stummschalten</string>
     <string name="NearbyPlaces">ODER WÄHLE EINEN ORT</string>
@@ -1436,7 +1439,8 @@
     <string name="PermissionOpenSettings">EINSTELLUNGEN</string>
     <string name="PermissionStorage">Telegram benötigt Zugriff auf deinen Speicher, damit du Bilder, Videos und Musik senden und speichern kannst.</string>
     <string name="Phone">Telefon</string>
-    <string name="PhoneHome">Festnetz</string>
+    <string name="PhoneCopied">Telefon in die Zwischenablage kopiert</string>
+    <string name="PhoneHome">Zuhause</string>
     <string name="PhoneMain">Hauptnummer</string>
     <string name="PhoneMobile">Mobil</string>
     <string name="PhoneNumberAlert">Deinen Kontakten wird deine neue Nummer ihrem Telefonbuch hinzugefügt, sofern sie deine alte Nummer gespeichert hatten und du sie nicht blockiert hattest.</string>
@@ -1464,6 +1468,7 @@
     <string name="PleaseEnterCurrentPassword">Bitte aktuelles Kennwort eingeben</string>
     <string name="PleaseEnterFirstPassword">Kennwort eingeben</string>
     <string name="PleaseEnterPassword">Bitte neues Kennwort eingeben</string>
+    <string name="PleaseLoginPassport">Bitte melde dich mit deinem Telegram-Konto an, um Telegram Passport nutzen zu können.</string>
     <string name="PleaseReEnterPassword">Bitte erneut dein Kennwort eingeben</string>
     <string name="PleaseStreamDownload">Bitte warte, bis das Video vollständig heruntergeladen wurde.</string>
     <string name="Points_few">%1$d Punkte</string>
@@ -1756,7 +1761,7 @@
     <string name="SyncContacts">Kontakte synchronisieren</string>
     <string name="SyncContactsAdded">Kontakte von diesem Gerät wurden deinem Konto hinzugefügt.</string>
     <string name="SyncContactsDelete">Synchronisierte Kontakte löschen</string>
-    <string name="SyncContactsDeleteInfo">Das wird deine Kontakte von den Telegram-Servern entfernen.Wenn \'Kontakte synchronisieren\' aktiviert ist, werden deine Kontakte erneut synchronisiert.</string>
+    <string name="SyncContactsDeleteInfo">Das wird deine Kontakte von den Telegram-Servern entfernen. Wenn \'Kontakte synchronisieren\' aktiviert ist, werden deine Kontakte erneut synchronisiert.</string>
     <string name="SyncContactsInfoOff">Aktiviere diese Option, um Kontakte von diesem Gerät durchgehend mit deinem Konto zu synchronisieren.</string>
     <string name="SyncContactsInfoOn">Kontakte dieses Gerätes werden deinem Konto hinzugefügt.</string>
     <string name="SyncContactsOff">Kontakte von diesem Gerät werden deinem Konto nicht hinzugefügt.</string>
@@ -1786,7 +1791,7 @@
     <string name="TerminateWebSessionQuestion">%1$s trennen?</string>
     <string name="TerminateWebSessionStop">%1$s blockieren</string>
     <string name="TermsOfService">Nutzungsbedingungen</string>
-    <string name="TermsOfServiceLogin">Mit der Registrierung\nstimmst du den *Nutzungsbedigungen* zu.</string>
+    <string name="TermsOfServiceLogin">Mit der Registrierung\nstimmst du den *Nutzungsbedingungen* zu.</string>
     <string name="TextCopied">Text in die Zwischenablage kopiert</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>

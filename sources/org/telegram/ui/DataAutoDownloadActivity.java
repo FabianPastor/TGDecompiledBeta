@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -72,8 +72,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     private int wifiSectionRow;
 
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$1 */
-    class C18191 extends ActionBarMenuOnItemClick {
-        C18191() {
+    class C18201 extends ActionBarMenuOnItemClick {
+        C18201() {
         }
 
         public void onItemClick(int id) {
@@ -114,8 +114,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$2 */
-    class C18202 implements OnItemClickListener {
-        C18202() {
+    class C18212 implements OnItemClickListener {
+        C18212() {
         }
 
         public void onItemClick(View view, int position) {
@@ -151,31 +151,31 @@ public class DataAutoDownloadActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0500R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     }
                 case 1:
                     TextCheckBoxCell textCell = holder.itemView;
                     String string;
                     if (position == DataAutoDownloadActivity.this.mContactsRow || position == DataAutoDownloadActivity.this.wContactsRow || position == DataAutoDownloadActivity.this.rContactsRow) {
-                        string = LocaleController.getString("AutodownloadContacts", C0500R.string.AutodownloadContacts);
+                        string = LocaleController.getString("AutodownloadContacts", C0501R.string.AutodownloadContacts);
                         if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
                             z = true;
                         }
                         textCell.setTextAndCheck(string, z, true);
                         return;
                     } else if (position == DataAutoDownloadActivity.this.mPrivateRow || position == DataAutoDownloadActivity.this.wPrivateRow || position == DataAutoDownloadActivity.this.rPrivateRow) {
-                        string = LocaleController.getString("AutodownloadPrivateChats", C0500R.string.AutodownloadPrivateChats);
+                        string = LocaleController.getString("AutodownloadPrivateChats", C0501R.string.AutodownloadPrivateChats);
                         if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
                             z = true;
                         }
                         textCell.setTextAndCheck(string, z, true);
                         return;
                     } else if (position == DataAutoDownloadActivity.this.mChannelsRow || position == DataAutoDownloadActivity.this.wChannelsRow || position == DataAutoDownloadActivity.this.rChannelsRow) {
-                        String string2 = LocaleController.getString("AutodownloadChannels", C0500R.string.AutodownloadChannels);
+                        String string2 = LocaleController.getString("AutodownloadChannels", C0501R.string.AutodownloadChannels);
                         boolean z3 = (DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0;
                         if (DataAutoDownloadActivity.this.mSizeRow == -1) {
                             z2 = false;
@@ -183,7 +183,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                         textCell.setTextAndCheck(string2, z3, z2);
                         return;
                     } else if (position == DataAutoDownloadActivity.this.mGroupRow || position == DataAutoDownloadActivity.this.wGroupRow || position == DataAutoDownloadActivity.this.rGroupRow) {
-                        string = LocaleController.getString("AutodownloadGroupChats", C0500R.string.AutodownloadGroupChats);
+                        string = LocaleController.getString("AutodownloadGroupChats", C0501R.string.AutodownloadGroupChats);
                         if ((DataAutoDownloadActivity.this.getMaskForRow(position) & DataAutoDownloadActivity.this.currentType) != 0) {
                             z = true;
                         }
@@ -195,13 +195,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == DataAutoDownloadActivity.this.mobileSectionRow) {
-                        headerCell.setText(LocaleController.getString("WhenUsingMobileData", C0500R.string.WhenUsingMobileData));
+                        headerCell.setText(LocaleController.getString("WhenUsingMobileData", C0501R.string.WhenUsingMobileData));
                         return;
                     } else if (position == DataAutoDownloadActivity.this.wifiSectionRow) {
-                        headerCell.setText(LocaleController.getString("WhenConnectedOnWiFi", C0500R.string.WhenConnectedOnWiFi));
+                        headerCell.setText(LocaleController.getString("WhenConnectedOnWiFi", C0501R.string.WhenConnectedOnWiFi));
                         return;
                     } else if (position == DataAutoDownloadActivity.this.roamingSectionRow) {
-                        headerCell.setText(LocaleController.getString("WhenRoaming", C0500R.string.WhenRoaming));
+                        headerCell.setText(LocaleController.getString("WhenRoaming", C0501R.string.WhenRoaming));
                         return;
                     } else {
                         return;
@@ -389,28 +389,28 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         if (this.currentType == 1) {
-            this.actionBar.setTitle(LocaleController.getString("LocalPhotoCache", C0500R.string.LocalPhotoCache));
+            this.actionBar.setTitle(LocaleController.getString("LocalPhotoCache", C0501R.string.LocalPhotoCache));
         } else if (this.currentType == 2) {
-            this.actionBar.setTitle(LocaleController.getString("AudioAutodownload", C0500R.string.AudioAutodownload));
+            this.actionBar.setTitle(LocaleController.getString("AudioAutodownload", C0501R.string.AudioAutodownload));
         } else if (this.currentType == 64) {
-            this.actionBar.setTitle(LocaleController.getString("VideoMessagesAutodownload", C0500R.string.VideoMessagesAutodownload));
+            this.actionBar.setTitle(LocaleController.getString("VideoMessagesAutodownload", C0501R.string.VideoMessagesAutodownload));
         } else if (this.currentType == 4) {
-            this.actionBar.setTitle(LocaleController.getString("LocalVideoCache", C0500R.string.LocalVideoCache));
+            this.actionBar.setTitle(LocaleController.getString("LocalVideoCache", C0501R.string.LocalVideoCache));
         } else if (this.currentType == 8) {
-            this.actionBar.setTitle(LocaleController.getString("FilesDataUsage", C0500R.string.FilesDataUsage));
+            this.actionBar.setTitle(LocaleController.getString("FilesDataUsage", C0501R.string.FilesDataUsage));
         } else if (this.currentType == 16) {
-            this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0500R.string.AttachMusic));
+            this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0501R.string.AttachMusic));
         } else if (this.currentType == 32) {
-            this.actionBar.setTitle(LocaleController.getString("LocalGifCache", C0500R.string.LocalGifCache));
+            this.actionBar.setTitle(LocaleController.getString("LocalGifCache", C0501R.string.LocalGifCache));
         }
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C18191());
-        this.actionBar.createMenu().addItemWithWidth(1, C0500R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C18201());
+        this.actionBar.createMenu().addItemWithWidth(1, C0501R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -420,7 +420,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C18202());
+        this.listView.setOnItemClickListener(new C18212());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

@@ -17,7 +17,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.CustomTabsCopyReceiver;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -54,8 +54,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C05931 implements ServiceConnectionCallback {
-        C05931() {
+    static class C05941 implements ServiceConnectionCallback {
+        C05941() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -117,7 +117,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C05931());
+                customTabsServiceConnection = new ServiceConnection(new C05941());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -163,6 +163,7 @@ public class Browser {
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom, boolean tryTelegraph) {
         if (context != null && uri != null) {
+            Intent intent;
             final int currentAccount = UserConfig.selectedAccount;
             boolean[] forceBrowser = new boolean[]{false};
             boolean internalUri = isInternalUri(uri, forceBrowser);
@@ -202,8 +203,8 @@ public class Browser {
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                            class C05961 implements OnClickListener {
-                                C05961() {
+                            class C05971 implements OnClickListener {
+                                C05971() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -219,10 +220,10 @@ public class Browser {
                             public void run() {
                                 if (progressDialog[0] != null) {
                                     try {
-                                        progressDialog[0].setMessage(LocaleController.getString("Loading", C0500R.string.Loading));
+                                        progressDialog[0].setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
                                         progressDialog[0].setCanceledOnTouchOutside(false);
                                         progressDialog[0].setCancelable(false);
-                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", C0500R.string.Cancel), new C05961());
+                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new C05971());
                                         progressDialog[0].show();
                                     } catch (Exception e) {
                                     }
@@ -286,20 +287,15 @@ public class Browser {
                         } catch (Exception e3) {
                         }
                         if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
-                            Intent intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                            intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                             intent.setAction("android.intent.action.SEND");
                             PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
                             Builder builder = new Builder(getSession());
-                            builder.addMenuItem(LocaleController.getString("CopyLink", C0500R.string.CopyLink), copy);
+                            builder.addMenuItem(LocaleController.getString("CopyLink", C0501R.string.CopyLink), copy);
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                             builder.setShowTitle(true);
-                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), C0500R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", C0500R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
+                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), C0501R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", C0501R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
                             CustomTabsIntent intent2 = builder.build();
-                            try {
-                                ApplicationLoader.applicationContext.getPackageManager().getPackageInfo("com.android.chrome", 1);
-                                intent2.intent.setPackage("com.android.chrome");
-                            } catch (Throwable th) {
-                            }
                             intent2.setUseNewTask();
                             intent2.launchUrl(context, uri);
                             return;
@@ -310,13 +306,13 @@ public class Browser {
                 FileLog.m3e(e4);
             }
             try {
-                CustomTabsIntent intent3 = new Intent("android.intent.action.VIEW", uri);
+                intent = new Intent("android.intent.action.VIEW", uri);
                 if (internalUri) {
-                    intent3.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                    intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
                 }
-                intent3.putExtra("create_new_tab", true);
-                intent3.putExtra("com.android.browser.application_id", context.getPackageName());
-                context.startActivity(intent3);
+                intent.putExtra("create_new_tab", true);
+                intent.putExtra("com.android.browser.application_id", context.getPackageName());
+                context.startActivity(intent);
             } catch (Throwable e42) {
                 FileLog.m3e(e42);
             }

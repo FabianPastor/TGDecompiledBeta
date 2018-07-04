@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -73,8 +73,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private boolean searching;
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$1 */
-    class C13781 extends ActionBarMenuOnItemClick {
-        C13781() {
+    class C13791 extends ActionBarMenuOnItemClick {
+        C13791() {
         }
 
         public void onItemClick(int id) {
@@ -85,8 +85,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$2 */
-    class C13792 extends ActionBarMenuItemSearchListener {
-        C13792() {
+    class C13802 extends ActionBarMenuItemSearchListener {
+        C13802() {
         }
 
         public void onSearchExpand() {
@@ -123,8 +123,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$3 */
-    class C13803 implements OnItemClickListener {
-        C13803() {
+    class C13813 implements OnItemClickListener {
+        C13813() {
         }
 
         public void onItemClick(View view, int position) {
@@ -155,8 +155,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$4 */
-    class C13814 implements OnItemLongClickListener {
-        C13814() {
+    class C13824 implements OnItemLongClickListener {
+        C13824() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -165,8 +165,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$5 */
-    class C13825 extends OnScrollListener {
-        C13825() {
+    class C13835 extends OnScrollListener {
+        C13835() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -181,8 +181,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$7 */
-    class C13847 implements ThemeDescriptionDelegate {
-        C13847() {
+    class C13857 implements ThemeDescriptionDelegate {
+        C13857() {
         }
 
         public void didSetColor() {
@@ -202,8 +202,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ChatUsersActivity$ListAdapter$1 */
-        class C13851 implements ManageChatUserCellDelegate {
-            C13851() {
+        class C13861 implements ManageChatUserCellDelegate {
+            C13861() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -233,11 +233,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 case 0:
                     view = new ManageChatUserCell(this.mContext, 1, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C13851());
+                    ((ManageChatUserCell) view).setDelegate(new C13861());
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0500R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -294,8 +294,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         private Timer searchTimer;
 
         /* renamed from: org.telegram.ui.ChatUsersActivity$SearchAdapter$4 */
-        class C13904 implements ManageChatUserCellDelegate {
-            C13904() {
+        class C13914 implements ManageChatUserCellDelegate {
+            C13914() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -431,7 +431,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ManageChatUserCell(this.mContext, 2, true);
             view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            ((ManageChatUserCell) view).setDelegate(new C13904());
+            ((ManageChatUserCell) view).setDelegate(new C13914());
             return new Holder(view);
         }
 
@@ -521,18 +521,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         int i = 1;
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupMembers", C0500R.string.GroupMembers));
-        this.actionBar.setActionBarMenuOnItemClick(new C13781());
+        this.actionBar.setTitle(LocaleController.getString("GroupMembers", C0501R.string.GroupMembers));
+        this.actionBar.setActionBarMenuOnItemClick(new C13791());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0500R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13792());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0500R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13802());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -547,9 +547,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C13803());
-        this.listView.setOnItemLongClickListener(new C13814());
-        this.listView.setOnScrollListener(new C13825());
+        this.listView.setOnItemClickListener(new C13813());
+        this.listView.setOnItemLongClickListener(new C13824());
+        this.listView.setOnScrollListener(new C13835());
         if (this.loadingUsers) {
             this.emptyView.showProgress();
         } else {
@@ -581,7 +581,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         ArrayList<String> items = new ArrayList();
         final ArrayList<Integer> actions = new ArrayList();
-        items.add(LocaleController.getString("KickFromGroup", C0500R.string.KickFromGroup));
+        items.add(LocaleController.getString("KickFromGroup", C0501R.string.KickFromGroup));
         actions.add(Integer.valueOf(0));
         Builder builder = new Builder(getParentActivity());
         builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {
@@ -625,7 +625,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C13847();
+        ThemeDescriptionDelegate сellDelegate = new C13857();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[22];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);

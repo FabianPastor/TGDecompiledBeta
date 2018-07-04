@@ -29,6 +29,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -82,7 +83,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -113,7 +114,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
@@ -334,6 +335,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private static final int search = 40;
     private static final int share_contact = 17;
     private static final int star = 22;
+    private static final int text_bold = 50;
+    private static final int text_italic = 51;
+    private static final int text_link = 53;
+    private static final int text_mono = 52;
+    private static final int text_regular = 54;
     private ArrayList<View> actionModeViews = new ArrayList();
     private TextView addContactItem;
     private TextView addToContactsButton;
@@ -352,7 +358,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private ChatAvatarContainer avatarContainer;
     private ChatBigEmptyView bigEmptyView;
     private MessageObject botButtons;
-    private PhotoViewerProvider botContextProvider = new C13352();
+    private PhotoViewerProvider botContextProvider = new C13362();
     private ArrayList<Object> botContextResults;
     private SparseArray<BotInfo> botInfo = new SparseArray();
     private MessageObject botReplyButtons;
@@ -389,6 +395,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     protected User currentUser;
     private long dialog_id;
     private ChatMessageCell drawLaterRoundProgressCell;
+    private int editTextEnd;
+    private ActionBarMenuItem editTextItem;
+    private int editTextStart;
     private MessageObject editingMessageObject;
     private int editingMessageObjectReqId;
     private View emojiButtonRed;
@@ -464,8 +473,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean needSelectFromMessageId;
     private int newMentionsCount;
     private int newUnreadMessageCount;
-    OnItemClickListenerExtended onItemClickListener = new C13414();
-    OnItemLongClickListenerExtended onItemLongClickListener = new C13393();
+    OnItemClickListenerExtended onItemClickListener = new C13424();
+    OnItemLongClickListenerExtended onItemLongClickListener = new C13403();
     private boolean openAnimationEnded;
     private boolean openSearchKeyboard;
     private View overlayView;
@@ -478,7 +487,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean pausedOnLastMessage;
     private String pendingLinkSearchString;
     private Runnable pendingWebPageTimeoutRunnable;
-    private PhotoViewerProvider photoViewerProvider = new C13291();
+    private PhotoViewerProvider photoViewerProvider = new C13301();
     private FileLocation pinnedImageLocation;
     private View pinnedLineView;
     private BackupImageView pinnedMessageImageView;
@@ -554,8 +563,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean wasPaused;
 
     /* renamed from: org.telegram.ui.ChatActivity$1 */
-    class C13291 extends EmptyPhotoViewerProvider {
-        C13291() {
+    class C13301 extends EmptyPhotoViewerProvider {
+        C13301() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -616,8 +625,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$2 */
-    class C13352 extends EmptyPhotoViewerProvider {
-        C13352() {
+    class C13362 extends EmptyPhotoViewerProvider {
+        C13362() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -666,8 +675,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$3 */
-    class C13393 implements OnItemLongClickListenerExtended {
-        C13393() {
+    class C13403 implements OnItemLongClickListenerExtended {
+        C13403() {
         }
 
         public boolean onItemClick(View view, int position, float x, float y) {
@@ -696,8 +705,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$4 */
-    class C13414 implements OnItemClickListenerExtended {
-        C13414() {
+    class C13424 implements OnItemClickListenerExtended {
+        C13424() {
         }
 
         public void onItemClick(View view, int position, float x, float y) {
@@ -719,12 +728,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$6 */
-    class C13546 implements Runnable {
+    class C13556 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ MessagesStorage val$messagesStorage;
         final /* synthetic */ int val$userId;
 
-        C13546(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+        C13556(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$userId = i;
             this.val$countDownLatch = countDownLatch;
@@ -737,12 +746,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$7 */
-    class C13617 implements Runnable {
+    class C13627 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ int val$encId;
         final /* synthetic */ MessagesStorage val$messagesStorage;
 
-        C13617(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+        C13627(MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$encId = i;
             this.val$countDownLatch = countDownLatch;
@@ -755,11 +764,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$8 */
-    class C13658 implements Runnable {
+    class C13668 implements Runnable {
         final /* synthetic */ CountDownLatch val$countDownLatch;
         final /* synthetic */ MessagesStorage val$messagesStorage;
 
-        C13658(MessagesStorage messagesStorage, CountDownLatch countDownLatch) {
+        C13668(MessagesStorage messagesStorage, CountDownLatch countDownLatch) {
             this.val$messagesStorage = messagesStorage;
             this.val$countDownLatch = countDownLatch;
         }
@@ -771,8 +780,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$9 */
-    class C13699 extends ActionBarMenuOnItemClick {
-        C13699() {
+    class C13709 extends ActionBarMenuOnItemClick {
+        C13709() {
         }
 
         public void onItemClick(int id) {
@@ -846,17 +855,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (ChatActivity.this.getParentActivity() != null) {
                     boolean isChat = ((int) ChatActivity.this.dialog_id) < 0 && ((int) (ChatActivity.this.dialog_id >> 32)) != 1;
                     Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
                     if (id == 15) {
-                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", C0500R.string.AreYouSureClearHistory));
+                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", C0501R.string.AreYouSureClearHistory));
                     } else if (isChat) {
-                        builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", C0500R.string.AreYouSureDeleteAndExit));
+                        builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", C0501R.string.AreYouSureDeleteAndExit));
                     } else {
-                        builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", C0500R.string.AreYouSureDeleteThisChat));
+                        builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", C0501R.string.AreYouSureDeleteThisChat));
                     }
                     final int i = id;
                     final boolean z = isChat;
-                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (i != 15) {
                                 if (!z) {
@@ -876,7 +885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             MessagesController.getInstance(ChatActivity.this.currentAccount).deleteDialog(ChatActivity.this.dialog_id, 1);
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                     ChatActivity.this.showDialog(builder.create());
                 }
             } else if (id == 17) {
@@ -974,8 +983,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 SendMessagesHelper.getInstance(ChatActivity.this.currentAccount).sendMessage("/settings", ChatActivity.this.dialog_id, null, null, false, null, null, null);
             } else if (id == ChatActivity.search) {
                 ChatActivity.this.openSearchWithText(null);
-            } else if (id == 32 && ChatActivity.this.currentUser != null && ChatActivity.this.getParentActivity() != null) {
-                VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.id));
+            } else if (id == 32) {
+                if (ChatActivity.this.currentUser != null && ChatActivity.this.getParentActivity() != null) {
+                    VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.id));
+                }
+            } else if (id == ChatActivity.text_bold) {
+                if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
+                    ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedBold();
+                }
+            } else if (id == ChatActivity.text_italic) {
+                if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
+                    ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedItalic();
+                }
+            } else if (id == ChatActivity.text_mono) {
+                if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
+                    ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedMono();
+                }
+            } else if (id == ChatActivity.text_link) {
+                if (ChatActivity.this.chatActivityEnterView != null) {
+                    ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
+                    ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedUrl();
+                }
+            } else if (id == ChatActivity.text_regular && ChatActivity.this.chatActivityEnterView != null) {
+                ChatActivity.this.chatActivityEnterView.getEditField().setSelectionOverride(ChatActivity.this.editTextStart, ChatActivity.this.editTextEnd);
+                ChatActivity.this.chatActivityEnterView.getEditField().makeSelectedRegular();
             }
         }
     }
@@ -991,8 +1025,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$1 */
-        class C13711 implements ChatMessageCellDelegate {
-            C13711() {
+        class C13721 implements ChatMessageCellDelegate {
+            C13721() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -1014,9 +1048,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             arrayList.add(messageObject);
                         }
                         ChatActivity chatActivity = ChatActivity.this;
-                        Context access$29200 = ChatActivityAdapter.this.mContext;
+                        Context access$29500 = ChatActivityAdapter.this.mContext;
                         boolean z = ChatObject.isChannel(ChatActivity.this.currentChat) && !ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.username != null && ChatActivity.this.currentChat.username.length() > 0;
-                        chatActivity.showDialog(new ShareAlert(access$29200, arrayList, null, z, null, false));
+                        chatActivity.showDialog(new ShareAlert(access$29500, arrayList, null, z, null, false));
                         return;
                     }
                     Bundle args = new Bundle();
@@ -1111,7 +1145,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (url != null) {
                     if (url instanceof URLSpanMono) {
                         ((URLSpanMono) url).copyToClipboard();
-                        Toast.makeText(ChatActivity.this.getParentActivity(), LocaleController.getString("TextCopied", C0500R.string.TextCopied), 0).show();
+                        Toast.makeText(ChatActivity.this.getParentActivity(), LocaleController.getString("TextCopied", C0501R.string.TextCopied), 0).show();
                     } else if (url instanceof URLSpanUserMention) {
                         User user = MessagesController.getInstance(ChatActivity.this.currentAccount).getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
                         if (user != null) {
@@ -1142,7 +1176,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (longPress) {
                             BottomSheet.Builder builder = new BottomSheet.Builder(ChatActivity.this.getParentActivity());
                             builder.setTitle(urlFinal);
-                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0500R.string.Open), LocaleController.getString("Copy", C0500R.string.Copy)}, new OnClickListener() {
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0501R.string.Open), LocaleController.getString("Copy", C0501R.string.Copy)}, new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     boolean z = true;
                                     if (which == 0) {
@@ -1344,8 +1378,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$2 */
-        class C13722 implements ChatActionCellDelegate {
-            C13722() {
+        class C13732 implements ChatActionCellDelegate {
+            C13732() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -1411,8 +1445,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$3 */
-        class C13733 implements BotHelpCellDelegate {
-            C13733() {
+        class C13743 implements BotHelpCellDelegate {
+            C13743() {
             }
 
             public void didPressUrl(String url) {
@@ -1491,18 +1525,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C13711());
+                chatMessageCell.setDelegate(new C13721());
                 if (ChatActivity.this.currentEncryptedChat == null) {
                     chatMessageCell.setAllowAssistant(true);
                 }
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C13722());
+                ((ChatActionCell) view).setDelegate(new C13732());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
                 view = new BotHelpCell(this.mContext);
-                ((BotHelpCell) view).setDelegate(new C13733());
+                ((BotHelpCell) view).setDelegate(new C13743());
             } else if (viewType == 4) {
                 view = new ChatLoadingCell(this.mContext);
             }
@@ -1631,8 +1665,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         animatorSet.addListener(new AnimatorListenerAdapter() {
 
                                             /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$4$1$1 */
-                                            class C13741 extends AnimatorListenerAdapter {
-                                                C13741() {
+                                            class C13751 extends AnimatorListenerAdapter {
+                                                C13751() {
                                                 }
 
                                                 public void onAnimationEnd(Animator animation) {
@@ -1649,7 +1683,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 animatorSet.playTogether(r1);
                                                 animatorSet.setDuration(100);
                                                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                                                animatorSet.addListener(new C13741());
+                                                animatorSet.addListener(new C13751());
                                                 animatorSet.start();
                                             }
                                         });
@@ -1671,7 +1705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     actionCell.setMessageObject(message);
                     actionCell.setAlpha(1.0f);
                 } else if (view instanceof ChatUnreadCell) {
-                    ((ChatUnreadCell) view).setText(LocaleController.getString("UnreadMessages", C0500R.string.UnreadMessages));
+                    ((ChatUnreadCell) view).setText(LocaleController.getString("UnreadMessages", C0501R.string.UnreadMessages));
                     if (ChatActivity.this.createUnreadMessageAfterId != 0) {
                         ChatActivity.this.createUnreadMessageAfterId = 0;
                     }
@@ -3002,12 +3036,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         } else {
             this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C13699());
+        this.actionBar.setActionBarMenuOnItemClick(new C13709());
         this.avatarContainer = new ChatAvatarContainer(context, this, this.currentEncryptedChat != null);
         if (this.inPreviewMode) {
             this.avatarContainer.setOccupyStatusBar(false);
         }
-        this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
+        this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, text_italic, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
         if (!(this.currentChat == null || ChatObject.isChannel(this.currentChat))) {
             int count = this.currentChat.participants_count;
             if (this.info != null) {
@@ -3019,12 +3053,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         ActionBarMenu menu = this.actionBar.createMenu();
         if (this.currentEncryptedChat == null && !this.isBroadcast) {
-            this.searchItem = menu.addItem(0, (int) C0500R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+            this.searchItem = menu.addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
                 boolean searchWas;
 
                 /* renamed from: org.telegram.ui.ChatActivity$10$1 */
-                class C13231 implements Runnable {
-                    C13231() {
+                class C13241 implements Runnable {
+                    C13241() {
                     }
 
                     public void run() {
@@ -3046,23 +3080,25 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     ChatActivity.this.mentionLayoutManager.setReverseLayout(false);
                     ChatActivity.this.mentionsAdapter.setSearchingMentions(false);
                     ChatActivity.this.searchingUserMessages = null;
-                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0500R.string.Search));
+                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
                     ChatActivity.this.searchItem.setSearchFieldCaption(null);
                     ChatActivity.this.avatarContainer.setVisibility(0);
-                    if (ChatActivity.this.chatActivityEnterView.hasText()) {
+                    if (ChatActivity.this.editTextItem.getTag() != null) {
                         if (ChatActivity.this.headerItem != null) {
                             ChatActivity.this.headerItem.setVisibility(8);
-                        }
-                        if (ChatActivity.this.attachItem != null) {
-                            ChatActivity.this.attachItem.setVisibility(0);
-                        }
-                    } else {
-                        if (ChatActivity.this.headerItem != null) {
-                            ChatActivity.this.headerItem.setVisibility(0);
-                        }
-                        if (ChatActivity.this.attachItem != null) {
+                            ChatActivity.this.editTextItem.setVisibility(0);
                             ChatActivity.this.attachItem.setVisibility(8);
                         }
+                    } else if (ChatActivity.this.chatActivityEnterView.hasText()) {
+                        if (ChatActivity.this.headerItem != null) {
+                            ChatActivity.this.headerItem.setVisibility(8);
+                            ChatActivity.this.editTextItem.setVisibility(8);
+                            ChatActivity.this.attachItem.setVisibility(0);
+                        }
+                    } else if (ChatActivity.this.headerItem != null) {
+                        ChatActivity.this.headerItem.setVisibility(0);
+                        ChatActivity.this.editTextItem.setVisibility(8);
+                        ChatActivity.this.attachItem.setVisibility(8);
                     }
                     ChatActivity.this.searchItem.setVisibility(8);
                     ChatActivity.this.highlightMessageId = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -3076,7 +3112,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                 public void onSearchExpand() {
                     if (ChatActivity.this.openSearchKeyboard) {
-                        AndroidUtilities.runOnUIThread(new C13231(), 300);
+                        AndroidUtilities.runOnUIThread(new C13241(), 300);
                     }
                 }
 
@@ -3089,7 +3125,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 public void onTextChanged(EditText editText) {
                     if (ChatActivity.this.searchingForUser) {
                         ChatActivity.this.mentionsAdapter.searchUsernameOrHashtag("@" + editText.getText().toString(), 0, ChatActivity.this.messages, true);
-                    } else if (!ChatActivity.this.searchingForUser && ChatActivity.this.searchingUserMessages == null && ChatActivity.this.searchUserButton != null && TextUtils.equals(editText.getText(), LocaleController.getString("SearchFrom", C0500R.string.SearchFrom))) {
+                    } else if (!ChatActivity.this.searchingForUser && ChatActivity.this.searchingUserMessages == null && ChatActivity.this.searchUserButton != null && TextUtils.equals(editText.getText(), LocaleController.getString("SearchFrom", C0501R.string.SearchFrom))) {
                         ChatActivity.this.searchUserButton.callOnClick();
                     }
                 }
@@ -3103,18 +3139,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.mentionsAdapter.searchUsernameOrHashtag(null, 0, null, false);
                         ChatActivity.this.searchingForUser = false;
                     }
-                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0500R.string.Search));
+                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
                     ChatActivity.this.searchCalendarButton.setVisibility(0);
                     ChatActivity.this.searchUserButton.setVisibility(0);
                     ChatActivity.this.searchingUserMessages = null;
                 }
             });
-            this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0500R.string.Search));
+            this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
             this.searchItem.setVisibility(8);
         }
-        this.headerItem = menu.addItem(0, (int) C0500R.drawable.ic_ab_other);
+        this.headerItem = menu.addItem(0, (int) C0501R.drawable.ic_ab_other);
         if (this.currentUser != null) {
-            this.headerItem.addSubItem(32, LocaleController.getString("Call", C0500R.string.Call));
+            this.headerItem.addSubItem(32, LocaleController.getString("Call", C0501R.string.Call));
             TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.id);
             if (userFull == null || !userFull.phone_calls_available) {
                 this.headerItem.hideSubItem(32);
@@ -3122,43 +3158,57 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.headerItem.showSubItem(32);
             }
         }
+        this.editTextItem = menu.addItem(0, (int) C0501R.drawable.ic_ab_other);
+        this.editTextItem.setTag(null);
+        this.editTextItem.setVisibility(8);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", C0501R.string.Bold));
+        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, spannableStringBuilder.length(), 33);
+        this.editTextItem.addSubItem(text_bold, spannableStringBuilder);
+        spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", C0501R.string.Italic));
+        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, spannableStringBuilder.length(), 33);
+        this.editTextItem.addSubItem(text_italic, spannableStringBuilder);
+        spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", C0501R.string.Mono));
+        spannableStringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, spannableStringBuilder.length(), 33);
+        this.editTextItem.addSubItem(text_mono, spannableStringBuilder);
+        this.editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", C0501R.string.CreateLink));
+        this.editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", C0501R.string.Regular));
         if (this.searchItem != null) {
-            this.headerItem.addSubItem(search, LocaleController.getString("Search", C0500R.string.Search));
+            this.headerItem.addSubItem(search, LocaleController.getString("Search", C0501R.string.Search));
         }
         if (ChatObject.isChannel(this.currentChat) && !this.currentChat.creator && (!this.currentChat.megagroup || (this.currentChat.username != null && this.currentChat.username.length() > 0))) {
-            this.headerItem.addSubItem(21, LocaleController.getString("ReportChat", C0500R.string.ReportChat));
+            this.headerItem.addSubItem(21, LocaleController.getString("ReportChat", C0501R.string.ReportChat));
         }
         if (this.currentUser != null) {
             this.addContactItem = this.headerItem.addSubItem(17, TtmlNode.ANONYMOUS_REGION_ID);
         }
         if (this.currentEncryptedChat != null) {
-            this.timeItem2 = this.headerItem.addSubItem(13, LocaleController.getString("SetTimer", C0500R.string.SetTimer));
+            this.timeItem2 = this.headerItem.addSubItem(13, LocaleController.getString("SetTimer", C0501R.string.SetTimer));
         }
         if (!ChatObject.isChannel(this.currentChat) || (this.currentChat != null && this.currentChat.megagroup && TextUtils.isEmpty(this.currentChat.username))) {
-            this.headerItem.addSubItem(15, LocaleController.getString("ClearHistory", C0500R.string.ClearHistory));
+            this.headerItem.addSubItem(15, LocaleController.getString("ClearHistory", C0501R.string.ClearHistory));
         }
         if (!ChatObject.isChannel(this.currentChat)) {
             if (this.currentChat == null || this.isBroadcast) {
-                this.headerItem.addSubItem(16, LocaleController.getString("DeleteChatUser", C0500R.string.DeleteChatUser));
+                this.headerItem.addSubItem(16, LocaleController.getString("DeleteChatUser", C0501R.string.DeleteChatUser));
             } else {
-                this.headerItem.addSubItem(16, LocaleController.getString("DeleteAndExit", C0500R.string.DeleteAndExit));
+                this.headerItem.addSubItem(16, LocaleController.getString("DeleteAndExit", C0501R.string.DeleteAndExit));
             }
         }
         if (this.currentUser == null || !this.currentUser.self) {
             this.muteItem = this.headerItem.addSubItem(18, null);
         } else if (this.currentUser.self) {
-            this.headerItem.addSubItem(24, LocaleController.getString("AddShortcut", C0500R.string.AddShortcut));
+            this.headerItem.addSubItem(24, LocaleController.getString("AddShortcut", C0501R.string.AddShortcut));
         }
         if (this.currentUser != null && this.currentEncryptedChat == null && this.currentUser.bot) {
-            this.headerItem.addSubItem(bot_settings, LocaleController.getString("BotSettings", C0500R.string.BotSettings));
-            this.headerItem.addSubItem(bot_help, LocaleController.getString("BotHelp", C0500R.string.BotHelp));
+            this.headerItem.addSubItem(bot_settings, LocaleController.getString("BotSettings", C0501R.string.BotSettings));
+            this.headerItem.addSubItem(bot_help, LocaleController.getString("BotHelp", C0501R.string.BotHelp));
             updateBotButtons();
         }
         updateTitle();
         this.avatarContainer.updateOnlineCount();
         this.avatarContainer.updateSubtitle();
         updateTitleIcons();
-        this.attachItem = menu.addItem(14, (int) C0500R.drawable.ic_ab_other).setOverrideMenuClick(true).setAllowCloseAnimation(false);
+        this.attachItem = menu.addItem(14, (int) C0501R.drawable.ic_ab_other).setOverrideMenuClick(true).setAllowCloseAnimation(false);
         this.attachItem.setVisibility(8);
         this.actionModeViews.clear();
         if (this.inPreviewMode) {
@@ -3177,20 +3227,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
         });
         if (this.currentEncryptedChat == null) {
-            this.actionModeViews.add(actionMode.addItemWithWidth(edit, C0500R.drawable.group_edit, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(edit, C0501R.drawable.group_edit, AndroidUtilities.dp(54.0f)));
             if (!this.isBroadcast) {
-                this.actionModeViews.add(actionMode.addItemWithWidth(19, C0500R.drawable.ic_ab_reply, AndroidUtilities.dp(54.0f)));
+                this.actionModeViews.add(actionMode.addItemWithWidth(19, C0501R.drawable.ic_ab_reply, AndroidUtilities.dp(54.0f)));
             }
-            this.actionModeViews.add(actionMode.addItemWithWidth(22, C0500R.drawable.ic_ab_fave, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(10, C0500R.drawable.ic_ab_copy, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(11, C0500R.drawable.ic_ab_forward, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(12, C0500R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(22, C0501R.drawable.ic_ab_fave, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(10, C0501R.drawable.ic_ab_copy, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(11, C0501R.drawable.ic_ab_forward, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(12, C0501R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
         } else {
-            this.actionModeViews.add(actionMode.addItemWithWidth(edit, C0500R.drawable.group_edit, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(19, C0500R.drawable.ic_ab_reply, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(22, C0500R.drawable.ic_ab_fave, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(10, C0500R.drawable.ic_ab_copy, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(12, C0500R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(edit, C0501R.drawable.group_edit, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(19, C0501R.drawable.ic_ab_reply, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(22, C0501R.drawable.ic_ab_fave, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(10, C0501R.drawable.ic_ab_copy, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(12, C0501R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
         }
         ActionBarMenuItem item = actionMode.getItem(edit);
         int i = (this.canEditMessagesCount == 1 && this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() == 1) ? 0 : 8;
@@ -3239,7 +3289,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 if (child == ChatActivity.this.actionBar && ChatActivity.this.parentLayout != null) {
                     int i;
-                    ActionBarLayout access$7500 = ChatActivity.this.parentLayout;
+                    ActionBarLayout access$7800 = ChatActivity.this.parentLayout;
                     if (ChatActivity.this.actionBar.getVisibility() == 0) {
                         int measuredHeight = ChatActivity.this.actionBar.getMeasuredHeight();
                         i = (!ChatActivity.this.inPreviewMode || VERSION.SDK_INT < 21) ? 0 : AndroidUtilities.statusBarHeight;
@@ -3247,7 +3297,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } else {
                         i = 0;
                     }
-                    access$7500.drawHeaderShadow(canvas, i);
+                    access$7800.drawHeaderShadow(canvas, i);
                 }
                 return result;
             }
@@ -3357,10 +3407,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     ChatActivity.this.globalIgnoreLayout = false;
                 }
                 if (ChatActivity.this.scrollToPositionOnRecreate != -1) {
-                    final int access$9300 = ChatActivity.this.scrollToPositionOnRecreate;
+                    final int access$9600 = ChatActivity.this.scrollToPositionOnRecreate;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            ChatActivity.this.chatLayoutManager.scrollToPositionWithOffset(access$9300, ChatActivity.this.scrollToOffsetOnRecreate);
+                            ChatActivity.this.chatLayoutManager.scrollToPositionWithOffset(access$9600, ChatActivity.this.scrollToOffsetOnRecreate);
                         }
                     });
                     ChatActivity.this.globalIgnoreLayout = true;
@@ -3389,7 +3439,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         int height = child.getMeasuredHeight();
                         int gravity = lp.gravity;
                         if (gravity == -1) {
-                            gravity = 51;
+                            gravity = ChatActivity.text_italic;
                         }
                         int verticalGravity = gravity & 112;
                         switch ((gravity & 7) & 7) {
@@ -3477,22 +3527,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (this.currentEncryptedChat != null) {
             this.bigEmptyView = new ChatBigEmptyView(context, true);
             if (this.currentEncryptedChat.admin_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                this.bigEmptyView.setSecretText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", C0500R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(this.currentUser)));
+                this.bigEmptyView.setSecretText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", C0501R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(this.currentUser)));
             } else {
-                this.bigEmptyView.setSecretText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", C0500R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(this.currentUser)));
+                this.bigEmptyView.setSecretText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", C0501R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(this.currentUser)));
             }
             this.emptyViewContainer.addView(this.bigEmptyView, new FrameLayout.LayoutParams(-2, -2, 17));
         } else if (this.currentUser == null || !this.currentUser.self) {
             this.emptyView = new TextView(context);
             if (this.currentUser == null || this.currentUser.id == 777000 || this.currentUser.id == 429000 || this.currentUser.id == 4244000 || !MessagesController.isSupportId(this.currentUser.id)) {
-                this.emptyView.setText(LocaleController.getString("NoMessages", C0500R.string.NoMessages));
+                this.emptyView.setText(LocaleController.getString("NoMessages", C0501R.string.NoMessages));
             } else {
-                this.emptyView.setText(LocaleController.getString("GotAQuestion", C0500R.string.GotAQuestion));
+                this.emptyView.setText(LocaleController.getString("GotAQuestion", C0501R.string.GotAQuestion));
             }
             this.emptyView.setTextSize(1, 14.0f);
             this.emptyView.setGravity(17);
             this.emptyView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
-            this.emptyView.setBackgroundResource(C0500R.drawable.system);
+            this.emptyView.setBackgroundResource(C0501R.drawable.system);
             this.emptyView.getBackground().setColorFilter(Theme.colorFilter);
             this.emptyView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.emptyView.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(3.0f));
@@ -4106,8 +4156,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             private float totalDy = 0.0f;
 
             /* renamed from: org.telegram.ui.ChatActivity$18$1 */
-            class C13281 extends AnimatorListenerAdapter {
-                C13281() {
+            class C13291 extends AnimatorListenerAdapter {
+                C13291() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -4148,11 +4198,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.floatingDateView.setTag(Integer.valueOf(1));
                         ChatActivity.this.floatingDateAnimation = new AnimatorSet();
                         ChatActivity.this.floatingDateAnimation.setDuration(150);
-                        AnimatorSet access$13300 = ChatActivity.this.floatingDateAnimation;
+                        AnimatorSet access$13600 = ChatActivity.this.floatingDateAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.floatingDateView, "alpha", new float[]{1.0f});
-                        access$13300.playTogether(animatorArr);
-                        ChatActivity.this.floatingDateAnimation.addListener(new C13281());
+                        access$13600.playTogether(animatorArr);
+                        ChatActivity.this.floatingDateAnimation.addListener(new C13291());
                         ChatActivity.this.floatingDateAnimation.start();
                     }
                 }
@@ -4184,9 +4234,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         });
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
-        this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
+        this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, text_italic));
         this.progressView2 = new View(context);
-        this.progressView2.setBackgroundResource(C0500R.drawable.system_loader);
+        this.progressView2.setBackgroundResource(C0501R.drawable.system_loader);
         this.progressView2.getBackground().setColorFilter(Theme.colorFilter);
         this.progressView.addView(this.progressView2, LayoutHelper.createFrame(36, 36, 17));
         this.progressBar = new RadialProgressView(context);
@@ -4215,9 +4265,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.pinnedMessageView.setTag(Integer.valueOf(1));
             this.pinnedMessageView.setTranslationY((float) (-AndroidUtilities.dp(50.0f)));
             this.pinnedMessageView.setVisibility(8);
-            this.pinnedMessageView.setBackgroundResource(C0500R.drawable.blockpanel);
+            this.pinnedMessageView.setBackgroundResource(C0501R.drawable.blockpanel);
             this.pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), Mode.MULTIPLY));
-            this.contentView.addView(this.pinnedMessageView, LayoutHelper.createFrame(-1, 50, 51));
+            this.contentView.addView(this.pinnedMessageView, LayoutHelper.createFrame(-1, text_bold, text_italic));
             this.pinnedMessageView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     ChatActivity.this.wasManualScroll = true;
@@ -4226,28 +4276,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
             this.pinnedLineView = new View(context);
             this.pinnedLineView.setBackgroundColor(Theme.getColor(Theme.key_chat_topPanelLine));
-            this.pinnedMessageView.addView(this.pinnedLineView, LayoutHelper.createFrame(2, 32.0f, 51, 8.0f, 8.0f, 0.0f, 0.0f));
+            this.pinnedMessageView.addView(this.pinnedLineView, LayoutHelper.createFrame(2, 32.0f, text_italic, 8.0f, 8.0f, 0.0f, 0.0f));
             this.pinnedMessageImageView = new BackupImageView(context);
-            this.pinnedMessageView.addView(this.pinnedMessageImageView, LayoutHelper.createFrame(32, 32.0f, 51, 17.0f, 8.0f, 0.0f, 0.0f));
+            this.pinnedMessageView.addView(this.pinnedMessageImageView, LayoutHelper.createFrame(32, 32.0f, text_italic, 17.0f, 8.0f, 0.0f, 0.0f));
             this.pinnedMessageNameTextView = new SimpleTextView(context);
             this.pinnedMessageNameTextView.setTextSize(14);
             this.pinnedMessageNameTextView.setTextColor(Theme.getColor(Theme.key_chat_topPanelTitle));
             this.pinnedMessageNameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.pinnedMessageView.addView(this.pinnedMessageNameTextView, LayoutHelper.createFrame(-1, (float) AndroidUtilities.dp(18.0f), 51, 18.0f, 7.3f, 52.0f, 0.0f));
+            this.pinnedMessageView.addView(this.pinnedMessageNameTextView, LayoutHelper.createFrame(-1, (float) AndroidUtilities.dp(18.0f), text_italic, 18.0f, 7.3f, 52.0f, 0.0f));
             this.pinnedMessageTextView = new SimpleTextView(context);
             this.pinnedMessageTextView.setTextSize(14);
             this.pinnedMessageTextView.setTextColor(Theme.getColor(Theme.key_chat_topPanelMessage));
-            this.pinnedMessageView.addView(this.pinnedMessageTextView, LayoutHelper.createFrame(-1, (float) AndroidUtilities.dp(18.0f), 51, 18.0f, 25.3f, 52.0f, 0.0f));
+            this.pinnedMessageView.addView(this.pinnedMessageTextView, LayoutHelper.createFrame(-1, (float) AndroidUtilities.dp(18.0f), text_italic, 18.0f, 25.3f, 52.0f, 0.0f));
             this.closePinned = new ImageView(context);
-            this.closePinned.setImageResource(C0500R.drawable.miniplayer_close);
+            this.closePinned.setImageResource(C0501R.drawable.miniplayer_close);
             this.closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), Mode.MULTIPLY));
             this.closePinned.setScaleType(ScaleType.CENTER);
-            this.pinnedMessageView.addView(this.closePinned, LayoutHelper.createFrame(48, 48, 53));
+            this.pinnedMessageView.addView(this.closePinned, LayoutHelper.createFrame(48, 48, text_link));
             this.closePinned.setOnClickListener(new View.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$21$1 */
-                class C13301 implements OnClickListener {
-                    C13301() {
+                class C13311 implements OnClickListener {
+                    C13311() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -4259,10 +4309,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     if (ChatActivity.this.getParentActivity() != null) {
                         if (ChatActivity.this.currentChat.creator || (ChatActivity.this.currentChat.admin_rights != null && ((ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.admin_rights.pin_messages) || (!ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.admin_rights.edit_messages)))) {
                             Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                            builder.setMessage(LocaleController.getString("UnpinMessageAlert", C0500R.string.UnpinMessageAlert));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C13301());
-                            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                            builder.setMessage(LocaleController.getString("UnpinMessageAlert", C0501R.string.UnpinMessageAlert));
+                            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C13311());
+                            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                             ChatActivity.this.showDialog(builder.create());
                             return;
                         }
@@ -4276,9 +4326,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.reportSpamView.setTag(Integer.valueOf(1));
         this.reportSpamView.setTranslationY((float) (-AndroidUtilities.dp(50.0f)));
         this.reportSpamView.setVisibility(8);
-        this.reportSpamView.setBackgroundResource(C0500R.drawable.blockpanel);
+        this.reportSpamView.setBackgroundResource(C0501R.drawable.blockpanel);
         this.reportSpamView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), Mode.MULTIPLY));
-        this.contentView.addView(this.reportSpamView, LayoutHelper.createFrame(-1, 50, 51));
+        this.contentView.addView(this.reportSpamView, LayoutHelper.createFrame(-1, text_bold, text_italic));
         this.addToContactsButton = new TextView(context);
         this.addToContactsButton.setTextColor(Theme.getColor(Theme.key_chat_addContact));
         this.addToContactsButton.setVisibility(8);
@@ -4288,8 +4338,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.addToContactsButton.setMaxLines(1);
         this.addToContactsButton.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
         this.addToContactsButton.setGravity(17);
-        this.addToContactsButton.setText(LocaleController.getString("AddContactChat", C0500R.string.AddContactChat));
-        this.reportSpamView.addView(this.addToContactsButton, LayoutHelper.createLinear(-1, -1, 0.5f, 51, 0, 0, 0, AndroidUtilities.dp(1.0f)));
+        this.addToContactsButton.setText(LocaleController.getString("AddContactChat", C0501R.string.AddContactChat));
+        this.reportSpamView.addView(this.addToContactsButton, LayoutHelper.createLinear(-1, -1, 0.5f, text_italic, 0, 0, 0, AndroidUtilities.dp(1.0f)));
         this.addToContactsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Bundle args = new Bundle();
@@ -4299,7 +4349,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
         });
         this.reportSpamContainer = new FrameLayout(context);
-        this.reportSpamView.addView(this.reportSpamContainer, LayoutHelper.createLinear(-1, -1, 1.0f, 51, 0, 0, 0, AndroidUtilities.dp(1.0f)));
+        this.reportSpamView.addView(this.reportSpamContainer, LayoutHelper.createLinear(-1, -1, 1.0f, text_italic, 0, 0, 0, AndroidUtilities.dp(1.0f)));
         this.reportSpamButton = new TextView(context);
         this.reportSpamButton.setTextColor(Theme.getColor(Theme.key_chat_reportSpam));
         this.reportSpamButton.setTextSize(1, 14.0f);
@@ -4307,18 +4357,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.reportSpamButton.setSingleLine(true);
         this.reportSpamButton.setMaxLines(1);
         if (this.currentChat != null) {
-            this.reportSpamButton.setText(LocaleController.getString("ReportSpamAndLeave", C0500R.string.ReportSpamAndLeave));
+            this.reportSpamButton.setText(LocaleController.getString("ReportSpamAndLeave", C0501R.string.ReportSpamAndLeave));
         } else {
-            this.reportSpamButton.setText(LocaleController.getString("ReportSpam", C0500R.string.ReportSpam));
+            this.reportSpamButton.setText(LocaleController.getString("ReportSpam", C0501R.string.ReportSpam));
         }
         this.reportSpamButton.setGravity(17);
         this.reportSpamButton.setPadding(AndroidUtilities.dp(50.0f), 0, AndroidUtilities.dp(50.0f), 0);
-        this.reportSpamContainer.addView(this.reportSpamButton, LayoutHelper.createFrame(-1, -1, 51));
+        this.reportSpamContainer.addView(this.reportSpamButton, LayoutHelper.createFrame(-1, -1, text_italic));
         this.reportSpamButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$23$1 */
-            class C13311 implements OnClickListener {
-                C13311() {
+            class C13321 implements OnClickListener {
+                C13321() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -4342,24 +4392,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (ChatActivity.this.getParentActivity() != null) {
                     Builder builder = new Builder(ChatActivity.this.getParentActivity());
                     if (ChatObject.isChannel(ChatActivity.this.currentChat) && !ChatActivity.this.currentChat.megagroup) {
-                        builder.setMessage(LocaleController.getString("ReportSpamAlertChannel", C0500R.string.ReportSpamAlertChannel));
+                        builder.setMessage(LocaleController.getString("ReportSpamAlertChannel", C0501R.string.ReportSpamAlertChannel));
                     } else if (ChatActivity.this.currentChat != null) {
-                        builder.setMessage(LocaleController.getString("ReportSpamAlertGroup", C0500R.string.ReportSpamAlertGroup));
+                        builder.setMessage(LocaleController.getString("ReportSpamAlertGroup", C0501R.string.ReportSpamAlertGroup));
                     } else {
-                        builder.setMessage(LocaleController.getString("ReportSpamAlert", C0500R.string.ReportSpamAlert));
+                        builder.setMessage(LocaleController.getString("ReportSpamAlert", C0501R.string.ReportSpamAlert));
                     }
-                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C13311());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C13321());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                     ChatActivity.this.showDialog(builder.create());
                 }
             }
         });
         this.closeReportSpam = new ImageView(context);
-        this.closeReportSpam.setImageResource(C0500R.drawable.miniplayer_close);
+        this.closeReportSpam.setImageResource(C0501R.drawable.miniplayer_close);
         this.closeReportSpam.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), Mode.MULTIPLY));
         this.closeReportSpam.setScaleType(ScaleType.CENTER);
-        this.reportSpamContainer.addView(this.closeReportSpam, LayoutHelper.createFrame(48, 48, 53));
+        this.reportSpamContainer.addView(this.closeReportSpam, LayoutHelper.createFrame(48, 48, text_link));
         this.closeReportSpam.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MessagesController.getInstance(ChatActivity.this.currentAccount).hideReportSpam(ChatActivity.this.dialog_id, ChatActivity.this.currentUser, ChatActivity.this.currentChat);
@@ -4370,9 +4420,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.alertView.setTag(Integer.valueOf(1));
         this.alertView.setTranslationY((float) (-AndroidUtilities.dp(50.0f)));
         this.alertView.setVisibility(8);
-        this.alertView.setBackgroundResource(C0500R.drawable.blockpanel);
+        this.alertView.setBackgroundResource(C0501R.drawable.blockpanel);
         this.alertView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), Mode.MULTIPLY));
-        this.contentView.addView(this.alertView, LayoutHelper.createFrame(-1, 50, 51));
+        this.contentView.addView(this.alertView, LayoutHelper.createFrame(-1, text_bold, text_italic));
         this.alertNameTextView = new TextView(context);
         this.alertNameTextView.setTextSize(1, 14.0f);
         this.alertNameTextView.setTextColor(Theme.getColor(Theme.key_chat_topPanelTitle));
@@ -4380,14 +4430,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.alertNameTextView.setSingleLine(true);
         this.alertNameTextView.setEllipsize(TruncateAt.END);
         this.alertNameTextView.setMaxLines(1);
-        this.alertView.addView(this.alertNameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 8.0f, 5.0f, 8.0f, 0.0f));
+        this.alertView.addView(this.alertNameTextView, LayoutHelper.createFrame(-2, -2.0f, text_italic, 8.0f, 5.0f, 8.0f, 0.0f));
         this.alertTextView = new TextView(context);
         this.alertTextView.setTextSize(1, 14.0f);
         this.alertTextView.setTextColor(Theme.getColor(Theme.key_chat_topPanelMessage));
         this.alertTextView.setSingleLine(true);
         this.alertTextView.setEllipsize(TruncateAt.END);
         this.alertTextView.setMaxLines(1);
-        this.alertView.addView(this.alertTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 8.0f, 23.0f, 8.0f, 0.0f));
+        this.alertView.addView(this.alertTextView, LayoutHelper.createFrame(-2, -2.0f, text_italic, 8.0f, 23.0f, 8.0f, 0.0f));
         this.pagedownButton = new FrameLayout(context);
         this.pagedownButton.setVisibility(4);
         this.contentView.addView(this.pagedownButton, LayoutHelper.createFrame(66, 59.0f, 85, 0.0f, 0.0f, -3.0f, 5.0f));
@@ -4410,8 +4460,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.mentiondownButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$26$1 */
-            class C13321 implements IntCallback {
-                C13321() {
+            class C13331 implements IntCallback {
+                C13331() {
                 }
 
                 public void run(int param) {
@@ -4427,7 +4477,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             private void loadLastUnreadMention() {
                 ChatActivity.this.wasManualScroll = true;
                 if (ChatActivity.this.hasAllMentionsLocal) {
-                    MessagesStorage.getInstance(ChatActivity.this.currentAccount).getUnreadMention(ChatActivity.this.dialog_id, new C13321());
+                    MessagesStorage.getInstance(ChatActivity.this.currentAccount).getUnreadMention(ChatActivity.this.dialog_id, new C13331());
                     return;
                 }
                 final MessagesStorage messagesStorage = MessagesStorage.getInstance(ChatActivity.this.currentAccount);
@@ -4711,8 +4761,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             chatActivityAdapter = new MentionsAdapter(context, false, this.dialog_id, new MentionsAdapterDelegate() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$35$1 */
-                class C13361 extends AnimatorListenerAdapter {
-                    C13361() {
+                class C13371 extends AnimatorListenerAdapter {
+                    C13371() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -4729,8 +4779,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$35$2 */
-                class C13372 extends AnimatorListenerAdapter {
-                    C13372() {
+                class C13382 extends AnimatorListenerAdapter {
+                    C13382() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -4776,9 +4826,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                                 if (!preferences.getBoolean("secretbot", false)) {
                                     Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("SecretChatContextBotAlert", C0500R.string.SecretChatContextBotAlert));
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("SecretChatContextBotAlert", C0501R.string.SecretChatContextBotAlert));
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                     ChatActivity.this.showDialog(builder.create());
                                     preferences.edit().putBoolean("secretbot", true).commit();
                                 }
@@ -4787,7 +4837,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.mentionContainer.setTag(null);
                             ChatActivity.this.mentionListAnimation = new AnimatorSet();
                             ChatActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f, 1.0f})});
-                            ChatActivity.this.mentionListAnimation.addListener(new C13361());
+                            ChatActivity.this.mentionListAnimation.addListener(new C13371());
                             ChatActivity.this.mentionListAnimation.setDuration(200);
                             ChatActivity.this.mentionListAnimation.start();
                             return;
@@ -4805,11 +4855,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                     if (ChatActivity.this.allowStickersPanel) {
                         ChatActivity.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$17000 = ChatActivity.this.mentionListAnimation;
+                        AnimatorSet access$17300 = ChatActivity.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f});
-                        access$17000.playTogether(animatorArr);
-                        ChatActivity.this.mentionListAnimation.addListener(new C13372());
+                        access$17300.playTogether(animatorArr);
+                        ChatActivity.this.mentionListAnimation.addListener(new C13382());
                         ChatActivity.this.mentionListAnimation.setDuration(200);
                         ChatActivity.this.mentionListAnimation.start();
                         return;
@@ -4865,7 +4915,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         name = ChatActivity.this.searchingUserMessages.last_name;
                                     }
                                     ChatActivity.this.searchingForUser = false;
-                                    String from = LocaleController.getString("SearchFrom", C0500R.string.SearchFrom);
+                                    String from = LocaleController.getString("SearchFrom", C0501R.string.SearchFrom);
                                     spannableString = new SpannableString(from + " " + name);
                                     spannableString.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_actionBarDefaultSubtitle)), from.length() + 1, spannableString.length(), 33);
                                     ChatActivity.this.searchItem.setSearchFieldCaption(spannableString);
@@ -4922,8 +4972,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.mentionListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$37$1 */
-                class C13381 implements OnClickListener {
-                    C13381() {
+                class C13391 implements OnClickListener {
+                    C13391() {
                     }
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -4942,10 +4992,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                     if (!ChatActivity.this.mentionsAdapter.isBotCommands()) {
                         Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                        builder.setMessage(LocaleController.getString("ClearSearch", C0500R.string.ClearSearch));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", C0500R.string.ClearButton).toUpperCase(), new C13381());
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                        builder.setMessage(LocaleController.getString("ClearSearch", C0501R.string.ClearSearch));
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", C0501R.string.ClearButton).toUpperCase(), new C13391());
+                        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                         ChatActivity.this.showDialog(builder.create());
                         return true;
                     } else if (!URLSpanBotCommand.enabled) {
@@ -4993,12 +5043,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             });
         }
         this.pagedownButtonImage = new ImageView(context);
-        this.pagedownButtonImage.setImageResource(C0500R.drawable.pagedown);
+        this.pagedownButtonImage.setImageResource(C0501R.drawable.pagedown);
         this.pagedownButtonImage.setScaleType(ScaleType.CENTER);
         this.pagedownButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonIcon), Mode.MULTIPLY));
         this.pagedownButtonImage.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         Drawable drawable = Theme.createCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(Theme.key_chat_goDownButton));
-        Drawable shadowDrawable = context.getResources().getDrawable(C0500R.drawable.pagedown_shadow).mutate();
+        Drawable shadowDrawable = context.getResources().getDrawable(C0501R.drawable.pagedown_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonShadow), Mode.MULTIPLY));
         Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
         combinedDrawable.setIconSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
@@ -5015,12 +5065,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.pagedownButtonCounter.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
         this.pagedownButton.addView(this.pagedownButtonCounter, LayoutHelper.createFrame(-2, edit, 49));
         this.mentiondownButtonImage = new ImageView(context);
-        this.mentiondownButtonImage.setImageResource(C0500R.drawable.mentionbutton);
+        this.mentiondownButtonImage.setImageResource(C0501R.drawable.mentionbutton);
         this.mentiondownButtonImage.setScaleType(ScaleType.CENTER);
         this.mentiondownButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonIcon), Mode.MULTIPLY));
         this.mentiondownButtonImage.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         drawable = Theme.createCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(Theme.key_chat_goDownButton));
-        shadowDrawable = context.getResources().getDrawable(C0500R.drawable.pagedown_shadow).mutate();
+        shadowDrawable = context.getResources().getDrawable(C0501R.drawable.pagedown_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonShadow), Mode.MULTIPLY));
         combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
         combinedDrawable.setIconSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
@@ -5040,11 +5090,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             SizeNotifierFrameLayout sizeNotifierFrameLayout = this.contentView;
             fragmentContextView = new FragmentContextView(context, this, true);
             this.fragmentLocationContextView = fragmentContextView;
-            sizeNotifierFrameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
+            sizeNotifierFrameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, text_italic, 0.0f, -36.0f, 0.0f, 0.0f));
             sizeNotifierFrameLayout = this.contentView;
             fragmentContextView = new FragmentContextView(context, this, false);
             this.fragmentContextView = fragmentContextView;
-            sizeNotifierFrameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
+            sizeNotifierFrameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, text_italic, 0.0f, -36.0f, 0.0f, 0.0f));
             this.fragmentContextView.setAdditionalContextView(this.fragmentLocationContextView);
             this.fragmentLocationContextView.setAdditionalContextView(this.fragmentContextView);
         }
@@ -5059,10 +5109,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return true;
             }
         });
-        this.contentView.addView(this.overlayView, LayoutHelper.createFrame(-1, -1, 51));
+        this.contentView.addView(this.overlayView, LayoutHelper.createFrame(-1, -1, text_italic));
         this.overlayView.setVisibility(8);
         this.instantCameraView = new InstantCameraView(context, this);
-        this.contentView.addView(this.instantCameraView, LayoutHelper.createFrame(-1, -1, 51));
+        this.contentView.addView(this.instantCameraView, LayoutHelper.createFrame(-1, -1, text_italic));
         this.chatActivityEnterView = new ChatActivityEnterView(getParentActivity(), this.contentView, this, true);
         this.chatActivityEnterView.setDialogId(this.dialog_id, this.currentAccount);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
@@ -5094,6 +5144,31 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
             public void onPreAudioVideoRecord() {
                 ChatActivity.this.showVoiceHint(true, false);
+            }
+
+            public void onTextSelectionChanged(int start, int end) {
+                if (ChatActivity.this.editTextItem != null) {
+                    if (end - start > 0) {
+                        if (ChatActivity.this.editTextItem.getTag() == null) {
+                            ChatActivity.this.editTextItem.setTag(Integer.valueOf(1));
+                            ChatActivity.this.editTextItem.setVisibility(0);
+                            ChatActivity.this.headerItem.setVisibility(8);
+                            ChatActivity.this.attachItem.setVisibility(8);
+                            ChatActivity.this.editTextStart = start;
+                            ChatActivity.this.editTextEnd = end;
+                        }
+                    } else if (ChatActivity.this.editTextItem.getTag() != null) {
+                        ChatActivity.this.editTextItem.setTag(null);
+                        ChatActivity.this.editTextItem.setVisibility(8);
+                        if (ChatActivity.this.chatActivityEnterView.hasText()) {
+                            ChatActivity.this.headerItem.setVisibility(8);
+                            ChatActivity.this.attachItem.setVisibility(0);
+                            return;
+                        }
+                        ChatActivity.this.headerItem.setVisibility(0);
+                        ChatActivity.this.attachItem.setVisibility(8);
+                    }
+                }
             }
 
             public void onTextChanged(final CharSequence text, boolean bigChange) {
@@ -5134,37 +5209,35 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
 
+            public void onTextSpansChanged(CharSequence text) {
+                ChatActivity.this.searchLinks(text, true);
+            }
+
             public void needSendTyping() {
                 MessagesController.getInstance(ChatActivity.this.currentAccount).sendTyping(ChatActivity.this.dialog_id, 0, ChatActivity.this.classGuid);
             }
 
             public void onAttachButtonHidden() {
-                if (!ChatActivity.this.actionBar.isSearchFieldVisible()) {
-                    if (ChatActivity.this.attachItem != null) {
-                        ChatActivity.this.attachItem.setVisibility(0);
-                    }
-                    if (ChatActivity.this.headerItem != null) {
-                        ChatActivity.this.headerItem.setVisibility(8);
-                    }
+                if (!ChatActivity.this.actionBar.isSearchFieldVisible() && ChatActivity.this.headerItem != null) {
+                    ChatActivity.this.headerItem.setVisibility(8);
+                    ChatActivity.this.editTextItem.setVisibility(8);
+                    ChatActivity.this.attachItem.setVisibility(0);
                 }
             }
 
             public void onAttachButtonShow() {
-                if (!ChatActivity.this.actionBar.isSearchFieldVisible()) {
-                    if (ChatActivity.this.attachItem != null) {
-                        ChatActivity.this.attachItem.setVisibility(8);
-                    }
-                    if (ChatActivity.this.headerItem != null) {
-                        ChatActivity.this.headerItem.setVisibility(0);
-                    }
+                if (!ChatActivity.this.actionBar.isSearchFieldVisible() && ChatActivity.this.headerItem != null) {
+                    ChatActivity.this.headerItem.setVisibility(0);
+                    ChatActivity.this.editTextItem.setVisibility(8);
+                    ChatActivity.this.attachItem.setVisibility(8);
                 }
             }
 
             public void onMessageEditEnd(boolean loading) {
                 if (!loading) {
-                    MentionsAdapter access$5100 = ChatActivity.this.mentionsAdapter;
+                    MentionsAdapter access$5300 = ChatActivity.this.mentionsAdapter;
                     boolean z = ChatActivity.this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(ChatActivity.this.currentEncryptedChat.layer) >= 46;
-                    access$5100.setNeedBotContext(z);
+                    access$5300.setNeedBotContext(z);
                     ChatActivity.this.chatListView.setOnItemLongClickListener(ChatActivity.this.onItemLongClickListener);
                     ChatActivity.this.chatListView.setOnItemClickListener(ChatActivity.this.onItemClickListener);
                     ChatActivity.this.chatListView.setClickable(true);
@@ -5288,11 +5361,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.pagedownButton.setTranslationY(translationY);
                     }
                     if (ChatActivity.this.mentiondownButton != null) {
-                        FrameLayout access$10200 = ChatActivity.this.mentiondownButton;
+                        FrameLayout access$10500 = ChatActivity.this.mentiondownButton;
                         if (ChatActivity.this.pagedownButton.getVisibility() == 0) {
                             translationY -= (float) AndroidUtilities.dp(72.0f);
                         }
-                        access$10200.setTranslationY(translationY);
+                        access$10500.setTranslationY(translationY);
                     }
                 }
             }
@@ -5305,7 +5378,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 float f = 0.0f;
                 super.setVisibility(visibility);
                 if (visibility == 8) {
-                    FrameLayout access$10000;
+                    FrameLayout access$10300;
                     if (ChatActivity.this.chatListView != null) {
                         ChatActivity.this.chatListView.setTranslationY(0.0f);
                     }
@@ -5316,20 +5389,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         ChatActivity.this.mentionContainer.setTranslationY(0.0f);
                     }
                     if (ChatActivity.this.pagedownButton != null) {
-                        access$10000 = ChatActivity.this.pagedownButton;
+                        access$10300 = ChatActivity.this.pagedownButton;
                         if (ChatActivity.this.pagedownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         }
-                        access$10000.setTranslationY(f);
+                        access$10300.setTranslationY(f);
                     }
                     if (ChatActivity.this.mentiondownButton != null) {
-                        access$10000 = ChatActivity.this.mentiondownButton;
+                        access$10300 = ChatActivity.this.mentiondownButton;
                         if (ChatActivity.this.mentiondownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         } else {
                             f = (float) (ChatActivity.this.pagedownButton.getVisibility() == 0 ? -AndroidUtilities.dp(72.0f) : 0);
                         }
-                        access$10000.setTranslationY(f);
+                        access$10300.setTranslationY(f);
                     }
                 }
             }
@@ -5354,12 +5427,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.replyIconImageView = new ImageView(context);
         this.replyIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_replyPanelIcons), Mode.MULTIPLY));
         this.replyIconImageView.setScaleType(ScaleType.CENTER);
-        fragmentContextView.addView(this.replyIconImageView, LayoutHelper.createFrame(52, 46, 51));
+        fragmentContextView.addView(this.replyIconImageView, LayoutHelper.createFrame(text_mono, 46, text_italic));
         this.replyCloseImageView = new ImageView(context);
         this.replyCloseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_replyPanelClose), Mode.MULTIPLY));
-        this.replyCloseImageView.setImageResource(C0500R.drawable.msg_panel_clear);
+        this.replyCloseImageView.setImageResource(C0501R.drawable.msg_panel_clear);
         this.replyCloseImageView.setScaleType(ScaleType.CENTER);
-        fragmentContextView.addView(this.replyCloseImageView, LayoutHelper.createFrame(52, 46.0f, 53, 0.0f, 0.5f, 0.0f, 0.0f));
+        fragmentContextView.addView(this.replyCloseImageView, LayoutHelper.createFrame(text_mono, 46.0f, text_link, 0.0f, 0.5f, 0.0f, 0.0f));
         this.replyCloseImageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (ChatActivity.this.forwardingMessages != null) {
@@ -5372,13 +5445,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.replyNameTextView.setTextSize(14);
         this.replyNameTextView.setTextColor(Theme.getColor(Theme.key_chat_replyPanelName));
         this.replyNameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        fragmentContextView.addView(this.replyNameTextView, LayoutHelper.createFrame(-1, 18.0f, 51, 52.0f, 6.0f, 52.0f, 0.0f));
+        fragmentContextView.addView(this.replyNameTextView, LayoutHelper.createFrame(-1, 18.0f, text_italic, 52.0f, 6.0f, 52.0f, 0.0f));
         this.replyObjectTextView = new SimpleTextView(context);
         this.replyObjectTextView.setTextSize(14);
         this.replyObjectTextView.setTextColor(Theme.getColor(Theme.key_chat_replyPanelMessage));
-        fragmentContextView.addView(this.replyObjectTextView, LayoutHelper.createFrame(-1, 18.0f, 51, 52.0f, 24.0f, 52.0f, 0.0f));
+        fragmentContextView.addView(this.replyObjectTextView, LayoutHelper.createFrame(-1, 18.0f, text_italic, 52.0f, 24.0f, 52.0f, 0.0f));
         this.replyImageView = new BackupImageView(context);
-        fragmentContextView.addView(this.replyImageView, LayoutHelper.createFrame(34, 34.0f, 51, 52.0f, 6.0f, 0.0f, 0.0f));
+        fragmentContextView.addView(this.replyImageView, LayoutHelper.createFrame(34, 34.0f, text_italic, 52.0f, 6.0f, 0.0f, 0.0f));
         this.stickersPanel = new FrameLayout(context);
         this.stickersPanel.setVisibility(8);
         this.contentView.addView(this.stickersPanel, LayoutHelper.createFrame(-2, 81.5f, 83, 0.0f, 0.0f, 0.0f, 38.0f));
@@ -5425,7 +5498,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.stickersPanel.addView(this.stickersListView, LayoutHelper.createFrame(-1, 78.0f));
         initStickers();
         this.stickersPanelArrow = new ImageView(context);
-        this.stickersPanelArrow.setImageResource(C0500R.drawable.stickers_back_arrow);
+        this.stickersPanelArrow.setImageResource(C0501R.drawable.stickers_back_arrow);
         this.stickersPanelArrow.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_stickersHintPanel), Mode.MULTIPLY));
         this.stickersPanel.addView(this.stickersPanelArrow, LayoutHelper.createFrame(-2, -2.0f, 83, 53.0f, 0.0f, 0.0f, 0.0f));
         this.searchContainer = new FrameLayout(context) {
@@ -5449,9 +5522,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.searchContainer.setPadding(0, AndroidUtilities.dp(3.0f), 0, 0);
         this.searchUpButton = new ImageView(context);
         this.searchUpButton.setScaleType(ScaleType.CENTER);
-        this.searchUpButton.setImageResource(C0500R.drawable.search_up);
+        this.searchUpButton.setImageResource(C0501R.drawable.search_up);
         this.searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
-        this.searchContainer.addView(this.searchUpButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 48.0f, 0.0f));
+        this.searchContainer.addView(this.searchUpButton, LayoutHelper.createFrame(48, 48.0f, text_link, 0.0f, 0.0f, 48.0f, 0.0f));
         this.searchUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DataQuery.getInstance(ChatActivity.this.currentAccount).searchMessagesInChat(null, ChatActivity.this.dialog_id, ChatActivity.this.mergeDialogId, ChatActivity.this.classGuid, 1, ChatActivity.this.searchingUserMessages);
@@ -5459,9 +5532,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         });
         this.searchDownButton = new ImageView(context);
         this.searchDownButton.setScaleType(ScaleType.CENTER);
-        this.searchDownButton.setImageResource(C0500R.drawable.search_down);
+        this.searchDownButton.setImageResource(C0501R.drawable.search_down);
         this.searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
-        this.searchContainer.addView(this.searchDownButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
+        this.searchContainer.addView(this.searchDownButton, LayoutHelper.createFrame(48, 48.0f, text_link, 0.0f, 0.0f, 0.0f, 0.0f));
         this.searchDownButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DataQuery.getInstance(ChatActivity.this.currentAccount).searchMessagesInChat(null, ChatActivity.this.dialog_id, ChatActivity.this.mergeDialogId, ChatActivity.this.classGuid, 2, ChatActivity.this.searchingUserMessages);
@@ -5470,9 +5543,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (this.currentChat != null && (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup)) {
             this.searchUserButton = new ImageView(context);
             this.searchUserButton.setScaleType(ScaleType.CENTER);
-            this.searchUserButton.setImageResource(C0500R.drawable.usersearch);
+            this.searchUserButton.setImageResource(C0501R.drawable.usersearch);
             this.searchUserButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
-            this.searchContainer.addView(this.searchUserButton, LayoutHelper.createFrame(48, 48.0f, 51, 48.0f, 0.0f, 0.0f, 0.0f));
+            this.searchContainer.addView(this.searchUserButton, LayoutHelper.createFrame(48, 48.0f, text_italic, 48.0f, 0.0f, 0.0f, 0.0f));
             this.searchUserButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     ChatActivity.this.mentionLayoutManager.setReverseLayout(true);
@@ -5481,8 +5554,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     ChatActivity.this.searchUserButton.setVisibility(8);
                     ChatActivity.this.searchingForUser = true;
                     ChatActivity.this.searchingUserMessages = null;
-                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("SearchMembers", C0500R.string.SearchMembers));
-                    ChatActivity.this.searchItem.setSearchFieldCaption(LocaleController.getString("SearchFrom", C0500R.string.SearchFrom));
+                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("SearchMembers", C0501R.string.SearchMembers));
+                    ChatActivity.this.searchItem.setSearchFieldCaption(LocaleController.getString("SearchFrom", C0501R.string.SearchFrom));
                     AndroidUtilities.showKeyboard(ChatActivity.this.searchItem.getSearchField());
                     ChatActivity.this.searchItem.clearSearchText();
                 }
@@ -5490,14 +5563,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         this.searchCalendarButton = new ImageView(context);
         this.searchCalendarButton.setScaleType(ScaleType.CENTER);
-        this.searchCalendarButton.setImageResource(C0500R.drawable.search_calendar);
+        this.searchCalendarButton.setImageResource(C0501R.drawable.search_calendar);
         this.searchCalendarButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
-        this.searchContainer.addView(this.searchCalendarButton, LayoutHelper.createFrame(48, 48, 51));
+        this.searchContainer.addView(this.searchCalendarButton, LayoutHelper.createFrame(48, 48, text_italic));
         this.searchCalendarButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$52$1 */
-            class C13421 implements OnDateSetListener {
-                C13421() {
+            class C13431 implements OnDateSetListener {
+                C13431() {
                 }
 
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -5512,8 +5585,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.ui.ChatActivity$52$2 */
-            class C13432 implements OnClickListener {
-                C13432() {
+            class C13442 implements OnClickListener {
+                C13442() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -5525,12 +5598,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.hideKeyboard(ChatActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
                     try {
-                        DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new C13421(), calendar.get(1), calendar.get(2), calendar.get(5));
+                        DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new C13431(), calendar.get(1), calendar.get(2), calendar.get(5));
                         final DatePicker datePicker = dialog.getDatePicker();
                         datePicker.setMinDate(1375315200000L);
                         datePicker.setMaxDate(System.currentTimeMillis());
-                        dialog.setButton(-1, LocaleController.getString("JumpToDate", C0500R.string.JumpToDate), dialog);
-                        dialog.setButton(-2, LocaleController.getString("Cancel", C0500R.string.Cancel), new C13432());
+                        dialog.setButton(-1, LocaleController.getString("JumpToDate", C0501R.string.JumpToDate), dialog);
+                        dialog.setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new C13442());
                         if (VERSION.SDK_INT >= 21) {
                             dialog.setOnShowListener(new OnShowListener() {
                                 public void onShow(DialogInterface dialog) {
@@ -5571,7 +5644,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.bottomOverlay.setFocusableInTouchMode(true);
         this.bottomOverlay.setClickable(true);
         this.bottomOverlay.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-        this.contentView.addView(this.bottomOverlay, LayoutHelper.createFrame(-1, 51, 80));
+        this.contentView.addView(this.bottomOverlay, LayoutHelper.createFrame(-1, text_italic, 80));
         this.bottomOverlayText = new TextView(context);
         this.bottomOverlayText.setTextSize(1, 14.0f);
         this.bottomOverlayText.setGravity(17);
@@ -5591,12 +5664,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.bottomOverlayChat.setWillNotDraw(false);
         this.bottomOverlayChat.setPadding(0, AndroidUtilities.dp(3.0f), 0, 0);
         this.bottomOverlayChat.setVisibility(4);
-        this.contentView.addView(this.bottomOverlayChat, LayoutHelper.createFrame(-1, 51, 80));
+        this.contentView.addView(this.bottomOverlayChat, LayoutHelper.createFrame(-1, text_italic, 80));
         this.bottomOverlayChat.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChatActivity$55$1 */
-            class C13451 implements OnClickListener {
-                C13451() {
+            class C13461 implements OnClickListener {
+                C13461() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -5605,8 +5678,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
 
             /* renamed from: org.telegram.ui.ChatActivity$55$2 */
-            class C13462 implements OnClickListener {
-                C13462() {
+            class C13472 implements OnClickListener {
+                C13472() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -5629,8 +5702,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.updateBottomOverlay();
                         } else if (!ChatObject.isChannel(ChatActivity.this.currentChat) || (ChatActivity.this.currentChat instanceof TL_channelForbidden)) {
                             builder = new Builder(ChatActivity.this.getParentActivity());
-                            builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", C0500R.string.AreYouSureDeleteThisChat));
-                            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C13462());
+                            builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", C0501R.string.AreYouSureDeleteThisChat));
+                            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C13472());
                         } else if (ChatObject.isNotInChat(ChatActivity.this.currentChat)) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).addUserToChat(ChatActivity.this.currentChat.id, UserConfig.getInstance(ChatActivity.this.currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this);
                             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction, new Object[0]);
@@ -5648,12 +5721,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     } else {
                         builder = new Builder(ChatActivity.this.getParentActivity());
-                        builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", C0500R.string.AreYouSureUnblockContact));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C13451());
+                        builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", C0501R.string.AreYouSureUnblockContact));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C13461());
                     }
                     if (builder != null) {
-                        builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                         ChatActivity.this.showDialog(builder.create());
                     }
                 }
@@ -5664,7 +5737,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         this.bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
         this.bottomOverlayChat.addView(this.bottomOverlayChatText, LayoutHelper.createFrame(-2, -2, 17));
-        this.contentView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 51, 80));
+        this.contentView.addView(this.searchContainer, LayoutHelper.createFrame(-1, text_italic, 80));
         this.chatAdapter.updateRows();
         if (this.loading && this.messages.isEmpty()) {
             this.progressView.setVisibility(this.chatAdapter.botInfoRow == -1 ? 0 : 4);
@@ -6079,9 +6152,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (ChatActivity.this.stickersPanel.getVisibility() != 4) {
                                     float f2;
                                     ChatActivity.this.runningAnimation = new AnimatorSet();
-                                    AnimatorSet access$22900 = ChatActivity.this.runningAnimation;
+                                    AnimatorSet access$23200 = ChatActivity.this.runningAnimation;
                                     Animator[] animatorArr = new Animator[1];
-                                    FrameLayout access$19200 = ChatActivity.this.stickersPanel;
+                                    FrameLayout access$19500 = ChatActivity.this.stickersPanel;
                                     String str = "alpha";
                                     float[] fArr = new float[2];
                                     if (show) {
@@ -6094,8 +6167,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         f = 0.0f;
                                     }
                                     fArr[1] = f;
-                                    animatorArr[0] = ObjectAnimator.ofFloat(access$19200, str, fArr);
-                                    access$22900.playTogether(animatorArr);
+                                    animatorArr[0] = ObjectAnimator.ofFloat(access$19500, str, fArr);
+                                    access$23200.playTogether(animatorArr);
                                     ChatActivity.this.runningAnimation.setDuration(150);
                                     ChatActivity.this.runningAnimation.addListener(new AnimatorListenerAdapter() {
                                         public void onAnimationEnd(Animator animation) {
@@ -6148,22 +6221,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public void shareMyContact(final MessageObject messageObject) {
         Builder builder = new Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("ShareYouPhoneNumberTitle", C0500R.string.ShareYouPhoneNumberTitle));
+        builder.setTitle(LocaleController.getString("ShareYouPhoneNumberTitle", C0501R.string.ShareYouPhoneNumberTitle));
         if (this.currentUser == null) {
-            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", C0500R.string.AreYouSureShareMyContactInfo));
+            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", C0501R.string.AreYouSureShareMyContactInfo));
         } else if (this.currentUser.bot) {
-            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", C0500R.string.AreYouSureShareMyContactInfoBot));
+            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", C0501R.string.AreYouSureShareMyContactInfoBot));
         } else {
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", C0500R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + UserConfig.getInstance(this.currentAccount).getCurrentUser().phone), ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name))));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", C0501R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + UserConfig.getInstance(this.currentAccount).getCurrentUser().phone), ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name))));
         }
-        builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+        builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 SendMessagesHelper.getInstance(ChatActivity.this.currentAccount).sendMessage(UserConfig.getInstance(ChatActivity.this.currentAccount).getCurrentUser(), ChatActivity.this.dialog_id, messageObject, null, null);
                 ChatActivity.this.moveScrollToLastMessage();
                 ChatActivity.this.hideFieldPanel();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -6224,7 +6297,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     hideVoiceHint();
                     return;
                 }
-                this.voiceHintTextView.setText(video ? LocaleController.getString("HoldToVideo", C0500R.string.HoldToVideo) : LocaleController.getString("HoldToAudio", C0500R.string.HoldToAudio));
+                this.voiceHintTextView.setText(video ? LocaleController.getString("HoldToVideo", C0501R.string.HoldToVideo) : LocaleController.getString("HoldToAudio", C0501R.string.HoldToAudio));
                 if (this.voiceHintHideRunnable != null) {
                     if (this.voiceHintAnimation != null) {
                         this.voiceHintAnimation.cancel();
@@ -6252,8 +6325,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.voiceHintAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.ChatActivity$65$1 */
-                    class C13491 implements Runnable {
-                        C13491() {
+                    class C13501 implements Runnable {
+                        C13501() {
                         }
 
                         public void run() {
@@ -6264,7 +6337,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     public void onAnimationEnd(Animator animation) {
                         if (animation.equals(ChatActivity.this.voiceHintAnimation)) {
                             ChatActivity.this.voiceHintAnimation = null;
-                            AndroidUtilities.runOnUIThread(ChatActivity.this.voiceHintHideRunnable = new C13491(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                            AndroidUtilities.runOnUIThread(ChatActivity.this.voiceHintHideRunnable = new C13501(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         }
                     }
 
@@ -6296,9 +6369,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         frameLayout.addView(this.mediaBanTooltip, index + 1, LayoutHelper.createFrame(-2, -2.0f, 85, 30.0f, 0.0f, 5.0f, 3.0f));
                     }
                     if (AndroidUtilities.isBannedForever(this.currentChat.banned_rights.until_date)) {
-                        this.mediaBanTooltip.setText(LocaleController.getString("AttachMediaRestrictedForever", C0500R.string.AttachMediaRestrictedForever));
+                        this.mediaBanTooltip.setText(LocaleController.getString("AttachMediaRestrictedForever", C0501R.string.AttachMediaRestrictedForever));
                     } else {
-                        this.mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", C0500R.string.AttachMediaRestricted, LocaleController.formatDateForBan((long) this.currentChat.banned_rights.until_date)));
+                        this.mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", C0501R.string.AttachMediaRestricted, LocaleController.formatDateForBan((long) this.currentChat.banned_rights.until_date)));
                     }
                     this.mediaBanTooltip.setVisibility(0);
                     AnimatorSet AnimatorSet = new AnimatorSet();
@@ -6306,11 +6379,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AnimatorSet.addListener(new AnimatorListenerAdapter() {
 
                         /* renamed from: org.telegram.ui.ChatActivity$66$1 */
-                        class C13511 implements Runnable {
+                        class C13521 implements Runnable {
 
                             /* renamed from: org.telegram.ui.ChatActivity$66$1$1 */
-                            class C13501 extends AnimatorListenerAdapter {
-                                C13501() {
+                            class C13511 extends AnimatorListenerAdapter {
+                                C13511() {
                                 }
 
                                 public void onAnimationEnd(Animator animation) {
@@ -6320,7 +6393,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 }
                             }
 
-                            C13511() {
+                            C13521() {
                             }
 
                             public void run() {
@@ -6329,7 +6402,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     Animator[] animatorArr = new Animator[1];
                                     animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mediaBanTooltip, "alpha", new float[]{0.0f});
                                     AnimatorSet.playTogether(animatorArr);
-                                    AnimatorSet.addListener(new C13501());
+                                    AnimatorSet.addListener(new C13511());
                                     AnimatorSet.setDuration(300);
                                     AnimatorSet.start();
                                 }
@@ -6337,7 +6410,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
 
                         public void onAnimationEnd(Animator animation) {
-                            AndroidUtilities.runOnUIThread(new C13511(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            AndroidUtilities.runOnUIThread(new C13521(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                     });
                     AnimatorSet.setDuration(300);
@@ -6358,14 +6431,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     if (index != -1) {
                         this.chatActivityEnterView.setOpenGifsTabFirst();
                         this.emojiButtonRed = new View(getParentActivity());
-                        this.emojiButtonRed.setBackgroundResource(C0500R.drawable.redcircle);
+                        this.emojiButtonRed.setBackgroundResource(C0501R.drawable.redcircle);
                         frameLayout.addView(this.emojiButtonRed, index + 1, LayoutHelper.createFrame(10, 10.0f, 83, 30.0f, 0.0f, 0.0f, 27.0f));
                         this.gifHintTextView = new TextView(getParentActivity());
                         this.gifHintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
                         this.gifHintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
                         this.gifHintTextView.setTextSize(1, 14.0f);
                         this.gifHintTextView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(7.0f));
-                        this.gifHintTextView.setText(LocaleController.getString("TapHereGifs", C0500R.string.TapHereGifs));
+                        this.gifHintTextView.setText(LocaleController.getString("TapHereGifs", C0501R.string.TapHereGifs));
                         this.gifHintTextView.setGravity(16);
                         frameLayout.addView(this.gifHintTextView, index + 1, LayoutHelper.createFrame(-2, -2.0f, 83, 5.0f, 0.0f, 5.0f, 3.0f));
                         AnimatorSet AnimatorSet = new AnimatorSet();
@@ -6373,11 +6446,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AnimatorSet.addListener(new AnimatorListenerAdapter() {
 
                             /* renamed from: org.telegram.ui.ChatActivity$67$1 */
-                            class C13531 implements Runnable {
+                            class C13541 implements Runnable {
 
                                 /* renamed from: org.telegram.ui.ChatActivity$67$1$1 */
-                                class C13521 extends AnimatorListenerAdapter {
-                                    C13521() {
+                                class C13531 extends AnimatorListenerAdapter {
+                                    C13531() {
                                     }
 
                                     public void onAnimationEnd(Animator animation) {
@@ -6387,7 +6460,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                 }
 
-                                C13531() {
+                                C13541() {
                                 }
 
                                 public void run() {
@@ -6396,7 +6469,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         Animator[] animatorArr = new Animator[1];
                                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.gifHintTextView, "alpha", new float[]{0.0f});
                                         AnimatorSet.playTogether(animatorArr);
-                                        AnimatorSet.addListener(new C13521());
+                                        AnimatorSet.addListener(new C13531());
                                         AnimatorSet.setDuration(300);
                                         AnimatorSet.start();
                                     }
@@ -6404,7 +6477,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
 
                             public void onAnimationEnd(Animator animation) {
-                                AndroidUtilities.runOnUIThread(new C13531(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                                AndroidUtilities.runOnUIThread(new C13541(), AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                             }
                         });
                         AnimatorSet.setDuration(300);
@@ -6560,7 +6633,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             isChannel = ChatObject.isChannel(this.currentChat);
                             i4 = this.lastLoadIndex;
                             this.lastLoadIndex = i4 + 1;
-                            instance.loadMessages(j, 50, i, 0, z, i2, i3, 0, 0, isChannel, i4);
+                            instance.loadMessages(j, text_bold, i, 0, z, i2, i3, 0, 0, isChannel, i4);
                         } else {
                             instance = MessagesController.getInstance(this.currentAccount);
                             j = this.dialog_id;
@@ -6570,7 +6643,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             isChannel = ChatObject.isChannel(this.currentChat);
                             i4 = this.lastLoadIndex;
                             this.lastLoadIndex = i4 + 1;
-                            instance.loadMessages(j, 50, 0, 0, z, i2, i3, 0, 0, isChannel, i4);
+                            instance.loadMessages(j, text_bold, 0, 0, z, i2, i3, 0, 0, isChannel, i4);
                         }
                     } else if (!(this.mergeDialogId == 0 || this.endReached[1])) {
                         this.loading = true;
@@ -6584,7 +6657,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         isChannel = ChatObject.isChannel(this.currentChat);
                         i4 = this.lastLoadIndex;
                         this.lastLoadIndex = i4 + 1;
-                        instance.loadMessages(j, 50, i, 0, z, i2, i3, 0, 0, isChannel, i4);
+                        instance.loadMessages(j, text_bold, i, 0, z, i2, i3, 0, 0, isChannel, i4);
                     }
                 }
                 if (visibleItemCount > 0 && !this.loadingForward && firstVisibleItem <= 10) {
@@ -6598,7 +6671,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         isChannel = ChatObject.isChannel(this.currentChat);
                         i4 = this.lastLoadIndex;
                         this.lastLoadIndex = i4 + 1;
-                        instance.loadMessages(j, 50, i, 0, true, i2, i3, 1, 0, isChannel, i4);
+                        instance.loadMessages(j, text_bold, i, 0, true, i2, i3, 1, 0, isChannel, i4);
                         this.loadingForward = true;
                     } else if (!this.forwardEndReached[0]) {
                         this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
@@ -6610,7 +6683,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         isChannel = ChatObject.isChannel(this.currentChat);
                         i4 = this.lastLoadIndex;
                         this.lastLoadIndex = i4 + 1;
-                        instance.loadMessages(j, 50, i, 0, true, i2, i3, 1, 0, isChannel, i4);
+                        instance.loadMessages(j, text_bold, i, 0, true, i2, i3, 1, 0, isChannel, i4);
                         this.loadingForward = true;
                     }
                 }
@@ -6833,8 +6906,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Utilities.searchQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$75$1 */
-                class C13551 implements Runnable {
-                    C13551() {
+                class C13561 implements Runnable {
+                    C13561() {
                     }
 
                     public void run() {
@@ -6846,8 +6919,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$75$2 */
-                class C13562 implements Runnable {
-                    C13562() {
+                class C13572 implements Runnable {
+                    C13572() {
                     }
 
                     public void run() {
@@ -6859,11 +6932,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 /* renamed from: org.telegram.ui.ChatActivity$75$3 */
-                class C13583 implements Runnable {
+                class C13593 implements Runnable {
 
                     /* renamed from: org.telegram.ui.ChatActivity$75$3$1 */
-                    class C13571 implements OnClickListener {
-                        C13571() {
+                    class C13581 implements OnClickListener {
+                        C13581() {
                         }
 
                         public void onClick(DialogInterface dialog, int which) {
@@ -6874,15 +6947,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     }
 
-                    C13583() {
+                    C13593() {
                     }
 
                     public void run() {
                         Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new C13571());
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
-                        builder.setMessage(LocaleController.getString("SecretLinkPreviewAlert", C0500R.string.SecretLinkPreviewAlert));
+                        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C13581());
+                        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+                        builder.setMessage(LocaleController.getString("SecretLinkPreviewAlert", C0501R.string.SecretLinkPreviewAlert));
                         ChatActivity.this.showDialog(builder.create());
                         messagesController.secretWebpagePreview = 0;
                         MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", messagesController.secretWebpagePreview).commit();
@@ -6890,58 +6963,123 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 public void run() {
+                    ArrayList<CharSequence> urls;
                     Throwable e;
+                    int a;
+                    boolean clear;
                     CharSequence textToCheck;
                     final TL_messages_getWebPagePreview req;
                     if (ChatActivity.this.linkSearchRequestId != 0) {
                         ConnectionsManager.getInstance(ChatActivity.this.currentAccount).cancelRequest(ChatActivity.this.linkSearchRequestId, true);
                         ChatActivity.this.linkSearchRequestId = 0;
                     }
-                    try {
-                        ArrayList<CharSequence> urls;
-                        Matcher m = AndroidUtilities.WEB_URL.matcher(charSequence);
-                        ArrayList<CharSequence> urls2 = null;
-                        while (m.find()) {
-                            try {
-                                if (m.start() <= 0 || charSequence.charAt(m.start() - 1) != '@') {
-                                    if (urls2 == null) {
-                                        urls = new ArrayList();
-                                    } else {
-                                        urls = urls2;
-                                    }
+                    Matcher m = AndroidUtilities.WEB_URL.matcher(charSequence);
+                    ArrayList<CharSequence> urls2 = null;
+                    while (m.find()) {
+                        try {
+                            if (m.start() <= 0 || charSequence.charAt(m.start() - 1) != '@') {
+                                if (urls2 == null) {
+                                    urls = new ArrayList();
+                                } else {
+                                    urls = urls2;
+                                }
+                                try {
                                     urls.add(charSequence.subSequence(m.start(), m.end()));
                                     urls2 = urls;
+                                } catch (Exception e2) {
+                                    e = e2;
                                 }
-                            } catch (Exception e2) {
-                                e = e2;
+                            }
+                        } catch (Exception e3) {
+                            e = e3;
+                            urls = urls2;
+                        }
+                    }
+                    if (charSequence instanceof Spannable) {
+                        URLSpanReplacement[] spans = (URLSpanReplacement[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), URLSpanReplacement.class);
+                        if (spans != null && spans.length > 0) {
+                            if (urls2 == null) {
+                                urls = new ArrayList();
+                            } else {
                                 urls = urls2;
                             }
-                        }
-                        if (urls2 != null) {
-                            if (ChatActivity.this.foundUrls != null && urls2.size() == ChatActivity.this.foundUrls.size()) {
-                                boolean clear = true;
-                                for (int a = 0; a < urls2.size(); a++) {
-                                    if (!TextUtils.equals((CharSequence) urls2.get(a), (CharSequence) ChatActivity.this.foundUrls.get(a))) {
+                            for (URLSpanReplacement url : spans) {
+                                urls.add(url.getURL());
+                            }
+                            if (!(urls == null || ChatActivity.this.foundUrls == null || urls.size() != ChatActivity.this.foundUrls.size())) {
+                                clear = true;
+                                for (a = 0; a < urls.size(); a++) {
+                                    if (!TextUtils.equals((CharSequence) urls.get(a), (CharSequence) ChatActivity.this.foundUrls.get(a))) {
                                         clear = false;
                                     }
                                 }
                                 if (clear) {
-                                    urls = urls2;
                                     return;
                                 }
                             }
+                            ChatActivity.this.foundUrls = urls;
+                            if (urls != null) {
+                                AndroidUtilities.runOnUIThread(new C13561());
+                                return;
+                            }
+                            textToCheck = TextUtils.join(" ", urls);
+                            if (ChatActivity.this.currentEncryptedChat == null && messagesController.secretWebpagePreview == 2) {
+                                AndroidUtilities.runOnUIThread(new C13593());
+                                return;
+                            }
+                            req = new TL_messages_getWebPagePreview();
+                            if (textToCheck instanceof String) {
+                                req.message = (String) textToCheck;
+                            } else {
+                                req.message = textToCheck.toString();
+                            }
+                            ChatActivity.this.linkSearchRequestId = ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
+                                public void run(final TLObject response, final TL_error error) {
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            ChatActivity.this.linkSearchRequestId = 0;
+                                            if (error != null) {
+                                                return;
+                                            }
+                                            if (response instanceof TL_messageMediaWebPage) {
+                                                ChatActivity.this.foundWebPage = ((TL_messageMediaWebPage) response).webpage;
+                                                if ((ChatActivity.this.foundWebPage instanceof TL_webPage) || (ChatActivity.this.foundWebPage instanceof TL_webPagePending)) {
+                                                    if (ChatActivity.this.foundWebPage instanceof TL_webPagePending) {
+                                                        ChatActivity.this.pendingLinkSearchString = req.message;
+                                                    }
+                                                    if (ChatActivity.this.currentEncryptedChat != null && (ChatActivity.this.foundWebPage instanceof TL_webPagePending)) {
+                                                        ChatActivity.this.foundWebPage.url = req.message;
+                                                    }
+                                                    ChatActivity.this.showFieldPanelForWebPage(true, ChatActivity.this.foundWebPage, false);
+                                                } else if (ChatActivity.this.foundWebPage != null) {
+                                                    ChatActivity.this.showFieldPanelForWebPage(false, ChatActivity.this.foundWebPage, false);
+                                                    ChatActivity.this.foundWebPage = null;
+                                                }
+                                            } else if (ChatActivity.this.foundWebPage != null) {
+                                                ChatActivity.this.showFieldPanelForWebPage(false, ChatActivity.this.foundWebPage, false);
+                                                ChatActivity.this.foundWebPage = null;
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            ConnectionsManager.getInstance(ChatActivity.this.currentAccount).bindRequestToGuid(ChatActivity.this.linkSearchRequestId, ChatActivity.this.classGuid);
                         }
-                        ChatActivity.this.foundUrls = urls2;
-                        if (urls2 == null) {
-                            AndroidUtilities.runOnUIThread(new C13551());
-                            urls = urls2;
-                            return;
+                    }
+                    urls = urls2;
+                    clear = true;
+                    for (a = 0; a < urls.size(); a++) {
+                        if (!TextUtils.equals((CharSequence) urls.get(a), (CharSequence) ChatActivity.this.foundUrls.get(a))) {
+                            clear = false;
                         }
-                        textToCheck = TextUtils.join(" ", urls2);
-                        urls = urls2;
-                        if (ChatActivity.this.currentEncryptedChat == null && messagesController.secretWebpagePreview == 2) {
-                            AndroidUtilities.runOnUIThread(new C13583());
-                            return;
+                    }
+                    if (clear) {
+                        return;
+                    }
+                    ChatActivity.this.foundUrls = urls;
+                    if (urls != null) {
+                        textToCheck = TextUtils.join(" ", urls);
+                        if (ChatActivity.this.currentEncryptedChat == null) {
                         }
                         req = new TL_messages_getWebPagePreview();
                         if (textToCheck instanceof String) {
@@ -6949,44 +7087,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         } else {
                             req.message = (String) textToCheck;
                         }
-                        ChatActivity.this.linkSearchRequestId = ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
-                            public void run(final TLObject response, final TL_error error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        ChatActivity.this.linkSearchRequestId = 0;
-                                        if (error != null) {
-                                            return;
-                                        }
-                                        if (response instanceof TL_messageMediaWebPage) {
-                                            ChatActivity.this.foundWebPage = ((TL_messageMediaWebPage) response).webpage;
-                                            if ((ChatActivity.this.foundWebPage instanceof TL_webPage) || (ChatActivity.this.foundWebPage instanceof TL_webPagePending)) {
-                                                if (ChatActivity.this.foundWebPage instanceof TL_webPagePending) {
-                                                    ChatActivity.this.pendingLinkSearchString = req.message;
-                                                }
-                                                if (ChatActivity.this.currentEncryptedChat != null && (ChatActivity.this.foundWebPage instanceof TL_webPagePending)) {
-                                                    ChatActivity.this.foundWebPage.url = req.message;
-                                                }
-                                                ChatActivity.this.showFieldPanelForWebPage(true, ChatActivity.this.foundWebPage, false);
-                                            } else if (ChatActivity.this.foundWebPage != null) {
-                                                ChatActivity.this.showFieldPanelForWebPage(false, ChatActivity.this.foundWebPage, false);
-                                                ChatActivity.this.foundWebPage = null;
-                                            }
-                                        } else if (ChatActivity.this.foundWebPage != null) {
-                                            ChatActivity.this.showFieldPanelForWebPage(false, ChatActivity.this.foundWebPage, false);
-                                            ChatActivity.this.foundWebPage = null;
-                                        }
-                                    }
-                                });
-                            }
-                        });
+                        ChatActivity.this.linkSearchRequestId = ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, /* anonymous class already generated */);
                         ConnectionsManager.getInstance(ChatActivity.this.currentAccount).bindRequestToGuid(ChatActivity.this.linkSearchRequestId, ChatActivity.this.classGuid);
-                    } catch (Exception e3) {
-                        e = e3;
                     }
+                    AndroidUtilities.runOnUIThread(new C13561());
+                    return;
                     FileLog.m3e(e);
                     String text = charSequence.toString().toLowerCase();
                     if (charSequence.length() < 13 || !(text.contains("http://") || text.contains("https://"))) {
-                        AndroidUtilities.runOnUIThread(new C13562());
+                        AndroidUtilities.runOnUIThread(new C13572());
                         return;
                     }
                     textToCheck = charSequence;
@@ -6994,9 +7103,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                     req = new TL_messages_getWebPagePreview();
                     if (textToCheck instanceof String) {
-                        req.message = textToCheck.toString();
-                    } else {
                         req.message = (String) textToCheck;
+                    } else {
+                        req.message = textToCheck.toString();
                     }
                     ChatActivity.this.linkSearchRequestId = ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, /* anonymous class already generated */);
                     ConnectionsManager.getInstance(ChatActivity.this.currentAccount).bindRequestToGuid(ChatActivity.this.linkSearchRequestId, ChatActivity.this.classGuid);
@@ -7089,14 +7198,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         this.chatActivityEnterView.setEditingMessageObject(messageObjectToEdit, !messageObjectToEdit.isMediaEmpty());
                         if (this.foundWebPage == null) {
                             this.chatActivityEnterView.setForceShowSendButton(false, false);
-                            this.replyIconImageView.setImageResource(C0500R.drawable.group_edit);
+                            this.replyIconImageView.setImageResource(C0501R.drawable.group_edit);
                             if (messageObjectToEdit.isMediaEmpty()) {
-                                this.replyNameTextView.setText(LocaleController.getString("EditMessage", C0500R.string.EditMessage));
+                                this.replyNameTextView.setText(LocaleController.getString("EditMessage", C0501R.string.EditMessage));
                             } else {
-                                this.replyNameTextView.setText(LocaleController.getString("EditCaption", C0500R.string.EditCaption));
+                                this.replyNameTextView.setText(LocaleController.getString("EditCaption", C0501R.string.EditCaption));
                             }
                             if (messageObjectToEdit.canEditMedia()) {
-                                this.replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", C0500R.string.EditMessageMedia));
+                                this.replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", C0501R.string.EditMessageMedia));
                             } else if (messageObjectToEdit.messageText != null) {
                                 mess = messageObjectToEdit.messageText.toString();
                                 if (mess.length() > 150) {
@@ -7129,7 +7238,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             } else {
                                 return;
                             }
-                            this.replyIconImageView.setImageResource(C0500R.drawable.msg_panel_reply);
+                            this.replyIconImageView.setImageResource(C0501R.drawable.msg_panel_reply);
                             this.replyNameTextView.setText(name);
                             if (messageObjectToReply.messageOwner.media instanceof TL_messageMediaGame) {
                                 this.replyObjectTextView.setText(Emoji.replaceEmoji(messageObjectToReply.messageOwner.media.game.title, this.replyObjectTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
@@ -7144,9 +7253,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             return;
                         }
                     } else if (messageObjectsToForward == null) {
-                        this.replyIconImageView.setImageResource(C0500R.drawable.msg_panel_link);
+                        this.replyIconImageView.setImageResource(C0501R.drawable.msg_panel_link);
                         if (webPage instanceof TL_webPagePending) {
-                            this.replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", C0500R.string.GettingLinkInfo));
+                            this.replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", C0501R.string.GettingLinkInfo));
                             this.replyObjectTextView.setText(this.pendingLinkSearchString);
                         } else {
                             if (webPage.site_name != null) {
@@ -7154,7 +7263,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             } else if (webPage.title != null) {
                                 this.replyNameTextView.setText(webPage.title);
                             } else {
-                                this.replyNameTextView.setText(LocaleController.getString("LinkPreview", C0500R.string.LinkPreview));
+                                this.replyNameTextView.setText(LocaleController.getString("LinkPreview", C0501R.string.LinkPreview));
                             }
                             if (webPage.title != null) {
                                 this.replyObjectTextView.setText(webPage.title);
@@ -7178,7 +7287,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             Integer uid;
                             this.chatActivityEnterView.setForceShowSendButton(true, false);
                             ArrayList<Integer> uids = new ArrayList();
-                            this.replyIconImageView.setImageResource(C0500R.drawable.msg_panel_forward);
+                            this.replyIconImageView.setImageResource(C0501R.drawable.msg_panel_forward);
                             MessageObject object = (MessageObject) messageObjectsToForward.get(0);
                             if (object.isFromUser()) {
                                 uids.add(Integer.valueOf(object.messageOwner.from_id));
@@ -7278,7 +7387,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 if (messageObjectsToForward.size() != 1) {
                                     this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedFile", messageObjectsToForward.size()));
                                 } else if (type == 8) {
-                                    this.replyObjectTextView.setText(LocaleController.getString("AttachGif", C0500R.string.AttachGif));
+                                    this.replyObjectTextView.setText(LocaleController.getString("AttachGif", C0501R.string.AttachGif));
                                 } else {
                                     name = FileLoader.getDocumentFileName(((MessageObject) messageObjectsToForward.get(0)).getDocument());
                                     if (name.length() != 0) {
@@ -8000,9 +8109,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             boolean hideKeyboard = false;
             if (ChatObject.isChannel(this.currentChat) && this.currentChat.banned_rights != null && this.currentChat.banned_rights.send_messages) {
                 if (AndroidUtilities.isBannedForever(this.currentChat.banned_rights.until_date)) {
-                    this.bottomOverlayText.setText(LocaleController.getString("SendMessageRestrictedForever", C0500R.string.SendMessageRestrictedForever));
+                    this.bottomOverlayText.setText(LocaleController.getString("SendMessageRestrictedForever", C0501R.string.SendMessageRestrictedForever));
                 } else {
-                    this.bottomOverlayText.setText(LocaleController.formatString("SendMessageRestricted", C0500R.string.SendMessageRestricted, LocaleController.formatDateForBan((long) this.currentChat.banned_rights.until_date)));
+                    this.bottomOverlayText.setText(LocaleController.formatString("SendMessageRestricted", C0501R.string.SendMessageRestricted, LocaleController.formatDateForBan((long) this.currentChat.banned_rights.until_date)));
                 }
                 this.bottomOverlay.setVisibility(0);
                 if (this.mentionListAnimation != null) {
@@ -8017,15 +8126,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return;
             } else {
                 if (this.currentEncryptedChat instanceof TL_encryptedChatRequested) {
-                    this.bottomOverlayText.setText(LocaleController.getString("EncryptionProcessing", C0500R.string.EncryptionProcessing));
+                    this.bottomOverlayText.setText(LocaleController.getString("EncryptionProcessing", C0501R.string.EncryptionProcessing));
                     this.bottomOverlay.setVisibility(0);
                     hideKeyboard = true;
                 } else if (this.currentEncryptedChat instanceof TL_encryptedChatWaiting) {
-                    this.bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AwaitingEncryption", C0500R.string.AwaitingEncryption, "<b>" + this.currentUser.first_name + "</b>")));
+                    this.bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AwaitingEncryption", C0501R.string.AwaitingEncryption, "<b>" + this.currentUser.first_name + "</b>")));
                     this.bottomOverlay.setVisibility(0);
                     hideKeyboard = true;
                 } else if (this.currentEncryptedChat instanceof TL_encryptedChatDiscarded) {
-                    this.bottomOverlayText.setText(LocaleController.getString("EncryptionRejected", C0500R.string.EncryptionRejected));
+                    this.bottomOverlayText.setText(LocaleController.getString("EncryptionRejected", C0501R.string.EncryptionRejected));
                     this.bottomOverlay.setVisibility(0);
                     this.chatActivityEnterView.setFieldText(TtmlNode.ANONYMOUS_REGION_ID);
                     DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, false);
@@ -8057,9 +8166,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         } else if (requestCode == 21) {
             if (getParentActivity() != null && grantResults != null && grantResults.length != 0 && grantResults[0] != 0) {
                 Builder builder = new Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", C0500R.string.PermissionNoAudioVideo));
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0500R.string.PermissionOpenSettings), new OnClickListener() {
+                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", C0501R.string.PermissionNoAudioVideo));
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0501R.string.PermissionOpenSettings), new OnClickListener() {
                     @TargetApi(9)
                     public void onClick(DialogInterface dialog, int which) {
                         try {
@@ -8071,7 +8180,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         }
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                 builder.show();
             }
         } else if (requestCode == 19 && grantResults != null && grantResults.length > 0 && grantResults[0] == 0) {
@@ -8353,7 +8462,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     break;
                 }
             }
-            starItem.setIcon(this.hasUnfavedSelected ? C0500R.drawable.ic_ab_fave : C0500R.drawable.ic_ab_unfave);
+            starItem.setIcon(this.hasUnfavedSelected ? C0501R.drawable.ic_ab_fave : C0501R.drawable.ic_ab_unfave);
             if (replyItem != null) {
                 boolean allowChatActions = true;
                 if ((this.currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) < 46) || this.isBroadcast || ((this.bottomOverlayChat != null && this.bottomOverlayChat.getVisibility() == 0) || (this.currentChat != null && (ChatObject.isNotInChat(this.currentChat) || !((!ChatObject.isChannel(this.currentChat) || ChatObject.canPost(this.currentChat) || this.currentChat.megagroup) && ChatObject.canSendMessages(this.currentChat)))))) {
@@ -8453,7 +8562,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             } else if (this.currentUser == null) {
             } else {
                 if (this.currentUser.self) {
-                    this.avatarContainer.setTitle(LocaleController.getString("SavedMessages", C0500R.string.SavedMessages));
+                    this.avatarContainer.setTitle(LocaleController.getString("SavedMessages", C0501R.string.SavedMessages));
                 } else if (MessagesController.isSupportId(this.currentUser.id) || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                     this.avatarContainer.setTitle(UserObject.getUserName(this.currentUser));
                 } else if (TextUtils.isEmpty(this.currentUser.phone)) {
@@ -8516,9 +8625,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return;
             }
             if (rightIcon != null) {
-                this.muteItem.setText(LocaleController.getString("UnmuteNotifications", C0500R.string.UnmuteNotifications));
+                this.muteItem.setText(LocaleController.getString("UnmuteNotifications", C0501R.string.UnmuteNotifications));
             } else {
-                this.muteItem.setText(LocaleController.getString("MuteNotifications", C0500R.string.MuteNotifications));
+                this.muteItem.setText(LocaleController.getString("MuteNotifications", C0501R.string.MuteNotifications));
             }
         }
     }
@@ -8576,7 +8685,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private void showAttachmentError() {
         if (getParentActivity() != null) {
-            Toast.makeText(getParentActivity(), LocaleController.getString("UnsupportedAttachment", C0500R.string.UnsupportedAttachment), 0).show();
+            Toast.makeText(getParentActivity(), LocaleController.getString("UnsupportedAttachment", C0501R.string.UnsupportedAttachment), 0).show();
         }
     }
 
@@ -8602,7 +8711,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     String firstExtraction = extractUriFrom.split("/1/")[1];
                     int index = firstExtraction.indexOf("/ACTUAL");
                     if (index != -1) {
-                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), C0615C.UTF8_NAME));
+                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), C0616C.UTF8_NAME));
                     }
                 } catch (Throwable e) {
                     FileLog.m3e(e);
@@ -9314,9 +9423,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     obj = (MessageObject) arr.get(0);
                     if (this.currentEncryptedChat != null && obj.isOut() && obj.messageOwner.action != null && (obj.messageOwner.action instanceof TL_messageEncryptedAction) && (obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) && getParentActivity() != null && AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) < 17 && this.currentEncryptedChat.ttl > 0 && this.currentEncryptedChat.ttl <= 60) {
                         r0 = new Builder(getParentActivity());
-                        r0.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                        r0.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
-                        r0.setMessage(LocaleController.formatString("CompatibilityChat", C0500R.string.CompatibilityChat, this.currentUser.first_name, this.currentUser.first_name));
+                        r0.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                        r0.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                        r0.setMessage(LocaleController.formatString("CompatibilityChat", C0501R.string.CompatibilityChat, this.currentUser.first_name, this.currentUser.first_name));
                         showDialog(r0.create());
                     }
                 }
@@ -9466,8 +9575,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                                     /* renamed from: org.telegram.ui.ChatActivity$86$1 */
-                                    class C13631 implements Runnable {
-                                        C13631() {
+                                    class C13641 implements Runnable {
+                                        C13641() {
                                         }
 
                                         public void run() {
@@ -9482,7 +9591,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         }
                                         NotificationCenter.getInstance(ChatActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                         parentLayout.presentFragment(new ChatActivity(bundle2), true);
-                                        AndroidUtilities.runOnUIThread(new C13631(), 1000);
+                                        AndroidUtilities.runOnUIThread(new C13641(), 1000);
                                     }
                                 });
                                 if (newGroups != null) {
@@ -9651,8 +9760,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.ChatActivity$85$1 */
-                                class C13621 implements Runnable {
-                                    C13621() {
+                                class C13631 implements Runnable {
+                                    C13631() {
                                     }
 
                                     public void run() {
@@ -9667,7 +9776,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     NotificationCenter.getInstance(ChatActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                     parentLayout.presentFragment(new ChatActivity(bundle2), true);
-                                    AndroidUtilities.runOnUIThread(new C13621(), 1000);
+                                    AndroidUtilities.runOnUIThread(new C13631(), 1000);
                                 }
                             });
                             return;
@@ -10260,15 +10369,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 int reason = ((Integer) args[1]).intValue();
                 if (getParentActivity() != null && this.closeChatDialog == null) {
                     r0 = new Builder(getParentActivity());
-                    r0.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+                    r0.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
                     if (reason == 0) {
-                        r0.setMessage(LocaleController.getString("ChannelCantOpenPrivate", C0500R.string.ChannelCantOpenPrivate));
+                        r0.setMessage(LocaleController.getString("ChannelCantOpenPrivate", C0501R.string.ChannelCantOpenPrivate));
                     } else if (reason == 1) {
-                        r0.setMessage(LocaleController.getString("ChannelCantOpenNa", C0500R.string.ChannelCantOpenNa));
+                        r0.setMessage(LocaleController.getString("ChannelCantOpenNa", C0501R.string.ChannelCantOpenNa));
                     } else if (reason == 2) {
-                        r0.setMessage(LocaleController.getString("ChannelCantOpenBanned", C0500R.string.ChannelCantOpenBanned));
+                        r0.setMessage(LocaleController.getString("ChannelCantOpenBanned", C0501R.string.ChannelCantOpenBanned));
                     }
-                    r0.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                    r0.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                     Dialog create = r0.create();
                     this.closeChatDialog = create;
                     showDialog(create);
@@ -10974,9 +11083,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (count < 0) {
                 this.searchCountText.setText(TtmlNode.ANONYMOUS_REGION_ID);
             } else if (count == 0) {
-                this.searchCountText.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
+                this.searchCountText.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
             } else {
-                this.searchCountText.setText(LocaleController.formatString("Of", C0500R.string.Of, Integer.valueOf(num + 1), Integer.valueOf(count)));
+                this.searchCountText.setText(LocaleController.formatString("Of", C0501R.string.Of, Integer.valueOf(num + 1), Integer.valueOf(count)));
             }
         }
     }
@@ -11040,14 +11149,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (VERSION.SDK_INT >= edit) {
                 menu.removeItem(16908341);
             }
-            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", C0500R.string.Bold));
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", C0501R.string.Bold));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), 33);
-            menu.add(C0500R.id.menu_groupbolditalic, C0500R.id.menu_bold, 6, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", C0500R.string.Italic));
+            menu.add(C0501R.id.menu_groupbolditalic, C0501R.id.menu_bold, 6, stringBuilder);
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", C0501R.string.Italic));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), 33);
-            menu.add(C0500R.id.menu_groupbolditalic, C0500R.id.menu_italic, 7, stringBuilder);
-            menu.add(C0500R.id.menu_groupbolditalic, C0500R.id.menu_regular, 8, LocaleController.getString("Regular", C0500R.string.Regular));
-            menu.add(C0500R.id.menu_groupbolditalic, C0500R.id.menu_link, 9, LocaleController.getString("CreateLink", C0500R.string.CreateLink));
+            menu.add(C0501R.id.menu_groupbolditalic, C0501R.id.menu_italic, 7, stringBuilder);
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", C0501R.string.Mono));
+            stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), 33);
+            menu.add(C0501R.id.menu_groupbolditalic, C0501R.id.menu_mono, 8, stringBuilder);
+            menu.add(C0501R.id.menu_groupbolditalic, C0501R.id.menu_link, 9, LocaleController.getString("CreateLink", C0501R.string.CreateLink));
+            menu.add(C0501R.id.menu_groupbolditalic, C0501R.id.menu_regular, 10, LocaleController.getString("Regular", C0501R.string.Regular));
         }
         return true;
     }
@@ -11056,19 +11168,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (this.bottomOverlayChatText != null) {
             if (this.currentChat != null) {
                 if (!ChatObject.isChannel(this.currentChat) || (this.currentChat instanceof TL_channelForbidden)) {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("DeleteThisGroup", C0500R.string.DeleteThisGroup));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("DeleteThisGroup", C0501R.string.DeleteThisGroup));
                 } else if (ChatObject.isNotInChat(this.currentChat)) {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelJoin", C0500R.string.ChannelJoin));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelJoin", C0501R.string.ChannelJoin));
                 } else if (MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id)) {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", C0500R.string.ChannelUnmute));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", C0501R.string.ChannelUnmute));
                 } else {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", C0500R.string.ChannelMute));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", C0501R.string.ChannelMute));
                 }
             } else if (this.userBlocked) {
                 if (this.currentUser.bot) {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("BotUnblock", C0500R.string.BotUnblock));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("BotUnblock", C0501R.string.BotUnblock));
                 } else {
-                    this.bottomOverlayChatText.setText(LocaleController.getString("Unblock", C0500R.string.Unblock));
+                    this.bottomOverlayChatText.setText(LocaleController.getString("Unblock", C0501R.string.Unblock));
                 }
                 if (this.botButtons != null) {
                     this.botButtons = null;
@@ -11081,9 +11193,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 }
             } else if (this.botUser == null || !this.currentUser.bot) {
-                this.bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", C0500R.string.DeleteThisChat));
+                this.bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", C0501R.string.DeleteThisChat));
             } else {
-                this.bottomOverlayChatText.setText(LocaleController.getString("BotStart", C0500R.string.BotStart));
+                this.bottomOverlayChatText.setText(LocaleController.getString("BotStart", C0501R.string.BotStart));
                 this.chatActivityEnterView.hidePopup(false);
                 if (getParentActivity() != null) {
                     AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
@@ -11127,6 +11239,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         this.muteItem.setVisibility(8);
                     }
                     this.attachItem.setVisibility(8);
+                    this.editTextItem.setVisibility(8);
                     this.headerItem.setVisibility(0);
                 }
                 if (this.topViewWasVisible == 1) {
@@ -11187,8 +11300,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             Runnable anonymousClass89 = new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$89$1 */
-                class C13641 extends AnimatorListenerAdapter {
-                    C13641() {
+                class C13651 extends AnimatorListenerAdapter {
+                    C13651() {
                     }
 
                     public void onAnimationEnd(Animator animation) {
@@ -11213,12 +11326,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$26500 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$26800 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$26500.playTogether(animatorArr);
+                        access$26800.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
-                        ChatActivity.this.alertViewAnimator.addListener(new C13641());
+                        ChatActivity.this.alertViewAnimator.addListener(new C13651());
                         ChatActivity.this.alertViewAnimator.start();
                     }
                 }
@@ -11340,7 +11453,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 this.pinnedMessageNameTextView.setLayoutParams(layoutParams1);
                 this.pinnedMessageTextView.setLayoutParams(layoutParams2);
-                this.pinnedMessageNameTextView.setText(LocaleController.getString("PinnedMessage", C0500R.string.PinnedMessage));
+                this.pinnedMessageNameTextView.setText(LocaleController.getString("PinnedMessage", C0501R.string.PinnedMessage));
                 if (this.pinnedMessageObject.type == 14) {
                     this.pinnedMessageTextView.setText(String.format("%s - %s", new Object[]{this.pinnedMessageObject.getMusicAuthor(), this.pinnedMessageObject.getMusicTitle()}));
                 } else if (this.pinnedMessageObject.messageOwner.media instanceof TL_messageMediaGame) {
@@ -11463,15 +11576,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 } else {
                     this.addContactItem.setVisibility(0);
                     if (TextUtils.isEmpty(this.currentUser.phone)) {
-                        this.addContactItem.setText(LocaleController.getString("ShareMyContactInfo", C0500R.string.ShareMyContactInfo));
+                        this.addContactItem.setText(LocaleController.getString("ShareMyContactInfo", C0501R.string.ShareMyContactInfo));
                         this.addToContactsButton.setVisibility(8);
                         this.reportSpamButton.setPadding(AndroidUtilities.dp(50.0f), 0, AndroidUtilities.dp(50.0f), 0);
-                        this.reportSpamContainer.setLayoutParams(LayoutHelper.createLinear(-1, -1, 1.0f, 51, 0, 0, 0, AndroidUtilities.dp(1.0f)));
+                        this.reportSpamContainer.setLayoutParams(LayoutHelper.createLinear(-1, -1, 1.0f, text_italic, 0, 0, 0, AndroidUtilities.dp(1.0f)));
                     } else {
-                        this.addContactItem.setText(LocaleController.getString("AddToContacts", C0500R.string.AddToContacts));
+                        this.addContactItem.setText(LocaleController.getString("AddToContacts", C0501R.string.AddToContacts));
                         this.reportSpamButton.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(50.0f), 0);
                         this.addToContactsButton.setVisibility(0);
-                        this.reportSpamContainer.setLayoutParams(LayoutHelper.createLinear(-1, -1, 0.5f, 51, 0, 0, 0, AndroidUtilities.dp(1.0f)));
+                        this.reportSpamContainer.setLayoutParams(LayoutHelper.createLinear(-1, -1, 0.5f, text_italic, 0, 0, 0, AndroidUtilities.dp(1.0f)));
                     }
                 }
             }
@@ -11564,7 +11677,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         super.setInPreviewMode(value);
         if (this.avatarContainer != null) {
             this.avatarContainer.setOccupyStatusBar(!value);
-            this.avatarContainer.setLayoutParams(LayoutHelper.createFrame(-2, -1.0f, 51, !value ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
+            this.avatarContainer.setLayoutParams(LayoutHelper.createFrame(-2, -1.0f, text_italic, !value ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
         }
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.setVisibility(!value ? 0 : 4);
@@ -11620,9 +11733,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (preferences.getLong("proxychannel", 0) != this.dialog_id) {
                 preferences.edit().putLong("proxychannel", this.dialog_id).commit();
                 Builder builder = new Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                builder.setMessage(LocaleController.getString("UseProxySponsorInfo", C0500R.string.UseProxySponsorInfo));
-                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                builder.setMessage(LocaleController.getString("UseProxySponsorInfo", C0501R.string.UseProxySponsorInfo));
+                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                 showDialog(builder.create());
             }
         }
@@ -11756,28 +11869,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             holder = (Holder) this.chatListView.findViewHolderForAdapterPosition(position + 1);
                         }
                         boolean ignore = false;
-                        int a = position - 1;
-                        while (a >= this.chatAdapter.messagesStartRow) {
-                            MessageObject messageObject = (MessageObject) this.messages.get(a - this.chatAdapter.messagesStartRow);
-                            if (messageObject.getId() == 0) {
-                                a--;
-                            } else {
-                                if (!messageObject.isOut() && messageObject.isUnread()) {
-                                    ignore = true;
-                                    messageId = 0;
-                                }
-                                if (!(holder == null || ignore)) {
-                                    if (holder.itemView instanceof ChatMessageCell) {
-                                        messageId = ((ChatMessageCell) holder.itemView).getMessageObject().getId();
-                                    } else if (holder.itemView instanceof ChatActionCell) {
-                                        messageId = ((ChatActionCell) holder.itemView).getMessageObject().getId();
-                                    }
-                                    if ((messageId > 0 || this.currentEncryptedChat != null) && (messageId >= 0 || this.currentEncryptedChat == null)) {
+                        for (int a = position - 1; a >= this.chatAdapter.messagesStartRow; a--) {
+                            int num = a - this.chatAdapter.messagesStartRow;
+                            if (num >= 0 && num < this.messages.size()) {
+                                MessageObject messageObject = (MessageObject) this.messages.get(num);
+                                if (messageObject.getId() != 0) {
+                                    if (!messageObject.isOut() && messageObject.isUnread()) {
+                                        ignore = true;
                                         messageId = 0;
-                                    } else {
-                                        offset = holder.itemView.getBottom() - this.chatListView.getMeasuredHeight();
-                                        if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m0d("save offset = " + offset + " for mid " + messageId);
+                                    }
+                                    if (!(holder == null || ignore)) {
+                                        if (holder.itemView instanceof ChatMessageCell) {
+                                            messageId = ((ChatMessageCell) holder.itemView).getMessageObject().getId();
+                                        } else if (holder.itemView instanceof ChatActionCell) {
+                                            messageId = ((ChatActionCell) holder.itemView).getMessageObject().getId();
+                                        }
+                                        if ((messageId > 0 || this.currentEncryptedChat != null) && (messageId >= 0 || this.currentEncryptedChat == null)) {
+                                            messageId = 0;
+                                        } else {
+                                            offset = holder.itemView.getBottom() - this.chatListView.getMeasuredHeight();
+                                            if (BuildVars.LOGS_ENABLED) {
+                                                FileLog.m0d("save offset = " + offset + " for mid " + messageId);
+                                            }
                                         }
                                     }
                                 }
@@ -11940,7 +12053,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (AndroidUtilities.isSmallTablet() && ApplicationLoader.applicationContext.getResources().getConfiguration().orientation == 1) {
             this.actionBar.setBackButtonDrawable(new BackDrawable(false));
             if (this.fragmentContextView != null && this.fragmentContextView.getParent() == null) {
-                ((ViewGroup) this.fragmentView).addView(this.fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
+                ((ViewGroup) this.fragmentView).addView(this.fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, text_italic, 0.0f, -36.0f, 0.0f, 0.0f));
             }
         } else {
             ActionBar actionBar = this.actionBar;
@@ -11989,8 +12102,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             } else {
                 count = this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size();
             }
-            builder.setMessage(LocaleController.formatString("AreYouSureDeleteMessages", C0500R.string.AreYouSureDeleteMessages, LocaleController.formatPluralString("messages", count)));
-            builder.setTitle(LocaleController.getString("Message", C0500R.string.Message));
+            builder.setMessage(LocaleController.formatString("AreYouSureDeleteMessages", C0501R.string.AreYouSureDeleteMessages, LocaleController.formatPluralString("messages", count)));
+            builder.setTitle(LocaleController.getString("Message", C0501R.string.Message));
             boolean[] checks = new boolean[3];
             boolean[] deleteForAll = new boolean[1];
             User user = null;
@@ -12073,9 +12186,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         frameLayout = new CheckBoxCell(getParentActivity(), 1);
                         frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         if (this.currentChat != null) {
-                            frameLayout.setText(LocaleController.getString("DeleteForAll", C0500R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                            frameLayout.setText(LocaleController.getString("DeleteForAll", C0501R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                         } else {
-                            frameLayout.setText(LocaleController.formatString("DeleteForUser", C0500R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                            frameLayout.setText(LocaleController.formatString("DeleteForUser", C0501R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                         }
                         if (LocaleController.isRTL) {
                             dp = AndroidUtilities.dp(16.0f);
@@ -12088,7 +12201,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             dp2 = AndroidUtilities.dp(16.0f);
                         }
                         frameLayout.setPadding(dp, 0, dp2, 0);
-                        frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                        frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, text_italic, 0.0f, 0.0f, 0.0f, 0.0f));
                         zArr = deleteForAll;
                         frameLayout.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
@@ -12118,11 +12231,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             frameLayout.setTag(Integer.valueOf(a));
                             if (a == 0) {
-                                frameLayout.setText(LocaleController.getString("DeleteBanUser", C0500R.string.DeleteBanUser), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.getString("DeleteBanUser", C0501R.string.DeleteBanUser), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             } else if (a == 1) {
-                                frameLayout.setText(LocaleController.getString("DeleteReportSpam", C0500R.string.DeleteReportSpam), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.getString("DeleteReportSpam", C0501R.string.DeleteReportSpam), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             } else if (a == 2) {
-                                frameLayout.setText(LocaleController.formatString("DeleteAllFrom", C0500R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.formatString("DeleteAllFrom", C0501R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             }
                             if (LocaleController.isRTL) {
                                 dp = AndroidUtilities.dp(16.0f);
@@ -12135,7 +12248,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 dp2 = AndroidUtilities.dp(16.0f);
                             }
                             frameLayout.setPadding(dp, 0, dp2, 0);
-                            frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) (num * 48), 0.0f, 0.0f));
+                            frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, text_italic, 0.0f, (float) (num * 48), 0.0f, 0.0f));
                             zArr = checks;
                             frameLayout.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
@@ -12187,8 +12300,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.ChatActivity$99$1 */
-                            class C13681 implements OnClickListener {
-                                C13681() {
+                            class C13691 implements OnClickListener {
+                                C13691() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -12203,10 +12316,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
                             public void run() {
                                 if (alertDialogArr[0] != null) {
-                                    alertDialogArr[0].setMessage(LocaleController.getString("Loading", C0500R.string.Loading));
+                                    alertDialogArr[0].setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
                                     alertDialogArr[0].setCanceledOnTouchOutside(false);
                                     alertDialogArr[0].setCancelable(false);
-                                    alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", C0500R.string.Cancel), new C13681());
+                                    alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new C13691());
                                     ChatActivity.this.showDialog(alertDialogArr[0]);
                                 }
                             }
@@ -12249,12 +12362,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     frameLayout = new CheckBoxCell(getParentActivity(), 1);
                     frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     if (this.currentChat != null) {
-                        frameLayout.setText(LocaleController.getString("DeleteForAll", C0500R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                        frameLayout.setText(LocaleController.getString("DeleteForAll", C0501R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                     } else {
-                        frameLayout.setText(LocaleController.formatString("DeleteForUser", C0500R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                        frameLayout.setText(LocaleController.formatString("DeleteForUser", C0501R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                     }
                     frameLayout.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-                    frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                    frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, text_italic, 0.0f, 0.0f, 0.0f, 0.0f));
                     zArr = deleteForAll;
                     frameLayout.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -12278,11 +12391,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             final GroupedMessages groupedMessages2 = finalSelectedGroup;
             final boolean[] zArr2 = deleteForAll;
             final boolean[] zArr3 = checks;
-            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
 
                 /* renamed from: org.telegram.ui.ChatActivity$103$1 */
-                class C13241 implements RequestDelegate {
-                    C13241() {
+                class C13251 implements RequestDelegate {
+                    C13251() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -12354,7 +12467,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             req.channel = MessagesController.getInputChannel(ChatActivity.this.currentChat);
                             req.user_id = MessagesController.getInstance(ChatActivity.this.currentAccount).getInputUser(userFinal);
                             req.id = ids;
-                            ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C13241());
+                            ConnectionsManager.getInstance(ChatActivity.this.currentAccount).sendRequest(req, new C13251());
                         }
                         if (zArr3[2]) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).deleteUserChannelHistory(ChatActivity.this.currentChat, userFinal, 0);
@@ -12362,7 +12475,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
             showDialog(builder.create());
         }
     }
@@ -12456,245 +12569,245 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 this.selectedObject = message;
                                 this.selectedObjectGroup = groupedMessages;
                                 if (type == -1) {
-                                    items.add(LocaleController.getString("CancelSending", C0500R.string.CancelSending));
+                                    items.add(LocaleController.getString("CancelSending", C0501R.string.CancelSending));
                                     options.add(Integer.valueOf(24));
                                 } else if (type == 0) {
-                                    items.add(LocaleController.getString("Retry", C0500R.string.Retry));
+                                    items.add(LocaleController.getString("Retry", C0501R.string.Retry));
                                     options.add(Integer.valueOf(0));
-                                    items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                    items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                     options.add(Integer.valueOf(1));
                                 } else if (type == 1) {
                                     if (this.currentChat != null || this.isBroadcast) {
                                         if (message.messageOwner.action != null && (message.messageOwner.action instanceof TL_messageActionPhoneCall)) {
                                             call = (TL_messageActionPhoneCall) message.messageOwner.action;
                                             if ((!(call.reason instanceof TL_phoneCallDiscardReasonMissed) || (call.reason instanceof TL_phoneCallDiscardReasonBusy)) && !message.isOutOwner()) {
-                                                string = LocaleController.getString("CallBack", C0500R.string.CallBack);
+                                                string = LocaleController.getString("CallBack", C0501R.string.CallBack);
                                             } else {
-                                                string = LocaleController.getString("CallAgain", C0500R.string.CallAgain);
+                                                string = LocaleController.getString("CallAgain", C0501R.string.CallAgain);
                                             }
                                             items.add(string);
                                             options.add(Integer.valueOf(18));
                                             if (VoIPHelper.canRateCall(call)) {
-                                                items.add(LocaleController.getString("CallMessageReportProblem", C0500R.string.CallMessageReportProblem));
+                                                items.add(LocaleController.getString("CallMessageReportProblem", C0501R.string.CallMessageReportProblem));
                                                 options.add(Integer.valueOf(19));
                                             }
                                         }
                                         if (single && this.selectedObject.getId() > 0 && allowChatActions) {
-                                            items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                                            items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                                             options.add(Integer.valueOf(8));
                                         }
                                         if (message.canDeleteMessage(this.currentChat)) {
-                                            items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                            items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                             options.add(Integer.valueOf(1));
                                         }
                                     } else {
                                         if (allowChatActions) {
-                                            items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                                            items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                                             options.add(Integer.valueOf(8));
                                         }
                                         if (allowUnpin) {
-                                            items.add(LocaleController.getString("UnpinMessage", C0500R.string.UnpinMessage));
+                                            items.add(LocaleController.getString("UnpinMessage", C0501R.string.UnpinMessage));
                                             options.add(Integer.valueOf(14));
                                         } else if (allowPin) {
-                                            items.add(LocaleController.getString("PinMessage", C0500R.string.PinMessage));
+                                            items.add(LocaleController.getString("PinMessage", C0501R.string.PinMessage));
                                             options.add(Integer.valueOf(13));
                                         }
                                         if (allowEdit) {
-                                            items.add(LocaleController.getString("Edit", C0500R.string.Edit));
+                                            items.add(LocaleController.getString("Edit", C0501R.string.Edit));
                                             options.add(Integer.valueOf(12));
                                         }
                                         if (this.selectedObject.contentType == 0 && this.selectedObject.getId() > 0 && !this.selectedObject.isOut() && (ChatObject.isChannel(this.currentChat) || (this.currentUser != null && this.currentUser.bot))) {
-                                            items.add(LocaleController.getString("ReportChat", C0500R.string.ReportChat));
+                                            items.add(LocaleController.getString("ReportChat", C0501R.string.ReportChat));
                                             options.add(Integer.valueOf(edit));
                                         }
                                         if (message.canDeleteMessage(this.currentChat)) {
-                                            items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                            items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                             options.add(Integer.valueOf(1));
                                         }
                                     }
                                 } else if (type == 20) {
-                                    items.add(LocaleController.getString("Retry", C0500R.string.Retry));
+                                    items.add(LocaleController.getString("Retry", C0501R.string.Retry));
                                     options.add(Integer.valueOf(0));
-                                    items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                    items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                     options.add(Integer.valueOf(3));
-                                    items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                    items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                     options.add(Integer.valueOf(1));
                                 } else if (this.currentEncryptedChat != null) {
                                     if (allowChatActions) {
-                                        items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                                        items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                                         options.add(Integer.valueOf(8));
                                     }
                                     if (this.selectedObject.type == 0 || this.selectedObject.caption != null) {
-                                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                         options.add(Integer.valueOf(3));
                                     }
                                     if (ChatObject.isChannel(this.currentChat) && this.currentChat.megagroup && !TextUtils.isEmpty(this.currentChat.username) && ChatObject.hasAdminRights(this.currentChat)) {
-                                        items.add(LocaleController.getString("CopyLink", C0500R.string.CopyLink));
+                                        items.add(LocaleController.getString("CopyLink", C0501R.string.CopyLink));
                                         options.add(Integer.valueOf(22));
                                     }
                                     if (type == 3) {
                                         if ((this.selectedObject.messageOwner.media instanceof TL_messageMediaWebPage) && MessageObject.isNewGifDocument(this.selectedObject.messageOwner.media.webpage.document)) {
-                                            items.add(LocaleController.getString("SaveToGIFs", C0500R.string.SaveToGIFs));
+                                            items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
                                             options.add(Integer.valueOf(11));
                                         }
                                     } else if (type != 4) {
                                         if (this.selectedObject.isVideo()) {
                                             if (this.selectedObject.isMusic()) {
-                                                items.add(LocaleController.getString("SaveToMusic", C0500R.string.SaveToMusic));
+                                                items.add(LocaleController.getString("SaveToMusic", C0501R.string.SaveToMusic));
                                                 options.add(Integer.valueOf(10));
-                                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                                 options.add(Integer.valueOf(6));
                                             } else if (this.selectedObject.getDocument() != null) {
                                                 if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
-                                                    items.add(LocaleController.getString("SaveToGIFs", C0500R.string.SaveToGIFs));
+                                                    items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
                                                     options.add(Integer.valueOf(11));
                                                 }
-                                                items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                                items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                                 options.add(Integer.valueOf(10));
-                                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                                 options.add(Integer.valueOf(6));
                                             } else if (!this.selectedObject.needDrawBluredPreview()) {
-                                                items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                                items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                                 options.add(Integer.valueOf(4));
                                             }
                                         } else if (!this.selectedObject.needDrawBluredPreview()) {
-                                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                             options.add(Integer.valueOf(4));
-                                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                             options.add(Integer.valueOf(6));
                                         }
                                     } else if (type == 5) {
-                                        items.add(LocaleController.getString("ApplyLocalizationFile", C0500R.string.ApplyLocalizationFile));
+                                        items.add(LocaleController.getString("ApplyLocalizationFile", C0501R.string.ApplyLocalizationFile));
                                         options.add(Integer.valueOf(5));
-                                        items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                        items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                         options.add(Integer.valueOf(10));
-                                        items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                         options.add(Integer.valueOf(6));
                                     } else if (type == 10) {
-                                        items.add(LocaleController.getString("ApplyThemeFile", C0500R.string.ApplyThemeFile));
+                                        items.add(LocaleController.getString("ApplyThemeFile", C0501R.string.ApplyThemeFile));
                                         options.add(Integer.valueOf(5));
-                                        items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                        items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                         options.add(Integer.valueOf(10));
-                                        items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                         options.add(Integer.valueOf(6));
                                     } else if (type == 6) {
-                                        items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                        items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                         options.add(Integer.valueOf(7));
-                                        items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                        items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                         options.add(Integer.valueOf(10));
-                                        items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                         options.add(Integer.valueOf(6));
                                     } else if (type != 7) {
                                         if (this.selectedObject.isMask()) {
-                                            items.add(LocaleController.getString("AddToStickers", C0500R.string.AddToStickers));
+                                            items.add(LocaleController.getString("AddToStickers", C0501R.string.AddToStickers));
                                             options.add(Integer.valueOf(9));
                                             if (!DataQuery.getInstance(this.currentAccount).isStickerInFavorites(this.selectedObject.getDocument())) {
-                                                items.add(LocaleController.getString("DeleteFromFavorites", C0500R.string.DeleteFromFavorites));
+                                                items.add(LocaleController.getString("DeleteFromFavorites", C0501R.string.DeleteFromFavorites));
                                                 options.add(Integer.valueOf(21));
                                             } else if (DataQuery.getInstance(this.currentAccount).canAddStickerToFavorites()) {
-                                                items.add(LocaleController.getString("AddToFavorites", C0500R.string.AddToFavorites));
+                                                items.add(LocaleController.getString("AddToFavorites", C0501R.string.AddToFavorites));
                                                 options.add(Integer.valueOf(20));
                                             }
                                         } else {
-                                            items.add(LocaleController.getString("AddToMasks", C0500R.string.AddToMasks));
+                                            items.add(LocaleController.getString("AddToMasks", C0501R.string.AddToMasks));
                                             options.add(Integer.valueOf(9));
                                         }
                                     } else if (type == 8) {
                                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
                                         if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.id)) != null)) {
-                                            items.add(LocaleController.getString("AddContactTitle", C0500R.string.AddContactTitle));
+                                            items.add(LocaleController.getString("AddContactTitle", C0501R.string.AddContactTitle));
                                             options.add(Integer.valueOf(15));
                                         }
                                         if (!TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
-                                            items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                            items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                             options.add(Integer.valueOf(16));
-                                            items.add(LocaleController.getString("Call", C0500R.string.Call));
+                                            items.add(LocaleController.getString("Call", C0501R.string.Call));
                                             options.add(Integer.valueOf(17));
                                         }
                                     } else if (type == 9) {
                                         if (DataQuery.getInstance(this.currentAccount).isStickerInFavorites(this.selectedObject.getDocument())) {
-                                            items.add(LocaleController.getString("AddToFavorites", C0500R.string.AddToFavorites));
+                                            items.add(LocaleController.getString("AddToFavorites", C0501R.string.AddToFavorites));
                                             options.add(Integer.valueOf(20));
                                         } else {
-                                            items.add(LocaleController.getString("DeleteFromFavorites", C0500R.string.DeleteFromFavorites));
+                                            items.add(LocaleController.getString("DeleteFromFavorites", C0501R.string.DeleteFromFavorites));
                                             options.add(Integer.valueOf(21));
                                         }
                                     }
                                     if (!(this.selectedObject.needDrawBluredPreview() || this.selectedObject.isLiveLocation())) {
-                                        items.add(LocaleController.getString("Forward", C0500R.string.Forward));
+                                        items.add(LocaleController.getString("Forward", C0501R.string.Forward));
                                         options.add(Integer.valueOf(2));
                                     }
                                     if (allowUnpin) {
-                                        items.add(LocaleController.getString("UnpinMessage", C0500R.string.UnpinMessage));
+                                        items.add(LocaleController.getString("UnpinMessage", C0501R.string.UnpinMessage));
                                         options.add(Integer.valueOf(14));
                                     } else if (allowPin) {
-                                        items.add(LocaleController.getString("PinMessage", C0500R.string.PinMessage));
+                                        items.add(LocaleController.getString("PinMessage", C0501R.string.PinMessage));
                                         options.add(Integer.valueOf(13));
                                     }
                                     if (allowEdit) {
-                                        items.add(LocaleController.getString("Edit", C0500R.string.Edit));
+                                        items.add(LocaleController.getString("Edit", C0501R.string.Edit));
                                         options.add(Integer.valueOf(12));
                                     }
                                     if (this.selectedObject.contentType == 0 && this.selectedObject.getId() > 0 && !this.selectedObject.isOut() && (ChatObject.isChannel(this.currentChat) || (this.currentUser != null && this.currentUser.bot))) {
-                                        items.add(LocaleController.getString("ReportChat", C0500R.string.ReportChat));
+                                        items.add(LocaleController.getString("ReportChat", C0501R.string.ReportChat));
                                         options.add(Integer.valueOf(edit));
                                     }
                                     if (message.canDeleteMessage(this.currentChat)) {
-                                        items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                        items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                         options.add(Integer.valueOf(1));
                                     }
                                 } else {
                                     if (allowChatActions) {
-                                        items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                                        items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                                         options.add(Integer.valueOf(8));
                                     }
                                     if (this.selectedObject.type == 0 || this.selectedObject.caption != null) {
-                                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                         options.add(Integer.valueOf(3));
                                     }
                                     if (type != 4) {
                                         if (this.selectedObject.isVideo()) {
-                                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                             options.add(Integer.valueOf(4));
-                                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                             options.add(Integer.valueOf(6));
                                         } else if (this.selectedObject.isMusic()) {
-                                            items.add(LocaleController.getString("SaveToMusic", C0500R.string.SaveToMusic));
+                                            items.add(LocaleController.getString("SaveToMusic", C0501R.string.SaveToMusic));
                                             options.add(Integer.valueOf(10));
-                                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                             options.add(Integer.valueOf(6));
                                         } else if (!this.selectedObject.isVideo() || this.selectedObject.getDocument() == null) {
-                                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                             options.add(Integer.valueOf(4));
                                         } else {
-                                            items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                            items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                             options.add(Integer.valueOf(10));
-                                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                             options.add(Integer.valueOf(6));
                                         }
                                     } else if (type == 5) {
-                                        items.add(LocaleController.getString("ApplyLocalizationFile", C0500R.string.ApplyLocalizationFile));
+                                        items.add(LocaleController.getString("ApplyLocalizationFile", C0501R.string.ApplyLocalizationFile));
                                         options.add(Integer.valueOf(5));
                                     } else if (type == 10) {
-                                        items.add(LocaleController.getString("ApplyThemeFile", C0500R.string.ApplyThemeFile));
+                                        items.add(LocaleController.getString("ApplyThemeFile", C0501R.string.ApplyThemeFile));
                                         options.add(Integer.valueOf(5));
                                     } else if (type == 7) {
-                                        items.add(LocaleController.getString("AddToStickers", C0500R.string.AddToStickers));
+                                        items.add(LocaleController.getString("AddToStickers", C0501R.string.AddToStickers));
                                         options.add(Integer.valueOf(9));
                                     } else if (type == 8) {
                                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
                                         if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.id)) != null)) {
-                                            items.add(LocaleController.getString("AddContactTitle", C0500R.string.AddContactTitle));
+                                            items.add(LocaleController.getString("AddContactTitle", C0501R.string.AddContactTitle));
                                             options.add(Integer.valueOf(15));
                                         }
                                         if (!TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
-                                            items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                            items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                             options.add(Integer.valueOf(16));
-                                            items.add(LocaleController.getString("Call", C0500R.string.Call));
+                                            items.add(LocaleController.getString("Call", C0501R.string.Call));
                                             options.add(Integer.valueOf(17));
                                         }
                                     }
-                                    items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                                    items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                                     options.add(Integer.valueOf(1));
                                 }
                             }
@@ -12708,7 +12821,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         }
                                     }
                                 });
-                                builder.setTitle(LocaleController.getString("Message", C0500R.string.Message));
+                                builder.setTitle(LocaleController.getString("Message", C0501R.string.Message));
                                 showDialog(builder.create());
                             }
                         }
@@ -12724,12 +12837,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     this.selectedObject = message;
                     this.selectedObjectGroup = groupedMessages;
                     if (type == -1) {
-                        items.add(LocaleController.getString("CancelSending", C0500R.string.CancelSending));
+                        items.add(LocaleController.getString("CancelSending", C0501R.string.CancelSending));
                         options.add(Integer.valueOf(24));
                     } else if (type == 0) {
-                        items.add(LocaleController.getString("Retry", C0500R.string.Retry));
+                        items.add(LocaleController.getString("Retry", C0501R.string.Retry));
                         options.add(Integer.valueOf(0));
-                        items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                        items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                         options.add(Integer.valueOf(1));
                     } else if (type == 1) {
                         if (this.currentChat != null) {
@@ -12737,182 +12850,182 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         call = (TL_messageActionPhoneCall) message.messageOwner.action;
                         if (call.reason instanceof TL_phoneCallDiscardReasonMissed) {
                         }
-                        string = LocaleController.getString("CallBack", C0500R.string.CallBack);
+                        string = LocaleController.getString("CallBack", C0501R.string.CallBack);
                         items.add(string);
                         options.add(Integer.valueOf(18));
                         if (VoIPHelper.canRateCall(call)) {
-                            items.add(LocaleController.getString("CallMessageReportProblem", C0500R.string.CallMessageReportProblem));
+                            items.add(LocaleController.getString("CallMessageReportProblem", C0501R.string.CallMessageReportProblem));
                             options.add(Integer.valueOf(19));
                         }
-                        items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                        items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                         options.add(Integer.valueOf(8));
                         if (message.canDeleteMessage(this.currentChat)) {
-                            items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                            items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                             options.add(Integer.valueOf(1));
                         }
                     } else if (type == 20) {
-                        items.add(LocaleController.getString("Retry", C0500R.string.Retry));
+                        items.add(LocaleController.getString("Retry", C0501R.string.Retry));
                         options.add(Integer.valueOf(0));
-                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                         options.add(Integer.valueOf(3));
-                        items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                        items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                         options.add(Integer.valueOf(1));
                     } else if (this.currentEncryptedChat != null) {
                         if (allowChatActions) {
-                            items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                            items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                             options.add(Integer.valueOf(8));
                         }
-                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                         options.add(Integer.valueOf(3));
                         if (type != 4) {
                             if (type == 5) {
-                                items.add(LocaleController.getString("ApplyLocalizationFile", C0500R.string.ApplyLocalizationFile));
+                                items.add(LocaleController.getString("ApplyLocalizationFile", C0501R.string.ApplyLocalizationFile));
                                 options.add(Integer.valueOf(5));
                             } else if (type == 10) {
-                                items.add(LocaleController.getString("ApplyThemeFile", C0500R.string.ApplyThemeFile));
+                                items.add(LocaleController.getString("ApplyThemeFile", C0501R.string.ApplyThemeFile));
                                 options.add(Integer.valueOf(5));
                             } else if (type == 7) {
-                                items.add(LocaleController.getString("AddToStickers", C0500R.string.AddToStickers));
+                                items.add(LocaleController.getString("AddToStickers", C0501R.string.AddToStickers));
                                 options.add(Integer.valueOf(9));
                             } else if (type == 8) {
                                 user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                                items.add(LocaleController.getString("AddContactTitle", C0500R.string.AddContactTitle));
+                                items.add(LocaleController.getString("AddContactTitle", C0501R.string.AddContactTitle));
                                 options.add(Integer.valueOf(15));
                                 if (TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
-                                    items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                    items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                     options.add(Integer.valueOf(16));
-                                    items.add(LocaleController.getString("Call", C0500R.string.Call));
+                                    items.add(LocaleController.getString("Call", C0501R.string.Call));
                                     options.add(Integer.valueOf(17));
                                 }
                             }
                         } else if (this.selectedObject.isVideo()) {
-                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                             options.add(Integer.valueOf(4));
-                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                             options.add(Integer.valueOf(6));
                         } else if (this.selectedObject.isMusic()) {
-                            items.add(LocaleController.getString("SaveToMusic", C0500R.string.SaveToMusic));
+                            items.add(LocaleController.getString("SaveToMusic", C0501R.string.SaveToMusic));
                             options.add(Integer.valueOf(10));
-                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                             options.add(Integer.valueOf(6));
                         } else {
                             if (this.selectedObject.isVideo()) {
                             }
-                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                             options.add(Integer.valueOf(4));
                         }
-                        items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                        items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                         options.add(Integer.valueOf(1));
                     } else {
                         if (allowChatActions) {
-                            items.add(LocaleController.getString("Reply", C0500R.string.Reply));
+                            items.add(LocaleController.getString("Reply", C0501R.string.Reply));
                             options.add(Integer.valueOf(8));
                         }
-                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                         options.add(Integer.valueOf(3));
-                        items.add(LocaleController.getString("CopyLink", C0500R.string.CopyLink));
+                        items.add(LocaleController.getString("CopyLink", C0501R.string.CopyLink));
                         options.add(Integer.valueOf(22));
                         if (type == 3) {
-                            items.add(LocaleController.getString("SaveToGIFs", C0500R.string.SaveToGIFs));
+                            items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
                             options.add(Integer.valueOf(11));
                         } else if (type != 4) {
                             if (type == 5) {
-                                items.add(LocaleController.getString("ApplyLocalizationFile", C0500R.string.ApplyLocalizationFile));
+                                items.add(LocaleController.getString("ApplyLocalizationFile", C0501R.string.ApplyLocalizationFile));
                                 options.add(Integer.valueOf(5));
-                                items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                 options.add(Integer.valueOf(10));
-                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (type == 10) {
-                                items.add(LocaleController.getString("ApplyThemeFile", C0500R.string.ApplyThemeFile));
+                                items.add(LocaleController.getString("ApplyThemeFile", C0501R.string.ApplyThemeFile));
                                 options.add(Integer.valueOf(5));
-                                items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                 options.add(Integer.valueOf(10));
-                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (type == 6) {
-                                items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                 options.add(Integer.valueOf(7));
-                                items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                 options.add(Integer.valueOf(10));
-                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (type != 7) {
                                 if (type == 8) {
                                     user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                                    items.add(LocaleController.getString("AddContactTitle", C0500R.string.AddContactTitle));
+                                    items.add(LocaleController.getString("AddContactTitle", C0501R.string.AddContactTitle));
                                     options.add(Integer.valueOf(15));
                                     if (TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
-                                        items.add(LocaleController.getString("Copy", C0500R.string.Copy));
+                                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
                                         options.add(Integer.valueOf(16));
-                                        items.add(LocaleController.getString("Call", C0500R.string.Call));
+                                        items.add(LocaleController.getString("Call", C0501R.string.Call));
                                         options.add(Integer.valueOf(17));
                                     }
                                 } else if (type == 9) {
                                     if (DataQuery.getInstance(this.currentAccount).isStickerInFavorites(this.selectedObject.getDocument())) {
-                                        items.add(LocaleController.getString("DeleteFromFavorites", C0500R.string.DeleteFromFavorites));
+                                        items.add(LocaleController.getString("DeleteFromFavorites", C0501R.string.DeleteFromFavorites));
                                         options.add(Integer.valueOf(21));
                                     } else {
-                                        items.add(LocaleController.getString("AddToFavorites", C0500R.string.AddToFavorites));
+                                        items.add(LocaleController.getString("AddToFavorites", C0501R.string.AddToFavorites));
                                         options.add(Integer.valueOf(20));
                                     }
                                 }
                             } else if (this.selectedObject.isMask()) {
-                                items.add(LocaleController.getString("AddToStickers", C0500R.string.AddToStickers));
+                                items.add(LocaleController.getString("AddToStickers", C0501R.string.AddToStickers));
                                 options.add(Integer.valueOf(9));
                                 if (!DataQuery.getInstance(this.currentAccount).isStickerInFavorites(this.selectedObject.getDocument())) {
-                                    items.add(LocaleController.getString("DeleteFromFavorites", C0500R.string.DeleteFromFavorites));
+                                    items.add(LocaleController.getString("DeleteFromFavorites", C0501R.string.DeleteFromFavorites));
                                     options.add(Integer.valueOf(21));
                                 } else if (DataQuery.getInstance(this.currentAccount).canAddStickerToFavorites()) {
-                                    items.add(LocaleController.getString("AddToFavorites", C0500R.string.AddToFavorites));
+                                    items.add(LocaleController.getString("AddToFavorites", C0501R.string.AddToFavorites));
                                     options.add(Integer.valueOf(20));
                                 }
                             } else {
-                                items.add(LocaleController.getString("AddToMasks", C0500R.string.AddToMasks));
+                                items.add(LocaleController.getString("AddToMasks", C0501R.string.AddToMasks));
                                 options.add(Integer.valueOf(9));
                             }
                         } else if (this.selectedObject.isVideo()) {
                             if (this.selectedObject.isMusic()) {
-                                items.add(LocaleController.getString("SaveToMusic", C0500R.string.SaveToMusic));
+                                items.add(LocaleController.getString("SaveToMusic", C0501R.string.SaveToMusic));
                                 options.add(Integer.valueOf(10));
-                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (this.selectedObject.getDocument() != null) {
                                 if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
-                                    items.add(LocaleController.getString("SaveToGIFs", C0500R.string.SaveToGIFs));
+                                    items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
                                     options.add(Integer.valueOf(11));
                                 }
-                                items.add(LocaleController.getString("SaveToDownloads", C0500R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
                                 options.add(Integer.valueOf(10));
-                                items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                                items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (this.selectedObject.needDrawBluredPreview()) {
-                                items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                                items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                                 options.add(Integer.valueOf(4));
                             }
                         } else if (this.selectedObject.needDrawBluredPreview()) {
-                            items.add(LocaleController.getString("SaveToGallery", C0500R.string.SaveToGallery));
+                            items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
                             options.add(Integer.valueOf(4));
-                            items.add(LocaleController.getString("ShareFile", C0500R.string.ShareFile));
+                            items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
                             options.add(Integer.valueOf(6));
                         }
-                        items.add(LocaleController.getString("Forward", C0500R.string.Forward));
+                        items.add(LocaleController.getString("Forward", C0501R.string.Forward));
                         options.add(Integer.valueOf(2));
                         if (allowUnpin) {
-                            items.add(LocaleController.getString("UnpinMessage", C0500R.string.UnpinMessage));
+                            items.add(LocaleController.getString("UnpinMessage", C0501R.string.UnpinMessage));
                             options.add(Integer.valueOf(14));
                         } else if (allowPin) {
-                            items.add(LocaleController.getString("PinMessage", C0500R.string.PinMessage));
+                            items.add(LocaleController.getString("PinMessage", C0501R.string.PinMessage));
                             options.add(Integer.valueOf(13));
                         }
                         if (allowEdit) {
-                            items.add(LocaleController.getString("Edit", C0500R.string.Edit));
+                            items.add(LocaleController.getString("Edit", C0501R.string.Edit));
                             options.add(Integer.valueOf(12));
                         }
-                        items.add(LocaleController.getString("ReportChat", C0500R.string.ReportChat));
+                        items.add(LocaleController.getString("ReportChat", C0501R.string.ReportChat));
                         options.add(Integer.valueOf(edit));
                         if (message.canDeleteMessage(this.currentChat)) {
-                            items.add(LocaleController.getString("Delete", C0500R.string.Delete));
+                            items.add(LocaleController.getString("Delete", C0501R.string.Delete));
                             options.add(Integer.valueOf(1));
                         }
                     }
@@ -12920,7 +13033,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         builder = new Builder(getParentActivity());
                         arrayList = options;
                         builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), /* anonymous class already generated */);
-                        builder.setTitle(LocaleController.getString("Message", C0500R.string.Message));
+                        builder.setTitle(LocaleController.getString("Message", C0501R.string.Message));
                         showDialog(builder.create());
                     }
                 }
@@ -12956,9 +13069,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             ChatActivity.this.editingMessageObjectReqId = 0;
                             if (response == null) {
                                 Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                                builder.setMessage(LocaleController.getString("EditMessageError", C0500R.string.EditMessageError));
-                                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                builder.setMessage(LocaleController.getString("EditMessageError", C0501R.string.EditMessageError));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                 ChatActivity.this.showDialog(builder.create());
                                 if (ChatActivity.this.chatActivityEnterView != null) {
                                     ChatActivity.this.chatActivityEnterView.setEditingMessageObject(null, false);
@@ -13092,9 +13205,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             if (!LocaleController.getInstance().applyLanguageFile(locFile, this.currentAccount)) {
                                 if (getParentActivity() != null) {
                                     builder = new Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", C0500R.string.IncorrectLocalization));
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", C0501R.string.IncorrectLocalization));
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                     showDialog(builder.create());
                                     break;
                                 }
@@ -13124,9 +13237,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             this.scrollToPositionOnRecreate = -1;
                             if (getParentActivity() != null) {
                                 builder = new Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                                builder.setMessage(LocaleController.getString("IncorrectTheme", C0500R.string.IncorrectTheme));
-                                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                builder.setMessage(LocaleController.getString("IncorrectTheme", C0501R.string.IncorrectTheme));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                 showDialog(builder.create());
                                 break;
                             }
@@ -13159,8 +13272,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
                     }
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0500R.string.ShareFile)), 500);
-                    break;
+                    try {
+                        getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0501R.string.ShareFile)), 500);
+                        break;
+                    } catch (Throwable th) {
+                        break;
+                    }
                 case 7:
                     path = this.selectedObject.messageOwner.attachPath;
                     if (!(path == null || path.length() <= 0 || new File(path).exists())) {
@@ -13224,12 +13341,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     builder = new Builder(getParentActivity());
                     if (ChatObject.isChannel(this.currentChat) && this.currentChat.megagroup) {
                         int i;
-                        builder.setMessage(LocaleController.getString("PinMessageAlert", C0500R.string.PinMessageAlert));
+                        builder.setMessage(LocaleController.getString("PinMessageAlert", C0501R.string.PinMessageAlert));
                         checks = new boolean[]{true};
                         View frameLayout = new FrameLayout(getParentActivity());
                         CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setText(LocaleController.getString("PinNotify", C0500R.string.PinNotify), TtmlNode.ANONYMOUS_REGION_ID, true, false);
+                        cell.setText(LocaleController.getString("PinNotify", C0501R.string.PinNotify), TtmlNode.ANONYMOUS_REGION_ID, true, false);
                         int dp = LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : 0;
                         if (LocaleController.isRTL) {
                             i = 0;
@@ -13237,7 +13354,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             i = AndroidUtilities.dp(8.0f);
                         }
                         cell.setPadding(dp, 0, i, 0);
-                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 8.0f, 0.0f, 8.0f, 0.0f));
+                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, text_italic, 8.0f, 0.0f, 8.0f, 0.0f));
                         cell.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 boolean z;
@@ -13254,29 +13371,29 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         });
                         builder.setView(frameLayout);
                     } else {
-                        builder.setMessage(LocaleController.getString("PinMessageAlertChannel", C0500R.string.PinMessageAlertChannel));
+                        builder.setMessage(LocaleController.getString("PinMessageAlertChannel", C0501R.string.PinMessageAlertChannel));
                         checks = new boolean[]{false};
                     }
                     final int i2 = mid;
-                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).pinChannelMessage(ChatActivity.this.currentChat, i2, checks[0]);
                         }
                     });
-                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                     showDialog(builder.create());
                     break;
                 case 14:
                     builder = new Builder(getParentActivity());
-                    builder.setMessage(LocaleController.getString("UnpinMessageAlert", C0500R.string.UnpinMessageAlert));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+                    builder.setMessage(LocaleController.getString("UnpinMessageAlert", C0501R.string.UnpinMessageAlert));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             MessagesController.getInstance(ChatActivity.this.currentAccount).pinChannelMessage(ChatActivity.this.currentChat, 0, false);
                         }
                     });
-                    builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
                     showDialog(builder.create());
                     break;
                 case 15:
@@ -13325,7 +13442,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     if (response != null) {
                                         try {
                                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", response.link));
-                                            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", C0500R.string.LinkCopied), 0).show();
+                                            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", C0501R.string.LinkCopied), 0).show();
                                         } catch (Throwable e) {
                                             FileLog.m3e(e);
                                         }
@@ -13449,20 +13566,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         Builder builder = new Builder(getParentActivity());
         if (this.chatActivityEnterView.isInVideoMode()) {
-            builder.setTitle(LocaleController.getString("DiscardVideoMessageTitle", C0500R.string.DiscardVideoMessageTitle));
-            builder.setMessage(LocaleController.getString("DiscardVideoMessageDescription", C0500R.string.DiscardVideoMessageDescription));
+            builder.setTitle(LocaleController.getString("DiscardVideoMessageTitle", C0501R.string.DiscardVideoMessageTitle));
+            builder.setMessage(LocaleController.getString("DiscardVideoMessageDescription", C0501R.string.DiscardVideoMessageDescription));
         } else {
-            builder.setTitle(LocaleController.getString("DiscardVoiceMessageTitle", C0500R.string.DiscardVoiceMessageTitle));
-            builder.setMessage(LocaleController.getString("DiscardVoiceMessageDescription", C0500R.string.DiscardVoiceMessageDescription));
+            builder.setTitle(LocaleController.getString("DiscardVoiceMessageTitle", C0501R.string.DiscardVoiceMessageTitle));
+            builder.setMessage(LocaleController.getString("DiscardVoiceMessageDescription", C0501R.string.DiscardVoiceMessageDescription));
         }
-        builder.setPositiveButton(LocaleController.getString("DiscardVoiceMessageAction", C0500R.string.DiscardVoiceMessageAction), new OnClickListener() {
+        builder.setPositiveButton(LocaleController.getString("DiscardVoiceMessageAction", C0501R.string.DiscardVoiceMessageAction), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
                     ChatActivity.this.chatActivityEnterView.cancelRecordingAudioVideo();
                 }
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
         showDialog(builder.create());
         return true;
     }
@@ -13563,7 +13680,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         SimpleTextView simpleTextView = this.replyObjectTextView;
                         Object[] objArr = new Object[1];
                         objArr[0] = String.format("%d:%02d", new Object[]{Integer.valueOf(dt / 60), Integer.valueOf(dt % 60)});
-                        simpleTextView.setText(LocaleController.formatString("TimeToEdit", C0500R.string.TimeToEdit, objArr));
+                        simpleTextView.setText(LocaleController.formatString("TimeToEdit", C0501R.string.TimeToEdit, objArr));
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -13573,7 +13690,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     return;
                 }
                 this.chatActivityEnterView.onEditTimeExpired();
-                this.replyObjectTextView.setText(LocaleController.formatString("TimeToEditExpired", C0500R.string.TimeToEditExpired, new Object[0]));
+                this.replyObjectTextView.setText(LocaleController.formatString("TimeToEditExpired", C0501R.string.TimeToEditExpired, new Object[0]));
             }
         }
     }
@@ -13597,12 +13714,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     private void alertUserOpenError(MessageObject message) {
         if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
             if (message.type == 3) {
-                builder.setMessage(LocaleController.getString("NoPlayerInstalled", C0500R.string.NoPlayerInstalled));
+                builder.setMessage(LocaleController.getString("NoPlayerInstalled", C0501R.string.NoPlayerInstalled));
             } else {
-                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0500R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0501R.string.NoHandleAppInstalled, message.getDocument().mime_type));
             }
             showDialog(builder.create());
         }
@@ -13613,6 +13730,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.avatarContainer.setVisibility(8);
             this.headerItem.setVisibility(8);
             this.attachItem.setVisibility(8);
+            this.editTextItem.setVisibility(8);
             this.searchItem.setVisibility(0);
             updateSearchButtons(0, 0, -1);
             updateBottomOverlay();
@@ -13695,24 +13813,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (ask) {
             String name;
             Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
             if (user != null) {
                 name = ContactsController.formatName(user.first_name, user.last_name);
             } else {
                 name = TtmlNode.ANONYMOUS_REGION_ID;
             }
-            builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", C0500R.string.BotPermissionGameAlert, name));
+            builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", C0501R.string.BotPermissionGameAlert, name));
             final TL_game tL_game = game;
             final MessageObject messageObject2 = messageObject;
             final String str = urlStr;
             final int i = uid;
-            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     ChatActivity.this.showOpenGameAlert(tL_game, messageObject2, str, false, i);
                     MessagesController.getNotificationsSettings(ChatActivity.this.currentAccount).edit().putBoolean("askgame_" + i, false).commit();
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
             showDialog(builder.create());
         } else if (VERSION.SDK_INT < 21 || AndroidUtilities.isTablet() || !WebviewActivity.supportWebview()) {
             Activity parentActivity = getParentActivity();
@@ -13736,14 +13854,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             return;
         }
         Builder builder = new Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-        builder.setMessage(LocaleController.formatString("OpenUrlAlert", C0500R.string.OpenUrlAlert, url));
-        builder.setPositiveButton(LocaleController.getString("Open", C0500R.string.Open), new OnClickListener() {
+        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+        builder.setMessage(LocaleController.formatString("OpenUrlAlert", C0501R.string.OpenUrlAlert, url));
+        builder.setPositiveButton(LocaleController.getString("Open", C0501R.string.Open), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Browser.openUrl(ChatActivity.this.getParentActivity(), url, ChatActivity.this.inlineReturn == 0);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -13852,11 +13970,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         themeDescriptionArr[47] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, null, null, null, Theme.key_chat_serviceBackgroundSelected);
         themeDescriptionArr[48] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, BotHelpCell.class}, null, null, null, Theme.key_chat_messageTextIn);
         themeDescriptionArr[49] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_messageTextOut);
-        themeDescriptionArr[50] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatMessageCell.class, BotHelpCell.class}, null, null, null, Theme.key_chat_messageLinkIn, null);
-        themeDescriptionArr[51] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_messageLinkOut, null);
-        themeDescriptionArr[52] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, Theme.key_chat_outSentCheck);
-        themeDescriptionArr[53] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, Theme.key_chat_outSentCheckSelected);
-        themeDescriptionArr[54] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutClockDrawable}, null, Theme.key_chat_outSentClock);
+        themeDescriptionArr[text_bold] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatMessageCell.class, BotHelpCell.class}, null, null, null, Theme.key_chat_messageLinkIn, null);
+        themeDescriptionArr[text_italic] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_messageLinkOut, null);
+        themeDescriptionArr[text_mono] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, Theme.key_chat_outSentCheck);
+        themeDescriptionArr[text_link] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, Theme.key_chat_outSentCheckSelected);
+        themeDescriptionArr[text_regular] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutClockDrawable}, null, Theme.key_chat_outSentClock);
         themeDescriptionArr[55] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutSelectedClockDrawable}, null, Theme.key_chat_outSentClockSelected);
         themeDescriptionArr[56] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInClockDrawable}, null, Theme.key_chat_inSentClock);
         themeDescriptionArr[57] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInSelectedClockDrawable}, null, Theme.key_chat_inSentClockSelected);

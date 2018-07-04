@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLog;
@@ -58,8 +58,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private int textWidth;
 
     /* renamed from: org.telegram.ui.IdenticonActivity$1 */
-    class C19151 extends ActionBarMenuOnItemClick {
-        C19151() {
+    class C19181 extends ActionBarMenuOnItemClick {
+        C19181() {
         }
 
         public void onItemClick(int id) {
@@ -70,8 +70,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$2 */
-    class C19162 implements OnTouchListener {
-        C19162() {
+    class C19192 implements OnTouchListener {
+        C19192() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -80,8 +80,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$4 */
-    class C19184 extends AnimatorListenerAdapter {
-        C19184() {
+    class C19214 extends AnimatorListenerAdapter {
+        C19214() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -92,8 +92,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$5 */
-    class C19195 implements OnPreDrawListener {
-        C19195() {
+    class C19225 implements OnPreDrawListener {
+        C19225() {
         }
 
         public boolean onPreDraw() {
@@ -141,14 +141,14 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("EncryptionKey", C0500R.string.EncryptionKey));
-        this.actionBar.setActionBarMenuOnItemClick(new C19151());
+        this.actionBar.setTitle(LocaleController.getString("EncryptionKey", C0501R.string.EncryptionKey));
+        this.actionBar.setActionBarMenuOnItemClick(new C19181());
         this.fragmentView = new FrameLayout(context);
         FrameLayout parentFrameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        this.fragmentView.setOnTouchListener(new C19162());
+        this.fragmentView.setOnTouchListener(new C19192());
         this.linearLayout = new LinearLayout(context);
         this.linearLayout.setOrientation(1);
         this.linearLayout.setWeightSum(100.0f);
@@ -229,11 +229,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             }
             this.codeTextView.setText(hash.toString());
             hash.clear();
-            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", C0500R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
+            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", C0501R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
             String url = "telegram.org";
             int index = hash.toString().indexOf("telegram.org");
             if (index != -1) {
-                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", C0500R.string.EncryptionKeyLink)), index, "telegram.org".length() + index, 33);
+                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", C0501R.string.EncryptionKeyLink)), index, "telegram.org".length() + index, 33);
             }
             this.textView.setText(hash);
         }
@@ -317,7 +317,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             fArr[0] = f;
             animatorArr[5] = ObjectAnimator.ofFloat(textView, str, fArr);
             animatorSet.playTogether(animatorArr);
-            this.animatorSet.addListener(new C19184());
+            this.animatorSet.addListener(new C19214());
             this.animatorSet.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(150);
             this.animatorSet.start();
@@ -361,7 +361,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     private void fixLayout() {
-        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C19195());
+        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C19225());
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

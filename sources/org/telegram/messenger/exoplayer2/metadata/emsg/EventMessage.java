@@ -7,7 +7,7 @@ import org.telegram.messenger.exoplayer2.metadata.Metadata.Entry;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class EventMessage implements Entry {
-    public static final Creator<EventMessage> CREATOR = new C06701();
+    public static final Creator<EventMessage> CREATOR = new C06711();
     public final long durationMs;
     private int hashCode;
     public final long id;
@@ -17,8 +17,8 @@ public final class EventMessage implements Entry {
     public final String value;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.emsg.EventMessage$1 */
-    static class C06701 implements Creator<EventMessage> {
-        C06701() {
+    static class C06711 implements Creator<EventMessage> {
+        C06711() {
         }
 
         public EventMessage createFromParcel(Parcel in) {

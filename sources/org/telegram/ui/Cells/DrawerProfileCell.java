@@ -21,7 +21,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
@@ -48,7 +48,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
         this.shadowView.setScaleType(ScaleType.FIT_XY);
-        this.shadowView.setImageResource(C0500R.drawable.bottom_shadow);
+        this.shadowView.setImageResource(C0501R.drawable.bottom_shadow);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32.0f));
@@ -142,7 +142,7 @@ public class DrawerProfileCell extends FrameLayout {
     public void setAccountsShowed(boolean value) {
         if (this.accountsShowed != value) {
             this.accountsShowed = value;
-            this.arrowView.setImageResource(this.accountsShowed ? C0500R.drawable.collapse_up : C0500R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? C0501R.drawable.collapse_up : C0501R.drawable.collapse_down);
         }
     }
 
@@ -150,7 +150,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.arrowView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
-                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? C0500R.drawable.collapse_up : C0500R.drawable.collapse_down);
+                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? C0501R.drawable.collapse_up : C0501R.drawable.collapse_down);
                 onClickListener.onClick(DrawerProfileCell.this);
             }
         });
@@ -163,7 +163,7 @@ public class DrawerProfileCell extends FrameLayout {
                 photo = user.photo.photo_small;
             }
             this.accountsShowed = accounts;
-            this.arrowView.setImageResource(this.accountsShowed ? C0500R.drawable.collapse_up : C0500R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? C0501R.drawable.collapse_up : C0501R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
             this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);

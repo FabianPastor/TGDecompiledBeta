@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import net.hockeyapp.android.UpdateFragment;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DownloadController;
@@ -229,7 +229,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private StaticLayout instantViewLayout;
     private Drawable instantViewSelectorDrawable;
     private int instantWidth;
-    private Runnable invalidateRunnable = new C11011();
+    private Runnable invalidateRunnable = new C11021();
     private boolean isAvatarVisible;
     public boolean isChat;
     private boolean isCheckPressed = true;
@@ -340,8 +340,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int widthForButtons;
 
     /* renamed from: org.telegram.ui.Cells.ChatMessageCell$1 */
-    class C11011 implements Runnable {
-        C11011() {
+    class C11021 implements Runnable {
+        C11021() {
         }
 
         public void run() {
@@ -1956,7 +1956,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.documentAttachType = 1;
             String name = FileLoader.getDocumentFileName(this.documentAttach);
             if (name == null || name.length() == 0) {
-                name = LocaleController.getString("AttachDocument", C0500R.string.AttachDocument);
+                name = LocaleController.getString("AttachDocument", C0501R.string.AttachDocument);
             }
             this.docTitleLayout = StaticLayoutEx.createStaticLayout(name, Theme.chat_docNamePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TruncateAt.MIDDLE, maxWidth, this.drawPhotoImage ? 2 : 1);
             this.docTitleOffsetX = Integer.MIN_VALUE;
@@ -2093,7 +2093,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
                 this.scheduledInvalidate = true;
-                this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", C0500R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, this.backgroundWidth - AndroidUtilities.dp(91.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", C0501R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, this.backgroundWidth - AndroidUtilities.dp(91.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         }
     }
@@ -2236,7 +2236,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r4 = r0.pinnedTop;
         r0 = r152;
-        if (r4 == r0) goto L_0x3b00;
+        if (r4 == r0) goto L_0x3b10;
     L_0x00c7:
         r0 = r151;
         r1 = r148;
@@ -3195,52 +3195,52 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r97 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x0b69 }
     L_0x0771:
         r136 = 0;
-        if (r135 == 0) goto L_0x3b7a;
+        if (r135 == 0) goto L_0x3b8b;
     L_0x0775:
         r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r0.titleX = r4;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b63 }
-        if (r4 == 0) goto L_0x07a0;	 Catch:{ Exception -> 0x3b63 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r0.titleX = r4;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b74 }
+        if (r4 == 0) goto L_0x07a0;	 Catch:{ Exception -> 0x3b74 }
     L_0x0782:
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b63 }
-        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;	 Catch:{ Exception -> 0x3b63 }
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x3b63 }
-        r4 = r4 + r6;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x3b63 }
-        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;	 Catch:{ Exception -> 0x3b63 }
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x3b63 }
-        r4 = r4 + r6;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x3b63 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b74 }
+        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;	 Catch:{ Exception -> 0x3b74 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x3b74 }
+        r4 = r4 + r6;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x3b74 }
+        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;	 Catch:{ Exception -> 0x3b74 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x3b74 }
+        r4 = r4 + r6;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x3b74 }
     L_0x07a0:
-        r118 = 0;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r0.isSmallImage;	 Catch:{ Exception -> 0x3b63 }
-        if (r4 == 0) goto L_0x07aa;	 Catch:{ Exception -> 0x3b63 }
+        r118 = 0;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r0.isSmallImage;	 Catch:{ Exception -> 0x3b74 }
+        if (r4 == 0) goto L_0x07aa;	 Catch:{ Exception -> 0x3b74 }
     L_0x07a8:
-        if (r66 != 0) goto L_0x0b6f;	 Catch:{ Exception -> 0x3b63 }
+        if (r66 != 0) goto L_0x0b6f;	 Catch:{ Exception -> 0x3b74 }
     L_0x07aa:
-        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x3b63 }
-        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x3b63 }
-        r12 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x3b63 }
-        r4 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x3b63 }
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x3b63 }
-        r13 = (float) r4;	 Catch:{ Exception -> 0x3b63 }
-        r14 = 0;	 Catch:{ Exception -> 0x3b63 }
-        r15 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x3b63 }
-        r17 = 4;	 Catch:{ Exception -> 0x3b63 }
-        r8 = r135;	 Catch:{ Exception -> 0x3b63 }
-        r10 = r88;	 Catch:{ Exception -> 0x3b63 }
-        r16 = r88;	 Catch:{ Exception -> 0x3b63 }
-        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r0.titleLayout = r4;	 Catch:{ Exception -> 0x3b63 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x3b74 }
+        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x3b74 }
+        r12 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x3b74 }
+        r4 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x3b74 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x3b74 }
+        r13 = (float) r4;	 Catch:{ Exception -> 0x3b74 }
+        r14 = 0;	 Catch:{ Exception -> 0x3b74 }
+        r15 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x3b74 }
+        r17 = 4;	 Catch:{ Exception -> 0x3b74 }
+        r8 = r135;	 Catch:{ Exception -> 0x3b74 }
+        r10 = r88;	 Catch:{ Exception -> 0x3b74 }
+        r16 = r88;	 Catch:{ Exception -> 0x3b74 }
+        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r0.titleLayout = r4;	 Catch:{ Exception -> 0x3b74 }
         r13 = r119;
     L_0x07cc:
         r0 = r148;	 Catch:{ Exception -> 0x0ba7 }
@@ -3559,7 +3559,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         goto L_0x09db;
     L_0x09f1:
         r4 = "Of";
-        r6 = NUM; // 0x7f0c04b9 float:1.8611644E38 double:1.053097996E-314;
+        r6 = NUM; // 0x7f0c04bc float:1.861165E38 double:1.0530979973E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r9 = 0;
@@ -3764,20 +3764,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         goto L_0x0771;
     L_0x0b6f:
         r118 = r119;
-        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x3b63 }
-        r4 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;	 Catch:{ Exception -> 0x3b63 }
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x3b63 }
-        r11 = r88 - r4;	 Catch:{ Exception -> 0x3b63 }
-        r13 = 4;	 Catch:{ Exception -> 0x3b63 }
-        r8 = r135;	 Catch:{ Exception -> 0x3b63 }
-        r10 = r88;	 Catch:{ Exception -> 0x3b63 }
-        r12 = r119;	 Catch:{ Exception -> 0x3b63 }
-        r4 = generateStaticLayout(r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r0.titleLayout = r4;	 Catch:{ Exception -> 0x3b63 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r0.titleLayout;	 Catch:{ Exception -> 0x3b63 }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x3b63 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x3b74 }
+        r4 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;	 Catch:{ Exception -> 0x3b74 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x3b74 }
+        r11 = r88 - r4;	 Catch:{ Exception -> 0x3b74 }
+        r13 = 4;	 Catch:{ Exception -> 0x3b74 }
+        r8 = r135;	 Catch:{ Exception -> 0x3b74 }
+        r10 = r88;	 Catch:{ Exception -> 0x3b74 }
+        r12 = r119;	 Catch:{ Exception -> 0x3b74 }
+        r4 = generateStaticLayout(r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r0.titleLayout = r4;	 Catch:{ Exception -> 0x3b74 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r0.titleLayout;	 Catch:{ Exception -> 0x3b74 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x3b74 }
         r13 = r119 - r4;
         goto L_0x07cc;
     L_0x0b96:
@@ -3794,11 +3794,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x0ba8:
         org.telegram.messenger.FileLog.m3e(r71);
     L_0x0bab:
-        if (r136 == 0) goto L_0x3b74;
+        if (r136 == 0) goto L_0x3b85;
     L_0x0bad:
         r0 = r148;
         r4 = r0.isSmallImage;
-        if (r4 == 0) goto L_0x3b74;
+        if (r4 == 0) goto L_0x3b85;
     L_0x0bb3:
         r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -3806,9 +3806,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r119 = r13;
     L_0x0bbd:
         r50 = 0;
-        if (r49 == 0) goto L_0x3b70;
+        if (r49 == 0) goto L_0x3b81;
     L_0x0bc1:
-        if (r135 != 0) goto L_0x3b70;
+        if (r135 != 0) goto L_0x3b81;
     L_0x0bc3:
         r0 = r148;	 Catch:{ Exception -> 0x0d63 }
         r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x0d63 }
@@ -3851,47 +3851,47 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0.authorLayout = r8;	 Catch:{ Exception -> 0x0d63 }
         r13 = r119;
     L_0x0c09:
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r6 = r0.authorLayout;	 Catch:{ Exception -> 0x3b60 }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x3b60 }
-        r6 = r6 + -1;	 Catch:{ Exception -> 0x3b60 }
-        r80 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r4 + r80;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r4 + r80;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b60 }
-        r6 = 0;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x3b60 }
-        r0 = (int) r4;	 Catch:{ Exception -> 0x3b60 }
-        r87 = r0;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r87;	 Catch:{ Exception -> 0x3b60 }
-        r4 = -r0;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r0.authorX = r4;	 Catch:{ Exception -> 0x3b60 }
-        if (r87 == 0) goto L_0x0d50;	 Catch:{ Exception -> 0x3b60 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r6 = r0.authorLayout;	 Catch:{ Exception -> 0x3b71 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x3b71 }
+        r6 = r6 + -1;	 Catch:{ Exception -> 0x3b71 }
+        r80 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r4 + r80;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r4 + r80;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b71 }
+        r6 = 0;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x3b71 }
+        r0 = (int) r4;	 Catch:{ Exception -> 0x3b71 }
+        r87 = r0;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r87;	 Catch:{ Exception -> 0x3b71 }
+        r4 = -r0;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r0.authorX = r4;	 Catch:{ Exception -> 0x3b71 }
+        if (r87 == 0) goto L_0x0d50;	 Catch:{ Exception -> 0x3b71 }
     L_0x0c44:
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r4.getWidth();	 Catch:{ Exception -> 0x3b60 }
-        r144 = r4 - r87;	 Catch:{ Exception -> 0x3b60 }
-        r50 = 1;	 Catch:{ Exception -> 0x3b60 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r4.getWidth();	 Catch:{ Exception -> 0x3b71 }
+        r144 = r4 - r87;	 Catch:{ Exception -> 0x3b71 }
+        r50 = 1;	 Catch:{ Exception -> 0x3b71 }
     L_0x0c50:
-        r4 = r144 + r44;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r94;	 Catch:{ Exception -> 0x3b60 }
-        r94 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x3b60 }
-        r4 = r144 + r44;	 Catch:{ Exception -> 0x3b60 }
-        r0 = r97;	 Catch:{ Exception -> 0x3b60 }
-        r97 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x3b60 }
+        r4 = r144 + r44;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r94;	 Catch:{ Exception -> 0x3b71 }
+        r94 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x3b71 }
+        r4 = r144 + r44;	 Catch:{ Exception -> 0x3b71 }
+        r0 = r97;	 Catch:{ Exception -> 0x3b71 }
+        r97 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x3b71 }
     L_0x0c60:
         if (r66 == 0) goto L_0x0d8a;
     L_0x0c62:
@@ -4019,12 +4019,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r13 = r119 - r4;
         goto L_0x0c09;
     L_0x0d50:
-        r0 = r148;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b60 }
-        r6 = 0;	 Catch:{ Exception -> 0x3b60 }
-        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x3b60 }
-        r8 = (double) r4;	 Catch:{ Exception -> 0x3b60 }
-        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x3b60 }
+        r0 = r148;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x3b71 }
+        r6 = 0;	 Catch:{ Exception -> 0x3b71 }
+        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x3b71 }
+        r8 = (double) r4;	 Catch:{ Exception -> 0x3b71 }
+        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x3b71 }
         r0 = (int) r8;
         r144 = r0;
         goto L_0x0c50;
@@ -4366,7 +4366,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x1c1b;
     L_0x0fc1:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0c0579 float:1.8612034E38 double:1.0530980906E-314;
+        r6 = NUM; // 0x7f0c057c float:1.861204E38 double:1.053098092E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
     L_0x0fcf:
@@ -5176,7 +5176,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r3 = r94;
         r0.calcBackgroundWidth(r1, r2, r3);
         r4 = org.telegram.messenger.MessageObject.isStickerDocument(r68);
-        if (r4 != 0) goto L_0x3b6c;
+        if (r4 != 0) goto L_0x3b7d;
     L_0x15c1:
         r0 = r148;
         r4 = r0.backgroundWidth;
@@ -5533,7 +5533,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r0.currentPhotoObjectThumb;
         r0 = r148;
         r6 = r0.currentPhotoObject;
-        if (r4 != r6) goto L_0x3b6c;
+        if (r4 != r6) goto L_0x3b7d;
     L_0x1889:
         r4 = 0;
         r0 = r148;
@@ -5550,13 +5550,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r6 = 0;
         goto L_0x1869;
     L_0x1899:
-        if (r141 == 0) goto L_0x3b6c;
+        if (r141 == 0) goto L_0x3b7d;
     L_0x189b:
         r0 = r141;
         r4 = r0.mime_type;
         r6 = "image/";
         r4 = r4.startsWith(r6);
-        if (r4 != 0) goto L_0x3b68;
+        if (r4 != 0) goto L_0x3b79;
     L_0x18a8:
         r15 = 0;
     L_0x18a9:
@@ -6050,13 +6050,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x1c35;
     L_0x1c25:
         r4 = "PaymentTestInvoice";
-        r6 = NUM; // 0x7f0c058b float:1.861207E38 double:1.0530980995E-314;
+        r6 = NUM; // 0x7f0c058e float:1.8612076E38 double:1.053098101E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x0fcf;
     L_0x1c35:
         r4 = "PaymentInvoice";
-        r6 = NUM; // 0x7f0c056c float:1.8612007E38 double:1.053098084E-314;
+        r6 = NUM; // 0x7f0c056f float:1.8612013E38 double:1.0530980857E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x0fcf;
@@ -6580,7 +6580,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         goto L_0x1f06;
     L_0x204d:
         r4 = "NumberUnknown";
-        r6 = NUM; // 0x7f0c04b7 float:1.861164E38 double:1.053097995E-314;
+        r6 = NUM; // 0x7f0c04ba float:1.8611646E38 double:1.0530979963E-314;
         r108 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x1f06;
     L_0x2059:
@@ -9543,7 +9543,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r6 = r0.photoImage;
         r4 = 0;
-        r4 = (android.graphics.drawable.BitmapDrawable) r4;
+        r4 = (android.graphics.drawable.Drawable) r4;
         r6.setImageBitmap(r4);
         goto L_0x235d;
     L_0x35c2:
@@ -9894,13 +9894,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x381b:
         r0 = r148;
         r4 = r0.currentPosition;
-        if (r4 != 0) goto L_0x3b13;
+        if (r4 != 0) goto L_0x3b23;
     L_0x3821:
         r0 = r149;
         r4 = r0.messageOwner;
         r4 = r4.reply_markup;
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
-        if (r4 == 0) goto L_0x3b13;
+        if (r4 == 0) goto L_0x3b23;
     L_0x382b:
         r0 = r149;
         r4 = r0.messageOwner;
@@ -10152,7 +10152,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x3a95;
     L_0x3a2c:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0c0579 float:1.8612034E38 double:1.0530980906E-314;
+        r6 = NUM; // 0x7f0c057c float:1.861204E38 double:1.053098092E-314;
         r34 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x3a36:
         r33 = new android.text.StaticLayout;
@@ -10223,11 +10223,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x3ac7:
         r0 = r148;
         r4 = r0.drawPinnedBottom;
-        if (r4 == 0) goto L_0x3b1e;
+        if (r4 == 0) goto L_0x3b2e;
     L_0x3acd:
         r0 = r148;
         r4 = r0.drawPinnedTop;
-        if (r4 == 0) goto L_0x3b1e;
+        if (r4 == 0) goto L_0x3b2e;
     L_0x3ad3:
         r0 = r148;
         r4 = r0.totalHeight;
@@ -10253,20 +10253,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r0.totalHeight = r4;
     L_0x3b00:
+        r0 = r148;
+        r4 = r0.drawPhotoImage;
+        if (r4 != 0) goto L_0x3b10;
+    L_0x3b06:
+        r0 = r148;
+        r6 = r0.photoImage;
+        r4 = 0;
+        r4 = (android.graphics.drawable.Drawable) r4;
+        r6.setImageBitmap(r4);
+    L_0x3b10:
         r148.updateWaveform();
-        if (r65 == 0) goto L_0x3b5e;
-    L_0x3b05:
+        if (r65 == 0) goto L_0x3b6f;
+    L_0x3b15:
         r0 = r149;
         r4 = r0.cancelEditing;
-        if (r4 != 0) goto L_0x3b5e;
-    L_0x3b0b:
+        if (r4 != 0) goto L_0x3b6f;
+    L_0x3b1b:
         r4 = 1;
-    L_0x3b0c:
+    L_0x3b1c:
         r6 = 1;
         r0 = r148;
         r0.updateButtonState(r4, r6);
         return;
-    L_0x3b13:
+    L_0x3b23:
         r4 = 0;
         r0 = r148;
         r0.substractBackgroundHeight = r4;
@@ -10274,11 +10284,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r0.keyboardHeight = r4;
         goto L_0x3ac7;
-    L_0x3b1e:
+    L_0x3b2e:
         r0 = r148;
         r4 = r0.drawPinnedBottom;
-        if (r4 == 0) goto L_0x3b34;
-    L_0x3b24:
+        if (r4 == 0) goto L_0x3b44;
+    L_0x3b34:
         r0 = r148;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;
@@ -10287,24 +10297,24 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r0.totalHeight = r4;
         goto L_0x3ae2;
-    L_0x3b34:
+    L_0x3b44:
         r0 = r148;
         r4 = r0.drawPinnedTop;
         if (r4 == 0) goto L_0x3ae2;
-    L_0x3b3a:
+    L_0x3b4a:
         r0 = r148;
         r4 = r0.pinnedBottom;
         if (r4 == 0) goto L_0x3ae2;
-    L_0x3b40:
+    L_0x3b50:
         r0 = r148;
         r4 = r0.currentPosition;
         if (r4 == 0) goto L_0x3ae2;
-    L_0x3b46:
+    L_0x3b56:
         r0 = r148;
         r4 = r0.currentPosition;
         r4 = r4.siblingHeights;
         if (r4 != 0) goto L_0x3ae2;
-    L_0x3b4e:
+    L_0x3b5e:
         r0 = r148;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;
@@ -10313,30 +10323,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r148;
         r0.totalHeight = r4;
         goto L_0x3ae2;
-    L_0x3b5e:
+    L_0x3b6f:
         r4 = 0;
-        goto L_0x3b0c;
-    L_0x3b60:
+        goto L_0x3b1c;
+    L_0x3b71:
         r71 = move-exception;
         goto L_0x0d66;
-    L_0x3b63:
+    L_0x3b74:
         r71 = move-exception;
         r13 = r119;
         goto L_0x0ba8;
-    L_0x3b68:
+    L_0x3b79:
         r15 = r141;
         goto L_0x18a9;
-    L_0x3b6c:
+    L_0x3b7d:
         r15 = r141;
         goto L_0x0dcf;
-    L_0x3b70:
+    L_0x3b81:
         r13 = r119;
         goto L_0x0c60;
-    L_0x3b74:
+    L_0x3b85:
         r119 = r13;
         r11 = r88;
         goto L_0x0bbd;
-    L_0x3b7a:
+    L_0x3b8b:
         r11 = r88;
         goto L_0x0bbd;
         */
@@ -10395,15 +10405,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             String str;
             this.instantWidth = AndroidUtilities.dp(33.0f);
             if (this.drawInstantViewType == 1) {
-                str = LocaleController.getString("OpenChannel", C0500R.string.OpenChannel);
+                str = LocaleController.getString("OpenChannel", C0501R.string.OpenChannel);
             } else if (this.drawInstantViewType == 2) {
-                str = LocaleController.getString("OpenGroup", C0500R.string.OpenGroup);
+                str = LocaleController.getString("OpenGroup", C0501R.string.OpenGroup);
             } else if (this.drawInstantViewType == 3) {
-                str = LocaleController.getString("OpenMessage", C0500R.string.OpenMessage);
+                str = LocaleController.getString("OpenMessage", C0501R.string.OpenMessage);
             } else if (this.drawInstantViewType == 5) {
-                str = LocaleController.getString("ViewContact", C0500R.string.ViewContact);
+                str = LocaleController.getString("ViewContact", C0501R.string.ViewContact);
             } else {
-                str = LocaleController.getString("InstantView", C0500R.string.InstantView);
+                str = LocaleController.getString("InstantView", C0501R.string.InstantView);
             }
             int mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
             this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -12158,7 +12168,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-        if (this.currentMessageObject != null && set && !thumb && !this.currentMessageObject.mediaExists && !this.currentMessageObject.attachPathExists) {
+        if (this.currentMessageObject == null) {
+            return;
+        }
+        if ((this.currentMessageObject.type == 0 || this.currentMessageObject.type == 1 || this.currentMessageObject.type == 8) && set && !thumb && !this.currentMessageObject.mediaExists && !this.currentMessageObject.attachPathExists) {
             this.currentMessageObject.mediaExists = true;
             updateButtonState(true, false);
         }
@@ -12248,7 +12261,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
         }
         if (edited) {
-            timeString = LocaleController.getString("EditedMessage", C0500R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
+            timeString = LocaleController.getString("EditedMessage", C0501R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
         } else {
             timeString = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
         }
@@ -12935,10 +12948,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0 = r38;
         r0.forwardedNameWidth = r2;
         r2 = "From";
-        r4 = NUM; // 0x7f0c0315 float:1.8610792E38 double:1.0530977883E-314;
+        r4 = NUM; // 0x7f0c0317 float:1.8610796E38 double:1.0530977893E-314;
         r23 = org.telegram.messenger.LocaleController.getString(r2, r4);
         r2 = "FromFormatted";
-        r4 = NUM; // 0x7f0c031d float:1.8610808E38 double:1.053097792E-314;
+        r4 = NUM; // 0x7f0c031f float:1.8610813E38 double:1.053097793E-314;
         r24 = org.telegram.messenger.LocaleController.getString(r2, r4);
         r2 = "%1$s";
         r0 = r24;
@@ -13049,7 +13062,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4.<init>(r5, r6, r7, r8, r9, r10, r11);	 Catch:{ Exception -> 0x0915 }
         r2[r12] = r4;	 Catch:{ Exception -> 0x0915 }
         r2 = "ForwardedMessage";	 Catch:{ Exception -> 0x0915 }
-        r4 = NUM; // 0x7f0c02ef float:1.8610715E38 double:1.0530977695E-314;	 Catch:{ Exception -> 0x0915 }
+        r4 = NUM; // 0x7f0c02f1 float:1.861072E38 double:1.0530977705E-314;	 Catch:{ Exception -> 0x0915 }
         r2 = org.telegram.messenger.LocaleController.getString(r2, r4);	 Catch:{ Exception -> 0x0915 }
         r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2);	 Catch:{ Exception -> 0x0915 }
         r4 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0915 }
@@ -13240,7 +13253,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r30 != 0) goto L_0x0666;
     L_0x065c:
         r2 = "Loading";
-        r4 = NUM; // 0x7f0c03ab float:1.8611096E38 double:1.0530978624E-314;
+        r4 = NUM; // 0x7f0c03ad float:1.86111E38 double:1.0530978634E-314;
         r30 = org.telegram.messenger.LocaleController.getString(r2, r4);
     L_0x0666:
         r2 = 10;

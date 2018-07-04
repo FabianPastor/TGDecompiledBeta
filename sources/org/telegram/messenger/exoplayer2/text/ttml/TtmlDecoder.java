@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
 import org.telegram.messenger.exoplayer2.util.ColorParser;
@@ -490,9 +490,9 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     }
 
     private TtmlNode parseNode(XmlPullParser parser, TtmlNode parent, Map<String, TtmlRegion> regionMap, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
-        long duration = C0615C.TIME_UNSET;
-        long startTime = C0615C.TIME_UNSET;
-        long endTime = C0615C.TIME_UNSET;
+        long duration = C0616C.TIME_UNSET;
+        long startTime = C0616C.TIME_UNSET;
+        long endTime = C0616C.TIME_UNSET;
         String regionId = TtmlNode.ANONYMOUS_REGION_ID;
         String[] styleIds = null;
         int attributeCount = parser.getAttributeCount();
@@ -560,18 +560,18 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                     break;
             }
         }
-        if (!(parent == null || parent.startTimeUs == C0615C.TIME_UNSET)) {
-            if (startTime != C0615C.TIME_UNSET) {
+        if (!(parent == null || parent.startTimeUs == C0616C.TIME_UNSET)) {
+            if (startTime != C0616C.TIME_UNSET) {
                 startTime += parent.startTimeUs;
             }
-            if (endTime != C0615C.TIME_UNSET) {
+            if (endTime != C0616C.TIME_UNSET) {
                 endTime += parent.startTimeUs;
             }
         }
-        if (endTime == C0615C.TIME_UNSET) {
-            if (duration != C0615C.TIME_UNSET) {
+        if (endTime == C0616C.TIME_UNSET) {
+            if (duration != C0616C.TIME_UNSET) {
                 endTime = startTime + duration;
-            } else if (!(parent == null || parent.endTimeUs == C0615C.TIME_UNSET)) {
+            } else if (!(parent == null || parent.endTimeUs == C0616C.TIME_UNSET)) {
                 endTime = parent.endTimeUs;
             }
         }

@@ -53,8 +53,8 @@ public class CropAreaView extends View {
     private RectF topRightCorner = new RectF();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropAreaView$1 */
-    class C14751 extends AnimatorListenerAdapter {
-        C14751() {
+    class C14761 extends AnimatorListenerAdapter {
+        C14761() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -251,7 +251,7 @@ public class CropAreaView extends View {
             if (animated) {
                 this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, targetProgress});
                 this.gridAnimator.setDuration(200);
-                this.gridAnimator.addListener(new C14751());
+                this.gridAnimator.addListener(new C14761());
                 if (type == GridType.NONE) {
                     this.gridAnimator.setStartDelay(200);
                 }

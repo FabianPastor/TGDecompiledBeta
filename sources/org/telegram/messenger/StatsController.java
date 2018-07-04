@@ -19,7 +19,7 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
-    private static final ThreadLocal<Long> lastStatsSaveTime = new C05791();
+    private static final ThreadLocal<Long> lastStatsSaveTime = new C05801();
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
     private int[] callsTotalTime = new int[3];
@@ -27,14 +27,14 @@ public class StatsController {
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] receivedItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private long[] resetStatsDate = new long[3];
-    private Runnable saveRunnable = new C05802();
+    private Runnable saveRunnable = new C05812();
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private RandomAccessFile statsFile;
 
     /* renamed from: org.telegram.messenger.StatsController$1 */
-    static class C05791 extends ThreadLocal<Long> {
-        C05791() {
+    static class C05801 extends ThreadLocal<Long> {
+        C05801() {
         }
 
         protected Long initialValue() {
@@ -43,8 +43,8 @@ public class StatsController {
     }
 
     /* renamed from: org.telegram.messenger.StatsController$2 */
-    class C05802 implements Runnable {
-        C05802() {
+    class C05812 implements Runnable {
+        C05812() {
         }
 
         public void run() {

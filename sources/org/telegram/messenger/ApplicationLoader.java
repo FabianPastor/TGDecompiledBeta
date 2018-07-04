@@ -23,6 +23,7 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;
+    public static volatile boolean externalInterfacePaused = true;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;

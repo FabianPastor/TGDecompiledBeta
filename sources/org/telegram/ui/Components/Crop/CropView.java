@@ -23,7 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -53,8 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C14811 implements OnPreDrawListener {
-        C14811() {
+    class C14821 implements OnPreDrawListener {
+        C14821() {
         }
 
         public boolean onPreDraw() {
@@ -65,8 +65,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C14877 implements OnCancelListener {
-        C14877() {
+    class C14887 implements OnCancelListener {
+        C14887() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -262,7 +262,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C14811());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C14821());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -665,8 +665,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
             ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
             ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
-            actions[0] = LocaleController.getString("CropOriginal", C0500R.string.CropOriginal);
-            actions[1] = LocaleController.getString("CropSquare", C0500R.string.CropSquare);
+            actions[0] = LocaleController.getString("CropOriginal", C0501R.string.CropOriginal);
+            actions[1] = LocaleController.getString("CropSquare", C0501R.string.CropSquare);
             int i = 2;
             for (Integer[] ratioPair : ratios) {
                 if (this.areaView.getAspectRatio() > 1.0f) {
@@ -699,7 +699,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C14877());
+            dialog.setOnCancelListener(new C14887());
             dialog.show();
         }
     }

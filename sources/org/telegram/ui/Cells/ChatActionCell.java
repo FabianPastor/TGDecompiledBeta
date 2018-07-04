@@ -11,7 +11,7 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -48,8 +48,8 @@ public class ChatActionCell extends BaseCell {
     private int textY = 0;
 
     /* renamed from: org.telegram.ui.Cells.ChatActionCell$1 */
-    class C11001 implements Runnable {
-        C11001() {
+    class C11011 implements Runnable {
+        C11011() {
         }
 
         public void run() {
@@ -90,7 +90,7 @@ public class ChatActionCell extends BaseCell {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
                 }
-                AndroidUtilities.runOnUIThread(new C11001());
+                AndroidUtilities.runOnUIThread(new C11011());
             }
         }
     }
@@ -269,9 +269,9 @@ public class ChatActionCell extends BaseCell {
             } else if (this.currentMessageObject.messageOwner == null || this.currentMessageObject.messageOwner.media == null || this.currentMessageObject.messageOwner.media.ttl_seconds == 0) {
                 text = this.currentMessageObject.messageText;
             } else if (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) {
-                text = LocaleController.getString("AttachPhotoExpired", C0500R.string.AttachPhotoExpired);
+                text = LocaleController.getString("AttachPhotoExpired", C0501R.string.AttachPhotoExpired);
             } else if (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty) {
-                text = LocaleController.getString("AttachVideoExpired", C0500R.string.AttachVideoExpired);
+                text = LocaleController.getString("AttachVideoExpired", C0501R.string.AttachVideoExpired);
             } else {
                 text = this.currentMessageObject.messageText;
             }

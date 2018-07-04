@@ -13,7 +13,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -38,15 +38,15 @@ public class SharingLiveLocationCell extends FrameLayout {
     private int currentAccount;
     private SharingLocationInfo currentInfo;
     private SimpleTextView distanceTextView;
-    private Runnable invalidateRunnable = new C11311();
+    private Runnable invalidateRunnable = new C11321();
     private LiveLocation liveLocation;
     private Location location = new Location("network");
     private SimpleTextView nameTextView;
     private RectF rect = new RectF();
 
     /* renamed from: org.telegram.ui.Cells.SharingLiveLocationCell$1 */
-    class C11311 implements Runnable {
-        C11311() {
+    class C11321 implements Runnable {
+        C11321() {
         }
 
         public void run() {
@@ -171,7 +171,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             this.avatarImageView.setImage(photo, null, this.avatarDrawable);
         } else {
             name = messageObject.messageOwner.media.title;
-            Drawable drawable = getResources().getDrawable(C0500R.drawable.pin);
+            Drawable drawable = getResources().getDrawable(C0501R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
             int color = Theme.getColor(Theme.key_location_placeLocationBackground);
             CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), color, color), drawable);
@@ -186,19 +186,19 @@ public class SharingLiveLocationCell extends FrameLayout {
             float distance = this.location.distanceTo(userLocation);
             if (address != null) {
                 if (distance < 1000.0f) {
-                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{address, Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0500R.string.MetersAway)}));
+                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{address, Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0501R.string.MetersAway)}));
                     return;
                 }
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{address, Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0500R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{address, Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0501R.string.KMetersAway)}));
             } else if (distance < 1000.0f) {
-                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0500R.string.MetersAway)}));
+                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distance), LocaleController.getString("MetersAway", C0501R.string.MetersAway)}));
             } else {
-                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0500R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", C0501R.string.KMetersAway)}));
             }
         } else if (address != null) {
             this.distanceTextView.setText(address);
         } else {
-            this.distanceTextView.setText(LocaleController.getString("Loading", C0500R.string.Loading));
+            this.distanceTextView.setText(LocaleController.getString("Loading", C0501R.string.Loading));
         }
     }
 
@@ -231,9 +231,9 @@ public class SharingLiveLocationCell extends FrameLayout {
         String time = LocaleController.formatLocationUpdateDate(info.object.edit_date != 0 ? (long) info.object.edit_date : (long) info.object.date);
         if (userLocation != null) {
             if (this.location.distanceTo(userLocation) < 1000.0f) {
-                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{time, Integer.valueOf((int) this.location.distanceTo(userLocation)), LocaleController.getString("MetersAway", C0500R.string.MetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{time, Integer.valueOf((int) this.location.distanceTo(userLocation)), LocaleController.getString("MetersAway", C0501R.string.MetersAway)}));
             } else {
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{time, Float.valueOf(this.location.distanceTo(userLocation) / 1000.0f), LocaleController.getString("KMetersAway", C0500R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{time, Float.valueOf(this.location.distanceTo(userLocation) / 1000.0f), LocaleController.getString("KMetersAway", C0501R.string.KMetersAway)}));
             }
         } else {
             this.distanceTextView.setText(time);

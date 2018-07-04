@@ -33,7 +33,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.LayoutHelper;
@@ -47,7 +47,7 @@ public class AlertDialog extends Dialog implements Callback {
     private int currentProgress;
     private View customView;
     private int customViewOffset = 20;
-    private Runnable dismissRunnable = new C08981();
+    private Runnable dismissRunnable = new C08991();
     private int[] itemIcons;
     private CharSequence[] items;
     private int lastScreenWidth;
@@ -83,8 +83,8 @@ public class AlertDialog extends Dialog implements Callback {
     private int topResId;
 
     /* renamed from: org.telegram.ui.ActionBar.AlertDialog$1 */
-    class C08981 implements Runnable {
-        C08981() {
+    class C08991 implements Runnable {
+        C08991() {
         }
 
         public void run() {
@@ -93,8 +93,8 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.AlertDialog$4 */
-    class C09034 implements View.OnClickListener {
-        C09034() {
+    class C09044 implements View.OnClickListener {
+        C09044() {
         }
 
         public void onClick(View v) {
@@ -106,8 +106,8 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.AlertDialog$7 */
-    class C09067 implements View.OnClickListener {
-        C09067() {
+    class C09077 implements View.OnClickListener {
+        C09077() {
         }
 
         public void onClick(View v) {
@@ -119,8 +119,8 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.AlertDialog$9 */
-    class C09089 implements View.OnClickListener {
-        C09089() {
+    class C09099 implements View.OnClickListener {
+        C09099() {
         }
 
         public void onClick(View v) {
@@ -295,8 +295,8 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     public AlertDialog(Context context, int progressStyle) {
-        super(context, C0500R.style.TransparentDialog);
-        this.shadowDrawable = context.getResources().getDrawable(C0500R.drawable.popup_fixed_alert).mutate();
+        super(context, C0501R.style.TransparentDialog);
+        this.shadowDrawable = context.getResources().getDrawable(C0501R.drawable.popup_fixed_alert).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(this.backgroundPaddings);
         this.progressViewStyle = progressStyle;
@@ -311,8 +311,8 @@ public class AlertDialog extends Dialog implements Callback {
             private boolean inLayout;
 
             /* renamed from: org.telegram.ui.ActionBar.AlertDialog$2$1 */
-            class C08991 implements Runnable {
-                C08991() {
+            class C09001 implements Runnable {
+                C09001() {
                 }
 
                 public void run() {
@@ -335,8 +335,8 @@ public class AlertDialog extends Dialog implements Callback {
             }
 
             /* renamed from: org.telegram.ui.ActionBar.AlertDialog$2$2 */
-            class C09002 implements OnScrollChangedListener {
-                C09002() {
+            class C09012 implements OnScrollChangedListener {
+                C09012() {
                 }
 
                 public void onScrollChanged() {
@@ -431,7 +431,7 @@ public class AlertDialog extends Dialog implements Callback {
                 setMeasuredDimension(width, ((maxContentHeight - availableHeight) + getPaddingTop()) + getPaddingBottom());
                 this.inLayout = false;
                 if (AlertDialog.this.lastScreenWidth != AndroidUtilities.displaySize.x) {
-                    AndroidUtilities.runOnUIThread(new C08991());
+                    AndroidUtilities.runOnUIThread(new C09001());
                 }
             }
 
@@ -439,7 +439,7 @@ public class AlertDialog extends Dialog implements Callback {
                 super.onLayout(changed, l, t, r, b);
                 if (AlertDialog.this.contentScrollView != null) {
                     if (AlertDialog.this.onScrollChangedListener == null) {
-                        AlertDialog.this.onScrollChangedListener = new C09002();
+                        AlertDialog.this.onScrollChangedListener = new C09012();
                         AlertDialog.this.contentScrollView.getViewTreeObserver().addOnScrollChangedListener(AlertDialog.this.onScrollChangedListener);
                     }
                     AlertDialog.this.onScrollChangedListener.onScrollChanged();
@@ -469,7 +469,7 @@ public class AlertDialog extends Dialog implements Callback {
                 this.topImageView.setImageResource(this.topResId);
             }
             this.topImageView.setScaleType(ScaleType.CENTER);
-            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(C0500R.drawable.popup_fixed_top));
+            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(C0501R.drawable.popup_fixed_top));
             this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, Mode.MULTIPLY));
             this.topImageView.setPadding(0, 0, 0, 0);
             containerView.addView(this.topImageView, LayoutHelper.createLinear(-1, 132, (LocaleController.isRTL ? 5 : 3) | 48, -8, -8, 0, 0));
@@ -502,8 +502,8 @@ public class AlertDialog extends Dialog implements Callback {
             containerView.addView(view, LayoutHelper.createLinear(-2, -2, i, 24, 0, 24, i2));
         }
         if (this.progressViewStyle == 0) {
-            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(C0500R.drawable.header_shadow).mutate();
-            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(C0500R.drawable.header_shadow_reverse).mutate();
+            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(C0501R.drawable.header_shadow).mutate();
+            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(C0501R.drawable.header_shadow_reverse).mutate();
             this.shadow[0].setAlpha(0);
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);
@@ -601,7 +601,7 @@ public class AlertDialog extends Dialog implements Callback {
                     cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
                     this.scrollContainer.addView(cell, LayoutHelper.createLinear(-1, 48));
                     cell.setTag(Integer.valueOf(a));
-                    cell.setOnClickListener(new C09034());
+                    cell.setOnClickListener(new C09044());
                 }
                 a++;
             }
@@ -669,7 +669,7 @@ public class AlertDialog extends Dialog implements Callback {
                 radialProgressView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
                 radialProgressView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 this.buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, 36, 53));
-                radialProgressView.setOnClickListener(new C09067());
+                radialProgressView.setOnClickListener(new C09077());
             }
             if (this.negativeButtonText != null) {
                 radialProgressView = new TextView(getContext()) {
@@ -688,7 +688,7 @@ public class AlertDialog extends Dialog implements Callback {
                 radialProgressView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
                 radialProgressView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 this.buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, 36, 53));
-                radialProgressView.setOnClickListener(new C09089());
+                radialProgressView.setOnClickListener(new C09099());
             }
             if (this.neutralButtonText != null) {
                 radialProgressView = new TextView(getContext()) {

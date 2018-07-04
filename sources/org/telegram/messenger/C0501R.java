@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0500R {
+public final class C0501R {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -779,6 +779,7 @@ public final class C0500R {
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
         public static final int menu_link = NUM;
+        public static final int menu_mono = NUM;
         public static final int menu_regular = NUM;
         public static final int monochrome = NUM;
         public static final int name = NUM;
@@ -1317,6 +1318,7 @@ public final class C0500R {
         public static final int ConnectingConnectProxy = NUM;
         public static final int ConnectingToProxy = NUM;
         public static final int ConnectingToProxyEnable = NUM;
+        public static final int ContactBirthday = NUM;
         public static final int ContactJob = NUM;
         public static final int ContactJobTitle = NUM;
         public static final int ContactJoined = NUM;
@@ -1459,6 +1461,7 @@ public final class C0500R {
         public static final int EditMessageMedia = NUM;
         public static final int EditName = NUM;
         public static final int EditedMessage = NUM;
+        public static final int EmailCopied = NUM;
         public static final int EmailPasswordConfirmText = NUM;
         public static final int Emoji = NUM;
         public static final int EmojiBigSize = NUM;
@@ -1898,6 +1901,7 @@ public final class C0500R {
         public static final int Minutes_two = NUM;
         public static final int Minutes_zero = NUM;
         public static final int MobileUsage = NUM;
+        public static final int Mono = NUM;
         public static final int Months_few = NUM;
         public static final int Months_many = NUM;
         public static final int Months_one = NUM;
@@ -2306,6 +2310,7 @@ public final class C0500R {
         public static final int PermissionOpenSettings = NUM;
         public static final int PermissionStorage = NUM;
         public static final int Phone = NUM;
+        public static final int PhoneCopied = NUM;
         public static final int PhoneHome = NUM;
         public static final int PhoneMain = NUM;
         public static final int PhoneMobile = NUM;
@@ -2334,6 +2339,7 @@ public final class C0500R {
         public static final int PleaseEnterCurrentPassword = NUM;
         public static final int PleaseEnterFirstPassword = NUM;
         public static final int PleaseEnterPassword = NUM;
+        public static final int PleaseLoginPassport = NUM;
         public static final int PleaseReEnterPassword = NUM;
         public static final int PleaseStreamDownload = NUM;
         public static final int Points_few = NUM;
@@ -3054,8 +3060,8 @@ public final class C0500R {
 
     /* renamed from: org.telegram.messenger.R$styleable */
     public static final class styleable {
-        public static final int[] CoordinatorLayout = new int[]{C0500R.attr.keylines, C0500R.attr.statusBarBackground};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0500R.attr.layout_anchor, C0500R.attr.layout_anchorGravity, C0500R.attr.layout_behavior, C0500R.attr.layout_dodgeInsetEdges, C0500R.attr.layout_insetEdge, C0500R.attr.layout_keyline};
+        public static final int[] CoordinatorLayout = new int[]{C0501R.attr.keylines, C0501R.attr.statusBarBackground};
+        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0501R.attr.layout_anchor, C0501R.attr.layout_anchorGravity, C0501R.attr.layout_behavior, C0501R.attr.layout_dodgeInsetEdges, C0501R.attr.layout_insetEdge, C0501R.attr.layout_keyline};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -3065,12 +3071,12 @@ public final class C0500R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{C0500R.attr.customThemeStyle, C0500R.attr.toolbarTextColorStyle, C0500R.attr.windowTransitionStyle};
+        public static final int[] CustomWalletTheme = new int[]{C0501R.attr.customThemeStyle, C0501R.attr.toolbarTextColorStyle, C0501R.attr.windowTransitionStyle};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{C0500R.attr.fontProviderAuthority, C0500R.attr.fontProviderCerts, C0500R.attr.fontProviderFetchStrategy, C0500R.attr.fontProviderFetchTimeout, C0500R.attr.fontProviderPackage, C0500R.attr.fontProviderQuery};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, C0500R.attr.font, C0500R.attr.fontStyle, C0500R.attr.fontWeight};
+        public static final int[] FontFamily = new int[]{C0501R.attr.fontProviderAuthority, C0501R.attr.fontProviderCerts, C0501R.attr.fontProviderFetchStrategy, C0501R.attr.fontProviderFetchTimeout, C0501R.attr.fontProviderPackage, C0501R.attr.fontProviderQuery};
+        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, C0501R.attr.font, C0501R.attr.fontStyle, C0501R.attr.fontWeight};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontWeight = 1;
@@ -3083,11 +3089,11 @@ public final class C0500R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
-        public static final int[] LoadingImageView = new int[]{C0500R.attr.circleCrop, C0500R.attr.imageAspectRatio, C0500R.attr.imageAspectRatioAdjust};
+        public static final int[] LoadingImageView = new int[]{C0501R.attr.circleCrop, C0501R.attr.imageAspectRatio, C0501R.attr.imageAspectRatioAdjust};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{C0500R.attr.ambientEnabled, C0500R.attr.cameraBearing, C0500R.attr.cameraMaxZoomPreference, C0500R.attr.cameraMinZoomPreference, C0500R.attr.cameraTargetLat, C0500R.attr.cameraTargetLng, C0500R.attr.cameraTilt, C0500R.attr.cameraZoom, C0500R.attr.latLngBoundsNorthEastLatitude, C0500R.attr.latLngBoundsNorthEastLongitude, C0500R.attr.latLngBoundsSouthWestLatitude, C0500R.attr.latLngBoundsSouthWestLongitude, C0500R.attr.liteMode, C0500R.attr.mapType, C0500R.attr.uiCompass, C0500R.attr.uiMapToolbar, C0500R.attr.uiRotateGestures, C0500R.attr.uiScrollGestures, C0500R.attr.uiTiltGestures, C0500R.attr.uiZoomControls, C0500R.attr.uiZoomGestures, C0500R.attr.useViewLifecycle, C0500R.attr.zOrderOnTop};
+        public static final int[] MapAttrs = new int[]{C0501R.attr.ambientEnabled, C0501R.attr.cameraBearing, C0501R.attr.cameraMaxZoomPreference, C0501R.attr.cameraMinZoomPreference, C0501R.attr.cameraTargetLat, C0501R.attr.cameraTargetLng, C0501R.attr.cameraTilt, C0501R.attr.cameraZoom, C0501R.attr.latLngBoundsNorthEastLatitude, C0501R.attr.latLngBoundsNorthEastLongitude, C0501R.attr.latLngBoundsSouthWestLatitude, C0501R.attr.latLngBoundsSouthWestLongitude, C0501R.attr.liteMode, C0501R.attr.mapType, C0501R.attr.uiCompass, C0501R.attr.uiMapToolbar, C0501R.attr.uiRotateGestures, C0501R.attr.uiScrollGestures, C0501R.attr.uiTiltGestures, C0501R.attr.uiZoomControls, C0501R.attr.uiZoomGestures, C0501R.attr.useViewLifecycle, C0501R.attr.zOrderOnTop};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -3111,16 +3117,16 @@ public final class C0500R {
         public static final int MapAttrs_uiZoomGestures = 20;
         public static final int MapAttrs_useViewLifecycle = 21;
         public static final int MapAttrs_zOrderOnTop = 22;
-        public static final int[] SignInButton = new int[]{C0500R.attr.buttonSize, C0500R.attr.colorScheme, C0500R.attr.scopeUris};
+        public static final int[] SignInButton = new int[]{C0501R.attr.buttonSize, C0501R.attr.colorScheme, C0501R.attr.scopeUris};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{C0500R.attr.appTheme, C0500R.attr.environment, C0500R.attr.fragmentMode, C0500R.attr.fragmentStyle};
+        public static final int[] WalletFragmentOptions = new int[]{C0501R.attr.appTheme, C0501R.attr.environment, C0501R.attr.fragmentMode, C0501R.attr.fragmentStyle};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{C0500R.attr.buyButtonAppearance, C0500R.attr.buyButtonHeight, C0500R.attr.buyButtonText, C0500R.attr.buyButtonWidth, C0500R.attr.maskedWalletDetailsBackground, C0500R.attr.maskedWalletDetailsButtonBackground, C0500R.attr.maskedWalletDetailsButtonTextAppearance, C0500R.attr.maskedWalletDetailsHeaderTextAppearance, C0500R.attr.maskedWalletDetailsLogoImageType, C0500R.attr.maskedWalletDetailsLogoTextColor, C0500R.attr.maskedWalletDetailsTextAppearance};
+        public static final int[] WalletFragmentStyle = new int[]{C0501R.attr.buyButtonAppearance, C0501R.attr.buyButtonHeight, C0501R.attr.buyButtonText, C0501R.attr.buyButtonWidth, C0501R.attr.maskedWalletDetailsBackground, C0501R.attr.maskedWalletDetailsButtonBackground, C0501R.attr.maskedWalletDetailsButtonTextAppearance, C0501R.attr.maskedWalletDetailsHeaderTextAppearance, C0501R.attr.maskedWalletDetailsLogoImageType, C0501R.attr.maskedWalletDetailsLogoTextColor, C0501R.attr.maskedWalletDetailsTextAppearance};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

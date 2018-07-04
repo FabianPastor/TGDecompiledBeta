@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -102,8 +102,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private SpansContainer spansContainer;
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C18711 extends ActionBarMenuOnItemClick {
-        C18711() {
+    class C18741 extends ActionBarMenuOnItemClick {
+        C18741() {
         }
 
         public void onItemClick(int id) {
@@ -116,8 +116,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$4 */
-    class C18744 implements OnClickListener {
-        C18744() {
+    class C18774 implements OnClickListener {
+        C18774() {
         }
 
         public void onClick(View v) {
@@ -127,8 +127,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C18766 implements Callback {
-        C18766() {
+    class C18796 implements Callback {
+        C18796() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -148,8 +148,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C18777 implements OnEditorActionListener {
-        C18777() {
+    class C18807 implements OnEditorActionListener {
+        C18807() {
         }
 
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -158,10 +158,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C18788 implements OnKeyListener {
+    class C18818 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C18788() {
+        C18818() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -180,8 +180,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C18799 implements TextWatcher {
-        C18799() {
+    class C18829 implements TextWatcher {
+        C18829() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -199,7 +199,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 GroupCreateActivity.this.adapter.searchDialogs(GroupCreateActivity.this.editText.getText().toString());
                 GroupCreateActivity.this.listView.setFastScrollVisible(false);
                 GroupCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
-                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0500R.string.NoResult));
+                GroupCreateActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
                 return;
             }
             GroupCreateActivity.this.closeSearch();
@@ -301,7 +301,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
                     if (this.searching) {
-                        cell.setText(LocaleController.getString("GlobalSearch", C0500R.string.GlobalSearch));
+                        cell.setText(LocaleController.getString("GlobalSearch", C0501R.string.GlobalSearch));
                         return;
                     }
                     return;
@@ -401,11 +401,11 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1 */
-                class C18821 implements Runnable {
+                class C18851 implements Runnable {
 
                     /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1$1 */
-                    class C18811 implements Runnable {
-                        C18811() {
+                    class C18841 implements Runnable {
+                        C18841() {
                         }
 
                         public void run() {
@@ -458,12 +458,12 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                         }
                     }
 
-                    C18821() {
+                    C18851() {
                     }
 
                     public void run() {
                         GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
-                        Utilities.searchQueue.postRunnable(new C18811());
+                        Utilities.searchQueue.postRunnable(new C18841());
                     }
                 }
 
@@ -474,7 +474,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C18821());
+                    AndroidUtilities.runOnUIThread(new C18851());
                 }
             }, 200, 300);
         }
@@ -498,8 +498,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C18851 extends AnimatorListenerAdapter {
-            C18851() {
+        class C18881 extends AnimatorListenerAdapter {
+            C18881() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -618,7 +618,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C18851());
+            this.currentAnimation.addListener(new C18881());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -715,25 +715,25 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             z = false;
         }
         this.doneButtonVisible = z;
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.chatType == 2) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", C0500R.string.ChannelAddMembers));
+            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", C0501R.string.ChannelAddMembers));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0500R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0501R.string.AlwaysAllow));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0500R.string.AlwaysShareWithTitle));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0501R.string.AlwaysShareWithTitle));
             }
         } else if (!this.isNeverShare) {
-            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", C0500R.string.NewGroup) : LocaleController.getString("NewBroadcastList", C0500R.string.NewBroadcastList));
+            this.actionBar.setTitle(this.chatType == 0 ? LocaleController.getString("NewGroup", C0501R.string.NewGroup) : LocaleController.getString("NewBroadcastList", C0501R.string.NewBroadcastList));
         } else if (this.isGroup) {
-            this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0500R.string.NeverAllow));
+            this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0501R.string.NeverAllow));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0500R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0501R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C18711());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0500R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C18741());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0501R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         if (this.chatType != 2) {
             this.doneButton.setScaleX(0.0f);
             this.doneButton.setScaleY(0.0f);
@@ -787,7 +787,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         frameLayout.addView(this.scrollView);
         this.spansContainer = new SpansContainer(context);
         this.scrollView.addView(this.spansContainer, LayoutHelper.createFrame(-1, -2.0f));
-        this.spansContainer.setOnClickListener(new C18744());
+        this.spansContainer.setOnClickListener(new C18774());
         this.editText = new EditTextBoldCursor(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 if (GroupCreateActivity.this.currentDeletingSpan != null) {
@@ -813,24 +813,24 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         if (this.chatType == 2) {
-            this.editText.setHintText(LocaleController.getString("AddMutual", C0500R.string.AddMutual));
+            this.editText.setHintText(LocaleController.getString("AddMutual", C0501R.string.AddMutual));
         } else if (this.isAlwaysShare) {
             if (this.isGroup) {
-                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", C0500R.string.AlwaysAllowPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysAllowPlaceholder", C0501R.string.AlwaysAllowPlaceholder));
             } else {
-                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", C0500R.string.AlwaysShareWithPlaceholder));
+                this.editText.setHintText(LocaleController.getString("AlwaysShareWithPlaceholder", C0501R.string.AlwaysShareWithPlaceholder));
             }
         } else if (!this.isNeverShare) {
-            this.editText.setHintText(LocaleController.getString("SendMessageTo", C0500R.string.SendMessageTo));
+            this.editText.setHintText(LocaleController.getString("SendMessageTo", C0501R.string.SendMessageTo));
         } else if (this.isGroup) {
-            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", C0500R.string.NeverAllowPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverAllowPlaceholder", C0501R.string.NeverAllowPlaceholder));
         } else {
-            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", C0500R.string.NeverShareWithPlaceholder));
+            this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", C0501R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C18766());
-        this.editText.setOnEditorActionListener(new C18777());
-        this.editText.setOnKeyListener(new C18788());
-        this.editText.addTextChangedListener(new C18799());
+        this.editText.setCustomSelectionActionModeCallback(new C18796());
+        this.editText.setOnEditorActionListener(new C18807());
+        this.editText.setOnKeyListener(new C18818());
+        this.editText.addTextChangedListener(new C18829());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -838,7 +838,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.emptyView.showTextView();
         }
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0500R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0501R.string.NoContacts));
         frameLayout.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
@@ -880,9 +880,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                         } else {
                             if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
                                 Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-                                builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0500R.string.SoftUserLimitAlert));
-                                builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                builder.setMessage(LocaleController.getString("SoftUserLimitAlert", C0501R.string.SoftUserLimitAlert));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
                                 GroupCreateActivity.this.showDialog(builder.create());
                                 return;
                             }
@@ -1035,7 +1035,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.adapter.searchDialogs(null);
         this.listView.setFastScrollVisible(true);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0500R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0501R.string.NoContacts));
     }
 
     private void updateHint() {
@@ -1043,9 +1043,9 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             if (this.chatType == 2) {
                 this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
             } else if (this.selectedContacts.size() == 0) {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", C0500R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", C0501R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
             } else {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", C0500R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", C0501R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
             }
         }
         if (this.chatType == 2) {

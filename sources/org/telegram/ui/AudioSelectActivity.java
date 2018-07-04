@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -64,8 +64,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private View shadow;
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
-    class C10411 extends ActionBarMenuOnItemClick {
-        C10411() {
+    class C10421 extends ActionBarMenuOnItemClick {
+        C10421() {
         }
 
         public void onItemClick(int id) {
@@ -76,8 +76,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
-    class C10422 implements OnItemClickListener {
-        C10422() {
+    class C10432 implements OnItemClickListener {
+        C10432() {
         }
 
         public void onItemClick(View view, int position) {
@@ -95,8 +95,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$3 */
-    class C10433 implements OnClickListener {
-        C10433() {
+    class C10443 implements OnClickListener {
+        C10443() {
         }
 
         public void onClick(View view) {
@@ -105,8 +105,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$4 */
-    class C10444 implements OnClickListener {
-        C10444() {
+    class C10454 implements OnClickListener {
+        C10454() {
         }
 
         public void onClick(View view) {
@@ -122,8 +122,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$5 */
-    class C10465 implements Runnable {
-        C10465() {
+    class C10475 implements Runnable {
+        C10475() {
         }
 
         public void run() {
@@ -217,8 +217,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         private Context mContext;
 
         /* renamed from: org.telegram.ui.AudioSelectActivity$ListAdapter$1 */
-        class C10471 implements AudioCellDelegate {
-            C10471() {
+        class C10481 implements AudioCellDelegate {
+            C10481() {
             }
 
             public void startedPlayingAudio(MessageObject messageObject) {
@@ -248,7 +248,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             AudioCell view = new AudioCell(this.mContext);
-            view.setDelegate(new C10471());
+            view.setDelegate(new C10481());
             return new Holder(view);
         }
 
@@ -293,14 +293,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0500R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0500R.string.AttachMusic));
-        this.actionBar.setActionBarMenuOnItemClick(new C10411());
+        this.actionBar.setTitle(LocaleController.getString("AttachMusic", C0501R.string.AttachMusic));
+        this.actionBar.setActionBarMenuOnItemClick(new C10421());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.progressView = new EmptyTextProgressView(context);
-        this.progressView.setText(LocaleController.getString("NoAudio", C0500R.string.NoAudio));
+        this.progressView.setText(LocaleController.getString("NoAudio", C0501R.string.NoAudio));
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.progressView);
@@ -316,13 +316,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        this.listView.setOnItemClickListener(new C10422());
+        this.listView.setOnItemClickListener(new C10432());
         this.bottomLayout = new PickerBottomLayout(context, false);
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.cancelButton.setOnClickListener(new C10433());
-        this.bottomLayout.doneButton.setOnClickListener(new C10444());
+        this.bottomLayout.cancelButton.setOnClickListener(new C10443());
+        this.bottomLayout.doneButton.setOnClickListener(new C10454());
         View shadow = new View(context);
-        shadow.setBackgroundResource(C0500R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(C0501R.drawable.header_shadow_reverse);
         frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         if (this.loadingAudio) {
             this.progressView.showProgress();
@@ -354,7 +354,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (this.progressView != null) {
             this.progressView.showProgress();
         }
-        Utilities.globalQueue.postRunnable(new C10465());
+        Utilities.globalQueue.postRunnable(new C10475());
     }
 
     public ThemeDescription[] getThemeDescriptions() {

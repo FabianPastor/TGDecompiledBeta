@@ -83,6 +83,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -93,7 +94,7 @@ import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
-import org.telegram.messenger.exoplayer2.C0615C;
+import org.telegram.messenger.exoplayer2.C0616C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -199,7 +200,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0615C.UTF8_NAME;
+            String nameCharset = C0616C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -239,7 +240,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0615C.UTF8_NAME;
+            String nameCharset = C0616C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -273,8 +274,23 @@ public class AndroidUtilities {
                     }
                 }
             }
-            if (format && this.type == 0) {
-                return PhoneFormat.getInstance().format(result.toString());
+            if (format) {
+                if (this.type == 0) {
+                    return PhoneFormat.getInstance().format(result.toString());
+                }
+                if (this.type == 5) {
+                    String[] date = result.toString().split("T");
+                    if (date.length > 0) {
+                        date = date[0].split("-");
+                        if (date.length == 3) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(1, Utilities.parseInt(date[0]).intValue());
+                            calendar.set(2, Utilities.parseInt(date[1]).intValue() - 1);
+                            calendar.set(5, Utilities.parseInt(date[2]).intValue());
+                            return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
+                        }
+                    }
+                }
             }
             return result.toString();
         }
@@ -306,6 +322,9 @@ public class AndroidUtilities {
         }
 
         public String getType() {
+            if (this.type == 5) {
+                return LocaleController.getString("ContactBirthday", C0501R.string.ContactBirthday);
+            }
             if (this.type != 6) {
                 int idx = this.fullData.indexOf(58);
                 if (idx < 0) {
@@ -325,22 +344,22 @@ public class AndroidUtilities {
                         value = value.substring(2);
                     }
                     if ("PREF".equals(value)) {
-                        value = LocaleController.getString("PhoneMain", C0500R.string.PhoneMain);
+                        value = LocaleController.getString("PhoneMain", C0501R.string.PhoneMain);
                     } else if ("HOME".equals(value)) {
-                        value = LocaleController.getString("PhoneHome", C0500R.string.PhoneHome);
+                        value = LocaleController.getString("PhoneHome", C0501R.string.PhoneHome);
                     } else if ("MOBILE".equals(value) || "CELL".equals(value)) {
-                        value = LocaleController.getString("PhoneMobile", C0500R.string.PhoneMobile);
+                        value = LocaleController.getString("PhoneMobile", C0501R.string.PhoneMobile);
                     } else if ("OTHER".equals(value)) {
-                        value = LocaleController.getString("PhoneOther", C0500R.string.PhoneOther);
+                        value = LocaleController.getString("PhoneOther", C0501R.string.PhoneOther);
                     } else if ("WORK".equals(value)) {
-                        value = LocaleController.getString("PhoneWork", C0500R.string.PhoneWork);
+                        value = LocaleController.getString("PhoneWork", C0501R.string.PhoneWork);
                     }
                 }
                 return value.substring(0, 1).toUpperCase() + value.substring(1, value.length()).toLowerCase();
             } else if ("ORG".equalsIgnoreCase(getRawType(true))) {
-                return LocaleController.getString("ContactJob", C0500R.string.ContactJob);
+                return LocaleController.getString("ContactJob", C0501R.string.ContactJob);
             } else {
-                return LocaleController.getString("ContactJobTitle", C0500R.string.ContactJobTitle);
+                return LocaleController.getString("ContactJobTitle", C0501R.string.ContactJobTitle);
             }
         }
     }
@@ -583,7 +602,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             Builder builder = new Builder(fragment.getParentActivity());
             builder.setMessage("Install Google Maps?");
-            builder.setPositiveButton(LocaleController.getString("OK", C0500R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
@@ -592,7 +611,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
             fragment.showDialog(builder.create());
             return false;
         }
@@ -693,7 +712,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0615C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0616C.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -1069,10 +1088,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&pt=%f,%f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
             }
             return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
-        } else if (marker) {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
-        } else {
+        }
+        if (TextUtils.isEmpty(MessagesController.getInstance(account).mapKey)) {
+            if (marker) {
+                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
+            }
             return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
+        } else if (marker) {
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
+        } else {
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
         }
     }
 
@@ -1118,7 +1143,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0500R.bool.isTablet));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0501R.bool.isTablet));
         }
         return isTablet.booleanValue();
     }
@@ -1969,9 +1994,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return;
             }
             Builder builder = new Builder((Context) activity);
-            builder.setTitle(LocaleController.getString("AppName", C0500R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", C0500R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0500R.string.PermissionOpenSettings), new OnClickListener() {
+            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+            builder.setMessage(LocaleController.getString("ApkRestricted", C0501R.string.ApkRestricted));
+            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0501R.string.PermissionOpenSettings), new OnClickListener() {
                 @TargetApi(26)
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
@@ -1981,7 +2006,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0500R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
             builder.show();
         }
     }
@@ -2140,7 +2165,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         linearLayout.setOrientation(1);
         if (!TextUtils.isEmpty(secret)) {
             textView = new TextView(activity);
-            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", C0500R.string.UseProxyTelegramInfo2));
+            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", C0501R.string.UseProxyTelegramInfo2));
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray4));
             textView.setTextSize(1, 14.0f);
             textView.setGravity(49);
@@ -2154,19 +2179,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             String detail = null;
             if (a == 0) {
                 text = address;
-                detail = LocaleController.getString("UseProxyAddress", C0500R.string.UseProxyAddress);
+                detail = LocaleController.getString("UseProxyAddress", C0501R.string.UseProxyAddress);
             } else if (a == 1) {
                 text = TtmlNode.ANONYMOUS_REGION_ID + port;
-                detail = LocaleController.getString("UseProxyPort", C0500R.string.UseProxyPort);
+                detail = LocaleController.getString("UseProxyPort", C0501R.string.UseProxyPort);
             } else if (a == 2) {
                 text = secret;
-                detail = LocaleController.getString("UseProxySecret", C0500R.string.UseProxySecret);
+                detail = LocaleController.getString("UseProxySecret", C0501R.string.UseProxySecret);
             } else if (a == 3) {
                 text = user;
-                detail = LocaleController.getString("UseProxyUsername", C0500R.string.UseProxyUsername);
+                detail = LocaleController.getString("UseProxyUsername", C0501R.string.UseProxyUsername);
             } else if (a == 4) {
                 text = password;
-                detail = LocaleController.getString("UseProxyPassword", C0500R.string.UseProxyPassword);
+                detail = LocaleController.getString("UseProxyPassword", C0501R.string.UseProxyPassword);
             }
             if (!TextUtils.isEmpty(text)) {
                 TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
@@ -2184,7 +2209,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         linearLayout.addView(textView, LayoutHelper.createFrame(-1, 48, 83));
         textView.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         textView.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        textView.cancelButton.setText(LocaleController.getString("Cancel", C0500R.string.Cancel).toUpperCase());
+        textView.cancelButton.setText(LocaleController.getString("Cancel", C0501R.string.Cancel).toUpperCase());
         textView.cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismissRunnable.run();
@@ -2193,7 +2218,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         textView.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         textView.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         textView.doneButtonBadgeTextView.setVisibility(8);
-        textView.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", C0500R.string.ConnectingConnectProxy).toUpperCase());
+        textView.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", C0501R.string.ConnectingConnectProxy).toUpperCase());
         final String str = address;
         final String str2 = port;
         final String str3 = secret;

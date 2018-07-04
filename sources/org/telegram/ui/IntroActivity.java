@@ -42,7 +42,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0500R;
+import org.telegram.messenger.C0501R;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.Intro;
@@ -83,11 +83,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private ViewPager viewPager;
 
     /* renamed from: org.telegram.ui.IntroActivity$1 */
-    class C19211 implements SurfaceTextureListener {
+    class C19241 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.IntroActivity$1$1 */
-        class C19201 implements Runnable {
-            C19201() {
+        class C19231 implements Runnable {
+            C19231() {
             }
 
             public void run() {
@@ -95,14 +95,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             }
         }
 
-        C19211() {
+        C19241() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             if (IntroActivity.this.eglThread == null && surface != null) {
                 IntroActivity.this.eglThread = new EGLThread(surface);
                 IntroActivity.this.eglThread.setSurfaceTextureSize(width, height);
-                IntroActivity.this.eglThread.postRunnable(new C19201());
+                IntroActivity.this.eglThread.postRunnable(new C19231());
             }
         }
 
@@ -125,8 +125,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$2 */
-    class C19222 implements OnPageChangeListener {
-        C19222() {
+    class C19252 implements OnPageChangeListener {
+        C19252() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -158,8 +158,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$3 */
-    class C19233 implements OnClickListener {
-        C19233() {
+    class C19263 implements OnClickListener {
+        C19263() {
         }
 
         public void onClick(View view) {
@@ -175,8 +175,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$4 */
-    class C19244 implements OnLongClickListener {
-        C19244() {
+    class C19274 implements OnLongClickListener {
+        C19274() {
         }
 
         public boolean onLongClick(View v) {
@@ -186,8 +186,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$5 */
-    class C19255 implements OnClickListener {
-        C19255() {
+    class C19285 implements OnClickListener {
+        C19285() {
         }
 
         public void onClick(View v) {
@@ -204,8 +204,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$6 */
-    class C19276 implements RequestDelegate {
-        C19276() {
+    class C19306 implements RequestDelegate {
+        C19306() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -280,7 +280,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     public class EGLThread extends DispatchQueue {
         private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
         private final int EGL_OPENGL_ES2_BIT = 4;
-        private Runnable drawRunnable = new C19291();
+        private Runnable drawRunnable = new C19321();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -295,11 +295,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private int[] textures = new int[23];
 
         /* renamed from: org.telegram.ui.IntroActivity$EGLThread$1 */
-        class C19291 implements Runnable {
+        class C19321 implements Runnable {
 
             /* renamed from: org.telegram.ui.IntroActivity$EGLThread$1$1 */
-            class C19281 implements Runnable {
-                C19281() {
+            class C19311 implements Runnable {
+                C19311() {
                 }
 
                 public void run() {
@@ -307,7 +307,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 }
             }
 
-            C19291() {
+            C19321() {
             }
 
             public void run() {
@@ -320,7 +320,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     Intro.setDate(time);
                     Intro.onDrawFrame();
                     EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
-                    EGLThread.this.postRunnable(new C19281(), 16);
+                    EGLThread.this.postRunnable(new C19311(), 16);
                 } else if (BuildVars.LOGS_ENABLED) {
                     FileLog.m1e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
                 }
@@ -328,8 +328,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         /* renamed from: org.telegram.ui.IntroActivity$EGLThread$2 */
-        class C19302 implements Runnable {
-            C19302() {
+        class C19332 implements Runnable {
+            C19332() {
             }
 
             public void run() {
@@ -386,29 +386,29 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                             this.gl = this.eglContext.getGL();
                             GLES20.glGenTextures(23, this.textures, 0);
-                            loadTexture(C0500R.drawable.intro_fast_arrow_shadow, 0);
-                            loadTexture(C0500R.drawable.intro_fast_arrow, 1);
-                            loadTexture(C0500R.drawable.intro_fast_body, 2);
-                            loadTexture(C0500R.drawable.intro_fast_spiral, 3);
-                            loadTexture(C0500R.drawable.intro_ic_bubble_dot, 4);
-                            loadTexture(C0500R.drawable.intro_ic_bubble, 5);
-                            loadTexture(C0500R.drawable.intro_ic_cam_lens, 6);
-                            loadTexture(C0500R.drawable.intro_ic_cam, 7);
-                            loadTexture(C0500R.drawable.intro_ic_pencil, 8);
-                            loadTexture(C0500R.drawable.intro_ic_pin, 9);
-                            loadTexture(C0500R.drawable.intro_ic_smile_eye, 10);
-                            loadTexture(C0500R.drawable.intro_ic_smile, 11);
-                            loadTexture(C0500R.drawable.intro_ic_videocam, 12);
-                            loadTexture(C0500R.drawable.intro_knot_down, 13);
-                            loadTexture(C0500R.drawable.intro_knot_up, 14);
-                            loadTexture(C0500R.drawable.intro_powerful_infinity_white, 15);
-                            loadTexture(C0500R.drawable.intro_powerful_infinity, 16);
-                            loadTexture(C0500R.drawable.intro_powerful_mask, 17);
-                            loadTexture(C0500R.drawable.intro_powerful_star, 18);
-                            loadTexture(C0500R.drawable.intro_private_door, 19);
-                            loadTexture(C0500R.drawable.intro_private_screw, 20);
-                            loadTexture(C0500R.drawable.intro_tg_plane, 21);
-                            loadTexture(C0500R.drawable.intro_tg_sphere, 22);
+                            loadTexture(C0501R.drawable.intro_fast_arrow_shadow, 0);
+                            loadTexture(C0501R.drawable.intro_fast_arrow, 1);
+                            loadTexture(C0501R.drawable.intro_fast_body, 2);
+                            loadTexture(C0501R.drawable.intro_fast_spiral, 3);
+                            loadTexture(C0501R.drawable.intro_ic_bubble_dot, 4);
+                            loadTexture(C0501R.drawable.intro_ic_bubble, 5);
+                            loadTexture(C0501R.drawable.intro_ic_cam_lens, 6);
+                            loadTexture(C0501R.drawable.intro_ic_cam, 7);
+                            loadTexture(C0501R.drawable.intro_ic_pencil, 8);
+                            loadTexture(C0501R.drawable.intro_ic_pin, 9);
+                            loadTexture(C0501R.drawable.intro_ic_smile_eye, 10);
+                            loadTexture(C0501R.drawable.intro_ic_smile, 11);
+                            loadTexture(C0501R.drawable.intro_ic_videocam, 12);
+                            loadTexture(C0501R.drawable.intro_knot_down, 13);
+                            loadTexture(C0501R.drawable.intro_knot_up, 14);
+                            loadTexture(C0501R.drawable.intro_powerful_infinity_white, 15);
+                            loadTexture(C0501R.drawable.intro_powerful_infinity, 16);
+                            loadTexture(C0501R.drawable.intro_powerful_mask, 17);
+                            loadTexture(C0501R.drawable.intro_powerful_star, 18);
+                            loadTexture(C0501R.drawable.intro_private_door, 19);
+                            loadTexture(C0501R.drawable.intro_private_screw, 20);
+                            loadTexture(C0501R.drawable.intro_tg_plane, 21);
+                            loadTexture(C0501R.drawable.intro_tg_sphere, 22);
                             Intro.setTelegramTextures(this.textures[22], this.textures[21]);
                             Intro.setPowerfulTextures(this.textures[17], this.textures[18], this.textures[16], this.textures[15]);
                             Intro.setPrivateTextures(this.textures[19], this.textures[20]);
@@ -474,7 +474,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public void shutdown() {
-            postRunnable(new C19302());
+            postRunnable(new C19332());
         }
 
         public void setSurfaceTextureSize(int width, int height) {
@@ -544,12 +544,12 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(C0500R.style.Theme.TMessages);
+        setTheme(C0501R.style.Theme.TMessages);
         super.onCreate(savedInstanceState);
         requestWindowFeature(1);
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
-        this.titles = new String[]{LocaleController.getString("Page1Title", C0500R.string.Page1Title), LocaleController.getString("Page2Title", C0500R.string.Page2Title), LocaleController.getString("Page3Title", C0500R.string.Page3Title), LocaleController.getString("Page5Title", C0500R.string.Page5Title), LocaleController.getString("Page4Title", C0500R.string.Page4Title), LocaleController.getString("Page6Title", C0500R.string.Page6Title)};
-        this.messages = new String[]{LocaleController.getString("Page1Message", C0500R.string.Page1Message), LocaleController.getString("Page2Message", C0500R.string.Page2Message), LocaleController.getString("Page3Message", C0500R.string.Page3Message), LocaleController.getString("Page5Message", C0500R.string.Page5Message), LocaleController.getString("Page4Message", C0500R.string.Page4Message), LocaleController.getString("Page6Message", C0500R.string.Page6Message)};
+        this.titles = new String[]{LocaleController.getString("Page1Title", C0501R.string.Page1Title), LocaleController.getString("Page2Title", C0501R.string.Page2Title), LocaleController.getString("Page3Title", C0501R.string.Page3Title), LocaleController.getString("Page5Title", C0501R.string.Page5Title), LocaleController.getString("Page4Title", C0501R.string.Page4Title), LocaleController.getString("Page6Title", C0501R.string.Page6Title)};
+        this.messages = new String[]{LocaleController.getString("Page1Message", C0501R.string.Page1Message), LocaleController.getString("Page2Message", C0501R.string.Page2Message), LocaleController.getString("Page3Message", C0501R.string.Page3Message), LocaleController.getString("Page5Message", C0501R.string.Page5Message), LocaleController.getString("Page4Message", C0501R.string.Page4Message), LocaleController.getString("Page6Message", C0501R.string.Page6Message)};
         View scrollView = new ScrollView(this);
         scrollView.setFillViewport(true);
         FrameLayout frameLayout = new FrameLayout(this);
@@ -559,20 +559,20 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         scrollView = new TextureView(this);
         frameLayout2.addView(scrollView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
-        scrollView.setSurfaceTextureListener(new C19211());
+        scrollView.setSurfaceTextureListener(new C19241());
         this.viewPager = new ViewPager(this);
         IntroActivity introActivity = this;
         this.viewPager.setAdapter(new IntroAdapter());
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
         frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
-        this.viewPager.addOnPageChangeListener(new C19222());
+        this.viewPager.addOnPageChangeListener(new C19252());
         scrollView = new TextView(this);
-        scrollView.setText(LocaleController.getString("StartMessaging", C0500R.string.StartMessaging).toUpperCase());
+        scrollView.setText(LocaleController.getString("StartMessaging", C0501R.string.StartMessaging).toUpperCase());
         scrollView.setGravity(17);
         scrollView.setTextColor(-1);
         scrollView.setTextSize(1, 16.0f);
-        scrollView.setBackgroundResource(C0500R.drawable.regbtn_states);
+        scrollView.setBackgroundResource(C0501R.drawable.regbtn_states);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             scrollView = scrollView;
@@ -583,9 +583,9 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
         scrollView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         frameLayout.addView(scrollView, LayoutHelper.createFrame(-2, -2.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
-        scrollView.setOnClickListener(new C19233());
+        scrollView.setOnClickListener(new C19263());
         if (BuildVars.DEBUG_VERSION) {
-            scrollView.setOnLongClickListener(new C19244());
+            scrollView.setOnLongClickListener(new C19274());
         }
         this.bottomPages = new BottomPagesView(this);
         frameLayout.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
@@ -594,17 +594,17 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
         frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
-        this.textView.setOnClickListener(new C19255());
+        this.textView.setOnClickListener(new C19285());
         if (AndroidUtilities.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
             View imageView = new ImageView(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0500R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0501R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             imageView.setBackgroundDrawable(drawable);
             frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
             FrameLayout frameLayout4 = new FrameLayout(this);
-            frameLayout4.setBackgroundResource(C0500R.drawable.btnshadow);
+            frameLayout4.setBackgroundResource(C0501R.drawable.btnshadow);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
             frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
         } else {
@@ -682,7 +682,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 this.localeInfo = englishInfo;
             }
             req.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19276(), 8);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19306(), 8);
         }
     }
 
