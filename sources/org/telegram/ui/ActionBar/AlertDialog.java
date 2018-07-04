@@ -302,8 +302,6 @@ public class AlertDialog extends Dialog implements Callback {
         this.progressViewStyle = progressStyle;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     protected void onCreate(Bundle savedInstanceState) {
         int maxWidth;
         super.onCreate(savedInstanceState);
@@ -733,6 +731,10 @@ public class AlertDialog extends Dialog implements Callback {
         params.width = (Math.min(maxWidth, calculatedWidth) + this.backgroundPaddings.left) + this.backgroundPaddings.right;
         params.flags |= 2;
         if (this.customView != null) {
+            if (canTextInput(this.customView)) {
+                params.softInputMode = 4;
+                window.setAttributes(params);
+            }
         }
         params.flags |= 131072;
         window.setAttributes(params);
