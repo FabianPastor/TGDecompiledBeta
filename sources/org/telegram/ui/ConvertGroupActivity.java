@@ -38,8 +38,8 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     private int rowCount;
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$1 */
-    class C22641 extends ActionBarMenuOnItemClick {
-        C22641() {
+    class C22851 extends ActionBarMenuOnItemClick {
+        C22851() {
         }
 
         public void onItemClick(int id) {
@@ -50,11 +50,11 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$2 */
-    class C22652 implements OnItemClickListener {
+    class C22862 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ConvertGroupActivity$2$1 */
-        class C14211 implements OnClickListener {
-            C14211() {
+        class C14371 implements OnClickListener {
+            C14371() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -62,7 +62,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22652() {
+        C22862() {
         }
 
         public void onItemClick(View view, int position) {
@@ -70,7 +70,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
                 Builder builder = new Builder(ConvertGroupActivity.this.getParentActivity());
                 builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
                 builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14211());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14371());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 ConvertGroupActivity.this.showDialog(builder.create());
             }
@@ -173,7 +173,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ConvertGroup", R.string.ConvertGroup));
-        this.actionBar.setActionBarMenuOnItemClick(new C22641());
+        this.actionBar.setActionBarMenuOnItemClick(new C22851());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -183,7 +183,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22652());
+        this.listView.setOnItemClickListener(new C22862());
         return this.fragmentView;
     }
 

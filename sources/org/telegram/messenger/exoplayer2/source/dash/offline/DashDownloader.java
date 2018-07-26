@@ -4,7 +4,7 @@ import android.net.Uri;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
 import org.telegram.messenger.exoplayer2.offline.DownloadException;
 import org.telegram.messenger.exoplayer2.offline.DownloaderConstructorHelper;
@@ -34,7 +34,7 @@ public final class DashDownloader extends SegmentDownloader<DashManifest, Repres
         ArrayList<Segment> segments = new ArrayList();
         for (int i = 0; i < manifest.getPeriodCount(); i++) {
             Period period = manifest.getPeriod(i);
-            long periodStartUs = C0555C.msToUs(period.startMs);
+            long periodStartUs = C0559C.msToUs(period.startMs);
             long periodDurationUs = manifest.getPeriodDurationUs(i);
             List<AdaptationSet> adaptationSets = period.adaptationSets;
             for (int j = 0; j < adaptationSets.size(); j++) {

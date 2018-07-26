@@ -18,8 +18,8 @@ public class EmptyTextProgressView extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Components.EmptyTextProgressView$1 */
-    class C12101 implements OnTouchListener {
-        C12101() {
+    class C12191 implements OnTouchListener {
+        C12191() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -40,7 +40,7 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.textView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
-        setOnTouchListener(new C12101());
+        setOnTouchListener(new C12191());
     }
 
     public void showProgress() {

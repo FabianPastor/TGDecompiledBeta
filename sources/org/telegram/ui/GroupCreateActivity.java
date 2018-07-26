@@ -102,8 +102,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private SpansContainer spansContainer;
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$4 */
-    class C14584 implements OnClickListener {
-        C14584() {
+    class C14744 implements OnClickListener {
+        C14744() {
         }
 
         public void onClick(View v) {
@@ -113,8 +113,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C14596 implements Callback {
-        C14596() {
+    class C14756 implements Callback {
+        C14756() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -134,8 +134,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C14607 implements OnEditorActionListener {
-        C14607() {
+    class C14767 implements OnEditorActionListener {
+        C14767() {
         }
 
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -144,10 +144,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C14618 implements OnKeyListener {
+    class C14778 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C14618() {
+        C14778() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -166,8 +166,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C14629 implements TextWatcher {
-        C14629() {
+    class C14789 implements TextWatcher {
+        C14789() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -204,8 +204,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C14671 extends AnimatorListenerAdapter {
-            C14671() {
+        class C14831 extends AnimatorListenerAdapter {
+            C14831() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -324,7 +324,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C14671());
+            this.currentAnimation.addListener(new C14831());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -368,8 +368,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C22931 extends ActionBarMenuOnItemClick {
-        C22931() {
+    class C23141 extends ActionBarMenuOnItemClick {
+        C23141() {
         }
 
         public void onItemClick(int id) {
@@ -572,11 +572,11 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1 */
-                class C14641 implements Runnable {
+                class C14801 implements Runnable {
 
                     /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$1$1 */
-                    class C14631 implements Runnable {
-                        C14631() {
+                    class C14791 implements Runnable {
+                        C14791() {
                         }
 
                         public void run() {
@@ -629,12 +629,12 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                         }
                     }
 
-                    C14641() {
+                    C14801() {
                     }
 
                     public void run() {
                         GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
-                        Utilities.searchQueue.postRunnable(new C14631());
+                        Utilities.searchQueue.postRunnable(new C14791());
                     }
                 }
 
@@ -645,7 +645,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C14641());
+                    AndroidUtilities.runOnUIThread(new C14801());
                 }
             }, 200, 300);
         }
@@ -732,7 +732,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22931());
+        this.actionBar.setActionBarMenuOnItemClick(new C23141());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         if (this.chatType != 2) {
             this.doneButton.setScaleX(0.0f);
@@ -787,7 +787,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         frameLayout.addView(this.scrollView);
         this.spansContainer = new SpansContainer(context);
         this.scrollView.addView(this.spansContainer, LayoutHelper.createFrame(-1, -2.0f));
-        this.spansContainer.setOnClickListener(new C14584());
+        this.spansContainer.setOnClickListener(new C14744());
         this.editText = new EditTextBoldCursor(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 if (GroupCreateActivity.this.currentDeletingSpan != null) {
@@ -827,10 +827,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C14596());
-        this.editText.setOnEditorActionListener(new C14607());
-        this.editText.setOnKeyListener(new C14618());
-        this.editText.addTextChangedListener(new C14629());
+        this.editText.setCustomSelectionActionModeCallback(new C14756());
+        this.editText.setOnEditorActionListener(new C14767());
+        this.editText.setOnKeyListener(new C14778());
+        this.editText.addTextChangedListener(new C14789());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -1089,7 +1089,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate cellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (GroupCreateActivity.this.listView != null) {
                     int count = GroupCreateActivity.this.listView.getChildCount();
@@ -1118,13 +1118,13 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         r10[23] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
         r10[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
         r10[25] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[29] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[30] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[31] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[32] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[26] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[27] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[28] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[29] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[30] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[31] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[32] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         r10[33] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundGroupCreateSpanBlue);
         r10[34] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_groupcreate_spanBackground);
         r10[35] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_groupcreate_spanText);

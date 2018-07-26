@@ -43,8 +43,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$2 */
-    class C20312 implements RequestDelegate {
-        C20312() {
+    class C20522 implements RequestDelegate {
+        C20522() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -65,8 +65,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$3 */
-    class C20323 implements RequestDelegate {
-        C20323() {
+    class C20533 implements RequestDelegate {
+        C20533() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -132,8 +132,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.searchTimer.schedule(new TimerTask() {
 
             /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-            class C08051 implements Runnable {
-                C08051() {
+            class C08091 implements Runnable {
+                C08091() {
                 }
 
                 public void run() {
@@ -149,7 +149,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                AndroidUtilities.runOnUIThread(new C08051());
+                AndroidUtilities.runOnUIThread(new C08091());
             }
         }, 200, 500);
     }
@@ -159,7 +159,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             this.searchingUser = true;
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
             req.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20312());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20522());
         }
     }
 
@@ -189,8 +189,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 req.bot = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                 req.offset = TtmlNode.ANONYMOUS_REGION_ID;
                 req.geo_point = new TL_inputGeoPoint();
-                req.geo_point.lat = coordinate.getLatitude();
-                req.geo_point._long = coordinate.getLongitude();
+                req.geo_point.lat = AndroidUtilities.fixLocationCoord(coordinate.getLatitude());
+                req.geo_point._long = AndroidUtilities.fixLocationCoord(coordinate.getLongitude());
                 req.flags |= 1;
                 int lower_id = (int) this.dialogId;
                 int high_id = (int) (this.dialogId >> 32);
@@ -199,7 +199,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } else {
                     req.peer = new TL_inputPeerEmpty();
                 }
-                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20323());
+                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20533());
                 notifyDataSetChanged();
             } else if (searchUser) {
                 searchBotUser();

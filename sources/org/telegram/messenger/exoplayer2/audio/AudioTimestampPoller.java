@@ -5,7 +5,7 @@ import android.media.AudioTimestamp;
 import android.media.AudioTrack;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -149,7 +149,7 @@ final class AudioTimestampPoller {
     }
 
     public long getTimestampSystemTimeUs() {
-        return this.audioTimestamp != null ? this.audioTimestamp.getTimestampSystemTimeUs() : C0555C.TIME_UNSET;
+        return this.audioTimestamp != null ? this.audioTimestamp.getTimestampSystemTimeUs() : C0559C.TIME_UNSET;
     }
 
     public long getTimestampPositionFrames() {

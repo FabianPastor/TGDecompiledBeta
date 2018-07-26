@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.offline.FilterableManifest;
 
 public class DashManifest implements FilterableManifest<DashManifest, RepresentationKey> {
@@ -50,14 +50,14 @@ public class DashManifest implements FilterableManifest<DashManifest, Representa
         if (index != this.periods.size() - 1) {
             return ((Period) this.periods.get(index + 1)).startMs - ((Period) this.periods.get(index)).startMs;
         }
-        if (this.durationMs == C0555C.TIME_UNSET) {
-            return C0555C.TIME_UNSET;
+        if (this.durationMs == C0559C.TIME_UNSET) {
+            return C0559C.TIME_UNSET;
         }
         return this.durationMs - ((Period) this.periods.get(index)).startMs;
     }
 
     public final long getPeriodDurationUs(int index) {
-        return C0555C.msToUs(getPeriodDurationMs(index));
+        return C0559C.msToUs(getPeriodDurationMs(index));
     }
 
     public final DashManifest copy(List<RepresentationKey> streamKeys) {
@@ -69,7 +69,7 @@ public class DashManifest implements FilterableManifest<DashManifest, Representa
         for (int periodIndex = 0; periodIndex < getPeriodCount(); periodIndex++) {
             if (((RepresentationKey) linkedList.peek()).periodIndex != periodIndex) {
                 long periodDurationMs = getPeriodDurationMs(periodIndex);
-                if (periodDurationMs != C0555C.TIME_UNSET) {
+                if (periodDurationMs != C0559C.TIME_UNSET) {
                     shiftMs += periodDurationMs;
                 }
             } else {
@@ -77,7 +77,7 @@ public class DashManifest implements FilterableManifest<DashManifest, Representa
                 copyPeriods.add(new Period(period.id, period.startMs - shiftMs, copyAdaptationSets(period.adaptationSets, linkedList), period.eventStreams));
             }
         }
-        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C0555C.TIME_UNSET ? this.durationMs - shiftMs : C0555C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
+        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C0559C.TIME_UNSET ? this.durationMs - shiftMs : C0559C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
     }
 
     private static ArrayList<AdaptationSet> copyAdaptationSets(List<AdaptationSet> adaptationSets, LinkedList<RepresentationKey> keys) {

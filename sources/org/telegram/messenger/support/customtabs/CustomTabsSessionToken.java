@@ -10,12 +10,12 @@ import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
 
 public class CustomTabsSessionToken {
     private static final String TAG = "CustomTabsSessionToken";
-    private final CustomTabsCallback mCallback = new C20001();
+    private final CustomTabsCallback mCallback = new C20211();
     private final ICustomTabsCallback mCallbackBinder;
 
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsSessionToken$1 */
-    class C20001 extends CustomTabsCallback {
-        C20001() {
+    class C20211 extends CustomTabsCallback {
+        C20211() {
         }
 
         public void onNavigationEvent(int navigationEvent, Bundle extras) {

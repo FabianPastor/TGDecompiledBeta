@@ -31,13 +31,13 @@ public class ProxyDrawable extends Drawable {
         this.outerPaint.setStyle(Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.outerPaint.setStrokeCap(Cap.ROUND);
-        this.lastUpdateTime = SystemClock.uptimeMillis();
+        this.lastUpdateTime = SystemClock.elapsedRealtime();
     }
 
     public void setConnected(boolean enabled, boolean value, boolean animated) {
         this.isEnabled = enabled;
         this.connected = value;
-        this.lastUpdateTime = SystemClock.uptimeMillis();
+        this.lastUpdateTime = SystemClock.elapsedRealtime();
         if (!animated) {
             this.connectedAnimationProgress = this.connected ? 1.0f : 0.0f;
         }
@@ -45,7 +45,7 @@ public class ProxyDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        long newTime = SystemClock.uptimeMillis();
+        long newTime = SystemClock.elapsedRealtime();
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
         if (!this.isEnabled) {

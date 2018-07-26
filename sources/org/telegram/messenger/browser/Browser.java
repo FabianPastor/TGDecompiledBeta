@@ -54,8 +54,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C19721 implements ServiceConnectionCallback {
-        C19721() {
+    static class C19931 implements ServiceConnectionCallback {
+        C19931() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -117,7 +117,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C19721());
+                customTabsServiceConnection = new ServiceConnection(new C19931());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -159,6 +159,10 @@ public class Browser {
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
         openUrl(context, uri, allowCustom, true);
+    }
+
+    public static void openUrl(Context context, String url, boolean allowCustom, boolean tryTelegraph) {
+        openUrl(context, Uri.parse(url), allowCustom, tryTelegraph);
     }
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom, boolean tryTelegraph) {
@@ -203,8 +207,8 @@ public class Browser {
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                            class C05361 implements OnClickListener {
-                                C05361() {
+                            class C05401 implements OnClickListener {
+                                C05401() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -223,7 +227,7 @@ public class Browser {
                                         progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
                                         progressDialog[0].setCanceledOnTouchOutside(false);
                                         progressDialog[0].setCancelable(false);
-                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05361());
+                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05401());
                                         progressDialog[0].show();
                                     } catch (Exception e) {
                                     }

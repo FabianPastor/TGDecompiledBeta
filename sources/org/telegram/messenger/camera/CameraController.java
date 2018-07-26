@@ -60,11 +60,11 @@ public class CameraController implements OnInfoListener {
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
     /* renamed from: org.telegram.messenger.camera.CameraController$1 */
-    class C05421 implements Runnable {
+    class C05461 implements Runnable {
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$1 */
-        class C05381 implements Comparator<Size> {
-            C05381() {
+        class C05421 implements Comparator<Size> {
+            C05421() {
             }
 
             public int compare(Size o1, Size o2) {
@@ -85,8 +85,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$2 */
-        class C05392 implements Runnable {
-            C05392() {
+        class C05432 implements Runnable {
+            C05432() {
             }
 
             public void run() {
@@ -103,8 +103,8 @@ public class CameraController implements OnInfoListener {
         }
 
         /* renamed from: org.telegram.messenger.camera.CameraController$1$3 */
-        class C05403 implements Runnable {
-            C05403() {
+        class C05443 implements Runnable {
+            C05443() {
             }
 
             public void run() {
@@ -114,16 +114,15 @@ public class CameraController implements OnInfoListener {
             }
         }
 
-        C05421() {
+        C05461() {
         }
 
         public void run() {
             try {
-                long time = System.currentTimeMillis();
                 if (CameraController.this.cameraInfos == null) {
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     String cache = preferences.getString("cameraCache", null);
-                    Comparator<Size> comparator = new C05381();
+                    Comparator<Size> comparator = new C05421();
                     ArrayList<CameraInfo> result = new ArrayList();
                     SerializedData serializedData;
                     int count;
@@ -215,10 +214,9 @@ public class CameraController implements OnInfoListener {
                     }
                     CameraController.this.cameraInfos = result;
                 }
-                FileLog.m0d("init time = " + (System.currentTimeMillis() - time));
-                AndroidUtilities.runOnUIThread(new C05392());
+                AndroidUtilities.runOnUIThread(new C05432());
             } catch (Exception e) {
-                AndroidUtilities.runOnUIThread(new C05403());
+                AndroidUtilities.runOnUIThread(new C05443());
             }
         }
     }
@@ -272,7 +270,7 @@ public class CameraController implements OnInfoListener {
         }
         if (!this.loadingCameras && !this.cameraInitied) {
             this.loadingCameras = true;
-            this.threadPool.execute(new C05421());
+            this.threadPool.execute(new C05461());
         }
     }
 

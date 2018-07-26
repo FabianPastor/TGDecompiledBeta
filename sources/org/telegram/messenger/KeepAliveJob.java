@@ -6,13 +6,13 @@ import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
     private static volatile CountDownLatch countDownLatch;
-    private static Runnable finishJobByTimeoutRunnable = new C02263();
+    private static Runnable finishJobByTimeoutRunnable = new C02283();
     private static volatile boolean startingJob;
     private static final Object sync = new Object();
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$1 */
-    static class C02241 implements Runnable {
-        C02241() {
+    static class C02261 implements Runnable {
+        C02261() {
         }
 
         public void run() {
@@ -32,44 +32,48 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$2 */
-    static class C02252 implements Runnable {
-        C02252() {
+    static class C02272 implements Runnable {
+        C02272() {
         }
 
         public void run() {
-            synchronized (KeepAliveJob.sync) {
-                if (KeepAliveJob.countDownLatch != null) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("finish keep-alive job");
-                    }
-                    KeepAliveJob.countDownLatch.countDown();
-                }
-                if (KeepAliveJob.startingJob) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("finish queued keep-alive job");
-                    }
-                    KeepAliveJob.startingJob = false;
-                }
-            }
+            KeepAliveJob.finishJobInternal();
         }
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$3 */
-    static class C02263 implements Runnable {
-        C02263() {
+    static class C02283 implements Runnable {
+        C02283() {
         }
 
         public void run() {
-            KeepAliveJob.finishJob();
+            KeepAliveJob.finishJobInternal();
         }
     }
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new C02241());
+        Utilities.globalQueue.postRunnable(new C02261());
+    }
+
+    private static void finishJobInternal() {
+        synchronized (sync) {
+            if (countDownLatch != null) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m0d("finish keep-alive job");
+                }
+                countDownLatch.countDown();
+            }
+            if (startingJob) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m0d("finish queued keep-alive job");
+                }
+                startingJob = false;
+            }
+        }
     }
 
     public static void finishJob() {
-        Utilities.globalQueue.postRunnable(new C02252());
+        Utilities.globalQueue.postRunnable(new C02272());
     }
 
     /* JADX WARNING: inconsistent code. */

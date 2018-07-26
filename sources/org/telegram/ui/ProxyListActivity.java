@@ -221,8 +221,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$1 */
-    class C24571 extends ActionBarMenuOnItemClick {
-        C24571() {
+    class C24801 extends ActionBarMenuOnItemClick {
+        C24801() {
         }
 
         public void onItemClick(int id) {
@@ -233,25 +233,35 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$2 */
-    class C24582 implements OnItemClickListener {
-        C24582() {
+    class C24812 implements OnItemClickListener {
+        C24812() {
         }
 
         public void onItemClick(View view, int position) {
-            boolean z = true;
-            Holder holder;
             Editor editor;
+            Holder holder;
             int a;
             if (position == ProxyListActivity.this.useProxyRow) {
+                SharedPreferences preferences;
                 if (SharedConfig.currentProxy == null) {
                     if (SharedConfig.proxyList.isEmpty()) {
                         ProxyListActivity.this.presentFragment(new ProxySettingsActivity());
                         return;
                     }
                     SharedConfig.currentProxy = (ProxyInfo) SharedConfig.proxyList.get(0);
+                    if (!ProxyListActivity.this.useProxySettings) {
+                        preferences = MessagesController.getGlobalMainSettings();
+                        editor = MessagesController.getGlobalMainSettings().edit();
+                        editor.putString("proxy_ip", SharedConfig.currentProxy.address);
+                        editor.putString("proxy_pass", SharedConfig.currentProxy.password);
+                        editor.putString("proxy_user", SharedConfig.currentProxy.username);
+                        editor.putInt("proxy_port", SharedConfig.currentProxy.port);
+                        editor.putString("proxy_secret", SharedConfig.currentProxy.secret);
+                        editor.commit();
+                    }
                 }
                 ProxyListActivity.this.useProxySettings = !ProxyListActivity.this.useProxySettings;
-                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                preferences = MessagesController.getGlobalMainSettings();
                 ((TextCheckCell) view).setChecked(ProxyListActivity.this.useProxySettings);
                 if (!ProxyListActivity.this.useProxySettings) {
                     holder = (Holder) ProxyListActivity.this.listView.findViewHolderForAdapterPosition(ProxyListActivity.this.callsRow);
@@ -263,10 +273,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled", ProxyListActivity.this.useProxySettings);
                 editor.commit();
+                ConnectionsManager.setProxySettings(ProxyListActivity.this.useProxySettings, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
                 NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
                 NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                ConnectionsManager.setProxySettings(ProxyListActivity.this.useProxySettings, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
                 for (a = ProxyListActivity.this.proxyStartRow; a < ProxyListActivity.this.proxyEndRow; a++) {
                     holder = (Holder) ProxyListActivity.this.listView.findViewHolderForAdapterPosition(a);
                     if (holder != null) {
@@ -274,11 +284,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     }
                 }
             } else if (position == ProxyListActivity.this.callsRow) {
-                ProxyListActivity proxyListActivity = ProxyListActivity.this;
-                if (ProxyListActivity.this.useProxyForCalls) {
-                    z = false;
-                }
-                proxyListActivity.useProxyForCalls = z;
+                ProxyListActivity.this.useProxyForCalls = !ProxyListActivity.this.useProxyForCalls;
                 ((TextCheckCell) view).setChecked(ProxyListActivity.this.useProxyForCalls);
                 editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled_calls", ProxyListActivity.this.useProxyForCalls);
@@ -302,14 +308,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 for (a = ProxyListActivity.this.proxyStartRow; a < ProxyListActivity.this.proxyEndRow; a++) {
                     holder = (Holder) ProxyListActivity.this.listView.findViewHolderForAdapterPosition(a);
                     if (holder != null) {
-                        boolean z2;
                         TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
-                        if (cell.currentInfo == info) {
-                            z2 = true;
-                        } else {
-                            z2 = false;
-                        }
-                        cell.setChecked(z2);
+                        cell.setChecked(cell.currentInfo == info);
                         cell.updateStatus();
                     }
                 }
@@ -326,8 +326,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$3 */
-    class C24593 implements OnItemLongClickListener {
-        C24593() {
+    class C24823 implements OnItemLongClickListener {
+        C24823() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -524,7 +524,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C24571());
+        this.actionBar.setActionBarMenuOnItemClick(new C24801());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -535,8 +535,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24582());
-        this.listView.setOnItemLongClickListener(new C24593());
+        this.listView.setOnItemClickListener(new C24812());
+        this.listView.setOnItemLongClickListener(new C24823());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
@@ -602,13 +602,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         int count = SharedConfig.proxyList.size();
         for (int a = 0; a < count; a++) {
             final ProxyInfo proxyInfo = (ProxyInfo) SharedConfig.proxyList.get(a);
-            if (!proxyInfo.checking && SystemClock.uptimeMillis() - proxyInfo.availableCheckTime >= 120000) {
+            if (!proxyInfo.checking && SystemClock.elapsedRealtime() - proxyInfo.availableCheckTime >= 120000) {
                 proxyInfo.checking = true;
                 proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(this.currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, new RequestTimeDelegate() {
                     public void run(final long time) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                proxyInfo.availableCheckTime = SystemClock.uptimeMillis();
+                                proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
                                 proxyInfo.checking = false;
                                 if (time == -1) {
                                     proxyInfo.available = false;

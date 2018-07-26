@@ -6,15 +6,15 @@ import android.os.Parcelable.Creator;
 import java.util.Arrays;
 
 public final class TrackGroupArray implements Parcelable {
-    public static final Creator<TrackGroupArray> CREATOR = new C06341();
+    public static final Creator<TrackGroupArray> CREATOR = new C06381();
     public static final TrackGroupArray EMPTY = new TrackGroupArray(new TrackGroup[0]);
     private int hashCode;
     public final int length;
     private final TrackGroup[] trackGroups;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.TrackGroupArray$1 */
-    static class C06341 implements Creator<TrackGroupArray> {
-        C06341() {
+    static class C06381 implements Creator<TrackGroupArray> {
+        C06381() {
         }
 
         public TrackGroupArray createFromParcel(Parcel in) {

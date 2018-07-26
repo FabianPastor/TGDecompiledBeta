@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
@@ -295,7 +295,7 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
             this.eventDispatcher.readingStarted();
             this.notifiedReadingStarted = true;
         }
-        return C0555C.TIME_UNSET;
+        return C0559C.TIME_UNSET;
     }
 
     public long getBufferedPositionUs() {

@@ -12,7 +12,7 @@ import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
 import android.view.Display;
 import android.view.WindowManager;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(16)
@@ -72,7 +72,7 @@ public final class VideoFrameReleaseTimeHelper {
         private final HandlerThread choreographerOwnerThread = new HandlerThread("ChoreographerOwner:Handler");
         private final Handler handler;
         private int observerCount;
-        public volatile long sampledVsyncTimeNs = C0555C.TIME_UNSET;
+        public volatile long sampledVsyncTimeNs = C0559C.TIME_UNSET;
 
         public static VSyncSampler getInstance() {
             return INSTANCE;
@@ -128,7 +128,7 @@ public final class VideoFrameReleaseTimeHelper {
             this.observerCount--;
             if (this.observerCount == 0) {
                 this.choreographer.removeFrameCallback(this);
-                this.sampledVsyncTimeNs = C0555C.TIME_UNSET;
+                this.sampledVsyncTimeNs = C0559C.TIME_UNSET;
             }
         }
     }
@@ -156,8 +156,8 @@ public final class VideoFrameReleaseTimeHelper {
             this.displayListener = null;
             this.vsyncSampler = null;
         }
-        this.vsyncDurationNs = C0555C.TIME_UNSET;
-        this.vsyncOffsetNs = C0555C.TIME_UNSET;
+        this.vsyncDurationNs = C0559C.TIME_UNSET;
+        this.vsyncOffsetNs = C0559C.TIME_UNSET;
     }
 
     public void enable() {
@@ -209,11 +209,11 @@ public final class VideoFrameReleaseTimeHelper {
         }
         this.lastFramePresentationTimeUs = framePresentationTimeUs;
         this.pendingAdjustedFrameTimeNs = adjustedFrameTimeNs;
-        if (this.vsyncSampler == null || this.vsyncDurationNs == C0555C.TIME_UNSET) {
+        if (this.vsyncSampler == null || this.vsyncDurationNs == C0559C.TIME_UNSET) {
             return adjustedReleaseTimeNs;
         }
         long sampledVsyncTimeNs = this.vsyncSampler.sampledVsyncTimeNs;
-        return sampledVsyncTimeNs != C0555C.TIME_UNSET ? closestVsync(adjustedReleaseTimeNs, sampledVsyncTimeNs, this.vsyncDurationNs) - this.vsyncOffsetNs : adjustedReleaseTimeNs;
+        return sampledVsyncTimeNs != C0559C.TIME_UNSET ? closestVsync(adjustedReleaseTimeNs, sampledVsyncTimeNs, this.vsyncDurationNs) - this.vsyncOffsetNs : adjustedReleaseTimeNs;
     }
 
     @TargetApi(17)

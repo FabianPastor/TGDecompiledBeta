@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 
 public final class StandaloneMediaClock implements MediaClock {
@@ -42,7 +42,7 @@ public final class StandaloneMediaClock implements MediaClock {
         }
         long elapsedSinceBaseMs = this.clock.elapsedRealtime() - this.baseElapsedMs;
         if (this.playbackParameters.speed == 1.0f) {
-            return positionUs + C0555C.msToUs(elapsedSinceBaseMs);
+            return positionUs + C0559C.msToUs(elapsedSinceBaseMs);
         }
         return positionUs + this.playbackParameters.getMediaTimeUsForPlayoutTimeMs(elapsedSinceBaseMs);
     }

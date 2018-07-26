@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.MetadataDecoder;
 import org.telegram.messenger.exoplayer2.metadata.MetadataInputBuffer;
@@ -29,7 +29,7 @@ public final class Id3Decoder implements MetadataDecoder {
     private static final int ID3_TEXT_ENCODING_UTF_16 = 1;
     private static final int ID3_TEXT_ENCODING_UTF_16BE = 2;
     private static final int ID3_TEXT_ENCODING_UTF_8 = 3;
-    public static final FramePredicate NO_FRAMES_PREDICATE = new C19921();
+    public static final FramePredicate NO_FRAMES_PREDICATE = new C20131();
     private static final String TAG = "Id3Decoder";
     private final FramePredicate framePredicate;
 
@@ -50,8 +50,8 @@ public final class Id3Decoder implements MetadataDecoder {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder$1 */
-    static class C19921 implements FramePredicate {
-        C19921() {
+    static class C20131 implements FramePredicate {
+        C20131() {
         }
 
         public boolean evaluate(int majorVersion, int id0, int id1, int id2, int id3) {
@@ -522,11 +522,11 @@ public final class Id3Decoder implements MetadataDecoder {
             case 0:
                 return "ISO-8859-1";
             case 1:
-                return C0555C.UTF16_NAME;
+                return C0559C.UTF16_NAME;
             case 2:
                 return "UTF-16BE";
             case 3:
-                return C0555C.UTF8_NAME;
+                return C0559C.UTF8_NAME;
             default:
                 return "ISO-8859-1";
         }

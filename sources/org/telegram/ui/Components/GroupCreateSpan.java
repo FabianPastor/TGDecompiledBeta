@@ -54,7 +54,7 @@ public class GroupCreateSpan extends View {
         String firstName;
         super(context);
         this.rect = new RectF();
-        this.colors = new int[6];
+        this.colors = new int[8];
         this.currentContact = contact;
         this.deleteDrawable = getResources().getDrawable(R.drawable.delete);
         textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -107,6 +107,8 @@ public class GroupCreateSpan extends View {
         this.colors[3] = Color.green(color);
         this.colors[4] = Color.blue(back);
         this.colors[5] = Color.blue(color);
+        this.colors[6] = Color.alpha(back);
+        this.colors[7] = Color.alpha(color);
         textPaint.setColor(text);
         this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(text, Mode.MULTIPLY));
         backPaint.setColor(back);
@@ -170,12 +172,14 @@ public class GroupCreateSpan extends View {
         }
         canvas.save();
         this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.dp(32.0f));
-        backPaint.setColor(Color.argb(255, this.colors[0] + ((int) (((float) (this.colors[1] - this.colors[0])) * this.progress)), this.colors[2] + ((int) (((float) (this.colors[3] - this.colors[2])) * this.progress)), this.colors[4] + ((int) (((float) (this.colors[5] - this.colors[4])) * this.progress))));
+        backPaint.setColor(Color.argb(this.colors[6] + ((int) (((float) (this.colors[7] - this.colors[6])) * this.progress)), this.colors[0] + ((int) (((float) (this.colors[1] - this.colors[0])) * this.progress)), this.colors[2] + ((int) (((float) (this.colors[3] - this.colors[2])) * this.progress)), this.colors[4] + ((int) (((float) (this.colors[5] - this.colors[4])) * this.progress))));
         canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
         this.imageReceiver.draw(canvas);
         if (this.progress != 0.0f) {
-            backPaint.setColor(this.avatarDrawable.getColor());
-            backPaint.setAlpha((int) (255.0f * this.progress));
+            int color = this.avatarDrawable.getColor();
+            float alpha = ((float) Color.alpha(color)) / 255.0f;
+            backPaint.setColor(color);
+            backPaint.setAlpha((int) ((255.0f * this.progress) * alpha));
             canvas.drawCircle((float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
             canvas.save();
             canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f));

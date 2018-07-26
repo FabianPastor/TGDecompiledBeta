@@ -26,13 +26,13 @@ public class SendLocationCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
-    private Runnable invalidateRunnable = new C09351();
+    private Runnable invalidateRunnable = new C09391();
     private RectF rect;
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Cells.SendLocationCell$1 */
-    class C09351 implements Runnable {
-        C09351() {
+    class C09391 implements Runnable {
+        C09391() {
         }
 
         public void run() {
@@ -46,6 +46,7 @@ public class SendLocationCell extends FrameLayout {
         String str;
         super(context);
         this.imageView = new ImageView(context);
+        this.imageView.setTag(live ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
         int dp = AndroidUtilities.dp(40.0f);
         int color = Theme.getColor(live ? Theme.key_location_sendLiveLocationBackground : Theme.key_location_sendLocationBackground);
         if (live) {
@@ -59,7 +60,7 @@ public class SendLocationCell extends FrameLayout {
         if (live) {
             this.rect = new RectF();
             drawable = getResources().getDrawable(R.drawable.livelocationpin);
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLiveLocationIcon), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
@@ -76,11 +77,8 @@ public class SendLocationCell extends FrameLayout {
         addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
         this.titleTextView = new SimpleTextView(context);
         this.titleTextView.setTextSize(16);
-        if (live) {
-            this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
-        } else {
-            this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText7));
-        }
+        this.titleTextView.setTag(live ? Theme.key_windowBackgroundWhiteRedText2 : Theme.key_windowBackgroundWhiteBlueText7);
+        this.titleTextView.setTextColor(Theme.getColor(live ? Theme.key_windowBackgroundWhiteRedText2 : Theme.key_windowBackgroundWhiteBlueText7));
         this.titleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));

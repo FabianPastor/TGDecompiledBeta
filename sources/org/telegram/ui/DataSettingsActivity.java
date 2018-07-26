@@ -76,8 +76,8 @@ public class DataSettingsActivity extends BaseFragment {
     private int wifiUsageRow;
 
     /* renamed from: org.telegram.ui.DataSettingsActivity$3 */
-    class C14293 extends AnimatorListenerAdapter {
-        C14293() {
+    class C14453 extends AnimatorListenerAdapter {
+        C14453() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -88,8 +88,8 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataSettingsActivity$1 */
-    class C22731 extends ActionBarMenuOnItemClick {
-        C22731() {
+    class C22941 extends ActionBarMenuOnItemClick {
+        C22941() {
         }
 
         public void onItemClick(int id) {
@@ -100,11 +100,11 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataSettingsActivity$2 */
-    class C22742 implements OnItemClickListener {
+    class C22952 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.DataSettingsActivity$2$1 */
-        class C14271 implements OnClickListener {
-            C14271() {
+        class C14431 implements OnClickListener {
+            C14431() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -153,7 +153,7 @@ public class DataSettingsActivity extends BaseFragment {
             }
         }
 
-        C22742() {
+        C22952() {
         }
 
         public void onItemClick(View view, final int position) {
@@ -181,7 +181,7 @@ public class DataSettingsActivity extends BaseFragment {
                     Builder builder = new Builder(DataSettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", R.string.ResetAutomaticMediaDownloadAlert));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14271());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14431());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder.show();
                 }
@@ -565,7 +565,7 @@ public class DataSettingsActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C22731());
+        this.actionBar.setActionBarMenuOnItemClick(new C22941());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -575,7 +575,7 @@ public class DataSettingsActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22742());
+        this.listView.setOnItemClickListener(new C22952());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
@@ -610,7 +610,7 @@ public class DataSettingsActivity extends BaseFragment {
             }
             this.animatorSet = new AnimatorSet();
             this.animatorSet.playTogether(animators);
-            this.animatorSet.addListener(new C14293());
+            this.animatorSet.addListener(new C14453());
             this.animatorSet.setDuration(150);
             this.animatorSet.start();
         }

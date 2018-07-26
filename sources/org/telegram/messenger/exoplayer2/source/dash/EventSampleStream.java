@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.dash;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
@@ -17,7 +17,7 @@ final class EventSampleStream implements SampleStream {
     private boolean eventStreamUpdatable;
     private long[] eventTimesUs;
     private boolean isFormatSentDownstream;
-    private long pendingSeekPositionUs = C0555C.TIME_UNSET;
+    private long pendingSeekPositionUs = C0559C.TIME_UNSET;
     private final Format upstreamFormat;
 
     EventSampleStream(EventStream eventStream, Format upstreamFormat, boolean eventStreamUpdatable) {
@@ -28,13 +28,13 @@ final class EventSampleStream implements SampleStream {
     }
 
     void updateEventStream(EventStream eventStream, boolean eventStreamUpdatable) {
-        long lastReadPositionUs = this.currentIndex == 0 ? C0555C.TIME_UNSET : this.eventTimesUs[this.currentIndex - 1];
+        long lastReadPositionUs = this.currentIndex == 0 ? C0559C.TIME_UNSET : this.eventTimesUs[this.currentIndex - 1];
         this.eventStreamUpdatable = eventStreamUpdatable;
         this.eventStream = eventStream;
         this.eventTimesUs = eventStream.presentationTimesUs;
-        if (this.pendingSeekPositionUs != C0555C.TIME_UNSET) {
+        if (this.pendingSeekPositionUs != C0559C.TIME_UNSET) {
             seekToUs(this.pendingSeekPositionUs);
-        } else if (lastReadPositionUs != C0555C.TIME_UNSET) {
+        } else if (lastReadPositionUs != C0559C.TIME_UNSET) {
             this.currentIndex = Util.binarySearchCeil(this.eventTimesUs, lastReadPositionUs, false, false);
         }
     }
@@ -89,7 +89,7 @@ final class EventSampleStream implements SampleStream {
             isPendingSeek = false;
         }
         if (!isPendingSeek) {
-            positionUs = C0555C.TIME_UNSET;
+            positionUs = C0559C.TIME_UNSET;
         }
         this.pendingSeekPositionUs = positionUs;
     }

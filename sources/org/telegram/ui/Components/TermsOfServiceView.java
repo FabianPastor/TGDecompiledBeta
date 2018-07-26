@@ -39,14 +39,14 @@ public class TermsOfServiceView extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1 */
-    class C13691 implements OnClickListener {
+    class C13801 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1 */
-        class C13681 implements DialogInterface.OnClickListener {
+        class C13791 implements DialogInterface.OnClickListener {
 
             /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1$1 */
-            class C13671 implements DialogInterface.OnClickListener {
-                C13671() {
+            class C13781 implements DialogInterface.OnClickListener {
+                C13781() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -86,26 +86,26 @@ public class TermsOfServiceView extends FrameLayout {
                 }
             }
 
-            C13681() {
+            C13791() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
                 Builder builder = new Builder(TermsOfServiceView.this.getContext());
                 builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new C13671());
+                builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new C13781());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
             }
         }
 
-        C13691() {
+        C13801() {
         }
 
         public void onClick(View view) {
             Builder builder = new Builder(view.getContext());
             builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
-            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new C13681());
+            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new C13791());
             builder.setNegativeButton(LocaleController.getString("Back", R.string.Back), null);
             builder.setMessage(LocaleController.getString("TosUpdateDecline", R.string.TosUpdateDecline));
             builder.show();
@@ -113,11 +113,11 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2 */
-    class C13712 implements OnClickListener {
+    class C13822 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2$1 */
-        class C13701 implements DialogInterface.OnClickListener {
-            C13701() {
+        class C13811 implements DialogInterface.OnClickListener {
+            C13811() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -125,14 +125,14 @@ public class TermsOfServiceView extends FrameLayout {
             }
         }
 
-        C13712() {
+        C13822() {
         }
 
         public void onClick(View view) {
             if (TermsOfServiceView.this.currentTos.min_age_confirm != 0) {
                 Builder builder = new Builder(view.getContext());
                 builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
-                builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new C13701());
+                builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new C13811());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", TermsOfServiceView.this.currentTos.min_age_confirm)));
                 builder.show();
@@ -149,8 +149,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$3 */
-    class C22483 implements RequestDelegate {
-        C22483() {
+    class C22693 implements RequestDelegate {
+        C22693() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -195,7 +195,7 @@ public class TermsOfServiceView extends FrameLayout {
         declineTextView.setTextSize(1, 16.0f);
         declineTextView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         addView(declineTextView, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
-        declineTextView.setOnClickListener(new C13691());
+        declineTextView.setOnClickListener(new C13801());
         TextView acceptTextView = new TextView(context);
         acceptTextView.setText(LocaleController.getString("Accept", R.string.Accept).toUpperCase());
         acceptTextView.setGravity(17);
@@ -211,14 +211,14 @@ public class TermsOfServiceView extends FrameLayout {
         }
         acceptTextView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         addView(acceptTextView, LayoutHelper.createFrame(-2, -2.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
-        acceptTextView.setOnClickListener(new C13712());
+        acceptTextView.setOnClickListener(new C13822());
     }
 
     private void accept() {
         this.delegate.onAcceptTerms(this.currentAccount);
         TL_help_acceptTermsOfService req = new TL_help_acceptTermsOfService();
         req.id = this.currentTos.id;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22483());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22693());
     }
 
     public void show(int account, TL_help_termsOfService tos) {

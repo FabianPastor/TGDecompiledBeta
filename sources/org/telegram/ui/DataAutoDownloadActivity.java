@@ -72,8 +72,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     private int wifiSectionRow;
 
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$1 */
-    class C22701 extends ActionBarMenuOnItemClick {
-        C22701() {
+    class C22911 extends ActionBarMenuOnItemClick {
+        C22911() {
         }
 
         public void onItemClick(int id) {
@@ -114,8 +114,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$2 */
-    class C22712 implements OnItemClickListener {
-        C22712() {
+    class C22922 implements OnItemClickListener {
+        C22922() {
         }
 
         public void onItemClick(View view, int position) {
@@ -409,7 +409,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C22701());
+        this.actionBar.setActionBarMenuOnItemClick(new C22911());
         this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
@@ -420,7 +420,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22712());
+        this.listView.setOnItemClickListener(new C22922());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.BehindLiveWindowException;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
@@ -35,7 +35,7 @@ class HlsChunkSource {
     private IOException fatalError;
     private boolean independentSegments;
     private boolean isTimestampMaster;
-    private long liveEdgeTimeUs = C0555C.TIME_UNSET;
+    private long liveEdgeTimeUs = C0559C.TIME_UNSET;
     private final DataSource mediaDataSource;
     private final List<Format> muxedCaptionFormats;
     private final HlsPlaylistTracker playlistTracker;
@@ -175,7 +175,7 @@ class HlsChunkSource {
         if (!(previous == null || this.independentSegments)) {
             long subtractedDurationUs = previous.getDurationUs();
             bufferedDurationUs = Math.max(0, bufferedDurationUs - subtractedDurationUs);
-            if (timeToLiveEdgeUs != C0555C.TIME_UNSET) {
+            if (timeToLiveEdgeUs != C0559C.TIME_UNSET) {
                 timeToLiveEdgeUs = Math.max(0, timeToLiveEdgeUs - subtractedDurationUs);
             }
         }
@@ -289,14 +289,14 @@ class HlsChunkSource {
     }
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
-        if (this.liveEdgeTimeUs != C0555C.TIME_UNSET) {
+        if (this.liveEdgeTimeUs != C0559C.TIME_UNSET) {
             return this.liveEdgeTimeUs - playbackPositionUs;
         }
-        return C0555C.TIME_UNSET;
+        return C0559C.TIME_UNSET;
     }
 
     private void updateLiveEdgeTimeUs(HlsMediaPlaylist mediaPlaylist) {
-        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0555C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
+        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0559C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
     }
 
     private EncryptionKeyChunk newEncryptionKeyChunk(Uri keyUri, String iv, int variantIndex, int trackSelectionReason, Object trackSelectionData) {

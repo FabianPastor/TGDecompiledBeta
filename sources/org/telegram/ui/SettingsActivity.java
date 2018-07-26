@@ -164,7 +164,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int overscrollRow;
     private int privacyPolicyRow;
     private int privacyRow;
-    private PhotoViewerProvider provider = new C25521();
+    private PhotoViewerProvider provider = new C25781();
     private int raiseToSpeakRow;
     private int rowCount;
     private int saveToGalleryRow;
@@ -186,8 +186,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private AnimatorSet writeButtonAnimation;
 
     /* renamed from: org.telegram.ui.SettingsActivity$8 */
-    class C18368 implements OnClickListener {
-        C18368() {
+    class C18568 implements OnClickListener {
+        C18568() {
         }
 
         public void onClick(View v) {
@@ -200,8 +200,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$9 */
-    class C18379 extends ViewOutlineProvider {
-        C18379() {
+    class C18579 extends ViewOutlineProvider {
+        C18579() {
         }
 
         @SuppressLint({"NewApi"})
@@ -225,14 +225,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$2 */
-    class C24822 implements ImageUpdaterDelegate {
+    class C25052 implements ImageUpdaterDelegate {
 
         /* renamed from: org.telegram.ui.SettingsActivity$2$1 */
-        class C24811 implements RequestDelegate {
+        class C25041 implements RequestDelegate {
 
             /* renamed from: org.telegram.ui.SettingsActivity$2$1$1 */
-            class C18261 implements Runnable {
-                C18261() {
+            class C18461 implements Runnable {
+                C18461() {
                 }
 
                 public void run() {
@@ -242,7 +242,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C24811() {
+            C25041() {
             }
 
             public void run(TLObject response, TL_error error) {
@@ -275,27 +275,27 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     ArrayList<User> users = new ArrayList();
                     users.add(user);
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
-                    AndroidUtilities.runOnUIThread(new C18261());
+                    AndroidUtilities.runOnUIThread(new C18461());
                 }
             }
         }
 
-        C24822() {
+        C25052() {
         }
 
         public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big, TL_secureFile secureFile) {
             TL_photos_uploadProfilePhoto req = new TL_photos_uploadProfilePhoto();
             req.file = file;
-            ConnectionsManager.getInstance(SettingsActivity.this.currentAccount).sendRequest(req, new C24811());
+            ConnectionsManager.getInstance(SettingsActivity.this.currentAccount).sendRequest(req, new C25041());
         }
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$3 */
-    class C24833 extends ActionBarMenuOnItemClick {
+    class C25063 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.SettingsActivity$3$1 */
-        class C18271 implements DialogInterface.OnClickListener {
-            C18271() {
+        class C18471 implements DialogInterface.OnClickListener {
+            C18471() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -303,7 +303,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C24833() {
+        C25063() {
         }
 
         public void onItemClick(int id) {
@@ -315,7 +315,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                 builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18271());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18471());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 SettingsActivity.this.showDialog(builder.create());
             }
@@ -323,11 +323,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$6 */
-    class C24856 implements OnItemClickListener {
+    class C25086 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.SettingsActivity$6$3 */
-        class C18303 implements DialogInterface.OnClickListener {
-            C18303() {
+        class C18503 implements DialogInterface.OnClickListener {
+            C18503() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -336,8 +336,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         /* renamed from: org.telegram.ui.SettingsActivity$6$4 */
-        class C18314 implements DialogInterface.OnClickListener {
-            C18314() {
+        class C18514 implements DialogInterface.OnClickListener {
+            C18514() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -348,7 +348,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C24856() {
+        C25086() {
         }
 
         public void onItemClick(View view, int position) {
@@ -416,7 +416,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setView(message);
                     builder.setTitle(LocaleController.getString("AskAQuestion", R.string.AskAQuestion));
-                    builder.setPositiveButton(LocaleController.getString("AskButton", R.string.AskButton), new C18303());
+                    builder.setPositiveButton(LocaleController.getString("AskButton", R.string.AskButton), new C18503());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     SettingsActivity.this.showDialog(builder.create());
                 }
@@ -471,7 +471,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18314());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18514());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     SettingsActivity.this.showDialog(builder.create());
                 }
@@ -603,16 +603,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$7 */
-    class C24867 implements OnItemLongClickListener {
+    class C25097 implements OnItemLongClickListener {
         private int pressCount = 0;
 
         /* renamed from: org.telegram.ui.SettingsActivity$7$1 */
-        class C18351 implements DialogInterface.OnClickListener {
-            C18351() {
+        class C18551 implements DialogInterface.OnClickListener {
+            C18551() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
-                boolean z = true;
                 if (which == 0) {
                     UserConfig.getInstance(SettingsActivity.this.currentAccount).syncContacts = true;
                     UserConfig.getInstance(SettingsActivity.this.currentAccount).saveConfig(false);
@@ -624,8 +623,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (which == 3) {
                     MessagesController.getInstance(SettingsActivity.this.currentAccount).forceResetDialogs();
                 } else if (which == 4) {
+                    boolean z;
                     if (BuildVars.LOGS_ENABLED) {
                         z = false;
+                    } else {
+                        z = true;
                     }
                     BuildVars.LOGS_ENABLED = z;
                     ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", 0).edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
@@ -635,11 +637,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                 } else if (which == 7) {
                     SharedConfig.toggleRoundCamera16to9();
+                } else if (which == 8) {
+                    ((LaunchActivity) SettingsActivity.this.getParentActivity()).checkAppUpdate(true);
                 }
             }
         }
 
-        C24867() {
+        C25097() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -648,23 +652,25 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             this.pressCount++;
             if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
-                String string;
+                String str;
                 Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                CharSequence[] items = new CharSequence[7];
+                CharSequence[] items = new CharSequence[9];
                 items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
                 items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                 items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                 items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
                 items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
-                if (SharedConfig.inappCamera) {
-                    string = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
-                } else {
-                    string = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
-                }
-                items[5] = string;
+                items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
                 items[6] = LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache);
-                builder.setItems(items, new C18351());
+                items[7] = null;
+                if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                    str = "Check for app updates";
+                } else {
+                    str = null;
+                }
+                items[8] = str;
+                builder.setItems(items, new C18551());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 SettingsActivity.this.showDialog(builder.create());
             } else {
@@ -679,8 +685,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$1 */
-    class C25521 extends EmptyPhotoViewerProvider {
-        C25521() {
+    class C25781 extends EmptyPhotoViewerProvider {
+        C25781() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -1000,7 +1006,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         this.imageUpdater.parentFragment = this;
-        this.imageUpdater.delegate = new C24822();
+        this.imageUpdater.delegate = new C25052();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.userInfoDidLoaded);
@@ -1154,7 +1160,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C24833());
+        this.actionBar.setActionBarMenuOnItemClick(new C25063());
         ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_other);
         item.addSubItem(1, LocaleController.getString("EditName", R.string.EditName));
         item.addSubItem(2, LocaleController.getString("LogOut", R.string.LogOut));
@@ -1189,20 +1195,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c25535 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager c25795 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c25535;
-        recyclerListView.setLayoutManager(c25535);
+        this.layoutManager = c25795;
+        recyclerListView.setLayoutManager(c25795);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setOnItemClickListener(new C24856());
-        this.listView.setOnItemLongClickListener(new C24867());
+        this.listView.setOnItemClickListener(new C25086());
+        this.listView.setOnItemLongClickListener(new C25097());
         frameLayout.addView(this.actionBar);
         this.extraHeightView = new View(context);
         this.extraHeightView.setPivotY(0.0f);
@@ -1216,7 +1222,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.avatarImage.setPivotX(0.0f);
         this.avatarImage.setPivotY(0.0f);
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(42, 42.0f, 51, 64.0f, 0.0f, 0.0f, 0.0f));
-        this.avatarImage.setOnClickListener(new C18368());
+        this.avatarImage.setOnClickListener(new C18568());
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_profile_title));
         this.nameTextView.setTextSize(1, 18.0f);
@@ -1256,14 +1262,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.writeButton.setStateListAnimator(animator);
-            this.writeButton.setOutlineProvider(new C18379());
+            this.writeButton.setOutlineProvider(new C18579());
         }
         frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
         this.writeButton.setOnClickListener(new OnClickListener() {
 
             /* renamed from: org.telegram.ui.SettingsActivity$10$1 */
-            class C18231 implements DialogInterface.OnClickListener {
-                C18231() {
+            class C18431 implements DialogInterface.OnClickListener {
+                C18431() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1294,7 +1300,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             fullMenu = true;
                         }
                         boolean full = fullMenu;
-                        builder.setItems(items, new C18231());
+                        builder.setItems(items, new C18431());
                         SettingsActivity.this.showDialog(builder.create());
                     }
                 }
@@ -1361,8 +1367,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getSupport(), new RequestDelegate() {
 
                 /* renamed from: org.telegram.ui.SettingsActivity$12$2 */
-                class C18252 implements Runnable {
-                    C18252() {
+                class C18452 implements Runnable {
+                    C18452() {
                     }
 
                     public void run() {
@@ -1402,7 +1408,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         });
                         return;
                     }
-                    AndroidUtilities.runOnUIThread(new C18252());
+                    AndroidUtilities.runOnUIThread(new C18452());
                 }
             });
             return;

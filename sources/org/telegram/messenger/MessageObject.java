@@ -705,7 +705,7 @@ public class MessageObject {
                                         }
                                         currentData2.company = args[1];
                                         if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                                            bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                            bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(currentData2.company));
                                             if (!(bytes == null || bytes.length == 0)) {
                                                 decodedName = new String(bytes, nameCharset);
                                                 if (decodedName != null) {
@@ -763,7 +763,7 @@ public class MessageObject {
                                     }
                                 }
                                 currentData2.company = args[1];
-                                bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(currentData2.company));
                                 decodedName = new String(bytes, nameCharset);
                                 if (decodedName != null) {
                                     currentData2.company = decodedName;
@@ -2853,11 +2853,19 @@ public class MessageObject {
         if (!(text instanceof Spannable)) {
             return false;
         }
+        byte t;
         Spannable spannable = (Spannable) text;
         int count = entities.size();
         URLSpan[] spans = (URLSpan[]) spannable.getSpans(0, text.length(), URLSpan.class);
         if (spans != null && spans.length > 0) {
             hasUrls = true;
+        }
+        if (photoViewer) {
+            t = (byte) 2;
+        } else if (out) {
+            t = (byte) 1;
+        } else {
+            t = (byte) 0;
         }
         int a = 0;
         boolean hasUrls2 = hasUrls;
@@ -2889,30 +2897,22 @@ public class MessageObject {
                         spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
                         hasUrls = hasUrls2;
                     } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
-                        byte t;
-                        if (photoViewer) {
-                            t = (byte) 2;
-                        } else if (out) {
-                            t = (byte) 1;
-                        } else {
-                            t = (byte) 0;
-                        }
                         spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, t), entity.offset, entity.offset + entity.length, 33);
                         hasUrls = hasUrls2;
                     } else if (entity instanceof TL_messageEntityMentionName) {
                         if (usernames) {
-                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, type), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, t), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
                         }
                     } else if (entity instanceof TL_inputMessageEntityMentionName) {
                         if (usernames) {
-                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, type), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, t), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
                         }
                     } else if (!useManualParse) {
                         String url = TextUtils.substring(text, entity.offset, entity.offset + entity.length);
                         if (entity instanceof TL_messageEntityBotCommand) {
-                            spannable.setSpan(new URLSpanBotCommand(url, type), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanBotCommand(url, t), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
                         } else if ((entity instanceof TL_messageEntityHashtag) || ((usernames && (entity instanceof TL_messageEntityMention)) || (entity instanceof TL_messageEntityCashtag))) {
                             spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);

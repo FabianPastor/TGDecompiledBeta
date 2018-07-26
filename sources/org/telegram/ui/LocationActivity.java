@@ -163,8 +163,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private boolean wasResults;
 
     /* renamed from: org.telegram.ui.LocationActivity$4 */
-    class C15324 extends ViewOutlineProvider {
-        C15324() {
+    class C15494 extends ViewOutlineProvider {
+        C15494() {
         }
 
         @SuppressLint({"NewApi"})
@@ -186,8 +186,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$1 */
-    class C23291 extends ActionBarMenuOnItemClick {
-        C23291() {
+    class C23491 extends ActionBarMenuOnItemClick {
+        C23491() {
         }
 
         public void onItemClick(int id) {
@@ -218,8 +218,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$2 */
-    class C23302 extends ActionBarMenuItemSearchListener {
-        C23302() {
+    class C23502 extends ActionBarMenuItemSearchListener {
+        C23502() {
         }
 
         public void onSearchExpand() {
@@ -257,11 +257,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$6 */
-    class C23316 extends OnScrollListener {
+    class C23516 extends OnScrollListener {
 
         /* renamed from: org.telegram.ui.LocationActivity$6$1 */
-        class C15331 implements Runnable {
-            C15331() {
+        class C15501 implements Runnable {
+            C15501() {
             }
 
             public void run() {
@@ -269,7 +269,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C23316() {
+        C23516() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -280,7 +280,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (dy > 0 && !LocationActivity.this.adapter.isPulledUp()) {
                         LocationActivity.this.adapter.setPulledUp();
                         if (LocationActivity.this.myLocation != null) {
-                            AndroidUtilities.runOnUIThread(new C15331());
+                            AndroidUtilities.runOnUIThread(new C15501());
                         }
                     }
                 }
@@ -289,25 +289,25 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$7 */
-    class C23337 implements OnItemClickListener {
+    class C23537 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.LocationActivity$7$1 */
-        class C23321 implements IntCallback {
-            C23321() {
+        class C23521 implements IntCallback {
+            C23521() {
             }
 
             public void run(int param) {
                 TL_messageMediaGeoLive location = new TL_messageMediaGeoLive();
                 location.geo = new TL_geoPoint();
-                location.geo.lat = LocationActivity.this.myLocation.getLatitude();
-                location.geo._long = LocationActivity.this.myLocation.getLongitude();
+                location.geo.lat = AndroidUtilities.fixLocationCoord(LocationActivity.this.myLocation.getLatitude());
+                location.geo._long = AndroidUtilities.fixLocationCoord(LocationActivity.this.myLocation.getLongitude());
                 location.period = param;
                 LocationActivity.this.delegate.didSelectLocation(location, LocationActivity.this.liveLocationType);
                 LocationActivity.this.finishFragment();
             }
         }
 
-        C23337() {
+        C23537() {
         }
 
         public void onItemClick(View view, int position) {
@@ -316,8 +316,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (!(LocationActivity.this.delegate == null || LocationActivity.this.userLocation == null)) {
                         TL_messageMediaGeo location = new TL_messageMediaGeo();
                         location.geo = new TL_geoPoint();
-                        location.geo.lat = LocationActivity.this.userLocation.getLatitude();
-                        location.geo._long = LocationActivity.this.userLocation.getLongitude();
+                        location.geo.lat = AndroidUtilities.fixLocationCoord(LocationActivity.this.userLocation.getLatitude());
+                        location.geo._long = AndroidUtilities.fixLocationCoord(LocationActivity.this.userLocation.getLongitude());
                         LocationActivity.this.delegate.didSelectLocation(location, LocationActivity.this.liveLocationType);
                     }
                     LocationActivity.this.finishFragment();
@@ -339,7 +339,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (((int) LocationActivity.this.dialogId) > 0) {
                         user = MessagesController.getInstance(LocationActivity.this.currentAccount).getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
                     }
-                    LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new C23321()));
+                    LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new C23521()));
                 }
             } else if (LocationActivity.this.googleMap != null) {
                 LocationActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationActivity.this.messageObject.messageOwner.media.geo.lat, LocationActivity.this.messageObject.messageOwner.media.geo._long), LocationActivity.this.googleMap.getMaxZoomLevel() - 4.0f));
@@ -348,8 +348,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$8 */
-    class C23348 implements BaseLocationAdapterDelegate {
-        C23348() {
+    class C23548 implements BaseLocationAdapterDelegate {
+        C23548() {
         }
 
         public void didLoadedSearchResult(ArrayList<TL_messageMediaVenue> places) {
@@ -410,11 +410,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAddToContainer(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C23291());
+        this.actionBar.setActionBarMenuOnItemClick(new C23491());
         ActionBarMenu menu = this.actionBar.createMenu();
         if (this.messageObject == null) {
             this.actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
-            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C23302()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C23502()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         } else if (this.messageObject.isLiveLocation()) {
             this.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation));
         } else {
@@ -459,7 +459,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.locationButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.locationButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.locationButton.setStateListAnimator(animator);
-            this.locationButton.setOutlineProvider(new C15324());
+            this.locationButton.setOutlineProvider(new C15494());
         }
         if (this.messageObject != null) {
             this.userLocation = new Location("network");
@@ -485,17 +485,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         recyclerListView.setAdapter(locationActivityAdapter);
         this.listView.setVerticalScrollBarEnabled(false);
         recyclerListView = this.listView;
-        LayoutManager c25405 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager c25645 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c25405;
-        recyclerListView.setLayoutManager(c25405);
+        this.layoutManager = c25645;
+        recyclerListView.setLayoutManager(c25645);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
-        this.listView.setOnScrollListener(new C23316());
-        this.listView.setOnItemClickListener(new C23337());
-        this.adapter.setDelegate(this.dialogId, new C23348());
+        this.listView.setOnScrollListener(new C23516());
+        this.listView.setOnItemClickListener(new C23537());
+        this.adapter.setDelegate(this.dialogId, new C23548());
         this.adapter.setOverScrollHeight(this.overScrollHeight);
         frameLayout.addView(this.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
         this.mapView = new MapView(context) {
@@ -550,11 +550,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         new Thread(new Runnable() {
 
             /* renamed from: org.telegram.ui.LocationActivity$10$1 */
-            class C15291 implements Runnable {
+            class C15461 implements Runnable {
 
                 /* renamed from: org.telegram.ui.LocationActivity$10$1$1 */
-                class C23281 implements OnMapReadyCallback {
-                    C23281() {
+                class C23481 implements OnMapReadyCallback {
+                    C23481() {
                     }
 
                     public void onMapReady(GoogleMap map) {
@@ -564,7 +564,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                C15291() {
+                C15461() {
                 }
 
                 public void run() {
@@ -572,7 +572,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         try {
                             map.onCreate(null);
                             MapsInitializer.initialize(ApplicationLoader.applicationContext);
-                            LocationActivity.this.mapView.getMapAsync(new C23281());
+                            LocationActivity.this.mapView.getMapAsync(new C23481());
                             LocationActivity.this.mapsInitialized = true;
                             if (LocationActivity.this.onResumeCalled) {
                                 LocationActivity.this.mapView.onResume();
@@ -589,7 +589,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     map.onCreate(null);
                 } catch (Exception e) {
                 }
-                AndroidUtilities.runOnUIThread(new C15291());
+                AndroidUtilities.runOnUIThread(new C15461());
             }
         }).start();
         View view = new View(context);
@@ -1326,7 +1326,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             public void didSetColor() {
             }
         };
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[50];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[52];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
         themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
@@ -1348,7 +1348,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         themeDescriptionArr[18] = new ThemeDescription(this.routeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_chats_actionBackground);
         themeDescriptionArr[19] = new ThemeDescription(this.routeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_chats_actionPressedBackground);
         themeDescriptionArr[20] = new ThemeDescription(this.markerXImageView, 0, null, null, null, null, Theme.key_location_markerX);
-        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_graySectionText);
         themeDescriptionArr[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
         themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, cellDelegate, Theme.key_avatar_text);
         themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
@@ -1361,22 +1361,24 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         themeDescriptionArr[31] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_location_liveLocationProgress);
         themeDescriptionArr[32] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_location_placeLocationBackground);
         themeDescriptionArr[33] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialog_liveLocationProgress);
-        themeDescriptionArr[34] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLocationIcon);
-        themeDescriptionArr[35] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLocationBackground);
-        themeDescriptionArr[36] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLiveLocationBackground);
-        themeDescriptionArr[37] = new ThemeDescription(this.listView, 0, new Class[]{SendLocationCell.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueText7);
+        themeDescriptionArr[34] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLocationIcon);
+        themeDescriptionArr[35] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLiveLocationIcon);
+        themeDescriptionArr[36] = new ThemeDescription(this.listView, (ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLocationBackground);
+        themeDescriptionArr[37] = new ThemeDescription(this.listView, (ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_location_sendLiveLocationBackground);
         themeDescriptionArr[38] = new ThemeDescription(this.listView, 0, new Class[]{SendLocationCell.class}, new String[]{"accurateTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[39] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[40] = new ThemeDescription(this.listView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[41] = new ThemeDescription(this.listView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[42] = new ThemeDescription(this.searchListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[43] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[44] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[45] = new ThemeDescription(this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
-        themeDescriptionArr[46] = new ThemeDescription(this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[47] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[48] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[49] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[39] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText2);
+        themeDescriptionArr[40] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueText7);
+        themeDescriptionArr[41] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[42] = new ThemeDescription(this.listView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[43] = new ThemeDescription(this.listView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[44] = new ThemeDescription(this.searchListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[45] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[46] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[47] = new ThemeDescription(this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[48] = new ThemeDescription(this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[49] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[50] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[51] = new ThemeDescription(this.listView, 0, new Class[]{LocationPoweredCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
         return themeDescriptionArr;
     }
 }

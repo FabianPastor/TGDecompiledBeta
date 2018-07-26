@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
@@ -184,12 +184,12 @@ final class AtomParsers {
         }
         long durationUs;
         TkhdData tkhdData = parseTkhd(trak.getLeafAtomOfType(Atom.TYPE_tkhd).data);
-        if (duration == C0555C.TIME_UNSET) {
+        if (duration == C0559C.TIME_UNSET) {
             duration = tkhdData.duration;
         }
         long movieTimescale = parseMvhd(mvhd.data);
-        if (duration == C0555C.TIME_UNSET) {
-            durationUs = C0555C.TIME_UNSET;
+        if (duration == C0559C.TIME_UNSET) {
+            durationUs = C0559C.TIME_UNSET;
         } else {
             durationUs = Util.scaleLargeTimestamp(duration, 1000000, movieTimescale);
         }
@@ -1091,11 +1091,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         if (durationUnknown) {
             tkhd.skipBytes(durationByteCount);
-            duration = C0555C.TIME_UNSET;
+            duration = C0559C.TIME_UNSET;
         } else {
             duration = version == 0 ? tkhd.readUnsignedInt() : tkhd.readUnsignedLongToLong();
             if (duration == 0) {
-                duration = C0555C.TIME_UNSET;
+                duration = C0559C.TIME_UNSET;
             }
         }
         tkhd.skipBytes(16);
@@ -1104,9 +1104,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         tkhd.skipBytes(4);
         int a10 = tkhd.readInt();
         int a11 = tkhd.readInt();
-        if (a00 == 0 && a01 == C0555C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
+        if (a00 == 0 && a01 == C0559C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
             rotationDegrees = 90;
-        } else if (a00 == 0 && a01 == (-65536) && a10 == C0555C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
+        } else if (a00 == 0 && a01 == (-65536) && a10 == C0559C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
             rotationDegrees = 270;
         } else if (a00 == (-65536) && a01 == 0 && a10 == 0 && a11 == (-65536)) {
             rotationDegrees = 180;
@@ -1520,7 +1520,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             childPosition += childAtomSize;
         }
-        if (!C0555C.CENC_TYPE_cenc.equals(schemeType) && !C0555C.CENC_TYPE_cbc1.equals(schemeType) && !C0555C.CENC_TYPE_cens.equals(schemeType) && !C0555C.CENC_TYPE_cbcs.equals(schemeType)) {
+        if (!C0559C.CENC_TYPE_cenc.equals(schemeType) && !C0559C.CENC_TYPE_cbc1.equals(schemeType) && !C0559C.CENC_TYPE_cens.equals(schemeType) && !C0559C.CENC_TYPE_cbcs.equals(schemeType)) {
             return null;
         }
         boolean z2;

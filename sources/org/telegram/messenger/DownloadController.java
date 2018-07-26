@@ -55,8 +55,8 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiMaxFileSize = new int[7];
 
     /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class C01501 implements Runnable {
-        C01501() {
+    class C01511 implements Runnable {
+        C01511() {
         }
 
         public void run() {
@@ -70,8 +70,8 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.DownloadController$2 */
-    class C01512 extends BroadcastReceiver {
-        C01512() {
+    class C01522 extends BroadcastReceiver {
+        C01522() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -157,8 +157,8 @@ public class DownloadController implements NotificationCenterDelegate {
             this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
-        AndroidUtilities.runOnUIThread(new C01501());
-        ApplicationLoader.applicationContext.registerReceiver(new C01512(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        AndroidUtilities.runOnUIThread(new C01511());
+        ApplicationLoader.applicationContext.registerReceiver(new C01522(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }

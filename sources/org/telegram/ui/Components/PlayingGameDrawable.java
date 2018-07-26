@@ -21,8 +21,8 @@ public class PlayingGameDrawable extends StatusDrawable {
     private boolean started = false;
 
     /* renamed from: org.telegram.ui.Components.PlayingGameDrawable$1 */
-    class C13301 implements Runnable {
-        C13301() {
+    class C13391 implements Runnable {
+        C13391() {
         }
 
         public void run() {
@@ -101,7 +101,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             return;
         }
         if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new C13301(), 100);
+            AndroidUtilities.runOnUIThread(new C13391(), 100);
         } else {
             update();
         }

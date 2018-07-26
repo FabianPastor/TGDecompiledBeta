@@ -3,11 +3,13 @@ package org.telegram.messenger;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 
@@ -17,6 +19,7 @@ public class SharedConfig {
     public static boolean appLocked;
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
+    public static int badPasscodeTries;
     private static boolean configLoaded;
     public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
@@ -30,8 +33,11 @@ public class SharedConfig {
     private static int lastLocalId = -210000;
     public static int lastPauseTime;
     public static String lastUpdateVersion;
+    public static long lastUptimeMillis;
     private static final Object localIdSync = new Object();
+    public static int mapPreviewType = 2;
     public static String passcodeHash = TtmlNode.ANONYMOUS_REGION_ID;
+    public static long passcodeRetryInMs;
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
     public static boolean playOrderReversed;
@@ -100,6 +106,9 @@ public class SharedConfig {
                 editor.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : TtmlNode.ANONYMOUS_REGION_ID);
                 editor.putBoolean("appLocked", appLocked);
                 editor.putInt("passcodeType", passcodeType);
+                editor.putLong("passcodeRetryInMs", passcodeRetryInMs);
+                editor.putLong("lastUptimeMillis", lastUptimeMillis);
+                editor.putInt("badPasscodeTries", badPasscodeTries);
                 editor.putInt("autoLockIn", autoLockIn);
                 editor.putInt("lastPauseTime", lastPauseTime);
                 editor.putLong("lastAppPauseTime", lastAppPauseTime);
@@ -135,6 +144,9 @@ public class SharedConfig {
             passcodeHash = preferences.getString("passcodeHash1", TtmlNode.ANONYMOUS_REGION_ID);
             appLocked = preferences.getBoolean("appLocked", false);
             passcodeType = preferences.getInt("passcodeType", 0);
+            passcodeRetryInMs = preferences.getLong("passcodeRetryInMs", 0);
+            lastUptimeMillis = preferences.getLong("lastUptimeMillis", 0);
+            badPasscodeTries = preferences.getInt("badPasscodeTries", 0);
             autoLockIn = preferences.getInt("autoLockIn", 3600);
             lastPauseTime = preferences.getInt("lastPauseTime", 0);
             lastAppPauseTime = preferences.getLong("lastAppPauseTime", 0);
@@ -159,6 +171,7 @@ public class SharedConfig {
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             saveToGallery = preferences.getBoolean("save_gallery", false);
             autoplayGifs = preferences.getBoolean("autoplay_gif", true);
+            mapPreviewType = preferences.getInt("mapPreviewType", 2);
             raiseToSpeak = preferences.getBoolean("raise_to_speak", true);
             customTabs = preferences.getBoolean("custom_tabs", true);
             directShare = preferences.getBoolean("direct_share", true);
@@ -180,6 +193,34 @@ public class SharedConfig {
         }
     }
 
+    public static void increaseBadPasscodeTries() {
+        badPasscodeTries++;
+        if (badPasscodeTries >= 3) {
+            switch (badPasscodeTries) {
+                case 3:
+                    passcodeRetryInMs = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+                    break;
+                case 4:
+                    passcodeRetryInMs = 10000;
+                    break;
+                case 5:
+                    passcodeRetryInMs = 15000;
+                    break;
+                case 6:
+                    passcodeRetryInMs = 20000;
+                    break;
+                case 7:
+                    passcodeRetryInMs = 25000;
+                    break;
+                default:
+                    passcodeRetryInMs = 30000;
+                    break;
+            }
+            lastUptimeMillis = SystemClock.elapsedRealtime();
+        }
+        saveConfig();
+    }
+
     public static boolean checkPasscode(String passcode) {
         boolean result = false;
         byte[] passcodeBytes;
@@ -190,7 +231,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0555C.UTF8_NAME);
+                    passcodeBytes = passcode.getBytes(C0559C.UTF8_NAME);
                     bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -203,7 +244,7 @@ public class SharedConfig {
             }
         } else {
             try {
-                passcodeBytes = passcode.getBytes(C0555C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(C0559C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -220,6 +261,9 @@ public class SharedConfig {
         saveIncomingPhotos = false;
         appLocked = false;
         passcodeType = 0;
+        passcodeRetryInMs = 0;
+        lastUptimeMillis = 0;
+        badPasscodeTries = 0;
         passcodeHash = TtmlNode.ANONYMOUS_REGION_ID;
         passcodeSalt = new byte[0];
         autoLockIn = 3600;
@@ -280,6 +324,17 @@ public class SharedConfig {
         autoplayGifs = !autoplayGifs;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("autoplay_gif", autoplayGifs);
+        editor.commit();
+    }
+
+    public static boolean isSecretMapPreviewSet() {
+        return MessagesController.getGlobalMainSettings().contains("mapPreviewType");
+    }
+
+    public static void setSecretMapPreviewType(int value) {
+        mapPreviewType = value;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putInt("mapPreviewType", mapPreviewType);
         editor.commit();
     }
 

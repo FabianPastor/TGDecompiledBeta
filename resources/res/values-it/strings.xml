@@ -154,6 +154,7 @@
     <string name="AreTypingGroup">%1$s stanno scrivendo...</string>
     <string name="AreYouSure">Sei sicuro?</string>
     <string name="AreYouSureBlockContact">Vuoi bloccare questo contatto?</string>
+    <string name="AreYouSureClearDrafts">Sei sicuro di voler eliminare tutte le bozze?</string>
     <string name="AreYouSureClearHistory">Sei sicuro di voler eliminare la cronologia?</string>
     <string name="AreYouSureClearHistoryChannel">Eliminare tutti i testi e i media di questo canale dalla cache?</string>
     <string name="AreYouSureClearHistoryGroup">Eliminare tutti i testi e i media di questo gruppo dalla cache?</string>
@@ -408,6 +409,7 @@
     <string name="Checking">Controllo...</string>
     <string name="ChooseCountry">Scegli una nazione</string>
     <string name="ChooseFromYourStickers">Scegli dai tuoi sticker</string>
+    <string name="ChooseMapPreviewProvider">Scegli fornitore anteprima mappa</string>
     <string name="ChooseStickerSet">SCEGLI SET DI STICKER</string>
     <string name="ChooseStickerSetMy">Puoi creare i tuoi set di sticker personalizzati tramite il bot @stickers.</string>
     <string name="ChooseStickerSetNotFound">Nessun set di sticker trovato</string>
@@ -526,7 +528,7 @@
     <string name="DefaultRingtone">Predefinita</string>
     <string name="Delete">Elimina</string>
     <string name="DeleteAccountHelp">Se non ti connetti almeno una volta in questo periodo, il tuo account verrà eliminato insieme a tutti i messaggi e i contatti.</string>
-    <string name="DeleteAccountIfAwayFor">Se assente per</string>
+    <string name="DeleteAccountIfAwayFor2">Elimina il mio account se lontano per</string>
     <string name="DeleteAccountTitle">Elimina il mio account</string>
     <string name="DeleteAllFrom">Elimina tutto da %1$s</string>
     <string name="DeleteAndExit">Elimina e lascia il gruppo</string>
@@ -920,6 +922,7 @@
     <string name="LastSeenNobodyPlus">Nessuno (+%1$d)</string>
     <string name="LastSeenTitle">Chi può vedere il tuo ultimo accesso?</string>
     <string name="Lately">ultimo accesso di recente</string>
+    <string name="Later">PIÙ TARDI</string>
     <string name="LeaveChannel">Lascia il canale</string>
     <string name="LeaveChannelMenu">Lascia il canale</string>
     <string name="LeaveMegaMenu">Lascia il gruppo</string>
@@ -968,6 +971,11 @@
     <string name="ManageGroup">Gestisci gruppo</string>
     <string name="ManageGroupMenu">Gestisci gruppo</string>
     <string name="Map">Mappa</string>
+    <string name="MapPreviewProvider">Fornitore anteprima mappa</string>
+    <string name="MapPreviewProviderGoogle">Google</string>
+    <string name="MapPreviewProviderNobody">Nessuno</string>
+    <string name="MapPreviewProviderTelegram">Telegram</string>
+    <string name="MapPreviewProviderYandex">Yandex</string>
     <string name="MarkAsRead">Segna come letto</string>
     <string name="MarkAsUnread">Segna come non letto</string>
     <string name="Masks">Maschere</string>
@@ -1096,6 +1104,8 @@
     <string name="NoSharedFilesSecret">I file e i documenti di questa chat appariranno qui.</string>
     <string name="NoSharedLinks">Condividi link in questa chat ed accedi ad essi da ogni tuo dispositivo.</string>
     <string name="NoSharedLinksSecret">I link condivisi di questa chat appariranno qui.</string>
+    <string name="NoSharedVoice">Condividi messaggi vocali in questa chat e accedi ad essi da ogni tuo dispositivo.</string>
+    <string name="NoSharedVoiceSecret">I messaggi vocali di questa chat appariranno qui.</string>
     <string name="NoSound">Nessun suono</string>
     <string name="NoStickers">Ancora nessuno sticker</string>
     <string name="NoStickersFound">Nessuno sticker trovato</string>
@@ -1191,6 +1201,8 @@
     <string name="NotificationsAndSounds">Notifiche e suoni</string>
     <string name="NotificationsCustom">Personalizzate</string>
     <string name="NotificationsCustomize">Personalizza</string>
+    <string name="NotificationsDefaultOff">Predefinite (Off)</string>
+    <string name="NotificationsDefaultOn">Predefinite (On)</string>
     <string name="NotificationsEnableCustom">Attiva notifiche personalizzate</string>
     <string name="NotificationsImportance">Importanza</string>
     <string name="NotificationsLed">LED</string>
@@ -1277,6 +1289,7 @@
     <string name="PassportBirthdate">Data di nascita</string>
     <string name="PassportCitizenship">Nazionalità</string>
     <string name="PassportCity">Città</string>
+    <string name="PassportCorrectErrors">Tocca per correggere gli errori.</string>
     <string name="PassportCountry">Nazione</string>
     <string name="PassportDeleteAddressAlert">Sei sicuro di voler eliminare i dettagli dell\'indirizzo?</string>
     <string name="PassportDeleteDocument">Elimina documento</string>
@@ -1293,7 +1306,6 @@
     <string name="PassportDeleteSelfieAlert">Sei sicuro di voler eliminare questo selfie?</string>
     <string name="PassportDiscard">Scarta</string>
     <string name="PassportDiscardChanges">Sei sicuro di voler annullare tutte le informazione che hai inserito? </string>
-    <string name="PassportDocumentDetails">Dettagli documento</string>
     <string name="PassportDocumentNumber">Numero documento</string>
     <string name="PassportDocuments">Scansioni</string>
     <string name="PassportEmail">Email</string>
@@ -1310,7 +1322,6 @@
     <string name="PassportIdentityDocumentInfo">Carica una scansione del tuo passaporto o di un altro documento</string>
     <string name="PassportInfo">Con Telegram Passport puoi iscriverti facilmente ai siti web e ai servizi che richiedono la verifica dell\'identità.\n\nLe tue informazioni, i tuoi dati personali e i tuoi documenti sono protetti da crittografia end-to-end. Nessuno, incluso Telegram, può accedervi senza il tuo permesso.\n\nPuoi visitare le nostre FAQ per saperne di più.</string>
     <string name="PassportInfoTitle">Cos\'è Telegram Passport?</string>
-    <string name="PassportIssued">Emesso\n</string>
     <string name="PassportMainPage">Pagina principale</string>
     <string name="PassportMainPageInfo">Carica una foto della pagina principale del documento</string>
     <string name="PassportMale">Uomo</string>
@@ -1482,12 +1493,14 @@
     <string name="PopupNotification">Notifiche popup</string>
     <string name="PreviewFeedback">Lascia un feedback su questa anteprima</string>
     <string name="PriorityInfo">Le notifiche con priorità più alta funzioneranno anche se il telefono è in modalità Non disturbare.</string>
+    <string name="PrivacyAdvanced">Avanzate</string>
     <string name="PrivacyBots">Bot e siti web</string>
     <string name="PrivacyBotsInfo">Siti web in cui hai usato Telegram per accedere.</string>
     <string name="PrivacyCallsP2PHelp">Disattivando il peer-to-peer, tutte le chiamate verranno inviate tramite i server di Telegram per evitare di rivelare l\'indirizzo IP, ma la qualità audio diminuirà leggermente.</string>
     <string name="PrivacyCallsP2PTitle">Peer-to-Peer</string>
     <string name="PrivacyClearPayment">Info di pagamento</string>
     <string name="PrivacyClearShipping">Info di spedizione</string>
+    <string name="PrivacyDeleteCloudDrafts">Elimina tutte le bozze</string>
     <string name="PrivacyFloodControlError">Spiacenti, troppe richieste. Impossibile cambiare le impostazioni di privacy ora, attendi.</string>
     <string name="PrivacyLastSeen">Ultimo accesso</string>
     <string name="PrivacyPaymentsClear">Cancella info di pagamento</string>
@@ -1694,9 +1707,14 @@
     <string name="ShareYouLocationUnable">L\'app non è riuscita a determinare la tua posizione corrente</string>
     <string name="ShareYouLocationUnableManually">Scegli manualmente</string>
     <string name="ShareYouPhoneNumberTitle">Condividere il tuo numero di telefono?</string>
+    <string name="SharedFilesTab">FILE</string>
+    <string name="SharedLinksTab">LINK</string>
     <string name="SharedMedia">Media condivisi</string>
+    <string name="SharedMediaTab">MEDIA</string>
     <string name="SharedMediaTitle">Media condivisi</string>
+    <string name="SharedMusicTab">AUDIO</string>
     <string name="SharedPlace">Luogo</string>
+    <string name="SharedVoiceTab">MESSAGGI VOCALI</string>
     <string name="SharingLiveLocationTitle">Stai condividendo la tua posizione attuale con %1$s</string>
     <string name="SharingYouAndOtherName">Tu e %1$s</string>
     <string name="Sharpen">Nitidezza</string>
@@ -1751,7 +1769,7 @@
     <string name="Subscribers_two">%1$d iscritti</string>
     <string name="Subscribers_zero">%1$d iscritti</string>
     <string name="SuggestContacts">Suggerisci contatti frequenti</string>
-    <string name="SuggestContactsAlert">Questo eliminerà tutti i dati delle persone che contatti di frequente e dei bot inline che usi di solito.</string>
+    <string name="SuggestContactsAlert">Questo eliminerà tutti i dati delle persone che contatti di frequente così come i bot inline che usi di solito.</string>
     <string name="SuggestContactsInfo">Visualizza le persone che contatti di frequente nella parte superiore della sezione di ricerca per un accesso rapido.</string>
     <string name="SuggestStickers">Suggerisci da emoji</string>
     <string name="SuggestStickersAll">Tutti</string>
@@ -1810,6 +1828,7 @@
     <string name="TintShadows">OMBRE</string>
     <string name="TodayAt">alle</string>
     <string name="TodayAtFormatted">alle %1$s</string>
+    <string name="TooManyTries">Troppi tentativi.\nPer favore riprova tra %1$s.</string>
     <string name="TosAgeText">Tocca Accetta per confermare di avere almeno %1$s anni.</string>
     <string name="TosAgeTitle">Verifica età</string>
     <string name="TosDecline">Siamo spiacenti, ma questo significa che non puoi iscriverti a Telegram.\n\nA differenza di altri, non utilizziamo i tuoi dati per il targeting degli annunci o altri scopi commerciali. Telegram conserva solo le informazioni di cui ha bisogno per funzionare come servizio cloud ricco di funzionalità. Puoi regolare il modo in cui utilizziamo i tuoi dati (ad esempio, eliminando i contatti sincronizzati) nelle impostazioni di Privacy e sicurezza.\n\nMa se in genere non sei d\'accordo con le modeste esigenze di Telegram, non sarà possibile per noi fornire questo servizio.</string>
@@ -1839,10 +1858,13 @@
     <string name="UnreadMessages">Messaggi non letti</string>
     <string name="UnsupportedAttachment">Allegato non supportato</string>
     <string name="UnsupportedMedia">Questo messaggio non è supportato dalla tua versione di Telegram. Aggiorna l\'app per visualizzarlo: https://telegram.org/update</string>
+    <string name="Update">AGGIORNA</string>
     <string name="UpdateApp">Aggiorna App</string>
     <string name="UpdateAppAlert">Spiacenti, la tua app Telegram è obsoleta e non può gestire la richiesta. Per favore aggiorna Telegram.</string>
     <string name="UpdateContactsMessage">Telegram ha trovato molti contatti non sincronizzati, vorresti sincronizzarli adesso? Scegli \'OK\' se stai usando il tuo dispositivo, la tua SIM e il tuo account Google.</string>
     <string name="UpdateContactsTitle">Aggiornare i contatti?</string>
+    <string name="UpdateNow">AGGIORNA ORA</string>
+    <string name="UpdateTelegram">Aggiorna Telegram</string>
     <string name="UpdatedMinutes_few">aggiornata %1$d minuti fa</string>
     <string name="UpdatedMinutes_many">aggiornata %1$d minuti fa</string>
     <string name="UpdatedMinutes_one">aggiornata %1$d minuto fa</string>

@@ -65,6 +65,7 @@ import org.telegram.tgnet.TLRPC.PhoneCall;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.tgnet.TLRPC.SendMessageAction;
+import org.telegram.tgnet.TLRPC.TL_account_getNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_account_registerDevice;
 import org.telegram.tgnet.TLRPC.TL_account_unregisterDevice;
 import org.telegram.tgnet.TLRPC.TL_account_updateStatus;
@@ -144,6 +145,8 @@ import org.telegram.tgnet.TLRPC.TL_inputDialogPeer;
 import org.telegram.tgnet.TLRPC.TL_inputDocument;
 import org.telegram.tgnet.TLRPC.TL_inputEncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterChatPhotos;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyChats;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyUsers;
 import org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
 import org.telegram.tgnet.TLRPC.TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
@@ -211,7 +214,9 @@ import org.telegram.tgnet.TLRPC.TL_messages_setTyping;
 import org.telegram.tgnet.TLRPC.TL_messages_startBot;
 import org.telegram.tgnet.TLRPC.TL_messages_toggleChatAdmins;
 import org.telegram.tgnet.TLRPC.TL_messages_toggleDialogPin;
+import org.telegram.tgnet.TLRPC.TL_notifyChats;
 import org.telegram.tgnet.TLRPC.TL_notifyPeer;
+import org.telegram.tgnet.TLRPC.TL_notifyUsers;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_peerChat;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
@@ -373,7 +378,9 @@ public class MessagesController implements NotificationCenterDelegate {
     public static final int UPDATE_MASK_STATUS = 4;
     public static final int UPDATE_MASK_USER_PHONE = 128;
     public static final int UPDATE_MASK_USER_PRINT = 64;
+    private static volatile long lastPasswordCheckTime;
     private static volatile long lastThemeCheckTime;
+    public int availableMapProviders;
     public boolean blockedCountry;
     public ArrayList<Integer> blockedUsers = new ArrayList();
     public int callConnectTimeout;
@@ -398,7 +405,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int currentDeletingTaskTime;
     public String dcDomainName;
     public boolean defaultP2pContacts;
-    private final Comparator<TL_dialog> dialogComparator = new C03332();
+    private final Comparator<TL_dialog> dialogComparator = new C03433();
     public LongSparseArray<MessageObject> dialogMessage = new LongSparseArray();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray();
@@ -441,6 +448,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ArrayList<Integer> loadingFullChats = new ArrayList();
     private ArrayList<Integer> loadingFullParticipants = new ArrayList();
     private ArrayList<Integer> loadingFullUsers = new ArrayList();
+    private int loadingNotificationSettings;
     private LongSparseArray<Boolean> loadingPeerSettings = new LongSparseArray();
     private boolean loadingUnreadDialogs;
     private SharedPreferences mainPreferences;
@@ -466,6 +474,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ConcurrentHashMap<String, TLObject> objectsByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
     private boolean offlineSent;
     public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, 1.0f, 2);
+    private Runnable passwordCheckRunnable = new C03372();
     public boolean preloadFeaturedStickers;
     public LongSparseArray<CharSequence> printingStrings = new LongSparseArray();
     public LongSparseArray<Integer> printingStringsTypes = new LongSparseArray();
@@ -491,9 +500,9 @@ public class MessagesController implements NotificationCenterDelegate {
     private int statusRequest;
     private int statusSettingState;
     public boolean suggestContacts = true;
-    private Runnable themeCheckRunnable = new C03281();
+    private Runnable themeCheckRunnable = new C03321();
     public int unreadUnmutedDialogs;
-    private final Comparator<Update> updatesComparator = new C03393();
+    private final Comparator<Update> updatesComparator = new C03454();
     private SparseArray<ArrayList<Updates>> updatesQueueChannels = new SparseArray();
     private ArrayList<Updates> updatesQueuePts = new ArrayList();
     private ArrayList<Updates> updatesQueueQts = new ArrayList();
@@ -506,11 +515,12 @@ public class MessagesController implements NotificationCenterDelegate {
     private String uploadingAvatar;
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, 1.0f, 2);
     public String venueSearchBot;
+    private ArrayList<Long> visibleDialogMainThreadIds = new ArrayList();
     public int webFileDatacenterId;
 
     /* renamed from: org.telegram.messenger.MessagesController$1 */
-    class C03281 implements Runnable {
-        C03281() {
+    class C03321 implements Runnable {
+        C03321() {
         }
 
         public void run() {
@@ -519,8 +529,18 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.MessagesController$2 */
-    class C03332 implements Comparator<TL_dialog> {
-        C03332() {
+    class C03372 implements Runnable {
+        C03372() {
+        }
+
+        public void run() {
+            UserConfig.getInstance(MessagesController.this.currentAccount).checkSavedPassword();
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.MessagesController$3 */
+    class C03433 implements Comparator<TL_dialog> {
+        C03433() {
         }
 
         public int compare(TL_dialog dialog1, TL_dialog dialog2) {
@@ -553,9 +573,9 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    /* renamed from: org.telegram.messenger.MessagesController$3 */
-    class C03393 implements Comparator<Update> {
-        C03393() {
+    /* renamed from: org.telegram.messenger.MessagesController$4 */
+    class C03454 implements Comparator<Update> {
+        C03454() {
         }
 
         public int compare(Update lhs, Update rhs) {
@@ -582,9 +602,9 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    /* renamed from: org.telegram.messenger.MessagesController$4 */
-    class C03424 implements Runnable {
-        C03424() {
+    /* renamed from: org.telegram.messenger.MessagesController$5 */
+    class C03535 implements Runnable {
+        C03535() {
         }
 
         public void run() {
@@ -598,9 +618,9 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    /* renamed from: org.telegram.messenger.MessagesController$7 */
-    class C03677 implements Runnable {
-        C03677() {
+    /* renamed from: org.telegram.messenger.MessagesController$8 */
+    class C03738 implements Runnable {
+        C03738() {
         }
 
         public void run() {
@@ -620,9 +640,9 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    /* renamed from: org.telegram.messenger.MessagesController$8 */
-    class C03698 implements Runnable {
-        C03698() {
+    /* renamed from: org.telegram.messenger.MessagesController$9 */
+    class C03839 implements Runnable {
+        C03839() {
         }
 
         public void run() {
@@ -652,12 +672,12 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    /* renamed from: org.telegram.messenger.MessagesController$6 */
-    class C19566 implements RequestDelegate {
+    /* renamed from: org.telegram.messenger.MessagesController$7 */
+    class C19787 implements RequestDelegate {
 
-        /* renamed from: org.telegram.messenger.MessagesController$6$1 */
-        class C03501 implements Runnable {
-            C03501() {
+        /* renamed from: org.telegram.messenger.MessagesController$7$1 */
+        class C03611 implements Runnable {
+            C03611() {
             }
 
             public void run() {
@@ -666,7 +686,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
         }
 
-        C19566() {
+        C19787() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -697,7 +717,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     ArrayList<User> users = new ArrayList();
                     users.add(user);
                     MessagesStorage.getInstance(MessagesController.this.currentAccount).putUsersAndChats(users, null, false, true);
-                    AndroidUtilities.runOnUIThread(new C03501());
+                    AndroidUtilities.runOnUIThread(new C03611());
                 }
             }
         }
@@ -769,7 +789,7 @@ public class MessagesController implements NotificationCenterDelegate {
         ImageLoader.getInstance();
         MessagesStorage.getInstance(this.currentAccount);
         LocationController.getInstance(this.currentAccount);
-        AndroidUtilities.runOnUIThread(new C03424());
+        AndroidUtilities.runOnUIThread(new C03535());
         addSupportUser();
         if (this.currentAccount == 0) {
             this.notificationsPreferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
@@ -798,6 +818,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.maxMessageLength = this.mainPreferences.getInt("maxMessageLength", 4096);
         this.maxCaptionLength = this.mainPreferences.getInt("maxCaptionLength", Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         this.mapProvider = this.mainPreferences.getInt("mapProvider", 0);
+        this.availableMapProviders = this.mainPreferences.getInt("availableMapProviders", 3);
         this.mapKey = this.mainPreferences.getString("pk", null);
         this.installReferer = this.mainPreferences.getString("installReferer", null);
         this.defaultP2pContacts = this.mainPreferences.getBoolean("defaultP2pContacts", false);
@@ -864,25 +885,40 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 MessagesController.this.mapKey = null;
                 MessagesController.this.mapProvider = 0;
-                String[] mapArgs = config.static_maps_provider.split("\\+");
-                if (mapArgs.length > 0) {
-                    String[] typeAndKey = mapArgs[0].split(":");
-                    if (typeAndKey.length > 0) {
-                        if ("yandex".equals(typeAndKey[0])) {
-                            if (mapArgs.length > 1) {
-                                MessagesController.this.mapProvider = 3;
-                            } else {
-                                MessagesController.this.mapProvider = 1;
+                MessagesController.this.availableMapProviders = 0;
+                String[] providers = config.static_maps_provider.split(",");
+                for (int a = 0; a < providers.length; a++) {
+                    String[] mapArgs = providers[a].split("\\+");
+                    if (mapArgs.length > 0) {
+                        String[] typeAndKey = mapArgs[0].split(":");
+                        if (typeAndKey.length > 0) {
+                            MessagesController messagesController;
+                            if ("yandex".equals(typeAndKey[0])) {
+                                if (a == 0) {
+                                    if (mapArgs.length > 1) {
+                                        MessagesController.this.mapProvider = 3;
+                                    } else {
+                                        MessagesController.this.mapProvider = 1;
+                                    }
+                                }
+                                messagesController = MessagesController.this;
+                                messagesController.availableMapProviders |= 4;
+                            } else if ("google".equals(typeAndKey[0])) {
+                                if (a == 0 && mapArgs.length > 1) {
+                                    MessagesController.this.mapProvider = 4;
+                                }
+                                messagesController = MessagesController.this;
+                                messagesController.availableMapProviders |= 1;
+                            } else if ("telegram".equals(typeAndKey[0])) {
+                                if (a == 0) {
+                                    MessagesController.this.mapProvider = 2;
+                                }
+                                messagesController = MessagesController.this;
+                                messagesController.availableMapProviders |= 2;
                             }
-                        } else if ("google".equals(typeAndKey[0])) {
-                            if (mapArgs.length > 1) {
-                                MessagesController.this.mapProvider = 4;
+                            if (typeAndKey.length > 1) {
+                                MessagesController.this.mapKey = typeAndKey[1];
                             }
-                        } else if ("telegram".equals(typeAndKey[0])) {
-                            MessagesController.this.mapProvider = 2;
-                        }
-                        if (typeAndKey.length > 1) {
-                            MessagesController.this.mapKey = typeAndKey[1];
                         }
                     }
                 }
@@ -1026,7 +1062,7 @@ public class MessagesController implements NotificationCenterDelegate {
             if (this.uploadingAvatar != null && this.uploadingAvatar.equals(location)) {
                 TL_photos_uploadProfilePhoto req = new TL_photos_uploadProfilePhoto();
                 req.file = file;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19566());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19787());
             }
         } else if (id == NotificationCenter.FileDidFailUpload) {
             location = (String) args[0];
@@ -1109,8 +1145,9 @@ public class MessagesController implements NotificationCenterDelegate {
         this.loadingPeerSettings.clear();
         this.lastPrintingStringCount = 0;
         this.nextDialogsCacheOffset = 0;
-        Utilities.stageQueue.postRunnable(new C03677());
+        Utilities.stageQueue.postRunnable(new C03738());
         this.createdDialogMainThreadIds.clear();
+        this.visibleDialogMainThreadIds.clear();
         this.blockedUsers.clear();
         this.sendingTypings.clear();
         this.loadingFullUsers.clear();
@@ -1143,7 +1180,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.uploadingAvatar = null;
         this.statusRequest = 0;
         this.statusSettingState = 0;
-        Utilities.stageQueue.postRunnable(new C03698());
+        Utilities.stageQueue.postRunnable(new C03839());
         if (this.currentDeleteTaskRunnable != null) {
             Utilities.stageQueue.cancelRunnable(this.currentDeleteTaskRunnable);
             this.currentDeleteTaskRunnable = null;
@@ -1207,18 +1244,32 @@ public class MessagesController implements NotificationCenterDelegate {
         return this.createdDialogMainThreadIds.contains(Long.valueOf(dialog_id));
     }
 
+    public boolean isDialogVisible(long dialog_id) {
+        return this.visibleDialogMainThreadIds.contains(Long.valueOf(dialog_id));
+    }
+
+    public void setLastVisibleDialogId(long dialog_id, boolean set) {
+        if (!set) {
+            this.visibleDialogMainThreadIds.remove(Long.valueOf(dialog_id));
+        } else if (!this.visibleDialogMainThreadIds.contains(Long.valueOf(dialog_id))) {
+            this.visibleDialogMainThreadIds.add(Long.valueOf(dialog_id));
+        }
+    }
+
     public void setLastCreatedDialogId(final long dialog_id, final boolean set) {
-        if (set) {
+        if (!set) {
+            this.createdDialogMainThreadIds.remove(Long.valueOf(dialog_id));
+        } else if (!this.createdDialogMainThreadIds.contains(Long.valueOf(dialog_id))) {
             this.createdDialogMainThreadIds.add(Long.valueOf(dialog_id));
         } else {
-            this.createdDialogMainThreadIds.remove(Long.valueOf(dialog_id));
+            return;
         }
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
-                if (set) {
-                    MessagesController.this.createdDialogIds.add(Long.valueOf(dialog_id));
-                } else {
+                if (!set) {
                     MessagesController.this.createdDialogIds.remove(Long.valueOf(dialog_id));
+                } else if (!MessagesController.this.createdDialogIds.contains(Long.valueOf(dialog_id))) {
+                    MessagesController.this.createdDialogIds.add(Long.valueOf(dialog_id));
                 }
             }
         });
@@ -1720,9 +1771,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$16$2 */
-                    class C03262 implements Runnable {
-                        C03262() {
+                    /* renamed from: org.telegram.messenger.MessagesController$17$2 */
+                    class C03302 implements Runnable {
+                        C03302() {
                         }
 
                         public void run() {
@@ -1757,7 +1808,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 }
                             });
                         } else {
-                            AndroidUtilities.runOnUIThread(new C03262());
+                            AndroidUtilities.runOnUIThread(new C03302());
                         }
                     }
                 }), classGuid);
@@ -1953,9 +2004,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                        /* renamed from: org.telegram.messenger.MessagesController$21$1 */
-                        class C03291 implements Runnable {
-                            C03291() {
+                        /* renamed from: org.telegram.messenger.MessagesController$22$1 */
+                        class C03331 implements Runnable {
+                            C03331() {
                             }
 
                             public void run() {
@@ -1968,7 +2019,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
 
                         public void run(TLObject response, TL_error error) {
-                            AndroidUtilities.runOnUIThread(new C03291());
+                            AndroidUtilities.runOnUIThread(new C03331());
                         }
                     });
                 } else {
@@ -2151,9 +2202,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final ArrayList<Integer> mids = new ArrayList(this.currentDeletingTaskMids);
         AndroidUtilities.runOnUIThread(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$26$1 */
-            class C03311 implements Runnable {
-                C03311() {
+            /* renamed from: org.telegram.messenger.MessagesController$27$1 */
+            class C03351 implements Runnable {
+                C03351() {
                 }
 
                 public void run() {
@@ -2169,7 +2220,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     MessagesStorage.getInstance(MessagesController.this.currentAccount).emptyMessagesMedia(mids);
                 }
-                Utilities.stageQueue.postRunnable(new C03311());
+                Utilities.stageQueue.postRunnable(new C03351());
             }
         });
         return true;
@@ -2178,9 +2229,9 @@ public class MessagesController implements NotificationCenterDelegate {
     public void processLoadedDeleteTask(final int taskTime, final ArrayList<Integer> messages, int channelId) {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$27$1 */
-            class C03321 implements Runnable {
-                C03321() {
+            /* renamed from: org.telegram.messenger.MessagesController$28$1 */
+            class C03361 implements Runnable {
+                C03361() {
                 }
 
                 public void run() {
@@ -2198,7 +2249,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         MessagesController.this.currentDeleteTaskRunnable = null;
                     }
                     if (!MessagesController.this.checkDeletingTask(false)) {
-                        MessagesController.this.currentDeleteTaskRunnable = new C03321();
+                        MessagesController.this.currentDeleteTaskRunnable = new C03361();
                         Utilities.stageQueue.postRunnable(MessagesController.this.currentDeleteTaskRunnable, ((long) Math.abs(ConnectionsManager.getInstance(MessagesController.this.currentAccount).getCurrentTime() - MessagesController.this.currentDeletingTaskTime)) * 1000);
                         return;
                     }
@@ -2299,9 +2350,9 @@ public class MessagesController implements NotificationCenterDelegate {
             final boolean z = isMegagroup;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$31$1 */
-                class C03341 implements Runnable {
-                    C03341() {
+                /* renamed from: org.telegram.messenger.MessagesController$32$1 */
+                class C03381 implements Runnable {
+                    C03381() {
                     }
 
                     public void run() {
@@ -2312,7 +2363,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 public void run(TLObject response, final TL_error error) {
                     if (error == null) {
                         MessagesController.this.processUpdates((Updates) response, false);
-                        AndroidUtilities.runOnUIThread(new C03341(), 1000);
+                        AndroidUtilities.runOnUIThread(new C03381(), 1000);
                         return;
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2346,9 +2397,9 @@ public class MessagesController implements NotificationCenterDelegate {
             final boolean z = isMegagroup;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$32$1 */
-                class C03361 implements Runnable {
-                    C03361() {
+                /* renamed from: org.telegram.messenger.MessagesController$33$1 */
+                class C03401 implements Runnable {
+                    C03401() {
                     }
 
                     public void run() {
@@ -2359,7 +2410,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 public void run(TLObject response, final TL_error error) {
                     if (error == null) {
                         MessagesController.this.processUpdates((Updates) response, false);
-                        AndroidUtilities.runOnUIThread(new C03361(), 1000);
+                        AndroidUtilities.runOnUIThread(new C03401(), 1000);
                         return;
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2463,9 +2514,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(UPDATE_MASK_ALL));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$36$1 */
-                    class C03381 implements Runnable {
-                        C03381() {
+                    /* renamed from: org.telegram.messenger.MessagesController$37$1 */
+                    class C03421 implements Runnable {
+                        C03421() {
                         }
 
                         public void run() {
@@ -2490,7 +2541,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 users.add(user);
                                 MessagesStorage.getInstance(MessagesController.this.currentAccount).putUsersAndChats(users, null, false, true);
                                 user.photo = (UserProfilePhoto) response;
-                                AndroidUtilities.runOnUIThread(new C03381());
+                                AndroidUtilities.runOnUIThread(new C03421());
                             }
                         }
                     }
@@ -2824,9 +2875,9 @@ public class MessagesController implements NotificationCenterDelegate {
             j = did;
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$44$1 */
-                class C03401 implements Runnable {
-                    C03401() {
+                /* renamed from: org.telegram.messenger.MessagesController$45$1 */
+                class C03441 implements Runnable {
+                    C03441() {
                     }
 
                     public void run() {
@@ -2835,7 +2886,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
 
                 public void run() {
-                    AndroidUtilities.runOnUIThread(new C03401());
+                    AndroidUtilities.runOnUIThread(new C03441());
                 }
             });
         }
@@ -3153,7 +3204,11 @@ public class MessagesController implements NotificationCenterDelegate {
             AndroidUtilities.runOnUIThread(this.themeCheckRunnable);
             lastThemeCheckTime = currentTime;
         }
-        if (this.lastPushRegisterSendTime != 0 && Math.abs(SystemClock.uptimeMillis() - this.lastPushRegisterSendTime) >= 10800000) {
+        if (UserConfig.getInstance(this.currentAccount).savedPasswordHash != null && Math.abs(currentTime - lastPasswordCheckTime) >= 60) {
+            AndroidUtilities.runOnUIThread(this.passwordCheckRunnable);
+            lastPasswordCheckTime = currentTime;
+        }
+        if (this.lastPushRegisterSendTime != 0 && Math.abs(SystemClock.elapsedRealtime() - this.lastPushRegisterSendTime) >= 10800000) {
             GcmInstanceIDListenerService.sendRegistrationToServer(SharedConfig.pushString);
         }
         LocationController.getInstance(this.currentAccount).update();
@@ -3233,9 +3288,9 @@ public class MessagesController implements NotificationCenterDelegate {
             this.checkingProxyInfo = true;
             this.checkingProxyInfoRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getProxyData(), new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$58$2 */
-                class C03482 implements Runnable {
-                    C03482() {
+                /* renamed from: org.telegram.messenger.MessagesController$59$2 */
+                class C03522 implements Runnable {
+                    C03522() {
                     }
 
                     public void run() {
@@ -3294,12 +3349,12 @@ public class MessagesController implements NotificationCenterDelegate {
                             if (!noDialog) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
 
-                                    /* renamed from: org.telegram.messenger.MessagesController$58$1$1 */
-                                    class C19551 implements RequestDelegate {
+                                    /* renamed from: org.telegram.messenger.MessagesController$59$1$1 */
+                                    class C19761 implements RequestDelegate {
 
-                                        /* renamed from: org.telegram.messenger.MessagesController$58$1$1$2 */
-                                        class C03462 implements Runnable {
-                                            C03462() {
+                                        /* renamed from: org.telegram.messenger.MessagesController$59$1$1$2 */
+                                        class C03502 implements Runnable {
+                                            C03502() {
                                             }
 
                                             public void run() {
@@ -3318,7 +3373,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             }
                                         }
 
-                                        C19551() {
+                                        C19761() {
                                         }
 
                                         public void run(TLObject response, TL_error error) {
@@ -3326,7 +3381,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                                 MessagesController.this.checkingProxyInfoRequestId = 0;
                                                 final TL_messages_peerDialogs res2 = (TL_messages_peerDialogs) response;
                                                 if (res2 == null || res2.dialogs.isEmpty()) {
-                                                    AndroidUtilities.runOnUIThread(new C03462());
+                                                    AndroidUtilities.runOnUIThread(new C03502());
                                                 } else {
                                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
                                                     TL_messages_dialogs dialogs = new TL_messages_dialogs();
@@ -3334,7 +3389,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                                     dialogs.users = res2.users;
                                                     dialogs.dialogs = res2.dialogs;
                                                     dialogs.messages = res2.messages;
-                                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, false);
+                                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, 2);
                                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                                         public void run() {
                                                             MessagesController.this.putUsers(res.users, false);
@@ -3429,7 +3484,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             }
                                         }
                                         req.peers.add(peer);
-                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C19551());
+                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C19761());
                                     }
                                 });
                             }
@@ -3442,7 +3497,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             MessagesController.getGlobalMainSettings().edit().putLong("proxy_dialog", MessagesController.this.proxyDialogId).commit();
                             MessagesController.this.checkingProxyInfoRequestId = 0;
                             MessagesController.this.checkingProxyInfo = false;
-                            AndroidUtilities.runOnUIThread(new C03482());
+                            AndroidUtilities.runOnUIThread(new C03522());
                         }
                     }
                 }
@@ -3628,9 +3683,9 @@ public class MessagesController implements NotificationCenterDelegate {
                             typings.put(dialog_id, Boolean.valueOf(true));
                             reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                                /* renamed from: org.telegram.messenger.MessagesController$61$1 */
-                                class C03511 implements Runnable {
-                                    C03511() {
+                                /* renamed from: org.telegram.messenger.MessagesController$62$1 */
+                                class C03541 implements Runnable {
+                                    C03541() {
                                     }
 
                                     public void run() {
@@ -3642,7 +3697,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 }
 
                                 public void run(TLObject response, TL_error error) {
-                                    AndroidUtilities.runOnUIThread(new C03511());
+                                    AndroidUtilities.runOnUIThread(new C03541());
                                 }
                             }, 2);
                             if (classGuid != 0) {
@@ -3661,9 +3716,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         typings.put(dialog_id, Boolean.valueOf(true));
                         reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new RequestDelegate() {
 
-                            /* renamed from: org.telegram.messenger.MessagesController$62$1 */
-                            class C03521 implements Runnable {
-                                C03521() {
+                            /* renamed from: org.telegram.messenger.MessagesController$63$1 */
+                            class C03551 implements Runnable {
+                                C03551() {
                                 }
 
                                 public void run() {
@@ -3675,7 +3730,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             }
 
                             public void run(TLObject response, TL_error error) {
-                                AndroidUtilities.runOnUIThread(new C03521());
+                                AndroidUtilities.runOnUIThread(new C03551());
                             }
                         }, 2);
                         if (classGuid != 0) {
@@ -3732,7 +3787,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 dialogs.users = res.users;
                                 dialogs.dialogs = res.dialogs;
                                 dialogs.messages = res.messages;
-                                MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, false);
+                                MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, 0);
                             }
                             MessagesController.this.loadMessagesInternal(j, r6, r7, i, false, i2, r10, r11, dialog.top_message, z, r13, r14, dialog.unread_count, r15, r16, dialog.unread_mentions_count, false);
                         }
@@ -3870,9 +3925,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final boolean z4 = isEnd;
         Utilities.stageQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$66$1 */
-            class C03541 implements Runnable {
-                C03541() {
+            /* renamed from: org.telegram.messenger.MessagesController$67$1 */
+            class C03571 implements Runnable {
+                C03571() {
                 }
 
                 public void run() {
@@ -4014,7 +4069,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     });
                     return;
                 }
-                AndroidUtilities.runOnUIThread(new C03541());
+                AndroidUtilities.runOnUIThread(new C03571());
             }
         });
     }
@@ -4119,6 +4174,65 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
             });
+        }
+    }
+
+    public void loadGlobalNotificationsSettings() {
+        if (this.loadingNotificationSettings == 0 && !UserConfig.getInstance(this.currentAccount).notificationsSettingsLoaded) {
+            this.loadingNotificationSettings = 2;
+            for (int a = 0; a < 2; a++) {
+                TL_account_getNotifySettings req = new TL_account_getNotifySettings();
+                if (a == 0) {
+                    req.peer = new TL_inputNotifyChats();
+                } else if (a == 1) {
+                    req.peer = new TL_inputNotifyUsers();
+                }
+                final int type = a;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (response != null) {
+                                    MessagesController.this.loadingNotificationSettings = MessagesController.this.loadingNotificationSettings - 1;
+                                    TL_peerNotifySettings notify_settings = response;
+                                    Editor editor = MessagesController.this.notificationsPreferences.edit();
+                                    if (type == 0) {
+                                        if ((notify_settings.flags & 1) != 0) {
+                                            editor.putBoolean("EnablePreviewGroup", notify_settings.show_previews);
+                                        }
+                                        if ((notify_settings.flags & 2) != 0) {
+                                        }
+                                        if ((notify_settings.flags & 4) != 0) {
+                                            boolean z;
+                                            String str = "EnableGroup";
+                                            if (notify_settings.mute_until < ConnectionsManager.getInstance(MessagesController.this.currentAccount).getCurrentTime()) {
+                                                z = true;
+                                            } else {
+                                                z = false;
+                                            }
+                                            editor.putBoolean(str, z);
+                                        }
+                                    } else {
+                                        if ((notify_settings.flags & 1) != 0) {
+                                            editor.putBoolean("EnablePreviewAll", notify_settings.show_previews);
+                                        }
+                                        if ((notify_settings.flags & 2) != 0) {
+                                        }
+                                        if ((notify_settings.flags & 4) != 0) {
+                                            editor.putBoolean("EnableAll", notify_settings.mute_until < ConnectionsManager.getInstance(MessagesController.this.currentAccount).getCurrentTime());
+                                        }
+                                    }
+                                    editor.commit();
+                                    if (MessagesController.this.loadingNotificationSettings == 0) {
+                                        UserConfig.getInstance(MessagesController.this.currentAccount).notificationsSettingsLoaded = true;
+                                        UserConfig.getInstance(MessagesController.this.currentAccount).saveConfig(false);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -4293,9 +4407,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final LongSparseArray<MessageObject> longSparseArray2 = new_dialogMessage;
         Utilities.stageQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$71$1 */
-            class C03571 implements Runnable {
-                C03571() {
+            /* renamed from: org.telegram.messenger.MessagesController$73$1 */
+            class C03631 implements Runnable {
+                C03631() {
                 }
 
                 public void run() {
@@ -4359,7 +4473,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(i2);
                 MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastQtsValue(i3);
                 MessagesController.this.getDifference();
-                AndroidUtilities.runOnUIThread(new C03571());
+                AndroidUtilities.runOnUIThread(new C03631());
             }
         });
     }
@@ -4392,9 +4506,9 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$72$2 */
-                class C03602 implements Runnable {
-                    C03602() {
+                /* renamed from: org.telegram.messenger.MessagesController$74$2 */
+                class C03662 implements Runnable {
+                    C03662() {
                     }
 
                     public void run() {
@@ -4407,9 +4521,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         final messages_Dialogs dialogsRes = (messages_Dialogs) response;
                         MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.MessagesController$72$1$1 */
-                            class C03581 implements Runnable {
-                                C03581() {
+                            /* renamed from: org.telegram.messenger.MessagesController$74$1$1 */
+                            class C03641 implements Runnable {
+                                C03641() {
                                 }
 
                                 public void run() {
@@ -4579,13 +4693,13 @@ public class MessagesController implements NotificationCenterDelegate {
                                     MessagesController.this.processLoadedDialogs(dialogsRes, null, offsetId, 0, 0, false, true, false);
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
-                                    AndroidUtilities.runOnUIThread(new C03581());
+                                    AndroidUtilities.runOnUIThread(new C03641());
                                 }
                             }
                         });
                         return;
                     }
-                    AndroidUtilities.runOnUIThread(new C03602());
+                    AndroidUtilities.runOnUIThread(new C03662());
                 }
             });
         }
@@ -4602,9 +4716,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final ArrayList<EncryptedChat> arrayList = encChats;
         Utilities.stageQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$73$1 */
-            class C03611 implements Runnable {
-                C03611() {
+            /* renamed from: org.telegram.messenger.MessagesController$75$1 */
+            class C03671 implements Runnable {
+                C03671() {
                 }
 
                 public void run() {
@@ -4632,7 +4746,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     FileLog.m0d("loaded loadType " + i + " count " + messages_dialogs.dialogs.size());
                 }
                 if (i == 1 && messages_dialogs.dialogs.size() == 0) {
-                    AndroidUtilities.runOnUIThread(new C03611());
+                    AndroidUtilities.runOnUIThread(new C03671());
                     return;
                 }
                 int a;
@@ -4813,7 +4927,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             message.unread = z;
                         }
                     }
-                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(messages_dialogs, false);
+                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(messages_dialogs, 0);
                 }
                 if (i == 2) {
                     chat = (Chat) messages_dialogs.chats.get(0);
@@ -4952,7 +5066,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     private void applyDialogNotificationsSettings(long dialog_id, PeerNotifySettings notify_settings) {
-        int currentValue = this.notificationsPreferences.getInt("notify2_" + dialog_id, 0);
+        int currentValue = this.notificationsPreferences.getInt("notify2_" + dialog_id, -1);
         int currentValue2 = this.notificationsPreferences.getInt("notifyuntil_" + dialog_id, 0);
         Editor editor = this.notificationsPreferences.edit();
         boolean updated = false;
@@ -4960,8 +5074,21 @@ public class MessagesController implements NotificationCenterDelegate {
         if (dialog != null) {
             dialog.notify_settings = notify_settings;
         }
-        editor.putBoolean("silent_" + dialog_id, notify_settings.silent);
-        if (notify_settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+        if ((notify_settings.flags & 2) != 0) {
+            editor.putBoolean("silent_" + dialog_id, notify_settings.silent);
+        } else {
+            editor.remove("silent_" + dialog_id);
+        }
+        if ((notify_settings.flags & 4) == 0) {
+            if (currentValue != -1) {
+                updated = true;
+                if (dialog != null) {
+                    dialog.notify_settings.mute_until = 0;
+                }
+                editor.remove("notify2_" + dialog_id);
+            }
+            MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
+        } else if (notify_settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
             int until = 0;
             if (notify_settings.mute_until <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 31536000) {
                 if (!(currentValue == 3 && currentValue2 == notify_settings.mute_until)) {
@@ -4988,7 +5115,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (dialog != null) {
                     dialog.notify_settings.mute_until = 0;
                 }
-                editor.remove("notify2_" + dialog_id);
+                editor.putInt("notify2_" + dialog_id, 0);
             }
             MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
         }
@@ -5014,9 +5141,15 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     dialog_id = -dialog.peer.channel_id;
                 }
-                editor.putBoolean("silent_" + dialog_id, dialog.notify_settings.silent);
-                if (dialog.notify_settings.mute_until == 0) {
+                if ((dialog.notify_settings.flags & 2) != 0) {
+                    editor.putBoolean("silent_" + dialog_id, dialog.notify_settings.silent);
+                } else {
+                    editor.remove("silent_" + dialog_id);
+                }
+                if ((dialog.notify_settings.flags & 4) == 0) {
                     editor.remove("notify2_" + dialog_id);
+                } else if (dialog.notify_settings.mute_until <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+                    editor.putInt("notify2_" + dialog_id, 0);
                 } else if (dialog.notify_settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 31536000) {
                     editor.putInt("notify2_" + dialog_id, 2);
                     dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -5149,9 +5282,9 @@ public class MessagesController implements NotificationCenterDelegate {
                             tL_dialog = dialog;
                             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                                /* renamed from: org.telegram.messenger.MessagesController$76$1 */
-                                class C03641 implements Runnable {
-                                    C03641() {
+                                /* renamed from: org.telegram.messenger.MessagesController$78$1 */
+                                class C03701 implements Runnable {
+                                    C03701() {
                                     }
 
                                     public void run() {
@@ -5162,9 +5295,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                     }
                                 }
 
-                                /* renamed from: org.telegram.messenger.MessagesController$76$2 */
-                                class C03652 implements Runnable {
-                                    C03652() {
+                                /* renamed from: org.telegram.messenger.MessagesController$78$2 */
+                                class C03712 implements Runnable {
+                                    C03712() {
                                     }
 
                                     public void run() {
@@ -5176,7 +5309,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (response != null) {
                                         messages_Messages res = (messages_Messages) response;
                                         if (res.messages.isEmpty()) {
-                                            AndroidUtilities.runOnUIThread(new C03641());
+                                            AndroidUtilities.runOnUIThread(new C03701());
                                         } else {
                                             TL_messages_dialogs dialogs = new TL_messages_dialogs();
                                             Message newMessage = (Message) res.messages.get(0);
@@ -5208,7 +5341,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (newTaskId != 0) {
                                         MessagesStorage.getInstance(MessagesController.this.currentAccount).removePendingTask(newTaskId);
                                     }
-                                    AndroidUtilities.runOnUIThread(new C03652());
+                                    AndroidUtilities.runOnUIThread(new C03712());
                                 }
                             });
                         }
@@ -5565,7 +5698,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     private void checkReadTasks() {
-        long time = SystemClock.uptimeMillis();
+        long time = SystemClock.elapsedRealtime();
         int a = 0;
         int size = this.readTasks.size();
         while (a < size) {
@@ -5634,9 +5767,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 final boolean z = popup;
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$89$1 */
-                    class C03681 implements Runnable {
-                        C03681() {
+                    /* renamed from: org.telegram.messenger.MessagesController$91$1 */
+                    class C03741 implements Runnable {
+                        C03741() {
                         }
 
                         public void run() {
@@ -5676,7 +5809,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
 
                     public void run() {
-                        AndroidUtilities.runOnUIThread(new C03681());
+                        AndroidUtilities.runOnUIThread(new C03741());
                     }
                 });
                 createReadTask = maxPositiveId != Integer.MAX_VALUE;
@@ -5694,9 +5827,9 @@ public class MessagesController implements NotificationCenterDelegate {
             final int i4 = maxNegativeId;
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$90$1 */
-                class C03701 implements Runnable {
-                    C03701() {
+                /* renamed from: org.telegram.messenger.MessagesController$92$1 */
+                class C03751 implements Runnable {
+                    C03751() {
                     }
 
                     public void run() {
@@ -5729,7 +5862,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
 
                 public void run() {
-                    AndroidUtilities.runOnUIThread(new C03701());
+                    AndroidUtilities.runOnUIThread(new C03751());
                 }
             });
             if (chat != null && chat.ttl > 0) {
@@ -5750,7 +5883,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (currentReadTask == null) {
                         currentReadTask = new ReadTask();
                         currentReadTask.dialogId = j2;
-                        currentReadTask.sendRequestTime = SystemClock.uptimeMillis() + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+                        currentReadTask.sendRequestTime = SystemClock.elapsedRealtime() + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
                         if (!z3) {
                             MessagesController.this.readTasksMap.put(j2, currentReadTask);
                             MessagesController.this.readTasks.add(currentReadTask);
@@ -5911,9 +6044,9 @@ public class MessagesController implements NotificationCenterDelegate {
         progressDialog.setCancelable(false);
         final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$94$1 */
-            class C03751 implements Runnable {
-                C03751() {
+            /* renamed from: org.telegram.messenger.MessagesController$96$1 */
+            class C03801 implements Runnable {
+                C03801() {
                 }
 
                 public void run() {
@@ -5927,9 +6060,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
 
-            /* renamed from: org.telegram.messenger.MessagesController$94$2 */
-            class C03762 implements Runnable {
-                C03762() {
+            /* renamed from: org.telegram.messenger.MessagesController$96$2 */
+            class C03812 implements Runnable {
+                C03812() {
                 }
 
                 public void run() {
@@ -5950,12 +6083,12 @@ public class MessagesController implements NotificationCenterDelegate {
 
             public void run(TLObject response, TL_error error) {
                 if (error == null) {
-                    AndroidUtilities.runOnUIThread(new C03751());
+                    AndroidUtilities.runOnUIThread(new C03801());
                     Updates updates = (Updates) response;
                     MessagesController.this.processUpdates((Updates) response, false);
                     return;
                 }
-                AndroidUtilities.runOnUIThread(new C03762());
+                AndroidUtilities.runOnUIThread(new C03812());
             }
         });
         progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
@@ -6014,9 +6147,9 @@ public class MessagesController implements NotificationCenterDelegate {
         req.enabled = enabled;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$98$1 */
-            class C03781 implements Runnable {
-                C03781() {
+            /* renamed from: org.telegram.messenger.MessagesController$100$1 */
+            class C02841 implements Runnable {
+                C02841() {
                 }
 
                 public void run() {
@@ -6027,7 +6160,7 @@ public class MessagesController implements NotificationCenterDelegate {
             public void run(TLObject response, TL_error error) {
                 if (response != null) {
                     MessagesController.this.processUpdates((Updates) response, false);
-                    AndroidUtilities.runOnUIThread(new C03781());
+                    AndroidUtilities.runOnUIThread(new C02841());
                 }
             }
         }, 64);
@@ -6039,9 +6172,9 @@ public class MessagesController implements NotificationCenterDelegate {
         req.enabled = enabled;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$99$1 */
-            class C03791 implements Runnable {
-                C03791() {
+            /* renamed from: org.telegram.messenger.MessagesController$101$1 */
+            class C02851 implements Runnable {
+                C02851() {
                 }
 
                 public void run() {
@@ -6052,7 +6185,7 @@ public class MessagesController implements NotificationCenterDelegate {
             public void run(TLObject response, TL_error error) {
                 if (response != null) {
                     MessagesController.this.processUpdates((Updates) response, false);
-                    AndroidUtilities.runOnUIThread(new C03791());
+                    AndroidUtilities.runOnUIThread(new C02851());
                 }
             }
         }, 64);
@@ -6065,9 +6198,9 @@ public class MessagesController implements NotificationCenterDelegate {
             req.about = about;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$100$1 */
-                class C02821 implements Runnable {
-                    C02821() {
+                /* renamed from: org.telegram.messenger.MessagesController$102$1 */
+                class C02861 implements Runnable {
+                    C02861() {
                     }
 
                     public void run() {
@@ -6079,7 +6212,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
                 public void run(TLObject response, TL_error error) {
                     if (response instanceof TL_boolTrue) {
-                        AndroidUtilities.runOnUIThread(new C02821());
+                        AndroidUtilities.runOnUIThread(new C02861());
                     }
                 }
             }, 64);
@@ -6092,9 +6225,9 @@ public class MessagesController implements NotificationCenterDelegate {
         req.username = userName;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$101$1 */
-            class C02831 implements Runnable {
-                C02831() {
+            /* renamed from: org.telegram.messenger.MessagesController$103$1 */
+            class C02871 implements Runnable {
+                C02871() {
                 }
 
                 public void run() {
@@ -6114,7 +6247,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
             public void run(TLObject response, TL_error error) {
                 if (response instanceof TL_boolTrue) {
-                    AndroidUtilities.runOnUIThread(new C02831());
+                    AndroidUtilities.runOnUIThread(new C02871());
                 }
             }
         }, 64);
@@ -6205,9 +6338,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 final BaseFragment baseFragment = fragment;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$105$1 */
-                    class C02841 implements Runnable {
-                        C02841() {
+                    /* renamed from: org.telegram.messenger.MessagesController$107$1 */
+                    class C02881 implements Runnable {
+                        C02881() {
                         }
 
                         public void run() {
@@ -6215,9 +6348,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     }
 
-                    /* renamed from: org.telegram.messenger.MessagesController$105$3 */
-                    class C02863 implements Runnable {
-                        C02863() {
+                    /* renamed from: org.telegram.messenger.MessagesController$107$3 */
+                    class C02903 implements Runnable {
+                        C02903() {
                         }
 
                         public void run() {
@@ -6227,7 +6360,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
                     public void run(TLObject response, final TL_error error) {
                         if (isChannel && (inputUser instanceof TL_inputUserSelf)) {
-                            AndroidUtilities.runOnUIThread(new C02841());
+                            AndroidUtilities.runOnUIThread(new C02881());
                         }
                         if (error != null) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -6261,7 +6394,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             if (!hasJoinMessage && (inputUser instanceof TL_inputUserSelf)) {
                                 MessagesController.this.generateJoinMessage(i, true);
                             }
-                            AndroidUtilities.runOnUIThread(new C02863(), 1000);
+                            AndroidUtilities.runOnUIThread(new C02903(), 1000);
                         }
                         if (isChannel && (inputUser instanceof TL_inputUserSelf)) {
                             MessagesStorage.getInstance(MessagesController.this.currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, i);
@@ -6339,9 +6472,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 final int i = chat_id;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$106$1 */
-                    class C02871 implements Runnable {
-                        C02871() {
+                    /* renamed from: org.telegram.messenger.MessagesController$108$1 */
+                    class C02911 implements Runnable {
+                        C02911() {
                         }
 
                         public void run() {
@@ -6349,9 +6482,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     }
 
-                    /* renamed from: org.telegram.messenger.MessagesController$106$2 */
-                    class C02882 implements Runnable {
-                        C02882() {
+                    /* renamed from: org.telegram.messenger.MessagesController$108$2 */
+                    class C02922 implements Runnable {
+                        C02922() {
                         }
 
                         public void run() {
@@ -6361,12 +6494,12 @@ public class MessagesController implements NotificationCenterDelegate {
 
                     public void run(TLObject response, TL_error error) {
                         if (user2.id == UserConfig.getInstance(MessagesController.this.currentAccount).getClientUserId()) {
-                            AndroidUtilities.runOnUIThread(new C02871());
+                            AndroidUtilities.runOnUIThread(new C02911());
                         }
                         if (error == null) {
                             MessagesController.this.processUpdates((Updates) response, false);
                             if (isChannel && !(inputUser instanceof TL_inputUserSelf)) {
-                                AndroidUtilities.runOnUIThread(new C02882(), 1000);
+                                AndroidUtilities.runOnUIThread(new C02922(), 1000);
                             }
                         }
                     }
@@ -6523,7 +6656,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!TextUtils.isEmpty(regid) && !this.registeringForPush && UserConfig.getInstance(this.currentAccount).getClientUserId() != 0) {
             if (!UserConfig.getInstance(this.currentAccount).registeredForPush || !regid.equals(SharedConfig.pushString)) {
                 this.registeringForPush = true;
-                this.lastPushRegisterSendTime = SystemClock.uptimeMillis();
+                this.lastPushRegisterSendTime = SystemClock.elapsedRealtime();
                 if (SharedConfig.pushAuthKey == null) {
                     SharedConfig.pushAuthKey = new byte[256];
                     Utilities.random.nextBytes(SharedConfig.pushAuthKey);
@@ -6541,9 +6674,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$112$1 */
-                    class C02891 implements Runnable {
-                        C02891() {
+                    /* renamed from: org.telegram.messenger.MessagesController$114$1 */
+                    class C02931 implements Runnable {
+                        C02931() {
                         }
 
                         public void run() {
@@ -6560,7 +6693,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             SharedConfig.pushString = regid;
                             UserConfig.getInstance(MessagesController.this.currentAccount).saveConfig(false);
                         }
-                        AndroidUtilities.runOnUIThread(new C02891());
+                        AndroidUtilities.runOnUIThread(new C02931());
                     }
                 });
             }
@@ -6989,9 +7122,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                         });
                                         MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                                            /* renamed from: org.telegram.messenger.MessagesController$120$2$2 */
-                                            class C02952 implements Runnable {
-                                                C02952() {
+                                            /* renamed from: org.telegram.messenger.MessagesController$122$2$2 */
+                                            class C02992 implements Runnable {
+                                                C02992() {
                                                 }
 
                                                 public void run() {
@@ -7071,9 +7204,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                                             });
                                                             MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                                                                /* renamed from: org.telegram.messenger.MessagesController$120$2$2$2$1 */
-                                                                class C02931 implements Runnable {
-                                                                    C02931() {
+                                                                /* renamed from: org.telegram.messenger.MessagesController$122$2$2$2$1 */
+                                                                class C02971 implements Runnable {
+                                                                    C02971() {
                                                                     }
 
                                                                     public void run() {
@@ -7083,7 +7216,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
                                                                 public void run() {
                                                                     if (!pushMessages.isEmpty()) {
-                                                                        AndroidUtilities.runOnUIThread(new C02931());
+                                                                        AndroidUtilities.runOnUIThread(new C02971());
                                                                     }
                                                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).putMessages(res.new_messages, true, false, false, DownloadController.getInstance(MessagesController.this.currentAccount).getAutodownloadMask());
                                                                 }
@@ -7170,7 +7303,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                                         });
                                                     }
                                                 }
-                                                Utilities.stageQueue.postRunnable(new C02952());
+                                                Utilities.stageQueue.postRunnable(new C02992());
                                             }
                                         });
                                         return;
@@ -7364,9 +7497,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         });
                         MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.MessagesController$121$3$2 */
-                            class C03042 implements Runnable {
-                                C03042() {
+                            /* renamed from: org.telegram.messenger.MessagesController$123$3$2 */
+                            class C03082 implements Runnable {
+                                C03082() {
                                 }
 
                                 public void run() {
@@ -7447,9 +7580,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                         });
                                         MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                                            /* renamed from: org.telegram.messenger.MessagesController$121$3$2$2$1 */
-                                            class C03021 implements Runnable {
-                                                C03021() {
+                                            /* renamed from: org.telegram.messenger.MessagesController$123$3$2$2$1 */
+                                            class C03061 implements Runnable {
+                                                C03061() {
                                                 }
 
                                                 public void run() {
@@ -7467,7 +7600,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
                                             public void run() {
                                                 if (!pushMessages.isEmpty()) {
-                                                    AndroidUtilities.runOnUIThread(new C03021());
+                                                    AndroidUtilities.runOnUIThread(new C03061());
                                                 }
                                                 MessagesStorage.getInstance(MessagesController.this.currentAccount).putMessages(res.new_messages, true, false, false, DownloadController.getInstance(MessagesController.this.currentAccount).getAutodownloadMask());
                                             }
@@ -7530,7 +7663,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                         });
                                     }
                                 }
-                                Utilities.stageQueue.postRunnable(new C03042());
+                                Utilities.stageQueue.postRunnable(new C03082());
                             }
                         });
                         return;
@@ -7850,9 +7983,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                         MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.MessagesController$125$1$1 */
-                            class C03071 implements Runnable {
-                                C03071() {
+                            /* renamed from: org.telegram.messenger.MessagesController$127$1$1 */
+                            class C03111 implements Runnable {
+                                C03111() {
                                 }
 
                                 public void run() {
@@ -7949,14 +8082,14 @@ public class MessagesController implements NotificationCenterDelegate {
                                         NotificationCenter.getInstance(MessagesController.this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                                     }
                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).unpinAllDialogsExceptNew(pinnedDialogs);
-                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(toCache, true);
+                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(toCache, 1);
                                     UserConfig.getInstance(MessagesController.this.currentAccount).pinnedDialogsLoaded = true;
                                     UserConfig.getInstance(MessagesController.this.currentAccount).saveConfig(false);
                                 }
                             }
 
                             public void run() {
-                                AndroidUtilities.runOnUIThread(new C03071());
+                                AndroidUtilities.runOnUIThread(new C03111());
                             }
                         });
                     }
@@ -7992,9 +8125,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 pushMessages.add(new MessageObject(this.currentAccount, message, true));
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$126$1 */
-                    class C03091 implements Runnable {
-                        C03091() {
+                    /* renamed from: org.telegram.messenger.MessagesController$128$1 */
+                    class C03131 implements Runnable {
+                        C03131() {
                         }
 
                         public void run() {
@@ -8003,7 +8136,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
 
                     public void run() {
-                        AndroidUtilities.runOnUIThread(new C03091());
+                        AndroidUtilities.runOnUIThread(new C03131());
                     }
                 });
                 MessagesStorage.getInstance(this.currentAccount).putMessages(messagesArr, true, true, false, 0);
@@ -8066,9 +8199,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                     pushMessages.add(new MessageObject(MessagesController.this.currentAccount, message, usersDict, true));
                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                                        /* renamed from: org.telegram.messenger.MessagesController$128$1$2$1 */
-                                        class C03111 implements Runnable {
-                                            C03111() {
+                                        /* renamed from: org.telegram.messenger.MessagesController$130$1$2$1 */
+                                        class C03151 implements Runnable {
+                                            C03151() {
                                             }
 
                                             public void run() {
@@ -8077,7 +8210,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                         }
 
                                         public void run() {
-                                            AndroidUtilities.runOnUIThread(new C03111());
+                                            AndroidUtilities.runOnUIThread(new C03151());
                                         }
                                     });
                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).putMessages(messagesArr, true, true, false, 0);
@@ -8420,9 +8553,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     final ArrayList<MessageObject> arrayList2 = objArr;
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                        /* renamed from: org.telegram.messenger.MessagesController$131$1 */
-                        class C03141 implements Runnable {
-                            C03141() {
+                        /* renamed from: org.telegram.messenger.MessagesController$133$1 */
+                        class C03181 implements Runnable {
+                            C03181() {
                             }
 
                             public void run() {
@@ -8431,7 +8564,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
 
                         public void run() {
-                            AndroidUtilities.runOnUIThread(new C03141());
+                            AndroidUtilities.runOnUIThread(new C03181());
                         }
                     });
                 }
@@ -9284,9 +9417,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 final TL_updateUserBlocked tL_updateUserBlocked = finalUpdate;
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$136$1 */
-                    class C03151 implements Runnable {
-                        C03151() {
+                    /* renamed from: org.telegram.messenger.MessagesController$138$1 */
+                    class C03191 implements Runnable {
+                        C03191() {
                         }
 
                         public void run() {
@@ -9300,7 +9433,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
 
                     public void run() {
-                        AndroidUtilities.runOnUIThread(new C03151());
+                        AndroidUtilities.runOnUIThread(new C03191());
                     }
                 });
             } else if (baseUpdate instanceof TL_updateNotifySettings) {
@@ -9667,9 +9800,9 @@ public class MessagesController implements NotificationCenterDelegate {
             final ArrayList<MessageObject> arrayList3 = pushMessages;
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.MessagesController$138$1 */
-                class C03161 implements Runnable {
-                    C03161() {
+                /* renamed from: org.telegram.messenger.MessagesController$140$1 */
+                class C03201 implements Runnable {
+                    C03201() {
                     }
 
                     public void run() {
@@ -9678,7 +9811,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
 
                 public void run() {
-                    AndroidUtilities.runOnUIThread(new C03161());
+                    AndroidUtilities.runOnUIThread(new C03201());
                 }
             });
         }
@@ -9711,9 +9844,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final int i = interfaceUpdateMaskFinal;
         AndroidUtilities.runOnUIThread(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$139$3 */
-            class C19543 implements RequestDelegate {
-                C19543() {
+            /* renamed from: org.telegram.messenger.MessagesController$141$3 */
+            class C19753 implements RequestDelegate {
+                C19753() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -9867,46 +10000,76 @@ public class MessagesController implements NotificationCenterDelegate {
                             dbUsers.add(toDbUser);
                         } else if (baseUpdate instanceof TL_updateNotifySettings) {
                             TL_updateNotifySettings update7 = (TL_updateNotifySettings) baseUpdate;
-                            if ((update7.notify_settings instanceof TL_peerNotifySettings) && (update7.peer instanceof TL_notifyPeer)) {
+                            if (update7.notify_settings instanceof TL_peerNotifySettings) {
                                 if (editor == null) {
                                     editor = MessagesController.this.notificationsPreferences.edit();
                                 }
-                                if (update7.peer.peer.user_id != 0) {
-                                    dialog_id = (long) update7.peer.peer.user_id;
-                                } else if (update7.peer.peer.chat_id != 0) {
-                                    dialog_id = (long) (-update7.peer.peer.chat_id);
-                                } else {
-                                    dialog_id = (long) (-update7.peer.peer.channel_id);
-                                }
-                                dialog = (TL_dialog) MessagesController.this.dialogs_dict.get(dialog_id);
-                                if (dialog != null) {
-                                    dialog.notify_settings = update7.notify_settings;
-                                }
-                                editor.putBoolean("silent_" + dialog_id, update7.notify_settings.silent);
                                 int currentTime = ConnectionsManager.getInstance(MessagesController.this.currentAccount).getCurrentTime();
-                                if (update7.notify_settings.mute_until > currentTime) {
-                                    int until = 0;
-                                    if (update7.notify_settings.mute_until > 31536000 + currentTime) {
-                                        editor.putInt("notify2_" + dialog_id, 2);
-                                        if (dialog != null) {
-                                            dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
-                                        }
+                                if (update7.peer instanceof TL_notifyPeer) {
+                                    if (update7.peer.peer.user_id != 0) {
+                                        dialog_id = (long) update7.peer.peer.user_id;
+                                    } else if (update7.peer.peer.chat_id != 0) {
+                                        dialog_id = (long) (-update7.peer.peer.chat_id);
                                     } else {
-                                        until = update7.notify_settings.mute_until;
-                                        editor.putInt("notify2_" + dialog_id, 3);
-                                        editor.putInt("notifyuntil_" + dialog_id, update7.notify_settings.mute_until);
-                                        if (dialog != null) {
-                                            dialog.notify_settings.mute_until = until;
-                                        }
+                                        dialog_id = (long) (-update7.peer.peer.channel_id);
                                     }
-                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, (((long) until) << 32) | 1);
-                                    NotificationsController.getInstance(MessagesController.this.currentAccount).removeNotificationsForDialog(dialog_id);
-                                } else {
+                                    dialog = (TL_dialog) MessagesController.this.dialogs_dict.get(dialog_id);
                                     if (dialog != null) {
-                                        dialog.notify_settings.mute_until = 0;
+                                        dialog.notify_settings = update7.notify_settings;
                                     }
-                                    editor.remove("notify2_" + dialog_id);
-                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, 0);
+                                    if ((update7.notify_settings.flags & 2) != 0) {
+                                        editor.putBoolean("silent_" + dialog_id, update7.notify_settings.silent);
+                                    } else {
+                                        editor.remove("silent_" + dialog_id);
+                                    }
+                                    if ((update7.notify_settings.flags & 4) == 0) {
+                                        if (dialog != null) {
+                                            update7.notify_settings.mute_until = 0;
+                                        }
+                                        editor.remove("notify2_" + dialog_id);
+                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, 0);
+                                    } else if (update7.notify_settings.mute_until > currentTime) {
+                                        int until = 0;
+                                        if (update7.notify_settings.mute_until > 31536000 + currentTime) {
+                                            editor.putInt("notify2_" + dialog_id, 2);
+                                            if (dialog != null) {
+                                                update7.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                                            }
+                                        } else {
+                                            until = update7.notify_settings.mute_until;
+                                            editor.putInt("notify2_" + dialog_id, 3);
+                                            editor.putInt("notifyuntil_" + dialog_id, update7.notify_settings.mute_until);
+                                            if (dialog != null) {
+                                                update7.notify_settings.mute_until = until;
+                                            }
+                                        }
+                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, (((long) until) << 32) | 1);
+                                        NotificationsController.getInstance(MessagesController.this.currentAccount).removeNotificationsForDialog(dialog_id);
+                                    } else {
+                                        if (dialog != null) {
+                                            update7.notify_settings.mute_until = 0;
+                                        }
+                                        editor.putInt("notify2_" + dialog_id, 0);
+                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, 0);
+                                    }
+                                } else if (update7.peer instanceof TL_notifyChats) {
+                                    if ((update7.notify_settings.flags & 1) != 0) {
+                                        editor.putBoolean("EnablePreviewGroup", update7.notify_settings.show_previews);
+                                    }
+                                    if ((update7.notify_settings.flags & 2) != 0) {
+                                    }
+                                    if ((update7.notify_settings.flags & 4) != 0) {
+                                        editor.putBoolean("EnableGroup", update7.notify_settings.mute_until < currentTime);
+                                    }
+                                } else if (update7.peer instanceof TL_notifyUsers) {
+                                    if ((update7.notify_settings.flags & 1) != 0) {
+                                        editor.putBoolean("EnablePreviewAll", update7.notify_settings.show_previews);
+                                    }
+                                    if ((update7.notify_settings.flags & 2) != 0) {
+                                    }
+                                    if ((update7.notify_settings.flags & 4) != 0) {
+                                        editor.putBoolean("EnableAll", update7.notify_settings.mute_until < currentTime);
+                                    }
                                 }
                             }
                         } else if (baseUpdate instanceof TL_updateChannel) {
@@ -9995,7 +10158,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                         req.peer.access_hash = call.access_hash;
                                         req.peer.id = call.id;
                                         req.reason = new TL_phoneCallDiscardReasonBusy();
-                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C19543());
+                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C19753());
                                     }
                                 } else if (BuildVars.LOGS_ENABLED) {
                                     FileLog.m0d("ignoring too old call");
@@ -10155,9 +10318,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final SparseIntArray clearHistoryMessagesFinal = clearHistoryMessages;
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.MessagesController$140$1 */
-            class C03191 implements Runnable {
-                C03191() {
+            /* renamed from: org.telegram.messenger.MessagesController$142$1 */
+            class C03231 implements Runnable {
+                C03231() {
                 }
 
                 public void run() {
@@ -10281,7 +10444,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C03191());
+                AndroidUtilities.runOnUIThread(new C03231());
             }
         });
         if (webPages != null) {
@@ -10330,12 +10493,17 @@ public class MessagesController implements NotificationCenterDelegate {
         return true;
     }
 
-    private boolean isNotifySettingsMuted(PeerNotifySettings settings) {
-        return (settings instanceof TL_peerNotifySettings) && settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-    }
-
     public boolean isDialogMuted(long dialog_id) {
-        int mute_type = this.notificationsPreferences.getInt("notify2_" + dialog_id, 0);
+        int mute_type = this.notificationsPreferences.getInt("notify2_" + dialog_id, -1);
+        if (mute_type == -1) {
+            if (((int) dialog_id) < 0) {
+                if (!this.notificationsPreferences.getBoolean("EnableGroup", true)) {
+                    return true;
+                }
+            } else if (!this.notificationsPreferences.getBoolean("EnableAll", true)) {
+                return true;
+            }
+        }
         if (mute_type == 2) {
             return true;
         }
@@ -10777,9 +10945,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 });
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.MessagesController$146$1 */
-                    class C03221 implements OnClickListener {
-                        C03221() {
+                    /* renamed from: org.telegram.messenger.MessagesController$148$1 */
+                    class C03261 implements OnClickListener {
+                        C03261() {
                         }
 
                         public void onClick(DialogInterface dialog, int which) {
@@ -10797,7 +10965,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
                             progressDialog[0].setCanceledOnTouchOutside(false);
                             progressDialog[0].setCancelable(false);
-                            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C03221());
+                            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C03261());
                             fragment.showDialog(progressDialog[0]);
                         }
                     }

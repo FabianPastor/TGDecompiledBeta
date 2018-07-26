@@ -85,11 +85,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private int selfUserId;
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$3 */
-    class C08143 implements Runnable {
+    class C08183 implements Runnable {
 
         /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$3$1 */
-        class C08121 implements Comparator<RecentSearchObject> {
-            C08121() {
+        class C08161 implements Comparator<RecentSearchObject> {
+            C08161() {
             }
 
             public int compare(RecentSearchObject lhs, RecentSearchObject rhs) {
@@ -103,7 +103,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
         }
 
-        C08143() {
+        C08183() {
         }
 
         public void run() {
@@ -190,7 +190,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                     }
                 }
-                Collections.sort(arrayList, new C08121());
+                Collections.sort(arrayList, new C08161());
                 final LongSparseArray<RecentSearchObject> longSparseArray = hashMap;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -204,8 +204,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$5 */
-    class C08165 implements Runnable {
-        C08165() {
+    class C08205 implements Runnable {
+        C08205() {
         }
 
         public void run() {
@@ -244,8 +244,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
-    class C20331 implements SearchAdapterHelperDelegate {
-        C20331() {
+    class C20541 implements SearchAdapterHelperDelegate {
+        C20541() {
         }
 
         public void onDataSetChanged() {
@@ -314,7 +314,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
-        this.searchAdapterHelper.setDelegate(new C20331());
+        this.searchAdapterHelper.setDelegate(new C20541());
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
@@ -448,7 +448,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void loadRecentSearch() {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08143());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08183());
     }
 
     public void putRecentSearch(final long did, TLObject object) {
@@ -484,7 +484,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.recentSearchObjectsById = new LongSparseArray();
         this.recentSearchObjects = new ArrayList();
         notifyDataSetChanged();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08165());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08205());
     }
 
     public void addHashtagsFromMessage(CharSequence message) {
@@ -512,8 +512,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$6$1 */
-                class C08171 implements Comparator<DialogSearchResult> {
-                    C08171() {
+                class C08211 implements Comparator<DialogSearchResult> {
+                    C08211() {
                     }
 
                     public int compare(DialogSearchResult lhs, DialogSearchResult rhs) {
@@ -769,7 +769,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                 arrayList.add(dialogSearchResult);
                             }
                         }
-                        Collections.sort(arrayList, new C08171());
+                        Collections.sort(arrayList, new C08211());
                         ArrayList<TLObject> resultArray = new ArrayList();
                         ArrayList<CharSequence> resultArrayNames = new ArrayList();
                         for (a = 0; a < arrayList.size(); a++) {
@@ -917,8 +917,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$8$1 */
-                class C08201 implements Runnable {
-                    C08201() {
+                class C08241 implements Runnable {
+                    C08241() {
                     }
 
                     public void run() {
@@ -938,7 +938,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         FileLog.m3e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
-                    AndroidUtilities.runOnUIThread(new C08201());
+                    AndroidUtilities.runOnUIThread(new C08241());
                 }
             }, 200, 300);
         }

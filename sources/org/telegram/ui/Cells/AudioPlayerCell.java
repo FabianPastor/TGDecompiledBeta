@@ -272,7 +272,9 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             cacheFile.delete();
         }
         boolean fileExists = cacheFile.exists();
-        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0) {
+        if (!SharedConfig.streamMedia || ((int) this.currentMessageObject.getDialogId()) == 0) {
+            this.miniButtonState = -1;
+        } else {
             this.hasMiniProgress = fileExists ? 1 : 2;
             fileExists = true;
         }

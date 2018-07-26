@@ -140,16 +140,16 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             static final int REMOVE_TILE = 3;
             static final int UPDATE_ITEM_COUNT = 1;
             private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
-            private Runnable mMainThreadRunnable = new C06811();
+            private Runnable mMainThreadRunnable = new C06851();
             final MessageQueue mQueue = new MessageQueue();
 
             /* renamed from: org.telegram.messenger.support.util.MessageThreadUtil$1$1 */
-            class C06811 implements Runnable {
-                C06811() {
+            class C06851 implements Runnable {
+                C06851() {
                 }
 
                 public void run() {
-                    SyncQueueItem msg = C20041.this.mQueue.next();
+                    SyncQueueItem msg = C20251.this.mQueue.next();
                     while (msg != null) {
                         switch (msg.what) {
                             case 1:
@@ -165,7 +165,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                 Log.e("ThreadUtil", "Unsupported message, what=" + msg.what);
                                 break;
                         }
-                        msg = C20041.this.mQueue.next();
+                        msg = C20251.this.mQueue.next();
                     }
                 }
             }
@@ -195,28 +195,28 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             static final int RECYCLE_TILE = 4;
             static final int REFRESH = 1;
             static final int UPDATE_RANGE = 2;
-            private Runnable mBackgroundRunnable = new C06821();
+            private Runnable mBackgroundRunnable = new C06861();
             AtomicBoolean mBackgroundRunning = new AtomicBoolean(false);
             private final Executor mExecutor = AsyncTask.THREAD_POOL_EXECUTOR;
             final MessageQueue mQueue = new MessageQueue();
 
             /* renamed from: org.telegram.messenger.support.util.MessageThreadUtil$2$1 */
-            class C06821 implements Runnable {
-                C06821() {
+            class C06861 implements Runnable {
+                C06861() {
                 }
 
                 public void run() {
                     while (true) {
-                        SyncQueueItem msg = C20052.this.mQueue.next();
+                        SyncQueueItem msg = C20262.this.mQueue.next();
                         if (msg != null) {
                             switch (msg.what) {
                                 case 1:
-                                    C20052.this.mQueue.removeMessages(1);
+                                    C20262.this.mQueue.removeMessages(1);
                                     callback.refresh(msg.arg1);
                                     break;
                                 case 2:
-                                    C20052.this.mQueue.removeMessages(2);
-                                    C20052.this.mQueue.removeMessages(3);
+                                    C20262.this.mQueue.removeMessages(2);
+                                    C20262.this.mQueue.removeMessages(3);
                                     callback.updateRange(msg.arg1, msg.arg2, msg.arg3, msg.arg4, msg.arg5);
                                     break;
                                 case 3:
@@ -230,7 +230,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                     break;
                             }
                         }
-                        C20052.this.mBackgroundRunning.set(false);
+                        C20262.this.mBackgroundRunning.set(false);
                         return;
                     }
                 }

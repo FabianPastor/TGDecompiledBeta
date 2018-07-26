@@ -240,8 +240,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             messagesStorage.getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MusicBrowserService$1$1 */
-                class C04181 implements Runnable {
-                    C04181() {
+                class C04211 implements Runnable {
+                    C04211() {
                     }
 
                     public void run() {
@@ -352,7 +352,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C04181());
+                    AndroidUtilities.runOnUIThread(new C04211());
                 }
             });
         }

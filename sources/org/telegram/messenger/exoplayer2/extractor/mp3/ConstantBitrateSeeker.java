@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
@@ -20,7 +20,7 @@ final class ConstantBitrateSeeker implements Seeker {
         this.bitrate = mpegAudioHeader.bitrate;
         if (inputLength == -1) {
             this.dataSize = -1;
-            this.durationUs = C0555C.TIME_UNSET;
+            this.durationUs = C0559C.TIME_UNSET;
             return;
         }
         this.dataSize = inputLength - firstFramePosition;

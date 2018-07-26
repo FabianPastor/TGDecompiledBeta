@@ -154,6 +154,7 @@
     <string name="AreTypingGroup">%1$s zijn aan het typen...</string>
     <string name="AreYouSure">Weet je het zeker?</string>
     <string name="AreYouSureBlockContact">Weet je zeker dat je deze persoon wilt blokkeren?</string>
+    <string name="AreYouSureClearDrafts">Echt alle Cloud-conceptberichten wissen?</string>
     <string name="AreYouSureClearHistory">Geschiedenis echt wissen? </string>
     <string name="AreYouSureClearHistoryChannel">Kanaalcache opschonen?</string>
     <string name="AreYouSureClearHistoryGroup">Gecachet tekst en media van deze groep wissen?</string>
@@ -408,6 +409,7 @@
     <string name="Checking">Controleren...</string>
     <string name="ChooseCountry">Kies een land</string>
     <string name="ChooseFromYourStickers">Kies uit je stickers</string>
+    <string name="ChooseMapPreviewProvider">Kies kaartvoorvertoning</string>
     <string name="ChooseStickerSet">KIES STICKERBUNDEL</string>
     <string name="ChooseStickerSetMy">Je kunt persoonlijke stickerbundels maken via de bot @stickers.</string>
     <string name="ChooseStickerSetNotFound">Stickerbundel niet gevonden</string>
@@ -526,7 +528,7 @@
     <string name="DefaultRingtone">Standaard</string>
     <string name="Delete">Verwijder</string>
     <string name="DeleteAccountHelp">Als je binnen deze periode niet minimaal één keer ingelogd bent geweest zal je account worden verwijderd, inclusief alle berichten en contacten.</string>
-    <string name="DeleteAccountIfAwayFor">Indien afwezig voor</string>
+    <string name="DeleteAccountIfAwayFor2">Verwijder mijn account indien afwezig voor</string>
     <string name="DeleteAccountTitle">Account verwijderen</string>
     <string name="DeleteAllFrom">Alles verwijderen van %1$s</string>
     <string name="DeleteAndExit">Groep verwijderen en verlaten</string>
@@ -920,6 +922,7 @@
     <string name="LastSeenNobodyPlus">Niemand (+%1$d)</string>
     <string name="LastSeenTitle">Wie kan mijn laatst gezien tijd zien?</string>
     <string name="Lately">recent gezien</string>
+    <string name="Later">LATER</string>
     <string name="LeaveChannel">Kanaal verlaten</string>
     <string name="LeaveChannelMenu">Kanaal verlaten</string>
     <string name="LeaveMegaMenu">Groep verlaten</string>
@@ -968,6 +971,11 @@
     <string name="ManageGroup">Groep beheren</string>
     <string name="ManageGroupMenu">Groep beheren</string>
     <string name="Map">Kaart</string>
+    <string name="MapPreviewProvider">Kaartvoorvertoning</string>
+    <string name="MapPreviewProviderGoogle">Google</string>
+    <string name="MapPreviewProviderNobody">Geen</string>
+    <string name="MapPreviewProviderTelegram">Telegram</string>
+    <string name="MapPreviewProviderYandex">Yandex</string>
     <string name="MarkAsRead">Markeer als gelezen</string>
     <string name="MarkAsUnread">Markeer als ongelezen</string>
     <string name="Masks">Maskers</string>
@@ -1096,6 +1104,8 @@
     <string name="NoSharedFilesSecret">Bestanden van deze chat verschijnen hier</string>
     <string name="NoSharedLinks">Deel links in deze chat om ze op al je apparaten te kunnen benaderen.</string>
     <string name="NoSharedLinksSecret">Gedeelde links can deze chat verschijnen hier</string>
+    <string name="NoSharedVoice">Deel spraakberichten in deze chat en open ze vanaf al je apparaten.</string>
+    <string name="NoSharedVoiceSecret">Spraakberichten in deze chat worden hier weergegeven.</string>
     <string name="NoSound">Geen geluid</string>
     <string name="NoStickers">Nog geen stickers</string>
     <string name="NoStickersFound">Geen stickers gevonden</string>
@@ -1191,6 +1201,8 @@
     <string name="NotificationsAndSounds">Meldingen en geluiden</string>
     <string name="NotificationsCustom">Aangepast</string>
     <string name="NotificationsCustomize">Aanpassen</string>
+    <string name="NotificationsDefaultOff">Standaard (Uit)</string>
+    <string name="NotificationsDefaultOn">Standaard (Aan)</string>
     <string name="NotificationsEnableCustom">Aangepaste meldingen inschakelen</string>
     <string name="NotificationsImportance">Prioriteit</string>
     <string name="NotificationsLed">LED</string>
@@ -1277,6 +1289,7 @@
     <string name="PassportBirthdate">Geboortedatum</string>
     <string name="PassportCitizenship">Burgerschap</string>
     <string name="PassportCity">Stad</string>
+    <string name="PassportCorrectErrors">Tik om fouten te corrigeren.</string>
     <string name="PassportCountry">Land</string>
     <string name="PassportDeleteAddressAlert">Adresgegevens echt verwijderen?</string>
     <string name="PassportDeleteDocument">Document verwijderen</string>
@@ -1293,7 +1306,6 @@
     <string name="PassportDeleteSelfieAlert">Selfie echt verwijderen?</string>
     <string name="PassportDiscard">Weggooien</string>
     <string name="PassportDiscardChanges">Alle informatie die je hebt ingegeven weggooien?</string>
-    <string name="PassportDocumentDetails">Details van document</string>
     <string name="PassportDocumentNumber">Documentnummer</string>
     <string name="PassportDocuments">Scans</string>
     <string name="PassportEmail">E-mailadres</string>
@@ -1310,7 +1322,6 @@
     <string name="PassportIdentityDocumentInfo">Upload een scan van je paspoort of ander identiteitsbewijs</string>
     <string name="PassportInfo">Met Telegram Passport kun je je makkelijk aanmelden voor websites en diensten die identiteitsverificatie vereisen.\n\nJe informatie, persoonsgegevens en documenten zijn beschermd middels end-to-end-versleuteling. Niemand heeft toegang tot deze gegevens zonder je toestemming, inclusief Telegram.\n\nJe kunt onze veelgestelde vragen bekijken voor meer informatie.</string>
     <string name="PassportInfoTitle">Wat is Telegram Passport?</string>
-    <string name="PassportIssued">Uitgiftedatum</string>
     <string name="PassportMainPage">Hoofdpagina</string>
     <string name="PassportMainPageInfo">Upload een foto van de hoofdpagina van het document</string>
     <string name="PassportMale">Man</string>
@@ -1482,12 +1493,14 @@
     <string name="PopupNotification">Pop-up meldingen</string>
     <string name="PreviewFeedback">Feedback over dit voorbeeld</string>
     <string name="PriorityInfo">Meldingen met hoge prioriteit werken ook als je telefoon op \"Niet storen\" staat.</string>
+    <string name="PrivacyAdvanced">Geavanceerd</string>
     <string name="PrivacyBots">Bots en websites</string>
     <string name="PrivacyBotsInfo">Websites waarop je Telegram hebt gebruikt om in te loggen.</string>
     <string name="PrivacyCallsP2PHelp">peer-to-peer uitschakelen zorgt ervoor dat alle gesprekken verlopen via Telegram-servers, dit voorkomt dat je IP-adres zichtbaar is maar verlaagt de audio-kwaliteit enigszins.</string>
     <string name="PrivacyCallsP2PTitle">Peer-to-Peer</string>
     <string name="PrivacyClearPayment">Betaalinformatie</string>
     <string name="PrivacyClearShipping">Verzendinformatie</string>
+    <string name="PrivacyDeleteCloudDrafts">Verwijder alle Cloud-conceptberichten</string>
     <string name="PrivacyFloodControlError">Sorry, te veel verzoeken. Momenteel is het niet mogelijk om de privacyinstellingen te wijzigen, even geduld alsjeblieft.</string>
     <string name="PrivacyLastSeen">Laatst gezien</string>
     <string name="PrivacyPaymentsClear">Betaal- en verzendinfo wissen</string>
@@ -1694,9 +1707,14 @@
     <string name="ShareYouLocationUnable">Huidige locatie kon niet worden vastgesteld</string>
     <string name="ShareYouLocationUnableManually">Handmatig kiezen</string>
     <string name="ShareYouPhoneNumberTitle">Telefoonnummer delen?</string>
+    <string name="SharedFilesTab">BESTANDEN</string>
+    <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Gedeelde media</string>
+    <string name="SharedMediaTab">MEDIA</string>
     <string name="SharedMediaTitle">Gedeelde media</string>
+    <string name="SharedMusicTab">AUDIO</string>
     <string name="SharedPlace">Plek</string>
+    <string name="SharedVoiceTab">SPRAAK</string>
     <string name="SharingLiveLocationTitle">Je deelt je live-locatie met %1$s</string>
     <string name="SharingYouAndOtherName">Jij en %1$s</string>
     <string name="Sharpen">Scherper</string>
@@ -1810,6 +1828,7 @@
     <string name="TintShadows">SCHADUWEN</string>
     <string name="TodayAt">om</string>
     <string name="TodayAtFormatted">om %1$s</string>
+    <string name="TooManyTries">Teveel pogingen.\nProbeer het opnieuw over %1$s.</string>
     <string name="TosAgeText">Tik om te bevestigen dat je %1$s of ouder bent.</string>
     <string name="TosAgeTitle">Leeftijdsverificatie</string>
     <string name="TosDecline">Het spijt ons maar helaas kun je je dan niet aanmelden voor Telegram.\n\nIn tegenstelling tot anderen gebruiken we je gegevens niet voor advertenties of andere commerciële doelen. Telegram slaat alleen gegevens op die noodzakelijk zijn om te kunnen functioneren als een veelzijde Cloud-dienst. Hoe we je gegevens gebruiken (verwijderen van gesynchroniseerde contacten) kun je aanpassen via de instellingen, onder Privacy &amp; Veiligheid.\n\nHelaas is het wel zo dat als je niet akkoord gaat met het beperkte gebruik van je gegevens door Telegram, we je niet van onze dienst kunnen voorzien.</string>
@@ -1839,10 +1858,13 @@
     <string name="UnreadMessages">Ongelezen berichten</string>
     <string name="UnsupportedAttachment">Bestandstype niet ondersteund</string>
     <string name="UnsupportedMedia">Dit bericht wordt niet ondersteund door jouw versie van Telegram. Werk Telegram bij om dit bericht te bekijken: https://telegram.org/update</string>
+    <string name="Update">BIJWERKEN</string>
     <string name="UpdateApp">App bijwerken</string>
     <string name="UpdateAppAlert">Je gebruikt een verouderde versie van Telegram, deze kan dit verzoek niet verwerken. Werk Telegram bij.</string>
     <string name="UpdateContactsMessage">Veel van je contacten zijn niet gesynchroniseerd, wil je deze synchroniseren? Kies \'OK\' als je je eigen apparaat, SIM en Google-account gebruikt.</string>
     <string name="UpdateContactsTitle">Contacten bijwerken?</string>
+    <string name="UpdateNow">NU BIJWERKEN</string>
+    <string name="UpdateTelegram">Telegram bijwerken</string>
     <string name="UpdatedMinutes_few">%1$d min geleden</string>
     <string name="UpdatedMinutes_many">%1$d min geleden</string>
     <string name="UpdatedMinutes_one">%1$d min geleden</string>

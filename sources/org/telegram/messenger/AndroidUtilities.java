@@ -95,7 +95,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -191,7 +191,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0555C.UTF8_NAME;
+            String nameCharset = C0559C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -206,7 +206,7 @@ public class AndroidUtilities {
             String[] args = value.split(";");
             for (a = 0; a < args.length; a++) {
                 if (!(TextUtils.isEmpty(args[a]) || nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE"))) {
-                    byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                    byte[] bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]));
                     if (!(bytes == null || bytes.length == 0)) {
                         try {
                             args[a] = new String(bytes, nameCharset);
@@ -231,7 +231,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0555C.UTF8_NAME;
+            String nameCharset = C0559C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -248,7 +248,7 @@ public class AndroidUtilities {
             for (a = 0; a < args.length; a++) {
                 if (!TextUtils.isEmpty(args[a])) {
                     if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                        byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                        byte[] bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]));
                         if (!(bytes == null || bytes.length == 0)) {
                             try {
                                 args[a] = new String(bytes, nameCharset);
@@ -356,8 +356,8 @@ public class AndroidUtilities {
     }
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C19265 extends CrashManagerListener {
-        C19265() {
+    static class C19475 extends CrashManagerListener {
+        C19475() {
         }
 
         public boolean includeDeviceData() {
@@ -702,6 +702,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes(C0559C.UTF8_NAME);
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+
     public static ArrayList<User> loadVCardFromStream(Uri uri, int currentAccount, boolean asset, ArrayList<VcardItem> items, String name) {
         InputStream stream;
         Throwable e;
@@ -713,7 +721,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0555C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0559C.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -823,7 +831,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             }
                             currentData.name = args[1];
                             if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                                byte[] bytes = decodeQuotedPrintable(currentData.name.getBytes());
+                                byte[] bytes = decodeQuotedPrintable(getStringBytes(currentData.name));
                                 if (!(bytes == null || bytes.length == 0)) {
                                     String decodedName = new String(bytes, nameCharset);
                                     if (decodedName != null) {
@@ -886,7 +894,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
-                    typefaceCache.put(assetPath, Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath));
+                    Typeface t;
+                    if (VERSION.SDK_INT >= 26) {
+                        Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                        if (assetPath.contains("medium")) {
+                            builder.setWeight(700);
+                        }
+                        if (assetPath.contains(TtmlNode.ITALIC)) {
+                            builder.setItalic(true);
+                        }
+                        t = builder.build();
+                    } else {
+                        t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                    }
+                    typefaceCache.put(assetPath, t);
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.m1e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
@@ -1070,6 +1091,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    public static double fixLocationCoord(double value) {
+        return ((double) ((long) (value * 1000000.0d))) / 1000000.0d;
+    }
+
     public static String formapMapUrl(int account, double lat, double lon, int width, int height, boolean marker, int zoom) {
         int scale = Math.min(2, (int) Math.ceil((double) density));
         int provider = MessagesController.getInstance(account).mapProvider;
@@ -1086,19 +1111,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 lang = "en_US";
             }
             if (marker) {
-                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&pt=%f,%f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
+                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&pt=%.6f,%.6f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
             }
-            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
+            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
         }
         if (TextUtils.isEmpty(MessagesController.getInstance(account).mapKey)) {
             if (marker) {
-                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
+                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
             }
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
         } else if (marker) {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
         } else {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
         }
     }
 
@@ -1542,7 +1567,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19265());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19475());
     }
 
     public static void checkForUpdates(Activity context) {

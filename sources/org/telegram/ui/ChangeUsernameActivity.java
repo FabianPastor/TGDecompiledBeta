@@ -63,8 +63,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     private boolean lastNameAvailable;
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$2 */
-    class C09842 implements OnTouchListener {
-        C09842() {
+    class C09882 implements OnTouchListener {
+        C09882() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -73,8 +73,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$3 */
-    class C09853 implements OnEditorActionListener {
-        C09853() {
+    class C09893 implements OnEditorActionListener {
+        C09893() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -87,8 +87,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$4 */
-    class C09864 implements TextWatcher {
-        C09864() {
+    class C09904 implements TextWatcher {
+        C09904() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -158,8 +158,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$1 */
-    class C21021 extends ActionBarMenuOnItemClick {
-        C21021() {
+    class C21231 extends ActionBarMenuOnItemClick {
+        C21231() {
         }
 
         public void onItemClick(int id) {
@@ -175,7 +175,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Username", R.string.Username));
-        this.actionBar.setActionBarMenuOnItemClick(new C21021());
+        this.actionBar.setActionBarMenuOnItemClick(new C21231());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
@@ -184,7 +184,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C09842());
+        this.fragmentView.setOnTouchListener(new C09882());
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -201,8 +201,8 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C09853());
-        this.firstNameField.addTextChangedListener(new C09864());
+        this.firstNameField.setOnEditorActionListener(new C09893());
+        this.firstNameField.addTextChangedListener(new C09904());
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.checkTextView = new TextView(context);
         this.checkTextView.setTextSize(1, 15.0f);
@@ -327,8 +327,8 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.checkRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChangeUsernameActivity$5$1 */
-                class C21031 implements RequestDelegate {
-                    C21031() {
+                class C21241 implements RequestDelegate {
+                    C21241() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -356,7 +356,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 public void run() {
                     TL_account_checkUsername req = new TL_account_checkUsername();
                     req.username = name;
-                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C21031(), 2);
+                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C21241(), 2);
                 }
             };
             AndroidUtilities.runOnUIThread(this.checkRunnable, 300);

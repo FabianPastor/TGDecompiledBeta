@@ -349,18 +349,20 @@ public class EditTextBoldCursor extends EditText {
                 int rF = Color.red(this.headerHintColor);
                 int gF = Color.green(this.headerHintColor);
                 int bF = Color.blue(this.headerHintColor);
+                int aF = Color.alpha(this.headerHintColor);
                 int rS = Color.red(this.hintColor);
                 int gS = Color.green(this.hintColor);
                 int bS = Color.blue(this.hintColor);
+                int aS = Color.alpha(this.hintColor);
                 if (this.supportRtlHint && LocaleController.isRTL) {
                     canvas.translate((hintWidth + lineLeft) - ((hintWidth + lineLeft) * scale), 0.0f);
                 }
                 canvas.scale(scale, scale);
                 canvas.translate(0.0f, translation);
-                getPaint().setColor(Color.argb(255, (int) (((float) rS) + (((float) (rF - rS)) * this.headerAnimationProgress)), (int) (((float) gS) + (((float) (gF - gS)) * this.headerAnimationProgress)), (int) (((float) bS) + (((float) (bF - bS)) * this.headerAnimationProgress))));
+                getPaint().setColor(Color.argb((int) (((float) aS) + (((float) (aF - aS)) * this.headerAnimationProgress)), (int) (((float) rS) + (((float) (rF - rS)) * this.headerAnimationProgress)), (int) (((float) gS) + (((float) (gF - gS)) * this.headerAnimationProgress)), (int) (((float) bS) + (((float) (bF - bS)) * this.headerAnimationProgress))));
             } else {
                 getPaint().setColor(this.hintColor);
-                getPaint().setAlpha((int) (255.0f * this.hintAlpha));
+                getPaint().setAlpha((int) ((255.0f * this.hintAlpha) * (((float) Color.alpha(this.hintColor)) / 255.0f)));
             }
             this.hintLayout.draw(canvas);
             getPaint().setColor(oldColor);

@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.ui.ActionBar.Theme;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private int currentPosition;
@@ -72,6 +72,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public TextView addIconTabWithCounter(Drawable drawable) {
+        boolean z;
         final int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
@@ -86,13 +87,18 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             }
         });
         tab.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-        tab.setSelected(position == this.currentPosition);
+        if (position == this.currentPosition) {
+            z = true;
+        } else {
+            z = false;
+        }
+        tab.setSelected(z);
         TextView textView = new TextView(getContext());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 12.0f);
-        textView.setTextColor(-1);
+        textView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelBadgeText));
         textView.setGravity(17);
-        textView.setBackgroundResource(R.drawable.sticker_badge);
+        textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(9.0f), Theme.getColor(Theme.key_chat_emojiPanelBadgeBackground)));
         textView.setMinWidth(AndroidUtilities.dp(18.0f));
         textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
         tab.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));

@@ -14,11 +14,11 @@ import org.telegram.messenger.exoplayer2.text.webvtt.WebvttDecoder;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public interface SubtitleDecoderFactory {
-    public static final SubtitleDecoderFactory DEFAULT = new C19951();
+    public static final SubtitleDecoderFactory DEFAULT = new C20161();
 
     /* renamed from: org.telegram.messenger.exoplayer2.text.SubtitleDecoderFactory$1 */
-    static class C19951 implements SubtitleDecoderFactory {
-        C19951() {
+    static class C20161 implements SubtitleDecoderFactory {
+        C20161() {
         }
 
         public boolean supportsFormat(Format format) {

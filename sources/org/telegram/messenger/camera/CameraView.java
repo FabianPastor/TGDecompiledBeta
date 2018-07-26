@@ -24,7 +24,6 @@ import org.telegram.tgnet.ConnectionsManager;
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private CameraSession cameraSession;
-    private boolean circleShape = false;
     private int clipLeft;
     private int clipTop;
     private int cx;
@@ -48,8 +47,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class C05531 implements Runnable {
-        C05531() {
+    class C05571 implements Runnable {
+        C05571() {
         }
 
         public void run() {
@@ -61,8 +60,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class C05542 implements Runnable {
-        C05542() {
+    class C05582 implements Runnable {
+        C05582() {
         }
 
         public void run() {
@@ -126,10 +125,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             z = true;
         }
         this.isFrontface = z;
-        initCamera(this.isFrontface);
+        initCamera();
     }
 
-    private void initCamera(boolean front) {
+    private void initCamera() {
         CameraInfo info = null;
         ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
         if (cameraInfos != null) {
@@ -178,7 +177,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 if (this.previewSize != null && surfaceTexture != null) {
                     surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                     this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05531(), new C05542());
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05571(), new C05582());
                 }
             }
         }
@@ -189,7 +188,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        initCamera(this.isFrontface);
+        initCamera();
     }
 
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {

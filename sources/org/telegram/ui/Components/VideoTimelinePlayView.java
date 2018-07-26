@@ -54,10 +54,10 @@ public class VideoTimelinePlayView extends View {
     private long videoLength;
 
     /* renamed from: org.telegram.ui.Components.VideoTimelinePlayView$1 */
-    class C13871 extends AsyncTask<Integer, Integer, Bitmap> {
+    class C14021 extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C13871() {
+        C14021() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -323,7 +323,7 @@ public class VideoTimelinePlayView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C13871();
+            this.currentTask = new C14021();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }

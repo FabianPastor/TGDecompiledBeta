@@ -13,8 +13,8 @@ public class ActionBarMenu extends LinearLayout {
     protected ActionBar parentActionBar;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenu$1 */
-    class C07581 implements OnClickListener {
-        C07581() {
+    class C07621 implements OnClickListener {
+        C07621() {
         }
 
         public void onClick(View view) {
@@ -86,7 +86,7 @@ public class ActionBarMenu extends LinearLayout {
             menuItem.iconView.setImageResource(icon);
         }
         addView(menuItem, new LayoutParams(width, -1));
-        menuItem.setOnClickListener(new C07581());
+        menuItem.setOnClickListener(new C07621());
         return menuItem;
     }
 
@@ -207,5 +207,13 @@ public class ActionBarMenu extends LinearLayout {
             return (ActionBarMenuItem) v;
         }
         return null;
+    }
+
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            getChildAt(a).setEnabled(enabled);
+        }
     }
 }

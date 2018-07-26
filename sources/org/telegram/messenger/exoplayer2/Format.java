@@ -13,7 +13,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.video.ColorInfo;
 
 public final class Format implements Parcelable {
-    public static final Creator<Format> CREATOR = new C05581();
+    public static final Creator<Format> CREATOR = new C05621();
     public static final int NO_VALUE = -1;
     public static final long OFFSET_SAMPLE_RELATIVE = Long.MAX_VALUE;
     public final int accessibilityChannel;
@@ -45,8 +45,8 @@ public final class Format implements Parcelable {
     public final int width;
 
     /* renamed from: org.telegram.messenger.exoplayer2.Format$1 */
-    static class C05581 implements Creator<Format> {
-        C05581() {
+    static class C05621 implements Creator<Format> {
+        C05621() {
         }
 
         public Format createFromParcel(Parcel in) {

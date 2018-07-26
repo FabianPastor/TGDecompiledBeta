@@ -110,8 +110,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private boolean usersEndReached;
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$2 */
-    class C21182 extends ActionBarMenuOnItemClick {
-        C21182() {
+    class C21392 extends ActionBarMenuOnItemClick {
+        C21392() {
         }
 
         public void onItemClick(int id) {
@@ -122,8 +122,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$3 */
-    class C21193 extends ActionBarMenuItemSearchListener {
-        C21193() {
+    class C21403 extends ActionBarMenuItemSearchListener {
+        C21403() {
         }
 
         public void onSearchExpand() {
@@ -158,8 +158,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$5 */
-    class C21205 implements OnItemClickListener {
-        C21205() {
+    class C21415 implements OnItemClickListener {
+        C21415() {
         }
 
         public void onItemClick(View view, int position) {
@@ -206,8 +206,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$6 */
-    class C21216 implements OnItemLongClickListener {
-        C21216() {
+    class C21426 implements OnItemLongClickListener {
+        C21426() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -228,8 +228,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$7 */
-    class C21227 extends OnScrollListener {
-        C21227() {
+    class C21437 extends OnScrollListener {
+        C21437() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -243,8 +243,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ChannelEditActivity$ListAdapter$1 */
-        class C21251 implements ManageChatUserCellDelegate {
-            C21251() {
+        class C21461 implements ManageChatUserCellDelegate {
+            C21461() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -273,7 +273,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 case 1:
                     view = new ManageChatUserCell(this.mContext, 8, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C21251());
+                    ((ManageChatUserCell) view).setDelegate(new C21461());
                     break;
                 case 2:
                     view = new ShadowSectionCell(this.mContext);
@@ -392,8 +392,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         private Timer searchTimer;
 
         /* renamed from: org.telegram.ui.ChannelEditActivity$SearchAdapter$4 */
-        class C21274 implements ManageChatUserCellDelegate {
-            C21274() {
+        class C21484 implements ManageChatUserCellDelegate {
+            C21484() {
             }
 
             public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
@@ -463,7 +463,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ManageChatUserCell(this.mContext, 8, true);
             view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            ((ManageChatUserCell) view).setDelegate(new C21274());
+            ((ManageChatUserCell) view).setDelegate(new C21484());
             return new Holder(view);
         }
 
@@ -561,9 +561,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         } else {
             this.actionBar.setTitle(LocaleController.getString("ManageChannel", R.string.ManageChannel));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21182());
+        this.actionBar.setActionBarMenuOnItemClick(new C21392());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21193()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21403()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listViewAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -586,9 +586,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listViewAdapter);
-        this.listView.setOnItemClickListener(new C21205());
-        this.listView.setOnItemLongClickListener(new C21216());
-        this.listView.setOnScrollListener(new C21227());
+        this.listView.setOnItemClickListener(new C21415());
+        this.listView.setOnItemLongClickListener(new C21426());
+        this.listView.setOnScrollListener(new C21437());
         return this.fragmentView;
     }
 
@@ -872,7 +872,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate cellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (ChannelEditActivity.this.listView != null) {
                     int count = ChannelEditActivity.this.listView.getChildCount();
@@ -893,16 +893,16 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         r10[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText5);
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
-        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteBlueText);
+        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteBlueText);
         r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[23] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         r10[24] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
         r10[25] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
         r10[26] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGray);

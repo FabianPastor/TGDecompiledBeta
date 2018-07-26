@@ -124,7 +124,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private ImageView playButton;
     private Drawable[] playOrderButtons = new Drawable[2];
     private FrameLayout playerLayout;
-    private ArrayList<MessageObject> playlist = new ArrayList();
+    private ArrayList<MessageObject> playlist;
     private LineProgressView progressView;
     private ImageView repeatButton;
     private int scrollOffsetY = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -148,11 +148,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private int topBeforeSwitch;
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$5 */
-    class C11235 implements OnClickListener {
+    class C11275 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$5$1 */
-        class C11221 extends AnimatorListenerAdapter {
-            C11221() {
+        class C11261 extends AnimatorListenerAdapter {
+            C11261() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -174,7 +174,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             }
         }
 
-        C11235() {
+        C11275() {
         }
 
         public void onClick(View view) {
@@ -237,7 +237,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             }
             AudioPlayerAlert.this.animatorSet.setInterpolator(new DecelerateInterpolator());
             AudioPlayerAlert.this.animatorSet.setDuration(250);
-            AudioPlayerAlert.this.animatorSet.addListener(new C11221());
+            AudioPlayerAlert.this.animatorSet.addListener(new C11261());
             AudioPlayerAlert.this.animatorSet.start();
             if (AudioPlayerAlert.this.hasOptions) {
                 AudioPlayerAlert.this.menuItem.setVisibility(0);
@@ -254,8 +254,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$6 */
-    class C11246 implements OnClickListener {
-        C11246() {
+    class C11286 implements OnClickListener {
+        C11286() {
         }
 
         public void onClick(View v) {
@@ -264,8 +264,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$2 */
-    class C21842 extends ActionBarMenuItemSearchListener {
-        C21842() {
+    class C22052 extends ActionBarMenuItemSearchListener {
+        C22052() {
         }
 
         public void onSearchCollapse() {
@@ -305,8 +305,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$3 */
-    class C21853 extends ActionBarMenuOnItemClick {
-        C21853() {
+    class C22063 extends ActionBarMenuOnItemClick {
+        C22063() {
         }
 
         public void onItemClick(int id) {
@@ -319,8 +319,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$7 */
-    class C21877 implements ActionBarMenuItemDelegate {
-        C21877() {
+    class C22087 implements ActionBarMenuItemDelegate {
+        C22087() {
         }
 
         public void onItemClick(int id) {
@@ -329,8 +329,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$8 */
-    class C21888 implements SeekBarViewDelegate {
-        C21888() {
+    class C22098 implements SeekBarViewDelegate {
+        C22098() {
         }
 
         public void onSeekBarDrag(float progress) {
@@ -657,7 +657,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
         this.menuItem.setTranslationX((float) AndroidUtilities.dp(48.0f));
         this.menuItem.setAlpha(0.0f);
-        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21842());
+        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22052());
         EditTextBoldCursor editText = this.searchItem.getSearchField();
         editText.setHint(LocaleController.getString("Search", R.string.Search));
         editText.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
@@ -667,7 +667,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             this.actionBar.showActionModeTop();
             this.actionBar.setActionModeTopColor(Theme.getColor(Theme.key_player_actionBarTop));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21853());
+        this.actionBar.setActionBarMenuOnItemClick(new C22063());
         this.shadow = new View(context);
         this.shadow.setAlpha(0.0f);
         this.shadow.setBackgroundResource(R.drawable.header_shadow);
@@ -696,7 +696,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.placeholderImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
         this.placeholderImageView.setPivotX(0.0f);
         this.placeholderImageView.setPivotY(0.0f);
-        this.placeholderImageView.setOnClickListener(new C11235());
+        this.placeholderImageView.setOnClickListener(new C11275());
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
         this.titleTextView.setTextSize(1, 15.0f);
@@ -721,10 +721,10 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.optionsButton.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
         this.optionsButton.addSubItem(2, LocaleController.getString("ShareFile", R.string.ShareFile));
         this.optionsButton.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
-        this.optionsButton.setOnClickListener(new C11246());
-        this.optionsButton.setDelegate(new C21877());
+        this.optionsButton.setOnClickListener(new C11286());
+        this.optionsButton.setDelegate(new C22087());
         this.seekBarView = new SeekBarView(context);
-        this.seekBarView.setDelegate(new C21888());
+        this.seekBarView.setDelegate(new C22098());
         frameLayout = this.playerLayout;
         frameLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 8.0f, 62.0f, 8.0f, 0.0f));
         this.progressView = new LineProgressView(context);

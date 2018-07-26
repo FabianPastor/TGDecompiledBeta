@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -24,6 +25,7 @@ import org.telegram.messenger.MessagesStorage.IntCallback;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -103,9 +105,9 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
-    /* renamed from: org.telegram.ui.Components.AlertsCreator$2 */
-    static class C21782 implements Formatter {
-        C21782() {
+    /* renamed from: org.telegram.ui.Components.AlertsCreator$3 */
+    static class C21993 implements Formatter {
+        C21993() {
         }
 
         public String format(int value) {
@@ -384,6 +386,37 @@ public class AlertsCreator {
         return dialog;
     }
 
+    public static AlertDialog showSecretLocationAlert(Context context, int currentAccount, final Runnable onSelectRunnable, boolean inChat) {
+        ArrayList<String> arrayList = new ArrayList();
+        int providers = MessagesController.getInstance(currentAccount).availableMapProviders;
+        if ((providers & 1) != 0) {
+            arrayList.add(LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram));
+        }
+        if ((providers & 2) != 0) {
+            arrayList.add(LocaleController.getString("MapPreviewProviderGoogle", R.string.MapPreviewProviderGoogle));
+        }
+        if ((providers & 4) != 0) {
+            arrayList.add(LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex));
+        }
+        arrayList.add(LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody));
+        Builder builder = new Builder(context).setTitle(LocaleController.getString("ChooseMapPreviewProvider", R.string.ChooseMapPreviewProvider)).setItems((CharSequence[]) arrayList.toArray(new String[arrayList.size()]), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SharedConfig.setSecretMapPreviewType(which);
+                if (onSelectRunnable != null) {
+                    onSelectRunnable.run();
+                }
+            }
+        });
+        if (!inChat) {
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        }
+        AlertDialog dialog = builder.show();
+        if (inChat) {
+            dialog.setCanceledOnTouchOutside(false);
+        }
+        return dialog;
+    }
+
     private static void updateDayPicker(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2, monthPicker.getValue());
@@ -424,7 +457,7 @@ public class AlertsCreator {
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, -2, 0.4f));
-        monthPicker.setFormatter(new C21782());
+        monthPicker.setFormatter(new C21993());
         monthPicker.setOnValueChangedListener(new OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 AlertsCreator.updateDayPicker(dayPicker, monthPicker, yearPicker);
@@ -544,9 +577,9 @@ public class AlertsCreator {
         final Context context2 = context;
         builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
 
-            /* renamed from: org.telegram.ui.Components.AlertsCreator$10$1 */
-            class C21771 implements RequestDelegate {
-                C21771() {
+            /* renamed from: org.telegram.ui.Components.AlertsCreator$11$1 */
+            class C21981 implements RequestDelegate {
+                C21981() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -588,7 +621,7 @@ public class AlertsCreator {
                     }
                     req = request;
                 }
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C21771());
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C21981());
                 Toast.makeText(context2, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
             }
         });

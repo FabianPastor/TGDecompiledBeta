@@ -32,7 +32,11 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_resetNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_account_updateNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyChats;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyUsers;
+import org.telegram.tgnet.TLRPC.TL_inputPeerNotifySettings;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -100,8 +104,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     private int rowCount = 0;
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$1 */
-    class C23631 extends ActionBarMenuOnItemClick {
-        C23631() {
+    class C23841 extends ActionBarMenuOnItemClick {
+        C23841() {
         }
 
         public void onItemClick(int id) {
@@ -112,17 +116,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3 */
-    class C23653 implements OnItemClickListener {
+    class C23863 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1 */
-        class C16181 implements OnClickListener {
+        class C16351 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1 */
-            class C23641 implements RequestDelegate {
+            class C23851 implements RequestDelegate {
 
                 /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1$1 */
-                class C16171 implements Runnable {
-                    C16171() {
+                class C16341 implements Runnable {
+                    C16341() {
                     }
 
                     public void run() {
@@ -138,26 +142,26 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 }
 
-                C23641() {
+                C23851() {
                 }
 
                 public void run(TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new C16171());
+                    AndroidUtilities.runOnUIThread(new C16341());
                 }
             }
 
-            C16181() {
+            C16351() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!NotificationsSettingsActivity.this.reseting) {
                     NotificationsSettingsActivity.this.reseting = true;
-                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C23641());
+                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C23851());
                 }
             }
         }
 
-        C23653() {
+        C23863() {
         }
 
         public void onItemClick(View view, int position) {
@@ -248,7 +252,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ResetNotificationsAlert", R.string.ResetNotificationsAlert));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C16181());
+                    builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C16351());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     NotificationsSettingsActivity.this.showDialog(builder.create());
                 } else if (position == NotificationsSettingsActivity.this.inappSoundRow) {
@@ -415,6 +419,15 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     textCheckCell.setChecked(z);
                 }
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.NotificationsSettingsActivity$4 */
+    class C23874 implements RequestDelegate {
+        C23874() {
+        }
+
+        public void run(TLObject response, TL_error error) {
         }
     }
 
@@ -849,7 +862,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds));
-        this.actionBar.setActionBarMenuOnItemClick(new C23631());
+        this.actionBar.setActionBarMenuOnItemClick(new C23841());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -867,11 +880,35 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         Adapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener(new C23653());
+        this.listView.setOnItemClickListener(new C23863());
         return this.fragmentView;
     }
 
     public void updateServerNotificationsSettings(boolean group) {
+        int i = 0;
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
+        TL_account_updateNotifySettings req = new TL_account_updateNotifySettings();
+        req.settings = new TL_inputPeerNotifySettings();
+        req.settings.flags = 5;
+        TL_inputPeerNotifySettings tL_inputPeerNotifySettings;
+        if (group) {
+            req.peer = new TL_inputNotifyChats();
+            tL_inputPeerNotifySettings = req.settings;
+            if (!preferences.getBoolean("EnableGroup", true)) {
+                i = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            }
+            tL_inputPeerNotifySettings.mute_until = i;
+            req.settings.show_previews = preferences.getBoolean("EnablePreviewGroup", true);
+        } else {
+            req.peer = new TL_inputNotifyUsers();
+            tL_inputPeerNotifySettings = req.settings;
+            if (!preferences.getBoolean("EnableAll", true)) {
+                i = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            }
+            tL_inputPeerNotifySettings.mute_until = i;
+            req.settings.show_previews = preferences.getBoolean("EnablePreviewAll", true);
+        }
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C23874());
     }
 
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
@@ -922,6 +959,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             }
             editor.commit();
+            if (requestCode == this.messageSoundRow || requestCode == this.groupSoundRow) {
+                updateServerNotificationsSettings(requestCode == this.groupSoundRow);
+            }
             this.adapter.notifyItemChanged(requestCode);
         }
     }

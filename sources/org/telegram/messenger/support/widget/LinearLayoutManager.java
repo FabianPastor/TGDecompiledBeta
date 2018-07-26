@@ -232,14 +232,14 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C06931();
+        public static final Creator<SavedState> CREATOR = new C06971();
         boolean mAnchorLayoutFromEnd;
         int mAnchorOffset;
         int mAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.LinearLayoutManager$SavedState$1 */
-        static class C06931 implements Creator<SavedState> {
-            C06931() {
+        static class C06971 implements Creator<SavedState> {
+            C06971() {
             }
 
             public SavedState createFromParcel(Parcel in) {

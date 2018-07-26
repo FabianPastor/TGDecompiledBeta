@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.Keep;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
@@ -91,8 +92,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     private TextView textView;
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$5 */
-    class C15005 implements Callback {
-        C15005() {
+    class C15165 implements Callback {
+        C15165() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -112,10 +113,10 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$6 */
-    class C15016 implements OnKeyListener {
+    class C15176 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C15016() {
+        C15176() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -132,8 +133,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$7 */
-    class C15027 implements TextWatcher {
-        C15027() {
+    class C15187 implements TextWatcher {
+        C15187() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -165,8 +166,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.InviteContactsActivity$SpansContainer$1 */
-        class C15071 extends AnimatorListenerAdapter {
-            C15071() {
+        class C15231 extends AnimatorListenerAdapter {
+            C15231() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -285,7 +286,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C15071());
+            this.currentAnimation.addListener(new C15231());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -329,8 +330,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$1 */
-    class C23101 extends ActionBarMenuOnItemClick {
-        C23101() {
+    class C23311 extends ActionBarMenuOnItemClick {
+        C23311() {
         }
 
         public void onItemClick(int id) {
@@ -341,8 +342,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$8 */
-    class C23128 implements OnItemClickListener {
-        C23128() {
+    class C23338 implements OnItemClickListener {
+        C23338() {
         }
 
         public void onItemClick(View view, int position) {
@@ -387,8 +388,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$9 */
-    class C23139 extends OnScrollListener {
-        C23139() {
+    class C23349 extends OnScrollListener {
+        C23349() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -493,11 +494,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1 */
-                class C15041 implements Runnable {
+                class C15201 implements Runnable {
 
                     /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1$1 */
-                    class C15031 implements Runnable {
-                        C15031() {
+                    class C15191 implements Runnable {
+                        C15191() {
                         }
 
                         public void run() {
@@ -540,11 +541,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                         }
                     }
 
-                    C15041() {
+                    C15201() {
                     }
 
                     public void run() {
-                        Utilities.searchQueue.postRunnable(new C15031());
+                        Utilities.searchQueue.postRunnable(new C15191());
                     }
                 }
 
@@ -555,7 +556,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C15041());
+                    AndroidUtilities.runOnUIThread(new C15201());
                 }
             }, 200, 300);
         }
@@ -624,7 +625,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteFriends", R.string.InviteFriends));
-        this.actionBar.setActionBarMenuOnItemClick(new C23101());
+        this.actionBar.setActionBarMenuOnItemClick(new C23311());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int maxSize;
@@ -710,9 +711,9 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", R.string.SearchFriends));
-        this.editText.setCustomSelectionActionModeCallback(new C15005());
-        this.editText.setOnKeyListener(new C15016());
-        this.editText.addTextChangedListener(new C15027());
+        this.editText.setCustomSelectionActionModeCallback(new C15165());
+        this.editText.setOnKeyListener(new C15176());
+        this.editText.addTextChangedListener(new C15187());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -736,8 +737,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.decoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C23128());
-        this.listView.setOnScrollListener(new C23139());
+        this.listView.setOnItemClickListener(new C23338());
+        this.listView.setOnScrollListener(new C23349());
         this.infoTextView = new TextView(context);
         this.infoTextView.setBackgroundColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.infoTextView.setTextColor(Theme.getColor(Theme.key_contacts_inviteText));
@@ -784,7 +785,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.counterTextView.setTextSize(1, 14.0f);
         this.counterTextView.setTextColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.counterTextView.setGravity(17);
-        this.counterTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), -1));
+        this.counterTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), Theme.getColor(Theme.key_contacts_inviteText)));
         this.counterTextView.setMinWidth(AndroidUtilities.dp(20.0f));
         this.counterTextView.setPadding(AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(1.0f));
         linearLayout.addView(this.counterTextView, LayoutHelper.createLinear(-2, 20, 16, 0, 0, 10, 0));
@@ -814,6 +815,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
     }
 
+    @Keep
     public void setContainerHeight(int value) {
         this.containerHeight = value;
         if (this.spansContainer != null) {
@@ -882,7 +884,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+        ThemeDescriptionDelegate cellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
                 if (InviteContactsActivity.this.listView != null) {
                     int count = InviteContactsActivity.this.listView.getChildCount();
@@ -895,7 +897,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 }
             }
         };
-        r10 = new ThemeDescription[44];
+        r10 = new ThemeDescription[45];
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
         r10[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
         r10[13] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
@@ -911,13 +913,13 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         r10[23] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
         r10[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
         r10[25] = new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[29] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[30] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[31] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[32] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[26] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[27] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[28] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[29] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[30] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[31] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[32] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         r10[33] = new ThemeDescription(this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[34] = new ThemeDescription(this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);
         r10[35] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundGroupCreateSpanBlue);
@@ -926,9 +928,10 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         r10[38] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundBlue);
         r10[39] = new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_contacts_inviteText);
         r10[40] = new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_contacts_inviteBackground);
-        r10[41] = new ThemeDescription(this.counterView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_contacts_inviteBackground);
+        r10[41] = new ThemeDescription(this.counterView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_contacts_inviteBackground);
         r10[42] = new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_contacts_inviteBackground);
         r10[43] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_contacts_inviteText);
+        r10[44] = new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_contacts_inviteText);
         return r10;
     }
 }

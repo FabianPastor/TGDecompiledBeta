@@ -26,8 +26,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
-    class C09161 implements OnTouchListener {
-        C09161() {
+    class C09201 implements OnTouchListener {
+        C09201() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -39,7 +39,7 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(new C09161());
+        setOnTouchListener(new C09201());
         this.emptyTextView1 = new TextView(context);
         this.emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));

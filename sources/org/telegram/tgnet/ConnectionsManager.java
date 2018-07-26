@@ -45,6 +45,7 @@ import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.EmuDetector;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
@@ -53,7 +54,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
@@ -87,7 +88,7 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
-    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C07281();
+    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C07321();
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
     private boolean appPaused = true;
@@ -99,8 +100,8 @@ public class ConnectionsManager {
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
-    static class C07281 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
-        C07281() {
+    static class C07321 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
+        C07321() {
         }
 
         protected HashMap<String, ResolvedDomain> initialValue() {
@@ -109,12 +110,13 @@ public class ConnectionsManager {
     }
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
-    class C07313 extends BroadcastReceiver {
-        C07313() {
+    class C07353 extends BroadcastReceiver {
+        C07353() {
         }
 
         public void onReceive(Context context, Intent intent) {
             ConnectionsManager.this.checkConnection();
+            FileLoader.getInstance(ConnectionsManager.this.currentAccount).onNetworkChanged(ConnectionsManager.isConnectionSlow());
         }
     }
 
@@ -247,8 +249,8 @@ public class ConnectionsManager {
         private int currentAccount;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$1 */
-        class C07391 implements Comparator<String> {
-            C07391() {
+        class C07431 implements Comparator<String> {
+            C07431() {
             }
 
             public int compare(String o1, String o2) {
@@ -318,13 +320,13 @@ public class ConnectionsManager {
                         } else {
                             if (read == -1) {
                             }
-                            array = new JSONObject(new String(outbuf.toByteArray(), C0555C.UTF8_NAME)).getJSONArray("Answer");
+                            array = new JSONObject(new String(outbuf.toByteArray(), C0559C.UTF8_NAME)).getJSONArray("Answer");
                             len = array.length();
                             arrayList = new ArrayList(len);
                             for (a = 0; a < len; a++) {
                                 arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                             }
-                            Collections.sort(arrayList, new C07391());
+                            Collections.sort(arrayList, new C07431());
                             builder = new StringBuilder();
                             for (a = 0; a < arrayList.size(); a++) {
                                 builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -350,13 +352,13 @@ public class ConnectionsManager {
                             }
                         }
                     }
-                    array = new JSONObject(new String(outbuf.toByteArray(), C0555C.UTF8_NAME)).getJSONArray("Answer");
+                    array = new JSONObject(new String(outbuf.toByteArray(), C0559C.UTF8_NAME)).getJSONArray("Answer");
                     len = array.length();
                     arrayList = new ArrayList(len);
                     for (a = 0; a < len; a++) {
                         arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                     }
-                    Collections.sort(arrayList, new C07391());
+                    Collections.sort(arrayList, new C07431());
                     builder = new StringBuilder();
                     for (a = 0; a < arrayList.size(); a++) {
                         builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -424,8 +426,8 @@ public class ConnectionsManager {
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
-        class C07422 implements Runnable {
-            C07422() {
+        class C07462 implements Runnable {
+            C07462() {
             }
 
             public void run() {
@@ -440,8 +442,8 @@ public class ConnectionsManager {
         }
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class C20281 implements OnCompleteListener<Void> {
-            C20281() {
+        class C20491 implements OnCompleteListener<Void> {
+            C20491() {
             }
 
             public void onComplete(Task<Void> finishedTask) {
@@ -492,10 +494,10 @@ public class ConnectionsManager {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m0d("current firebase value = " + currentValue);
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C20281());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C20491());
                 return null;
             } catch (Throwable e) {
-                Utilities.stageQueue.postRunnable(new C07422());
+                Utilities.stageQueue.postRunnable(new C07462());
                 FileLog.m3e(e);
             }
         }
@@ -550,7 +552,7 @@ public class ConnectionsManager {
 
     public static native void native_setLangCode(int i, String str);
 
-    public static native void native_setNetworkAvailable(int i, boolean z, int i2);
+    public static native void native_setNetworkAvailable(int i, boolean z, int i2, boolean z2);
 
     public static native void native_setProxySettings(int i, String str, int i2, String str2, String str3, String str4);
 
@@ -678,8 +680,8 @@ public class ConnectionsManager {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class C20271 implements RequestDelegateInternal {
-                C20271() {
+            class C20481 implements RequestDelegateInternal {
+                C20481() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
@@ -739,7 +741,7 @@ public class ConnectionsManager {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C20271(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C20481(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -781,7 +783,7 @@ public class ConnectionsManager {
 
     private void checkConnection() {
         native_setUseIpv6(this.currentAccount, useIpv6Address());
-        native_setNetworkAvailable(this.currentAccount, isNetworkOnline(), getCurrentNetworkType());
+        native_setNetworkAvailable(this.currentAccount, isNetworkOnline(), getCurrentNetworkType(), isConnectionSlow());
     }
 
     public void setPushConnectionEnabled(boolean value) {
@@ -800,7 +802,7 @@ public class ConnectionsManager {
         }
         native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new C07313(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new C07353(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {
@@ -1010,7 +1012,7 @@ public class ConnectionsManager {
         Throwable th;
         HashMap<String, ResolvedDomain> cache = (HashMap) dnsCache.get();
         ResolvedDomain resolvedDomain = (ResolvedDomain) cache.get(domain);
-        if (resolvedDomain != null && SystemClock.uptimeMillis() - resolvedDomain.ttl < 300000) {
+        if (resolvedDomain != null && SystemClock.elapsedRealtime() - resolvedDomain.ttl < 300000) {
             return resolvedDomain.address;
         }
         ByteArrayOutputStream byteArrayOutputStream = null;
@@ -1039,7 +1041,7 @@ public class ConnectionsManager {
                 JSONArray array = new JSONObject(new String(outbuf.toByteArray())).getJSONArray("Answer");
                 if (array.length() > 0) {
                     String ip = array.getJSONObject(Utilities.random.nextInt(array.length())).getString(DataSchemeDataSource.SCHEME_DATA);
-                    cache.put(domain, new ResolvedDomain(ip, SystemClock.uptimeMillis()));
+                    cache.put(domain, new ResolvedDomain(ip, SystemClock.elapsedRealtime()));
                     if (httpConnectionStream != null) {
                         try {
                             httpConnectionStream.close();
@@ -1270,6 +1272,24 @@ public class ConnectionsManager {
             FileLog.m3e(e2);
             return false;
         }
+    }
+
+    public static boolean isConnectionSlow() {
+        try {
+            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            if (netInfo.getType() == 0) {
+                switch (netInfo.getSubtype()) {
+                    case 1:
+                    case 2:
+                    case 4:
+                    case 7:
+                    case 11:
+                        return true;
+                }
+            }
+        } catch (Throwable th) {
+        }
+        return false;
     }
 
     public static boolean isNetworkOnline() {

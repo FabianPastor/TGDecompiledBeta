@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
@@ -88,8 +88,8 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
 
     /* renamed from: org.telegram.messenger.LocaleController$1 */
-    class C02271 implements Runnable {
-        C02271() {
+    class C02291 implements Runnable {
+        C02291() {
         }
 
         public void run() {
@@ -163,8 +163,8 @@ public class LocaleController {
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
 
         /* renamed from: org.telegram.messenger.LocaleController$TimeZoneChangedReceiver$1 */
-        class C02341 implements Runnable {
-            C02341() {
+        class C02361 implements Runnable {
+            C02361() {
             }
 
             public void run() {
@@ -178,7 +178,7 @@ public class LocaleController {
         }
 
         public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.applicationHandler.post(new C02341());
+            ApplicationLoader.applicationHandler.post(new C02361());
         }
     }
 
@@ -547,7 +547,7 @@ public class LocaleController {
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         loadOtherLanguages();
         if (this.remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new C02271());
+            AndroidUtilities.runOnUIThread(new C02291());
         }
         for (a = 0; a < this.otherLanguages.size(); a++) {
             LocaleInfo locale = (LocaleInfo) this.otherLanguages.get(a);
@@ -969,7 +969,7 @@ public class LocaleController {
                 XmlPullParser parser = Xml.newPullParser();
                 FileInputStream stream = new FileInputStream(file);
                 try {
-                    parser.setInput(stream, C0555C.UTF8_NAME);
+                    parser.setInput(stream, C0559C.UTF8_NAME);
                     String name = null;
                     String value = null;
                     String attrName = null;
@@ -1245,7 +1245,7 @@ public class LocaleController {
             discount = false;
         }
         amount = Math.abs(amount);
-        Currency сurrency = Currency.getInstance(type);
+        Currency currency = Currency.getInstance(type);
         int i = -1;
         switch (type.hashCode()) {
             case 65726:
@@ -1484,9 +1484,9 @@ public class LocaleController {
                 doubleAmount = ((double) amount) / 100.0d;
                 break;
         }
-        if (сurrency != null) {
+        if (currency != null) {
             NumberFormat format = NumberFormat.getCurrencyInstance(this.currentLocale != null ? this.currentLocale : this.systemDefaultLocale);
-            format.setCurrency(сurrency);
+            format.setCurrency(currency);
             if (type.equals("IRR")) {
                 format.setMaximumFractionDigits(0);
             }
@@ -2006,7 +2006,7 @@ public class LocaleController {
             lang = "en";
         }
         lang = lang.toLowerCase();
-        boolean z = lang.startsWith("ar") || lang.startsWith("fa") || (BuildVars.DEBUG_VERSION && (lang.startsWith("he") || lang.startsWith("iw")));
+        boolean z = lang.startsWith("ar") || lang.startsWith("fa") || lang.startsWith("he") || lang.startsWith("iw");
         isRTL = z;
         if (lang.equals("ko")) {
             i = 2;

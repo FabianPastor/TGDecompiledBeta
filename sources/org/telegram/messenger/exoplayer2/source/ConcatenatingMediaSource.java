@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
@@ -108,7 +108,7 @@ public class ConcatenatingMediaSource extends CompositeMediaSource<MediaSourceHo
         }
 
         public Window getWindow(int windowIndex, Window window, boolean setTag, long defaultPositionProjectionUs) {
-            return window.set(null, C0555C.TIME_UNSET, C0555C.TIME_UNSET, false, true, defaultPositionProjectionUs > 0 ? C0555C.TIME_UNSET : 0, C0555C.TIME_UNSET, 0, 0, 0);
+            return window.set(null, C0559C.TIME_UNSET, C0559C.TIME_UNSET, false, true, defaultPositionProjectionUs > 0 ? C0559C.TIME_UNSET : 0, C0559C.TIME_UNSET, 0, 0, 0);
         }
 
         public int getPeriodCount() {
@@ -116,7 +116,7 @@ public class ConcatenatingMediaSource extends CompositeMediaSource<MediaSourceHo
         }
 
         public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            return period.set(null, null, 0, C0555C.TIME_UNSET, 0);
+            return period.set(null, null, 0, C0559C.TIME_UNSET, 0);
         }
 
         public int getIndexOfPeriod(Object uid) {

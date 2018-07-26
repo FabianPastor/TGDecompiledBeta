@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -28,8 +28,11 @@ import org.telegram.tgnet.WriteToSocketDelegate;
 
 public class FileUploadOperation {
     private static final int initialRequestsCount = 8;
+    private static final int initialRequestsSlowNetworkCount = 1;
     private static final int maxUploadingKBytes = 2048;
+    private static final int maxUploadingSlowNetworkKBytes = 32;
     private static final int minUploadChunkSize = 128;
+    private static final int minUploadChunkSlowNetworkSize = 32;
     private long availableSize;
     private SparseArray<UploadCachedResult> cachedResults = new SparseArray();
     private int currentAccount;
@@ -37,7 +40,6 @@ public class FileUploadOperation {
     private int currentPartNum;
     private int currentType;
     private int currentUploadRequetsCount;
-    private int currentUploadingBytes;
     private FileUploadOperationDelegate delegate;
     private int estimatedSize;
     private String fileKey;
@@ -52,39 +54,48 @@ public class FileUploadOperation {
     private int lastSavedPartNum;
     private int maxRequestsCount;
     private boolean nextPartFirst;
+    private int operationGuid;
     private SharedPreferences preferences;
     private byte[] readBuffer;
     private long readBytesCount;
     private int requestNum;
     private SparseIntArray requestTokens = new SparseIntArray();
     private int saveInfoTimes;
+    private boolean slowNetwork;
     private boolean started;
     private int state;
     private RandomAccessFile stream;
     private long totalFileSize;
     private int totalPartsCount;
-    private int uploadChunkSize = C0555C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    private int uploadChunkSize = C0559C.DEFAULT_BUFFER_SEGMENT_SIZE;
     private boolean uploadFirstPartLater;
     private int uploadStartTime;
     private long uploadedBytesCount;
     private String uploadingFilePath;
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
-    class C01791 implements Runnable {
-        C01791() {
+    class C01801 implements Runnable {
+        C01801() {
         }
 
         public void run() {
             FileUploadOperation.this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", 0);
-            for (int a = 0; a < 8; a++) {
+            FileUploadOperation.this.slowNetwork = ConnectionsManager.isConnectionSlow();
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("start upload on slow network = " + FileUploadOperation.this.slowNetwork);
+            }
+            int a = 0;
+            int count = FileUploadOperation.this.slowNetwork ? 1 : 8;
+            while (a < count) {
                 FileUploadOperation.this.startUploadRequest();
+                a++;
             }
         }
     }
 
-    /* renamed from: org.telegram.messenger.FileUploadOperation$2 */
-    class C01802 implements Runnable {
-        C01802() {
+    /* renamed from: org.telegram.messenger.FileUploadOperation$3 */
+    class C01823 implements Runnable {
+        C01823() {
         }
 
         public void run() {
@@ -110,12 +121,12 @@ public class FileUploadOperation {
         }
     }
 
-    /* renamed from: org.telegram.messenger.FileUploadOperation$5 */
-    class C19435 implements WriteToSocketDelegate {
+    /* renamed from: org.telegram.messenger.FileUploadOperation$6 */
+    class C19646 implements WriteToSocketDelegate {
 
-        /* renamed from: org.telegram.messenger.FileUploadOperation$5$1 */
-        class C01821 implements Runnable {
-            C01821() {
+        /* renamed from: org.telegram.messenger.FileUploadOperation$6$1 */
+        class C01841 implements Runnable {
+            C01841() {
             }
 
             public void run() {
@@ -125,11 +136,11 @@ public class FileUploadOperation {
             }
         }
 
-        C19435() {
+        C19646() {
         }
 
         public void run() {
-            Utilities.stageQueue.postRunnable(new C01821());
+            Utilities.stageQueue.postRunnable(new C01841());
         }
     }
 
@@ -154,14 +165,59 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new C01791());
+            Utilities.stageQueue.postRunnable(new C01801());
+        }
+    }
+
+    protected void onNetworkChanged(final boolean slow) {
+        if (this.state == 1) {
+            Utilities.stageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    int count = 1;
+                    if (FileUploadOperation.this.slowNetwork != slow) {
+                        int a;
+                        FileUploadOperation.this.slowNetwork = slow;
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d("network changed to slow = " + FileUploadOperation.this.slowNetwork);
+                        }
+                        for (a = 0; a < FileUploadOperation.this.requestTokens.size(); a++) {
+                            ConnectionsManager.getInstance(FileUploadOperation.this.currentAccount).cancelRequest(FileUploadOperation.this.requestTokens.valueAt(a), true);
+                        }
+                        FileUploadOperation.this.requestTokens.clear();
+                        FileUploadOperation.this.cleanup();
+                        FileUploadOperation.this.isLastPart = false;
+                        FileUploadOperation.this.nextPartFirst = false;
+                        FileUploadOperation.this.requestNum = 0;
+                        FileUploadOperation.this.currentPartNum = 0;
+                        FileUploadOperation.this.readBytesCount = 0;
+                        FileUploadOperation.this.uploadedBytesCount = 0;
+                        FileUploadOperation.this.saveInfoTimes = 0;
+                        FileUploadOperation.this.key = null;
+                        FileUploadOperation.this.iv = null;
+                        FileUploadOperation.this.ivChange = null;
+                        FileUploadOperation.this.currentUploadRequetsCount = 0;
+                        FileUploadOperation.this.lastSavedPartNum = 0;
+                        FileUploadOperation.this.uploadFirstPartLater = false;
+                        FileUploadOperation.this.cachedResults.clear();
+                        FileUploadOperation.this.operationGuid = FileUploadOperation.this.operationGuid + 1;
+                        a = 0;
+                        if (!FileUploadOperation.this.slowNetwork) {
+                            count = 8;
+                        }
+                        while (a < count) {
+                            FileUploadOperation.this.startUploadRequest();
+                            a++;
+                        }
+                    }
+                }
+            });
         }
     }
 
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new C01802());
+            Utilities.stageQueue.postRunnable(new C01823());
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -248,7 +304,7 @@ public class FileUploadOperation {
                     if (this.totalFileSize > 10485760) {
                         this.isBigFile = true;
                     }
-                    this.uploadChunkSize = (int) Math.max(128, ((this.totalFileSize + 3072000) - 1) / 3072000);
+                    this.uploadChunkSize = (int) Math.max(this.slowNetwork ? 32 : 128, ((this.totalFileSize + 3072000) - 1) / 3072000);
                     if (1024 % this.uploadChunkSize != 0) {
                         int chunkSize = 64;
                         while (this.uploadChunkSize > chunkSize) {
@@ -256,7 +312,7 @@ public class FileUploadOperation {
                         }
                         this.uploadChunkSize = chunkSize;
                     }
-                    this.maxRequestsCount = 2048 / this.uploadChunkSize;
+                    this.maxRequestsCount = Math.min(1, (this.slowNetwork ? 32 : 2048) / this.uploadChunkSize);
                     if (this.isEncrypted) {
                         this.freeRequestIvs = new ArrayList(this.maxRequestsCount);
                         for (a = 0; a < this.maxRequestsCount; a++) {
@@ -406,6 +462,7 @@ public class FileUploadOperation {
                         byte[] currentRequestIv;
                         int currentRequestPartNum;
                         TLObject finalRequest;
+                        int connectionType;
                         toAdd = 0;
                         if (this.isEncrypted && currentRequestBytes % 16 != 0) {
                             toAdd = 0 + (16 - (currentRequestBytes % 16));
@@ -464,122 +521,130 @@ public class FileUploadOperation {
                         this.requestNum = requestNumFinal + 1;
                         final long currentRequestBytesOffset = (long) (currentRequestPartNum + currentRequestBytes);
                         final int requestSize = finalRequest.getObjectSize() + 4;
+                        final int currentOperationGuid = this.operationGuid;
+                        if (this.slowNetwork) {
+                            connectionType = 4;
+                        } else {
+                            connectionType = ((requestNumFinal % 4) << 16) | 4;
+                        }
                         final int i = currentRequestBytes;
                         this.requestTokens.put(requestNumFinal, ConnectionsManager.getInstance(this.currentAccount).sendRequest(finalRequest, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
-                                int networkType = response != null ? response.networkType : ConnectionsManager.getCurrentNetworkType();
-                                if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
-                                    StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 3, (long) requestSize);
-                                } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
-                                    StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 2, (long) requestSize);
-                                } else if (FileUploadOperation.this.currentType == 16777216) {
-                                    StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 4, (long) requestSize);
-                                } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
-                                    StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 5, (long) requestSize);
-                                }
-                                if (currentRequestIv != null) {
-                                    FileUploadOperation.this.freeRequestIvs.add(currentRequestIv);
-                                }
-                                FileUploadOperation.this.requestTokens.delete(requestNumFinal);
-                                if (!(response instanceof TL_boolTrue)) {
-                                    if (finalRequest != null) {
-                                        FileLog.m1e("23123");
+                                if (currentOperationGuid == FileUploadOperation.this.operationGuid) {
+                                    int networkType = response != null ? response.networkType : ConnectionsManager.getCurrentNetworkType();
+                                    if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                        StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 3, (long) requestSize);
+                                    } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                        StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 2, (long) requestSize);
+                                    } else if (FileUploadOperation.this.currentType == 16777216) {
+                                        StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 4, (long) requestSize);
+                                    } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                        StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentBytesCount(networkType, 5, (long) requestSize);
                                     }
-                                    FileUploadOperation.this.state = 4;
-                                    FileUploadOperation.this.delegate.didFailedUploadingFile(FileUploadOperation.this);
-                                    FileUploadOperation.this.cleanup();
-                                } else if (FileUploadOperation.this.state == 1) {
-                                    long size;
-                                    FileUploadOperation.this.uploadedBytesCount = FileUploadOperation.this.uploadedBytesCount + ((long) i);
-                                    if (FileUploadOperation.this.estimatedSize != 0) {
-                                        size = Math.max(FileUploadOperation.this.availableSize, (long) FileUploadOperation.this.estimatedSize);
-                                    } else {
-                                        size = FileUploadOperation.this.totalFileSize;
+                                    if (currentRequestIv != null) {
+                                        FileUploadOperation.this.freeRequestIvs.add(currentRequestIv);
                                     }
-                                    FileUploadOperation.this.delegate.didChangedUploadProgress(FileUploadOperation.this, ((float) FileUploadOperation.this.uploadedBytesCount) / ((float) size));
-                                    FileUploadOperation.this.currentUploadRequetsCount = FileUploadOperation.this.currentUploadRequetsCount - 1;
-                                    if (FileUploadOperation.this.isLastPart && FileUploadOperation.this.currentUploadRequetsCount == 0 && FileUploadOperation.this.state == 1) {
-                                        FileUploadOperation.this.state = 3;
-                                        if (FileUploadOperation.this.key == null) {
-                                            InputFile result;
-                                            if (FileUploadOperation.this.isBigFile) {
-                                                result = new TL_inputFileBig();
-                                            } else {
-                                                result = new TL_inputFile();
-                                                result.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
-                                            }
-                                            result.parts = FileUploadOperation.this.currentPartNum;
-                                            result.id = FileUploadOperation.this.currentFileId;
-                                            result.name = FileUploadOperation.this.uploadingFilePath.substring(FileUploadOperation.this.uploadingFilePath.lastIndexOf("/") + 1);
-                                            FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, result, null, null, null);
-                                            FileUploadOperation.this.cleanup();
+                                    FileUploadOperation.this.requestTokens.delete(requestNumFinal);
+                                    if (!(response instanceof TL_boolTrue)) {
+                                        if (finalRequest != null) {
+                                            FileLog.m1e("23123");
+                                        }
+                                        FileUploadOperation.this.state = 4;
+                                        FileUploadOperation.this.delegate.didFailedUploadingFile(FileUploadOperation.this);
+                                        FileUploadOperation.this.cleanup();
+                                    } else if (FileUploadOperation.this.state == 1) {
+                                        long size;
+                                        FileUploadOperation.this.uploadedBytesCount = FileUploadOperation.this.uploadedBytesCount + ((long) i);
+                                        if (FileUploadOperation.this.estimatedSize != 0) {
+                                            size = Math.max(FileUploadOperation.this.availableSize, (long) FileUploadOperation.this.estimatedSize);
                                         } else {
-                                            InputEncryptedFile result2;
-                                            if (FileUploadOperation.this.isBigFile) {
-                                                result2 = new TL_inputEncryptedFileBigUploaded();
+                                            size = FileUploadOperation.this.totalFileSize;
+                                        }
+                                        FileUploadOperation.this.delegate.didChangedUploadProgress(FileUploadOperation.this, ((float) FileUploadOperation.this.uploadedBytesCount) / ((float) size));
+                                        FileUploadOperation.this.currentUploadRequetsCount = FileUploadOperation.this.currentUploadRequetsCount - 1;
+                                        if (FileUploadOperation.this.isLastPart && FileUploadOperation.this.currentUploadRequetsCount == 0 && FileUploadOperation.this.state == 1) {
+                                            FileUploadOperation.this.state = 3;
+                                            if (FileUploadOperation.this.key == null) {
+                                                InputFile result;
+                                                if (FileUploadOperation.this.isBigFile) {
+                                                    result = new TL_inputFileBig();
+                                                } else {
+                                                    result = new TL_inputFile();
+                                                    result.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
+                                                }
+                                                result.parts = FileUploadOperation.this.currentPartNum;
+                                                result.id = FileUploadOperation.this.currentFileId;
+                                                result.name = FileUploadOperation.this.uploadingFilePath.substring(FileUploadOperation.this.uploadingFilePath.lastIndexOf("/") + 1);
+                                                FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, result, null, null, null);
+                                                FileUploadOperation.this.cleanup();
                                             } else {
-                                                result2 = new TL_inputEncryptedFileUploaded();
-                                                result2.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
+                                                InputEncryptedFile result2;
+                                                if (FileUploadOperation.this.isBigFile) {
+                                                    result2 = new TL_inputEncryptedFileBigUploaded();
+                                                } else {
+                                                    result2 = new TL_inputEncryptedFileUploaded();
+                                                    result2.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
+                                                }
+                                                result2.parts = FileUploadOperation.this.currentPartNum;
+                                                result2.id = FileUploadOperation.this.currentFileId;
+                                                result2.key_fingerprint = FileUploadOperation.this.fingerprint;
+                                                FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, null, result2, FileUploadOperation.this.key, FileUploadOperation.this.iv);
+                                                FileUploadOperation.this.cleanup();
                                             }
-                                            result2.parts = FileUploadOperation.this.currentPartNum;
-                                            result2.id = FileUploadOperation.this.currentFileId;
-                                            result2.key_fingerprint = FileUploadOperation.this.fingerprint;
-                                            FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, null, result2, FileUploadOperation.this.key, FileUploadOperation.this.iv);
-                                            FileUploadOperation.this.cleanup();
-                                        }
-                                        if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
-                                            StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
-                                        } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
-                                            StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
-                                        } else if (FileUploadOperation.this.currentType == 16777216) {
-                                            StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
-                                        } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
-                                            StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
-                                        }
-                                    } else if (FileUploadOperation.this.currentUploadRequetsCount < FileUploadOperation.this.maxRequestsCount) {
-                                        if (!(FileUploadOperation.this.estimatedSize != 0 || FileUploadOperation.this.uploadFirstPartLater || FileUploadOperation.this.nextPartFirst)) {
-                                            if (FileUploadOperation.this.saveInfoTimes >= 4) {
-                                                FileUploadOperation.this.saveInfoTimes = 0;
+                                            if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                                StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
+                                            } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                                StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
+                                            } else if (FileUploadOperation.this.currentType == 16777216) {
+                                                StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
+                                            } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                                StatsController.getInstance(FileUploadOperation.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
                                             }
-                                            UploadCachedResult result3;
-                                            if (currentRequestPartNum == FileUploadOperation.this.lastSavedPartNum) {
-                                                FileUploadOperation.this.lastSavedPartNum = FileUploadOperation.this.lastSavedPartNum + 1;
-                                                long offsetToSave = currentRequestBytesOffset;
-                                                byte[] ivToSave = currentRequestIv;
-                                                while (true) {
-                                                    result3 = (UploadCachedResult) FileUploadOperation.this.cachedResults.get(FileUploadOperation.this.lastSavedPartNum);
-                                                    if (result3 == null) {
-                                                        break;
-                                                    }
-                                                    offsetToSave = result3.bytesOffset;
-                                                    ivToSave = result3.iv;
-                                                    FileUploadOperation.this.cachedResults.remove(FileUploadOperation.this.lastSavedPartNum);
+                                        } else if (FileUploadOperation.this.currentUploadRequetsCount < FileUploadOperation.this.maxRequestsCount) {
+                                            if (!(FileUploadOperation.this.estimatedSize != 0 || FileUploadOperation.this.uploadFirstPartLater || FileUploadOperation.this.nextPartFirst)) {
+                                                if (FileUploadOperation.this.saveInfoTimes >= 4) {
+                                                    FileUploadOperation.this.saveInfoTimes = 0;
+                                                }
+                                                UploadCachedResult result3;
+                                                if (currentRequestPartNum == FileUploadOperation.this.lastSavedPartNum) {
                                                     FileUploadOperation.this.lastSavedPartNum = FileUploadOperation.this.lastSavedPartNum + 1;
-                                                }
-                                                if ((FileUploadOperation.this.isBigFile && offsetToSave % 1048576 == 0) || (!FileUploadOperation.this.isBigFile && FileUploadOperation.this.saveInfoTimes == 0)) {
-                                                    Editor editor = FileUploadOperation.this.preferences.edit();
-                                                    editor.putLong(FileUploadOperation.this.fileKey + "_uploaded", offsetToSave);
-                                                    if (FileUploadOperation.this.isEncrypted) {
-                                                        editor.putString(FileUploadOperation.this.fileKey + "_ivc", Utilities.bytesToHex(ivToSave));
+                                                    long offsetToSave = currentRequestBytesOffset;
+                                                    byte[] ivToSave = currentRequestIv;
+                                                    while (true) {
+                                                        result3 = (UploadCachedResult) FileUploadOperation.this.cachedResults.get(FileUploadOperation.this.lastSavedPartNum);
+                                                        if (result3 == null) {
+                                                            break;
+                                                        }
+                                                        offsetToSave = result3.bytesOffset;
+                                                        ivToSave = result3.iv;
+                                                        FileUploadOperation.this.cachedResults.remove(FileUploadOperation.this.lastSavedPartNum);
+                                                        FileUploadOperation.this.lastSavedPartNum = FileUploadOperation.this.lastSavedPartNum + 1;
                                                     }
-                                                    editor.commit();
+                                                    if ((FileUploadOperation.this.isBigFile && offsetToSave % 1048576 == 0) || (!FileUploadOperation.this.isBigFile && FileUploadOperation.this.saveInfoTimes == 0)) {
+                                                        Editor editor = FileUploadOperation.this.preferences.edit();
+                                                        editor.putLong(FileUploadOperation.this.fileKey + "_uploaded", offsetToSave);
+                                                        if (FileUploadOperation.this.isEncrypted) {
+                                                            editor.putString(FileUploadOperation.this.fileKey + "_ivc", Utilities.bytesToHex(ivToSave));
+                                                        }
+                                                        editor.commit();
+                                                    }
+                                                } else {
+                                                    result3 = new UploadCachedResult();
+                                                    result3.bytesOffset = currentRequestBytesOffset;
+                                                    if (currentRequestIv != null) {
+                                                        result3.iv = new byte[32];
+                                                        System.arraycopy(currentRequestIv, 0, result3.iv, 0, 32);
+                                                    }
+                                                    FileUploadOperation.this.cachedResults.put(currentRequestPartNum, result3);
                                                 }
-                                            } else {
-                                                result3 = new UploadCachedResult();
-                                                result3.bytesOffset = currentRequestBytesOffset;
-                                                if (currentRequestIv != null) {
-                                                    result3.iv = new byte[32];
-                                                    System.arraycopy(currentRequestIv, 0, result3.iv, 0, 32);
-                                                }
-                                                FileUploadOperation.this.cachedResults.put(currentRequestPartNum, result3);
+                                                FileUploadOperation.this.saveInfoTimes = FileUploadOperation.this.saveInfoTimes + 1;
                                             }
-                                            FileUploadOperation.this.saveInfoTimes = FileUploadOperation.this.saveInfoTimes + 1;
+                                            FileUploadOperation.this.startUploadRequest();
                                         }
-                                        FileUploadOperation.this.startUploadRequest();
                                     }
                                 }
                             }
-                        }, null, new C19435(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, ((requestNumFinal % 4) << 16) | 4, true));
+                        }, null, new C19646(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
                     }
                 }
             } catch (Throwable e2) {

@@ -25,6 +25,7 @@ import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputDocumentFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputEncryptedFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputFileLocation;
+import org.telegram.tgnet.TLRPC.TL_inputWebFileGeoPointLocation;
 import org.telegram.tgnet.TLRPC.TL_upload_cdnFile;
 import org.telegram.tgnet.TLRPC.TL_upload_cdnFileReuploadNeeded;
 import org.telegram.tgnet.TLRPC.TL_upload_file;
@@ -105,8 +106,8 @@ public class FileLoadOperation {
     private InputWebFileLocation webLocation;
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$4 */
-    class C01584 implements Runnable {
-        C01584() {
+    class C01594 implements Runnable {
+        C01594() {
         }
 
         public void run() {
@@ -115,8 +116,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$6 */
-    class C01606 implements Runnable {
-        C01606() {
+    class C01616 implements Runnable {
+        C01616() {
         }
 
         public void run() {
@@ -125,8 +126,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$7 */
-    class C01617 implements Runnable {
-        C01617() {
+    class C01627 implements Runnable {
+        C01627() {
         }
 
         public void run() {
@@ -143,8 +144,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$8 */
-    class C01628 implements Runnable {
-        C01628() {
+    class C01638 implements Runnable {
+        C01638() {
         }
 
         public void run() {
@@ -598,7 +599,7 @@ public class FileLoadOperation {
 
     public void pause() {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new C01584());
+            Utilities.stageQueue.postRunnable(new C01594());
         }
     }
 
@@ -630,7 +631,7 @@ public class FileLoadOperation {
                 }
             });
         } else if (wasPaused && alreadyStarted) {
-            Utilities.stageQueue.postRunnable(new C01606());
+            Utilities.stageQueue.postRunnable(new C01616());
         }
         if (alreadyStarted) {
             return wasPaused;
@@ -840,7 +841,7 @@ public class FileLoadOperation {
                 return false;
             }
             this.started = true;
-            Utilities.stageQueue.postRunnable(new C01617());
+            Utilities.stageQueue.postRunnable(new C01627());
         }
         return true;
     }
@@ -850,7 +851,7 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new C01628());
+        Utilities.stageQueue.postRunnable(new C01638());
     }
 
     private void cleanup() {
@@ -1319,7 +1320,10 @@ public class FileLoadOperation {
                     int i;
                     boolean isLast = this.totalBytesCount <= 0 || a == count - 1 || (this.totalBytesCount > 0 && this.currentDownloadChunkSize + downloadOffset >= this.totalBytesCount);
                     int connectionType = this.requestsCount % 2 == 0 ? 2 : ConnectionsManager.ConnectionTypeDownload2;
-                    int flags = (this.isForceRequest ? 32 : 0) | 2;
+                    int flags = this.isForceRequest ? 32 : 0;
+                    if (!(this.webLocation instanceof TL_inputWebFileGeoPointLocation)) {
+                        flags |= 2;
+                    }
                     TLObject req;
                     if (this.isCdn) {
                         req = new TL_upload_getCdnFile();
@@ -1350,8 +1354,8 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass12 = new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.FileLoadOperation$12$1 */
-                        class C19391 implements RequestDelegate {
-                            C19391() {
+                        class C19601 implements RequestDelegate {
+                            C19601() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -1445,7 +1449,7 @@ public class FileLoadOperation {
                                 TL_upload_reuploadCdnFile req = new TL_upload_reuploadCdnFile();
                                 req.file_token = FileLoadOperation.this.cdnToken;
                                 req.request_token = res2.request_token;
-                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C19391(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
+                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C19601(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
                             }
                         }
                     };

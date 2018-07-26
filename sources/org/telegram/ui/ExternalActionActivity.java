@@ -68,8 +68,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     private PasscodeView passcodeView;
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$1 */
-    class C14471 implements OnTouchListener {
-        C14471() {
+    class C14631 implements OnTouchListener {
+        C14631() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -98,8 +98,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$2 */
-    class C14482 implements OnClickListener {
-        C14482() {
+    class C14642 implements OnClickListener {
+        C14642() {
         }
 
         public void onClick(View v) {
@@ -107,8 +107,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$5 */
-    class C14495 implements OnDismissListener {
-        C14495() {
+    class C14655 implements OnDismissListener {
+        C14655() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -118,8 +118,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$7 */
-    class C14537 implements OnGlobalLayoutListener {
-        C14537() {
+    class C14697 implements OnGlobalLayoutListener {
+        C14697() {
         }
 
         public void onGlobalLayout() {
@@ -131,8 +131,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$8 */
-    class C14548 implements Runnable {
-        C14548() {
+    class C14708 implements Runnable {
+        C14708() {
         }
 
         public void run() {
@@ -151,8 +151,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$3 */
-    class C22863 implements PasscodeViewDelegate {
-        C22863() {
+    class C23073 implements PasscodeViewDelegate {
+        C23073() {
         }
 
         public void didAcceptedPassword() {
@@ -215,8 +215,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             FrameLayout shadowTablet = new FrameLayout(this);
             shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
-            shadowTablet.setOnTouchListener(new C14471());
-            shadowTablet.setOnClickListener(new C14482());
+            shadowTablet.setOnTouchListener(new C14631());
+            shadowTablet.setOnClickListener(new C14642());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
@@ -268,7 +268,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C22863());
+            this.passcodeView.setDelegate(new C23073());
         }
     }
 
@@ -329,7 +329,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                         });
                         alertDialog.show();
                         alertDialog.setCanceledOnTouchOutside(false);
-                        alertDialog.setOnDismissListener(new C14495());
+                        alertDialog.setOnDismissListener(new C14655());
                         return true;
                     }
                 }
@@ -390,8 +390,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.ExternalActionActivity$6$2$1 */
-                            class C14511 implements OnDismissListener {
-                                C14511() {
+                            class C14671 implements OnDismissListener {
+                                C14671() {
                                 }
 
                                 public void onDismiss(DialogInterface dialog) {
@@ -406,7 +406,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                                     if ("APP_VERSION_OUTDATED".equals(error.text)) {
                                         AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                                         if (dialog != null) {
-                                            dialog.setOnDismissListener(new C14511());
+                                            dialog.setOnDismissListener(new C14671());
                                             return;
                                         }
                                         ExternalActionActivity.this.setResult(1, new Intent().putExtra("error", error.text));
@@ -525,7 +525,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C14537());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C14697());
         }
     }
 
@@ -577,7 +577,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C14548();
+            this.lockRunnable = new C14708();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

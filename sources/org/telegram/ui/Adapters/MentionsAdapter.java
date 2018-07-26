@@ -91,7 +91,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C20351()) {
+    private LocationProvider locationProvider = new LocationProvider(new C20561()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -109,7 +109,6 @@ public class MentionsAdapter extends SelectionAdapter {
     private SearchAdapterHelper searchAdapterHelper;
     private Runnable searchGlobalRunnable;
     private ArrayList<BotInlineResult> searchResultBotContext;
-    private HashMap<String, BotInlineResult> searchResultBotContextById;
     private TL_inlineBotSwitchPM searchResultBotContextSwitch;
     private ArrayList<String> searchResultCommands;
     private ArrayList<String> searchResultCommandsHelp;
@@ -130,8 +129,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C20351 implements LocationProviderDelegate {
-        C20351() {
+    class C20561 implements LocationProviderDelegate {
+        C20561() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -147,8 +146,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C20373 implements SearchAdapterHelperDelegate {
-        C20373() {
+    class C20583 implements SearchAdapterHelperDelegate {
+        C20583() {
         }
 
         public void onDataSetChanged() {
@@ -162,7 +161,7 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    static /* synthetic */ int access$3104(MentionsAdapter x0) {
+    static /* synthetic */ int access$3004(MentionsAdapter x0) {
         int i = x0.channelLastReqId + 1;
         x0.channelLastReqId = i;
         return i;
@@ -174,7 +173,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C20373());
+        this.searchAdapterHelper.setDelegate(new C20583());
     }
 
     public void onDestroy() {
@@ -331,7 +330,6 @@ public class MentionsAdapter extends SelectionAdapter {
     private void searchForContextBot(String username, String query) {
         if (this.foundContextBot == null || this.foundContextBot.username == null || !this.foundContextBot.username.equals(username) || this.searchingContextQuery == null || !this.searchingContextQuery.equals(query)) {
             this.searchResultBotContext = null;
-            this.searchResultBotContextById = null;
             this.searchResultBotContextSwitch = null;
             notifyDataSetChanged();
             if (this.foundContextBot != null) {
@@ -395,8 +393,8 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
-                class C20381 implements RequestDelegate {
-                    C20381() {
+                class C20591 implements RequestDelegate {
+                    C20591() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -431,7 +429,7 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                             req.username = MentionsAdapter.this.searchingContextUsername;
-                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C20381());
+                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C20591());
                         } else if (!MentionsAdapter.this.noUserName) {
                             MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, TtmlNode.ANONYMOUS_REGION_ID);
                         }
@@ -516,19 +514,17 @@ public class MentionsAdapter extends SelectionAdapter {
                                             messagesStorage.saveBotCache(key, res);
                                         }
                                         MentionsAdapter.this.nextQueryOffset = res.next_offset;
-                                        if (MentionsAdapter.this.searchResultBotContextById == null) {
-                                            MentionsAdapter.this.searchResultBotContextById = new HashMap();
+                                        if (MentionsAdapter.this.searchResultBotContextSwitch == null) {
                                             MentionsAdapter.this.searchResultBotContextSwitch = res.switch_pm;
                                         }
                                         int a = 0;
                                         while (a < res.results.size()) {
                                             BotInlineResult result = (BotInlineResult) res.results.get(a);
-                                            if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
+                                            if (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content == null && (result.send_message instanceof TL_botInlineMessageMediaAuto)) {
                                                 res.results.remove(a);
                                                 a--;
                                             }
                                             result.query_id = res.query_id;
-                                            MentionsAdapter.this.searchResultBotContextById.put(result.id, result);
                                             a++;
                                         }
                                         boolean added = false;
@@ -593,8 +589,8 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
                     req.flags |= 1;
                     req.geo_point = new TL_inputGeoPoint();
-                    req.geo_point.lat = this.lastKnownLocation.getLatitude();
-                    req.geo_point._long = this.lastKnownLocation.getLongitude();
+                    req.geo_point.lat = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLatitude());
+                    req.geo_point._long = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLongitude());
                 }
                 int lower_id = (int) this.dialog_id;
                 int high_id = (int) (this.dialog_id >> 32);
@@ -805,7 +801,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C08329 c08329 = new Runnable() {
+                    C08369 c08369 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -814,7 +810,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 req.offset = 0;
                                 req.filter = new TL_channelParticipantsSearch();
                                 req.filter.f34q = str;
-                                final int currentReqId = MentionsAdapter.access$3104(MentionsAdapter.this);
+                                final int currentReqId = MentionsAdapter.access$3004(MentionsAdapter.this);
                                 MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                     public void run(final TLObject response, final TL_error error) {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -846,8 +842,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
                     };
-                    this.searchGlobalRunnable = c08329;
-                    AndroidUtilities.runOnUIThread(c08329, 200);
+                    this.searchGlobalRunnable = c08369;
+                    AndroidUtilities.runOnUIThread(c08369, 200);
                 }
                 final SparseArray<User> sparseArray = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;

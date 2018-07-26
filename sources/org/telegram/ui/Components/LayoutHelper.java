@@ -20,6 +20,15 @@ public class LayoutHelper {
         return new LayoutParams(getSize((float) width), getSize((float) height), gravity);
     }
 
+    public static LayoutParams createScroll(int width, int height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
+        LayoutParams layoutParams = new LayoutParams(getSize((float) width), getSize((float) height), gravity);
+        layoutParams.leftMargin = AndroidUtilities.dp(leftMargin);
+        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
+        layoutParams.rightMargin = AndroidUtilities.dp(rightMargin);
+        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        return layoutParams;
+    }
+
     public static LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         LayoutParams layoutParams = new LayoutParams(getSize((float) width), getSize(height), gravity);
         layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));

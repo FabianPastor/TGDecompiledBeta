@@ -97,7 +97,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     static final String TRACE_SCROLL_TAG = "RV Scroll";
     static final boolean VERBOSE_TRACING = false;
     public static final int VERTICAL = 1;
-    static final Interpolator sQuinticInterpolator = new C06963();
+    static final Interpolator sQuinticInterpolator = new C07003();
     private int bottomGlowOffset;
     private int glowColor;
     RecyclerViewAccessibilityDelegate mAccessibilityDelegate;
@@ -176,8 +176,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     private int topGlowOffset;
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$1 */
-    class C06941 implements Runnable {
-        C06941() {
+    class C06981 implements Runnable {
+        C06981() {
         }
 
         public void run() {
@@ -194,8 +194,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$2 */
-    class C06952 implements Runnable {
-        C06952() {
+    class C06992 implements Runnable {
+        C06992() {
         }
 
         public void run() {
@@ -207,8 +207,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$3 */
-    static class C06963 implements Interpolator {
-        C06963() {
+    static class C07003 implements Interpolator {
+        C07003() {
         }
 
         public float getInterpolation(float t) {
@@ -640,7 +640,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         private int mHeight;
         private int mHeightMode;
         ViewBoundsCheck mHorizontalBoundCheck = new ViewBoundsCheck(this.mHorizontalBoundCheckCallback);
-        private final Callback mHorizontalBoundCheckCallback = new C20121();
+        private final Callback mHorizontalBoundCheckCallback = new C20331();
         boolean mIsAttachedToWindow = false;
         private boolean mItemPrefetchEnabled = true;
         private boolean mMeasurementCacheEnabled = true;
@@ -650,7 +650,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         boolean mRequestedSimpleAnimations = false;
         SmoothScroller mSmoothScroller;
         ViewBoundsCheck mVerticalBoundCheck = new ViewBoundsCheck(this.mVerticalBoundCheckCallback);
-        private final Callback mVerticalBoundCheckCallback = new C20132();
+        private final Callback mVerticalBoundCheckCallback = new C20342();
         private int mWidth;
         private int mWidthMode;
 
@@ -666,8 +666,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$LayoutManager$1 */
-        class C20121 implements Callback {
-            C20121() {
+        class C20331 implements Callback {
+            C20331() {
             }
 
             public int getChildCount() {
@@ -700,8 +700,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$LayoutManager$2 */
-        class C20132 implements Callback {
-            C20132() {
+        class C20342 implements Callback {
+            C20342() {
             }
 
             public int getChildCount() {
@@ -3620,8 +3620,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$4 */
-    class C20094 implements ProcessCallback {
-        C20094() {
+    class C20304 implements ProcessCallback {
+        C20304() {
         }
 
         public void processDisappeared(ViewHolder viewHolder, ItemHolderInfo info, ItemHolderInfo postInfo) {
@@ -3650,8 +3650,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$5 */
-    class C20105 implements Callback {
-        C20105() {
+    class C20315 implements Callback {
+        C20315() {
         }
 
         public int getChildCount() {
@@ -3737,8 +3737,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$6 */
-    class C20116 implements Callback {
-        C20116() {
+    class C20326 implements Callback {
+        C20326() {
         }
 
         public ViewHolder findViewHolder(int position) {
@@ -3875,12 +3875,12 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     public static class SavedState extends AbsSavedState {
-        public static final Creator<SavedState> CREATOR = new C06971();
+        public static final Creator<SavedState> CREATOR = new C07011();
         Parcelable mLayoutState;
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$SavedState$1 */
-        static class C06971 implements ClassLoaderCreator<SavedState> {
-            C06971() {
+        static class C07011 implements ClassLoaderCreator<SavedState> {
+            C07011() {
             }
 
             public SavedState createFromParcel(Parcel in, ClassLoader loader) {
@@ -4027,7 +4027,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.mObserver = new RecyclerViewDataObserver();
         this.mRecycler = new Recycler();
         this.mViewInfoStore = new ViewInfoStore();
-        this.mUpdateChildViewsRunnable = new C06941();
+        this.mUpdateChildViewsRunnable = new C06981();
         this.mTempRect = new Rect();
         this.mTempRect2 = new Rect();
         this.mTempRectF = new RectF();
@@ -4060,8 +4060,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.bottomGlowOffset = 0;
         this.glowColor = 0;
         this.mPendingAccessibilityImportanceChange = new ArrayList();
-        this.mItemAnimatorRunner = new C06952();
-        this.mViewInfoProcessCallback = new C20094();
+        this.mItemAnimatorRunner = new C06992();
+        this.mViewInfoProcessCallback = new C20304();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, CLIP_TO_PADDING_ATTR, defStyle, 0);
             this.mClipToPadding = a.getBoolean(0, true);
@@ -4157,11 +4157,11 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     private void initChildrenHelper() {
-        this.mChildHelper = new ChildHelper(new C20105());
+        this.mChildHelper = new ChildHelper(new C20315());
     }
 
     void initAdapterManager() {
-        this.mAdapterHelper = new AdapterHelper(new C20116());
+        this.mAdapterHelper = new AdapterHelper(new C20326());
     }
 
     public void setHasFixedSize(boolean hasFixedSize) {

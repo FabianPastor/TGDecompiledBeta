@@ -126,7 +126,7 @@ public class RadialProgress {
         this.parent = parentView;
     }
 
-    public void setStrikeWidth(int width) {
+    public void setStrokeWidth(int width) {
         this.progressPaint.setStrokeWidth((float) width);
     }
 

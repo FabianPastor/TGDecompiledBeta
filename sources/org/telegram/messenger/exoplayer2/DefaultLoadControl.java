@@ -66,14 +66,14 @@ public class DefaultLoadControl implements LoadControl {
 
         public DefaultLoadControl createDefaultLoadControl() {
             if (this.allocator == null) {
-                this.allocator = new DefaultAllocator(true, C0555C.DEFAULT_BUFFER_SEGMENT_SIZE);
+                this.allocator = new DefaultAllocator(true, C0559C.DEFAULT_BUFFER_SEGMENT_SIZE);
             }
             return new DefaultLoadControl(this.allocator, this.minBufferMs, this.maxBufferMs, this.bufferForPlaybackMs, this.bufferForPlaybackAfterRebufferMs, this.targetBufferBytes, this.prioritizeTimeOverSizeThresholds, this.priorityTaskManager);
         }
     }
 
     public DefaultLoadControl() {
-        this(new DefaultAllocator(true, C0555C.DEFAULT_BUFFER_SEGMENT_SIZE));
+        this(new DefaultAllocator(true, C0559C.DEFAULT_BUFFER_SEGMENT_SIZE));
     }
 
     @Deprecated

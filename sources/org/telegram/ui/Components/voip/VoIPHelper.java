@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -43,6 +44,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
 import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
@@ -96,8 +98,8 @@ public class VoIPHelper {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                        class C14071 implements Runnable {
-                            C14071() {
+                        class C14221 implements Runnable {
+                            C14221() {
                             }
 
                             public void run() {
@@ -107,7 +109,7 @@ public class VoIPHelper {
 
                         public void onClick(DialogInterface dialog, int which) {
                             if (VoIPService.getSharedInstance() != null) {
-                                VoIPService.getSharedInstance().hangUp(new C14071());
+                                VoIPService.getSharedInstance().hangUp(new C14221());
                             } else {
                                 VoIPHelper.doInitiateCall(user, activity);
                             }
@@ -220,7 +222,7 @@ public class VoIPHelper {
         final boolean[] includeLogs = new boolean[]{true};
         linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
-        View.OnClickListener c14115 = new View.OnClickListener() {
+        View.OnClickListener c14265 = new View.OnClickListener() {
             public void onClick(View v) {
                 boolean z;
                 boolean[] zArr = includeLogs;
@@ -235,14 +237,14 @@ public class VoIPHelper {
         };
         linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
         linearLayout.setClipToPadding(false);
-        linearLayout.setOnClickListener(c14115);
+        linearLayout.setOnClickListener(c14265);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
         linearLayout.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        linearLayout.setOnClickListener(c14115);
+        linearLayout.setOnClickListener(c14265);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
         linearLayout.setVisibility(8);
@@ -256,7 +258,7 @@ public class VoIPHelper {
         final int i = account;
         final Context context2 = context;
         final Runnable runnable = onDismiss;
-        final View btn = new Builder(context).setTitle(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", R.string.Send), new OnClickListener() {
+        AlertDialog alert = new Builder(context).setTitle(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", R.string.Send), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 final int currentAccount = UserConfig.selectedAccount;
                 final TL_phone_setCallRating req = new TL_phone_setCallRating();
@@ -287,7 +289,15 @@ public class VoIPHelper {
                     runnable.run();
                 }
             }
-        }).show().getButton(-1);
+        }).create();
+        final AlertDialog alertDialog = alert;
+        alert.setOnShowListener(new OnShowListener() {
+            public void onShow(DialogInterface dialog) {
+                AndroidUtilities.hideKeyboard(alertDialog.getWindow().getDecorView());
+            }
+        });
+        alert.show();
+        final View btn = alert.getButton(-1);
         btn.setEnabled(false);
         view2 = linearLayout;
         final Context context3 = context;

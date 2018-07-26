@@ -54,11 +54,11 @@ public class SearchAdapterHelper {
     private int reqId = 0;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4 */
-    class C08464 implements Runnable {
+    class C08504 implements Runnable {
 
         /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4$1 */
-        class C08441 implements Comparator<HashtagObject> {
-            C08441() {
+        class C08481 implements Comparator<HashtagObject> {
+            C08481() {
             }
 
             public int compare(HashtagObject lhs, HashtagObject rhs) {
@@ -72,7 +72,7 @@ public class SearchAdapterHelper {
             }
         }
 
-        C08464() {
+        C08504() {
         }
 
         public void run() {
@@ -88,7 +88,7 @@ public class SearchAdapterHelper {
                     hashMap.put(hashtagObject.hashtag, hashtagObject);
                 }
                 cursor.dispose();
-                Collections.sort(arrayList, new C08441());
+                Collections.sort(arrayList, new C08481());
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         SearchAdapterHelper.this.setHashtags(arrayList, hashMap);
@@ -101,8 +101,8 @@ public class SearchAdapterHelper {
     }
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$6 */
-    class C08486 implements Runnable {
-        C08486() {
+    class C08526 implements Runnable {
+        C08526() {
         }
 
         public void run() {
@@ -361,7 +361,7 @@ public class SearchAdapterHelper {
         if (this.hashtagsLoadedFromDb) {
             return true;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08464());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08504());
         return false;
     }
 
@@ -493,7 +493,7 @@ public class SearchAdapterHelper {
     public void clearRecentHashtags() {
         this.hashtags = new ArrayList();
         this.hashtagsByText = new HashMap();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08486());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08526());
     }
 
     public void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {

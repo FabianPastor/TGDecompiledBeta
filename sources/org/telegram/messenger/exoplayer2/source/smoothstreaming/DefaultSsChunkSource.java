@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source.smoothstreaming;
 import android.net.Uri;
 import java.io.IOException;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
@@ -57,7 +57,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
         for (int i = 0; i < this.extractorWrappers.length; i++) {
             int manifestTrackIndex = trackSelection.getIndexInTrackGroup(i);
             Format format = streamElement.formats[manifestTrackIndex];
-            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0555C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
+            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0559C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
         }
     }
 
@@ -136,7 +136,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
             this.trackSelection.updateSelectedTrack(playbackPositionUs, loadPositionUs - playbackPositionUs, resolveTimeToLiveEdgeUs(playbackPositionUs));
             long chunkStartTimeUs = streamElement.getStartTimeUs(chunkIndex);
             long chunkEndTimeUs = chunkStartTimeUs + streamElement.getChunkDurationUs(chunkIndex);
-            long chunkSeekTimeUs = previous == null ? loadPositionUs : C0555C.TIME_UNSET;
+            long chunkSeekTimeUs = previous == null ? loadPositionUs : C0559C.TIME_UNSET;
             int currentAbsoluteChunkIndex = chunkIndex + this.currentManifestChunkOffset;
             int trackSelectionIndex = this.trackSelection.getSelectedIndex();
             out.chunk = newMediaChunk(this.trackSelection.getSelectedFormat(), this.dataSource, streamElement.buildRequestUri(this.trackSelection.getIndexInTrackGroup(trackSelectionIndex), chunkIndex), null, currentAbsoluteChunkIndex, chunkStartTimeUs, chunkEndTimeUs, chunkSeekTimeUs, this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), this.extractorWrappers[trackSelectionIndex]);
@@ -157,7 +157,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
         if (!this.manifest.isLive) {
-            return C0555C.TIME_UNSET;
+            return C0559C.TIME_UNSET;
         }
         StreamElement currentElement = this.manifest.streamElements[this.streamElementIndex];
         int lastChunkIndex = currentElement.chunkCount - 1;

@@ -22,8 +22,8 @@ public class PhotoEditRadioCell extends FrameLayout {
     private final int[] tintShadowColors = new int[]{0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditRadioCell$1 */
-    class C09261 implements OnClickListener {
-        C09261() {
+    class C09301 implements OnClickListener {
+        C09301() {
         }
 
         public void onClick(View v) {
@@ -55,7 +55,7 @@ public class PhotoEditRadioCell extends FrameLayout {
             radioButton.setSize(AndroidUtilities.dp(20.0f));
             radioButton.setTag(Integer.valueOf(a));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new C09261());
+            radioButton.setOnClickListener(new C09301());
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }

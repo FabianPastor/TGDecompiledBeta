@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.ogg;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0555C;
+import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -51,7 +51,7 @@ abstract class StreamReader {
         }
 
         public SeekMap createSeekMap() {
-            return new Unseekable(C0555C.TIME_UNSET);
+            return new Unseekable(C0559C.TIME_UNSET);
         }
     }
 

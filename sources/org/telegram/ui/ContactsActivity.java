@@ -100,8 +100,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$1 */
-    class C22591 extends ActionBarMenuOnItemClick {
-        C22591() {
+    class C22801 extends ActionBarMenuOnItemClick {
+        C22801() {
         }
 
         public void onItemClick(int id) {
@@ -114,8 +114,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$2 */
-    class C22602 extends ActionBarMenuItemSearchListener {
-        C22602() {
+    class C22812 extends ActionBarMenuItemSearchListener {
+        C22812() {
         }
 
         public void onSearchExpand() {
@@ -162,8 +162,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$5 */
-    class C22615 implements OnItemClickListener {
-        C22615() {
+    class C22825 implements OnItemClickListener {
+        C22825() {
         }
 
         public void onItemClick(View view, int position) {
@@ -282,8 +282,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$6 */
-    class C22626 extends OnScrollListener {
-        C22626() {
+    class C22836 extends OnScrollListener {
+        C22836() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -298,8 +298,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$9 */
-    class C22639 implements IntCallback {
-        C22639() {
+    class C22849 implements IntCallback {
+        C22849() {
         }
 
         public void run(int param) {
@@ -372,9 +372,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         } else {
             this.actionBar.setTitle(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22591());
+        this.actionBar.setActionBarMenuOnItemClick(new C22801());
         ActionBarMenu menu = this.actionBar.createMenu();
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22602()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22812()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         if (!(this.createSecretChat || this.returnAsResult)) {
             this.addItem = menu.addItem(1, (int) R.drawable.add);
         }
@@ -450,8 +450,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22615());
-        this.listView.setOnScrollListener(new C22626());
+        this.listView.setOnItemClickListener(new C22825());
+        this.listView.setOnScrollListener(new C22836());
         return this.fragmentView;
     }
 
@@ -558,7 +558,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     return;
                 }
                 if (activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
-                    Dialog create = AlertsCreator.createContactsPermissionDialog(activity, new C22639()).create();
+                    Dialog create = AlertsCreator.createContactsPermissionDialog(activity, new C22849()).create();
                     this.permissionDialog = create;
                     showDialog(create);
                     return;
@@ -730,7 +730,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         themeDescriptionArr[27] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);
-        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_graySectionText);
         themeDescriptionArr[29] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
         themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, null, Theme.key_chats_nameIcon);
         themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, Theme.key_chats_verifiedCheck);

@@ -29,8 +29,8 @@ public abstract class DownloadHelper {
         new Thread() {
 
             /* renamed from: org.telegram.messenger.exoplayer2.offline.DownloadHelper$1$1 */
-            class C06071 implements Runnable {
-                C06071() {
+            class C06111 implements Runnable {
+                C06111() {
                 }
 
                 public void run() {
@@ -41,7 +41,7 @@ public abstract class DownloadHelper {
             public void run() {
                 try {
                     DownloadHelper.this.prepareInternal();
-                    handler.post(new C06071());
+                    handler.post(new C06111());
                 } catch (final IOException e) {
                     handler.post(new Runnable() {
                         public void run() {

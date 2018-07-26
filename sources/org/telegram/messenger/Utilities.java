@@ -309,7 +309,7 @@ public class Utilities {
         String str = null;
         if (md5 != null) {
             try {
-                byte[] array = MessageDigest.getInstance("MD5").digest(md5.getBytes());
+                byte[] array = MessageDigest.getInstance("MD5").digest(AndroidUtilities.getStringBytes(md5));
                 StringBuilder sb = new StringBuilder();
                 for (byte b : array) {
                     sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
